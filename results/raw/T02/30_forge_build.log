@@ -1,0 +1,333 @@
+$ forge build
+Compiling 22 files with Solc 0.8.28
+Solc 0.8.28 finished in 1.50s
+Compiler run successful!
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> contracts/generated/Groth16Verifier.sol:30:22
+   |
+30 |     uint256 constant alphax  = 10860270741984935761297588305818446628024843422269835363878966113821104330782;
+   |                      ^^^^^^
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[unsafe-cheatcode]: usage of unsafe cheatcodes that can perform dangerous operations
+  --> test/BatchConsumer.t.sol:27:30
+   |
+27 |         string memory j = vm.readFile("build/T02/calldata.json");
+   |                              ^^^^^^^^
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#unsafe-cheatcode
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> contracts/generated/Groth16Verifier.sol:31:22
+   |
+31 |     uint256 constant alphay  = 5482730849587064625749484317738382251239997587459001570225335408545877910194;
+   |                      ^^^^^^
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> contracts/generated/Groth16Verifier.sol:32:22
+   |
+32 |     uint256 constant betax1  = 8991664707795279035869298993820580306272507981767544952313275670973579669021;
+   |                      ^^^^^^
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> contracts/generated/Groth16Verifier.sol:33:22
+   |
+33 |     uint256 constant betax2  = 10490625396478801670834601687334930943456990428934693219954980608628904216142;
+   |                      ^^^^^^
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> contracts/generated/Groth16Verifier.sol:34:22
+   |
+34 |     uint256 constant betay1  = 12380554462377828094017468400662585430031625270726602452438783697292086390656;
+   |                      ^^^^^^
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> contracts/generated/Groth16Verifier.sol:35:22
+   |
+35 |     uint256 constant betay2  = 17655185268230406202777142595489656911822990439813519861668819260334305912893;
+   |                      ^^^^^^
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> contracts/generated/Groth16Verifier.sol:36:22
+   |
+36 |     uint256 constant gammax1 = 11559732032986387107991004021392285783925812861821192530917403151452391805634;
+   |                      ^^^^^^^
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> contracts/generated/Groth16Verifier.sol:37:22
+   |
+37 |     uint256 constant gammax2 = 10857046999023057135944570762232829481370756359578518086990519993285655852781;
+   |                      ^^^^^^^
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> contracts/generated/Groth16Verifier.sol:38:22
+   |
+38 |     uint256 constant gammay1 = 4082367875863433681332203403145435568316851327593401208105741076214120093531;
+   |                      ^^^^^^^
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> contracts/generated/Groth16Verifier.sol:39:22
+   |
+39 |     uint256 constant gammay2 = 8495653923123431417604973247489272438418190587263600148770280649306958101930;
+   |                      ^^^^^^^
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-immutable]: immutables should use SCREAMING_SNAKE_CASE
+  --> contracts/BatchConsumer.sol:23:39
+   |
+23 |     IGroth16Verifier public immutable verifier;
+   |                                       ^^^^^^^^
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-immutable
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> contracts/generated/Groth16Verifier.sol:40:22
+   |
+40 |     uint256 constant deltax1 = 10508292168996816191331852619139822639133993671479618413695338204148498132914;
+   |                      ^^^^^^^
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> contracts/generated/Groth16Verifier.sol:41:22
+   |
+41 |     uint256 constant deltax2 = 3790602226542903264533248499826897267751936584297566271726637449076973497615;
+   |                      ^^^^^^^
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> contracts/generated/Groth16Verifier.sol:42:22
+   |
+42 |     uint256 constant deltay1 = 21250300715383676963868363454442228385842256527012047661586247685568677275615;
+   |                      ^^^^^^^
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> contracts/generated/Groth16Verifier.sol:43:22
+   |
+43 |     uint256 constant deltay2 = 12864361140070400291359391294213425075079947064998679014201269859942927040553;
+   |                      ^^^^^^^
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> contracts/generated/Groth16Verifier.sol:46:22
+   |
+46 |     uint256 constant IC0x = 19765484260423162836744509022067244473771741699802640505238508997872587740397;
+   |                      ^^^^
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> contracts/generated/Groth16Verifier.sol:47:22
+   |
+47 |     uint256 constant IC0y = 16351413384095596444859043289615657777283457975525155426868959611444538113376;
+   |                      ^^^^
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> contracts/generated/Groth16Verifier.sol:49:22
+   |
+49 |     uint256 constant IC1x = 7436464840916834777513933667749065934810873900767022575437959017348145943888;
+   |                      ^^^^
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> contracts/generated/Groth16Verifier.sol:50:22
+   |
+50 |     uint256 constant IC1y = 14557550608992113042954300387876882298052376275900601045157636242256167161023;
+   |                      ^^^^
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> contracts/generated/Groth16Verifier.sol:52:22
+   |
+52 |     uint256 constant IC2x = 14621334122209329412609702308130563818567366246152386740629936000960745855850;
+   |                      ^^^^
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> contracts/generated/Groth16Verifier.sol:53:22
+   |
+53 |     uint256 constant IC2y = 9519312337823428516032401873083243299797050137203766643704860720262074752545;
+   |                      ^^^^
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> contracts/generated/Groth16Verifier.sol:55:22
+   |
+55 |     uint256 constant IC3x = 21840128610794074215667246297644183123433704932863625237171684081576938614312;
+   |                      ^^^^
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> contracts/generated/Groth16Verifier.sol:56:22
+   |
+56 |     uint256 constant IC3y = 3939777447165380483040488041299304553366577823657788126908170651571599611602;
+   |                      ^^^^
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> contracts/generated/Groth16Verifier.sol:58:22
+   |
+58 |     uint256 constant IC4x = 19286757014361721566192086406154806662858486256135377580506376564520757192615;
+   |                      ^^^^
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> contracts/generated/Groth16Verifier.sol:59:22
+   |
+59 |     uint256 constant IC4y = 17296437758561466074723662319262796449972464977387702585716936711917973250887;
+   |                      ^^^^
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> contracts/generated/Groth16Verifier.sol:61:22
+   |
+61 |     uint256 constant IC5x = 18491767574312535377055648037472788934431188527204297771137001378191542157726;
+   |                      ^^^^
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> contracts/generated/Groth16Verifier.sol:62:22
+   |
+62 |     uint256 constant IC5y = 8731911627313557832747740525273980100133809962562379359325217512124194149391;
+   |                      ^^^^
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> contracts/generated/Groth16Verifier.sol:64:22
+   |
+64 |     uint256 constant IC6x = 9517107485218990664639410698464015741483570439263711563042923115832313082926;
+   |                      ^^^^
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> contracts/generated/Groth16Verifier.sol:65:22
+   |
+65 |     uint256 constant IC6y = 19316214527098537857398553936745657361760840563863816688366405050333354876272;
+   |                      ^^^^
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> contracts/generated/Groth16Verifier.sol:67:22
+   |
+67 |     uint256 constant IC7x = 7452898074959402997221878211542867223969018236683426029151496736193759434142;
+   |                      ^^^^
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> contracts/generated/Groth16Verifier.sol:68:22
+   |
+68 |     uint256 constant IC7y = 12222839348842662026600679079837285674297371757801272548310443927327222503712;
+   |                      ^^^^
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> contracts/generated/Groth16Verifier.sol:70:22
+   |
+70 |     uint256 constant IC8x = 14026305502598609301766776836633284597723978777264543546638975254768468312289;
+   |                      ^^^^
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> contracts/generated/Groth16Verifier.sol:71:22
+   |
+71 |     uint256 constant IC8y = 21846553977542381409394131948508682979333577356086501941824235152133797438165;
+   |                      ^^^^
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> contracts/generated/Groth16Verifier.sol:73:22
+   |
+73 |     uint256 constant IC9x = 19482807360026835063145672179553029801891062334055026906944952854266605104121;
+   |                      ^^^^
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> contracts/generated/Groth16Verifier.sol:74:22
+   |
+74 |     uint256 constant IC9y = 21886182332378770231775918802124267491902966399832471651726193852997745510435;
+   |                      ^^^^
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> contracts/generated/Groth16Verifier.sol:76:22
+   |
+76 |     uint256 constant IC10x = 9056200164035385658852812250046129662917322631122583577321496133462323119565;
+   |                      ^^^^^
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> contracts/generated/Groth16Verifier.sol:77:22
+   |
+77 |     uint256 constant IC10y = 7891899290924037468410061624847643472557797134782915757411425094832680397734;
+   |                      ^^^^^
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> contracts/generated/Groth16Verifier.sol:81:21
+   |
+81 |     uint16 constant pVk = 0;
+   |                     ^^^
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> contracts/generated/Groth16Verifier.sol:82:21
+   |
+82 |     uint16 constant pPairing = 128;
+   |                     ^^^^^^^^
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> contracts/generated/Groth16Verifier.sol:84:21
+   |
+84 |     uint16 constant pLastMem = 896;
+   |                     ^^^^^^^^
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+exit=0

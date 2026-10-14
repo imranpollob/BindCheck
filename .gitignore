@@ -4,3 +4,9 @@ node_modules
 # T01: regenerable by `bash scripts/t01.sh`
 build/
 tools/circom-src/
+
+# T02: regenerable by `bash scripts/t02.sh`
+out/
+cache/
+lib/forge-std/
+contracts/generated/

@@ -1,0 +1,13 @@
+$ forge test -vv
+No files changed, compilation skipped
+
+Ran 5 tests for test/BatchConsumer.t.sol:BatchConsumerTest
+[PASS] test_alteredAmountWithOriginalProofRejectedByVerifier() (gas: 570496)
+[PASS] test_honestProofAcceptedAndCommitmentUpdated() (gas: 566850)
+[PASS] test_invalidProofRejected_pointNotOnCurve() (gas: 1072189915)
+[PASS] test_invalidProofRejected_wrongCurvePoint() (gas: 567969)
+[PASS] test_validProofAgainstIncompatibleStoredCommitmentRejected() (gas: 518128)
+Suite result: ok. 5 passed; 0 failed; 0 skipped; finished in 17.73ms (21.75ms CPU time)
+
+Ran 1 test suite in 166.19ms (17.73ms CPU time): 5 tests passed, 0 failed, 0 skipped (5 total tests)
+exit=0
