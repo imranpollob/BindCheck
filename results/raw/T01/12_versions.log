@@ -1,5 +1,0 @@
-$ bash -c '/Users/imranpollob/Coding/ai-coders/claude/tools/circom-src/target/release/circom' --version; '/Users/imranpollob/Coding/ai-coders/claude/node_modules/.bin/snarkjs' --help 2>&1 | head -1; node -p "const l=require('./package-lock.json').packages; ['snarkjs','circomlib','circomlibjs'].map(n=>n+'@'+l['node_modules/'+n].version).join(' ')"
-circom compiler 2.2.3
-snarkjs@0.7.6
-snarkjs@0.7.6 circomlib@2.0.5 circomlibjs@0.1.7
-exit=0

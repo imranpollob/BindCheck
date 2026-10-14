@@ -1,1 +1,0 @@
-{"caseId":"c-032","consumer":"mutant","fixture":"original","fundedRows":[0,1],"limit":"4","status":"reverted","baseline":{"holds":true,"commitmentOk":false,"accountingOk":false,"stateUnchanged":true,"violations":[],"missingAmount":"0"}}

@@ -1,5 +1,0 @@
-# throwaway: ActiveRowOutsidePrefix loop removed from RepairedPrefixBatchConsumer; file restored afterwards
-[FAIL: next call did not revert as expected] test_1_originalScenario_rows0and1Funded_limit3_rejectedByActiveRowOutsidePrefix3() (gas: 1188303)
-[FAIL: next call did not revert as expected] test_2_allActiveRowsFunded_limit3_stillRejectedByActiveRowOutsidePrefix3() (gas: 986047)
-[FAIL: next call did not revert as expected] test_5_paddedProof_limit1_rejectedByActiveRowOutsidePrefix1() (gas: 924249)
-Suite result: FAILED. 5 passed; 3 failed; 0 skipped; finished in 49.77ms (48.43ms CPU time)

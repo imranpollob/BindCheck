@@ -1,2 +1,0 @@
-$ /Users/imranpollob/Coding/ai-coders/claude/node_modules/.bin/snarkjs wtns calculate build/T01/batch_deposit_js/batch_deposit.wasm build/T05/input.json build/T05/witness.wtns
-exit=0

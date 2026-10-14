@@ -1,2 +1,0 @@
-[FAIL: MissingEscrow(3)] test_RESEARCH_MUTANT_numRealTxs3_acceptsVerifiedProofWithRow3Unbacked_confirmsInvariantViolation() (gas: 1221337)
-Suite result: FAILED. 3 passed; 1 failed; 0 skipped; finished in 9.39ms (16.60ms CPU time)

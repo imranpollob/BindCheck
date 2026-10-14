@@ -1,9 +1,0 @@
-$ /Users/imranpollob/Coding/ai-coders/claude/node_modules/.bin/snarkjs r1cs info build/T01/batch_deposit.r1cs
-[32;22m[INFO]  [39;1msnarkJS[0m: Curve: bn-128
-[32;22m[INFO]  [39;1msnarkJS[0m: # of Wires: 1101
-[32;22m[INFO]  [39;1msnarkJS[0m: # of Constraints: 1105
-[32;22m[INFO]  [39;1msnarkJS[0m: # of Private Inputs: 2
-[32;22m[INFO]  [39;1msnarkJS[0m: # of Public Inputs: 10
-[32;22m[INFO]  [39;1msnarkJS[0m: # of Labels: 1439
-[32;22m[INFO]  [39;1msnarkJS[0m: # of Outputs: 0
-exit=0

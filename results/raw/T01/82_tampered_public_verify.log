@@ -1,3 +1,0 @@
-$ /Users/imranpollob/Coding/ai-coders/claude/node_modules/.bin/snarkjs groth16 verify build/T01/verification_key.json build/T01/public_tampered.json build/T01/proof.json
-[31;22m[ERROR] [39;1msnarkJS[0m: Invalid proof
-exit=1

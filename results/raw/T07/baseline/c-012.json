@@ -1,1 +1,0 @@
-{"caseId":"c-012","consumer":"correct","fixture":"padded","fundedRows":[0,1],"limit":null,"status":"success","baseline":{"holds":true,"commitmentOk":true,"accountingOk":true,"stateUnchanged":false,"violations":[],"missingAmount":"0"}}

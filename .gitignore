@@ -1,5 +1,6 @@
 node_modules
 .DS_Store
+results/raw
 
 # T01: regenerable by `bash scripts/t01.sh`
 build/

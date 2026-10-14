@@ -1,3 +1,0 @@
-a67459ed9a4da707ccdf9f0fb119ebbb1fc627390d953c4bdac84f45251aec19  contracts/BackedBatchConsumer.sol
-3ac17a32f819ad39e3dbeca028b171c4b04197676768b9df7f3e96fac80c98c0  test/BackedBatchConsumer.t.sol
-d6864a44ea5a3626811d2cbf2740df597f236b4d8e51dca6f20d9112117a39a2  test/T01Fixture.sol

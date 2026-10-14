@@ -1,4 +1,0 @@
-6b2d76b83c5faa74117c0eeef3d9effdb7100a0ddad99e9bcc37a99ea80f1e1c  build/T01/proof.json
-ffc698d691cc4d4759d0ff86695e097cd0cda9516781c8e48d2ffc9fbc101c81  build/T01/public.json
-1562e08c6834de6a13b66835f665e3bf97a45f11536ff57a5a5f373de62df315  build/T01/circuit_final.zkey
-d961228a3c22932d30c8ea4b653ac51a2ea1224112a10eb486ed4e7824068789  build/T02/calldata.json

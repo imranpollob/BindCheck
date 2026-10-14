@@ -1,3 +1,0 @@
-$ node scripts/make_input.js build/T01/input.json
-oldBalance=1000 sum=390 newBalance=1390
-exit=0
