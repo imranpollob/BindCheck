@@ -1,0 +1,2 @@
+$ /Users/imranpollob/Coding/ai-coders/claude/node_modules/.bin/snarkjs groth16 prove build/T01/circuit_final.zkey build/T05/witness.wtns build/T05/proof.json build/T05/public.json
+exit=0

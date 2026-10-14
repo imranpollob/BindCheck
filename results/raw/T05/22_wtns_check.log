@@ -1,0 +1,19 @@
+$ /Users/imranpollob/Coding/ai-coders/claude/node_modules/.bin/snarkjs wtns check build/T01/batch_deposit.r1cs build/T05/witness.wtns
+[32;22m[INFO]  [39;1msnarkJS[0m: WITNESS CHECKING STARTED
+[32;22m[INFO]  [39;1msnarkJS[0m: > Reading r1cs file
+[32;22m[INFO]  [39;1msnarkJS[0m: > Reading witness file
+[32;22m[INFO]  [39;1msnarkJS[0m: ----------------------------
+[32;22m[INFO]  [39;1msnarkJS[0m:   WITNESS CHECK
+[32;22m[INFO]  [39;1msnarkJS[0m:   Curve:          bn128
+[32;22m[INFO]  [39;1msnarkJS[0m:   Vars (wires):   1101
+[32;22m[INFO]  [39;1msnarkJS[0m:   Outputs:        0
+[32;22m[INFO]  [39;1msnarkJS[0m:   Public Inputs:  10
+[32;22m[INFO]  [39;1msnarkJS[0m:   Private Inputs: 2
+[32;22m[INFO]  [39;1msnarkJS[0m:   Labels:         1439
+[32;22m[INFO]  [39;1msnarkJS[0m:   Constraints:    1105
+[32;22m[INFO]  [39;1msnarkJS[0m:   Custom Gates:   false
+[32;22m[INFO]  [39;1msnarkJS[0m: ----------------------------
+[32;22m[INFO]  [39;1msnarkJS[0m: > Checking witness correctness
+[32;22m[INFO]  [39;1msnarkJS[0m: WITNESS IS CORRECT
+[32;22m[INFO]  [39;1msnarkJS[0m: WITNESS CHECKING FINISHED SUCCESSFULLY
+exit=0
