@@ -1,0 +1,87 @@
+$ forge test -vv
+No files changed, compilation skipped
+
+Ran 5 tests for test/BatchConsumer.t.sol:BatchConsumerTest
+[PASS] test_alteredAmountWithOriginalProofRejectedByVerifier() (gas: 570496)
+[PASS] test_honestProofAcceptedAndCommitmentUpdated() (gas: 566850)
+[PASS] test_invalidProofRejected_pointNotOnCurve() (gas: 1072189915)
+[PASS] test_invalidProofRejected_wrongCurvePoint() (gas: 567969)
+[PASS] test_validProofAgainstIncompatibleStoredCommitmentRejected() (gas: 518128)
+Suite result: ok. 5 passed; 0 failed; 0 skipped; finished in 13.08ms (26.81ms CPU time)
+
+Ran 4 tests for test/MutantBackedBatchConsumer.t.sol:MutantBackedBatchConsumerTest
+[PASS] test_RESEARCH_MUTANT_numRealTxs3_acceptsVerifiedProofWithRow3Unbacked_confirmsInvariantViolation() (gas: 1308506)
+Logs:
+  mutant, pre
+    commitment       4718284119804185511257508371982628095258483864365234338531443234707945892862
+    eth held         350
+    rawBacking       0
+    matchingConsumed 0
+    missing backing  390
+    consumed r0,r1,r2,r3: false false
+                         false false
+    funded   r0,r1,r2,r3: true true
+                         false false
+  proof/public-input calldata hash (mutant):
+  0xfd847d58c564f09823f616ab39dc8c5078add0b59f0e6da546d8d79f4c198e82
+  mutant, post (ACCEPTED)
+    commitment       1308650522590904424068291859776138677625716297266440279579353064214255920234
+    eth held         350
+    rawBacking       350
+    matchingConsumed 350
+    missing backing  40
+    consumed r0,r1,r2,r3: true true
+                         false false
+    funded   r0,r1,r2,r3: true true
+                         false false
+
+[PASS] test_control_mutantFullyFundedNumRealTxs4_consumesAllThreeActiveEntries() (gas: 1056103)
+Logs:
+  proof/public-input calldata hash (control):
+  0xfd847d58c564f09823f616ab39dc8c5078add0b59f0e6da546d8d79f4c198e82
+  control (mutant, numRealTxs=4), post
+    commitment       1308650522590904424068291859776138677625716297266440279579353064214255920234
+    eth held         390
+    rawBacking       390
+    matchingConsumed 390
+    missing backing  0
+    consumed r0,r1,r2,r3: true true
+                         false true
+    funded   r0,r1,r2,r3: true true
+                         false true
+
+[PASS] test_correctConsumer_rejectsPartiallyFundedBatch_missingEscrowRow3() (gas: 1007004)
+Logs:
+  proof/public-input calldata hash (correct consumer):
+  0xfd847d58c564f09823f616ab39dc8c5078add0b59f0e6da546d8d79f4c198e82
+  correct consumer, post (reverted)
+    commitment       4718284119804185511257508371982628095258483864365234338531443234707945892862
+    eth held         350
+    rawBacking       0
+    matchingConsumed 0
+    missing backing  390
+    consumed r0,r1,r2,r3: false false
+                         false false
+    funded   r0,r1,r2,r3: true true
+                         false false
+
+[PASS] test_mutant_retainsOldCommitmentProofAndBoundChecks() (gas: 1949414)
+Suite result: ok. 4 passed; 0 failed; 0 skipped; finished in 14.20ms (16.79ms CPU time)
+
+Ran 12 tests for test/BackedBatchConsumer.t.sol:BackedBatchConsumerTest
+[PASS] test_consumptionGuardRejectsAlreadyConsumedEntries_isolatedWithHarness() (gas: 1551294)
+[PASS] test_duplicateFundingRejected() (gas: 575066)
+[PASS] test_escrowForDifferentBatchDoesNotBackThisBatch() (gas: 516465)
+[PASS] test_fundRows0_1_3_thenSettlementSucceeds() (gas: 582454)
+[PASS] test_inactiveRowNeedsNoEscrowAndCannotBeFunded() (gas: 570597)
+[PASS] test_incorrectFundingAmountRejected() (gas: 476777)
+[PASS] test_invalidProofWithFullEscrowLeavesStateUnchanged() (gas: 769347)
+[PASS] test_oldCommitmentMismatchWithFullEscrowLeavesStateUnchanged() (gas: 736771)
+[PASS] test_omittedFundingRow0Rejected() (gas: 464772)
+[PASS] test_omittedFundingRow1Rejected() (gas: 467831)
+[PASS] test_omittedFundingRow3Rejected() (gas: 471069)
+[PASS] test_repeatAcceptedSettlementRejected_byOldCommitmentCheck() (gas: 552020)
+Suite result: ok. 12 passed; 0 failed; 0 skipped; finished in 14.22ms (44.10ms CPU time)
+
+Ran 3 test suites in 143.03ms (41.50ms CPU time): 21 tests passed, 0 failed, 0 skipped (21 total tests)
+exit=0

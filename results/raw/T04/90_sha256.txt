@@ -1,0 +1,3 @@
+d9114d562cdc1dea4b7f5ff9f56580d52f0a65f2cc6befb492acd588ae857b66  contracts/research/MutantBackedBatchConsumer.sol
+785bca2205bec893179e01619726964a0b2dc4cf04506ce986aef37816f6e9e9  test/MutantBackedBatchConsumer.t.sol
+40a9af268813ae288eb782e0f8fff8e521289ac3f347e8d8b5d6cb4332642eee  results/raw/T04/mutation.diff

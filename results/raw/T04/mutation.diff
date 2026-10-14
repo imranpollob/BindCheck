@@ -1,0 +1,56 @@
+--- contracts/BackedBatchConsumer.sol	2026-10-13 23:47:17
++++ contracts/research/MutantBackedBatchConsumer.sol	2026-10-13 23:49:47
+@@ -1,8 +1,14 @@
+ // SPDX-License-Identifier: UNLICENSED
+ pragma solidity ^0.8.20;
+ 
+-import {IGroth16Verifier} from "./BatchConsumer.sol";
++import {IGroth16Verifier} from "../BatchConsumer.sol";
+ 
++/// RESEARCH-AUTHORED MUTANT (T04). DO NOT DEPLOY OR REUSE. Self-authored coverage failure for
++/// local defensive research, not a vulnerability in any real-world system.
++/// Identical to BackedBatchConsumer (T03) except: submit() takes a caller-supplied `numRealTxs`
++/// (0..4) and only processes/consumes active rows with index < numRealTxs; nothing enforces that
++/// rows outside the prefix are neutral. numRealTxs is NOT part of the verified statement.
++///
+ /// T03: T02's consumer extended with per-row ETH escrow backing. TEST ARCHITECTURE ONLY.
+ ///
+ /// Demonstration identity (the T01 circuit has no deposit IDs):
+@@ -15,7 +21,7 @@
+ /// as backing for the credited balance (1 unit == 1 wei by convention here).
+ ///
+ /// Public-signal order (T01): [0..3] amount, [4..7] active, [8] oldCommitment, [9] newCommitment.
+-contract BackedBatchConsumer {
++contract ResearchMutantBackedBatchConsumer {
+     uint256 internal constant ROWS = 4;
+     uint256 internal constant ACTIVE_OFFSET = 4;
+     uint256 internal constant OLD_COMMITMENT_INDEX = 8;
+@@ -43,6 +49,7 @@
+     error MissingEscrow(uint256 row);
+     error AlreadyConsumed(uint256 row);
+     error EscrowAmountMismatch(uint256 row, uint256 expected, uint256 stored);
++    error InvalidNumRealTxs(uint256 numRealTxs);
+ 
+     event Funded(bytes32 indexed batchId, uint256 indexed row, uint256 amount);
+     event Consumed(bytes32 indexed batchId, uint256 indexed row, uint256 amount);
+@@ -77,8 +84,10 @@
+         uint256[2] calldata pA,
+         uint256[2][2] calldata pB,
+         uint256[2] calldata pC,
+-        uint256[10] calldata pubSignals
++        uint256[10] calldata pubSignals,
++        uint256 numRealTxs
+     ) external {
++        if (numRealTxs > ROWS) revert InvalidNumRealTxs(numRealTxs);
+         uint256 stored = currentCommitment;
+         if (pubSignals[OLD_COMMITMENT_INDEX] != stored) {
+             revert OldCommitmentMismatch(stored, pubSignals[OLD_COMMITMENT_INDEX]);
+@@ -89,7 +98,7 @@
+         // unconsumed entry of exactly its public amount. Any failure reverts the whole call.
+         bytes32 batchId = batchIdOf(pubSignals);
+         uint256 backed;
+-        for (uint256 row = 0; row < ROWS; row++) {
++        for (uint256 row = 0; row < numRealTxs; row++) {
+             if (pubSignals[ACTIVE_OFFSET + row] != 1) continue;
+             Escrow storage e = escrows[batchId][row];
+             if (!e.funded) revert MissingEscrow(row);
