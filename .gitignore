@@ -11,3 +11,10 @@ out/
 cache/
 lib/forge-std/
 contracts/generated/
+
+# T08: downloaded third-party sources and toolchains (regenerable; untrusted data)
+tools/cases/
+tools/noir-1.0.0-beta.14/
+
+# T09: pinned bb binary (downloaded, verified against the repo pin)
+tools/bb-3.0.0-manual.20251030/
