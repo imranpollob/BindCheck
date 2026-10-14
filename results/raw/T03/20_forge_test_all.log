@@ -1,0 +1,28 @@
+$ forge test -vv
+No files changed, compilation skipped
+
+Ran 12 tests for test/BackedBatchConsumer.t.sol:BackedBatchConsumerTest
+[PASS] test_consumptionGuardRejectsAlreadyConsumedEntries_isolatedWithHarness() (gas: 1551294)
+[PASS] test_duplicateFundingRejected() (gas: 575066)
+[PASS] test_escrowForDifferentBatchDoesNotBackThisBatch() (gas: 516465)
+[PASS] test_fundRows0_1_3_thenSettlementSucceeds() (gas: 582454)
+[PASS] test_inactiveRowNeedsNoEscrowAndCannotBeFunded() (gas: 570597)
+[PASS] test_incorrectFundingAmountRejected() (gas: 476777)
+[PASS] test_invalidProofWithFullEscrowLeavesStateUnchanged() (gas: 769347)
+[PASS] test_oldCommitmentMismatchWithFullEscrowLeavesStateUnchanged() (gas: 736771)
+[PASS] test_omittedFundingRow0Rejected() (gas: 464772)
+[PASS] test_omittedFundingRow1Rejected() (gas: 467831)
+[PASS] test_omittedFundingRow3Rejected() (gas: 471069)
+[PASS] test_repeatAcceptedSettlementRejected_byOldCommitmentCheck() (gas: 552020)
+Suite result: ok. 12 passed; 0 failed; 0 skipped; finished in 10.66ms (40.92ms CPU time)
+
+Ran 5 tests for test/BatchConsumer.t.sol:BatchConsumerTest
+[PASS] test_alteredAmountWithOriginalProofRejectedByVerifier() (gas: 570496)
+[PASS] test_honestProofAcceptedAndCommitmentUpdated() (gas: 566850)
+[PASS] test_invalidProofRejected_pointNotOnCurve() (gas: 1072189915)
+[PASS] test_invalidProofRejected_wrongCurvePoint() (gas: 567969)
+[PASS] test_validProofAgainstIncompatibleStoredCommitmentRejected() (gas: 518128)
+Suite result: ok. 5 passed; 0 failed; 0 skipped; finished in 10.64ms (20.62ms CPU time)
+
+Ran 2 test suites in 141.48ms (21.30ms CPU time): 17 tests passed, 0 failed, 0 skipped (17 total tests)
+exit=0

@@ -19,6 +19,6 @@ step 20_export_verifier "$SNARKJS" zkey export solidityverifier "$B1/circuit_fin
 "$SNARKJS" zkey export soliditycalldata "$B1/public.json" "$B1/proof.json" 2> "$L/21_calldata.err" | { printf '['; cat; printf ']'; } > "$B2/calldata.json"
 echo "calldata.json bytes: $(wc -c < "$B2/calldata.json")" > "$L/21_calldata.log"
 step 30_forge_build forge build
-step 40_forge_test forge test -vv
+step 40_forge_test forge test -vv --match-path test/BatchConsumer.t.sol
 shasum -a 256 contracts/generated/Groth16Verifier.sol contracts/BatchConsumer.sol test/BatchConsumer.t.sol foundry.toml "$B2/calldata.json" "$B1/circuit_final.zkey" > "$L/90_sha256.txt"
 sed 's/\x1b\[[0-9;]*m//g' "$L/40_forge_test.log" | grep -E '^(\[|Ran |Suite result)'
