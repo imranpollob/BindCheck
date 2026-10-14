@@ -8,3 +8,48 @@ evm_version = "paris"
 optimizer = true
 optimizer_runs = 200
 fs_permissions = [{ access = "read", path = "./build" }, { access = "read-write", path = "./results/raw/T06" }, { access = "read-write", path = "./results/raw/T07" }]
+
+# T11: Payy agg_final Honk verifier, compiled with the settings the Payy repo uses for its generated verifiers
+# (pkg/xtask/src/noir_fixtures/solidity.rs: optimizer runs=0, revertStrings=strip; pkg/solc-tooling: solc 0.8.29).
+# Select with FOUNDRY_PROFILE=payy. The default profile used by T02-T10 is unchanged.
+[profile.payy]
+src = "payy/src"
+test = "payy/test"
+out = "out-payy"
+cache_path = "cache-payy"
+libs = ["lib"]
+solc_version = "0.8.29"
+# The repo's solc standard-json leaves evmVersion unset, i.e. solc 0.8.29's default (cancun). Set it explicitly: profiles inherit
+# evm_version = "paris" from [profile.default], which would NOT match the pinned build.
+evm_version = "cancun"
+optimizer = true
+optimizer_runs = 0
+revert_strings = "strip"
+fs_permissions = [{ access = "read", path = "./results/raw/T10" }]
+
+# T12: the actual Payy consumer (rollup3/RollupV1.sol @ dcd5d96) with the compiler settings of eth/hardhat.config.ts
+# (solc 0.8.20, viaIR, optimizer runs 200; evmVersion unset upstream = solc 0.8.20 default "shanghai") and OpenZeppelin 5.0.1
+# (npm tarballs checked against eth/yarn.lock integrity hashes by scripts/t12.sh). Select with FOUNDRY_PROFILE=payy-consumer.
+[profile.payy-consumer]
+src = "payy-consumer/src"
+test = "payy-consumer/test"
+out = "out-payy-consumer"
+cache_path = "cache-payy-consumer"
+libs = ["lib"]
+solc_version = "0.8.20"
+# Execution EVM must be >= cancun: the committed Honk verifier bytecode uses MCOPY (a cancun opcode; with a shanghai EVM a valid proof burns all gas
+# on an invalid opcode). solc 0.8.20 cannot target cancun; Foundry compiles for the newest EVM the compiler supports (shanghai, which is
+# also what upstream hardhat.config.ts produces) while executing tests on the configured one.
+evm_version = "cancun"
+via_ir = true
+optimizer = true
+optimizer_runs = 200
+remappings = [
+  "@openzeppelin/contracts/=tools/oz-5.0.1/contracts/",
+  "@openzeppelin/contracts-upgradeable/=tools/oz-5.0.1/upgradeable/",
+]
+fs_permissions = [
+  { access = "read", path = "./build/T12" },
+  { access = "read", path = "./results/raw/T10" },
+  { access = "read-write", path = "./results/raw/T12" },
+]

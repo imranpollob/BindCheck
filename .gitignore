@@ -18,3 +18,14 @@ tools/noir-1.0.0-beta.14/
 
 # T09: pinned bb binary (downloaded, verified against the repo pin)
 tools/bb-3.0.0-manual.20251030/
+
+# T11: generated Honk verifier copy (regenerable from git) and its Foundry output
+payy/src/AggFinalHonkVerifier.sol
+out-payy/
+cache-payy/
+
+# T12: extracted consumer sources, OZ tarballs/extract, outputs
+payy-consumer/src/
+out-payy-consumer/
+cache-payy-consumer/
+tools/oz-5.0.1/
