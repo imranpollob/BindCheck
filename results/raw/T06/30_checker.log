@@ -1,0 +1,9 @@
+$ node bindcheck/checker.js bindcheck/spec/batch_backing.spec.json results/raw/T06/records results/raw/T06/checker_verdicts.json
+exec-01.json	NO_VIOLATION	settled; all specified obligations met by the recorded evidence
+exec-02.json	VIOLATION	settled; 1 finding(s), missing consumption 40
+exec-03.json	NO_VIOLATION	settled; all specified obligations met by the recorded evidence
+exec-04.json	REVERTED_UNCHANGED	reverted; no committed coverage violation
+exec-05.json	NO_VIOLATION	settled; all specified obligations met by the recorded evidence
+exec-06.json	REVERTED_UNCHANGED	reverted; no committed coverage violation
+exec-07.json	VIOLATION	settled; 1 finding(s), missing consumption 40
+exit=0

@@ -1,0 +1,27 @@
+{
+  "specId": "t01-batch-backing/v1",
+  "authorship": "MANUAL specification written by the researcher/coder for the T01 fixture. It encodes intended protocol policy and is not derived or verified from any circuit or contract.",
+  "publicInputs": {
+    "count": 10,
+    "amount": [0, 1, 2, 3],
+    "active": [4, 5, 6, 7],
+    "oldCommitment": 8,
+    "newCommitment": 9
+  },
+  "activation": {
+    "activeValue": "1",
+    "inactiveValue": "0",
+    "otherwise": "evidence_error (the T01 circuit constrains flags to Boolean, so any other authenticated value is not a valid statement)"
+  },
+  "depositIdentity": {
+    "key": ["batchId", "rowIndex"],
+    "batchId": "keccak256 over the concatenation of the ten public inputs, each as a 32-byte big-endian word, in index order (equals keccak256(abi.encode(uint256[10])))"
+  },
+  "conversion": { "weiPerUnit": "1" },
+  "verifierCall": {
+    "signature": "verifyProof(uint256[2],uint256[2][2],uint256[2],uint256[10])",
+    "publicInputsWordOffset": 8,
+    "publicInputsWordCount": 10
+  },
+  "obligation": "For a successful settlement, every active row i must have, before the call, a funded escrow entry for (batchId, i) with amount == publicInputs[amount[i]] * weiPerUnit and consumed == false, and that entry must be consumed after the call. The sum of newly consumed entry amounts must equal the change in consumedBacking. Pre/post commitments must equal the authenticated old/new commitments. A reverted settlement must leave all observed protected state unchanged."
+}

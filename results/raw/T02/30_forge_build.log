@@ -1,7 +1,5 @@
 $ forge build
-Compiling 2 files with Solc 0.8.28
-Solc 0.8.28 finished in 741.11ms
-Compiler run successful!
+No files changed, compilation skipped
 note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
   --> contracts/generated/Groth16Verifier.sol:30:22
    |
@@ -18,10 +16,58 @@ note[mixed-case-variable]: mutable variables should use mixedCase
    |
    = help: https://book.getfoundry.sh/reference/forge/forge-lint#mixed-case-variable
 
+note[mixed-case-variable]: mutable variables should use mixedCase
+  --> test/BackedBatchConsumer.t.sol:27:16
+   |
+27 |     uint256[4] AMOUNT = [uint256(100), 250, 0, 40];
+   |                ^^^^^^
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#mixed-case-variable
+
+note[mixed-case-variable]: mutable variables should use mixedCase
+  --> test/BackedBatchConsumer.t.sol:28:13
+   |
+28 |     bool[4] ACTIVE = [true, true, false, true];
+   |             ^^^^^^
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#mixed-case-variable
+
 note[screaming-snake-case-immutable]: immutables should use SCREAMING_SNAKE_CASE
   --> contracts/BatchConsumer.sol:23:39
    |
 23 |     IGroth16Verifier public immutable verifier;
+   |                                       ^^^^^^^^
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-immutable
+
+note[screaming-snake-case-immutable]: immutables should use SCREAMING_SNAKE_CASE
+  --> contracts/research/RepairedPrefixBatchConsumer.sol:44:39
+   |
+44 |     IGroth16Verifier public immutable verifier;
+   |                                       ^^^^^^^^
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-immutable
+
+note[unsafe-cheatcode]: usage of unsafe cheatcodes that can perform dangerous operations
+  --> test/BatchConsumer.t.sol:27:30
+   |
+27 |         string memory j = vm.readFile("build/T02/calldata.json");
+   |                              ^^^^^^^^
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#unsafe-cheatcode
+
+note[asm-keccak256]: use of inefficient hashing mechanism; consider using inline assembly
+  --> contracts/research/RepairedPrefixBatchConsumer.sol:73:16
+   |
+73 |         return keccak256(abi.encode(pubSignals));
+   |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#asm-keccak256
+
+note[screaming-snake-case-immutable]: immutables should use SCREAMING_SNAKE_CASE
+  --> contracts/BackedBatchConsumer.sol:30:39
+   |
+30 |     IGroth16Verifier public immutable verifier;
    |                                       ^^^^^^^^
    |
    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-immutable
@@ -35,12 +81,28 @@ note[screaming-snake-case-immutable]: immutables should use SCREAMING_SNAKE_CASE
    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-immutable
 
 note[unsafe-cheatcode]: usage of unsafe cheatcodes that can perform dangerous operations
-  --> test/BatchConsumer.t.sol:27:30
+  --> test/T06Export.t.sol:49:30
    |
-27 |         string memory j = vm.readFile("build/T02/calldata.json");
+49 |         string memory j = vm.readFile("build/T05/calldata.json");
    |                              ^^^^^^^^
    |
    = help: https://book.getfoundry.sh/reference/forge/forge-lint#unsafe-cheatcode
+
+note[asm-keccak256]: use of inefficient hashing mechanism; consider using inline assembly
+  --> contracts/BackedBatchConsumer.sol:57:16
+   |
+57 |         return keccak256(abi.encode(pubSignals));
+   |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#asm-keccak256
+
+note[unsafe-cheatcode]: usage of unsafe cheatcodes that can perform dangerous operations
+   --> test/T06Export.t.sol:197:12
+    |
+197 |         vm.writeFile(string.concat("results/raw/T06/records/", execId, ".json"), _recJson(r, pr.p));
+    |            ^^^^^^^^^
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#unsafe-cheatcode
 
 note[mixed-case-variable]: mutable variables should use mixedCase
   --> test/RepairedPrefixBatchConsumer.t.sol:17:16
@@ -66,21 +128,29 @@ note[asm-keccak256]: use of inefficient hashing mechanism; consider using inline
    |
    = help: https://book.getfoundry.sh/reference/forge/forge-lint#asm-keccak256
 
+note[unsafe-cheatcode]: usage of unsafe cheatcodes that can perform dangerous operations
+   --> test/T06Export.t.sol:235:12
+    |
+235 |         vm.writeFile(
+    |            ^^^^^^^^^
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#unsafe-cheatcode
+
 note[mixed-case-variable]: mutable variables should use mixedCase
-  --> test/BackedBatchConsumer.t.sol:27:16
+  --> test/MutantBackedBatchConsumer.t.sol:24:13
    |
-27 |     uint256[4] AMOUNT = [uint256(100), 250, 0, 40];
-   |                ^^^^^^
+24 |     bool[4] ACTIVE = [true, true, false, true];
+   |             ^^^^^^
    |
    = help: https://book.getfoundry.sh/reference/forge/forge-lint#mixed-case-variable
 
-note[screaming-snake-case-immutable]: immutables should use SCREAMING_SNAKE_CASE
-  --> contracts/research/RepairedPrefixBatchConsumer.sol:44:39
+note[unsafe-cheatcode]: usage of unsafe cheatcodes that can perform dangerous operations
+  --> test/T01Fixture.sol:17:30
    |
-44 |     IGroth16Verifier public immutable verifier;
-   |                                       ^^^^^^^^
+17 |         string memory j = vm.readFile("build/T02/calldata.json");
+   |                              ^^^^^^^^
    |
-   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-immutable
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#unsafe-cheatcode
 
 note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
   --> contracts/generated/Groth16Verifier.sol:31:22
@@ -98,6 +168,14 @@ note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
    |
    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
 
+note[mixed-case-variable]: mutable variables should use mixedCase
+   --> test/T06Export.t.sol:257:16
+    |
+257 |     uint256[4] AMT_O = [uint256(100), 250, 0, 40];
+    |                ^^^^^
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#mixed-case-variable
+
 note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
   --> contracts/generated/Groth16Verifier.sol:33:22
    |
@@ -105,6 +183,14 @@ note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
    |                      ^^^^^^
    |
    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[unsafe-cheatcode]: usage of unsafe cheatcodes that can perform dangerous operations
+  --> test/RepairedPrefixBatchConsumer.t.sol:41:30
+   |
+41 |         string memory j = vm.readFile("build/T05/calldata.json");
+   |                              ^^^^^^^^
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#unsafe-cheatcode
 
 note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
   --> contracts/generated/Groth16Verifier.sol:34:22
@@ -146,6 +232,14 @@ note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
    |
    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
 
+note[mixed-case-variable]: mutable variables should use mixedCase
+   --> test/T06Export.t.sol:258:16
+    |
+258 |     uint256[4] AMT_P = [uint256(100), 250, 0, 0];
+    |                ^^^^^
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#mixed-case-variable
+
 note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
   --> contracts/generated/Groth16Verifier.sol:39:22
    |
@@ -170,38 +264,6 @@ note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
    |
    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
 
-note[unsafe-cheatcode]: usage of unsafe cheatcodes that can perform dangerous operations
-  --> test/RepairedPrefixBatchConsumer.t.sol:41:30
-   |
-41 |         string memory j = vm.readFile("build/T05/calldata.json");
-   |                              ^^^^^^^^
-   |
-   = help: https://book.getfoundry.sh/reference/forge/forge-lint#unsafe-cheatcode
-
-note[mixed-case-variable]: mutable variables should use mixedCase
-  --> test/BackedBatchConsumer.t.sol:28:13
-   |
-28 |     bool[4] ACTIVE = [true, true, false, true];
-   |             ^^^^^^
-   |
-   = help: https://book.getfoundry.sh/reference/forge/forge-lint#mixed-case-variable
-
-note[asm-keccak256]: use of inefficient hashing mechanism; consider using inline assembly
-  --> contracts/research/RepairedPrefixBatchConsumer.sol:73:16
-   |
-73 |         return keccak256(abi.encode(pubSignals));
-   |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-   |
-   = help: https://book.getfoundry.sh/reference/forge/forge-lint#asm-keccak256
-
-note[mixed-case-variable]: mutable variables should use mixedCase
-  --> test/MutantBackedBatchConsumer.t.sol:24:13
-   |
-24 |     bool[4] ACTIVE = [true, true, false, true];
-   |             ^^^^^^
-   |
-   = help: https://book.getfoundry.sh/reference/forge/forge-lint#mixed-case-variable
-
 note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
   --> contracts/generated/Groth16Verifier.sol:42:22
    |
@@ -209,14 +271,6 @@ note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
    |                      ^^^^^^^
    |
    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
-
-note[unsafe-cheatcode]: usage of unsafe cheatcodes that can perform dangerous operations
-  --> test/T01Fixture.sol:17:30
-   |
-17 |         string memory j = vm.readFile("build/T02/calldata.json");
-   |                              ^^^^^^^^
-   |
-   = help: https://book.getfoundry.sh/reference/forge/forge-lint#unsafe-cheatcode
 
 note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
   --> contracts/generated/Groth16Verifier.sol:43:22
@@ -234,6 +288,22 @@ note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
    |
    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
 
+note[named-struct-fields]: prefer initializing structs with named fields
+   --> test/T06Export.t.sol:202:16
+    |
+202 |         return Proof(pA, pB, pC, pub);
+    |                ^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#named-struct-fields
+
+note[named-struct-fields]: prefer initializing structs with named fields
+   --> test/T06Export.t.sol:206:16
+    |
+206 |         return Proof(qA, qB, qC, qpub);
+    |                ^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#named-struct-fields
+
 note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
   --> contracts/generated/Groth16Verifier.sol:47:22
    |
@@ -241,14 +311,6 @@ note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
    |                      ^^^^
    |
    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
-
-note[screaming-snake-case-immutable]: immutables should use SCREAMING_SNAKE_CASE
-  --> contracts/BackedBatchConsumer.sol:30:39
-   |
-30 |     IGroth16Verifier public immutable verifier;
-   |                                       ^^^^^^^^
-   |
-   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-immutable
 
 note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
   --> contracts/generated/Groth16Verifier.sol:49:22
@@ -281,14 +343,6 @@ note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
    |                      ^^^^
    |
    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
-
-note[asm-keccak256]: use of inefficient hashing mechanism; consider using inline assembly
-  --> contracts/BackedBatchConsumer.sol:57:16
-   |
-57 |         return keccak256(abi.encode(pubSignals));
-   |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-   |
-   = help: https://book.getfoundry.sh/reference/forge/forge-lint#asm-keccak256
 
 note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
   --> contracts/generated/Groth16Verifier.sol:55:22

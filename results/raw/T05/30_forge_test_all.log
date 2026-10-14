@@ -1,21 +1,6 @@
 $ forge test -vv
 No files changed, compilation skipped
 
-Ran 12 tests for test/BackedBatchConsumer.t.sol:BackedBatchConsumerTest
-[PASS] test_consumptionGuardRejectsAlreadyConsumedEntries_isolatedWithHarness() (gas: 1551294)
-[PASS] test_duplicateFundingRejected() (gas: 575066)
-[PASS] test_escrowForDifferentBatchDoesNotBackThisBatch() (gas: 516465)
-[PASS] test_fundRows0_1_3_thenSettlementSucceeds() (gas: 582454)
-[PASS] test_inactiveRowNeedsNoEscrowAndCannotBeFunded() (gas: 570597)
-[PASS] test_incorrectFundingAmountRejected() (gas: 476777)
-[PASS] test_invalidProofWithFullEscrowLeavesStateUnchanged() (gas: 769347)
-[PASS] test_oldCommitmentMismatchWithFullEscrowLeavesStateUnchanged() (gas: 736771)
-[PASS] test_omittedFundingRow0Rejected() (gas: 464772)
-[PASS] test_omittedFundingRow1Rejected() (gas: 467831)
-[PASS] test_omittedFundingRow3Rejected() (gas: 471069)
-[PASS] test_repeatAcceptedSettlementRejected_byOldCommitmentCheck() (gas: 552020)
-Suite result: ok. 12 passed; 0 failed; 0 skipped; finished in 21.43ms (46.45ms CPU time)
-
 Ran 4 tests for test/MutantBackedBatchConsumer.t.sol:MutantBackedBatchConsumerTest
 [PASS] test_RESEARCH_MUTANT_numRealTxs3_acceptsVerifiedProofWithRow3Unbacked_confirmsInvariantViolation() (gas: 1308506)
 Logs:
@@ -73,7 +58,32 @@ Logs:
                          false false
 
 [PASS] test_mutant_retainsOldCommitmentProofAndBoundChecks() (gas: 1949414)
-Suite result: ok. 4 passed; 0 failed; 0 skipped; finished in 21.53ms (22.36ms CPU time)
+Suite result: ok. 4 passed; 0 failed; 0 skipped; finished in 23.70ms (22.64ms CPU time)
+
+Ran 7 tests for test/T06Export.t.sol:T06ExportTest
+[PASS] test_export_exec01() (gas: 1491651)
+[PASS] test_export_exec02() (gas: 1437277)
+[PASS] test_export_exec03() (gas: 1501005)
+[PASS] test_export_exec04() (gas: 1415901)
+[PASS] test_export_exec05() (gas: 1454387)
+[PASS] test_export_exec06() (gas: 1415863)
+[PASS] test_export_exec07() (gas: 1493104)
+Suite result: ok. 7 passed; 0 failed; 0 skipped; finished in 23.81ms (55.41ms CPU time)
+
+Ran 12 tests for test/BackedBatchConsumer.t.sol:BackedBatchConsumerTest
+[PASS] test_consumptionGuardRejectsAlreadyConsumedEntries_isolatedWithHarness() (gas: 1551294)
+[PASS] test_duplicateFundingRejected() (gas: 575066)
+[PASS] test_escrowForDifferentBatchDoesNotBackThisBatch() (gas: 516465)
+[PASS] test_fundRows0_1_3_thenSettlementSucceeds() (gas: 582454)
+[PASS] test_inactiveRowNeedsNoEscrowAndCannotBeFunded() (gas: 570597)
+[PASS] test_incorrectFundingAmountRejected() (gas: 476777)
+[PASS] test_invalidProofWithFullEscrowLeavesStateUnchanged() (gas: 769347)
+[PASS] test_oldCommitmentMismatchWithFullEscrowLeavesStateUnchanged() (gas: 736771)
+[PASS] test_omittedFundingRow0Rejected() (gas: 464772)
+[PASS] test_omittedFundingRow1Rejected() (gas: 467831)
+[PASS] test_omittedFundingRow3Rejected() (gas: 471069)
+[PASS] test_repeatAcceptedSettlementRejected_byOldCommitmentCheck() (gas: 552020)
+Suite result: ok. 12 passed; 0 failed; 0 skipped; finished in 24.49ms (39.94ms CPU time)
 
 Ran 5 tests for test/BatchConsumer.t.sol:BatchConsumerTest
 [PASS] test_alteredAmountWithOriginalProofRejectedByVerifier() (gas: 570496)
@@ -81,7 +91,7 @@ Ran 5 tests for test/BatchConsumer.t.sol:BatchConsumerTest
 [PASS] test_invalidProofRejected_pointNotOnCurve() (gas: 1072189915)
 [PASS] test_invalidProofRejected_wrongCurvePoint() (gas: 567969)
 [PASS] test_validProofAgainstIncompatibleStoredCommitmentRejected() (gas: 518128)
-Suite result: ok. 5 passed; 0 failed; 0 skipped; finished in 24.61ms (27.68ms CPU time)
+Suite result: ok. 5 passed; 0 failed; 0 skipped; finished in 29.98ms (22.23ms CPU time)
 
 Ran 8 tests for test/RepairedPrefixBatchConsumer.t.sol:RepairedPrefixBatchConsumerTest
 [PASS] test_1_originalScenario_rows0and1Funded_limit3_rejectedByActiveRowOutsidePrefix3() (gas: 1212110)
@@ -92,7 +102,7 @@ Ran 8 tests for test/RepairedPrefixBatchConsumer.t.sol:RepairedPrefixBatchConsum
 [PASS] test_5_paddedProof_limit1_rejectedByActiveRowOutsidePrefix1() (gas: 951178)
 [PASS] test_6_limitAbove4_rejectedByInvalidNumRealTxs() (gas: 761311)
 [PASS] test_repairRetainsEscrowProofAndOldCommitmentChecks() (gas: 2385907)
-Suite result: ok. 8 passed; 0 failed; 0 skipped; finished in 24.67ms (33.84ms CPU time)
+Suite result: ok. 8 passed; 0 failed; 0 skipped; finished in 30.10ms (32.75ms CPU time)
 
-Ran 4 test suites in 151.94ms (92.25ms CPU time): 29 tests passed, 0 failed, 0 skipped (29 total tests)
+Ran 5 test suites in 153.87ms (132.08ms CPU time): 36 tests passed, 0 failed, 0 skipped (36 total tests)
 exit=0

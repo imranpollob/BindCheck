@@ -1,5 +1,5 @@
 --- contracts/research/MutantBackedBatchConsumer.sol	2026-10-13 23:50:44
-+++ contracts/research/RepairedPrefixBatchConsumer.sol	2026-10-13 23:57:03
++++ contracts/research/RepairedPrefixBatchConsumer.sol	2026-10-13 23:57:15
 @@ -3,12 +3,20 @@
  
  import {IGroth16Verifier} from "../BatchConsumer.sol";

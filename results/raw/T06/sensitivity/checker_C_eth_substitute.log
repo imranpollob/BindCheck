@@ -1,0 +1,3 @@
+# throwaway checker mutation: substitute total ETH held for consumption
+| exec-07 | NO_VIOLATION | VIOLATION | - | NO: verdict MISMATCH (NO_VIOLATION vs VIOLATION); missing MISMATCH ( vs 3:40:true); deficit MISMATCH (0 vs 40) |
+ORACLE AGREEMENT: DISAGREEMENT
