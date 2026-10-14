@@ -1,0 +1,7 @@
+$ /Users/imranpollob/Coding/ai-coders/claude/node_modules/.bin/snarkjs powersoftau new bn128 12 build/T01/pot_0000.ptau
+[32;22m[INFO]  [39;1msnarkJS[0m: First Contribution Hash:
+		9e63a5f6 2b96538d aaed2372 481920d1
+		a40b9195 9ea38ef9 f5f6a303 3b886516
+		0710d067 c09d0961 5f928ea5 17bcdf49
+		ad75abd2 c8340b40 0e3b18e9 68b4ffef
+exit=0

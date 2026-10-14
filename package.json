@@ -1,0 +1,12 @@
+{
+  "name": "bindcheck",
+  "version": "0.0.1",
+  "private": true,
+  "description": "BindCheck research workspace (T01: honest batch proof fixture)",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "circomlib": "2.0.5",
+    "circomlibjs": "0.1.7",
+    "snarkjs": "0.7.6"
+  }
+}

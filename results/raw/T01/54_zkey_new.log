@@ -1,0 +1,12 @@
+$ /Users/imranpollob/Coding/ai-coders/claude/node_modules/.bin/snarkjs groth16 setup build/T01/batch_deposit.r1cs build/T01/pot_final.ptau build/T01/circuit_0000.zkey
+[32;22m[INFO]  [39;1msnarkJS[0m: Reading r1cs
+[32;22m[INFO]  [39;1msnarkJS[0m: Reading tauG1
+[32;22m[INFO]  [39;1msnarkJS[0m: Reading tauG2
+[32;22m[INFO]  [39;1msnarkJS[0m: Reading alphatauG1
+[32;22m[INFO]  [39;1msnarkJS[0m: Reading betatauG1
+[32;22m[INFO]  [39;1msnarkJS[0m: Circuit hash: 
+		715ac7f6 53cece6b fcba3a4c 93f6f41b
+		4c8721ca 548fe2bb 89452231 d4c45abf
+		ebfaada7 199321e5 12b4e36f 57dafb6a
+		41e15641 4a196b37 62a5be6d 0c00cb1a
+exit=0

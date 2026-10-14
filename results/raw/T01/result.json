@@ -1,0 +1,127 @@
+{
+  "task": "T01",
+  "elapsed_seconds": 50,
+  "all_steps_as_expected": true,
+  "steps": [
+    {
+      "name": "12_versions",
+      "expected": "0",
+      "observed": "0",
+      "verdict": "ok"
+    },
+    {
+      "name": "20_npm_ci",
+      "expected": "0",
+      "observed": "0",
+      "verdict": "ok"
+    },
+    {
+      "name": "30_make_input",
+      "expected": "0",
+      "observed": "0",
+      "verdict": "ok"
+    },
+    {
+      "name": "40_compile",
+      "expected": "0",
+      "observed": "0",
+      "verdict": "ok"
+    },
+    {
+      "name": "41_r1cs_info",
+      "expected": "0",
+      "observed": "0",
+      "verdict": "ok"
+    },
+    {
+      "name": "50_ptau_new",
+      "expected": "0",
+      "observed": "0",
+      "verdict": "ok"
+    },
+    {
+      "name": "51_ptau_contribute",
+      "expected": "0",
+      "observed": "0",
+      "verdict": "ok"
+    },
+    {
+      "name": "52_ptau_prepare",
+      "expected": "0",
+      "observed": "0",
+      "verdict": "ok"
+    },
+    {
+      "name": "53_ptau_verify",
+      "expected": "0",
+      "observed": "0",
+      "verdict": "ok"
+    },
+    {
+      "name": "54_zkey_new",
+      "expected": "0",
+      "observed": "0",
+      "verdict": "ok"
+    },
+    {
+      "name": "55_zkey_contribute",
+      "expected": "0",
+      "observed": "0",
+      "verdict": "ok"
+    },
+    {
+      "name": "56_zkey_verify",
+      "expected": "0",
+      "observed": "0",
+      "verdict": "ok"
+    },
+    {
+      "name": "57_vkey_export",
+      "expected": "0",
+      "observed": "0",
+      "verdict": "ok"
+    },
+    {
+      "name": "60_witness",
+      "expected": "0",
+      "observed": "0",
+      "verdict": "ok"
+    },
+    {
+      "name": "61_wtns_check",
+      "expected": "0",
+      "observed": "0",
+      "verdict": "ok"
+    },
+    {
+      "name": "70_prove",
+      "expected": "0",
+      "observed": "0",
+      "verdict": "ok"
+    },
+    {
+      "name": "71_verify",
+      "expected": "0",
+      "observed": "0",
+      "verdict": "ok"
+    },
+    {
+      "name": "72_public_order",
+      "expected": "0",
+      "observed": "0",
+      "verdict": "ok"
+    },
+    {
+      "name": "81_wrong_sum_witness",
+      "expected": "1",
+      "observed": "1",
+      "verdict": "ok"
+    },
+    {
+      "name": "82_tampered_public_verify",
+      "expected": "1",
+      "observed": "1",
+      "verdict": "ok"
+    }
+  ]
+}

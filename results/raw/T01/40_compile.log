@@ -1,0 +1,14 @@
+$ /Users/imranpollob/Coding/ai-coders/claude/tools/circom-src/target/release/circom circuits/batch_deposit.circom --r1cs --wasm --sym -l node_modules -o build/T01
+[32mtemplate instances[0m: 73
+non-linear constraints: 700
+linear constraints: 405
+public inputs: 10
+private inputs: 2
+public outputs: 0
+wires: 1101
+labels: 1439
+[32mWritten successfully:[0m build/T01/batch_deposit.r1cs
+[32mWritten successfully:[0m build/T01/batch_deposit.sym
+[32mWritten successfully:[0m build/T01/batch_deposit_js/batch_deposit.wasm
+[32mEverything went okay[0m
+exit=0

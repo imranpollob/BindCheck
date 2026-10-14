@@ -1,0 +1,12 @@
+$ /Users/imranpollob/Coding/ai-coders/claude/node_modules/.bin/snarkjs powersoftau contribute build/T01/pot_0000.ptau build/T01/pot_0001.ptau --name=bindcheck-T01-toy -e=bindcheck T01 public toy entropy - not secret
+[32;22m[INFO]  [39;1msnarkJS[0m: Contribution Response Hash imported: 
+		63ebf187 56390f35 6884a9b6 0aff915d
+		8dc67c35 37bddcf5 f2b3a2ac 30d713b4
+		e6af864d d5f362a4 b029465b 3bc22af7
+		dde5a9b6 4e965bde 0d576647 c4715d86
+[32;22m[INFO]  [39;1msnarkJS[0m: Next Challenge Hash: 
+		81b72f65 1e87d52a 81072dd3 23133aa7
+		a43f7185 7ea0aee4 21127655 d14c2aab
+		10fea6dc 04e90e25 8d7dac17 2651ef11
+		748c8197 5adab2c5 f4cd8de0 622285af
+exit=0

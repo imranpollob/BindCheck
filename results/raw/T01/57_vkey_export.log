@@ -1,0 +1,5 @@
+$ /Users/imranpollob/Coding/ai-coders/claude/node_modules/.bin/snarkjs zkey export verificationkey build/T01/circuit_final.zkey build/T01/verification_key.json
+[32;22m[INFO]  [39;1msnarkJS[0m: EXPORT VERIFICATION KEY STARTED
+[32;22m[INFO]  [39;1msnarkJS[0m: > Detected protocol: groth16
+[32;22m[INFO]  [39;1msnarkJS[0m: EXPORT VERIFICATION KEY FINISHED
+exit=0

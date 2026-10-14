@@ -1,0 +1,13 @@
+$ /Users/imranpollob/Coding/ai-coders/claude/node_modules/.bin/snarkjs wtns calculate build/T01/batch_deposit_js/batch_deposit.wasm build/T01/input_wrong_sum.json build/T01/witness_wrong_sum.wtns
+ERROR:  4 Error in template BatchDeposit_72 line: 65
+
+[31;22m[ERROR] [39;1msnarkJS[0m: Error: Error: Assert Failed. Error in template BatchDeposit_72 line: 65
+
+    at /Users/imranpollob/Coding/ai-coders/claude/node_modules/circom_runtime/build/main.cjs:529:27
+    at Array.forEach (<anonymous>)
+    at WitnessCalculatorCircom2._doCalculateWitness (/Users/imranpollob/Coding/ai-coders/claude/node_modules/circom_runtime/build/main.cjs:500:14)
+    at WitnessCalculatorCircom2.calculateWTNSBin (/Users/imranpollob/Coding/ai-coders/claude/node_modules/circom_runtime/build/main.cjs:559:20)
+    at wtnsCalculate$1 (/Users/imranpollob/Coding/ai-coders/claude/node_modules/snarkjs/build/cli.cjs:6100:28)
+    at async Object.wtnsCalculate [as action] (/Users/imranpollob/Coding/ai-coders/claude/node_modules/snarkjs/build/cli.cjs:12925:5)
+    at async clProcessor (/Users/imranpollob/Coding/ai-coders/claude/node_modules/snarkjs/build/cli.cjs:519:27)
+exit=1
