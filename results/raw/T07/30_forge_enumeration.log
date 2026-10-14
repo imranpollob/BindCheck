@@ -1,0 +1,16 @@
+$ forge test --match-path test/T07Baseline.t.sol
+No files changed, compilation skipped
+
+Ran 8 tests for test/T07Baseline.t.sol:T07BaselineTest
+[PASS] test_eachEvaluatedConsumerEnforcesTheVerifierResult() (gas: 3597543)
+[PASS] test_enumerate_correct_original() (gas: 11274124)
+[PASS] test_enumerate_correct_padded() (gas: 5370476)
+[PASS] test_enumerate_mutant_original() (gas: 71925352)
+[PASS] test_enumerate_mutant_padded() (gas: 30585500)
+[PASS] test_enumerate_repaired_original() (gas: 70512404)
+[PASS] test_enumerate_repaired_padded() (gas: 30627025)
+[PASS] test_standaloneAssertion_holdsOnHonestSettlement_andFailsOnKnownCoverageGap() (gas: 1948424)
+Suite result: ok. 8 passed; 0 failed; 0 skipped; finished in 245.39ms (824.31ms CPU time)
+
+Ran 1 test suite in 245.78ms (245.39ms CPU time): 8 tests passed, 0 failed, 0 skipped (8 total tests)
+exit=0

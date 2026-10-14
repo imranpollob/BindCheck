@@ -8,6 +8,6 @@ Ran 5 tests for test/BatchConsumer.t.sol:BatchConsumerTest
 [PASS] test_invalidProofRejected_pointNotOnCurve() (gas: 1072189915)
 [PASS] test_invalidProofRejected_wrongCurvePoint() (gas: 567969)
 [PASS] test_validProofAgainstIncompatibleStoredCommitmentRejected() (gas: 518128)
-Suite result: ok. 5 passed; 0 failed; 0 skipped; finished in 19.00ms (24.86ms CPU time)
-Ran 1 test suite in 162.88ms (19.00ms CPU time): 5 tests passed, 0 failed, 0 skipped (5 total tests)
+Suite result: ok. 5 passed; 0 failed; 0 skipped; finished in 18.96ms (26.12ms CPU time)
+Ran 1 test suite in 189.58ms (18.96ms CPU time): 5 tests passed, 0 failed, 0 skipped (5 total tests)
 exit=0

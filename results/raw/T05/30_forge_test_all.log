@@ -58,17 +58,26 @@ Logs:
                          false false
 
 [PASS] test_mutant_retainsOldCommitmentProofAndBoundChecks() (gas: 1949414)
-Suite result: ok. 4 passed; 0 failed; 0 skipped; finished in 23.70ms (22.64ms CPU time)
+Suite result: ok. 4 passed; 0 failed; 0 skipped; finished in 28.54ms (25.86ms CPU time)
 
-Ran 7 tests for test/T06Export.t.sol:T06ExportTest
-[PASS] test_export_exec01() (gas: 1491651)
-[PASS] test_export_exec02() (gas: 1437277)
-[PASS] test_export_exec03() (gas: 1501005)
-[PASS] test_export_exec04() (gas: 1415901)
-[PASS] test_export_exec05() (gas: 1454387)
-[PASS] test_export_exec06() (gas: 1415863)
-[PASS] test_export_exec07() (gas: 1493104)
-Suite result: ok. 7 passed; 0 failed; 0 skipped; finished in 23.81ms (55.41ms CPU time)
+Ran 5 tests for test/BatchConsumer.t.sol:BatchConsumerTest
+[PASS] test_alteredAmountWithOriginalProofRejectedByVerifier() (gas: 570496)
+[PASS] test_honestProofAcceptedAndCommitmentUpdated() (gas: 566850)
+[PASS] test_invalidProofRejected_pointNotOnCurve() (gas: 1072189915)
+[PASS] test_invalidProofRejected_wrongCurvePoint() (gas: 567969)
+[PASS] test_validProofAgainstIncompatibleStoredCommitmentRejected() (gas: 518128)
+Suite result: ok. 5 passed; 0 failed; 0 skipped; finished in 35.18ms (32.16ms CPU time)
+
+Ran 8 tests for test/RepairedPrefixBatchConsumer.t.sol:RepairedPrefixBatchConsumerTest
+[PASS] test_1_originalScenario_rows0and1Funded_limit3_rejectedByActiveRowOutsidePrefix3() (gas: 1212110)
+[PASS] test_2_allActiveRowsFunded_limit3_stillRejectedByActiveRowOutsidePrefix3() (gas: 1007824)
+[PASS] test_3_originalProof_allActiveRowsFunded_limit4_succeeds() (gas: 1040320)
+[PASS] test_4_paddedProof_rows0and1Funded_limit2_acceptedAndConsumesExactly350() (gas: 1019811)
+[PASS] test_4b_paddedProof_limit4_alsoAccepted() (gas: 980568)
+[PASS] test_5_paddedProof_limit1_rejectedByActiveRowOutsidePrefix1() (gas: 951178)
+[PASS] test_6_limitAbove4_rejectedByInvalidNumRealTxs() (gas: 761311)
+[PASS] test_repairRetainsEscrowProofAndOldCommitmentChecks() (gas: 2385907)
+Suite result: ok. 8 passed; 0 failed; 0 skipped; finished in 37.92ms (33.05ms CPU time)
 
 Ran 12 tests for test/BackedBatchConsumer.t.sol:BackedBatchConsumerTest
 [PASS] test_consumptionGuardRejectsAlreadyConsumedEntries_isolatedWithHarness() (gas: 1551294)
@@ -83,26 +92,28 @@ Ran 12 tests for test/BackedBatchConsumer.t.sol:BackedBatchConsumerTest
 [PASS] test_omittedFundingRow1Rejected() (gas: 467831)
 [PASS] test_omittedFundingRow3Rejected() (gas: 471069)
 [PASS] test_repeatAcceptedSettlementRejected_byOldCommitmentCheck() (gas: 552020)
-Suite result: ok. 12 passed; 0 failed; 0 skipped; finished in 24.49ms (39.94ms CPU time)
+Suite result: ok. 12 passed; 0 failed; 0 skipped; finished in 262.93ms (41.69ms CPU time)
 
-Ran 5 tests for test/BatchConsumer.t.sol:BatchConsumerTest
-[PASS] test_alteredAmountWithOriginalProofRejectedByVerifier() (gas: 570496)
-[PASS] test_honestProofAcceptedAndCommitmentUpdated() (gas: 566850)
-[PASS] test_invalidProofRejected_pointNotOnCurve() (gas: 1072189915)
-[PASS] test_invalidProofRejected_wrongCurvePoint() (gas: 567969)
-[PASS] test_validProofAgainstIncompatibleStoredCommitmentRejected() (gas: 518128)
-Suite result: ok. 5 passed; 0 failed; 0 skipped; finished in 29.98ms (22.23ms CPU time)
+Ran 7 tests for test/T06Export.t.sol:T06ExportTest
+[PASS] test_export_exec01() (gas: 1491651)
+[PASS] test_export_exec02() (gas: 1437277)
+[PASS] test_export_exec03() (gas: 1501005)
+[PASS] test_export_exec04() (gas: 1415901)
+[PASS] test_export_exec05() (gas: 1454387)
+[PASS] test_export_exec06() (gas: 1415863)
+[PASS] test_export_exec07() (gas: 1493104)
+Suite result: ok. 7 passed; 0 failed; 0 skipped; finished in 267.06ms (55.92ms CPU time)
 
-Ran 8 tests for test/RepairedPrefixBatchConsumer.t.sol:RepairedPrefixBatchConsumerTest
-[PASS] test_1_originalScenario_rows0and1Funded_limit3_rejectedByActiveRowOutsidePrefix3() (gas: 1212110)
-[PASS] test_2_allActiveRowsFunded_limit3_stillRejectedByActiveRowOutsidePrefix3() (gas: 1007824)
-[PASS] test_3_originalProof_allActiveRowsFunded_limit4_succeeds() (gas: 1040320)
-[PASS] test_4_paddedProof_rows0and1Funded_limit2_acceptedAndConsumesExactly350() (gas: 1019811)
-[PASS] test_4b_paddedProof_limit4_alsoAccepted() (gas: 980568)
-[PASS] test_5_paddedProof_limit1_rejectedByActiveRowOutsidePrefix1() (gas: 951178)
-[PASS] test_6_limitAbove4_rejectedByInvalidNumRealTxs() (gas: 761311)
-[PASS] test_repairRetainsEscrowProofAndOldCommitmentChecks() (gas: 2385907)
-Suite result: ok. 8 passed; 0 failed; 0 skipped; finished in 30.10ms (32.75ms CPU time)
+Ran 8 tests for test/T07Baseline.t.sol:T07BaselineTest
+[PASS] test_eachEvaluatedConsumerEnforcesTheVerifierResult() (gas: 3597543)
+[PASS] test_enumerate_correct_original() (gas: 11274124)
+[PASS] test_enumerate_correct_padded() (gas: 5370476)
+[PASS] test_enumerate_mutant_original() (gas: 71925352)
+[PASS] test_enumerate_mutant_padded() (gas: 30585500)
+[PASS] test_enumerate_repaired_original() (gas: 70512404)
+[PASS] test_enumerate_repaired_padded() (gas: 30627025)
+[PASS] test_standaloneAssertion_holdsOnHonestSettlement_andFailsOnKnownCoverageGap() (gas: 1948424)
+Suite result: ok. 8 passed; 0 failed; 0 skipped; finished in 267.13ms (838.59ms CPU time)
 
-Ran 5 test suites in 153.87ms (132.08ms CPU time): 36 tests passed, 0 failed, 0 skipped (36 total tests)
+Ran 6 test suites in 267.72ms (898.77ms CPU time): 44 tests passed, 0 failed, 0 skipped (44 total tests)
 exit=0

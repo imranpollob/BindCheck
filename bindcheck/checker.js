@@ -168,6 +168,7 @@ function checkRecord(rec, spec) {
       newlyConsumedTotal: newlyConsumed.toString(), consumedBackingDelta: deltaBacking.toString(),
       ethBefore: pre.eth.toString(), ethAfter: post.eth.toString(),
     };
+    out.notes.push("Proof acceptance is inferred from the successful settlement and the observed verifier call; this depends on the consumer enforcing the verifier result (see spec assumptions).");
     if (out.findings.some((f) => f.fundedButUnconsumed)) out.notes.push("Some missing obligations have escrow physically held but unconsumed: a consumption shortfall, not absent funds.");
     if (out.findings.some((f) => f.kind === "missing_consumption" && f.reason === "unfunded")) out.notes.push("Some missing obligations are unfunded: no escrow was present for them.");
     if (out.findings.length === 0) return finish("NO_VIOLATION", "settled; all specified obligations met by the recorded evidence");
@@ -195,6 +196,6 @@ if (require.main === module) {
   if (!specF || !dir || !outF) { console.error("usage: node bindcheck/checker.js <spec.json> <records_dir> <out.json>"); process.exit(2); }
   const spec = JSON.parse(fs.readFileSync(specF, "utf8"));
   const results = checkDir(spec, dir);
-  fs.writeFileSync(outF, JSON.stringify({ specId: spec.specId, results }, null, 2) + "\n");
+  fs.writeFileSync(outF, JSON.stringify({ specId: spec.specId, specAssumptions: spec.assumptions || [], results }, null, 2) + "\n");
   for (const r of results) console.log(`${r.file}\t${r.verdict}\t${r.summary}`);
 }

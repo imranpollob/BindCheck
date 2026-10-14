@@ -1,0 +1,1 @@
+{"caseId":"c-113","consumer":"repaired","fixture":"padded","fundedRows":[],"limit":"0","status":"reverted","baseline":{"holds":true,"commitmentOk":false,"accountingOk":false,"stateUnchanged":true,"violations":[],"missingAmount":"0"}}

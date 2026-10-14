@@ -7,4 +7,4 @@ solc_version = "0.8.28"
 evm_version = "paris"
 optimizer = true
 optimizer_runs = 200
-fs_permissions = [{ access = "read", path = "./build" }, { access = "read-write", path = "./results/raw/T06" }]
+fs_permissions = [{ access = "read", path = "./build" }, { access = "read-write", path = "./results/raw/T06" }, { access = "read-write", path = "./results/raw/T07" }]

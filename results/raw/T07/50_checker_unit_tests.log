@@ -1,0 +1,22 @@
+$ node --test --test-reporter=spec bindcheck/test/checker.test.js
+✔ baseline: records are present and every verdict is definite (0.491ms)
+✔ renaming executionId, addresses and chain metadata does not change verdicts (1.058042ms)
+✔ swapping executionIds between records: verdict follows the evidence, not the id (0.23425ms)
+✔ checker source and spec contain no scenario/variant names and no hard-coded row or amount rules (0.434959ms)
+✔ missing required evidence is never a clean verdict (8.104291ms)
+✔ a settled record whose verifier call was not observed is inconclusive (even if state looks fine) (0.112292ms)
+✔ optional fields may be absent without changing verdicts (0.336333ms)
+✔ malformed or inconsistent evidence is an evidence error, never clean (0.871417ms)
+✔ no clean verdict when a settled record's per-row evidence is altered to hide a shortfall (0.151458ms)
+✔ commitment value is not the success indicator: unchanged commitment with unmet obligation is still a finding (0.15825ms)
+✔ SYNTHETIC: a legitimate no-op (all rows inactive, old == new commitment) is clean though the commitment value is unchanged (0.16275ms)
+✔ SYNTHETIC: replayed settlement (entry already consumed before the call) is reported with its own reason (0.105709ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 81.379
+exit=0

@@ -1,0 +1,27 @@
+$ node bindcheck/compare_baseline.js bindcheck/spec/batch_backing.spec.json results/raw/T07/records results/raw/T07/baseline results/raw/T07/analysis
+Cases: 132; checker verdicts: 132; baseline results: 132
+
+| consumer/fixture | cases | success | reverted | checker verdicts | baseline verdicts |
+|---|---|---|---|---|---|
+| correct/original | 8 | 1 | 7 | {"REVERTED_UNCHANGED":7,"NO_VIOLATION":1} | {"REVERTED_UNCHANGED":7,"CLEAN":1} |
+| correct/padded | 4 | 1 | 3 | {"REVERTED_UNCHANGED":3,"NO_VIOLATION":1} | {"REVERTED_UNCHANGED":3,"CLEAN":1} |
+| mutant/original | 40 | 17 | 23 | {"VIOLATION":16,"REVERTED_UNCHANGED":23,"NO_VIOLATION":1} | {"VIOLATION":16,"REVERTED_UNCHANGED":23,"CLEAN":1} |
+| mutant/padded | 20 | 9 | 11 | {"VIOLATION":6,"REVERTED_UNCHANGED":11,"NO_VIOLATION":3} | {"VIOLATION":6,"REVERTED_UNCHANGED":11,"CLEAN":3} |
+| repaired/original | 40 | 1 | 39 | {"REVERTED_UNCHANGED":39,"NO_VIOLATION":1} | {"REVERTED_UNCHANGED":39,"CLEAN":1} |
+| repaired/padded | 20 | 3 | 17 | {"REVERTED_UNCHANGED":17,"NO_VIOLATION":3} | {"REVERTED_UNCHANGED":17,"CLEAN":3} |
+
+| dimension | agree / total |
+|---|---|
+| classification | 132 / 132 |
+| violationFlag | 132 / 132 |
+| affectedRowsAndAmounts | 132 / 132 |
+| missingAmount | 132 / 132 |
+| stateAfterRejection | 132 / 132 |
+| commitmentAndAccounting | 132 / 132 |
+| design-intent prediction vs checker | 132 / 132 |
+| design-intent prediction vs baseline | 132 / 132 |
+
+Checker time (in-process, 132 records, read+parse+evaluate): first run 11.67 ms, median of 20 runs 5.55 ms (0.042 ms/record)
+
+Disagreements: 0
+exit=0

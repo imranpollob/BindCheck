@@ -1,0 +1,1 @@
+{"caseId":"c-053","consumer":"mutant","fixture":"padded","fundedRows":[],"limit":"0","status":"success","baseline":{"holds":false,"commitmentOk":true,"accountingOk":true,"stateUnchanged":false,"violations":[{"row":0,"amount":"100","fundedButUnconsumed":false},{"row":1,"amount":"250","fundedButUnconsumed":false}],"missingAmount":"350"}}

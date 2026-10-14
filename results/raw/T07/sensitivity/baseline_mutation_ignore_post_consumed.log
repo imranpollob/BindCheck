@@ -1,0 +1,9 @@
+# throwaway baseline mutation: coverage check ignores the post-state consumed flag
+[FAIL: assertion failed] test_standaloneAssertion_holdsOnHonestSettlement_andFailsOnKnownCoverageGap() (gas: 1943036)
+Suite result: FAILED. 7 passed; 1 failed; 0 skipped; finished in 266.99ms (857.63ms CPU time)
+[FAIL: assertion failed] test_standaloneAssertion_holdsOnHonestSettlement_andFailsOnKnownCoverageGap() (gas: 1943036)
+| violationFlag | 126 / 132 |
+| affectedRowsAndAmounts | 116 / 132 |
+| missingAmount | 116 / 132 |
+| design-intent prediction vs baseline | 116 / 132 |
+Disagreements: 54
