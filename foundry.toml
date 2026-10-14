@@ -50,9 +50,13 @@ remappings = [
 ]
 fs_permissions = [
   { access = "read", path = "./build/T12" },
+  { access = "read", path = "./build/T18" },
   { access = "read", path = "./results/raw/T10" },
   { access = "read-write", path = "./results/raw/T12" },
   { access = "read", path = "./results/raw/T13" },
   { access = "read-write", path = "./results/raw/T13/observations" },
   { access = "read-write", path = "./results/raw/T14/observations" },
+  { access = "read", path = "./results/raw/T16" },
+  { access = "read-write", path = "./results/raw/T18" },
+  { access = "read-write", path = "./results/raw/T19" },
 ]
