@@ -1,0 +1,10 @@
+{
+  "messages": "abi:messages",
+  "streams": [
+    {"source": "rec:0[5:13]", "active_if_nonzero": "abi:proofs[0].old_root"},
+    {"source": "rec:1[5:13]", "active_if_nonzero": "abi:proofs[1].old_root"}
+  ],
+  "derivation": {"mode": "walk", "records": {"2": 4, "3": 5, "4": 5}},
+  "recursion_public_inputs_start": 623,
+  "instance": "agg_agg source with array length 1000 -> 8 (scratch copy); verdict is for the N=8 instance"
+}

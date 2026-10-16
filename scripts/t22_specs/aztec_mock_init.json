@@ -1,0 +1,8 @@
+{
+  "messages": "return:commitments",
+  "streams": [
+    {"source": "abi:app_inputs.commitments"}
+  ],
+  "derivation": {"mode": "nonzero"},
+  "instance": "unscaled (4 message words); nargo 1.0.0-rc.4"
+}

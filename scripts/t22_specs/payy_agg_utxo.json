@@ -1,0 +1,11 @@
+{
+  "messages": "abi:messages",
+  "streams": [
+    {"source": "rec:0[4:9]", "active_if_nonzero": "abi:proofs[0].utxo_kind"},
+    {"source": "rec:1[4:9]", "active_if_nonzero": "abi:proofs[1].utxo_kind"},
+    {"source": "rec:2[4:9]", "active_if_nonzero": "abi:proofs[2].utxo_kind"}
+  ],
+  "derivation": {"mode": "walk", "records": {"2": 4, "3": 5}},
+  "recursion_public_inputs_start": 623,
+  "instance": "agg_utxo source with array length 1000 -> 8 (scratch copy); verdict is for the N=8 instance"
+}
