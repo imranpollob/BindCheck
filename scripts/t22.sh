@@ -10,8 +10,14 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 
-OUT="$ROOT/results/raw/T22"
-WORK="$ROOT/build/T22/scratch"
+OUT_ROOT="$ROOT/results/raw/T22"
+RUN_ID="${T22_RUN_ID:-$(date -u +%Y%m%dT%H%M%SZ)}"
+if [[ ! "$RUN_ID" =~ ^[A-Za-z0-9._-]+$ ]]; then
+  echo "invalid T22_RUN_ID: $RUN_ID" >&2
+  exit 1
+fi
+OUT="$OUT_ROOT/$RUN_ID"
+WORK="$ROOT/build/T22/scratch-$RUN_ID"
 PAYY="$ROOT/tools/cases/payy-history"
 A="c4d2c9021b8fb9988816eb6987a734b830bfce15"
 B="dcd5d96ee15664a59bc24ed0dc2bb78b73ac5e36"
@@ -19,6 +25,10 @@ NARGO="${NARGO:-$ROOT/tools/noir-1.0.0-beta.14/nargo}"
 CVC5="${CVC5:-$ROOT/tools/cvc5-1.4.2-gpl/bin/cvc5}"
 TLIMIT="${TLIMIT:-300}"
 
+if [ -e "$OUT" ]; then
+  echo "refusing to overwrite existing T22 run: $OUT" >&2
+  exit 1
+fi
 mkdir -p "$OUT" "$ROOT/build/T22" "$ROOT/tools/cases"
 
 if [ ! -d "$PAYY/.git" ]; then

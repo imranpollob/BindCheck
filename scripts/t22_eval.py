@@ -28,15 +28,15 @@ def sub(s, old, new):
 FN = re.search(r"fn assert_message_tail_zero.*?\n}\n", TAIL_B, re.S).group(0)
 U = scale(src_of("B", "agg_utxo"))
 CASES = [  # name, pkg, source, spec, expected (declared before running; see results/raw/T22/05_expectations.md)
- ("A agg_agg (earlier)",            "agg_agg",  scale(src_of("A", "agg_agg")), "payy_agg_agg.json", "VIOLATED"),
- ("B agg_agg (check added)",        "agg_agg",  TAIL_B, "payy_agg_agg.json", "SATISFIED_AT_SCOPE"),
- ("agg_utxo (A=B)",                 "agg_utxo", U, "payy_agg_utxo.json", "SATISFIED_AT_SCOPE"),
- ("m1 B: guard > instead of >=",    "agg_agg",  sub(TAIL_B, "if i >= messages_index", "if i > messages_index"), "payy_agg_agg.json", "VIOLATED"),
- ("m2 B: loop skips last slot",     "agg_agg",  sub(TAIL_B, "for i in 0..messages.len() {", "for i in 0..7 {"), "payy_agg_agg.json", "VIOLATED"),
- ("m3 B: helper call deleted",      "agg_agg",  sub(TAIL_B, "    assert_message_tail_zero(messages, messages_index);\n", ""), "payy_agg_agg.json", "VIOLATED"),
- ("m4 B: different idiom (flag)",   "agg_agg",  sub(TAIL_B, FN, FLAG + "\n"), "payy_agg_agg.json", "SATISFIED_AT_SCOPE"),
- ("m5 utxo: tail loop deleted",     "agg_utxo", re.sub(r"    // Verify all other messages are zero\n.*?\n    }\n", "", U, flags=re.S), "payy_agg_utxo.json", "VIOLATED"),
- ("m6 utxo: else-branch idiom",     "agg_utxo", sub(U, "        if i >= messages_index {\n            assert(messages[i] == 0, \"Message is not zero\");\n        }", "        if i < messages_index {\n        } else {\n            assert(messages[i] == 0, \"Message is not zero\");\n        }"), "payy_agg_utxo.json", "SATISFIED_AT_SCOPE"),
+ ("A agg_agg (earlier)",            "agg_agg",  scale(src_of("A", "agg_agg")), "payy_agg_agg.json", "VIOLATION"),
+ ("B agg_agg (check added)",        "agg_agg",  TAIL_B, "payy_agg_agg.json", "VERIFIED_WITHIN_SCOPE"),
+ ("agg_utxo (A=B)",                 "agg_utxo", U, "payy_agg_utxo.json", "VERIFIED_WITHIN_SCOPE"),
+ ("m1 B: guard > instead of >=",    "agg_agg",  sub(TAIL_B, "if i >= messages_index", "if i > messages_index"), "payy_agg_agg.json", "VIOLATION"),
+ ("m2 B: loop skips last slot",     "agg_agg",  sub(TAIL_B, "for i in 0..messages.len() {", "for i in 0..7 {"), "payy_agg_agg.json", "VIOLATION"),
+ ("m3 B: helper call deleted",      "agg_agg",  sub(TAIL_B, "    assert_message_tail_zero(messages, messages_index);\n", ""), "payy_agg_agg.json", "VIOLATION"),
+ ("m4 B: different idiom (flag)",   "agg_agg",  sub(TAIL_B, FN, FLAG + "\n"), "payy_agg_agg.json", "VERIFIED_WITHIN_SCOPE"),
+ ("m5 utxo: tail loop deleted",     "agg_utxo", re.sub(r"    // Verify all other messages are zero\n.*?\n    }\n", "", U, flags=re.S), "payy_agg_utxo.json", "VIOLATION"),
+ ("m6 utxo: else-branch idiom",     "agg_utxo", sub(U, "        if i >= messages_index {\n            assert(messages[i] == 0, \"Message is not zero\");\n        }", "        if i < messages_index {\n        } else {\n            assert(messages[i] == 0, \"Message is not zero\");\n        }"), "payy_agg_utxo.json", "VERIFIED_WITHIN_SCOPE"),
 ]
 ONLY_CASE = os.environ.get("T22_ONLY_CASE")
 if ONLY_CASE:

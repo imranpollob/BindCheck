@@ -11,7 +11,7 @@ Spec (JSON) -- every field is an ANALYST ASSUMPTION and is echoed as such:
   recursion_public_inputs_start  (only for flat `inputs:` recursion lines, nargo beta.14)
   instance        free text (e.g. scale) copied into the report
 ref syntax: abi:path | return:path | rec:CALL[LO:HI]   (path = a.b[3].c, arrays expand to all elements)
-Verdicts: SATISFIED_AT_SCOPE | VIOLATED | UNKNOWN.
+Verdicts: VERIFIED_WITHIN_SCOPE | VIOLATION | UNKNOWN.
 """
 import argparse, json, os, re, sys, time
 P = 21888242871839275222246405745257275088548364400416034343698204186575808495617
@@ -753,7 +753,7 @@ def run(spec, acir_text, abi, timeout=300, smt_dir=None):
         if pr[0] == "sat":
             rep["checked"].append("PROBE: satisfying witness with every inner stream inactive (empty prefix, L=0) and a nonzero message slot: " + json.dumps(pr[5]))
             rep["checked"].append(f"lemmas used: booleans/is-zero = {pr[6]}")
-            rep["verdict"] = "VIOLATED" if not pr[4] else "UNKNOWN"
+            rep["verdict"] = "VIOLATION" if not pr[4] else "UNKNOWN"
             rep["notes"].append(f"cone: {pr[2]} of {len(acir.ops)} opcodes after exact pruning; components outside the cone are assumed satisfiable")
             if "v1_all_stream_cone" in pr[5]:
                 old = pr[5]["v1_all_stream_cone"]
@@ -775,13 +775,13 @@ def run(spec, acir_text, abi, timeout=300, smt_dir=None):
     rep["checked"].append("non-vacuity: the cone's constraints are satisfiable with a non-empty prefix (L>=1)")
     if tl == "sat":
         rep["checked"].append("TAIL: counterexample = satisfying witness with a message slot >= L nonzero: " + json.dumps(res["tail"][5]))
-        rep["verdict"] = "VIOLATED" if not free else "UNKNOWN"
+        rep["verdict"] = "VIOLATION" if not free else "UNKNOWN"
         if free: rep["notes"].append("SAT may be spurious (unmodeled black-box outputs in cone)")
     elif tl == "unsat":
         if pf == "unsat":
             rep["checked"].append("PREFIX: no satisfying witness where an emitted inner word differs from the slot the spec assigns it (spec consistent with circuit)")
             rep["checked"].append("TAIL: no satisfying witness with any message slot >= L(spec) nonzero")
-            rep["verdict"] = "SATISFIED_AT_SCOPE"
+            rep["verdict"] = "VERIFIED_WITHIN_SCOPE"
         else:
             rep["checked"].append(f"TAIL: unsat, but PREFIX query is {pf}: spec derivation does not match circuit, so L is not trustworthy")
             if pf == "sat": rep["checked"].append("PREFIX counterexample: " + json.dumps(res["prefix"][5]))
