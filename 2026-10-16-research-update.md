@@ -1,5 +1,7 @@
 # BindCheck: weekly update
 
+> **Historical snapshot (16 October 2026).** This file preserves the progress description written on that date. Use [`docs/research-contract.md`](docs/research-contract.md) for current research decisions and [`README.md`](README.md) for current task status. Its “Next steps” section is not the active task queue.
+
 **In one paragraph.** A zero-knowledge proof lets someone show a computation was done correctly without revealing the details. A smart contract checks the proof, then moves money based on what the proof says. BindCheck asks one question: *does what the proof guarantees match what the contract does with it?* I built a small test system, reproduced a real, publicly disclosed vulnerability in the Payy project from circuit to token transfer, and confirmed that Payy's fix stops it.
 
 **Key terms**

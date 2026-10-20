@@ -3,6 +3,8 @@
 **A beginner-friendly project plan, technical proposal, and paper-development guide**  
 Prepared for Imran Pollob · Revised 13 October 2026 · Technical review incorporated; small-task coder workflow added
 
+> **Historical planning document.** This guide records the plan and evidence assessment as of 13 October 2026. The authoritative current scope and evidence rules are in [`docs/research-contract.md`](docs/research-contract.md); current implementation status is in [`README.md`](README.md). Later T15–T21 work supersedes several status statements below, especially the Payy evidence and the absence of an accepted-proof execution violation.
+
 ## 1. The recommendation
 
 **Keep the broad research goal, build a convincing first instance, and expand through evidence.** The goal is a systematic method for checking whether the security guarantees established by a ZK proof are preserved when an application interprets the proof and executes protected state changes. A narrow first implementation is a way to make progress, not the permanent boundary of the idea.
@@ -19,7 +21,7 @@ This is a proposed research contribution, not an established novel result. Accep
 
 This revision reads the supplied guide, checks incident reports and research sources, examines relevant published S&P approaches, and proposes a substantially revised methodology. It does **not** build BindCheck, run historical forks, reproduce vulnerabilities, prove the proposed theorem, establish ecosystem prevalence, or certify that no overlapping work exists. Those are research tasks with explicit acceptance criteria below.
 
-Primary reports substantiate the Aztec Connect motivation. Some other claims need weaker labels. In particular, the Aztec 2.0 mechanism remains partly hypothetical in its own incident report. The Payy advisory could not be retrieved in readable primary-source form during this review; its detailed claims remain provisional. The original plan's confident “verified” labels should not be carried into a paper.
+Primary reports substantiate the Aztec Connect motivation. Some other claims need weaker labels. In particular, the Aztec 2.0 mechanism remains partly hypothetical in its own incident report. At the time of this review, the Payy advisory could not be retrieved in readable form. It was retrieved later and mapped to the local T15–T20 reproduction; use those later records rather than this document's provisional Payy assessment.
 
 ### How to use this guide
 
@@ -86,7 +88,7 @@ These examples are explanatory designs, not newly discovered vulnerabilities.
 |---|---|---|
 | A real gap can exist between proof acceptance and settlement | Supported by primary incident evidence [1] | Keep as motivation |
 | Aztec 2.0's exact root-mismatch mechanism is verified | Its primary report calls the mechanism a leading hypothesis [2] | Separate observed loss from the hypothesized mechanism |
-| Payy advisory details are established | Primary advisory access was unsuccessful in this review | Keep a candidate record; do not use it as confirmed benchmark ground truth |
+| Payy advisory details are established | Unresolved during this 13 October review; later superseded by the advisory retrieval and T15–T20 evidence | Use T20 and the Payy case study for current evidence status |
 | The integration bug class is new | Already discussed in prior work [3] | Claim an advance in method and evidence, if demonstrated |
 | No formal work addresses proof/state agreement | Too broad: prior rollup modeling includes this agreement [10] | Compare concrete properties and assumptions |
 | Every obligation only needs some matching effect | Allows duplicate use and incorrect aggregation | Track identities, multiplicity, quantity, and state transitions |
@@ -115,9 +117,9 @@ The primary report describes an approximately $2.2M incident on 17 June 2026 and
 
 Treat this as a secondary case requiring circuit and key provenance work. A successful replay would confirm acceptance and effects; it would not, by itself, prove how the private witness was constructed. Do not count “stale VK,” a duplicate-root defect, and a header mismatch as three independent confirmed bugs without separate evidence.
 
-### 4.3 Payy: preserve the lead, lower the confidence
+### 4.3 Payy: historical assessment, superseded by T15–T20
 
-The uploaded guide distinguishes a trailing-message aggregation flaw, identified as `CVE-2026-48100` / `GHSA-fhxc-63vg-9gwr`, from a reported September verifier incident. That distinction may be important, but the primary advisory and an authoritative incident report were not available in readable form during this review. [12]
+The uploaded guide distinguishes a trailing-message aggregation flaw, identified as `CVE-2026-48100` / `GHSA-fhxc-63vg-9gwr`, from a reported September verifier incident. The primary advisory was unavailable during this review, but was retrieved later. T15–T20 now provide the current local reproduction, repair validation, and advisory mapping. The separate verifier incident remains outside the initial BindCheck scope. [12]
 
 Before promotion into the dataset, retrieve the advisory, vulnerable and repaired commits, deployed or tested verifier configuration, and the actual caller/prover restrictions. Verify the affected versions and whether the issue was exploited. Do not assume the two descriptions represent either the same bug or two independent incidents. A media account can point to a case; it cannot establish the circuit semantics.
 
@@ -775,7 +777,7 @@ Links below are primary research, author, maintainer, or official venue sources 
 9. **Wang et al. Understanding Verification Vulnerabilities in Cross-chain Bridges: An Empirical Study. arXiv preprint, submitted 9 October 2026.** Full-text taxonomy, dataset, evaluation methodology, and discussion inspected. [Paper](https://arxiv.org/html/2610.13170v1). Treat as a preprint; independently validate any reused case.
 10. **Towards a Formal Foundation for Blockchain ZK Rollups.** Full-text model and relevant consistency/queue passages inspected. [Version 3](https://arxiv.org/html/2406.16219v3). This guide uses the inspected version without relying on the uploaded guide's unverified venue label.
 11. **SmartAxe: Detecting Cross-Chain Vulnerabilities in Bridge Smart Contracts via Fine-Grained Static Analysis.** Full-text alignment and semantic-checking approach inspected. [Paper](https://arxiv.org/html/2406.15999v1).
-12. **Payy advisory lead.** [GHSA-fhxc-63vg-9gwr](https://github.com/polybase/payy/security/advisories/GHSA-fhxc-63vg-9gwr), [NVD lookup](https://nvd.nist.gov/vuln/detail/CVE-2026-48100). These did not provide readable primary advisory content in this review. They are retrieval targets, not verified support for detailed claims. The supplied document's separate September incident also needs a primary-source record.
+12. **Payy advisory.** [GHSA-fhxc-63vg-9gwr](https://github.com/polybase/payy/security/advisories/GHSA-fhxc-63vg-9gwr), [NVD lookup](https://nvd.nist.gov/vuln/detail/CVE-2026-48100). The advisory was not readable during the 13 October review, but was retrieved later and mapped in T20. Use T20 and `docs/payy-case-study.md` for current evidence. The separate verifier incident is not part of the initial BindCheck scope.
 13. **Kolozyan, Sorger, Hicks, and Chaliasos. ZKP Security Tools and Verification: Coverage, Effectiveness, Adoption, and Challenges. July 2026 preprint.** Full-text methodology and results inspected. [Paper](https://arxiv.org/html/2607.23752v1), [artifact](https://github.com/t-sorger/zkp-security-tools).
 14. **Ootani. Context-Binding Gaps in Stateful Zero-Knowledge Proximity Proofs: Taxonomy, Separation, and Mitigation. 2026 preprint.** Version 1 model and scope inspected; publication acceptance not established. [Paper](https://arxiv.org/html/2604.03900v1).
 15. **IEEE S&P 2027 Call for Papers.** Official deadlines, submission, disclosure, and AI-use rules checked. [CFP](https://sp2027.ieee-security.org/cfpapers.html).
@@ -793,11 +795,11 @@ Complete full-text and artifact inspection for Coda, CIVER, and CCC-Check; resol
 
 The project is ready for a strong submission when it has an important, accurately evidenced problem; a clearly differentiated method; explicit assumptions; independent-family results; serious negative controls; fair strong baselines; and reproducible conclusions. Previously unknown, confirmed vulnerabilities would strengthen that package, but they do not compensate for a weak method or invalid evaluation.
 
-**The next milestone is a working comparative experiment: a real boundary failure, a justified repair, a legitimate contrasting design, and a baseline that receives the same specification.** Use that result to improve the method and select the next extension. The broader objective remains connecting proof guarantees to execution requirements across applications. Grow the research scope through reusable mechanisms and independent evidence, and let the final paper claim the strongest contribution the completed work supports.
+The earlier comparative milestone was completed in stages through T15–T21, but remains in-sample. **The current milestone is T22: evaluate the ACIR/SMT method under its preregistered expectations, record specification burden and failures, and then begin independent-case feasibility work.** The broader objective remains connecting proof guarantees to execution requirements across applications.
 
 ## 18. Detailed execution plan: from local experiment to submitted paper
 
-**Added 13 October 2026.** This section is the operational companion to Sections 6–15. It defines the work to perform; it does not claim that the prototype, experiments, or paper have been completed. Start here when deciding what to do each day, and use the earlier sections for the technical rationale.
+**Added 13 October 2026; retained as historical planning context.** Later tasks completed part of this plan. Use the research contract and README for current decisions and status; use this section for rationale and unfinished work only.
 
 Your starting environment is your own contracts deployed on your own local Hardhat or Anvil network. Use it to build, debug, and demonstrate the method. A local deployment gives control over experiments; it does not by itself establish that a finding applies to an independently developed or deployed application. Preserve that distinction in every case record.
 
@@ -1161,6 +1163,8 @@ The official S&P 2027 Cycle 2 dates remain abstract registration on 10 November 
 
 ### 18.19 Your next ten working days
 
+> Historical starting sequence from 13 October. It is not the current task queue.
+
 This replaces Section 15.5's aggressive seven-day sequence as the default when beginning from a plan without an existing runnable artifact. Historical reconstruction proceeds in parallel where feasible, but does not block an owned demonstrator.
 
 | Day | Work | Stop condition for the day |
@@ -1258,7 +1262,7 @@ For proof setup, record security assumptions and avoid presenting public/recompu
 
 ### 19.5 Evidence status at this revision
 
-The earlier coder reported a compiled circuit, generated verifier, compiled consumers, proof-free contract tests, and checker tests over handwritten traces. Those claims have not been independently verified here from source or execution. No inspected artifact in this conversation establishes an accepted-proof application violation. New coder work should begin from the actual provided repository state and report its own evidence. This guide update changes the plan; it does not promote earlier reported results into completed research findings.
+At this guide's 13 October revision, no inspected artifact established an accepted-proof application violation. Later T15–T19 work superseded that status by producing a local real-proof Payy reproduction, committed token-balance effects, repair rejection, and an honest control; T20 records the claim mapping. T21 remains explicitly in-sample. Consult those reports rather than treating this historical paragraph as current evidence.
 
 ### 19.6 How the bar rises
 

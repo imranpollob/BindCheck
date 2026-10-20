@@ -342,7 +342,9 @@ class IntFF(FF):
             vals.append(v if abs(v) < P // 2 else v - P)
         return vals
 
-BACKEND = os.environ.get("T22_BACKEND", "z3")
+BACKEND = os.environ.get("T22_BACKEND", "cvc5")
+if BACKEND not in ("cvc5", "z3"):
+    raise ValueError(f"unsupported T22_BACKEND: {BACKEND}")
 
 def norm_terms(e):
     """canonical form: dict {tuple(sorted wits): coef mod P}"""

@@ -1,0 +1,31 @@
+# BindCheck
+
+BindCheck is a research prototype for checking whether the guarantees of a zero-knowledge proof justify the effects an application performs after accepting it. The first testbed is batched deposits and withdrawals: Circom circuits, Solidity consumers, a specification-assisted checker, and local execution traces. The broader research question is whether proof-to-execution obligations can be recovered and checked across independent applications with useful accuracy and manageable analyst effort.
+
+Start with the [research contract](docs/research-contract.md). It is authoritative for the research questions, threat model, scope, specification boundary, and evidence rules. The [Payy case study](docs/payy-case-study.md) gives the pinned versions, commands, expected outcomes, evidence locations, and limits for the independently built local reproduction of a publicly disclosed message-tail flaw.
+
+The [research guide](BindCheck_Research_Guide.md) and [16 October progress update](2026-10-16-research-update.md) are historical planning and progress records. They remain useful context, but their evidence status and schedules may have been superseded.
+
+The principal directories are `circuits/` and `contracts/` for the small fixture, `bindcheck/` for the checker and specification, `payy-harness/` and `payy-consumer/` for the Payy experiment, `scripts/` for task runners, and `reports/` for evidence reviews. Generated proof data and raw logs are under the ignored `results/raw/` tree and must be regenerated on a fresh checkout.
+
+## Current status
+
+- T15–T19 locally reproduce the public Payy message-tail mechanism with real proofs and committed token-balance effects, then validate the repair and an honest control.
+- T20 maps those claims to pinned source and advisory evidence.
+- T21 is an in-sample, source-pattern prototype; it does not establish generalization.
+- T22 contains an ACIR/SMT prototype and preregistered local expectations, but its evaluation and tracked evidence report are not complete.
+- No held-out application result or general research contribution has been established.
+
+The current task is to complete T22 without changing the two principal properties in the research contract.
+
+## Evidence hierarchy
+
+1. `docs/research-contract.md` — current research decisions.
+2. This README — current task status.
+3. `reports/Txx.md` — tracked evidence summaries.
+4. `results/raw/Txx/` — ignored, regenerable raw logs.
+5. The research guide and dated updates — historical context.
+
+## Repository layout
+
+The principal directories are `circuits/` and `contracts/` for the small fixture, `bindcheck/` for the checker and specification, `payy-harness/` and `payy-consumer/` for the Payy experiment, `scripts/` for task runners, `reports/` for tracked evidence summaries, and `docs/` for current and historical-facing documentation. Generated proof data, downloaded dependencies, compiler output, and raw logs are ignored and must be regenerated on a fresh checkout.

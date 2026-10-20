@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """T22 evaluation driver (Payy cases + declared mutants). Builds scratch N=8 instances (upstream untouched), compiles with the
 pinned nargo, runs T22 (ACIR+spec+cvc5) and T21 (source rules) on the same sources.
-usage: t22_eval.py SCRATCH_DIR OUT_JSON   env: NARGO, CVC5"""
+usage: t22_eval.py SCRATCH_DIR OUT_JSON   env: NARGO, CVC5, T22_BACKEND"""
 import json, os, re, shutil, subprocess, sys, time
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import t22_tailspec as T22

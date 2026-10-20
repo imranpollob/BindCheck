@@ -2,6 +2,13 @@ node_modules
 .DS_Store
 results/raw
 
+# Python-generated caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
 # T01: regenerable by `bash scripts/t01.sh`
 build/
 tools/circom-src/
@@ -15,6 +22,12 @@ contracts/generated/
 # T08: downloaded third-party sources and toolchains (regenerable; untrusted data)
 tools/cases/
 tools/noir-1.0.0-beta.14/
+
+# T22 secondary frontend compiler (fetched and checksum-verified)
+tools/noir-rc4/
+
+# T22 finite-field solver (locally built with GPL CoCoA support)
+tools/cvc5-1.4.2-gpl/
 
 # T09: pinned bb binary (downloaded, verified against the repo pin)
 tools/bb-3.0.0-manual.20251030/
