@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """T22 evaluation driver (Payy cases + declared mutants). Builds scratch N=8 instances (upstream untouched), compiles with the
 pinned nargo, runs T22 (ACIR+spec+cvc5) and T21 (source rules) on the same sources.
-usage: t22_eval.py SCRATCH_DIR OUT_JSON   env: NARGO, CVC5, T22_BACKEND"""
+usage: t22_eval.py SCRATCH_DIR OUT_JSON   env: NARGO, CVC5, T22_BACKEND, T22_ONLY_CASE"""
 import json, os, re, shutil, subprocess, sys, time
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import t22_tailspec as T22
@@ -38,6 +38,11 @@ CASES = [  # name, pkg, source, spec, expected (declared before running; see res
  ("m5 utxo: tail loop deleted",     "agg_utxo", re.sub(r"    // Verify all other messages are zero\n.*?\n    }\n", "", U, flags=re.S), "payy_agg_utxo.json", "VIOLATED"),
  ("m6 utxo: else-branch idiom",     "agg_utxo", sub(U, "        if i >= messages_index {\n            assert(messages[i] == 0, \"Message is not zero\");\n        }", "        if i < messages_index {\n        } else {\n            assert(messages[i] == 0, \"Message is not zero\");\n        }"), "payy_agg_utxo.json", "SATISFIED_AT_SCOPE"),
 ]
+ONLY_CASE = os.environ.get("T22_ONLY_CASE")
+if ONLY_CASE:
+    CASES = [case for case in CASES if case[0] == ONLY_CASE]
+    if len(CASES) != 1:
+        raise SystemExit(f"T22_ONLY_CASE did not match exactly one case: {ONLY_CASE!r}")
 res = []
 for name, pkg, src, specf, exp in CASES:
     d = f"{S}/work_{re.sub(r'[^a-z0-9]+', '_', name.lower())}"

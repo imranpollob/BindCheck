@@ -288,7 +288,9 @@ class FF:
         self.A(self.eq(x, self.add([self.mul([self.c(2 ** i), b]) if i else b for i, b in enumerate(bs)])))
     def parse_vals(self, out):
         body = out.split("\n", 1)[1] if "\n" in out else ""
-        return [int(v) if int(v) < P // 2 else int(v) - P for v in re.findall(r"\(as ff(\d+) \(_ FiniteField", body)]
+        raw = re.findall(r"(?:\(as ff(\d+) \(_ FiniteField \d+\)\)|#f(\d+)m\d+)", body)
+        vals = [int(old or compact) for old, compact in raw]
+        return [v if v < P // 2 else v - P for v in vals]
     def solve(self, getv, path=None):
         head = [f"(set-logic QF_FF)", f"(set-option :produce-models true)", f"(define-sort F () (_ FiniteField {P}))"]
         script = "\n".join(head + self.lines + ["(check-sat)", "(get-value (" + " ".join(getv) + "))"]) + "\n"
@@ -428,8 +430,226 @@ def build(spec, acir, abi):
         streams.append((words, act))
     return M, streams
 
+def _sub_constants(e, fixed):
+    out = {}
+    for cf, ws in e:
+        rest = []
+        for w in ws:
+            if w in fixed: cf = (cf * fixed[w]) % P
+            else: rest.append(w)
+        key = tuple(sorted(rest)); out[key] = (out.get(key, 0) + cf) % P
+    return [(cf, list(key)) for key, cf in out.items() if cf]
+
+def _discover_constants(ops, initial, cap=256):
+    """Bounded exact symbolic propagation over SSA-style polynomial definitions.
+
+    This only adds a constant when an equality algebraically forces it.  The
+    cap affects completeness, not soundness: definitions that would expand
+    beyond it are simply left to the solver.
+    """
+    fixed, defs = dict(initial), {}
+
+    def add(a, b):
+        out = dict(a)
+        for key, val in b.items(): out[key] = (out.get(key, 0) + val) % P
+        return {key: val for key, val in out.items() if val}
+
+    def mul(a, b):
+        if len(a) * len(b) > cap * 4: raise OverflowError
+        out = {}
+        for ka, va in a.items():
+            for kb, vb in b.items():
+                key = tuple(sorted(ka + kb)); out[key] = (out.get(key, 0) + va * vb) % P
+                if len(out) > cap: raise OverflowError
+        return {key: val for key, val in out.items() if val}
+
+    def reduce_fixed(poly):
+        out = {}
+        for key, cf in poly.items():
+            rest = []
+            for w in key:
+                if w in fixed: cf = (cf * fixed[w]) % P
+                else: rest.append(w)
+            key2 = tuple(rest); out[key2] = (out.get(key2, 0) + cf) % P
+        return {key: val for key, val in out.items() if val}
+
+    def rewrite(e):
+        out = {}
+        for cf, ws in e:
+            term = {(): cf % P}
+            for w in ws:
+                atom = {(): fixed[w]} if w in fixed else reduce_fixed(defs.get(w, {(w,): 1}))
+                term = mul(term, atom)
+            out = add(out, term)
+            if len(out) > cap: raise OverflowError
+        return out
+
+    for _ in range(3):
+        for op in ops:
+            if op[0] != "assert": continue
+            try: poly = rewrite(op[1])
+            except OverflowError: continue
+            if not poly: continue
+            if set(poly) == {()}:
+                raise Unsupported("empty-prefix assumptions contradict the selected ACIR component")
+            all_wits = {w for monomial in poly for w in monomial}
+            candidates = []
+            for monomial, cf in poly.items():
+                if len(monomial) != 1: continue
+                w = monomial[0]
+                if any(w in other for other in poly if other != monomial): continue
+                # Orient toward a newer witness to keep definitions acyclic.
+                if all(w > other for other in all_wits if other != w): candidates.append((w, cf))
+            if not candidates: continue
+            w, cf = max(candidates)
+            if w in defs: continue
+            rest = dict(poly); del rest[(w,)]
+            inv = pow(cf, -1, P)
+            definition = {key: (-val * inv) % P for key, val in rest.items()}
+            if len(definition) > cap: continue
+            defs[w] = definition
+            if set(definition) <= {()}:
+                value = definition.get((), 0)
+                if w in fixed and fixed[w] != value:
+                    raise Unsupported("empty-prefix assumptions imply conflicting witness constants")
+                fixed[w] = value; defs.pop(w, None)
+    return fixed
+
+def _specialize_probe_component(acir, selected, fixed, keep):
+    """Substitute implied constants, lower fixed reads, and prune exact definitions."""
+    source = [acir.ops[i] for i in selected]
+    # Restart the bounded definition cache after each pass so constants learned
+    # late in one pass can simplify earlier definitions on the next pass.
+    for _ in range(3):
+        expanded = _discover_constants(source, fixed)
+        if len(expanded) == len(fixed): break
+        fixed = expanded
+    written = {op[1] for op in source if op[0] == "write"}
+    blocks, out = {}, []
+
+    def const(e):
+        terms = norm_terms(e)
+        if not terms: return 0
+        return terms.get(()) if set(terms) == {()} else None
+
+    def difference(left, right):
+        return _sub_constants(left + [(-cf, ws) for cf, ws in right], fixed)
+
+    for op in source:
+        kind = op[0]
+        if kind == "assert":
+            e = _sub_constants(op[1], fixed)
+            if not e: continue
+            if const(e) is not None: raise Unsupported("specialized ACIR assertion is inconsistent")
+            out.append(("assert", e))
+        elif kind == "range":
+            e = _sub_constants(op[1], fixed); value = const(e)
+            if value is not None:
+                if value >= 2 ** op[2]: raise Unsupported("specialized ACIR range is inconsistent")
+            else: out.append(("range", e, op[2]))
+        elif kind == "init":
+            blocks[op[1]] = [_sub_constants(e, fixed) for e in op[2]]
+            out.append(("init", op[1], blocks[op[1]]))
+        elif kind == "read":
+            result, index = _sub_constants(op[2], fixed), _sub_constants(op[3], fixed)
+            value = const(index)
+            if op[1] not in written and value is not None:
+                if op[1] not in blocks or value >= len(blocks[op[1]]):
+                    raise Unsupported("specialized ACIR read is out of range")
+                e = difference(result, blocks[op[1]][value])
+                if e: out.append(("assert", e))
+            else: out.append(("read", op[1], result, index))
+        elif kind == "write":
+            out.append(("write", op[1], _sub_constants(op[2], fixed), _sub_constants(op[3], fixed)))
+        else:
+            out.append(op)
+
+    reduced = object.__new__(Acir)
+    reduced.ops, reduced.unmodeled = out, acir.unmodeled
+    live = prune_dangling(reduced, keep)
+    # An INIT with no surviving memory operation has no constraint semantics.
+    used_blocks = {reduced.ops[i][1] for i in live if reduced.ops[i][0] in ("read", "write")}
+    live = {i for i in live if reduced.ops[i][0] != "init" or reduced.ops[i][1] in used_blocks}
+    wits = set(keep)
+    for i in live:
+        op = reduced.ops[i]; kind = op[0]
+        if kind in ("assert", "range"): wits |= expr_wits(op[1])
+        elif kind == "init":
+            for e in op[2]: wits |= expr_wits(e)
+        elif kind in ("read", "write"): wits |= expr_wits(op[2]) | expr_wits(op[3])
+    return reduced, sorted(live), wits, fixed
+
+def probe_query(acir, M, streams, timeout):
+    """Specialized empty-prefix refutation query.
+
+    If every stream has an activation predicate, L=0 follows from setting those
+    predicates to zero.  Stream contents and message slots other than the one
+    chosen as nonzero are then irrelevant to this query.  Selecting their
+    constraint components made the original probe much harder without adding a
+    premise to the counterexample.
+
+    Returns None when an always-active stream requires the generic encoding.
+    """
+    acts = [act for _, act in streams]
+    if any(act is None for act in acts):
+        return None
+
+    act_seeds = set()
+    for act in acts:
+        act_seeds |= expr_wits(act)
+
+    # Preserve the v1 cone size for an auditable before/after comparison.
+    all_seeds = set(act_seeds)
+    for e in M:
+        all_seeds |= expr_wits(e)
+    for words, _ in streams:
+        for e in words:
+            all_seeds |= expr_wits(e)
+    v1_sel, v1_wits = cone(acir, all_seeds)
+
+    # Any nonzero slot violates the tail property when L=0.  Prefer the slot
+    # whose exactly specialized component is smallest; this is a solver
+    # scheduling choice, not a semantic assumption.
+    candidates = []
+    for k, message in enumerate(M):
+        fixed = {}
+        for act in acts:
+            terms = norm_terms(act)
+            if len(terms) != 1 or len(next(iter(terms))) != 1:
+                return None
+            witness = next(iter(terms))[0]
+            fixed[witness] = 0
+        original, _ = cone(acir, set(fixed) | expr_wits(message))
+        reduced, sel, wits, implied = _specialize_probe_component(acir, original, fixed, expr_wits(message))
+        candidates.append((len(sel), len(wits), k, reduced, sel, wits, implied))
+    _, _, k, reduced, sel, wits, implied = min(candidates, key=lambda row: row[:3])
+
+    free = [n for n, o in acir.unmodeled if set(o) & wits]
+    ff = (IntFF if BACKEND == "z3" else FF)(timeout * 1000)
+    encode(ff, reduced, sel)
+    mv = ff.expr(M[k])
+    ff.A(ff.ne(mv, ff.zero))
+    st, out, dt = ff.solve([mv], os.path.join(SMT_DIR, "probe.smt2") if SMT_DIR else None)
+    info = {
+        "message_index": k,
+        "activation_values": [0 for _ in acts],
+        "implied_constants": len(implied),
+        "v1_all_stream_cone": {"opcodes": len(v1_sel), "witnesses": len(v1_wits)},
+    }
+    if st == "sat":
+        vals = ff.parse_vals(out)
+        if vals:
+            info["message_value"] = vals[0]
+    elif st == "unknown":
+        info["raw"] = out[:200]
+    return st, dt, len(sel), len(wits), free, info, getattr(ff, "lemma_stats", None)
+
 def query(spec, acir, M, streams, q, timeout):
     N = len(M)
+    if q == "probe":
+        specialized = probe_query(acir, M, streams, timeout)
+        if specialized is not None:
+            return specialized
     seeds = set()
     for e in M: seeds |= expr_wits(e)
     for words, act in streams:
@@ -467,7 +687,7 @@ def query(spec, acir, M, streams, q, timeout):
     names = {}
     if q == "nonvacuous":
         ff.A(ff.OR(*[ff.eq(L, ff.c(l)) for l in range(1, N + 1)]))
-    elif q == "probe":     # generic refutation probe: every stream inactive (empty prefix), exactly one message slot nonzero
+    elif q == "probe":     # fallback when an always-active stream prevents the specialized empty-prefix query
         for a, ems, cums, ss, off in recs: ff.A(ff.NOT(a))
         ff.A(ff.OR(*[ff.AND(*[ff.eq(mv[j], ff.zero) if j != k else ff.ne(mv[j], ff.zero) for j in range(N)]) for k in range(N)]))
     elif q == "tail":      # some slot k >= L is nonzero
@@ -535,6 +755,9 @@ def run(spec, acir_text, abi, timeout=300, smt_dir=None):
             rep["checked"].append(f"lemmas used: booleans/is-zero = {pr[6]}")
             rep["verdict"] = "VIOLATED" if not pr[4] else "UNKNOWN"
             rep["notes"].append(f"cone: {pr[2]} of {len(acir.ops)} opcodes after exact pruning; components outside the cone are assumed satisfiable")
+            if "v1_all_stream_cone" in pr[5]:
+                old = pr[5]["v1_all_stream_cone"]
+                rep["notes"].append(f"T22-v2 probe reduction: {old['opcodes']} opcodes/{old['witnesses']} witnesses -> {pr[2]} opcodes/{pr[3]} witnesses")
             if pr[4]: rep["notes"].append("SAT may be spurious (unmodeled black-box outputs in cone): " + ", ".join(pr[4]))
             return rep
         for q in ("nonvacuous", "prefix", "tail"):

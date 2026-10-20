@@ -2,7 +2,7 @@
 
 BindCheck is a research prototype for checking whether the guarantees of a zero-knowledge proof justify the effects an application performs after accepting it. The first testbed is batched deposits and withdrawals: Circom circuits, Solidity consumers, a specification-assisted checker, and local execution traces. The broader research question is whether proof-to-execution obligations can be recovered and checked across independent applications with useful accuracy and manageable analyst effort.
 
-Start with the [research contract](docs/research-contract.md). It is authoritative for the research questions, threat model, scope, specification boundary, and evidence rules. The [Payy case study](docs/payy-case-study.md) gives the pinned versions, commands, expected outcomes, evidence locations, and limits for the independently built local reproduction of a publicly disclosed message-tail flaw.
+Start with the [research contract](docs/research-contract.md). It is authoritative for the research questions, threat model, scope, specification boundary, and evidence rules. The [living project checkpoint tree](docs/project-status.md) shows the path from current work to a possible paper submission without replacing the underlying evidence. The [Payy case study](docs/payy-case-study.md) gives the pinned versions, commands, expected outcomes, evidence locations, and limits for the independently built local reproduction of a publicly disclosed message-tail flaw.
 
 The [research guide](BindCheck_Research_Guide.md) and [16 October progress update](2026-10-16-research-update.md) are historical planning and progress records. They remain useful context, but their evidence status and schedules may have been superseded.
 
@@ -13,7 +13,7 @@ The principal directories are `circuits/` and `contracts/` for the small fixture
 - T15–T19 locally reproduce the public Payy message-tail mechanism with real proofs and committed token-balance effects, then validate the repair and an honest control.
 - T20 maps those claims to pinned source and advisory evidence.
 - T21 is an in-sample, source-pattern prototype; it does not establish generalization.
-- T22 contains an ACIR/SMT prototype and preregistered local expectations, but its evaluation and tracked evidence report are not complete.
+- T22-v2 passes the single-case feasibility gate: the bounded earlier Payy `agg_agg` case now yields a cvc5 counterexample in 4.1 seconds after exact specialization reduces the probe from 587 opcodes/523 witnesses to 0/1. The nine-case evaluation and T22 evidence report remain incomplete.
 - No held-out application result or general research contribution has been established.
 
 The current task is to complete T22 without changing the two principal properties in the research contract.

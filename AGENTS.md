@@ -23,6 +23,24 @@ If these sources disagree, follow the higher-ranked source and report the disagr
 - Prefer primary sources and pinned artifacts. Label reported, source-confirmed, model-confirmed, locally reproduced, and repair-validated evidence accurately.
 - AI output is not independent annotation. Authors must inspect generated code, labels, citations, and claims.
 
+## Living project checkpoint
+
+After each bounded project task that changes the research state, update
+`docs/project-status.md` in the same turn:
+
+- add or update the task under the relevant Mermaid branch;
+- use only `[DONE]`, `[ACTIVE]`, `[NEXT]`, `[WAITING]`, or `[UNKNOWN]` for
+  project-progress labels;
+- append one dated row to the checkpoint log with links to the controlling
+  report or evidence;
+- preserve prior checkpoint rows and completed nodes; and
+- never let the diagram claim more than the research contract, README, and
+  immutable reports support.
+
+Conversation-only, status-only, and failed turns do not get a new checkpoint
+unless they materially change project state. If a task remains incomplete,
+update its existing node rather than marking it done.
+
 ## Safety and repository hygiene
 
 - Defensive experiments are limited to owned local execution with synthetic assets unless the user explicitly expands the scope.
