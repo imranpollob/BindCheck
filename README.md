@@ -18,9 +18,10 @@ The principal directories are `circuits/` and `contracts/` for the small fixture
   - **Running-flag `VIOLATION` (false positive):** confirmed as an analyzer false positive. Specialization discards the implied constraint `messages[k] = 0` for the goal witness, while subset certificates from the original ACIR are UNSAT for all eight slots.
   - **Timeouts:** traced to the default cvc5 finite-field mode on range-bit decompositions, missing re-componentization, and a slot schedule that skips the violating slot. The general queries remain an open scalability limit.
   - **`agg_utxo` contradictions:** genuine (the first proof can never be padding), but handled as unsupported, so no general query was issued.
+- [T22-v3](reports/T22-v3.md) completes the separately frozen R1–R6 repair, nine-case rerun and SAT audit: 4/9 outcomes match, with 4 `VIOLATION`, 5 `UNKNOWN`, and no `VERIFIED_WITHIN_SCOPE`. It recovers the `>`-guard and skipped-final-slot mutants; the running-flag probe false positive is fixed (all eight slots UNSAT), while its full case remains `UNKNOWN`. Six general queries time out and nine fail allocation under the frozen 4 GiB cap. All four SAT probes replay successfully, all nine compiled cases match v2, and prior evidence is unchanged. This is development-case evidence, not generalization.
 - No held-out application result or general research contribution has been established.
 
-The current task is a separately versioned T22-v3 encoding (repairs R1–R6 in report Section 3.2), frozen before any output is inspected and rerun on the same nine cases. The independent transfer case is still deferred. The two principal properties in the research contract remain unchanged.
+The next task is a separately versioned general-query feasibility experiment on the check-added `agg_agg` development case: obtain non-vacuity SAT and prefix/tail UNSAT within 300 seconds per query, or preserve a minimized blocker. The independent transfer case is still deferred because the primary controls remain unresolved. The two principal properties in the research contract remain unchanged.
 
 ## Evidence hierarchy
 

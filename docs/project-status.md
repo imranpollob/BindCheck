@@ -34,7 +34,8 @@ flowchart TD
     t22 --> nineCases["Nine-case run [DONE]"]
     nineCases --> primaryResult["Primary result [UNKNOWN]"]
     primaryResult --> failureAnalysis["Failure analysis [DONE]"]
-    failureAnalysis --> v3Rerun["Versioned v3 rerun [NEXT]"]
+    failureAnalysis --> v3Rerun["Versioned v3 rerun [DONE]"]
+    v3Rerun --> generalGate["General-query feasibility [NEXT]"]
     t22 --> transferCase["Independent transfer [WAITING]"]
     t22 --> sensitivity["Sensitivity checks [WAITING]"]
 
@@ -54,9 +55,9 @@ flowchart TD
     classDef waiting fill:#D9D9D9,stroke:#B3B3B3
     classDef unknown fill:#FFE0C2,stroke:#FF9E42
 
-    class foundation,fixture,payy,sourceCheck,coneGate,nineCases,failureAnalysis,tracking,livingTree done
+    class foundation,fixture,payy,sourceCheck,coneGate,nineCases,failureAnalysis,v3Rerun,tracking,livingTree done
     class analysis,t22 active
-    class v3Rerun next
+    class generalGate next
     class evaluation,history,heldOut,baselines,manuscript,claims,artifacts,draft,transferCase,sensitivity waiting
     class contribution,primaryResult unknown
 ```
@@ -64,10 +65,11 @@ flowchart TD
 ## Immediate path
 
 1. Done: the running-flag false positive and both `UNKNOWN` classes are explained in [T22 Section 3.2](../reports/T22.md).
-2. Freeze the T22-v3 encoding (repairs R1–R6) and its solver mode before inspecting any output, then rerun the same nine cases under a new run ID.
-3. Run the independent transfer case only after the primary controls are acceptable, without tuning on its result.
-4. Complete sensitivity checks and equal-information baselines.
-5. Decide whether the evidence supports a defensible contribution and, if so, assemble the submission package.
+2. Done: the [T22-v3 rerun and audit](../reports/T22-v3.md), frozen before output, returns 4 `VIOLATION` and 5 `UNKNOWN` (4/9 expected outcomes matched). Seven synthetic regressions and four SAT replays pass; the running-flag probe false positive is fixed, but its full case remains unresolved. Prior evidence and compiled inputs are unchanged.
+3. Next: freeze a versioned general-query feasibility experiment on the check-added `agg_agg` development case. Require non-vacuity SAT and prefix/tail UNSAT within 300 seconds per query, or a preserved minimized blocker.
+4. Run the independent transfer case only after the primary controls are acceptable, without tuning on its result.
+5. Complete sensitivity checks and equal-information baselines.
+6. Decide whether the evidence supports a defensible contribution and, if so, assemble the submission package.
 
 The end goal does not imply that submission is currently justified. The
 research contract's two principal properties remain unchanged, and T22 has no
@@ -82,6 +84,7 @@ completed verdict yet.
 | 2026-10-20 | T22-v2 frozen nine-case primary run | `[DONE]` | [T22](../reports/T22.md): 2/9 outcomes matched, 6 were `UNKNOWN`, and the running-flag negative control returned a likely spurious `VIOLATION`. The evaluation task completed, but the T22 result remains `[UNKNOWN]`. |
 | 2026-10-20 | T22-v2 failure diagnosis | `[DONE]` | [T22 Section 3.2](../reports/T22.md); raw evidence in ignored `results/raw/T22/32_v2_diagnosis/`. The running-flag `VIOLATION` is a confirmed analyzer false positive: the specialization drops the implied goal constraint, and original-ACIR subset certificates are UNSAT for all eight slots. Timeouts trace to the cvc5 `gb` mode, missing re-componentization and slot scheduling; the general queries remain unresolved. The `agg_utxo` contradiction is genuine but was handled as unsupported. No verdict changed; the primary result stays `[UNKNOWN]`. |
 | 2026-10-20 | T22-v2 diagnosis correction and reproduction addendum | `[DONE]` | [T22 Section 3.2](../reports/T22.md), post-review corrections. Correction to the previous row: the `agg_utxo` contradiction rules out only the all-streams-inactive premise; it does not show that an empty prefix is impossible. The R3 wording was narrowed to match. An exact-command addendum (`11_commands_addendum.txt`) and three reproduction scripts were added; the original raw records are unchanged. No verdict or tree node changed; the v3 rerun remains `[NEXT]`. |
+| 2026-10-20 | T22-v3 versioned encoding, primary rerun and audit | `[DONE]` | [T22-v3](../reports/T22-v3.md): frozen R1–R6 rerun completes with 4 `VIOLATION`, 5 `UNKNOWN`, 0 `VERIFIED_WITHIN_SCOPE` (4/9 matches). All seven regressions and four SAT replays pass; all nine source/compiled cases and 129 prior raw evidence files match v2/the diagnosis. The running-flag probe false positive is fixed, but general queries produce six timeouts and nine allocation failures. Overall T22 remains `[ACTIVE]`, its research result `[UNKNOWN]`, and independent transfer deferred. |
 
 ## Update rule
 
