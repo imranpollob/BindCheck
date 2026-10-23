@@ -1,0 +1,371 @@
+{
+  "task": "D1-01",
+  "created_at_utc": "2026-10-23T16:01:23.077170+00:00",
+  "closure_status": "DONE",
+  "original_six_primary_execution_records_available": 6,
+  "original_decisive_milestone": "UNMET",
+  "research_verdict": "UNKNOWN",
+  "rows": [
+    {
+      "slot": "check_added/nonvacuous",
+      "case": "check_added",
+      "obligation": "nonvacuous",
+      "availability": "PRESERVED_RECORD",
+      "evidence_path": "results/raw/D1-00/baseline-results/T22/35_v5_compact/primary_check_added/nonvacuous.json",
+      "evidence_sha256": "1de808d172da35bd32fd2e22cf4997caa6a718213fae29e3da8cd1723007ad99",
+      "query_path": "results/raw/D1-00/baseline-results/T22/35_v5_compact/primary_check_added/nonvacuous.smt2",
+      "query_sha256": "c0312431ed84da5b55094fc4b27212f607789d143ad56b54db52359235b794b3",
+      "command": [
+        "/home/pollmix/Coding/BindCheck/tools/cvc5-1.4.2-gpl/bin/cvc5",
+        "--lang=smt2",
+        "--ff-solver=split"
+      ],
+      "stdin": "Exact query bytes; solver command reads stdin",
+      "driver_command": null,
+      "driver_command_note": "Historical launch command was not archived; not reconstructed as an observed command",
+      "solver_version": "cvc5 1.4.2 [git 282d5e0 on branch HEAD]",
+      "solver_sha256": "2406449e9b2e01c1243b838a6c3eba776db38624b56fa6911566fafabb86732f",
+      "resource_limits": {
+        "N": 8,
+        "seconds_per_query": 300,
+        "rlimit_as_bytes": 4294967296,
+        "ff_solver": "split"
+      },
+      "resource_evidence": "Frozen historical main() RLIMIT_AS and seconds in saved record; no per-process limits/RSS saved",
+      "exit_status": -9,
+      "timed_out": true,
+      "elapsed_seconds": 300.207,
+      "stdout": "",
+      "stderr": "",
+      "peak_rss_kib": null,
+      "solver_observation": "unknown",
+      "verdict": "UNKNOWN",
+      "reason_codes": [
+        "TIMEOUT"
+      ],
+      "evidence_grade": "Producer-side solver observation; no decisive semantic result",
+      "bounds": {
+        "N": 8,
+        "streams": 2,
+        "selected_acir_opcodes": 620,
+        "selected_witnesses": 540
+      },
+      "nonvacuity": "UNRESOLVED",
+      "assumptions": [
+        "Analyst stream roles and walk policy",
+        "Omitted ACIR components assumed satisfiable",
+        "Recursive proof feasibility unvalidated",
+        "Printed ACIR parser/cone/encoding correctness unproved",
+        "No consumer decoding, reachable history, proof or committed-effect replay in D1-01"
+      ],
+      "unresolved_checks": [
+        "Full extraction/encoding soundness",
+        "Nonvacuity",
+        "Concrete proof feasibility and consumer effects"
+      ],
+      "artifact_provenance": "metadata/d1/d1-01-execution-manifest.json"
+    },
+    {
+      "slot": "check_added/prefix",
+      "case": "check_added",
+      "obligation": "prefix",
+      "availability": "PRESERVED_RECORD",
+      "evidence_path": "results/raw/D1-00/baseline-results/T22/35_v5_compact/primary_check_added/prefix.json",
+      "evidence_sha256": "696032c7400e5e70b917293f2d15d6d8d5e2382cb8cb6b9d2975d5a00c74ce49",
+      "query_path": "results/raw/D1-00/baseline-results/T22/35_v5_compact/primary_check_added/prefix.smt2",
+      "query_sha256": "4ae2be7bcedcfe992966dc406d4cd8f2b43f1823fa49efd8fbfa14044631e781",
+      "command": [
+        "/home/pollmix/Coding/BindCheck/tools/cvc5-1.4.2-gpl/bin/cvc5",
+        "--lang=smt2",
+        "--ff-solver=split"
+      ],
+      "stdin": "Exact query bytes; solver command reads stdin",
+      "driver_command": null,
+      "driver_command_note": "Historical launch command was not archived; not reconstructed as an observed command",
+      "solver_version": "cvc5 1.4.2 [git 282d5e0 on branch HEAD]",
+      "solver_sha256": "2406449e9b2e01c1243b838a6c3eba776db38624b56fa6911566fafabb86732f",
+      "resource_limits": {
+        "N": 8,
+        "seconds_per_query": 300,
+        "rlimit_as_bytes": 4294967296,
+        "ff_solver": "split"
+      },
+      "resource_evidence": "Frozen historical main() RLIMIT_AS and seconds in saved record; no per-process limits/RSS saved",
+      "exit_status": -9,
+      "timed_out": true,
+      "elapsed_seconds": 300.131,
+      "stdout": "",
+      "stderr": "",
+      "peak_rss_kib": null,
+      "solver_observation": "unknown",
+      "verdict": "UNKNOWN",
+      "reason_codes": [
+        "TIMEOUT"
+      ],
+      "evidence_grade": "Producer-side solver observation; no decisive semantic result",
+      "bounds": {
+        "N": 8,
+        "streams": 2,
+        "selected_acir_opcodes": 620,
+        "selected_witnesses": 540
+      },
+      "nonvacuity": "UNRESOLVED",
+      "assumptions": [
+        "Analyst stream roles and walk policy",
+        "Omitted ACIR components assumed satisfiable",
+        "Recursive proof feasibility unvalidated",
+        "Printed ACIR parser/cone/encoding correctness unproved",
+        "No consumer decoding, reachable history, proof or committed-effect replay in D1-01"
+      ],
+      "unresolved_checks": [
+        "Full extraction/encoding soundness",
+        "Nonvacuity",
+        "Concrete proof feasibility and consumer effects"
+      ],
+      "artifact_provenance": "metadata/d1/d1-01-execution-manifest.json"
+    },
+    {
+      "slot": "check_added/tail",
+      "case": "check_added",
+      "obligation": "tail",
+      "availability": "PRESERVED_RECORD",
+      "evidence_path": "results/raw/D1-00/baseline-results/T22/35_v5_compact/primary_check_added/tail.json",
+      "evidence_sha256": "6b0cbf8ee0747f16abe0ab09765317a6cd72d032f818950ab967e1dc987b974a",
+      "query_path": "results/raw/D1-00/baseline-results/T22/35_v5_compact/primary_check_added/tail.smt2",
+      "query_sha256": "3621cdfca8269e404aca638a24aa852da0406be1013f2c29511df47b6ff0a7a1",
+      "command": [
+        "/home/pollmix/Coding/BindCheck/tools/cvc5-1.4.2-gpl/bin/cvc5",
+        "--lang=smt2",
+        "--ff-solver=split"
+      ],
+      "stdin": "Exact query bytes; solver command reads stdin",
+      "driver_command": null,
+      "driver_command_note": "Historical launch command was not archived; not reconstructed as an observed command",
+      "solver_version": "cvc5 1.4.2 [git 282d5e0 on branch HEAD]",
+      "solver_sha256": "2406449e9b2e01c1243b838a6c3eba776db38624b56fa6911566fafabb86732f",
+      "resource_limits": {
+        "N": 8,
+        "seconds_per_query": 300,
+        "rlimit_as_bytes": 4294967296,
+        "ff_solver": "split"
+      },
+      "resource_evidence": "Frozen historical main() RLIMIT_AS and seconds in saved record; no per-process limits/RSS saved",
+      "exit_status": -9,
+      "timed_out": true,
+      "elapsed_seconds": 300.147,
+      "stdout": "",
+      "stderr": "",
+      "peak_rss_kib": null,
+      "solver_observation": "unknown",
+      "verdict": "UNKNOWN",
+      "reason_codes": [
+        "TIMEOUT"
+      ],
+      "evidence_grade": "Producer-side solver observation; no decisive semantic result",
+      "bounds": {
+        "N": 8,
+        "streams": 2,
+        "selected_acir_opcodes": 620,
+        "selected_witnesses": 540
+      },
+      "nonvacuity": "UNRESOLVED",
+      "assumptions": [
+        "Analyst stream roles and walk policy",
+        "Omitted ACIR components assumed satisfiable",
+        "Recursive proof feasibility unvalidated",
+        "Printed ACIR parser/cone/encoding correctness unproved",
+        "No consumer decoding, reachable history, proof or committed-effect replay in D1-01"
+      ],
+      "unresolved_checks": [
+        "Full extraction/encoding soundness",
+        "Nonvacuity",
+        "Concrete proof feasibility and consumer effects"
+      ],
+      "artifact_provenance": "metadata/d1/d1-01-execution-manifest.json"
+    },
+    {
+      "slot": "running_flag/nonvacuous",
+      "case": "running_flag",
+      "obligation": "nonvacuous",
+      "availability": "NEW_EXECUTION",
+      "evidence_path": "results/raw/D1-01/primary_running_flag/nonvacuous.json",
+      "evidence_sha256": "20dd2219cc4fe5c9f5618769b6231be0c7abbdf39aecc59c477d342deed60151",
+      "query_path": "results/raw/D1-01/generated/running_flag/nonvacuous.smt2",
+      "query_sha256": "af1ae83aafa43b9dbb06e110270dda0bff11c90371c2666143916fb067b21ff8",
+      "command": [
+        "/home/pollmix/Coding/BindCheck-d1/tools/cvc5-1.4.2-gpl/bin/cvc5",
+        "--lang=smt2",
+        "--ff-solver=split"
+      ],
+      "stdin": "Exact query bytes; solver command reads stdin",
+      "driver_command": null,
+      "driver_command_note": "See frozen manifest and report for wrapper command",
+      "solver_version": "cvc5 1.4.2 [git 282d5e0 on branch HEAD]",
+      "solver_sha256": "2406449e9b2e01c1243b838a6c3eba776db38624b56fa6911566fafabb86732f",
+      "resource_limits": {
+        "N": 8,
+        "seconds_per_query": 300,
+        "rlimit_as_bytes": 4294967296,
+        "ff_solver": "split"
+      },
+      "resource_evidence": "results/raw/D1-01/primary_running_flag/nonvacuous.limits.txt",
+      "exit_status": -9,
+      "timed_out": true,
+      "elapsed_seconds": 300.1669122220046,
+      "stdout": "",
+      "stderr": "",
+      "peak_rss_kib": null,
+      "solver_observation": "unknown",
+      "verdict": "UNKNOWN",
+      "reason_codes": [
+        "TIMEOUT"
+      ],
+      "evidence_grade": "Producer-side solver observation; no decisive semantic result",
+      "bounds": {
+        "N": 8,
+        "streams": 2,
+        "selected_acir_opcodes": 627,
+        "selected_witnesses": 555
+      },
+      "nonvacuity": "UNRESOLVED",
+      "assumptions": [
+        "Analyst stream roles and walk policy",
+        "Omitted ACIR components assumed satisfiable",
+        "Recursive proof feasibility unvalidated",
+        "Printed ACIR parser/cone/encoding correctness unproved",
+        "No consumer decoding, reachable history, proof or committed-effect replay in D1-01"
+      ],
+      "unresolved_checks": [
+        "Full extraction/encoding soundness",
+        "Nonvacuity",
+        "Concrete proof feasibility and consumer effects"
+      ],
+      "artifact_provenance": "metadata/d1/d1-01-execution-manifest.json"
+    },
+    {
+      "slot": "running_flag/prefix",
+      "case": "running_flag",
+      "obligation": "prefix",
+      "availability": "NEW_EXECUTION",
+      "evidence_path": "results/raw/D1-01/primary_running_flag/prefix.json",
+      "evidence_sha256": "e280129a413985928425571b0e645fc54614d7a2cfb05676df4a712e6754f92a",
+      "query_path": "results/raw/D1-01/generated/running_flag/prefix.smt2",
+      "query_sha256": "6ac4b20422b09c0deea148b977159919d1542b7d587cdde38a9e9583671b82b4",
+      "command": [
+        "/home/pollmix/Coding/BindCheck-d1/tools/cvc5-1.4.2-gpl/bin/cvc5",
+        "--lang=smt2",
+        "--ff-solver=split"
+      ],
+      "stdin": "Exact query bytes; solver command reads stdin",
+      "driver_command": null,
+      "driver_command_note": "See frozen manifest and report for wrapper command",
+      "solver_version": "cvc5 1.4.2 [git 282d5e0 on branch HEAD]",
+      "solver_sha256": "2406449e9b2e01c1243b838a6c3eba776db38624b56fa6911566fafabb86732f",
+      "resource_limits": {
+        "N": 8,
+        "seconds_per_query": 300,
+        "rlimit_as_bytes": 4294967296,
+        "ff_solver": "split"
+      },
+      "resource_evidence": "results/raw/D1-01/primary_running_flag/prefix.limits.txt",
+      "exit_status": -9,
+      "timed_out": true,
+      "elapsed_seconds": 300.12679470899457,
+      "stdout": "",
+      "stderr": "",
+      "peak_rss_kib": null,
+      "solver_observation": "unknown",
+      "verdict": "UNKNOWN",
+      "reason_codes": [
+        "TIMEOUT"
+      ],
+      "evidence_grade": "Producer-side solver observation; no decisive semantic result",
+      "bounds": {
+        "N": 8,
+        "streams": 2,
+        "selected_acir_opcodes": 627,
+        "selected_witnesses": 555
+      },
+      "nonvacuity": "UNRESOLVED",
+      "assumptions": [
+        "Analyst stream roles and walk policy",
+        "Omitted ACIR components assumed satisfiable",
+        "Recursive proof feasibility unvalidated",
+        "Printed ACIR parser/cone/encoding correctness unproved",
+        "No consumer decoding, reachable history, proof or committed-effect replay in D1-01"
+      ],
+      "unresolved_checks": [
+        "Full extraction/encoding soundness",
+        "Nonvacuity",
+        "Concrete proof feasibility and consumer effects"
+      ],
+      "artifact_provenance": "metadata/d1/d1-01-execution-manifest.json"
+    },
+    {
+      "slot": "running_flag/tail",
+      "case": "running_flag",
+      "obligation": "tail",
+      "availability": "NEW_EXECUTION",
+      "evidence_path": "results/raw/D1-01/primary_running_flag/tail.json",
+      "evidence_sha256": "9130d185c2187da5ce6698e7d11da21600c75bb7e7ecf273ae055cfd924a6d70",
+      "query_path": "results/raw/D1-01/generated/running_flag/tail.smt2",
+      "query_sha256": "4d80a119dfe1f781eb2a47cb60490143afc930eb150dec2b4da980370d900a3c",
+      "command": [
+        "/home/pollmix/Coding/BindCheck-d1/tools/cvc5-1.4.2-gpl/bin/cvc5",
+        "--lang=smt2",
+        "--ff-solver=split"
+      ],
+      "stdin": "Exact query bytes; solver command reads stdin",
+      "driver_command": null,
+      "driver_command_note": "See frozen manifest and report for wrapper command",
+      "solver_version": "cvc5 1.4.2 [git 282d5e0 on branch HEAD]",
+      "solver_sha256": "2406449e9b2e01c1243b838a6c3eba776db38624b56fa6911566fafabb86732f",
+      "resource_limits": {
+        "N": 8,
+        "seconds_per_query": 300,
+        "rlimit_as_bytes": 4294967296,
+        "ff_solver": "split"
+      },
+      "resource_evidence": "results/raw/D1-01/primary_running_flag/tail.limits.txt",
+      "exit_status": -9,
+      "timed_out": true,
+      "elapsed_seconds": 300.192028407997,
+      "stdout": "",
+      "stderr": "",
+      "peak_rss_kib": null,
+      "solver_observation": "unknown",
+      "verdict": "UNKNOWN",
+      "reason_codes": [
+        "TIMEOUT"
+      ],
+      "evidence_grade": "Producer-side solver observation; no decisive semantic result",
+      "bounds": {
+        "N": 8,
+        "streams": 2,
+        "selected_acir_opcodes": 627,
+        "selected_witnesses": 555
+      },
+      "nonvacuity": "UNRESOLVED",
+      "assumptions": [
+        "Analyst stream roles and walk policy",
+        "Omitted ACIR components assumed satisfiable",
+        "Recursive proof feasibility unvalidated",
+        "Printed ACIR parser/cone/encoding correctness unproved",
+        "No consumer decoding, reachable history, proof or committed-effect replay in D1-01"
+      ],
+      "unresolved_checks": [
+        "Full extraction/encoding soundness",
+        "Nonvacuity",
+        "Concrete proof feasibility and consumer effects"
+      ],
+      "artifact_provenance": "metadata/d1/d1-01-execution-manifest.json"
+    }
+  ],
+  "diagnostics_excluded_from_primary": [
+    "exploratory_spec_only",
+    "exploratory_full_check_added",
+    "reductions",
+    "self-check",
+    "generation-audit"
+  ]
+}

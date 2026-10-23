@@ -1,0 +1,144 @@
+{
+  "task": "D1-01",
+  "frozen_at_utc": "2026-10-23T15:45:35.855589+00:00",
+  "repository_head": "564ad2f46aef3a20373df7eff087569528b00c3a",
+  "scope": "Reporting closure; original v5 protocol preserved; no tuning or new reductions",
+  "python": "3.12.12 (main, Oct 25 2025, 03:47:29) [GCC 13.3.0]",
+  "platform": "Linux-7.0.0-38-generic-x86_64-with-glibc2.39",
+  "assertions_enabled": true,
+  "setup_elapsed_seconds": 191.397128,
+  "setup_limit_seconds": 3600,
+  "new_attempt_limit_per_slot": 1,
+  "maximum_new_primary_attempts": 6,
+  "maximum_primary_solver_budget_seconds": 1800,
+  "planned_primary_solver_budget_seconds": 900,
+  "limits": {
+    "N": 8,
+    "seconds_per_query": 300,
+    "rlimit_as_bytes": 4294967296,
+    "ff_solver": "split"
+  },
+  "solver_version_command": {
+    "argv": [
+      "/home/pollmix/Coding/BindCheck-d1/tools/cvc5-1.4.2-gpl/bin/cvc5",
+      "--version"
+    ],
+    "cwd": "/home/pollmix/Coding/BindCheck-d1",
+    "exit_status": 0,
+    "stdout": "cvc5 1.4.2 [git 282d5e0 on branch HEAD]\ncompiled as a unrestricted build with GCC version 13.3.0 on Oct 20 2026 15:17:02\n\nCopyright (c) 2009-2026 by the authors and their institutional\naffiliations listed at https://cvc5.github.io/people.html\n\nThis build of cvc5 uses GPLed libraries, and is thus covered by\nthe GNU General Public License (GPL) version 3.  Versions of cvc5\nare available that are covered by the (modified) BSD license. If\nyou want to license cvc5 under this license, please configure cvc5\nwith the \"--no-gpl\" option before building from sources.\n\nTHIS SOFTWARE IS PROVIDED AS-IS, WITHOUT ANY WARRANTIES.\nUSE AT YOUR OWN RISK.\n\nThis version of cvc5 is linked against the following non-(L)GPL'ed\nthird party libraries.\n\n  CaDiCaL - Simplified Satisfiability Solver\n  See https://github.com/arminbiere/cadical for copyright information.\n\n  SymFPU - The Symbolic Floating Point Unit\n  See https://github.com/martin-cs/symfpu/tree/main for copyright information.\n\nThis version of cvc5 is linked against the following third party\nlibraries covered by the LGPLv3 license.\nSee licenses/lgpl-3.0.txt for more information.\n\n  GMP - Gnu Multi Precision Arithmetic Library\n  See http://gmplib.org for copyright information.\n\n  LibPoly polynomial library\n  See https://github.com/SRI-CSL/libpoly for copyright and\n  licensing information.\n\nThis version of cvc5 is linked against the following third party\nlibraries covered by the GPLv3 license.\nSee licenses/gpl-3.0.txt for more information.\n\n  CoCoALib - a computer algebra library\n  See https://cocoa.dima.unige.it/cocoa/cocoalib/index.shtml for copyright information\n\nSee the file COPYING (distributed with the source code, and with\nall binaries) for the full cvc5 copyright, licensing, and (lack of)\nwarranty information.\n\n",
+    "stderr": ""
+  },
+  "runtime_library_sha256": {
+    "/home/pollmix/Coding/BindCheck-d1/tools/cvc5-1.4.2-gpl/bin/../lib/libcvc5parser.so.1": "6a47508d986de52c5fee3ee81bdd749f8ce264981ed489160fd73c9110dc098d",
+    "/home/pollmix/Coding/BindCheck-d1/tools/cvc5-1.4.2-gpl/bin/../lib/libcvc5.so.1": "e617fc072f5dca76a332f18067d0f4c4494562e6855da285cb16a72d5ccddf27",
+    "/lib/x86_64-linux-gnu/libstdc++.so.6": "1fd75fe70354a416d75aef22bcae68c47bd25d20e2d0568c30b1a9838cf62f11",
+    "/lib/x86_64-linux-gnu/libgcc_s.so.1": "d93224d2b0dab4247598be683adca02f5cf00586f99c187579cd7e92058fb7cb",
+    "/lib/x86_64-linux-gnu/libc.so.6": "3a15d66867d83762c7f2f1e37359cb8f6c5743edb369c65285cb0b1c4f7498bf",
+    "/lib64/ld-linux-x86-64.so.2": "c20a2dc8917c755f02b94049356320fe1f62ac7d9f8994731f807d9df39302da",
+    "/home/pollmix/Coding/BindCheck-d1/tools/cvc5-1.4.2-gpl/bin/../lib/../lib/libpoly.so.0": "ffceecb15131fbb0ad16e3a4a850f348e8bf65fd003c77336c0d34d4fecb15ab",
+    "/home/pollmix/Coding/BindCheck-d1/tools/cvc5-1.4.2-gpl/bin/../lib/../lib/libpolyxx.so.0": "70131592253c16533bebf9e2b3f8366ffc4b691cfef1e50d60ccf41228061487",
+    "/home/pollmix/Coding/BindCheck-d1/tools/cvc5-1.4.2-gpl/bin/../lib/../lib/libmpfr.so.6": "cd44f0a022dd7e835c88fe4ce16bc4c9d3b604ccf14478a8c30d8e281bd227e9",
+    "/lib/x86_64-linux-gnu/libgmp.so.10": "0ccdfb6d6f5c039465f6d002cf7e4c072d48ac6a2cffc8dd6c748dec31592804",
+    "/lib/x86_64-linux-gnu/libm.so.6": "fce00b6f25f459cf4ae0b7fae4257909a1a8a86f9149e7c029a5d617baf1ccd0"
+  },
+  "frozen_file_sha256": {
+    "/home/pollmix/Coding/BindCheck-d1/scripts/t22_v5_protocol.md": "dd6fee7a9a3d8bce9f14fb5bb233b3fc8888342b73a0d7ca49f9dfdbc79339f9",
+    "/home/pollmix/Coding/BindCheck-d1/scripts/t22_v5_compact.py": "39cb3731d6e2921ac0a59c21dbd5d18a7a91bec18628e0e6bb843382d766c792",
+    "/home/pollmix/Coding/BindCheck-d1/scripts/t22_specs/payy_agg_agg.json": "dd7e17ed2c9cd74000182ea613184a53f86bd1944f86a5c5cc8016663a203e1c",
+    "/home/pollmix/Coding/BindCheck-d1/results/raw/D1-00/baseline-results/T22/33_v3_primary/20_payy_eval.json.artifacts/b_agg_agg_check_added_.compile.stdout": "1743e5dcdeaf36172fbbde66fda165e79db9081f8a3a980ee4bbf31f61a2875a",
+    "/home/pollmix/Coding/BindCheck-d1/results/raw/D1-00/baseline-results/T22/33_v3_primary/20_payy_eval.json.artifacts/b_agg_agg_check_added_.abi.json": "8b288933d3330874c2e5c9b00443d6b0748302fce46d5aedf7ece6536b3cbebb",
+    "/home/pollmix/Coding/BindCheck-d1/results/raw/D1-00/baseline-results/T22/33_v3_primary/20_payy_eval.json.artifacts/m4_b_different_idiom_flag_.compile.stdout": "13227e27dcd806524d5707995438a3c3b6573c7a20451db41a9f1fd68dcf4670",
+    "/home/pollmix/Coding/BindCheck-d1/results/raw/D1-00/baseline-results/T22/33_v3_primary/20_payy_eval.json.artifacts/m4_b_different_idiom_flag_.abi.json": "8b288933d3330874c2e5c9b00443d6b0748302fce46d5aedf7ece6536b3cbebb",
+    "/home/pollmix/Coding/BindCheck/tools/cvc5-1.4.2-gpl/bin/cvc5": "2406449e9b2e01c1243b838a6c3eba776db38624b56fa6911566fafabb86732f",
+    "/home/pollmix/Coding/BindCheck-d1/tools/cvc5-1.4.2-gpl/bin/cvc5": "2406449e9b2e01c1243b838a6c3eba776db38624b56fa6911566fafabb86732f",
+    "/home/pollmix/Coding/BindCheck-d1/tools/cvc5-1.4.2-gpl/lib/libpoly.so.0": "ffceecb15131fbb0ad16e3a4a850f348e8bf65fd003c77336c0d34d4fecb15ab",
+    "/home/pollmix/Coding/BindCheck-d1/tools/cvc5-1.4.2-gpl/lib/libmpfr.so.6": "cd44f0a022dd7e835c88fe4ce16bc4c9d3b604ccf14478a8c30d8e281bd227e9",
+    "/home/pollmix/Coding/BindCheck-d1/tools/cvc5-1.4.2-gpl/lib/libmpfr.so": "cd44f0a022dd7e835c88fe4ce16bc4c9d3b604ccf14478a8c30d8e281bd227e9",
+    "/home/pollmix/Coding/BindCheck-d1/tools/cvc5-1.4.2-gpl/lib/libmpfr.so.6.2.2": "cd44f0a022dd7e835c88fe4ce16bc4c9d3b604ccf14478a8c30d8e281bd227e9",
+    "/home/pollmix/Coding/BindCheck-d1/tools/cvc5-1.4.2-gpl/lib/libpolyxx.so.0.2.1": "70131592253c16533bebf9e2b3f8366ffc4b691cfef1e50d60ccf41228061487",
+    "/home/pollmix/Coding/BindCheck-d1/tools/cvc5-1.4.2-gpl/lib/libcvc5.so": "e617fc072f5dca76a332f18067d0f4c4494562e6855da285cb16a72d5ccddf27",
+    "/home/pollmix/Coding/BindCheck-d1/tools/cvc5-1.4.2-gpl/lib/libcvc5parser.so.1": "6a47508d986de52c5fee3ee81bdd749f8ce264981ed489160fd73c9110dc098d",
+    "/home/pollmix/Coding/BindCheck-d1/tools/cvc5-1.4.2-gpl/lib/libcvc5.so.1": "e617fc072f5dca76a332f18067d0f4c4494562e6855da285cb16a72d5ccddf27",
+    "/home/pollmix/Coding/BindCheck-d1/tools/cvc5-1.4.2-gpl/lib/libcvc5parser.so.1.4.2": "6a47508d986de52c5fee3ee81bdd749f8ce264981ed489160fd73c9110dc098d",
+    "/home/pollmix/Coding/BindCheck-d1/tools/cvc5-1.4.2-gpl/lib/libpolyxx.so.0": "70131592253c16533bebf9e2b3f8366ffc4b691cfef1e50d60ccf41228061487",
+    "/home/pollmix/Coding/BindCheck-d1/tools/cvc5-1.4.2-gpl/lib/libcvc5.so.1.4.2": "e617fc072f5dca76a332f18067d0f4c4494562e6855da285cb16a72d5ccddf27",
+    "/home/pollmix/Coding/BindCheck-d1/tools/cvc5-1.4.2-gpl/lib/libpoly.so": "ffceecb15131fbb0ad16e3a4a850f348e8bf65fd003c77336c0d34d4fecb15ab",
+    "/home/pollmix/Coding/BindCheck-d1/tools/cvc5-1.4.2-gpl/lib/libcvc5parser.so": "6a47508d986de52c5fee3ee81bdd749f8ce264981ed489160fd73c9110dc098d",
+    "/home/pollmix/Coding/BindCheck-d1/tools/cvc5-1.4.2-gpl/lib/libpoly.so.0.2.1": "ffceecb15131fbb0ad16e3a4a850f348e8bf65fd003c77336c0d34d4fecb15ab",
+    "/home/pollmix/Coding/BindCheck-d1/tools/cvc5-1.4.2-gpl/lib/libpolyxx.so": "70131592253c16533bebf9e2b3f8366ffc4b691cfef1e50d60ccf41228061487",
+    "/home/pollmix/Coding/BindCheck-d1/tools/cvc5-1.4.2-gpl/lib/libmpfr.la": "ecd6f2833109a80cfdcfc180c6728928ee546eefd520e81e5b7db45c32af997b",
+    "/home/pollmix/Coding/BindCheck-d1/tools/cvc5-1.4.2-gpl/lib/pkgconfig/mpfr.pc": "4f894d03aebbcdf5f439933657ebdb126cdfb5c26d9a5e9c4a3d9f76e54f00ed",
+    "/home/pollmix/Coding/BindCheck-d1/tools/cvc5-1.4.2-gpl/lib/cmake/cvc5/cvc5ConfigVersion.cmake": "6f1c6f75610aa90241add568b0eedefd507387f4821a79283c0635dc5c34bf62",
+    "/home/pollmix/Coding/BindCheck-d1/tools/cvc5-1.4.2-gpl/lib/cmake/cvc5/cvc5Config.cmake": "bc5b63be415d9784665d5c175b8570e6983e28291cf2c2742fe71fb0717a34ef",
+    "/home/pollmix/Coding/BindCheck-d1/tools/cvc5-1.4.2-gpl/lib/cmake/cvc5/cvc5Targets.cmake": "090ab2862ae0cdb337ac1422c7e32247f40e942721f55ac05493bba35e5183d7",
+    "/home/pollmix/Coding/BindCheck-d1/tools/cvc5-1.4.2-gpl/lib/cmake/cvc5/cvc5Targets-production.cmake": "228560298c67563ce3a3bcb86ad0127e497cc88f66119f12fa4f9824a2a6c045",
+    "/home/pollmix/Coding/BindCheck-d1/scripts/d1_01_closure.py": "e391ba5277bb4baa2a1a232cfa8156de943a05fc6ec98a429f8acf7636f1aae3",
+    "/home/pollmix/Coding/BindCheck-d1/scripts/t22_v3_tailspec.py": "81a1cd43cd3e6e735dc325535f05d9b2a88c6c9794b434ab53e834061ff700c8",
+    "/home/pollmix/Coding/BindCheck-d1/scripts/t22_v5_audit.py": "e1d775151c70395c983bf13ae121472179292cf2bc89847a61015d419b794e8a",
+    "/home/pollmix/Coding/BindCheck-d1/scripts/t22_v5_reduce.py": "22b9a1d6b8f188b836bb111b4a4fafa3cbd4b96af232c57c333c0f2250b96bdc",
+    "/home/pollmix/Coding/BindCheck-d1/results/raw/D1-01/initial-state.json": "1b16c22138f68592e59d77fa624829a55d3704012c0bb1336412aaacb2a7a12c",
+    "/home/pollmix/Coding/BindCheck-d1/results/raw/D1-00/baseline-results/T22/33_v3_primary/20_payy_eval.json.artifacts/b_agg_agg_check_added_.source.nr": "af9df5073230c040b1c7cb31ca31b2521b5485b8bc3ff566e915ad84d710632b",
+    "/home/pollmix/Coding/BindCheck-d1/results/raw/D1-00/baseline-results/T22/33_v3_primary/20_payy_eval.json.artifacts/b_agg_agg_check_added_.compile.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/pollmix/Coding/BindCheck-d1/results/raw/D1-00/baseline-results/T22/33_v3_primary/20_payy_eval.json.artifacts/m4_b_different_idiom_flag_.source.nr": "b4e541fb411a2738d5b1268b3854aaca016e24ab97fd46117e50db7a37697dc7",
+    "/home/pollmix/Coding/BindCheck-d1/results/raw/D1-00/baseline-results/T22/33_v3_primary/20_payy_eval.json.artifacts/m4_b_different_idiom_flag_.compile.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/pollmix/Coding/BindCheck-d1/results/raw/D1-01/generated/check_added/nonvacuous.smt2": "c0312431ed84da5b55094fc4b27212f607789d143ad56b54db52359235b794b3",
+    "/home/pollmix/Coding/BindCheck-d1/results/raw/D1-01/generated/check_added/prefix.smt2": "4ae2be7bcedcfe992966dc406d4cd8f2b43f1823fa49efd8fbfa14044631e781",
+    "/home/pollmix/Coding/BindCheck-d1/results/raw/D1-01/generated/check_added/tail.smt2": "3621cdfca8269e404aca638a24aa852da0406be1013f2c29511df47b6ff0a7a1",
+    "/home/pollmix/Coding/BindCheck-d1/results/raw/D1-01/generated/running_flag/nonvacuous.smt2": "af1ae83aafa43b9dbb06e110270dda0bff11c90371c2666143916fb067b21ff8",
+    "/home/pollmix/Coding/BindCheck-d1/results/raw/D1-01/generated/running_flag/prefix.smt2": "6ac4b20422b09c0deea148b977159919d1542b7d587cdde38a9e9583671b82b4",
+    "/home/pollmix/Coding/BindCheck-d1/results/raw/D1-01/generated/running_flag/tail.smt2": "4d80a119dfe1f781eb2a47cb60490143afc930eb150dec2b4da980370d900a3c"
+  },
+  "planned_attempts": [
+    {
+      "slot": "running_flag/nonvacuous",
+      "query_path": "results/raw/D1-01/generated/running_flag/nonvacuous.smt2",
+      "solver_argv": [
+        "/home/pollmix/Coding/BindCheck-d1/tools/cvc5-1.4.2-gpl/bin/cvc5",
+        "--lang=smt2",
+        "--ff-solver=split"
+      ],
+      "stdin": "Exact bytes of query_path",
+      "seconds": 300,
+      "rlimit_as_bytes": 4294967296,
+      "timeout_action": "SIGKILL entire new process group"
+    },
+    {
+      "slot": "running_flag/prefix",
+      "query_path": "results/raw/D1-01/generated/running_flag/prefix.smt2",
+      "solver_argv": [
+        "/home/pollmix/Coding/BindCheck-d1/tools/cvc5-1.4.2-gpl/bin/cvc5",
+        "--lang=smt2",
+        "--ff-solver=split"
+      ],
+      "stdin": "Exact bytes of query_path",
+      "seconds": 300,
+      "rlimit_as_bytes": 4294967296,
+      "timeout_action": "SIGKILL entire new process group"
+    },
+    {
+      "slot": "running_flag/tail",
+      "query_path": "results/raw/D1-01/generated/running_flag/tail.smt2",
+      "solver_argv": [
+        "/home/pollmix/Coding/BindCheck-d1/tools/cvc5-1.4.2-gpl/bin/cvc5",
+        "--lang=smt2",
+        "--ff-solver=split"
+      ],
+      "stdin": "Exact bytes of query_path",
+      "seconds": 300,
+      "rlimit_as_bytes": 4294967296,
+      "timeout_action": "SIGKILL entire new process group"
+    }
+  ],
+  "skipped_valid_slots": [
+    "check_added/nonvacuous",
+    "check_added/prefix",
+    "check_added/tail"
+  ],
+  "historical_provenance": {
+    "payy_B_revision": "dcd5d96ee15664a59bc24ed0dc2bb78b73ac5e36",
+    "nargo": "1.0.0-beta.14",
+    "noirc": "60ccd48e18ad8ce50d5ecda9baf813b712145051",
+    "source": "reports/T22-v3.md and saved 33_v3_primary/10_run_manifest.txt; no recompilation",
+    "cvc5_revision": "282d5e0c84baf49c780704c532f87ba66d8b513d"
+  }
+}

@@ -1,6 +1,6 @@
 # D1 development plan
 
-Date: **23 October 2026**. Status: **D1-00 complete; new analyzer implementation and experiments not started**.
+Date: **23 October 2026**. Status: **D1-00 and D1-01 complete; T22-v5 queries remain UNKNOWN; new analyzer implementation not started**.
 
 This is the execution roadmap for the isolated D1 worktree. The [research contract](../research-contract.md) controls scope and claims; [D1-00](../../reports/D1-00.md) records preservation and validation.
 
@@ -92,7 +92,7 @@ The new result envelope retains the research contract's three verdicts: `VIOLATI
 | Task | Work and deliverables | Completion criterion |
 |---|---|---|
 | **D1-00 — Preserve and align** | Capture repository/index state and hashes; create isolated worktree; review and carry necessary staged work without touching the original index; add D1 brief, contract change log, README roadmap, and checkpoint entry | Original checkout and staged diff are unchanged; baseline is reproducible from a manifest; D1 scope, verdict semantics, task order, and provenance are explicit. No code is advertised as newly validated. |
-| **D1-01 — Close the T22 reporting boundary** | Audit existing v5 records against its six-query protocol; identify missing executions and prerequisites; run only needed permitted primary queries in a fresh namespace if inputs are available; write a versioned closure report | All six slots have an evidenced outcome or an explicit missing/blocked designation. Keep 300 seconds/query and 4 GiB. UNKNOWN is a valid closure outcome; do not prolong the old campaign to obtain a favorable verdict. |
+| **D1-01 — Close the T22 reporting boundary (DONE)** | Audit existing v5 records against its six-query protocol; identify missing executions and prerequisites; run only needed permitted primary queries in a fresh namespace if inputs are available; write a versioned closure report | All six slots have an evidenced outcome or an explicit missing/blocked designation. Keep 300 seconds/query and 4 GiB. UNKNOWN is a valid closure outcome; do not prolong the old campaign to obtain a favorable verdict. |
 | **D1-02 — Independent target intake** | Screen two non-Payy families for usable source/license, public-input/consumer correspondence, honest proving path, policy source, and architectural independence | At least one plausible transfer target is selected before algorithm tuning. Record failures and unresolved availability. Screening is not a successful build or transfer result. |
 | **D1-03 — Minimal joint semantics** | Implement artifact/result/policy schemas and a small boundary IR; extract one producer/consumer path; construct a direct joint query and independent replay oracle | A real-constraint faulty development case has a concrete model and executable replay; an honest/repaired case has non-vacuity and a scoped no-violation result. Unsupported operations and missing assumptions reliably produce UNKNOWN. Synthetic success is labeled synthetic. |
 | **D1-04 — Baselines before optimization** | Run direct Foundry tests, monolithic joint solving, and a straightforward CIVER-style summary adaptation on the same facts, bounds, and policy | Comparable result matrix and measured preparation, annotation, query, proving, and replay costs. The modular adaptation is labeled as an adaptation, not a reproduction of CIVER unless actually reproduced. |
@@ -148,7 +148,7 @@ If proof/consumer paths and meaningful policies are available but static composi
 | Task | State | Dependency |
 |---|---|---|
 | D1-00 | DONE | Preservation and documentation checks in the task report |
-| D1-01 | NEXT | Audit the preserved T22 inputs, protocol, and records; provision pinned dependencies only as needed |
+| D1-01 | DONE | [Closure report](../../reports/D1-01.md): six accounted slots, three preserved plus three new timeouts; all UNKNOWN; original successful-solver milestone unmet |
 | D1-02 | NEXT | Independent availability screen; no dependency on T22 solver success |
 | D1-03 | WAITING | Close the old evidence record, review intake, and freeze the supported fragment/policy; old UNKNOWN need not become safe |
 | D1-04 | WAITING | D1-03 faithful joint semantics |
@@ -157,9 +157,20 @@ If proof/consumer paths and meaningful policies are available but static composi
 | D1-07 | WAITING | Frozen mechanism and an independent honest proving path |
 | D1-08 | WAITING | Feasibility and transfer justify a broader study |
 
-**Next bounded task: D1-01, close the T22 reporting boundary.** Audit the six original v5 query slots (two controls times non-vacuity/prefix/tail), record an outcome or an explicit missing/blocked designation for each, and write `reports/D1-01.md`. Preserve the original 300-second/query and 4-GiB limits. Do not substitute reduced-query success for full-query success. Any additional execution needs a fresh output directory and provenance; never run a legacy cleanup script over the backup.
+**Next bounded task: D1-02, independent target intake.** Screen two non-Payy
+families for usable source/license, public-input/consumer correspondence,
+honest proving path, policy provenance, and architectural independence.
+Select at least one plausible transfer target. Record explicit availability
+blockers for all failed candidates; if none qualifies, leave the selection
+gate unresolved. Screening is not a successful build or
+transfer result and does not require T22 solver success.
 
-D1-02 can follow immediately or be scheduled independently; this roadmap does not authorize delegation. Neither task is performed in D1-00. No analyzer implementation, solver/prover run, or new target analysis has occurred here.
+[D1-01](../../reports/D1-01.md) completed reporting closure with six execution
+records and six UNKNOWN outcomes. Three valid saved records were retained;
+three missing running-flag slots were attempted once at 300 seconds/4 GiB.
+The original successful-solver milestone remains unmet. No analyzer
+implementation, prover run, or new target analysis has occurred. D1-02 is not
+started; this roadmap does not authorize delegation.
 
 **User-side action:** open `/home/pollmix/Coding/BindCheck-d1` for future implementation. No manual stash, empty repository, or deletion is needed. Review the policy and actor capabilities before freezing evaluation labels. No full-paper commitment is implied.
 

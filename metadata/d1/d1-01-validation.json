@@ -1,0 +1,543 @@
+{
+  "task": "D1-01",
+  "checked_at_utc": "2026-10-23T16:01:28.334875+00:00",
+  "status": "PASS",
+  "verifier_sha256": "8848b1bb38ab7f4b5f132d40e7650c6107ac1936cb3f0e57d054852c5e3a78fe",
+  "checks": [
+    {
+      "check": "original_source_files_modes_symlinks",
+      "passed": true,
+      "expected_count": 19616,
+      "actual_count": 19616,
+      "differences": []
+    },
+    {
+      "check": "entire_D1_00_archive",
+      "passed": true,
+      "expected_count": 417,
+      "actual_count": 417,
+      "differences": []
+    },
+    {
+      "check": "source_index_bytes",
+      "passed": true
+    },
+    {
+      "check": "source_rev-parse HEAD",
+      "passed": true
+    },
+    {
+      "check": "source_branch --show-current",
+      "passed": true
+    },
+    {
+      "check": "source_status --porcelain=v1 --untracked-files=all",
+      "passed": true
+    },
+    {
+      "check": "source_diff --cached --binary",
+      "passed": true
+    },
+    {
+      "check": "source_diff --binary",
+      "passed": true
+    },
+    {
+      "check": "source_rev-parse --git-path index",
+      "passed": true
+    },
+    {
+      "check": "worktree_index_bytes",
+      "passed": true
+    },
+    {
+      "check": "worktree_rev-parse HEAD",
+      "passed": true
+    },
+    {
+      "check": "worktree_branch --show-current",
+      "passed": true
+    },
+    {
+      "check": "worktree_diff --cached --binary",
+      "passed": true
+    },
+    {
+      "check": "worktree_rev-parse --git-path index",
+      "passed": true
+    },
+    {
+      "check": "historical_reports_code_and_other_tracked_files",
+      "passed": true,
+      "changed": []
+    },
+    {
+      "check": "new_diff_whitespace",
+      "passed": true
+    },
+    {
+      "check": "staged_diff_still_empty",
+      "passed": true
+    },
+    {
+      "check": "checkpoint_rows_preserved",
+      "passed": true,
+      "count": 8
+    },
+    {
+      "check": "completed_nodes_preserved",
+      "passed": true,
+      "count": 12
+    },
+    {
+      "check": "historical_freeze_33_v3_freeze/00_sha256.txt",
+      "passed": true,
+      "entries": [
+        {
+          "path": "/home/pollmix/Coding/BindCheck-d1/scripts/t22_v3_tailspec.py",
+          "expected": "81a1cd43cd3e6e735dc325535f05d9b2a88c6c9794b434ab53e834061ff700c8",
+          "actual": "81a1cd43cd3e6e735dc325535f05d9b2a88c6c9794b434ab53e834061ff700c8"
+        },
+        {
+          "path": "/home/pollmix/Coding/BindCheck-d1/scripts/t22_v3_eval.py",
+          "expected": "53eead88b903a906011b1012735aa9d2e990442e560de31bcb5f8989a6afac80",
+          "actual": "53eead88b903a906011b1012735aa9d2e990442e560de31bcb5f8989a6afac80"
+        },
+        {
+          "path": "/home/pollmix/Coding/BindCheck-d1/scripts/t22_v3.sh",
+          "expected": "b3cf18f55d974c1504eb39877692bf608b24b27853825f80a6086c1505a278bc",
+          "actual": "b3cf18f55d974c1504eb39877692bf608b24b27853825f80a6086c1505a278bc"
+        },
+        {
+          "path": "/home/pollmix/Coding/BindCheck-d1/scripts/t22_v3_checks.py",
+          "expected": "3470061af6cb64d40e28c2e6d2d34508c4c608d9efcf2d12c4a5888feb1f32ca",
+          "actual": "3470061af6cb64d40e28c2e6d2d34508c4c608d9efcf2d12c4a5888feb1f32ca"
+        },
+        {
+          "path": "/home/pollmix/Coding/BindCheck-d1/scripts/t22_v3_protocol.md",
+          "expected": "93d2eaf4cf293fa5972f162f2aa1c40905889df79bc9e65bbd0af3163c7f060b",
+          "actual": "93d2eaf4cf293fa5972f162f2aa1c40905889df79bc9e65bbd0af3163c7f060b"
+        },
+        {
+          "path": "/home/pollmix/Coding/BindCheck-d1/scripts/t22_specs/payy_agg_agg.json",
+          "expected": "dd7e17ed2c9cd74000182ea613184a53f86bd1944f86a5c5cc8016663a203e1c",
+          "actual": "dd7e17ed2c9cd74000182ea613184a53f86bd1944f86a5c5cc8016663a203e1c"
+        },
+        {
+          "path": "/home/pollmix/Coding/BindCheck-d1/scripts/t22_specs/payy_agg_utxo.json",
+          "expected": "689556ab772496f68208c89467be34f7af0ab4c92b57070b0552cd6c66af5c87",
+          "actual": "689556ab772496f68208c89467be34f7af0ab4c92b57070b0552cd6c66af5c87"
+        },
+        {
+          "path": "/home/pollmix/Coding/BindCheck-d1/scripts/t22_tailspec.py",
+          "expected": "d45ccef0380d2a6010b25842d588b38c0d668640b06014dda5ec7b4d664f9dc6",
+          "actual": "d45ccef0380d2a6010b25842d588b38c0d668640b06014dda5ec7b4d664f9dc6"
+        },
+        {
+          "path": "/home/pollmix/Coding/BindCheck-d1/scripts/t22_eval.py",
+          "expected": "9403603795145bd089832d0560b87fb853b016c779c77c4679dcb2e515b5f067",
+          "actual": "9403603795145bd089832d0560b87fb853b016c779c77c4679dcb2e515b5f067"
+        },
+        {
+          "path": "/home/pollmix/Coding/BindCheck-d1/scripts/t22.sh",
+          "expected": "f6e9759644f5997bcf8e4e0fcac11edea3a3f402e50040e27e1f9307ac460833",
+          "actual": "f6e9759644f5997bcf8e4e0fcac11edea3a3f402e50040e27e1f9307ac460833"
+        },
+        {
+          "path": "/home/pollmix/Coding/BindCheck-d1/scripts/t21_tailcheck.py",
+          "expected": "ed20e4bbd6b3371eba31d78a0575359281ac4e6d57f40dfc19a3057ee468138a",
+          "actual": "ed20e4bbd6b3371eba31d78a0575359281ac4e6d57f40dfc19a3057ee468138a"
+        }
+      ]
+    },
+    {
+      "check": "historical_freeze_35_v5_compact/00_freeze_sha256.txt",
+      "passed": true,
+      "entries": [
+        {
+          "path": "/home/pollmix/Coding/BindCheck-d1/scripts/t22_v5_protocol.md",
+          "expected": "dd6fee7a9a3d8bce9f14fb5bb233b3fc8888342b73a0d7ca49f9dfdbc79339f9",
+          "actual": "dd6fee7a9a3d8bce9f14fb5bb233b3fc8888342b73a0d7ca49f9dfdbc79339f9"
+        },
+        {
+          "path": "/home/pollmix/Coding/BindCheck-d1/scripts/t22_v5_compact.py",
+          "expected": "39cb3731d6e2921ac0a59c21dbd5d18a7a91bec18628e0e6bb843382d766c792",
+          "actual": "39cb3731d6e2921ac0a59c21dbd5d18a7a91bec18628e0e6bb843382d766c792"
+        },
+        {
+          "path": "/home/pollmix/Coding/BindCheck-d1/scripts/t22_specs/payy_agg_agg.json",
+          "expected": "dd7e17ed2c9cd74000182ea613184a53f86bd1944f86a5c5cc8016663a203e1c",
+          "actual": "dd7e17ed2c9cd74000182ea613184a53f86bd1944f86a5c5cc8016663a203e1c"
+        },
+        {
+          "path": "/home/pollmix/Coding/BindCheck-d1/results/raw/D1-00/baseline-results/T22/33_v3_primary/20_payy_eval.json.artifacts/b_agg_agg_check_added_.compile.stdout",
+          "expected": "1743e5dcdeaf36172fbbde66fda165e79db9081f8a3a980ee4bbf31f61a2875a",
+          "actual": "1743e5dcdeaf36172fbbde66fda165e79db9081f8a3a980ee4bbf31f61a2875a"
+        },
+        {
+          "path": "/home/pollmix/Coding/BindCheck-d1/results/raw/D1-00/baseline-results/T22/33_v3_primary/20_payy_eval.json.artifacts/b_agg_agg_check_added_.abi.json",
+          "expected": "8b288933d3330874c2e5c9b00443d6b0748302fce46d5aedf7ece6536b3cbebb",
+          "actual": "8b288933d3330874c2e5c9b00443d6b0748302fce46d5aedf7ece6536b3cbebb"
+        },
+        {
+          "path": "/home/pollmix/Coding/BindCheck-d1/results/raw/D1-00/baseline-results/T22/33_v3_primary/20_payy_eval.json.artifacts/m4_b_different_idiom_flag_.compile.stdout",
+          "expected": "13227e27dcd806524d5707995438a3c3b6573c7a20451db41a9f1fd68dcf4670",
+          "actual": "13227e27dcd806524d5707995438a3c3b6573c7a20451db41a9f1fd68dcf4670"
+        },
+        {
+          "path": "/home/pollmix/Coding/BindCheck-d1/results/raw/D1-00/baseline-results/T22/33_v3_primary/20_payy_eval.json.artifacts/m4_b_different_idiom_flag_.abi.json",
+          "expected": "8b288933d3330874c2e5c9b00443d6b0748302fce46d5aedf7ece6536b3cbebb",
+          "actual": "8b288933d3330874c2e5c9b00443d6b0748302fce46d5aedf7ece6536b3cbebb"
+        },
+        {
+          "path": "/home/pollmix/Coding/BindCheck-d1/tools/cvc5-1.4.2-gpl/bin/cvc5",
+          "expected": "2406449e9b2e01c1243b838a6c3eba776db38624b56fa6911566fafabb86732f",
+          "actual": "2406449e9b2e01c1243b838a6c3eba776db38624b56fa6911566fafabb86732f"
+        }
+      ]
+    },
+    {
+      "check": "historical_freeze_35_v5_compact/20_reducer_sha256.txt",
+      "passed": true,
+      "entries": [
+        {
+          "path": "/home/pollmix/Coding/BindCheck-d1/scripts/t22_v5_reduce.py",
+          "expected": "22b9a1d6b8f188b836bb111b4a4fafa3cbd4b96af232c57c333c0f2250b96bdc",
+          "actual": "22b9a1d6b8f188b836bb111b4a4fafa3cbd4b96af232c57c333c0f2250b96bdc"
+        },
+        {
+          "path": "/home/pollmix/Coding/BindCheck-d1/results/raw/D1-00/baseline-results/T22/35_v5_compact/primary_check_added/nonvacuous.smt2",
+          "expected": "c0312431ed84da5b55094fc4b27212f607789d143ad56b54db52359235b794b3",
+          "actual": "c0312431ed84da5b55094fc4b27212f607789d143ad56b54db52359235b794b3"
+        },
+        {
+          "path": "/home/pollmix/Coding/BindCheck-d1/tools/cvc5-1.4.2-gpl/bin/cvc5",
+          "expected": "2406449e9b2e01c1243b838a6c3eba776db38624b56fa6911566fafabb86732f",
+          "actual": "2406449e9b2e01c1243b838a6c3eba776db38624b56fa6911566fafabb86732f"
+        }
+      ]
+    },
+    {
+      "check": "historical_freeze_35_v5_compact/30_audit_sha256.txt",
+      "passed": true,
+      "entries": [
+        {
+          "path": "/home/pollmix/Coding/BindCheck-d1/scripts/t22_v5_audit.py",
+          "expected": "e1d775151c70395c983bf13ae121472179292cf2bc89847a61015d419b794e8a",
+          "actual": "e1d775151c70395c983bf13ae121472179292cf2bc89847a61015d419b794e8a"
+        },
+        {
+          "path": "/home/pollmix/Coding/BindCheck-d1/scripts/t22_v5_reduce.py",
+          "expected": "22b9a1d6b8f188b836bb111b4a4fafa3cbd4b96af232c57c333c0f2250b96bdc",
+          "actual": "22b9a1d6b8f188b836bb111b4a4fafa3cbd4b96af232c57c333c0f2250b96bdc"
+        },
+        {
+          "path": "/home/pollmix/Coding/BindCheck-d1/results/raw/D1-00/baseline-results/T22/35_v5_compact/reductions/prefix_320_confirmed.smt2",
+          "expected": "3e61af60d85ae9e074b022aaecab1d72d44139d1e77c259be43908d0c9e7416a",
+          "actual": "3e61af60d85ae9e074b022aaecab1d72d44139d1e77c259be43908d0c9e7416a"
+        },
+        {
+          "path": "/home/pollmix/Coding/BindCheck-d1/results/raw/D1-00/baseline-results/T22/35_v5_compact/reductions/prefix_320_confirmed.smt2.json",
+          "expected": "8788da02674e3cd5cc1310b0b0f6054df17831b339bc4460cf0f80b699a215b8",
+          "actual": "8788da02674e3cd5cc1310b0b0f6054df17831b339bc4460cf0f80b699a215b8"
+        }
+      ]
+    },
+    {
+      "check": "D1_01_frozen_inputs_and_runtime",
+      "passed": true,
+      "changed": []
+    },
+    {
+      "check": "setup_budget",
+      "passed": true
+    },
+    {
+      "check": "six_unique_primary_slots",
+      "passed": true
+    },
+    {
+      "check": "one_attempt_per_missing_slot",
+      "passed": true
+    },
+    {
+      "check": "primary_budget",
+      "passed": true
+    },
+    {
+      "check": "row_integrity_check_added/nonvacuous",
+      "passed": true
+    },
+    {
+      "check": "timeout_verdict_check_added/nonvacuous",
+      "passed": true
+    },
+    {
+      "check": "row_integrity_check_added/prefix",
+      "passed": true
+    },
+    {
+      "check": "timeout_verdict_check_added/prefix",
+      "passed": true
+    },
+    {
+      "check": "row_integrity_check_added/tail",
+      "passed": true
+    },
+    {
+      "check": "timeout_verdict_check_added/tail",
+      "passed": true
+    },
+    {
+      "check": "row_integrity_running_flag/nonvacuous",
+      "passed": true
+    },
+    {
+      "check": "timeout_verdict_running_flag/nonvacuous",
+      "passed": true
+    },
+    {
+      "check": "runtime_limit_nonvacuous",
+      "passed": true
+    },
+    {
+      "check": "prefrozen_execution_nonvacuous",
+      "passed": true
+    },
+    {
+      "check": "raw_streams_nonvacuous",
+      "passed": true
+    },
+    {
+      "check": "row_integrity_running_flag/prefix",
+      "passed": true
+    },
+    {
+      "check": "timeout_verdict_running_flag/prefix",
+      "passed": true
+    },
+    {
+      "check": "runtime_limit_prefix",
+      "passed": true
+    },
+    {
+      "check": "prefrozen_execution_prefix",
+      "passed": true
+    },
+    {
+      "check": "raw_streams_prefix",
+      "passed": true
+    },
+    {
+      "check": "row_integrity_running_flag/tail",
+      "passed": true
+    },
+    {
+      "check": "timeout_verdict_running_flag/tail",
+      "passed": true
+    },
+    {
+      "check": "runtime_limit_tail",
+      "passed": true
+    },
+    {
+      "check": "prefrozen_execution_tail",
+      "passed": true
+    },
+    {
+      "check": "raw_streams_tail",
+      "passed": true
+    },
+    {
+      "check": "self_check_assertions_enabled",
+      "passed": true
+    },
+    {
+      "check": "saved_blocker_audit",
+      "passed": true
+    },
+    {
+      "check": "observed_local_runtime",
+      "passed": true
+    },
+    {
+      "check": "no_primary_solver_process_left_running",
+      "passed": true,
+      "pids": []
+    },
+    {
+      "check": "local_markdown_links",
+      "passed": true,
+      "missing": [],
+      "scope": "Targets only; no anchor or external URL check"
+    },
+    {
+      "check": "raw_and_toolchain_ignored",
+      "passed": true
+    }
+  ],
+  "commands": [
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "cwd": "/home/pollmix/Coding/BindCheck",
+      "exit_status": 0,
+      "stdout": "90f46a4e30c1b15ee94a357d244a54dbbabf2d2c\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "branch",
+        "--show-current"
+      ],
+      "cwd": "/home/pollmix/Coding/BindCheck",
+      "exit_status": 0,
+      "stdout": "main\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "status",
+        "--porcelain=v1",
+        "--untracked-files=all"
+      ],
+      "cwd": "/home/pollmix/Coding/BindCheck",
+      "exit_status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--cached",
+        "--binary"
+      ],
+      "cwd": "/home/pollmix/Coding/BindCheck",
+      "exit_status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--binary"
+      ],
+      "cwd": "/home/pollmix/Coding/BindCheck",
+      "exit_status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "--git-path",
+        "index"
+      ],
+      "cwd": "/home/pollmix/Coding/BindCheck",
+      "exit_status": 0,
+      "stdout": ".git/index\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "cwd": "/home/pollmix/Coding/BindCheck-d1",
+      "exit_status": 0,
+      "stdout": "564ad2f46aef3a20373df7eff087569528b00c3a\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "branch",
+        "--show-current"
+      ],
+      "cwd": "/home/pollmix/Coding/BindCheck-d1",
+      "exit_status": 0,
+      "stdout": "research/d1\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--cached",
+        "--binary"
+      ],
+      "cwd": "/home/pollmix/Coding/BindCheck-d1",
+      "exit_status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "--git-path",
+        "index"
+      ],
+      "cwd": "/home/pollmix/Coding/BindCheck-d1",
+      "exit_status": 0,
+      "stdout": "/home/pollmix/Coding/BindCheck/.git/worktrees/BindCheck-d1/index\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/home/pollmix/Coding/BindCheck-d1",
+      "exit_status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--cached",
+        "--binary"
+      ],
+      "cwd": "/home/pollmix/Coding/BindCheck-d1",
+      "exit_status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "show",
+        "564ad2f46aef3a20373df7eff087569528b00c3a:docs/project-status.md"
+      ],
+      "cwd": "/home/pollmix/Coding/BindCheck-d1",
+      "exit_status": 0,
+      "stdout": "# BindCheck project checkpoints\n\nThis is the living visual index from the current research state to a paper\nsubmission. It is a navigation aid, not an evidence source. The\n[research contract](research-contract.md), [README](../README.md), and linked\ntask reports remain authoritative.\n\nStatus labels mean:\n\n- `[DONE]` \u2014 the bounded task is complete at its stated evidence level;\n- `[ACTIVE]` \u2014 work is underway;\n- `[NEXT]` \u2014 the immediate gate;\n- `[WAITING]` \u2014 depends on earlier work; and\n- `[UNKNOWN]` \u2014 the research verdict is not established.\n\n```mermaid\nflowchart TD\n    submit([\"Submit paper [WAITING]\"])\n    contribution[\"Defensible contribution [UNKNOWN]\"]\n    submit -->|\"Requires\"| contribution\n    submit -->|\"Requires\"| manuscript[\"Paper package [WAITING]\"]\n    submit -.->|\"Tracks\"| tracking[\"Visual checkpoints [DONE]\"]\n\n    contribution --> foundation[\"Evidence foundation [DONE]\"]\n    contribution --> analysis[\"Analysis method [ACTIVE]\"]\n    contribution --> evaluation[\"Generalization evidence [WAITING]\"]\n\n    foundation --> fixture[\"T01-T07 fixture [DONE]\"]\n    foundation --> payy[\"T08-T20 Payy [DONE]\"]\n\n    analysis --> sourceCheck[\"T21 source check [DONE]\"]\n    analysis --> t22[\"T22 evidence closure [WAITING]\"]\n    t22 --> coneGate[\"Cone gate [DONE]\"]\n    t22 --> nineCases[\"Nine-case run [DONE]\"]\n    nineCases --> primaryResult[\"Primary result [UNKNOWN]\"]\n    primaryResult --> failureAnalysis[\"Failure analysis [DONE]\"]\n    failureAnalysis --> v3Rerun[\"Versioned v3 rerun [DONE]\"]\n    v3Rerun --> generalGate[\"General-query feasibility [DONE]\"]\n    generalGate --> generalResult[\"Check-added general result [UNKNOWN]\"]\n    generalResult --> acirSummary[\"ACIR-backed summary gate [WAITING]\"]\n    t22 --> transferCase[\"Independent transfer [WAITING]\"]\n    t22 --> sensitivity[\"Sensitivity checks [WAITING]\"]\n\n    analysis --> d1[\"D1 investigation [ACTIVE]\"]\n    d1 --> d100[\"D1-00 preserve and align [DONE]\"]\n    d100 --> d101[\"D1-01 T22 reporting closure [NEXT]\"]\n    d100 --> d102[\"D1-02 independent intake [NEXT]\"]\n    d101 --> d103[\"D1-03 joint semantics [WAITING]\"]\n    d102 --> d103\n    d103 --> d104[\"D1-04 fair baselines [WAITING]\"]\n    d104 --> d105[\"D1-05 checked refinement [WAITING]\"]\n    d105 --> d106[\"D1-06 frozen comparison [WAITING]\"]\n    d106 --> d107[\"D1-07 independent transfer [WAITING]\"]\n    d107 --> d108[\"D1-08 full evaluation [WAITING]\"]\n    d101 -.-> t22\n    d106 -.-> acirSummary\n    d107 -.-> transferCase\n    d108 -.-> evaluation\n\n    evaluation --> history[\"Historical cases [WAITING]\"]\n    evaluation --> heldOut[\"Held-out families [WAITING]\"]\n    evaluation --> baselines[\"Equal-info baselines [WAITING]\"]\n\n    manuscript --> claims[\"Claims and limits [WAITING]\"]\n    manuscript --> artifacts[\"Artifact package [WAITING]\"]\n    manuscript --> draft[\"Write and revise [WAITING]\"]\n\n    tracking --> livingTree[\"Living tree added [DONE]\"]\n\n    classDef done fill:#CDF4D3,stroke:#66D575\n    classDef active fill:#C2E5FF,stroke:#3DADFF\n    classDef next fill:#FFECBD,stroke:#FFC943\n    classDef waiting fill:#D9D9D9,stroke:#B3B3B3\n    classDef unknown fill:#FFE0C2,stroke:#FF9E42\n\n    class foundation,fixture,payy,sourceCheck,coneGate,nineCases,failureAnalysis,v3Rerun,generalGate,tracking,livingTree,d100 done\n    class analysis,d1 active\n    class d101,d102 next\n    class evaluation,history,heldOut,baselines,manuscript,claims,artifacts,draft,transferCase,sensitivity,submit,t22,acirSummary,d103,d104,d105,d106,d107,d108 waiting\n    class contribution,primaryResult,generalResult unknown\n```\n\n## Immediate path\n\n1. Done: the running-flag false positive and both `UNKNOWN` classes are explained in [T22 Section 3.2](../reports/T22.md).\n2. Done: the [T22-v3 rerun and audit](../reports/T22-v3.md), frozen before output, returns 4 `VIOLATION` and 5 `UNKNOWN` (4/9 expected outcomes matched). Seven synthetic regressions and four SAT replays pass; the running-flag probe false positive is fixed, but its full case remains unresolved. Prior evidence and compiled inputs are unchanged.\n3. Done: [T22-v4](../reports/T22-v4.md) preserves a 22.5 KB, one-assertion non-vacuity goal that times out at 300 seconds with 93,696 KiB peak RSS. A fixed-stream ACIR branch returns conditional SAT in 79.9 seconds, while non-vacuity, prefix and tail in the full Boolean-rank query remain `UNKNOWN` after three 300-second timeouts. The check-added case has no verified verdict.\n4. Done: [D1-00](../reports/D1-00.md) creates the isolated worktree, preserves staged work and historical evidence, and aligns the contract and [roadmap](d1/roadmap.md).\n5. Next: D1-01 audits the six T22-v5 slots and closes reporting with outcomes or explicit missing/blocked designations. UNKNOWN is valid closure; no open-ended solver campaign is implied.\n6. Next, independently: D1-02 screens two non-Payy families for a plausible proving/consumer path. Availability screening is not a held-out result and does not wait for favorable T22 results.\n7. Then: faithful joint semantics, equal-information baselines, checked consumer-directed refinement, frozen comparison, and independent transfer. Full evaluation and submission remain conditional on the feasibility decision.\n\nThe end goal does not imply that submission is currently justified. The\nresearch contract's two principal properties remain unchanged, and unresolved T22 results remain UNKNOWN. D1 preparation is complete; no new analyzer or experiment has been completed.\n\n## Checkpoint log\n\n| Date | Checkpoint | Status | Evidence and meaning |\n| --- | --- | --- | --- |\n| 2026-10-20 | T22-v2 single-case feasibility gate | `[DONE]` | [T22](../reports/T22.md): the known vulnerable Payy case produced a counterexample in 4.1 seconds after exact specialization reduced the probe from 587 opcodes and 523 witnesses to 0 opcodes and 1 witness. This is not the nine-case result. |\n| 2026-10-20 | Living project checkpoint tree | `[DONE]` | This page and the corresponding `AGENTS.md` update establish the visual checkpoint routine. No research verdict changed. |\n| 2026-10-20 | T22-v2 frozen nine-case primary run | `[DONE]` | [T22](../reports/T22.md): 2/9 outcomes matched, 6 were `UNKNOWN`, and the running-flag negative control returned a likely spurious `VIOLATION`. The evaluation task completed, but the T22 result remains `[UNKNOWN]`. |\n| 2026-10-20 | T22-v2 failure diagnosis | `[DONE]` | [T22 Section 3.2](../reports/T22.md); raw evidence in ignored `results/raw/T22/32_v2_diagnosis/`. The running-flag `VIOLATION` is a confirmed analyzer false positive: the specialization drops the implied goal constraint, and original-ACIR subset certificates are UNSAT for all eight slots. Timeouts trace to the cvc5 `gb` mode, missing re-componentization and slot scheduling; the general queries remain unresolved. The `agg_utxo` contradiction is genuine but was handled as unsupported. No verdict changed; the primary result stays `[UNKNOWN]`. |\n| 2026-10-20 | T22-v2 diagnosis correction and reproduction addendum | `[DONE]` | [T22 Section 3.2](../reports/T22.md), post-review corrections. Correction to the previous row: the `agg_utxo` contradiction rules out only the all-streams-inactive premise; it does not show that an empty prefix is impossible. The R3 wording was narrowed to match. An exact-command addendum (`11_commands_addendum.txt`) and three reproduction scripts were added; the original raw records are unchanged. No verdict or tree node changed; the v3 rerun remains `[NEXT]`. |\n| 2026-10-20 | T22-v3 versioned encoding, primary rerun and audit | `[DONE]` | [T22-v3](../reports/T22-v3.md): frozen R1\u2013R6 rerun completes with 4 `VIOLATION`, 5 `UNKNOWN`, 0 `VERIFIED_WITHIN_SCOPE` (4/9 matches). All seven regressions and four SAT replays pass; all nine source/compiled cases and 129 prior raw evidence files match v2/the diagnosis. The running-flag probe false positive is fixed, but general queries produce six timeouts and nine allocation failures. Overall T22 remains `[ACTIVE]`, its research result `[UNKNOWN]`, and independent transfer deferred. |\n| 2026-10-20 | T22-v4 check-added general-query feasibility | `[DONE]` | [T22-v4](../reports/T22-v4.md): a one-assertion, 18-variable reduction of the original non-vacuity goal still times out at 300 seconds (93,696 KiB peak RSS). Exact fixed-stream specialization yields conditional non-vacuity SAT in 79.9 seconds; the three full Boolean-rank queries each time out at 300 seconds. The bounded feasibility task is complete with a preserved blocker, while the check-added verdict and overall T22 remain `[UNKNOWN]`/`[ACTIVE]`; independent transfer stays deferred. |\n| 2026-10-23 | D1-00 isolated worktree and research alignment | `[DONE]` | [D1-00](../reports/D1-00.md), [baseline](../metadata/d1/baseline.json), and [validation](../metadata/d1/d1-00-validation.json): preserve source index/staged patch, original files, historical reports, and an independent raw-evidence copy. Revise the prospective contract and roadmap; old verdicts remain unchanged. D1-01 reporting closure and D1-02 intake are next; old transfer deferral is replaced by early availability screening, not a transfer claim. |\n\n## Update rule\n\nFor every bounded task that changes project state, update the relevant node and\nappend one row above. Link to the report or evidence that supports the status.\nNever remove an old row; corrections should be new rows that identify what\nchanged. Pure discussion or status checks do not create project checkpoints.\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "check-ignore",
+        "results/raw/D1-01",
+        "tools/cvc5-1.4.2-gpl"
+      ],
+      "cwd": "/home/pollmix/Coding/BindCheck-d1",
+      "exit_status": 0,
+      "stdout": "results/raw/D1-01\ntools/cvc5-1.4.2-gpl\n",
+      "stderr": ""
+    }
+  ],
+  "scope": "Evidence consistency and preservation; not an independent encoding/proof audit"
+}
