@@ -1,0 +1,278 @@
+{
+  "task": "D1-00",
+  "checked_at_utc": "2026-10-23T15:01:26.727896+00:00",
+  "status": "PASS",
+  "verifier_sha256": "0c7da8cb37bd1d9818e474be9a53181abb6164ca25eb9da04c42aecdd687f7f1",
+  "python_version": "3.12.12 (main, Oct 25 2025, 03:47:29) [GCC 13.3.0]",
+  "git_version": "git version 2.43.0",
+  "research_experiments_executed": 0,
+  "checks": [
+    {
+      "check": "inventory_manifest_hash",
+      "passed": true
+    },
+    {
+      "check": "original_working_files_modes_and_symlinks",
+      "passed": true,
+      "expected_count": 19616,
+      "actual_count": 19616,
+      "differences": []
+    },
+    {
+      "check": "original_index_bytes",
+      "passed": true
+    },
+    {
+      "check": "BindCheck_head",
+      "passed": true
+    },
+    {
+      "check": "BindCheck_branch",
+      "passed": true
+    },
+    {
+      "check": "BindCheck_staged_patch",
+      "passed": true
+    },
+    {
+      "check": "BindCheck-d1_head",
+      "passed": true
+    },
+    {
+      "check": "BindCheck-d1_branch",
+      "passed": true
+    },
+    {
+      "check": "BindCheck-d1_staged_patch",
+      "passed": true
+    },
+    {
+      "check": "original_unstaged_patch",
+      "passed": true
+    },
+    {
+      "check": "original_status",
+      "passed": true
+    },
+    {
+      "check": "staged_backup",
+      "passed": true
+    },
+    {
+      "check": "unstaged_backup",
+      "passed": true
+    },
+    {
+      "check": "index_backup",
+      "passed": true
+    },
+    {
+      "check": "independent_raw_backup",
+      "passed": true,
+      "expected_count": 403,
+      "actual_count": 403,
+      "differences": []
+    },
+    {
+      "check": "raw_regular_files_not_hardlinked",
+      "passed": true,
+      "aliases": []
+    },
+    {
+      "check": "inherited_code_reports_and_user_additions",
+      "passed": true,
+      "changed": []
+    },
+    {
+      "check": "prior_checkpoint_rows_preserved_in_order",
+      "passed": true,
+      "count": 7
+    },
+    {
+      "check": "completed_checkpoint_nodes_preserved",
+      "passed": true,
+      "count": 11
+    },
+    {
+      "check": "historical_contract_exact",
+      "passed": true
+    },
+    {
+      "check": "historical_manifest_matches_baseline",
+      "passed": true,
+      "count": 427
+    },
+    {
+      "check": "literature_snapshot_hashes",
+      "passed": true,
+      "differences": []
+    },
+    {
+      "check": "local_markdown_link_targets",
+      "passed": true,
+      "missing": [],
+      "note": "File existence only; anchors and external URLs not checked"
+    },
+    {
+      "check": "new_unstaged_diff_whitespace",
+      "passed": true
+    },
+    {
+      "check": "staged_whitespace_diagnostics_unchanged",
+      "passed": true,
+      "exit_status": 2,
+      "diagnostics": "docs/research-and-work-summary.md:3: trailing whitespace.\n+**Snapshot:** 22 October 2026 (America/Detroit).  \ndocs/research-and-work-summary.md:4: trailing whitespace.\n+**Audience:** a researcher, supervisor, or collaborator joining the project.  \n"
+    }
+  ],
+  "commands": [
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "--git-path",
+        "index"
+      ],
+      "cwd": "/home/pollmix/Coding/BindCheck",
+      "exit_status": 0,
+      "stdout": null,
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "cwd": "/home/pollmix/Coding/BindCheck",
+      "exit_status": 0,
+      "stdout": null,
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "branch",
+        "--show-current"
+      ],
+      "cwd": "/home/pollmix/Coding/BindCheck",
+      "exit_status": 0,
+      "stdout": null,
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--cached",
+        "--binary"
+      ],
+      "cwd": "/home/pollmix/Coding/BindCheck",
+      "exit_status": 0,
+      "stdout": null,
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "cwd": "/home/pollmix/Coding/BindCheck-d1",
+      "exit_status": 0,
+      "stdout": null,
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "branch",
+        "--show-current"
+      ],
+      "cwd": "/home/pollmix/Coding/BindCheck-d1",
+      "exit_status": 0,
+      "stdout": null,
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--cached",
+        "--binary"
+      ],
+      "cwd": "/home/pollmix/Coding/BindCheck-d1",
+      "exit_status": 0,
+      "stdout": null,
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--binary"
+      ],
+      "cwd": "/home/pollmix/Coding/BindCheck",
+      "exit_status": 0,
+      "stdout": null,
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "status",
+        "--porcelain=v1",
+        "--untracked-files=all"
+      ],
+      "cwd": "/home/pollmix/Coding/BindCheck",
+      "exit_status": 0,
+      "stdout": null,
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "ls-files",
+        "-z"
+      ],
+      "cwd": "/home/pollmix/Coding/BindCheck",
+      "exit_status": 0,
+      "stdout": null,
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/home/pollmix/Coding/BindCheck-d1",
+      "exit_status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--cached",
+        "--check"
+      ],
+      "cwd": "/home/pollmix/Coding/BindCheck-d1",
+      "exit_status": 2,
+      "stdout": "docs/research-and-work-summary.md:3: trailing whitespace.\n+**Snapshot:** 22 October 2026 (America/Detroit).  \ndocs/research-and-work-summary.md:4: trailing whitespace.\n+**Audience:** a researcher, supervisor, or collaborator joining the project.  \n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--cached",
+        "--check"
+      ],
+      "cwd": "/home/pollmix/Coding/BindCheck",
+      "exit_status": 2,
+      "stdout": "docs/research-and-work-summary.md:3: trailing whitespace.\n+**Snapshot:** 22 October 2026 (America/Detroit).  \ndocs/research-and-work-summary.md:4: trailing whitespace.\n+**Audience:** a researcher, supervisor, or collaborator joining the project.  \n",
+      "stderr": ""
+    }
+  ]
+}

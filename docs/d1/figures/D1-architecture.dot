@@ -1,0 +1,29 @@
+digraph proposal {
+
+graph [bgcolor="white", pad="0.15", nodesep="0.32", ranksep="0.40", splines=polyline];
+node [shape=box, style="rounded,filled", fillcolor="#F5F6F7", color="#6B7785", fontname="Liberation Sans", fontsize=16, fontcolor="#17212B", margin="0.16,0.12", penwidth=1.2];
+edge [color="#526273", penwidth=1.3, arrowsize=0.7, fontname="Liberation Sans", fontsize=12, fontcolor="#334155"];
+
+rankdir=TB;
+art [label="Pinned artifacts\nProducer · decoder · consumer"];
+policy [label="Independent policy\nAuthorization · coverage", fillcolor="#EEF4EF", color="#52755C"];
+extract [label="Boundary extraction\nEffects → input interpretation"];
+summary [label="Consumer directed summaries\nProve relations · retain assumptions", fillcolor="#E8F0F7", color="#38678A"];
+query [label="Bounded joint query\nHistory + relation + forbidden effect", fillcolor="#E8F0F7", color="#38678A"];
+replay [label="Concretize and replay\nReal proof · original consumer"];
+scoped [label="Scoped guarantee or UNKNOWN\nCheck non-vacuity and bounds"];
+confirmed [label="Confirmed forbidden effect\nReachable trace + exact permissions", fillcolor="#EEF4EF", color="#52755C"];
+art [group="left"]; extract [group="left"]; query [group="left"]; scoped [group="left"];
+policy [group="right"]; summary [group="right"]; replay [group="right"]; confirmed [group="right"];
+extract -> query [style=invis, weight=100]; policy -> summary [style=invis, weight=100]; summary -> replay [style=invis, weight=100];
+{rank=same; art; policy;}
+{rank=same; extract; summary;}
+{rank=same; query; replay;}
+{rank=same; scoped; confirmed;}
+art -> extract; extract -> summary; policy -> query;
+summary -> query; query -> replay [label="candidate"];
+query -> scoped [label="UNSAT / unresolved"];
+replay -> confirmed [label="full acceptance"];
+replay -> summary [style=dashed, label="spurious candidate", constraint=false];
+
+}

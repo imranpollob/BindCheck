@@ -6,7 +6,7 @@ Read these sources in order before changing the project:
 
 1. `docs/research-contract.md` — authoritative research question, threat model, scope, semantics, and evidence rules.
 2. `README.md` — current implementation and task status.
-3. `reports/Txx.md` — immutable evidence records for completed tasks.
+3. `reports/Txx.md` and `reports/D1-xx.md` — immutable evidence records for completed tasks.
 4. `BindCheck_Research_Guide.md` and dated research updates — historical planning context only.
 
 If these sources disagree, follow the higher-ranked source and report the disagreement. Do not silently rewrite an older report to match a later conclusion.
@@ -14,7 +14,7 @@ If these sources disagree, follow the higher-ranked source and report the disagr
 ## Working rules
 
 - Work on one bounded task with explicit completion criteria.
-- Preserve prior reports and raw evidence. Put new raw logs under ignored `results/raw/Txx/` and summarize them in tracked `reports/Txx.md`.
+- Preserve prior reports and raw evidence. Put new raw logs under ignored `results/raw/Txx/` or `results/raw/D1-xx/` and summarize them in tracked task reports.
 - Record exact commands, tool versions, source revisions, hashes, exit statuses, assumptions, and unsupported behavior.
 - Use only `VIOLATION`, `VERIFIED_WITHIN_SCOPE`, or `UNKNOWN` according to the research contract. Never treat a timeout, build failure, unsupported feature, or missing artifact as safe.
 - Keep implementation facts separate from protocol-policy specifications. Do not encode the expected verdict or missing constraint in a specification.
@@ -60,3 +60,7 @@ Every completed task should provide:
 - assumptions and limitations;
 - failed approaches or unexpected observations; and
 - one recommended next task with a measurable completion criterion.
+
+## D1 workspace
+
+Follow `docs/d1/roadmap.md` after the research contract and README. The source checkout `/home/pollmix/Coding/BindCheck` and `results/raw/D1-00/baseline-results/` are preservation references, not experiment output locations. Do not run legacy cleanup scripts against either. The copied user changes remain staged; D1-00 documentation remains unstaged. Read `docs/d1/workspace.md` before dependency setup or reruns.

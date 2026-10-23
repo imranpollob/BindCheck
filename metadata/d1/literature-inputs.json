@@ -1,0 +1,73 @@
+{
+  "date": "2026-10-23",
+  "source_head": "99a2621aae3e4b01450658bbfb735d603cc9effa",
+  "note": "Hashes identify exact local bytes; source HEAD alone does not assert a clean source checkout. The reference proposal is portable; raw Markdown snapshots preserve original relative links and are archival data.",
+  "files": [
+    {
+      "source_repository": "/home/pollmix/Coding/literature-review-bindcheck",
+      "source_path": "reports/phase3/proposals/D1-proof-to-effect-proposal.md",
+      "copied_path": "docs/d1/reference-proposal.md",
+      "sha256": "ad8677d19ec3a29fe4bb60a43dc037353628f3dd7e0a04f3034005c43b0fa6f4"
+    },
+    {
+      "source_repository": "/home/pollmix/Coding/literature-review-bindcheck",
+      "source_path": "reports/phase3/proposals/figures/D1-problem.png",
+      "copied_path": "docs/d1/figures/D1-problem.png",
+      "sha256": "8524711baa7ecf1228f1850cf0ded8bd324146ef2d528ac699f9d31697ce5e57"
+    },
+    {
+      "source_repository": "/home/pollmix/Coding/literature-review-bindcheck",
+      "source_path": "reports/phase3/proposals/figures/D1-problem.svg",
+      "copied_path": "docs/d1/figures/D1-problem.svg",
+      "sha256": "f54ec74954747fcb49902e3e35f6ea0bcd15a6c67a274ae99c7ab6c2a6f6cca2"
+    },
+    {
+      "source_repository": "/home/pollmix/Coding/literature-review-bindcheck",
+      "source_path": "reports/phase3/proposals/figures/D1-problem.dot",
+      "copied_path": "docs/d1/figures/D1-problem.dot",
+      "sha256": "6d4d547d1dad34e9088aba5072fa5623bbca41c2710b9233f7d16c485268cbac"
+    },
+    {
+      "source_repository": "/home/pollmix/Coding/literature-review-bindcheck",
+      "source_path": "reports/phase3/proposals/figures/D1-architecture.png",
+      "copied_path": "docs/d1/figures/D1-architecture.png",
+      "sha256": "5a7ee6df0a27feede1fbd2e728fa23adf9dcd6ef68d82749d65f0884418068db"
+    },
+    {
+      "source_repository": "/home/pollmix/Coding/literature-review-bindcheck",
+      "source_path": "reports/phase3/proposals/figures/D1-architecture.svg",
+      "copied_path": "docs/d1/figures/D1-architecture.svg",
+      "sha256": "8c317490d74fb8beac30befb7f8fa172f683e59e268c912528c1f467e66a6606"
+    },
+    {
+      "source_repository": "/home/pollmix/Coding/literature-review-bindcheck",
+      "source_path": "reports/phase3/proposals/figures/D1-architecture.dot",
+      "copied_path": "docs/d1/figures/D1-architecture.dot",
+      "sha256": "ee49095d884c4b3f0c07399564cb04cc1d5ce9aaccbb672cc7bc6b0c12dce7cf"
+    },
+    {
+      "source_repository": "/home/pollmix/Coding/literature-review-bindcheck",
+      "source_path": "reports/phase3/d1-development-plan.md",
+      "copied_path": "results/raw/D1-00/literature-snapshots/reports/phase3/d1-development-plan.md",
+      "sha256": "ce151ef9299c7392a204c840bdd85e9db478bfe6586d71b45b11136a779fd0cc"
+    },
+    {
+      "source_repository": "/home/pollmix/Coding/literature-review-bindcheck",
+      "source_path": "reports/phase3/D1-proof-to-effect.md",
+      "copied_path": "results/raw/D1-00/literature-snapshots/reports/phase3/D1-proof-to-effect.md",
+      "sha256": "4bf336c25a83849283dedc7894fb5fe422a8a224b04ea1f080cc1894ddf41392"
+    },
+    {
+      "source_repository": "/home/pollmix/Coding/literature-review-bindcheck",
+      "source_path": "reports/phase3/evaluation-protocol.md",
+      "copied_path": "results/raw/D1-00/literature-snapshots/reports/phase3/evaluation-protocol.md",
+      "sha256": "208f9c396157a65bd204e0ec5063e91bf7c0ec7483fb8cf668d20b33f5f90b13"
+    },
+    {
+      "source_repository": "/home/pollmix/Coding/literature-review-bindcheck",
+      "source_path": "reports/phase2/followups/BC-F005.md",
+      "copied_path": "results/raw/D1-00/literature-snapshots/reports/phase2/followups/BC-F005.md",
+      "sha256": "00cc859bf03451105c3a6d6bb52308e2c92592d989bf35faf51b643eeb7b0341"
+    }
+  ]
+}

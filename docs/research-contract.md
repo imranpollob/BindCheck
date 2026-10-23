@@ -1,25 +1,27 @@
 # BindCheck research contract
 
-**Status:** Initial research contract
-**Frozen:** 20 October 2026
-**Scope:** First IEEE S&P submission candidate
+**Status:** D1 research contract revision 1; INVESTIGATE FURTHER
+**Revised:** 23 October 2026; original contract frozen 20 October 2026
+**Scope:** Consumer-directed proof-to-effect analysis feasibility study
 
-This document fixes the initial research question, threat model, semantic boundary, and evidence rules. It prevents later experiments from silently changing the property to fit observed results. Changes must follow the change-control rules at the end.
+This document controls prospective D1 work. The [original contract](history/research-contract-2026-10-20.md) remains the interpretation boundary for earlier experiments. Changes follow the dated change-control entry below; no historical experiment or verdict is retroactively relabeled. The [D1 brief](d1/brief.md), [roadmap](d1/roadmap.md), and versioned [reference proposal](d1/reference-proposal.md) explain the implementation plan.
 
 ## 1. Paper thesis
 
 A zero-knowledge verifier establishes only the relation encoded by its circuit and verification configuration. A consuming contract may interpret the accepted public values differently, perform effects that were not authorized, or omit effects required by the accepted state transition.
 
-BindCheck investigates whether a specification-assisted analysis can connect **facts established by the proof relation** to **protected effects committed by the consumer**, while exposing assumptions and unsupported behavior.
+BindCheck D1 investigates whether **consumer-directed extraction and checked summary refinement** can connect facts established by the actual proof relation to protected consumer effects, with a measurable advantage over equally informed monolithic and modular analysis. Start from relevant effects, recover the producer/decoder/consumer obligations, prove summaries from supported constraints, and refine them when an abstract candidate cannot be concretized.
+
+The possible novelty lies in this extraction/refinement mechanism and its demonstrated benefit. Integration failures, rich semantic specifications, modular summaries, and selective unfolding are prior work, notably CIVER, Coda, CCC-Check, and the SNARK SoK cited in the reference proposal. A new ACIR adapter, known-case reproduction, or more solver tuning alone does not establish a contribution.
 
 The initial scope is batched ZK applications with a Noir/ACIR producer and a Solidity/EVM consumer. Broader language support is an evaluation question, not an assumed contribution.
 
 ## 2. Research questions
 
-- **RQ1 — Model:** What recurring authorization and coverage failures occur in real ZK applications, and can one reusable model represent them and legitimate transformations?
-- **RQ2 — Effectiveness:** Can BindCheck detect such failures in historical and held-out implementation families while accepting property-specific valid designs?
-- **RQ3 — Added value:** What does BindCheck add beyond circuit-only analysis, cross-boundary dependency analysis, and generic verification supplied with equivalent information?
-- **RQ4 — Practicality:** What specification, onboarding, correction, and computational effort does BindCheck require?
+- **RQ1 — Semantic fidelity:** Can supported extraction faithfully connect the compiled producer relation, exact public-input decoding, and consumer effects?
+- **RQ2 — Analysis effectiveness:** Does consumer-directed summary selection/refinement improve solved obligations, precision, or total cost over equal-information monolithic and modular baselines?
+- **RQ3 — Transfer:** Does the frozen mechanism work on an independently developed application without a new defect-specific rule?
+- **RQ4 — Security usefulness:** Which confirmed effects or useful bounded guarantees does it obtain beyond direct contract tests with the same valid proofs and policy, and at what analyst and computational cost?
 
 If the available cases cannot support a prevalence study, RQ1 remains a model-expressiveness question. The paper will not infer ecosystem prevalence from a convenience sample.
 
@@ -27,9 +29,9 @@ If the available cases cannot support a prevalence study, RQ1 remains a model-ex
 
 These are goals, not completed claims.
 
-1. **Consistency model.** Authorization and coverage semantics for connecting proof-established facts, obligations or permissions, and committed execution effects, with identity and quantity preserving matching.
-2. **BindCheck.** A checker that extracts implementation facts from supported circuit and consumer artifacts, combines them with a small semantic-role specification, and reports a violation, bounded verification result, or explicit unknown.
-3. **Evidence.** A reproducible evaluation using historical defects and repairs, justified negative controls, historically grounded mutations, held-out applications, specification-sensitivity experiments, and equal-information baselines.
+1. **Method.** Consumer-directed recovery of joint producer/decoder/consumer obligations, with observation-specific proved summaries and a concrete refinement mechanism that improves on a fair modular adaptation.
+2. **Justified implementation.** A precisely supported boundary model, extraction provenance, an abstraction-preservation argument, and explicit unresolved results. Authorization/coverage terminology alone is not a novelty claim.
+3. **Comparative evidence.** Historical defects and repairs, legitimate controls, held-out applications, ablations, and total analyst/proving/solver cost compared with equal-information baselines. These results do not yet exist for D1.
 
 ## 4. System model
 
@@ -44,6 +46,8 @@ For verification configuration `v`:
 - `q` records pending obligations when the protocol explicitly permits deferral.
 
 Records may contain a kind, identity, asset, quantity, beneficiary, domain, state version, activation condition, and permitted discharge rule. Commitments may replace private values when their binding and encoding assumptions are explicit.
+
+D1 also represents the actual decoding relation `D_v(p,x)` and an explicit bounded reachable-history relation `Reach_L(h,s)`. A joint counterexample requires a legal history, a satisfying producer witness, actual decoding, successful consumer execution, and a policy violation together. A fixed admitted pre-state is a narrower mode and must be labeled as such; it does not quantify over all reachable states. Pin program/key identity as well as source, constraints, ABI, and consumer configuration.
 
 ### 4.1 Authorization
 
@@ -114,6 +118,12 @@ Unsupported behavior produces `UNKNOWN`; it is not evidence of safety.
 
 The separately reported Payy verifier failure is outside this initial scope. The `agg_agg` message-tail defect is inside scope because it concerns the relation established by the circuit and the consumer's interpretation of accepted public values.
 
+### 5.5 D1 initial implementation fragment
+
+Begin with a bounded arithmetic/array producer and one supported non-reentrant Solidity/EVM settlement path, standard atomic token behavior where modeled, and a replayable initialization. Before new experiments, freeze numeric bounds, admitted states/history length, compiler/solver versions, supported operations, and resources in that task's protocol. Existing N=8 T22 controls keep their original bounds and limits.
+
+Initially implement occurrence-level discharge with identity, asset, amount, beneficiary, and domain. Splitting, aggregation, and deferral are permitted policy concepts, not implemented capabilities; until modeled and controlled, their occurrence yields UNKNOWN. Keep field, integer, and byte semantics distinct; establish range/canonicality obligations before replacing one with another. Unsupported recursive relations and hashes remain explicit assumptions or UNKNOWN, never silently trusted producer facts.
+
 ## 6. Non-circular specification boundary
 
 BindCheck separates **implementation facts** from **protocol policy**.
@@ -151,6 +161,8 @@ Necessary manual implementation summaries must be marked `ASSUMED`, measured sep
 
 Specifications for held-out cases must be versioned and frozen before BindCheck's verdict is inspected. Subsequent corrections are reported as post-hoc refinements.
 
+Mark recovered facts `EXTRACTED`, discharged relations `PROVED`, and external/manual implementation facts `ASSUMED`. Each summary must have a checked producer implication and explicit preconditions discharged at its use site. Cache identities include artifact hashes, policy, bounds, and assumptions. Any assumed implementation summary is excluded from automatic-recovery claims and disclosed in the guarantee.
+
 ## 7. Bounded formal target
 
 The intended theorem is over BindCheck's abstract transition model, not unrestricted EVM semantics:
@@ -165,6 +177,8 @@ The proof must identify separate assumptions for:
 
 No theorem may claim coverage of unsupported instructions, external behavior, unbounded executions, or liveness. Bounded solver success is reported with its bounds and assumptions.
 
+The proposed D1 preservation obligation is that every supported concrete execution has an abstract representative preserving the relevant observations, and refinement preserves that inclusion. Only then can abstract UNSAT support the bounded concrete claim. Extraction fidelity and cryptographic/compiler assumptions remain separate obligations. Fixing omitted witnesses or surrounding state can underapproximate the relation and is useful only for explicitly restricted search unless equivalence is established. No preservation theorem has been proved in D1-00.
+
 ## 8. Required result categories
 
 Every analysis returns one of:
@@ -174,6 +188,8 @@ Every analysis returns one of:
 - **UNKNOWN:** extraction, modeling, provenance, solver, or validation is insufficient.
 
 A candidate violation is not an end-to-end exploit claim until its proof feasibility and reachable committed effects are validated. Real-proof validation is required for the central motivating result and a declared subset of evaluation cases. Repairs must also preserve legitimate behavior.
+
+Keep the three verdicts above and attach a separate evidence grade, bounds, assumptions, provenance, non-vacuity result, and reason codes. `SPECIFICATION_UNRESOLVED` is an UNKNOWN reason, not another verdict. An abstract SAT candidate is unresolved until checked against the supported concrete relation. A concrete model violation is distinct from a real-proof, original-consumer, reachable-effect replay. A clean legacy trace is only an observation. `VERIFIED_WITHIN_SCOPE` additionally requires non-vacuity and justified abstraction/extraction; timeout, allocation failure, probe UNSAT, or an unsupported feature never establishes it.
 
 ## 9. Evaluation commitments
 
@@ -187,6 +203,10 @@ A candidate violation is not an end-to-end exploit claim until its proof feasibi
 - Measure specification size, authoring and correction time, runtime, memory, applicability, localization, and false alarms.
 - Never count `UNKNOWN` as safe or as a semantic false negative when a baseline does not support the input.
 - New findings require responsible disclosure before they support a submission claim.
+
+D1 compares direct Foundry property tests with the same valid-proof seeds, a monolithic joint query, and a CIVER-style modular adaptation on the same extracted relation. Identify an adaptation honestly; do not claim to reproduce CIVER unless reproduced. Charge specification, extraction, adapter, proving, solver, and adjudication effort. Compare shared bug-finding tasks separately from verification guarantees. An unsupported native frontend is not an algorithmic baseline failure.
+
+Inventory independent targets early, before D1 tuning. Availability screening is not an honest build or transfer result. Freeze mechanism and policy procedure before held-out analysis, disclose prior exposure, and retire a holdout if its results drive new rules. Payy variants stay development data.
 
 ## 10. AI-assisted research integrity
 
@@ -204,4 +224,12 @@ Open decisions are deliberately not frozen yet:
 - whether pending deferral enters the initial implementation; and
 - final solver bounds and supported EVM subset.
 
-**Next gate:** complete the T22 ACIR/SMT evaluation and the independent-case feasibility ledger. Use their evidence to update implementation priorities without changing the two principal properties.
+**Next gate:** D1-01 audits and closes the existing T22-v5 evidence/reporting boundary under its six-query, 300-second/query, 4 GiB protocol, retaining UNKNOWN and explicit missing/blocked outcomes. D1-02 independently inventories non-Payy targets without waiting for solver success. New implementation then proceeds through minimal joint semantics, equal-information baselines, and consumer-directed refinement before a frozen comparison/transfer decision. Do not indefinitely extend T22 or call reduced queries decisions of its original formulas.
+
+The initial ten-researcher-day budget is a feasibility decision budget, not a completion promise. Continue only with meaningful clean/faulty controls, baseline benefit, and independent transfer evidence. If these are not obtained, report the failed gate and decide explicitly whether to narrow or stop. A tie with a routine modular adapter, hand-supplied correspondence, or infeasible independent proving paths undermines the claimed contribution.
+
+### Change log
+
+| Date | Revision and reason | Effect on earlier results |
+| --- | --- | --- |
+| 2026-10-23 | D1 revision 1, authorized by the user's request to start D1-00. Focus the method and RQs on consumer-directed extraction/refinement; specify the initial fragment, evidence grades, preservation obligations, baselines, and bounded decision gates. Replace an open-ended next encoding repair with T22 reporting closure plus independent intake. | Authorization and coverage definitions, threat-model restrictions, and three verdicts are retained. Original contract bytes are preserved in `docs/history/research-contract-2026-10-20.md`. No old report or result is changed; no rerun is required to preserve its original meaning. Earlier experiments cannot count as validation of the new D1 method; fresh separately versioned evaluation is required for that claim. |
