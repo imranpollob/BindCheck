@@ -63,4 +63,4 @@ Every completed task should provide:
 
 ## D1 workspace
 
-Follow `docs/d1/roadmap.md` after the research contract and README. The source checkout `/home/pollmix/Coding/BindCheck` and `results/raw/D1-00/baseline-results/` are preservation references, not experiment output locations. Do not run legacy cleanup scripts against either. The copied user changes remain staged; D1-00 documentation remains unstaged. Read `docs/d1/workspace.md` before dependency setup or reruns.
+Follow `docs/d1/roadmap.md` after the research contract and README. The source checkout `/home/pollmix/Coding/BindCheck` and `results/raw/D1-00/baseline-results/` are preservation references, not experiment output locations. Do not run legacy cleanup scripts against either. At the D1-00 checkpoint, copied user changes were staged and D1-00 documentation was unstaged. Later commits changed that state; inspect the current index and working tree rather than restoring the old baseline. Preserve sealed historical deliverables at their recorded revisions and archive exact copies before prospectively updating living status documents. Read `docs/d1/workspace.md` before dependency setup or reruns.

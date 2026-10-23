@@ -1,0 +1,433 @@
+{
+  "task": "D1-02",
+  "created_at_utc": "2026-10-23T16:16:53.104998+00:00",
+  "task_progress": "ACTIVE",
+  "bounded_screen": "COMPLETE",
+  "selection_gate": "UNRESOLVED",
+  "selected_initial_scope_target": null,
+  "conditional_preference": "privacy-pools",
+  "research_verdict": "UNKNOWN",
+  "substantive_families_screened": 2,
+  "source_files_fetched": 65,
+  "builds_attempted": 0,
+  "proofs_generated": 0,
+  "solver_queries": 0,
+  "validated_findings": 0,
+  "confirmed_safe_controls": 0,
+  "candidates": [
+    {
+      "id": "warp-toad",
+      "repository": "warptoad/warp-toad",
+      "revision": "973e7d1e4b60d0d8a8ca299b0cabd9193b147ef8",
+      "license": "MIT; LICENSE and Solidity headers inspected",
+      "independence": "Repository metadata says non-fork; separate source layout/authorship from Payy, shared Noir/Barretenberg/Poseidon tooling. Full ancestry not audited.",
+      "producer": "Standalone Noir withdraw circuit, 11 public Field parameters; Aztec branches also present",
+      "consumer": "WarpToadCore.mint -> _formatPublicInputs -> IVerifier.verify -> nullifier state and ERC20 mint(s)",
+      "public_input_order_source_only": [
+        "nullifier",
+        "chain_id",
+        "amount",
+        "giga_root",
+        "destination_local_root",
+        "aztec_warptoad_address",
+        "fee_factor",
+        "priority_fee",
+        "max_fee",
+        "relayer_address",
+        "recipient_address"
+      ],
+      "policy_provenance": "README describes shielded transfers; source comments and local honest test express burn-to-mint/recipient intent. Formal independent policy is not frozen or human-reviewed.",
+      "honest_path": "Source has real Noir.execute / UltraHonkBackend.generateProof(keccakZK:true), matching-mode verifier generation and same-chain burn/verify/mint balance assertions. No execution.",
+      "initial_scope_fit": false,
+      "decision": "CONDITIONAL_FALLBACK_NOT_SELECTED",
+      "security_verdict": "UNKNOWN",
+      "blockers": [
+        "Inspected circuit and settlement entry point process one claim, not a batched producer/consumer transition",
+        "Compiler/proof artifact compatibility unvalidated: README beta.19 vs backend noir_js beta.22; root script invokes aztec-nargo",
+        "Source-to-compiled-circuit-to-generated-verifier/key correspondence unvalidated; larger compiled artifact only inventoried",
+        "Local network initialization and admitted states not reproduced; full cross-chain/Aztec system outside initial fragment",
+        "Public test mint/faucet means full contract requires explicit policy exclusions; no global token-security claim",
+        "Hash/Merkle operations, fee policy and field-to-EVM canonicality need supported models/assumptions"
+      ],
+      "exposure": "Pinned source includes a defect-warning annotation and public test mint. Observed incidentally, not investigated/validated. Do not claim a blind holdout for that mechanism.",
+      "build_status": "NOT_RUN",
+      "proof_status": "NOT_RUN",
+      "consumer_replay_status": "NOT_RUN",
+      "policy_status": "UNFROZEN",
+      "citations": {
+        "producer_schema": {
+          "path": "results/raw/D1-02/sources/warptoad--warp-toad/files/backend/circuits/withdraw/src/main.nr",
+          "sha256": "ce4bf56bb44e2e1106560251f3ff28dc8545fc9b7b7256c9d7695f6e28de192f",
+          "lines": [
+            15
+          ],
+          "url": "https://github.com/warptoad/warp-toad/blob/973e7d1e4b60d0d8a8ca299b0cabd9193b147ef8/backend/circuits/withdraw/src/main.nr#L15",
+          "observation": "Manual source inspection; not automatic extraction or proof"
+        },
+        "input_construction": {
+          "path": "results/raw/D1-02/sources/warptoad--warp-toad/files/backend/contracts/core/WarpToadCore.sol",
+          "sha256": "323a1cf26c7449f67cf277ff0a46c31e12f725c555f9fa165d5a60011e122c39",
+          "lines": [
+            127
+          ],
+          "url": "https://github.com/warptoad/warp-toad/blob/973e7d1e4b60d0d8a8ca299b0cabd9193b147ef8/backend/contracts/core/WarpToadCore.sol#L127",
+          "observation": "Manual source inspection; not automatic extraction or proof"
+        },
+        "verifier_and_effects": {
+          "path": "results/raw/D1-02/sources/warptoad--warp-toad/files/backend/contracts/core/WarpToadCore.sol",
+          "sha256": "323a1cf26c7449f67cf277ff0a46c31e12f725c555f9fa165d5a60011e122c39",
+          "lines": [
+            143
+          ],
+          "url": "https://github.com/warptoad/warp-toad/blob/973e7d1e4b60d0d8a8ca299b0cabd9193b147ef8/backend/contracts/core/WarpToadCore.sol#L143",
+          "observation": "Manual source inspection; not automatic extraction or proof"
+        },
+        "proof_generation": {
+          "path": "results/raw/D1-02/sources/warptoad--warp-toad/files/backend/lib/proving.ts",
+          "sha256": "e1c7e4d209e82fe9b51b536605671bb32545e52f27bccf0240892f2c24d8323c",
+          "lines": [
+            386
+          ],
+          "url": "https://github.com/warptoad/warp-toad/blob/973e7d1e4b60d0d8a8ca299b0cabd9193b147ef8/backend/lib/proving.ts#L386",
+          "observation": "Manual source inspection; not automatic extraction or proof"
+        },
+        "verifier_generation": {
+          "path": "results/raw/D1-02/sources/warptoad--warp-toad/files/backend/scripts/regenerateVerifier.ts",
+          "sha256": "9268ae8b5e14aae28f79f21016039e1308f2d8a0d5741f6c3daa47f0a9f339c5",
+          "lines": [
+            22,
+            23
+          ],
+          "url": "https://github.com/warptoad/warp-toad/blob/973e7d1e4b60d0d8a8ca299b0cabd9193b147ef8/backend/scripts/regenerateVerifier.ts#L22",
+          "observation": "Manual source inspection; not automatic extraction or proof"
+        },
+        "honest_test": {
+          "path": "results/raw/D1-02/sources/warptoad--warp-toad/files/backend/test/testL1ToL1.ts",
+          "sha256": "1c831d9e3832191ef6b1b1aac679c5c517ad89cdf3adfc708e4266a4780ff349",
+          "lines": [
+            21
+          ],
+          "url": "https://github.com/warptoad/warp-toad/blob/973e7d1e4b60d0d8a8ca299b0cabd9193b147ef8/backend/test/testL1ToL1.ts#L21",
+          "observation": "Manual source inspection; not automatic extraction or proof"
+        },
+        "initialization": {
+          "path": "results/raw/D1-02/sources/warptoad--warp-toad/files/backend/test/helpers/setup.ts",
+          "sha256": "89c28bf2f548e2efc39c0b16e50f9a2ca1153d8b29fea71225c2c32969589f79",
+          "lines": [
+            23
+          ],
+          "url": "https://github.com/warptoad/warp-toad/blob/973e7d1e4b60d0d8a8ca299b0cabd9193b147ef8/backend/test/helpers/setup.ts#L23",
+          "observation": "Manual source inspection; not automatic extraction or proof"
+        },
+        "public_test_faucet": {
+          "path": "results/raw/D1-02/sources/warptoad--warp-toad/files/backend/contracts/core/WarpToadCore.sol",
+          "sha256": "323a1cf26c7449f67cf277ff0a46c31e12f725c555f9fa165d5a60011e122c39",
+          "lines": [
+            199
+          ],
+          "url": "https://github.com/warptoad/warp-toad/blob/973e7d1e4b60d0d8a8ca299b0cabd9193b147ef8/backend/contracts/core/WarpToadCore.sol#L199",
+          "observation": "Manual source inspection; not automatic extraction or proof"
+        },
+        "source_annotation_exposure": {
+          "path": "results/raw/D1-02/sources/warptoad--warp-toad/files/backend/circuits/withdraw/src/main.nr",
+          "sha256": "ce4bf56bb44e2e1106560251f3ff28dc8545fc9b7b7256c9d7695f6e28de192f",
+          "lines": [
+            11
+          ],
+          "url": "https://github.com/warptoad/warp-toad/blob/973e7d1e4b60d0d8a8ca299b0cabd9193b147ef8/backend/circuits/withdraw/src/main.nr#L11",
+          "observation": "Manual source inspection; not automatic extraction or proof"
+        },
+        "compile_script": {
+          "path": "results/raw/D1-02/sources/warptoad--warp-toad/files/package.json",
+          "sha256": "549fd528d032e51467cc1a89d91ff13baee4ceef88b46aea029ba3d7e3219178",
+          "lines": [
+            27
+          ],
+          "url": "https://github.com/warptoad/warp-toad/blob/973e7d1e4b60d0d8a8ca299b0cabd9193b147ef8/package.json#L27",
+          "observation": "Manual source inspection; not automatic extraction or proof"
+        },
+        "dependency_versions": {
+          "path": "results/raw/D1-02/sources/warptoad--warp-toad/files/backend/package.json",
+          "sha256": "01f2bae4590b1cbe14716c1ff1cd50209bd4b1cb5be9fc20e13da8801b0aa57b",
+          "lines": [
+            54
+          ],
+          "url": "https://github.com/warptoad/warp-toad/blob/973e7d1e4b60d0d8a8ca299b0cabd9193b147ef8/backend/package.json#L54",
+          "observation": "Manual source inspection; not automatic extraction or proof"
+        },
+        "readme_version": {
+          "path": "results/raw/D1-02/sources/warptoad--warp-toad/files/README.md",
+          "sha256": "0ed136c9360145a7329f3ca4b10c582c9df735f81442ad446959b6d859e854be",
+          "lines": [
+            24
+          ],
+          "url": "https://github.com/warptoad/warp-toad/blob/973e7d1e4b60d0d8a8ca299b0cabd9193b147ef8/README.md#L24",
+          "observation": "Manual source inspection; not automatic extraction or proof"
+        }
+      }
+    },
+    {
+      "id": "privacy-pools",
+      "repository": "0xbow-io/privacy-pools-core",
+      "revision": "d494b63e79f33bb2b0c8ece6cdacdca465c3b884",
+      "license": "Apache-2.0; root LICENSE, source headers and package metadata inspected",
+      "independence": "Repository metadata says non-fork; separate 0xbow/Wonderland application with Circom/Groth16 and batched individual proofs rather than Payy recursive Noir aggregation. Shared Poseidon, Merkle and EVM ecosystem components; full ancestry not audited.",
+      "producer": "Circom Withdraw(32), two public outputs plus six explicit public inputs, Groth16",
+      "consumer": "BatchRelayer.batchRelay -> PrivacyPool.withdraw -> Groth16 verify -> nullifier/commitment updates and pool-to-processor transfer -> aggregate batch fee/recipient transfers",
+      "public_input_order_source_only": [
+        "newCommitmentHash",
+        "existingNullifierHash",
+        "withdrawnValue",
+        "stateRoot",
+        "stateTreeDepth",
+        "ASPRoot",
+        "ASPTreeDepth",
+        "context"
+      ],
+      "policy_provenance": "Protocol withdrawal documentation, circuit README and explicit batch completeness intent comment. Source interface takes Withdrawal(processooor,data); docs show an extra scope field. Treat docs as policy intent and code as encoding facts, not interchangeable schemas.",
+      "honest_path": "SDK calls snarkjs.groth16.fullProve; integration helper ABI-encodes real proof, Foundry vm.ffi loads it, IntegrationBase deploys WithdrawalVerifier, batch tests cover one/two proofs. Existing integration harness requires a mainnet RPC fork/CreateX and proxy setup; no execution.",
+      "initial_scope_fit": false,
+      "decision": "PREFERRED_CONDITIONAL_FALLBACK_NOT_SELECTED",
+      "security_verdict": "UNKNOWN",
+      "blockers": [
+        "Circom/Groth16 requires a new producer frontend; initial scope is Noir/ACIR, no adapter implemented here",
+        "Batch combines withdrawals and fee splits: aggregation/splitting is not yet in the contract initial occurrence-level implementation fragment",
+        "Existing integration setup uses mainnet fork, CreateX and ERC1967Proxy; owned synthetic fork-free initialization is not supplied or validated by this screen",
+        "SDK proving artifact versions, WASM/zkey/vkey and consumer verification key correspondence not checked end-to-end",
+        "Hash/context canonicality, standard-token calls and latest ASP/state-root policy require explicit reviewed modeling"
+      ],
+      "exposure": "Availability and producer/consumer mapping inspected, including upstream success-test names; no audit reports or defect-label suites read. Not completely blind; any later rule tuning retires the family as held-out.",
+      "build_status": "NOT_RUN",
+      "proof_status": "NOT_RUN",
+      "consumer_replay_status": "NOT_RUN",
+      "policy_status": "UNFROZEN",
+      "citations": {
+        "producer": {
+          "path": "results/raw/D1-02/sources/0xbow-io--privacy-pools-core/files/packages/circuits/circuits/withdraw.circom",
+          "sha256": "03e00168149bd00cd71d43d86f475e4ff919fef524dca0dd5689d7bc99dc4731",
+          "lines": [
+            12
+          ],
+          "url": "https://github.com/0xbow-io/privacy-pools-core/blob/d494b63e79f33bb2b0c8ece6cdacdca465c3b884/packages/circuits/circuits/withdraw.circom#L12",
+          "observation": "Manual source inspection; not automatic extraction or proof"
+        },
+        "public_input_configuration": {
+          "path": "results/raw/D1-02/sources/0xbow-io--privacy-pools-core/files/packages/circuits/src/index.ts",
+          "sha256": "1b83bb91e8d0e32a5b30ae451d534702f9dd0a579b1013dc059352e4a43e3033",
+          "lines": [
+            23
+          ],
+          "url": "https://github.com/0xbow-io/privacy-pools-core/blob/d494b63e79f33bb2b0c8ece6cdacdca465c3b884/packages/circuits/src/index.ts#L23",
+          "observation": "Manual source inspection; not automatic extraction or proof"
+        },
+        "decoder": {
+          "path": "results/raw/D1-02/sources/0xbow-io--privacy-pools-core/files/packages/contracts/src/contracts/lib/ProofLib.sol",
+          "sha256": "2041a535cdfbec83e1df4d54f5addc305629a41af22ac8a17393d63fda63b1cb",
+          "lines": [
+            34
+          ],
+          "url": "https://github.com/0xbow-io/privacy-pools-core/blob/d494b63e79f33bb2b0c8ece6cdacdca465c3b884/packages/contracts/src/contracts/lib/ProofLib.sol#L34",
+          "observation": "Manual source inspection; not automatic extraction or proof"
+        },
+        "context_guard": {
+          "path": "results/raw/D1-02/sources/0xbow-io--privacy-pools-core/files/packages/contracts/src/contracts/PrivacyPool.sol",
+          "sha256": "063dafd1f8f8ea107ec6c7811a01d41855f63bfde297bf51c0ff99bac2f4ad85",
+          "lines": [
+            48
+          ],
+          "url": "https://github.com/0xbow-io/privacy-pools-core/blob/d494b63e79f33bb2b0c8ece6cdacdca465c3b884/packages/contracts/src/contracts/PrivacyPool.sol#L48",
+          "observation": "Manual source inspection; not automatic extraction or proof"
+        },
+        "verifier_and_effects": {
+          "path": "results/raw/D1-02/sources/0xbow-io--privacy-pools-core/files/packages/contracts/src/contracts/PrivacyPool.sol",
+          "sha256": "063dafd1f8f8ea107ec6c7811a01d41855f63bfde297bf51c0ff99bac2f4ad85",
+          "lines": [
+            110
+          ],
+          "url": "https://github.com/0xbow-io/privacy-pools-core/blob/d494b63e79f33bb2b0c8ece6cdacdca465c3b884/packages/contracts/src/contracts/PrivacyPool.sol#L110",
+          "observation": "Manual source inspection; not automatic extraction or proof"
+        },
+        "erc20_effect": {
+          "path": "results/raw/D1-02/sources/0xbow-io--privacy-pools-core/files/packages/contracts/src/contracts/implementations/PrivacyPoolComplex.sol",
+          "sha256": "0f9c34f0bfd03a35117c3885e5d0bb9d4214513f201e122f4b8bae52b96b31a5",
+          "lines": [
+            66
+          ],
+          "url": "https://github.com/0xbow-io/privacy-pools-core/blob/d494b63e79f33bb2b0c8ece6cdacdca465c3b884/packages/contracts/src/contracts/implementations/PrivacyPoolComplex.sol#L66",
+          "observation": "Manual source inspection; not automatic extraction or proof"
+        },
+        "batch": {
+          "path": "results/raw/D1-02/sources/0xbow-io--privacy-pools-core/files/packages/contracts/src/contracts/BatchRelayer.sol",
+          "sha256": "7c3387c47582091c458020688abe63e8dc425fc028b33bf34c90dbc112614855",
+          "lines": [
+            26
+          ],
+          "url": "https://github.com/0xbow-io/privacy-pools-core/blob/d494b63e79f33bb2b0c8ece6cdacdca465c3b884/packages/contracts/src/contracts/BatchRelayer.sol#L26",
+          "observation": "Manual source inspection; not automatic extraction or proof"
+        },
+        "batch_policy_intent": {
+          "path": "results/raw/D1-02/sources/0xbow-io--privacy-pools-core/files/packages/contracts/src/contracts/BatchRelayer.sol",
+          "sha256": "7c3387c47582091c458020688abe63e8dc425fc028b33bf34c90dbc112614855",
+          "lines": [
+            36
+          ],
+          "url": "https://github.com/0xbow-io/privacy-pools-core/blob/d494b63e79f33bb2b0c8ece6cdacdca465c3b884/packages/contracts/src/contracts/BatchRelayer.sol#L36",
+          "observation": "Manual source inspection; not automatic extraction or proof"
+        },
+        "proof_generation": {
+          "path": "results/raw/D1-02/sources/0xbow-io--privacy-pools-core/files/packages/sdk/src/core/withdrawal.service.ts",
+          "sha256": "94219b700b6697366e3972a34839b91d0e76c31943ed8b1f64574df9880d1c33",
+          "lines": [
+            35
+          ],
+          "url": "https://github.com/0xbow-io/privacy-pools-core/blob/d494b63e79f33bb2b0c8ece6cdacdca465c3b884/packages/sdk/src/core/withdrawal.service.ts#L35",
+          "observation": "Manual source inspection; not automatic extraction or proof"
+        },
+        "ffi_helper": {
+          "path": "results/raw/D1-02/sources/0xbow-io--privacy-pools-core/files/packages/contracts/test/integration/Utils.sol",
+          "sha256": "e2488db5a7db45df4c22d2b2155de123fb699ba3aaec2cc0b497543305282727",
+          "lines": [
+            138
+          ],
+          "url": "https://github.com/0xbow-io/privacy-pools-core/blob/d494b63e79f33bb2b0c8ece6cdacdca465c3b884/packages/contracts/test/integration/Utils.sol#L138",
+          "observation": "Manual source inspection; not automatic extraction or proof"
+        },
+        "fork_dependency": {
+          "path": "results/raw/D1-02/sources/0xbow-io--privacy-pools-core/files/packages/contracts/test/integration/IntegrationBase.sol",
+          "sha256": "f68f45dff01844fd1b55a44fca8f0b7412158775deb68f8e202d29e5f9d67403",
+          "lines": [
+            90
+          ],
+          "url": "https://github.com/0xbow-io/privacy-pools-core/blob/d494b63e79f33bb2b0c8ece6cdacdca465c3b884/packages/contracts/test/integration/IntegrationBase.sol#L90",
+          "observation": "Manual source inspection; not automatic extraction or proof"
+        },
+        "proxy_dependency": {
+          "path": "results/raw/D1-02/sources/0xbow-io--privacy-pools-core/files/packages/contracts/test/integration/IntegrationBase.sol",
+          "sha256": "f68f45dff01844fd1b55a44fca8f0b7412158775deb68f8e202d29e5f9d67403",
+          "lines": [
+            15,
+            115
+          ],
+          "url": "https://github.com/0xbow-io/privacy-pools-core/blob/d494b63e79f33bb2b0c8ece6cdacdca465c3b884/packages/contracts/test/integration/IntegrationBase.sol#L15",
+          "observation": "Manual source inspection; not automatic extraction or proof"
+        },
+        "policy_document": {
+          "path": "results/raw/D1-02/sources/0xbow-io--privacy-pools-core/files/docs/docs/protocol/withdrawal.md",
+          "sha256": "a77f46dcae6c5279e0a5cee4c162c011aa78bdb986fa353691b3f1e2a8a874f8",
+          "lines": [
+            153
+          ],
+          "url": "https://github.com/0xbow-io/privacy-pools-core/blob/d494b63e79f33bb2b0c8ece6cdacdca465c3b884/docs/docs/protocol/withdrawal.md#L153",
+          "observation": "Manual source inspection; not automatic extraction or proof"
+        },
+        "actual_struct": {
+          "path": "results/raw/D1-02/sources/0xbow-io--privacy-pools-core/files/packages/contracts/src/interfaces/IPrivacyPool.sol",
+          "sha256": "33706cbfd13913f2e3b239e48259a0782278d46e10dac45fa4a86897c0a7a4a7",
+          "lines": [
+            22
+          ],
+          "url": "https://github.com/0xbow-io/privacy-pools-core/blob/d494b63e79f33bb2b0c8ece6cdacdca465c3b884/packages/contracts/src/interfaces/IPrivacyPool.sol#L22",
+          "observation": "Manual source inspection; not automatic extraction or proof"
+        },
+        "batch_honest_test": {
+          "path": "results/raw/D1-02/sources/0xbow-io--privacy-pools-core/files/packages/contracts/test/integration/IntegrationBatchRelayerSuccessCases.t.sol",
+          "sha256": "41ce1498fca9dde25d97a299c557ea0ad83942806d569624f690360d597d4d57",
+          "lines": [
+            33
+          ],
+          "url": "https://github.com/0xbow-io/privacy-pools-core/blob/d494b63e79f33bb2b0c8ece6cdacdca465c3b884/packages/contracts/test/integration/IntegrationBatchRelayerSuccessCases.t.sol#L33",
+          "observation": "Manual source inspection; not automatic extraction or proof"
+        }
+      }
+    }
+  ],
+  "artifact_availability": [
+    {
+      "repo": "warptoad/warp-toad",
+      "revision": "973e7d1e4b60d0d8a8ca299b0cabd9193b147ef8",
+      "path": "frontend/src/lib/circuits/withdraw.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b897e4d5d9d1550bf622228e781242176984285e",
+      "size": 2395571,
+      "url": "https://api.github.com/repos/warptoad/warp-toad/git/blobs/b897e4d5d9d1550bf622228e781242176984285e",
+      "downloaded": false,
+      "availability": "Git tree inventory only unless downloaded; Git blob ID is not a verified local SHA256"
+    },
+    {
+      "repo": "0xbow-io/privacy-pools-core",
+      "revision": "d494b63e79f33bb2b0c8ece6cdacdca465c3b884",
+      "path": "packages/circuits/build/withdraw/withdraw.r1cs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "dc721815329eb1ab67c0bfb9e6bdbc09219ed0ab",
+      "size": 4937856,
+      "url": "https://api.github.com/repos/0xbow-io/privacy-pools-core/git/blobs/dc721815329eb1ab67c0bfb9e6bdbc09219ed0ab",
+      "downloaded": false,
+      "availability": "Git tree inventory only unless downloaded; Git blob ID is not a verified local SHA256"
+    },
+    {
+      "repo": "0xbow-io/privacy-pools-core",
+      "revision": "d494b63e79f33bb2b0c8ece6cdacdca465c3b884",
+      "path": "packages/circuits/build/withdraw/withdraw_js/withdraw.wasm",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2b3457f0136681163ff6d875441fb3519ec5b5a6",
+      "size": 2607967,
+      "url": "https://api.github.com/repos/0xbow-io/privacy-pools-core/git/blobs/2b3457f0136681163ff6d875441fb3519ec5b5a6",
+      "downloaded": false,
+      "availability": "Git tree inventory only unless downloaded; Git blob ID is not a verified local SHA256"
+    },
+    {
+      "repo": "0xbow-io/privacy-pools-core",
+      "revision": "d494b63e79f33bb2b0c8ece6cdacdca465c3b884",
+      "path": "packages/circuits/trusted-setup/final-keys/withdraw.vkey",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f39a0e6f2696cffb587a718275efc980136168b0",
+      "size": 4208,
+      "url": "https://api.github.com/repos/0xbow-io/privacy-pools-core/git/blobs/f39a0e6f2696cffb587a718275efc980136168b0",
+      "downloaded": true,
+      "availability": "Git tree inventory only unless downloaded; Git blob ID is not a verified local SHA256"
+    },
+    {
+      "repo": "0xbow-io/privacy-pools-core",
+      "revision": "d494b63e79f33bb2b0c8ece6cdacdca465c3b884",
+      "path": "packages/circuits/trusted-setup/final-keys/withdraw.zkey",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5c64ced16184db030e836f41423a983235137f3f",
+      "size": 17793015,
+      "url": "https://api.github.com/repos/0xbow-io/privacy-pools-core/git/blobs/5c64ced16184db030e836f41423a983235137f3f",
+      "downloaded": false,
+      "availability": "Git tree inventory only unless downloaded; Git blob ID is not a verified local SHA256"
+    }
+  ],
+  "discovery_only": [
+    {
+      "repo": "Railgun-Privacy/contract",
+      "stage": "repository metadata only",
+      "result": "API license field null; no source/policy/proving-path screen attempted; no license/legal conclusion"
+    },
+    {
+      "repo": "noir-lang/stealthdrop",
+      "stage": "public search snippet only",
+      "result": "not promoted to substantive screen; no license/code/build assessment"
+    },
+    {
+      "repo": "neylanxyz/swirl",
+      "stage": "public search snippet only",
+      "result": "not promoted to substantive screen; no license/code/build assessment"
+    }
+  ],
+  "not_claimed": [
+    "Successful build",
+    "Honest local proof",
+    "Transfer",
+    "Generality",
+    "Security verdict beyond UNKNOWN",
+    "New defect",
+    "Automatic extraction",
+    "Independent human annotation"
+  ]
+}

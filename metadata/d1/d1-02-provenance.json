@@ -1,0 +1,50 @@
+{
+  "task": "D1-02",
+  "created_at_utc": "2026-10-23T16:23:25.174416+00:00",
+  "starting_revision": "30fb03ee78bb732169442047d8c9b5b16d2412e0",
+  "protocol_sha256": "16f0afbd27bf28ee49013c88acc5d35bedf919c87d911559d90d03ab26d80931",
+  "review_snapshot": {
+    "path": "results/raw/D1-02/d1-01-completion-review.md",
+    "sha256": "13f231ad6b7076fcda5e7ea041ac3261df3fc12a19bed5ac589f44a3d0834c7e"
+  },
+  "pins": {
+    "frozen_at_utc": "2026-10-23T16:12:35.218222+00:00",
+    "protocol_sha256": "16f0afbd27bf28ee49013c88acc5d35bedf919c87d911559d90d03ab26d80931",
+    "families": [
+      {
+        "repo": "warptoad/warp-toad",
+        "revision": "973e7d1e4b60d0d8a8ca299b0cabd9193b147ef8",
+        "commit_time": "2026-09-29T05:58:03Z",
+        "tree_entries": 497,
+        "tree_sha256": "67805fef431a8dd7ff577631390d49e8adf7453a22501b64df2b6cff119da44b"
+      },
+      {
+        "repo": "0xbow-io/privacy-pools-core",
+        "revision": "d494b63e79f33bb2b0c8ece6cdacdca465c3b884",
+        "commit_time": "2026-09-23T16:09:48Z",
+        "tree_entries": 474,
+        "tree_sha256": "f944c99e085a6278c3fb1b1505b84e73a23bb033828e504e151d79976af83e3a"
+      }
+    ]
+  },
+  "source_logs": {
+    "fetch-log-01.json": "1a008aff214c94201c0da0790f80a0ae0f4ef17e6fe3eeef4d2de67a64e705a1",
+    "fetch-log-02.json": "5f337002bea00915f190ca9b18cafbcc4475518060406437c44e02234b8384b3",
+    "tree-object-resolution.json": "335706169f2e20a41aa416774597152b68afb4004ef58792123c37445fee544e",
+    "commands-and-versions.json": "2d8591935db37de18cc5533db9c6d03a107d5c9807179d2311cbf54dc02603d6",
+    "prior-checkpoint-manifest.json": "973cf5f19121ff1899850d698926dc2f2ea1940c149be343763cdd70d565679d"
+  },
+  "source_fetch_helper_sha256": "7bec4855045c5c01a119c98fd98f0b67b7eb37ffc494ede15afe2c36ddcd35d8",
+  "validation_helper_sha256": "af7a87085b2e70da811f184dcf9a2e76d5955c763639bf9efc4697649039d3a1",
+  "actual_execution_counts": {
+    "dependency_installs": 0,
+    "builds": 0,
+    "proofs": 0,
+    "solver_queries": 0,
+    "replays": 0
+  },
+  "task_status": "ACTIVE",
+  "selection_gate": "UNRESOLVED",
+  "old_seal": "unchanged, interpreted at reviewed checkpoint; nine archive copies and Git blobs verified",
+  "not_a_preregistration_claim": "Local protocol freeze after discovery and before pinned source inspection; not independent preregistration"
+}

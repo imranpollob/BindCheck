@@ -1,0 +1,28 @@
+{
+  "task": "D1-02",
+  "frozen_before_pinned_source_inspection": true,
+  "purpose": "Availability screening of two independent non-Payy application families",
+  "families": ["warptoad/warp-toad", "0xbow-io/privacy-pools-core"],
+  "selection_criteria": [
+    "Pinned publicly retrievable producer and Solidity consumer sources with usable license evidence",
+    "Source-traceable public-input construction, decoding, verifier call and protected effects",
+    "Primary policy documentation separate from assumed implementation correctness",
+    "A documented or source-supported honest local proving and replay route, with unresolved prerequisites explicit",
+    "Independent application lineage from Payy, with shared cryptographic dependencies and prior exposure disclosed"
+  ],
+  "scope_gate": "Report Noir/ACIR, batching, external-call and initialization fit separately. No frontend or threat-model expansion is authorized. A conditional fallback is not an initial-scope selection.",
+  "limits": {
+    "substantive_families": 2,
+    "maximum_source_files_per_family": 60,
+    "maximum_single_source_file_bytes": 1500000,
+    "request_timeout_seconds": 30,
+    "dependency_installations": 0,
+    "builds": 0,
+    "solver_runs": 0,
+    "proof_runs": 0
+  },
+  "outcomes": "Select a plausible target with all qualifications stated, or retain an unresolved selection gate. No security verdict follows; research verdict remains UNKNOWN.",
+  "exposure": "Candidate discovery has read public search snippets, the official awesome-noir list, and repository metadata for these two families plus Railgun-Privacy/contract. No pinned candidate circuit or consumer source has yet been inspected. Prior conversation includes general ZK/Payy literature exposure; no claim of complete blindness.",
+  "holdout_rule": "Availability/source correspondence inspection is disclosed exposure. Do not tune an analyzer, inspect defect labels or create mutations here; freeze later mechanism and policy procedure before transfer evaluation. Retire a case as held-out if later results guide rule changes.",
+  "preservation": "D1-00 and D1-01 archives, D1-01 seal and its nine deliverables, all completed reports and historical scripts are immutable. New raw output only under results/raw/D1-02. No stage, commit, push, external contact or delegation."
+}

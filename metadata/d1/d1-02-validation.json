@@ -1,0 +1,842 @@
+{
+  "task": "D1-02",
+  "checked_at_utc": "2026-10-23T16:22:17.775624+00:00",
+  "status": "PASS",
+  "verifier_sha256": "af7a87085b2e70da811f184dcf9a2e76d5955c763639bf9efc4697649039d3a1",
+  "checks": [
+    {
+      "check": "original_D1_01_seal_unchanged",
+      "passed": true
+    },
+    {
+      "check": "all_49_old_raw_files_and_exact_set",
+      "passed": true,
+      "differences": []
+    },
+    {
+      "check": "historical_checkpoint_README.md",
+      "passed": true
+    },
+    {
+      "check": "historical_checkpoint_docs/d1/roadmap.md",
+      "passed": true
+    },
+    {
+      "check": "historical_checkpoint_docs/project-status.md",
+      "passed": true
+    },
+    {
+      "check": "historical_checkpoint_reports/D1-01.md",
+      "passed": true
+    },
+    {
+      "check": "immutable_current_deliverable_reports/D1-01.md",
+      "passed": true
+    },
+    {
+      "check": "historical_checkpoint_scripts/d1_01_closure.py",
+      "passed": true
+    },
+    {
+      "check": "immutable_current_deliverable_scripts/d1_01_closure.py",
+      "passed": true
+    },
+    {
+      "check": "historical_checkpoint_scripts/d1_01_verify.py",
+      "passed": true
+    },
+    {
+      "check": "immutable_current_deliverable_scripts/d1_01_verify.py",
+      "passed": true
+    },
+    {
+      "check": "historical_checkpoint_metadata/d1/d1-01-execution-manifest.json",
+      "passed": true
+    },
+    {
+      "check": "immutable_current_deliverable_metadata/d1/d1-01-execution-manifest.json",
+      "passed": true
+    },
+    {
+      "check": "historical_checkpoint_metadata/d1/d1-01-query-matrix.json",
+      "passed": true
+    },
+    {
+      "check": "immutable_current_deliverable_metadata/d1/d1-01-query-matrix.json",
+      "passed": true
+    },
+    {
+      "check": "historical_checkpoint_metadata/d1/d1-01-validation.json",
+      "passed": true
+    },
+    {
+      "check": "immutable_current_deliverable_metadata/d1/d1-01-validation.json",
+      "passed": true
+    },
+    {
+      "check": "all_nine_checkpoint_files_archived",
+      "passed": true
+    },
+    {
+      "check": "old_verifier_unchanged",
+      "passed": true
+    },
+    {
+      "check": "original_checkout_full_inventory",
+      "passed": true,
+      "entries": 19616,
+      "differences": []
+    },
+    {
+      "check": "entire_D1_00_archive",
+      "passed": true,
+      "entries": 417
+    },
+    {
+      "check": "original_index_unchanged",
+      "passed": true
+    },
+    {
+      "check": "original_rev-parse HEAD",
+      "passed": true
+    },
+    {
+      "check": "original_branch --show-current",
+      "passed": true
+    },
+    {
+      "check": "original_status --porcelain=v1 --untracked-files=all",
+      "passed": true
+    },
+    {
+      "check": "original_diff --cached --binary",
+      "passed": true
+    },
+    {
+      "check": "original_diff --binary",
+      "passed": true
+    },
+    {
+      "check": "original_rev-parse --git-path index",
+      "passed": true
+    },
+    {
+      "check": "worktree_index_unchanged",
+      "passed": true
+    },
+    {
+      "check": "worktree_rev-parse HEAD",
+      "passed": true
+    },
+    {
+      "check": "worktree_branch --show-current",
+      "passed": true
+    },
+    {
+      "check": "worktree_diff --cached --binary",
+      "passed": true
+    },
+    {
+      "check": "worktree_rev-parse --git-path index",
+      "passed": true
+    },
+    {
+      "check": "all_other_initial_tracked_files_unchanged",
+      "passed": true,
+      "differences": []
+    },
+    {
+      "check": "new_diff_whitespace",
+      "passed": true
+    },
+    {
+      "check": "new_file_whitespace_reports/D1-02.md",
+      "passed": true,
+      "exit_status": 1,
+      "output": "",
+      "stderr": "",
+      "note": "--no-index can return 1 for differing files; whitespace diagnostics must be empty"
+    },
+    {
+      "check": "new_file_whitespace_scripts/d1_02_fetch.py",
+      "passed": true,
+      "exit_status": 1,
+      "output": "",
+      "stderr": "",
+      "note": "--no-index can return 1 for differing files; whitespace diagnostics must be empty"
+    },
+    {
+      "check": "new_file_whitespace_scripts/d1_02_verify.py",
+      "passed": true,
+      "exit_status": 1,
+      "output": "",
+      "stderr": "",
+      "note": "--no-index can return 1 for differing files; whitespace diagnostics must be empty"
+    },
+    {
+      "check": "prior_checkpoint_rows_preserved",
+      "passed": true
+    },
+    {
+      "check": "prior_completed_nodes_preserved",
+      "passed": true
+    },
+    {
+      "check": "intake_protocol_frozen_identity",
+      "passed": true
+    },
+    {
+      "check": "fetch_plan_fetch-log-01.json",
+      "passed": true
+    },
+    {
+      "check": "source_warptoad--warp-toad/files/README.md",
+      "passed": true
+    },
+    {
+      "check": "source_warptoad--warp-toad/files/LICENSE",
+      "passed": true
+    },
+    {
+      "check": "source_warptoad--warp-toad/files/package.json",
+      "passed": true
+    },
+    {
+      "check": "source_warptoad--warp-toad/files/backend/README.md",
+      "passed": true
+    },
+    {
+      "check": "source_warptoad--warp-toad/files/backend/package.json",
+      "passed": true
+    },
+    {
+      "check": "source_warptoad--warp-toad/files/backend/circuits/withdraw/Nargo.toml",
+      "passed": true
+    },
+    {
+      "check": "source_warptoad--warp-toad/files/backend/circuits/withdraw/src/main.nr",
+      "passed": true
+    },
+    {
+      "check": "source_warptoad--warp-toad/files/backend/circuits/hashing/Nargo.toml",
+      "passed": true
+    },
+    {
+      "check": "source_warptoad--warp-toad/files/backend/circuits/hashing/src/lib.nr",
+      "passed": true
+    },
+    {
+      "check": "source_warptoad--warp-toad/files/backend/contracts/core/WarpToadCore.sol",
+      "passed": true
+    },
+    {
+      "check": "source_warptoad--warp-toad/files/backend/contracts/core/L1WarpToad.sol",
+      "passed": true
+    },
+    {
+      "check": "source_warptoad--warp-toad/files/backend/contracts/interfaces/IWarpToadCore.sol",
+      "passed": true
+    },
+    {
+      "check": "source_warptoad--warp-toad/files/backend/contracts/verifier/WithdrawVerifier.sol",
+      "passed": true
+    },
+    {
+      "check": "source_warptoad--warp-toad/files/backend/lib/hashing.ts",
+      "passed": true
+    },
+    {
+      "check": "source_warptoad--warp-toad/files/backend/test/testL1ToL1.ts",
+      "passed": true
+    },
+    {
+      "check": "source_warptoad--warp-toad/files/backend/test/helpers/deploy-evm.ts",
+      "passed": true
+    },
+    {
+      "check": "source_warptoad--warp-toad/files/backend/test/helpers/setup.ts",
+      "passed": true
+    },
+    {
+      "check": "source_warptoad--warp-toad/files/backend/scripts/regenerateVerifier.ts",
+      "passed": true
+    },
+    {
+      "check": "source_warptoad--warp-toad/files/backend/hardhat.config.ts",
+      "passed": true
+    },
+    {
+      "check": "source_warptoad--warp-toad/files/backend/test/helpers/constants.ts",
+      "passed": true
+    },
+    {
+      "check": "source_0xbow-io--privacy-pools-core/files/README.md",
+      "passed": true
+    },
+    {
+      "check": "source_0xbow-io--privacy-pools-core/files/LICENSE",
+      "passed": true
+    },
+    {
+      "check": "source_0xbow-io--privacy-pools-core/files/package.json",
+      "passed": true
+    },
+    {
+      "check": "source_0xbow-io--privacy-pools-core/files/packages/circuits/README.md",
+      "passed": true
+    },
+    {
+      "check": "source_0xbow-io--privacy-pools-core/files/packages/circuits/package.json",
+      "passed": true
+    },
+    {
+      "check": "source_0xbow-io--privacy-pools-core/files/packages/circuits/circuits/withdraw.circom",
+      "passed": true
+    },
+    {
+      "check": "source_0xbow-io--privacy-pools-core/files/packages/contracts/README.md",
+      "passed": true
+    },
+    {
+      "check": "source_0xbow-io--privacy-pools-core/files/packages/contracts/package.json",
+      "passed": true
+    },
+    {
+      "check": "source_0xbow-io--privacy-pools-core/files/packages/contracts/foundry.toml",
+      "passed": true
+    },
+    {
+      "check": "source_0xbow-io--privacy-pools-core/files/packages/contracts/src/contracts/PrivacyPool.sol",
+      "passed": true
+    },
+    {
+      "check": "source_0xbow-io--privacy-pools-core/files/packages/contracts/src/contracts/Entrypoint.sol",
+      "passed": true
+    },
+    {
+      "check": "source_0xbow-io--privacy-pools-core/files/packages/contracts/src/contracts/implementations/PrivacyPoolComplex.sol",
+      "passed": true
+    },
+    {
+      "check": "source_0xbow-io--privacy-pools-core/files/packages/contracts/src/contracts/lib/ProofLib.sol",
+      "passed": true
+    },
+    {
+      "check": "source_0xbow-io--privacy-pools-core/files/packages/contracts/src/contracts/verifiers/WithdrawalVerifier.sol",
+      "passed": true
+    },
+    {
+      "check": "source_0xbow-io--privacy-pools-core/files/packages/contracts/test/integration/IntegrationBase.sol",
+      "passed": true
+    },
+    {
+      "check": "source_0xbow-io--privacy-pools-core/files/packages/contracts/test/integration/IntegrationERC20.t.sol",
+      "passed": true
+    },
+    {
+      "check": "source_0xbow-io--privacy-pools-core/files/packages/contracts/test/integration/IntegrationBatchRelayerSuccessCases.t.sol",
+      "passed": true
+    },
+    {
+      "check": "source_0xbow-io--privacy-pools-core/files/packages/contracts/test/helper/WithdrawalProofGenerator.mjs",
+      "passed": true
+    },
+    {
+      "check": "source_0xbow-io--privacy-pools-core/files/packages/sdk/src/core/withdrawal.service.ts",
+      "passed": true
+    },
+    {
+      "check": "source_0xbow-io--privacy-pools-core/files/packages/sdk/src/circuits/circuits.impl.ts",
+      "passed": true
+    },
+    {
+      "check": "source_0xbow-io--privacy-pools-core/files/docs/docs/protocol/withdrawal.md",
+      "passed": true
+    },
+    {
+      "check": "source_0xbow-io--privacy-pools-core/files/docs/docs/layers/zk/withdrawal.md",
+      "passed": true
+    },
+    {
+      "check": "source_0xbow-io--privacy-pools-core/files/docs/docs/reference/circuits.md",
+      "passed": true
+    },
+    {
+      "check": "source_0xbow-io--privacy-pools-core/files/packages/circuits/tests/withdrawal.test.ts",
+      "passed": true
+    },
+    {
+      "check": "source_0xbow-io--privacy-pools-core/files/packages/contracts/src/contracts/BatchRelayer.sol",
+      "passed": true
+    },
+    {
+      "check": "fetch_plan_fetch-log-02.json",
+      "passed": true
+    },
+    {
+      "check": "source_warptoad--warp-toad/files/backend/lib/proving.ts",
+      "passed": true
+    },
+    {
+      "check": "source_warptoad--warp-toad/files/backend/test/helpers/index.ts",
+      "passed": true
+    },
+    {
+      "check": "source_warptoad--warp-toad/files/backend/circuits/constants/src/lib.nr",
+      "passed": true
+    },
+    {
+      "check": "source_warptoad--warp-toad/files/backend/circuits/nargo_hashing/src/lib.nr",
+      "passed": true
+    },
+    {
+      "check": "source_warptoad--warp-toad/files/backend/circuits/nargo_hashing/Nargo.toml",
+      "passed": true
+    },
+    {
+      "check": "source_warptoad--warp-toad/files/backend/circuits/merkle-trees/src/lib.nr",
+      "passed": true
+    },
+    {
+      "check": "source_warptoad--warp-toad/files/backend/circuits/merkle-trees/src/merkle.nr",
+      "passed": true
+    },
+    {
+      "check": "source_warptoad--warp-toad/files/backend/circuits/merkle-trees/src/types.nr",
+      "passed": true
+    },
+    {
+      "check": "source_warptoad--warp-toad/files/pnpm-lock.yaml",
+      "passed": true
+    },
+    {
+      "check": "source_0xbow-io--privacy-pools-core/files/packages/circuits/circomkit.json",
+      "passed": true
+    },
+    {
+      "check": "source_0xbow-io--privacy-pools-core/files/packages/circuits/circuits.json",
+      "passed": true
+    },
+    {
+      "check": "source_0xbow-io--privacy-pools-core/files/packages/circuits/trusted-setup/final-keys/withdraw.vkey",
+      "passed": true
+    },
+    {
+      "check": "source_0xbow-io--privacy-pools-core/files/packages/circuits/circuits/commitment.circom",
+      "passed": true
+    },
+    {
+      "check": "source_0xbow-io--privacy-pools-core/files/packages/circuits/circuits/merkleTree.circom",
+      "passed": true
+    },
+    {
+      "check": "source_0xbow-io--privacy-pools-core/files/packages/contracts/src/contracts/State.sol",
+      "passed": true
+    },
+    {
+      "check": "source_0xbow-io--privacy-pools-core/files/packages/contracts/src/interfaces/IBatchRelayer.sol",
+      "passed": true
+    },
+    {
+      "check": "source_0xbow-io--privacy-pools-core/files/packages/contracts/src/interfaces/IPrivacyPool.sol",
+      "passed": true
+    },
+    {
+      "check": "source_0xbow-io--privacy-pools-core/files/packages/contracts/test/integration/Utils.sol",
+      "passed": true
+    },
+    {
+      "check": "source_0xbow-io--privacy-pools-core/files/packages/sdk/package.json",
+      "passed": true
+    },
+    {
+      "check": "source_0xbow-io--privacy-pools-core/files/packages/circuits/src/index.ts",
+      "passed": true
+    },
+    {
+      "check": "65_unique_sources",
+      "passed": true
+    },
+    {
+      "check": "pinned_tree_warptoad/warp-toad",
+      "passed": true
+    },
+    {
+      "check": "per_family_source_bound_warptoad/warp-toad",
+      "passed": true
+    },
+    {
+      "check": "pinned_tree_0xbow-io/privacy-pools-core",
+      "passed": true
+    },
+    {
+      "check": "per_family_source_bound_0xbow-io/privacy-pools-core",
+      "passed": true
+    },
+    {
+      "check": "honest_task_gate_status",
+      "passed": true
+    },
+    {
+      "check": "no_unrun_success_claims",
+      "passed": true
+    },
+    {
+      "check": "citation_warp-toad_producer_schema",
+      "passed": true
+    },
+    {
+      "check": "citation_warp-toad_input_construction",
+      "passed": true
+    },
+    {
+      "check": "citation_warp-toad_verifier_and_effects",
+      "passed": true
+    },
+    {
+      "check": "citation_warp-toad_proof_generation",
+      "passed": true
+    },
+    {
+      "check": "citation_warp-toad_verifier_generation",
+      "passed": true
+    },
+    {
+      "check": "citation_warp-toad_honest_test",
+      "passed": true
+    },
+    {
+      "check": "citation_warp-toad_initialization",
+      "passed": true
+    },
+    {
+      "check": "citation_warp-toad_public_test_faucet",
+      "passed": true
+    },
+    {
+      "check": "citation_warp-toad_source_annotation_exposure",
+      "passed": true
+    },
+    {
+      "check": "citation_warp-toad_compile_script",
+      "passed": true
+    },
+    {
+      "check": "citation_warp-toad_dependency_versions",
+      "passed": true
+    },
+    {
+      "check": "citation_warp-toad_readme_version",
+      "passed": true
+    },
+    {
+      "check": "citation_privacy-pools_producer",
+      "passed": true
+    },
+    {
+      "check": "citation_privacy-pools_public_input_configuration",
+      "passed": true
+    },
+    {
+      "check": "citation_privacy-pools_decoder",
+      "passed": true
+    },
+    {
+      "check": "citation_privacy-pools_context_guard",
+      "passed": true
+    },
+    {
+      "check": "citation_privacy-pools_verifier_and_effects",
+      "passed": true
+    },
+    {
+      "check": "citation_privacy-pools_erc20_effect",
+      "passed": true
+    },
+    {
+      "check": "citation_privacy-pools_batch",
+      "passed": true
+    },
+    {
+      "check": "citation_privacy-pools_batch_policy_intent",
+      "passed": true
+    },
+    {
+      "check": "citation_privacy-pools_proof_generation",
+      "passed": true
+    },
+    {
+      "check": "citation_privacy-pools_ffi_helper",
+      "passed": true
+    },
+    {
+      "check": "citation_privacy-pools_fork_dependency",
+      "passed": true
+    },
+    {
+      "check": "citation_privacy-pools_proxy_dependency",
+      "passed": true
+    },
+    {
+      "check": "citation_privacy-pools_policy_document",
+      "passed": true
+    },
+    {
+      "check": "citation_privacy-pools_actual_struct",
+      "passed": true
+    },
+    {
+      "check": "citation_privacy-pools_batch_honest_test",
+      "passed": true
+    },
+    {
+      "check": "local_links",
+      "passed": true,
+      "missing": []
+    },
+    {
+      "check": "raw_evidence_ignored",
+      "passed": true
+    }
+  ],
+  "commands": [
+    {
+      "argv": [
+        "git",
+        "show",
+        "30fb03ee78bb732169442047d8c9b5b16d2412e0:README.md"
+      ],
+      "cwd": "/home/pollmix/Coding/BindCheck-d1",
+      "exit_status": 0,
+      "stdout": null,
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "show",
+        "30fb03ee78bb732169442047d8c9b5b16d2412e0:docs/d1/roadmap.md"
+      ],
+      "cwd": "/home/pollmix/Coding/BindCheck-d1",
+      "exit_status": 0,
+      "stdout": null,
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "show",
+        "30fb03ee78bb732169442047d8c9b5b16d2412e0:docs/project-status.md"
+      ],
+      "cwd": "/home/pollmix/Coding/BindCheck-d1",
+      "exit_status": 0,
+      "stdout": null,
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "show",
+        "30fb03ee78bb732169442047d8c9b5b16d2412e0:reports/D1-01.md"
+      ],
+      "cwd": "/home/pollmix/Coding/BindCheck-d1",
+      "exit_status": 0,
+      "stdout": null,
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "show",
+        "30fb03ee78bb732169442047d8c9b5b16d2412e0:scripts/d1_01_closure.py"
+      ],
+      "cwd": "/home/pollmix/Coding/BindCheck-d1",
+      "exit_status": 0,
+      "stdout": null,
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "show",
+        "30fb03ee78bb732169442047d8c9b5b16d2412e0:scripts/d1_01_verify.py"
+      ],
+      "cwd": "/home/pollmix/Coding/BindCheck-d1",
+      "exit_status": 0,
+      "stdout": null,
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "show",
+        "30fb03ee78bb732169442047d8c9b5b16d2412e0:metadata/d1/d1-01-execution-manifest.json"
+      ],
+      "cwd": "/home/pollmix/Coding/BindCheck-d1",
+      "exit_status": 0,
+      "stdout": null,
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "show",
+        "30fb03ee78bb732169442047d8c9b5b16d2412e0:metadata/d1/d1-01-query-matrix.json"
+      ],
+      "cwd": "/home/pollmix/Coding/BindCheck-d1",
+      "exit_status": 0,
+      "stdout": null,
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "show",
+        "30fb03ee78bb732169442047d8c9b5b16d2412e0:metadata/d1/d1-01-validation.json"
+      ],
+      "cwd": "/home/pollmix/Coding/BindCheck-d1",
+      "exit_status": 0,
+      "stdout": null,
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "cwd": "/home/pollmix/Coding/BindCheck",
+      "exit_status": 0,
+      "stdout": "90f46a4e30c1b15ee94a357d244a54dbbabf2d2c\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "branch",
+        "--show-current"
+      ],
+      "cwd": "/home/pollmix/Coding/BindCheck",
+      "exit_status": 0,
+      "stdout": "main\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "status",
+        "--porcelain=v1",
+        "--untracked-files=all"
+      ],
+      "cwd": "/home/pollmix/Coding/BindCheck",
+      "exit_status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--cached",
+        "--binary"
+      ],
+      "cwd": "/home/pollmix/Coding/BindCheck",
+      "exit_status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--binary"
+      ],
+      "cwd": "/home/pollmix/Coding/BindCheck",
+      "exit_status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "--git-path",
+        "index"
+      ],
+      "cwd": "/home/pollmix/Coding/BindCheck",
+      "exit_status": 0,
+      "stdout": ".git/index\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "cwd": "/home/pollmix/Coding/BindCheck-d1",
+      "exit_status": 0,
+      "stdout": "30fb03ee78bb732169442047d8c9b5b16d2412e0\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "branch",
+        "--show-current"
+      ],
+      "cwd": "/home/pollmix/Coding/BindCheck-d1",
+      "exit_status": 0,
+      "stdout": "research/d1\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--cached",
+        "--binary"
+      ],
+      "cwd": "/home/pollmix/Coding/BindCheck-d1",
+      "exit_status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "--git-path",
+        "index"
+      ],
+      "cwd": "/home/pollmix/Coding/BindCheck-d1",
+      "exit_status": 0,
+      "stdout": "/home/pollmix/Coding/BindCheck/.git/worktrees/BindCheck-d1/index\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/home/pollmix/Coding/BindCheck-d1",
+      "exit_status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "check-ignore",
+        "results/raw/D1-02"
+      ],
+      "cwd": "/home/pollmix/Coding/BindCheck-d1",
+      "exit_status": 0,
+      "stdout": "results/raw/D1-02\n",
+      "stderr": ""
+    }
+  ],
+  "meaning": "Checkpoint/evidence consistency; no build, security, proof or selection success claim",
+  "historical_seal_interpretation": "49 raw files and six immutable deliverables unchanged at current paths; all nine historical deliverables byte-exact in archive and reviewed Git revision; three living documents evolve prospectively"
+}

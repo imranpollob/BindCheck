@@ -1,6 +1,6 @@
 # D1 development plan
 
-Date: **23 October 2026**. Status: **D1-00 and D1-01 complete; T22-v5 queries remain UNKNOWN; new analyzer implementation not started**.
+Date: **23 October 2026**. Status: **D1-00 and D1-01 complete; D1-02 ACTIVE with selection unresolved; new analyzer implementation not started**.
 
 This is the execution roadmap for the isolated D1 worktree. The [research contract](../research-contract.md) controls scope and claims; [D1-00](../../reports/D1-00.md) records preservation and validation.
 
@@ -149,7 +149,7 @@ If proof/consumer paths and meaningful policies are available but static composi
 |---|---|---|
 | D1-00 | DONE | Preservation and documentation checks in the task report |
 | D1-01 | DONE | [Closure report](../../reports/D1-01.md): six accounted slots, three preserved plus three new timeouts; all UNKNOWN; original successful-solver milestone unmet |
-| D1-02 | NEXT | Independent availability screen; no dependency on T22 solver success |
+| D1-02 | ACTIVE | [Two-family screen](../../reports/D1-02.md) complete; no initial-scope selection. Conditional alternatives need changed frontend/batching support; continuation required |
 | D1-03 | WAITING | Close the old evidence record, review intake, and freeze the supported fragment/policy; old UNKNOWN need not become safe |
 | D1-04 | WAITING | D1-03 faithful joint semantics |
 | D1-05 | WAITING | D1-04 fair baseline and cost accounting |
@@ -157,20 +157,24 @@ If proof/consumer paths and meaningful policies are available but static composi
 | D1-07 | WAITING | Frozen mechanism and an independent honest proving path |
 | D1-08 | WAITING | Feasibility and transfer justify a broader study |
 
-**Next bounded task: D1-02, independent target intake.** Screen two non-Payy
-families for usable source/license, public-input/consumer correspondence,
-honest proving path, policy provenance, and architectural independence.
-Select at least one plausible transfer target. Record explicit availability
-blockers for all failed candidates; if none qualifies, leave the selection
-gate unresolved. Screening is not a successful build or
-transfer result and does not require T22 solver success.
+**Current bounded task: D1-02, independent target intake.** The
+[two-family screen](../../reports/D1-02.md) is complete, but its initial-scope
+selection gate is unresolved. WarpToad is Noir/EVM with single-claim minting;
+0xbow Privacy Pools has batch consumption with a Circom/Groth16 producer and
+aggregation/splitting requirements. No build, proof, replay, adapter or policy
+expansion was performed. D1-02 remains ACTIVE and D1-03 has not started.
 
-[D1-01](../../reports/D1-01.md) completed reporting closure with six execution
-records and six UNKNOWN outcomes. Three valid saved records were retained;
-three missing running-flag slots were attempted once at 300 seconds/4 GiB.
-The original successful-solver milestone remains unmet. No analyzer
-implementation, prover run, or new target analysis has occurred. D1-02 is not
-started; this roadmap does not authorize delegation.
+**Recommended continuation:** freeze a further screen of at most two
+Noir/ACIR batched EVM families. Select one pinned, licensed candidate with
+source-mapped producer/consumer facts, policy provenance and a documented
+honest local proving route, or record failures and an explicit scope decision.
+Do not silently substitute a conditional fallback for the initial-scope gate.
+Screening remains separate from a build or held-out transfer result.
+
+[D1-01](../../reports/D1-01.md) and its seal retain their historical meaning.
+The three living status documents evolve prospectively; exact sealed versions
+are preserved at the reviewed commit and in the D1-02 prior-checkpoint archive.
+This roadmap does not authorize delegation or external contact.
 
 **User-side action:** open `/home/pollmix/Coding/BindCheck-d1` for future implementation. No manual stash, empty repository, or deletion is needed. Review the policy and actor capabilities before freezing evaluation labels. No full-paper commitment is implied.
 

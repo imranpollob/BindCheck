@@ -1,0 +1,451 @@
+{
+  "task": "D1-02",
+  "sealed_at_utc": "2026-10-23T16:23:25.206672+00:00",
+  "task_progress": "ACTIVE",
+  "selection_gate": "UNRESOLVED",
+  "raw_file_count": 105,
+  "raw_files": {
+    "results/raw/D1-02/awesome-noir-discovery.md": {
+      "sha256": "7cf1d3b79336fa943770aa11df2e03384997201a35194238b74157b5fb456043",
+      "bytes": 12143
+    },
+    "results/raw/D1-02/build-intake.py": {
+      "sha256": "41d1e7ea21ae2fbb392aa3957a6bce1528a5226b95098f5547cb44921a7c7e22",
+      "bytes": 11659
+    },
+    "results/raw/D1-02/commands-and-versions.json": {
+      "sha256": "2d8591935db37de18cc5533db9c6d03a107d5c9807179d2311cbf54dc02603d6",
+      "bytes": 1042
+    },
+    "results/raw/D1-02/d1-01-completion-review.md": {
+      "sha256": "13f231ad6b7076fcda5e7ea041ac3261df3fc12a19bed5ac589f44a3d0834c7e",
+      "bytes": 5794
+    },
+    "results/raw/D1-02/discovery/0xbow-io--privacy-pools-core.json": {
+      "sha256": "908ed4c5f018ebf6c9e30c570dc773c11fa420c71f560a700a6162a5691d9c71",
+      "bytes": 6704
+    },
+    "results/raw/D1-02/discovery/Railgun-Privacy--contract.json": {
+      "sha256": "fc384e889ebafc3c68db9aac3370299a39fd68935193240258c06726de52dcc4",
+      "bytes": 6463
+    },
+    "results/raw/D1-02/discovery/warptoad--warp-toad.json": {
+      "sha256": "64a1717ef74ba60c9dd0c4d644b1e995f64aac0218958de08191c550e912600d",
+      "bytes": 6137
+    },
+    "results/raw/D1-02/discovery-exact-queries.json": {
+      "sha256": "0b345594adaf52bdac1a8dbe405be6b4b0f97006ba48df2a2d2febb1825130fd",
+      "bytes": 575
+    },
+    "results/raw/D1-02/discovery-fetch.json": {
+      "sha256": "8989111eb593c61e418c2dd00e319faf4c6f61702249e56e3ada6da0f3627660",
+      "bytes": 267
+    },
+    "results/raw/D1-02/discovery-searches.json": {
+      "sha256": "3f6f9eb21e61170c45bcabffa8532e51643af3985c3a9c925a5df5ccb3bf9e4e",
+      "bytes": 752
+    },
+    "results/raw/D1-02/fetch-log-01.json": {
+      "sha256": "1a008aff214c94201c0da0790f80a0ae0f4ef17e6fe3eeef4d2de67a64e705a1",
+      "bytes": 35790
+    },
+    "results/raw/D1-02/fetch-log-02.json": {
+      "sha256": "5f337002bea00915f190ca9b18cafbcc4475518060406437c44e02234b8384b3",
+      "bytes": 16129
+    },
+    "results/raw/D1-02/fetch-plan-01.json": {
+      "sha256": "13ebd316d656ee919dafd9cafd88641105ad4d823d979f07e061006d8485ae1a",
+      "bytes": 2308
+    },
+    "results/raw/D1-02/fetch-plan-02.json": {
+      "sha256": "114967e1980b9145f847bc8edec24f820eb72cbb0ff09291b994ff31b66bc5b2",
+      "bytes": 1216
+    },
+    "results/raw/D1-02/final-validation.json": {
+      "sha256": "38dc3881166b83e4ee8c25bd3b7d1ad2054530a00576db97720fc3436040a02a",
+      "bytes": 21211
+    },
+    "results/raw/D1-02/initial-state.json": {
+      "sha256": "faba3f448ff198d40b2cb2af99a2498032a73d8fab413a4b8c2b850a6a2d634c",
+      "bytes": 91936
+    },
+    "results/raw/D1-02/original-source-inventory.json": {
+      "sha256": "f0079f934627580d63fb2f011a10e8a8ffb538d088efc7e8c7419770459e5671",
+      "bytes": 4480199
+    },
+    "results/raw/D1-02/pins.json": {
+      "sha256": "99b4e16ed69c910bd8e0d52fca1ffbb41728d39e90952e10fb4fbc1959274250",
+      "bytes": 717
+    },
+    "results/raw/D1-02/prior-checkpoint/README.md": {
+      "sha256": "d5d846d1fb8020e360e4732b1de29f3c429b0d1de2b878a9df1666a92ba476c9",
+      "bytes": 7191
+    },
+    "results/raw/D1-02/prior-checkpoint/docs/d1/roadmap.md": {
+      "sha256": "b183de6cc6217c8dad9ebc3143716f2cc5f034989c4de1486dc5db3ea0c52e7b",
+      "bytes": 22795
+    },
+    "results/raw/D1-02/prior-checkpoint/docs/project-status.md": {
+      "sha256": "df9b445482290d652e677f9d261df96263c397317215014e2567559618642860",
+      "bytes": 10345
+    },
+    "results/raw/D1-02/prior-checkpoint/metadata/d1/d1-01-execution-manifest.json": {
+      "sha256": "00b965f2d918506f5c8660ad5468303e82fb671291432a6aaeb9821a4ac57033",
+      "bytes": 13546
+    },
+    "results/raw/D1-02/prior-checkpoint/metadata/d1/d1-01-query-matrix.json": {
+      "sha256": "b4657531f480a035fd0468e4e48ba8fa45079397a35ddaa10c30572e7015740f",
+      "bytes": 14845
+    },
+    "results/raw/D1-02/prior-checkpoint/metadata/d1/d1-01-validation.json": {
+      "sha256": "f1736c5693c44288189ae004bcc5869bde700e6224fe97d469102dd0b6019685",
+      "bytes": 26095
+    },
+    "results/raw/D1-02/prior-checkpoint/reports/D1-01.md": {
+      "sha256": "69362ee03691efc728702b7ebec42ecae399e228c94026e928ad3a423b61840e",
+      "bytes": 15346
+    },
+    "results/raw/D1-02/prior-checkpoint/scripts/d1_01_closure.py": {
+      "sha256": "e391ba5277bb4baa2a1a232cfa8156de943a05fc6ec98a429f8acf7636f1aae3",
+      "bytes": 18991
+    },
+    "results/raw/D1-02/prior-checkpoint/scripts/d1_01_verify.py": {
+      "sha256": "8848b1bb38ab7f4b5f132d40e7650c6107ac1936cb3f0e57d054852c5e3a78fe",
+      "bytes": 10179
+    },
+    "results/raw/D1-02/prior-checkpoint-manifest.json": {
+      "sha256": "973cf5f19121ff1899850d698926dc2f2ea1940c149be343763cdd70d565679d",
+      "bytes": 2598
+    },
+    "results/raw/D1-02/seal-intake.py": {
+      "sha256": "03183e40bdc1a75f9fa9738d03cab0c21c4974149f877295bf8323faf4fff3a9",
+      "bytes": 3593
+    },
+    "results/raw/D1-02/sources/0xbow-io--privacy-pools-core/commit.json": {
+      "sha256": "909b1b1ac0b9d68609b290849af57b25543f1f591a0a33ad95a2a607495a90fd",
+      "bytes": 8541
+    },
+    "results/raw/D1-02/sources/0xbow-io--privacy-pools-core/files/LICENSE": {
+      "sha256": "2f5662cc01004eb907e83f41d1832252f96deac7969d11ea0b9a5b8dffed5993",
+      "bytes": 11339
+    },
+    "results/raw/D1-02/sources/0xbow-io--privacy-pools-core/files/README.md": {
+      "sha256": "ac939de1cc89b91ea5c9863615edca2659cf9589e9ab249fe3f3b8099553ebb8",
+      "bytes": 1226
+    },
+    "results/raw/D1-02/sources/0xbow-io--privacy-pools-core/files/docs/docs/layers/zk/withdrawal.md": {
+      "sha256": "c2c44f53ea64e0aed9fb9afc31289c7d8cf2a726a899eb73ad9d5c16319bd9bc",
+      "bytes": 1089
+    },
+    "results/raw/D1-02/sources/0xbow-io--privacy-pools-core/files/docs/docs/protocol/withdrawal.md": {
+      "sha256": "a77f46dcae6c5279e0a5cee4c162c011aa78bdb986fa353691b3f1e2a8a874f8",
+      "bytes": 4616
+    },
+    "results/raw/D1-02/sources/0xbow-io--privacy-pools-core/files/docs/docs/reference/circuits.md": {
+      "sha256": "b5f0748456290ee69a5387930e7c706b83cf1d36acc0c265941e1c2e72e56592",
+      "bytes": 1290
+    },
+    "results/raw/D1-02/sources/0xbow-io--privacy-pools-core/files/package.json": {
+      "sha256": "f5cd598dd731e1259f24f7a9c4cb261c334b61d20e867b041dc4c33406413f9c",
+      "bytes": 848
+    },
+    "results/raw/D1-02/sources/0xbow-io--privacy-pools-core/files/packages/circuits/README.md": {
+      "sha256": "fba72c6db09b91f7e736f15373412554da3d35988b1063fd60d42a5ebdaba6f7",
+      "bytes": 2246
+    },
+    "results/raw/D1-02/sources/0xbow-io--privacy-pools-core/files/packages/circuits/circomkit.json": {
+      "sha256": "2e599aaf9950b778f1b1989eac7bec0e399f8a0da01d878ef5124dc990b0ec64",
+      "bytes": 109
+    },
+    "results/raw/D1-02/sources/0xbow-io--privacy-pools-core/files/packages/circuits/circuits/commitment.circom": {
+      "sha256": "9c5ccc11cd162a9e584e882e62c852da60fa2ef90e52476d9ac0d4a7cdff1eb8",
+      "bytes": 1367
+    },
+    "results/raw/D1-02/sources/0xbow-io--privacy-pools-core/files/packages/circuits/circuits/merkleTree.circom": {
+      "sha256": "5754b7b09afa124e4821dff70a7caf533635366d9dcbb56d04128603494d0882",
+      "bytes": 3263
+    },
+    "results/raw/D1-02/sources/0xbow-io--privacy-pools-core/files/packages/circuits/circuits/withdraw.circom": {
+      "sha256": "03e00168149bd00cd71d43d86f475e4ff919fef524dca0dd5689d7bc99dc4731",
+      "bytes": 4656
+    },
+    "results/raw/D1-02/sources/0xbow-io--privacy-pools-core/files/packages/circuits/circuits.json": {
+      "sha256": "2d9c69618aaa5d12ece277cafe61c9d14ca40f3e6954ad29c913a49750c806f2",
+      "bytes": 204
+    },
+    "results/raw/D1-02/sources/0xbow-io--privacy-pools-core/files/packages/circuits/package.json": {
+      "sha256": "9ef43141362b80c80f3fcb0f215b03073c59f6ee5a95108d82d9a8af2e31e71c",
+      "bytes": 2377
+    },
+    "results/raw/D1-02/sources/0xbow-io--privacy-pools-core/files/packages/circuits/src/index.ts": {
+      "sha256": "1b83bb91e8d0e32a5b30ae451d534702f9dd0a579b1013dc059352e4a43e3033",
+      "bytes": 1078
+    },
+    "results/raw/D1-02/sources/0xbow-io--privacy-pools-core/files/packages/circuits/tests/withdrawal.test.ts": {
+      "sha256": "7c5a6138ad59f2ca2420d2ad5634f04b790e7a33cd70b56a6a2c7bc72c134603",
+      "bytes": 19121
+    },
+    "results/raw/D1-02/sources/0xbow-io--privacy-pools-core/files/packages/circuits/trusted-setup/final-keys/withdraw.vkey": {
+      "sha256": "666bd0983b20c1611543b04f7712e067fbe8cad69f07ada8a310837ff398d21e",
+      "bytes": 4208
+    },
+    "results/raw/D1-02/sources/0xbow-io--privacy-pools-core/files/packages/contracts/README.md": {
+      "sha256": "09c4edc0a31b3e578e7fd34a80078e358e6884f9691f83e4a6cf6141b6a92f95",
+      "bytes": 6383
+    },
+    "results/raw/D1-02/sources/0xbow-io--privacy-pools-core/files/packages/contracts/foundry.toml": {
+      "sha256": "3f8894964a66290a03f657145f8dd4522f2de1b1235a569e79722ae0a3349e7b",
+      "bytes": 854
+    },
+    "results/raw/D1-02/sources/0xbow-io--privacy-pools-core/files/packages/contracts/package.json": {
+      "sha256": "9ddc8cb492d8260c4245500148b395cc9f4b8d833b7c8b233d0c4d68fc1bf0f9",
+      "bytes": 3757
+    },
+    "results/raw/D1-02/sources/0xbow-io--privacy-pools-core/files/packages/contracts/src/contracts/BatchRelayer.sol": {
+      "sha256": "7c3387c47582091c458020688abe63e8dc425fc028b33bf34c90dbc112614855",
+      "bytes": 3165
+    },
+    "results/raw/D1-02/sources/0xbow-io--privacy-pools-core/files/packages/contracts/src/contracts/Entrypoint.sol": {
+      "sha256": "8245c32d50ae65825172ab5a74154417315fa7cb0d1c31c66a7c5ce00c38196e",
+      "bytes": 15955
+    },
+    "results/raw/D1-02/sources/0xbow-io--privacy-pools-core/files/packages/contracts/src/contracts/PrivacyPool.sol": {
+      "sha256": "063dafd1f8f8ea107ec6c7811a01d41855f63bfde297bf51c0ff99bac2f4ad85",
+      "bytes": 7758
+    },
+    "results/raw/D1-02/sources/0xbow-io--privacy-pools-core/files/packages/contracts/src/contracts/State.sol": {
+      "sha256": "189880f20c474746b7ea73e4d751a95d2fb37eb474f30301d998d80bba11e0ac",
+      "bytes": 7061
+    },
+    "results/raw/D1-02/sources/0xbow-io--privacy-pools-core/files/packages/contracts/src/contracts/implementations/PrivacyPoolComplex.sol": {
+      "sha256": "0f9c34f0bfd03a35117c3885e5d0bb9d4214513f201e122f4b8bae52b96b31a5",
+      "bytes": 3393
+    },
+    "results/raw/D1-02/sources/0xbow-io--privacy-pools-core/files/packages/contracts/src/contracts/lib/ProofLib.sol": {
+      "sha256": "2041a535cdfbec83e1df4d54f5addc305629a41af22ac8a17393d63fda63b1cb",
+      "bytes": 6589
+    },
+    "results/raw/D1-02/sources/0xbow-io--privacy-pools-core/files/packages/contracts/src/contracts/verifiers/WithdrawalVerifier.sol": {
+      "sha256": "7b6991befbc9a94ae99222e07f849771e22d0510da7e5f347ae85b3e2cafeede",
+      "bytes": 9851
+    },
+    "results/raw/D1-02/sources/0xbow-io--privacy-pools-core/files/packages/contracts/src/interfaces/IBatchRelayer.sol": {
+      "sha256": "f11ae95379de79fadd740bb91b351b20815ac377518c0eacd2f6bfe88b443af5",
+      "bytes": 3523
+    },
+    "results/raw/D1-02/sources/0xbow-io--privacy-pools-core/files/packages/contracts/src/interfaces/IPrivacyPool.sol": {
+      "sha256": "33706cbfd13913f2e3b239e48259a0782278d46e10dac45fa4a86897c0a7a4a7",
+      "bytes": 6046
+    },
+    "results/raw/D1-02/sources/0xbow-io--privacy-pools-core/files/packages/contracts/test/helper/WithdrawalProofGenerator.mjs": {
+      "sha256": "0c23131e236adf918c501b906c95ae44486b6398623e1b0190960584c858090d",
+      "bytes": 4027
+    },
+    "results/raw/D1-02/sources/0xbow-io--privacy-pools-core/files/packages/contracts/test/integration/IntegrationBase.sol": {
+      "sha256": "f68f45dff01844fd1b55a44fca8f0b7412158775deb68f8e202d29e5f9d67403",
+      "bytes": 18979
+    },
+    "results/raw/D1-02/sources/0xbow-io--privacy-pools-core/files/packages/contracts/test/integration/IntegrationBatchRelayerSuccessCases.t.sol": {
+      "sha256": "41ce1498fca9dde25d97a299c557ea0ad83942806d569624f690360d597d4d57",
+      "bytes": 6326
+    },
+    "results/raw/D1-02/sources/0xbow-io--privacy-pools-core/files/packages/contracts/test/integration/IntegrationERC20.t.sol": {
+      "sha256": "ac38c9a94bdcb871add4c8ab16605e3ba411142916ca51844c227a71d7257fe9",
+      "bytes": 12832
+    },
+    "results/raw/D1-02/sources/0xbow-io--privacy-pools-core/files/packages/contracts/test/integration/Utils.sol": {
+      "sha256": "e2488db5a7db45df4c22d2b2155de123fb699ba3aaec2cc0b497543305282727",
+      "bytes": 8460
+    },
+    "results/raw/D1-02/sources/0xbow-io--privacy-pools-core/files/packages/sdk/package.json": {
+      "sha256": "543267206381f1d4d109cf210c5a268368b48091bd53a62c8aed713e21fcda53",
+      "bytes": 2712
+    },
+    "results/raw/D1-02/sources/0xbow-io--privacy-pools-core/files/packages/sdk/src/circuits/circuits.impl.ts": {
+      "sha256": "79bebdbbe24cca3104e689e62a85bae93cd803964970ac582f1d0b960548f21e",
+      "bytes": 8054
+    },
+    "results/raw/D1-02/sources/0xbow-io--privacy-pools-core/files/packages/sdk/src/core/withdrawal.service.ts": {
+      "sha256": "94219b700b6697366e3972a34839b91d0e76c31943ed8b1f64574df9880d1c33",
+      "bytes": 3826
+    },
+    "results/raw/D1-02/sources/0xbow-io--privacy-pools-core/tree-by-object.json": {
+      "sha256": "52b262bc24eec16068f236db574c627007d0ec0200861469eec747f2dcf98e02",
+      "bytes": 121184
+    },
+    "results/raw/D1-02/sources/0xbow-io--privacy-pools-core/tree.json": {
+      "sha256": "f944c99e085a6278c3fb1b1505b84e73a23bb033828e504e151d79976af83e3a",
+      "bytes": 121184
+    },
+    "results/raw/D1-02/sources/warptoad--warp-toad/commit.json": {
+      "sha256": "068e4bbda846605f23cef2cc0b4a6a05967ae1753c8c0b584adf37bb5357ade0",
+      "bytes": 9656
+    },
+    "results/raw/D1-02/sources/warptoad--warp-toad/files/LICENSE": {
+      "sha256": "2389e31effbb3f3960033cc002761c874636c7a67eab69302f17029c5dd6bc25",
+      "bytes": 1079
+    },
+    "results/raw/D1-02/sources/warptoad--warp-toad/files/README.md": {
+      "sha256": "0ed136c9360145a7329f3ca4b10c582c9df735f81442ad446959b6d859e854be",
+      "bytes": 12119
+    },
+    "results/raw/D1-02/sources/warptoad--warp-toad/files/backend/README.md": {
+      "sha256": "6f77dc59d758be01b3ba8f76f98b36130d473c5bd63840c376ee7cce6ca7cf1a",
+      "bytes": 7763
+    },
+    "results/raw/D1-02/sources/warptoad--warp-toad/files/backend/circuits/constants/src/lib.nr": {
+      "sha256": "5f5538be0fae7ce0254cb78f22662c4f45b84afbe1ec0bafee65613c0520aeba",
+      "bytes": 313
+    },
+    "results/raw/D1-02/sources/warptoad--warp-toad/files/backend/circuits/hashing/Nargo.toml": {
+      "sha256": "384b570ce244f852ed7919a4dfc4876e2e3e591328b1f80a02f15fd0869bdeae",
+      "bytes": 351
+    },
+    "results/raw/D1-02/sources/warptoad--warp-toad/files/backend/circuits/hashing/src/lib.nr": {
+      "sha256": "f3d0fc75df6ab61fff55f1dba4aa84be1196a32a8cfe6c2c189724614f00862f",
+      "bytes": 2802
+    },
+    "results/raw/D1-02/sources/warptoad--warp-toad/files/backend/circuits/merkle-trees/src/lib.nr": {
+      "sha256": "d517f12bd9c38696580463aae3ed72aa9d428dc1559631ad738ff1d1f34c6ed3",
+      "bytes": 312
+    },
+    "results/raw/D1-02/sources/warptoad--warp-toad/files/backend/circuits/merkle-trees/src/merkle.nr": {
+      "sha256": "31b3e1640db0ab3f39f27022a54eeb6c3c3cb974cedd05e7782b76a5c78d6028",
+      "bytes": 5118
+    },
+    "results/raw/D1-02/sources/warptoad--warp-toad/files/backend/circuits/merkle-trees/src/types.nr": {
+      "sha256": "f4f006544425ac34ad1761bc990101e7ebd02d9d921767764d5d9362d54c8e18",
+      "bytes": 3463
+    },
+    "results/raw/D1-02/sources/warptoad--warp-toad/files/backend/circuits/nargo_hashing/Nargo.toml": {
+      "sha256": "ff55caf959d33eab84eeeee46c3fa3707e73a4530041b3ac2b10e452b0ab04d3",
+      "bytes": 228
+    },
+    "results/raw/D1-02/sources/warptoad--warp-toad/files/backend/circuits/nargo_hashing/src/lib.nr": {
+      "sha256": "ec0ad211ff92580652244a7b6871db8874222e3928c8b25934ef8ac2882871d3",
+      "bytes": 3552
+    },
+    "results/raw/D1-02/sources/warptoad--warp-toad/files/backend/circuits/withdraw/Nargo.toml": {
+      "sha256": "466b325e71d02e22a9caef5b6a2ff86043315a234098949f76ba8687960c180a",
+      "bytes": 263
+    },
+    "results/raw/D1-02/sources/warptoad--warp-toad/files/backend/circuits/withdraw/src/main.nr": {
+      "sha256": "ce4bf56bb44e2e1106560251f3ff28dc8545fc9b7b7256c9d7695f6e28de192f",
+      "bytes": 13878
+    },
+    "results/raw/D1-02/sources/warptoad--warp-toad/files/backend/contracts/core/L1WarpToad.sol": {
+      "sha256": "1ce9eaec8065f15c2e6fb6e05489ef2e12bb9464273285c302d0752be01492a3",
+      "bytes": 1006
+    },
+    "results/raw/D1-02/sources/warptoad--warp-toad/files/backend/contracts/core/WarpToadCore.sol": {
+      "sha256": "323a1cf26c7449f67cf277ff0a46c31e12f725c555f9fa165d5a60011e122c39",
+      "bytes": 8609
+    },
+    "results/raw/D1-02/sources/warptoad--warp-toad/files/backend/contracts/interfaces/IWarpToadCore.sol": {
+      "sha256": "690641ebebe2d23ccddfa28f53ce3ff5c7bf03ea74420137bcd79fc316f49969",
+      "bytes": 1680
+    },
+    "results/raw/D1-02/sources/warptoad--warp-toad/files/backend/contracts/verifier/WithdrawVerifier.sol": {
+      "sha256": "d9a822a5c16253bec2b690e06f16cb9d444ca9886be6ebf2302e4c5e55f04b48",
+      "bytes": 103923
+    },
+    "results/raw/D1-02/sources/warptoad--warp-toad/files/backend/hardhat.config.ts": {
+      "sha256": "153e9c86e4d1baa649d4e820bcfdaee5b25e9836802b83ca3cb8e25a09acc994",
+      "bytes": 6048
+    },
+    "results/raw/D1-02/sources/warptoad--warp-toad/files/backend/lib/hashing.ts": {
+      "sha256": "c5d564a467c01d97cddefb6f65013843fd8b128b303ac3a4c517403bd0f2af92",
+      "bytes": 4696
+    },
+    "results/raw/D1-02/sources/warptoad--warp-toad/files/backend/lib/proving.ts": {
+      "sha256": "e1c7e4d209e82fe9b51b536605671bb32545e52f27bccf0240892f2c24d8323c",
+      "bytes": 19582
+    },
+    "results/raw/D1-02/sources/warptoad--warp-toad/files/backend/package.json": {
+      "sha256": "01f2bae4590b1cbe14716c1ff1cd50209bd4b1cb5be9fc20e13da8801b0aa57b",
+      "bytes": 5600
+    },
+    "results/raw/D1-02/sources/warptoad--warp-toad/files/backend/scripts/regenerateVerifier.ts": {
+      "sha256": "9268ae8b5e14aae28f79f21016039e1308f2d8a0d5741f6c3daa47f0a9f339c5",
+      "bytes": 1175
+    },
+    "results/raw/D1-02/sources/warptoad--warp-toad/files/backend/test/helpers/constants.ts": {
+      "sha256": "a5ac68e8053656f71f40c145bd2277c021b1abe0696c8b7ae1af902cf5494d1c",
+      "bytes": 920
+    },
+    "results/raw/D1-02/sources/warptoad--warp-toad/files/backend/test/helpers/deploy-evm.ts": {
+      "sha256": "e74d8544cdf11d94905c45502c5bdd51f5b196837090a6baf1defe5ab07f714b",
+      "bytes": 6250
+    },
+    "results/raw/D1-02/sources/warptoad--warp-toad/files/backend/test/helpers/index.ts": {
+      "sha256": "eb3082438e7f959da5e527f9bd33e2f4a86a31bfb0485ef7d9c666b6eff67702",
+      "bytes": 534
+    },
+    "results/raw/D1-02/sources/warptoad--warp-toad/files/backend/test/helpers/setup.ts": {
+      "sha256": "89c28bf2f548e2efc39c0b16e50f9a2ca1153d8b29fea71225c2c32969589f79",
+      "bytes": 2887
+    },
+    "results/raw/D1-02/sources/warptoad--warp-toad/files/backend/test/testL1ToL1.ts": {
+      "sha256": "1c831d9e3832191ef6b1b1aac679c5c517ad89cdf3adfc708e4266a4780ff349",
+      "bytes": 4038
+    },
+    "results/raw/D1-02/sources/warptoad--warp-toad/files/package.json": {
+      "sha256": "549fd528d032e51467cc1a89d91ff13baee4ceef88b46aea029ba3d7e3219178",
+      "bytes": 3619
+    },
+    "results/raw/D1-02/sources/warptoad--warp-toad/files/pnpm-lock.yaml": {
+      "sha256": "d984410433a0349df3d32ab9c188bd76c30ffdfcfdb7e05bc67c473949f6f8e0",
+      "bytes": 326448
+    },
+    "results/raw/D1-02/sources/warptoad--warp-toad/tree-by-object.json": {
+      "sha256": "b843bbce7c8f6773e071b77e78ca99b49baa3bf776050bad9c25afb13287a829",
+      "bytes": 125716
+    },
+    "results/raw/D1-02/sources/warptoad--warp-toad/tree.json": {
+      "sha256": "67805fef431a8dd7ff577631390d49e8adf7453a22501b64df2b6cff119da44b",
+      "bytes": 125716
+    },
+    "results/raw/D1-02/tree-object-resolution.json": {
+      "sha256": "335706169f2e20a41aa416774597152b68afb4004ef58792123c37445fee544e",
+      "bytes": 996
+    },
+    "results/raw/D1-02/validation-02.json": {
+      "sha256": "895d182e41f1a5c3c7ca7c1a1cf164f8e5aaf3106fd6ccf1e8d8e5d07b11352a",
+      "bytes": 21635
+    },
+    "results/raw/D1-02/validation-command-02.json": {
+      "sha256": "5c1214de84383161eee8783f4660005adc4ece0b42cf3bd491c5629b731f69c4",
+      "bytes": 332
+    },
+    "results/raw/D1-02/validation-command.json": {
+      "sha256": "eb3c08ad4a8cbfdf1cc224d632a06a5423463bce5e5f3e9e178028adc9086590",
+      "bytes": 767
+    },
+    "results/raw/D1-02/verifier-first-attempt.py": {
+      "sha256": "37f999b6cfd9136ddc113f7570511fc9eccb99c996f24620d6416d194a244820",
+      "bytes": 9531
+    }
+  },
+  "deliverable_sha256": {
+    "AGENTS.md": "0940b1606dcfb72501e9a7a7cedd9bdfd8858720cbe381a21c56d090f1010181",
+    "README.md": "c763e1739a645750c2bcc03b1b6aff740318d91445ffff14963dfd3cf34a6dbe",
+    "docs/d1/roadmap.md": "1a5b5f20684ad24b43418e26cf0a0eb957f2754479dbc9683d8f8f77f54e6261",
+    "docs/d1/workspace.md": "5bff6891f52aa5ff0b53e6f4fe87f576ec3eaadf6a20d5c3782397992961fe49",
+    "docs/project-status.md": "a00fcb457c68788f5f8d4bca90e71e1390457c03da3f573470500fcbb6e8c3ad",
+    "reports/D1-02.md": "a60765c80f5e534388d3d662960e24e7ee16df2270f55c199ab8d016fe2f0813",
+    "scripts/d1_02_fetch.py": "7bec4855045c5c01a119c98fd98f0b67b7eb37ffc494ede15afe2c36ddcd35d8",
+    "scripts/d1_02_verify.py": "af7a87085b2e70da811f184dcf9a2e76d5955c763639bf9efc4697649039d3a1",
+    "protocols/d1/d1-02-intake.json": "16f0afbd27bf28ee49013c88acc5d35bedf919c87d911559d90d03ab26d80931",
+    "metadata/d1/d1-02-intake.json": "96d796429b8f8128ae275a50839c00ac4cfd63aa27f7c22ba21fb22a6208f312",
+    "metadata/d1/d1-02-validation.json": "895d182e41f1a5c3c7ca7c1a1cf164f8e5aaf3106fd6ccf1e8d8e5d07b11352a",
+    "metadata/d1/d1-02-provenance.json": "1dfe2114190369872315973629c6c5e91a301003808190efe92ecefe9fe84b00"
+  },
+  "scope": "Evidence preservation/source-availability inventory; no build or semantic validation. Prospective status pages will evolve; archive sealed versions before later edits.",
+  "self_excluded": "metadata/d1/d1-02-evidence-manifest.json",
+  "validation": {
+    "status": "PASS",
+    "checks": 144,
+    "source_record": "results/raw/D1-02/validation-02.json",
+    "sha256": "895d182e41f1a5c3c7ca7c1a1cf164f8e5aaf3106fd6ccf1e8d8e5d07b11352a"
+  }
+}
