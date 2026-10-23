@@ -1,6 +1,6 @@
 # D1 development plan
 
-Date: **23 October 2026**. Status: **D1-00 through D1-04 complete; D1-05 NEXT. Review checkpoint reached.**
+Date: **23 October 2026**. Status: **D1-00 through D1-05 complete; D1-06 NEXT.**
 
 This is the execution roadmap for the isolated D1 worktree. The [research contract](../research-contract.md) controls scope and claims; [D1-00](../../reports/D1-00.md) records preservation and validation.
 
@@ -152,20 +152,20 @@ If proof/consumer paths and meaningful policies are available but static composi
 | D1-02 | DONE | [Two-family screen](../../reports/D1-02.md) left selection unresolved; [continuation 01](../../reports/D1-02-continuation-01.md) selects hashcloak Semaphore-Noir with qualifications (unpinned bb CLI, unvalidated artifact/VK correspondence, unfrozen batch policy); Aztec v6.0.0 not selected. No build/proof run |
 | D1-03 | DONE | [Report](../../reports/D1-03.md): synth-faulty→VIOLATION (replayed), synth-repaired→VERIFIED_WITHIN_SCOPE (replayed non-vacuity); 15 regression tests pass |
 | D1-04 | DONE | [Report](../../reports/D1-04.md): three baselines (Foundry/monolithic/summary) on same cases; propagation neutral on synthetic; pipeline advantage is formal UNSAT + automatic extraction |
-| D1-05 | WAITING | D1-04 fair baseline and cost accounting |
-| D1-06 | WAITING | D1-05 justified refinement; frozen comparison protocol |
+| D1-05 | DONE | [Report](../../reports/D1-05.md): CEGAR on synthetic; spurious candidates rejected; same verdicts as D1-03; 16 tests pass |
+| D1-06 | NEXT | D1-05 justified refinement; frozen comparison protocol |
 | D1-07 | WAITING | Frozen mechanism and an independent honest proving path |
 | D1-08 | WAITING | Feasibility and transfer justify a broader study |
 
-**D1-03 and D1-04 are complete.** The joint-semantics pipeline validates on
-authored synthetic fixtures (D1-03) and the baseline comparison (D1-04) shows:
-- Foundry tests are faster for bug finding but cannot prove UNSAT/VERIFIED.
-- Propagation is neutral on these cases (no fixed inputs to propagate).
-- Manual summaries are faster for SAT but time out on UNSAT proofs.
-- The pipeline's value is formal UNSAT + automatic ACIR extraction.
+**D1-03 through D1-05 are complete.** D1-05 adds consumer-directed
+abstraction-refinement (CEGAR): abstract → concretize → refine. On both
+synthetic cases, the mechanism correctly rejects spurious abstract candidates
+via concretization and produces the same final verdicts as D1-03. Refinement
+is coarse-grained on these small circuits (all constraints added in one step).
+The CEGAR overhead is 3–9% vs monolithic; the concretization check is the
+genuine new mechanism. See [D1-05 report](../../reports/D1-05.md).
 
-**Review checkpoint reached.** The roadmap requires stopping here for review
-before D1-05 (consumer-directed refinement). See [D1-04 report](../../reports/D1-04.md).
+D1-06 (frozen feasibility comparison) is NEXT.
 
 ## 9 Provenance and limits
 

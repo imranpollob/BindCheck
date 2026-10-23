@@ -31,10 +31,11 @@ The principal directories are `circuits/` and `contracts/` for the small fixture
 - No held-out application result or general research contribution has been established.
 
 - [D1-04](reports/D1-04.md) compares three baselines on the same synthetic cases: B1 (Foundry direct tests, 7 pass in <1 ms), B2 (monolithic joint solving without propagation, identical verdicts and times), and B3 (manual summary specification, faster SAT but UNKNOWN on repaired UNSAT). The pipeline's demonstrated advantage is formal UNSAT/VERIFIED results and automatic ACIR extraction. No speed advantage over Foundry for bug finding on these synthetic cases. An honest assessment.
+- [D1-05](reports/D1-05.md) adds consumer-directed abstraction-refinement (CEGAR): start with 0 ACIR constraints (abstract model), solve, concretize SAT candidates against full producer, refine when spurious. Both synthetic cases reject a spurious abstract candidate at iteration 0 via concretization; synth-faulty confirms VIOLATION at iteration 1 (11.75 s); synth-repaired proves UNSAT at iteration 1 (107.3 s). Refinement is coarse-grained on these small circuits (all constraints added in one step). The concretization check is the new mechanism; 16 regression tests pass.
 
-**D1-00 through D1-04 are complete. Review checkpoint reached.** D1-05 (consumer-directed refinement) is NEXT pending review. The selected transfer target is reserved and must not drive development. The two principal properties remain authorization and coverage.
+**D1-00 through D1-05 are complete.** D1-06 (frozen feasibility comparison) is NEXT. The selected transfer target is reserved and must not drive development. The two principal properties remain authorization and coverage.
 
-D1-00 ran preservation and documentation checks only. D1-01 validated the saved check-added records and ran only the three missing running-flag slots. D1-03 validates the pipeline on authored synthetic circuits; D1-04 shows that Foundry testing is a strong baseline for bug finding. Neither establishes generalization, the consumer-directed advantage, or a method-feasibility claim.
+D1-00 ran preservation and documentation checks only. D1-01 validated the saved check-added records and ran only the three missing running-flag slots. D1-03 validates the pipeline on authored synthetic circuits; D1-04 shows that Foundry testing is a strong baseline for bug finding; D1-05 demonstrates the CEGAR mechanism but not a selective refinement advantage. None of these establishes generalization or a method-feasibility claim.
 
 ## Evidence hierarchy
 
