@@ -58,7 +58,10 @@ flowchart TD
     d103guardreview --> d103guards["Additional artifact-check budget authorized [DONE]"]
     d103guards --> d103effects["Effects and rollback composition [ACTIVE]"]
     d103effects --> d103concrete["Concrete AST execution and component checks [DONE]"]
-    d103concrete --> d103replayreview["Replay inputs and budget review [NEXT]"]
+    d103concrete --> d103replayreview["Bounded proof recovery authorized [DONE]"]
+    d103replayreview --> d103recovery["Two-build recovery attempt [DONE]"]
+    d103recovery --> d103recoveryresult["Accepted proof recovery [UNKNOWN]"]
+    d103recoveryresult --> d103linkreview["Memory-conserving link proposal [NEXT]"]
     d103effects --> d103symbolic["Full symbolic composition [WAITING]"]
     d103 --> d104["D1-04 fair baselines [WAITING]"]
     d104 --> d105["D1-05 checked refinement [WAITING]"]
@@ -86,11 +89,11 @@ flowchart TD
     classDef waiting fill:#D9D9D9,stroke:#B3B3B3
     classDef unknown fill:#FFE0C2,stroke:#FF9E42
 
-    class foundation,fixture,payy,sourceCheck,coneGate,nineCases,failureAnalysis,v3Rerun,generalGate,tracking,livingTree,d100,d101,d102,d103preflight,d103review,d103typed,d103boundary,d103guards,d103guardreview,d103concrete done
+    class foundation,fixture,payy,sourceCheck,coneGate,nineCases,failureAnalysis,v3Rerun,generalGate,tracking,livingTree,d100,d101,d102,d103preflight,d103review,d103typed,d103boundary,d103guards,d103guardreview,d103concrete,d103replayreview,d103recovery done
     class analysis,d1,d103,d103impl,d103consumer,d103effects active
-    class d103replayreview next
+    class d103linkreview next
     class evaluation,history,heldOut,baselines,manuscript,claims,artifacts,draft,transferCase,sensitivity,submit,t22,acirSummary,d104,d105,d106,d107,d108,d103symbolic waiting
-    class contribution,primaryResult,generalResult,d103gate unknown
+    class contribution,primaryResult,generalResult,d103gate,d103recoveryresult unknown
 ```
 
 ## Immediate path
@@ -108,7 +111,8 @@ flowchart TD
 11. Active: [Consumer-boundary audit](../reports/D1-03-consumer-boundary-01.md) locates 19 function/modifier bodies; nine controls pass after a preserved fixture-error correction. The full transition remains unmodeled; the subsequent guard-frame attempt is recorded below. No primary slot used.
 12. Done: [Codebase review](../reports/D1-codebase-review-01.md) performs the newly authorized final guard-artifact check; the frame prerequisite passes. All 81 Python controls pass in an isolated source/test copy. Legacy JavaScript tests are blocked by a missing dependency. Exact effects, rollback and the full joint D1-03 gates remain incomplete; all 28 primary slots are unused.
 13. Done at component level: [Consumer execution 01](../reports/D1-03-consumer-execution-01.md) implements concrete AST execution and rollback; 119 Python tests, 29 actual-artifact controls and 13 Solidity component tests pass. Full symbolic semantics and accepted replay remain UNKNOWN. Missing historical proof bundles and zero-new-proof budget require replay/resource review; no primary slot spent.
-14. Then: faithful joint semantics, equal-information baselines, checked consumer-directed refinement, frozen comparison, and independent transfer. Full evaluation and submission remain conditional on the feasibility decision.
+14. Done as a bounded attempt: [Proof recovery 01](../reports/D1-03-proof-recovery-01.md) provisions pinned Linux tooling and isolated source; both builds fail (missing libclang, then final-link allocation failure). Local compiler-library setup fixes the first blocker. All 119 Python tests pass; no proof/replay ran. Recovery and D1-03 remain UNKNOWN. Review the [one-build BFD proposal](d1/proof-recovery-02-proposal.md); do not reuse exhausted slots.
+15. Then: faithful joint semantics, equal-information baselines, checked consumer-directed refinement, frozen comparison, and independent transfer. Full evaluation and submission remain conditional on the feasibility decision.
 
 The end goal does not imply that submission is currently justified. The
 research contract's two principal properties remain unchanged, and unresolved T22 results remain UNKNOWN. D1 preparation and reporting closure are complete; three missing historical query slots were executed. No new D1 analyzer or method-evaluation result has been completed.
@@ -144,6 +148,8 @@ research contract's two principal properties remain unchanged, and unresolved T2
 | 2026-10-23 | Codebase verification and current guard artifact check | `[DONE]` | [Report](../reports/D1-codebase-review-01.md): 81 Python controls pass in an isolated source/test tree; the single newly authorized hardened guard check passes with seven bodies and 21 protected state roots. Legacy Node suite fails setup on missing `js-sha3`; no install or rerun hides it. Historical synthetic-branch deliverables archived exactly; current joint semantics remain incomplete/UNKNOWN. No primary solver/proof/replay work. |
 
 | 2026-10-23 | Consumer AST execution and replay-readiness review | `[DONE]` | [Report](../reports/D1-03-consumer-execution-01.md): concrete execution/component task complete, with 119 Python, 29 artifact and 13 Foundry controls passing. Explicit abstract guard/verifier boundaries prevent a joint claim. Historical proof/public-input bundles are unavailable in inspected local raw directories; zero-new-proof budget unchanged. Full symbolic composition and D1-03 remain UNKNOWN; D1-04 WAITING. Review replay inputs before proceeding. |
+
+| 2026-10-23 | Proof recovery attempt and linker resource review | `[DONE]` | [Report](../reports/D1-03-proof-recovery-01.md): pinned Rust/Linux bb and 2,667 original source files preserved. First build fails for missing libclang; locally extracted pinned libraries resolve it. Second build fails at final linking under 4 GiB. Both build slots consumed, no proof/replay/query/held-out run; 119 Python tests pass. Recovery remains UNKNOWN, D1-03 incomplete and D1-04 WAITING. [Proposed next task](d1/proof-recovery-02-proposal.md): one memory-conserving BFD link, then real proof/replay controls only if it succeeds. |
 
 ## Update rule
 

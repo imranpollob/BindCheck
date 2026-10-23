@@ -1,0 +1,255 @@
+{
+  "task": "D1-03 proof recovery 01",
+  "status": "Bounded attempt DONE; recovery UNKNOWN; review required before another build",
+  "security_verdict": "UNKNOWN",
+  "starting_revision": "cafe4dac50a24b36107ed9ef187abc2666156593",
+  "sealed_utc": "2026-10-23T23:49:42.988551+00:00",
+  "counts": {
+    "setup_commands": 6,
+    "build_attempts": 2,
+    "build_successes": 0,
+    "checks": 7,
+    "python_tests": 119,
+    "new_proofs": 0,
+    "native_proof_verifications": 0,
+    "accepted_full_rollup_replays": 0,
+    "primary_queries": 0,
+    "v2_primary_slots_unused": 28,
+    "heldout_runs": 0
+  },
+  "blocker": "Final-link rust-lld allocation failure under 4 GiB address-space cap; both build slots consumed",
+  "observations": {
+    "build-01": {
+      "exit_status": 101,
+      "timed_out": false,
+      "elapsed_s": 296.7189817428589,
+      "max_child_rss_kib": 536220
+    },
+    "build-02": {
+      "exit_status": 101,
+      "timed_out": false,
+      "elapsed_s": 1086.042638540268,
+      "max_child_rss_kib": 1699104
+    },
+    "check-01": {
+      "exit_status": 0,
+      "timed_out": false,
+      "elapsed_s": 0.00977015495300293,
+      "max_child_rss_kib": 10032
+    },
+    "check-02": {
+      "exit_status": 0,
+      "timed_out": false,
+      "elapsed_s": 0.0661475658416748,
+      "max_child_rss_kib": 13768
+    },
+    "check-03": {
+      "exit_status": 0,
+      "timed_out": false,
+      "elapsed_s": 0.16658949851989746,
+      "max_child_rss_kib": 77180
+    },
+    "check-04": {
+      "exit_status": 0,
+      "timed_out": false,
+      "elapsed_s": 0.21631479263305664,
+      "max_child_rss_kib": 24092
+    },
+    "check-05": {
+      "exit_status": 0,
+      "timed_out": false,
+      "elapsed_s": 0.06586384773254395,
+      "max_child_rss_kib": 13056
+    },
+    "check-06": {
+      "exit_status": 0,
+      "timed_out": false,
+      "elapsed_s": 0.8169593811035156,
+      "max_child_rss_kib": 17368
+    },
+    "check-07": {
+      "exit_status": 0,
+      "timed_out": false,
+      "elapsed_s": 0.06577563285827637,
+      "max_child_rss_kib": 14276
+    },
+    "setup-01": {
+      "exit_status": 0,
+      "timed_out": false,
+      "elapsed_s": 14.601176023483276,
+      "max_child_rss_kib": 633076
+    },
+    "setup-02": {
+      "exit_status": 0,
+      "timed_out": false,
+      "elapsed_s": 0.5667259693145752,
+      "max_child_rss_kib": 13784
+    },
+    "setup-03": {
+      "exit_status": 0,
+      "timed_out": false,
+      "elapsed_s": 3.2718124389648438,
+      "max_child_rss_kib": 103084
+    },
+    "setup-04": {
+      "exit_status": 0,
+      "timed_out": false,
+      "elapsed_s": 1.9210572242736816,
+      "max_child_rss_kib": 91504
+    },
+    "setup-05": {
+      "exit_status": 0,
+      "timed_out": false,
+      "elapsed_s": 4.225064277648926,
+      "max_child_rss_kib": 91428
+    },
+    "setup-06": {
+      "exit_status": 0,
+      "timed_out": false,
+      "elapsed_s": 3.8722009658813477,
+      "max_child_rss_kib": 81384
+    }
+  },
+  "preservation": {
+    "prior_task_deliverables": {
+      "checked": 11,
+      "mismatches": []
+    },
+    "prior_task_raw": {
+      "checked": 836,
+      "mismatches": []
+    },
+    "starting_deliverables": {
+      "checked": 79,
+      "mismatches": []
+    },
+    "upstream_source": {
+      "checked": 2667,
+      "mismatches": []
+    },
+    "protocol_frozen": true,
+    "passed": true
+  },
+  "setup": {
+    "source_revision": "dcd5d96ee15664a59bc24ed0dc2bb78b73ac5e36",
+    "source_archive_sha256": "cff3cd74a17d56c4f6e163ad519a64743a4ea27eb6a25b53cfd6276ca066e8fe",
+    "source_files": 2667,
+    "bb_archive_sha256": "88586691621fdbf6105e064aca1b6e4f1f5345f2e75560d1d385693019480697",
+    "bb_files": {
+      "bb": "1118bba6968ede0a5cf354d9170459acae8f5fcc2a58d21f7a49fb178850f94d"
+    },
+    "harness_sha256": "59a5fe25a4989724c2604254dc982d83890d158e67e01bd6f94aa06fc537f8ac",
+    "harness_origin": "payy-harness/t13_mint.rs",
+    "source_changes": [
+      "Added unchanged historical integration harness; no upstream source edits"
+    ]
+  },
+  "unexecuted_helpers": [
+    "scripts/d1_bb_recorder.py",
+    "scripts/d1_proof_recovery_prove.py",
+    "scripts/d1_proof_recovery_replay.py"
+  ],
+  "next_proposal": "docs/d1/proof-recovery-02-proposal.md",
+  "deliverables": {
+    "README.md": "e953726059400ac1bbe4f3b21be01eb308a459c8aba570331d138878380d3ef1",
+    "docs/d1/roadmap.md": "78d8ae68a6c395d796c6aef7fc5174daa964ed54f4250e46170bf4ad2235969e",
+    "docs/project-status.md": "f85989728dab642837d3fd195ea66e1a60b8ea20dfe3b5f05469ef7e3ffa4b48",
+    "docs/d1/proof-recovery-02-proposal.md": "dc2f6fa15b5653b4823d5f6e12a0e3f358830f0e18c0684fa540b1c82d15d220",
+    "protocols/d1/d1-03-proof-recovery-01.json": "a669ca27170e8bfb2f3df07b5d7c747455454f548ef181e31dd2ba89a8ba6897",
+    "reports/D1-03-proof-recovery-01.md": "63001b8cc12f0dae4f25c89350fee378d4b6289043bab6088ef457b6be715b9a",
+    "scripts/d1_bb_recorder.py": "464bc8417a5e1bd15258bf71e58f114096c71dc9393fcabea517b3d40f0c32c6",
+    "scripts/d1_proof_recovery_audit.py": "900d3865e64288f1c9194338f0c92a2476a93027d35738f06371e1bc0e56768b",
+    "scripts/d1_proof_recovery_clang.py": "5267b67dcda1bc030f674a9f0f98160d9eb6f575f2e8dcaf4156ed91b797792f",
+    "scripts/d1_proof_recovery_prove.py": "9dc94b40f271b2cd0123d573bc09ebd4512f72121791409d34da3a2ee438e291",
+    "scripts/d1_proof_recovery_replay.py": "4617672b6e7bb6d933d6d8afc9c1cc43ca27aadd0f769d953ec87da3c43ee803",
+    "scripts/d1_proof_recovery_run.py": "f5b76b09af754d3a8b6b956e92e092cbad0967685b00b6fbd89309acdd3a764a",
+    "scripts/d1_proof_recovery_setup.py": "e4d7cb996ced4b594fe3b504ff7b1192d535ea93215499c9369e6763929e17d4"
+  },
+  "raw_files": {
+    "results/raw/D1-03/proof-recovery-01/bb-thread.cpp": "66e6f037cfa2a0e4b2a64f86e5558051aee2658c4f6c5fca58d2aaadded89156",
+    "results/raw/D1-03/proof-recovery-01/build-01/command.json": "ffa2f3b51caf0f32ce3cb0a0a5f5b7d5a60ef87b675748965667f88139e3bd7b",
+    "results/raw/D1-03/proof-recovery-01/build-01/result.json": "babc5de689508356cfbcca332b6fd9dcd2a551d7828469eec2221cea592f00f4",
+    "results/raw/D1-03/proof-recovery-01/build-01/stderr.log": "8961dffb7659491500f93694555e632f9b97393e4051f8b41964e3a2c508f61d",
+    "results/raw/D1-03/proof-recovery-01/build-01/stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "results/raw/D1-03/proof-recovery-01/build-02/command.json": "d4fca265941137ebf56d8c1857f1b59669ef836f8ffce316485883d0a3fd2a52",
+    "results/raw/D1-03/proof-recovery-01/build-02/result.json": "0e74d00ac119c5ae27f31c0b0a68ae1eb3cf2519a01253906575f9a4fbf55854",
+    "results/raw/D1-03/proof-recovery-01/build-02/runner.py": "4c5fe6abab65a3bb95ae7bd5a2d74797e2f6ea9b69eb49353d2ced89b209469a",
+    "results/raw/D1-03/proof-recovery-01/build-02/stderr.log": "57452536cc3aaa48841e646cd0928cf36651f8a66bb8be9ad58cb388fa89ebce",
+    "results/raw/D1-03/proof-recovery-01/build-02/stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "results/raw/D1-03/proof-recovery-01/check-01/command.json": "e4c1d74902504caa15d72efd94fcaa339a0305b6401b27d2aeecf42c3c43b786",
+    "results/raw/D1-03/proof-recovery-01/check-01/result.json": "a4251e6d795fec62abf227522a70b7c3a8fe19ee88c7d84abe7f40e874679857",
+    "results/raw/D1-03/proof-recovery-01/check-01/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "results/raw/D1-03/proof-recovery-01/check-01/stdout.log": "c51f697d5bbff3427987d9fbe87ea282380a9fcb082ce03867fe051aaabbb2a4",
+    "results/raw/D1-03/proof-recovery-01/check-02/command.json": "163a8495ca830b66e8f36ec54105c413d12f89ebee57882dc9b3faff3d9375b5",
+    "results/raw/D1-03/proof-recovery-01/check-02/result.json": "b691d3a99eb6e1ea62720b8bf5ca95ed082ddbedc5f669ddbf54ad971fa477d8",
+    "results/raw/D1-03/proof-recovery-01/check-02/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "results/raw/D1-03/proof-recovery-01/check-02/stdout.log": "6ea629fafb01df53af5456fd281e7bd6a617c3cc09f2e81009db9d89cd718e2a",
+    "results/raw/D1-03/proof-recovery-01/check-03/command.json": "e9152a3fd3999a9f2a6c5d1e3ac0922a7b08ba7cd5b68fcb5eee1ef012351e3e",
+    "results/raw/D1-03/proof-recovery-01/check-03/result.json": "46de1c537de62d8f93144535fd6e8ca3070de27ec6e1b85cfd44be11ddade094",
+    "results/raw/D1-03/proof-recovery-01/check-03/runner.py": "f5b76b09af754d3a8b6b956e92e092cbad0967685b00b6fbd89309acdd3a764a",
+    "results/raw/D1-03/proof-recovery-01/check-03/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "results/raw/D1-03/proof-recovery-01/check-03/stdout.log": "9857465423a70e0d6c40c58d989d10f912a3b4dd4738960325fbd44a247ee895",
+    "results/raw/D1-03/proof-recovery-01/check-04/command.json": "7b3af4005a7100c7a1c7bc15c4691ee979868cf6a205a84535b1f0e6a038ab3c",
+    "results/raw/D1-03/proof-recovery-01/check-04/result.json": "7e534988252fe6466c0e7cbc12533e98ed3ad60a2bcbffb53861b270f24455db",
+    "results/raw/D1-03/proof-recovery-01/check-04/runner.py": "f5b76b09af754d3a8b6b956e92e092cbad0967685b00b6fbd89309acdd3a764a",
+    "results/raw/D1-03/proof-recovery-01/check-04/stderr.log": "a1fcdb7a564e2d0c1b97f1a27496b3f7cd64539898e22afeaea9c68c4eb12288",
+    "results/raw/D1-03/proof-recovery-01/check-04/stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "results/raw/D1-03/proof-recovery-01/check-05/command.json": "cb175d64005f06abe74d184d51d2fe36c928d1193bc292ec2dd233736d00a9f8",
+    "results/raw/D1-03/proof-recovery-01/check-05/result.json": "ae5cfbb276ccd20fd7709ac5b3558c4150877ff3409e9be498cc5cc612e50dd3",
+    "results/raw/D1-03/proof-recovery-01/check-05/runner.py": "f5b76b09af754d3a8b6b956e92e092cbad0967685b00b6fbd89309acdd3a764a",
+    "results/raw/D1-03/proof-recovery-01/check-05/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "results/raw/D1-03/proof-recovery-01/check-05/stdout.log": "5565dbd3f83512828b56fa2f005864f97d3e6ded30afb257a9ad3d3b693df545",
+    "results/raw/D1-03/proof-recovery-01/check-06/command.json": "7838cd05fecf323180fa70ad4f8bd180f586456cbcaffb4a6d78e21ab2e0fa79",
+    "results/raw/D1-03/proof-recovery-01/check-06/result.json": "276df6892fba9d5365f13a9f5eb38990aab3021af07c1c3b0ed077c0baea9186",
+    "results/raw/D1-03/proof-recovery-01/check-06/runner.py": "f5b76b09af754d3a8b6b956e92e092cbad0967685b00b6fbd89309acdd3a764a",
+    "results/raw/D1-03/proof-recovery-01/check-06/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "results/raw/D1-03/proof-recovery-01/check-06/stdout.log": "aa763622a38c39821c6a2e7b448081c93f558b51aba40bf5e9832349c0dbb202",
+    "results/raw/D1-03/proof-recovery-01/check-07/command.json": "a8ee0685276487c6e1602a0336340c749f3e3ee2c6288f3e4ac91fe79f5f0a18",
+    "results/raw/D1-03/proof-recovery-01/check-07/result.json": "337e63ee279e0ad4b21a9e499f997b4e9c6a2b50c507633d3fde74d9ac75dc57",
+    "results/raw/D1-03/proof-recovery-01/check-07/runner.py": "f5b76b09af754d3a8b6b956e92e092cbad0967685b00b6fbd89309acdd3a764a",
+    "results/raw/D1-03/proof-recovery-01/check-07/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "results/raw/D1-03/proof-recovery-01/check-07/stdout.log": "15c2ee4f7d8357d56a912c56c7d5b3c6ed7c09d80f2ec4f6793f58d996dd4053",
+    "results/raw/D1-03/proof-recovery-01/clang-setup.json": "46b9b41368af63fc0514926bc0474e58549bf247f84056d918a2dfb5595b70e3",
+    "results/raw/D1-03/proof-recovery-01/libclang-common-18-dev.apt-metadata.txt": "51eea64a8c29ad869eefd0af480ffc736540e6f3ba09a9e10876152d6831b358",
+    "results/raw/D1-03/proof-recovery-01/libclang1-18.apt-metadata.txt": "4316663c3646ee25b537bfea3c181ba7d1fad7eb34f87590ce53856cb3bddad7",
+    "results/raw/D1-03/proof-recovery-01/libllvm18.apt-metadata.txt": "75cfcc32de4ffdad20ed8756f9c99a2b360c15ab78e424db6b2c7ec187ddcd23",
+    "results/raw/D1-03/proof-recovery-01/preservation-check.json": "aa763622a38c39821c6a2e7b448081c93f558b51aba40bf5e9832349c0dbb202",
+    "results/raw/D1-03/proof-recovery-01/preserved.json": "b8def7e480627e8e986db22c757fd7b28d9eadf6f9c1c452ef4cc6fcabd6926d",
+    "results/raw/D1-03/proof-recovery-01/prior-checkpoint/README.md": "f053c992bea24968ac6b08c02dc9a3d5e76a230335b38910f275f748824633f1",
+    "results/raw/D1-03/proof-recovery-01/prior-checkpoint/docs/d1/roadmap.md": "45f8e7f658b98f5b400ad397732b84b2b68b286900435682b8d3ec62b398a523",
+    "results/raw/D1-03/proof-recovery-01/prior-checkpoint/docs/project-status.md": "cae1d13b845674e20bc7eac311a1bd4ebf0ce4a9b7426d01a48acf918daf5fef",
+    "results/raw/D1-03/proof-recovery-01/protocol.frozen.json": "a669ca27170e8bfb2f3df07b5d7c747455454f548ef181e31dd2ba89a8ba6897",
+    "results/raw/D1-03/proof-recovery-01/protocol.sha256": "56644e2993173cdc5758fce2526e7c02af1dd2bf0ffa7cfc9c1bd679c20657e3",
+    "results/raw/D1-03/proof-recovery-01/runner-initial.py": "16fa4ba588b70bf57f867b28da88514304215cb93c1287bdd68be8a3653fd43c",
+    "results/raw/D1-03/proof-recovery-01/runner-launch-error-handling.py": "eb6f8f88757fcb579f7f2cdc0f2d2bf606690a552b696978e9efdda200581aa8",
+    "results/raw/D1-03/proof-recovery-01/setup-01/command.json": "a142d787c42a88947d41c44af275373ea5be97238b72a807178c90c4789268a6",
+    "results/raw/D1-03/proof-recovery-01/setup-01/result.json": "5120f4d30481becb2f372768a41379483b36c6e49fc256a9c3b39122db52c7f8",
+    "results/raw/D1-03/proof-recovery-01/setup-01/stderr.log": "6d2b6616fd9e277e97d261682ad67b0d039657290478f0970bdc2c6f2829620e",
+    "results/raw/D1-03/proof-recovery-01/setup-01/stdout.log": "276a3b0a1a345d6c6d2f9f364dfa54bbbd4717c39d5d8132499770fa10a77ecb",
+    "results/raw/D1-03/proof-recovery-01/setup-02/command.json": "06a750dad00baa425ac410d3980fb3604b640a60cfde41da2e9222792ef508d9",
+    "results/raw/D1-03/proof-recovery-01/setup-02/result.json": "e0febd5dbb9607765808ea54b88f24e031fb3526c4a385b5f1b62d991785b21b",
+    "results/raw/D1-03/proof-recovery-01/setup-02/stderr.log": "3067a9350917fea003780aa979c64cd6b2078ff8ccbdfdcaa8a2f0fc2e5446e3",
+    "results/raw/D1-03/proof-recovery-01/setup-02/stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "results/raw/D1-03/proof-recovery-01/setup-03/command.json": "593d90cd307dd30482bab15f1ad1802f6f97429091e051233ba37105c781ac85",
+    "results/raw/D1-03/proof-recovery-01/setup-03/result.json": "737ddc0327f6ff115c1978d52ed029c419d4f852f017d2ffa4398054aaafd5ca",
+    "results/raw/D1-03/proof-recovery-01/setup-03/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "results/raw/D1-03/proof-recovery-01/setup-03/stdout.log": "c7ea2ae62e24abb5cf0fdbd93a9dc1b4ad583e93f7207b2702d170491130ef29",
+    "results/raw/D1-03/proof-recovery-01/setup-04/command.json": "856786ba92e1b520e979d234fa656d20707d48139f47c5bf14d123f30d35e672",
+    "results/raw/D1-03/proof-recovery-01/setup-04/result.json": "b1a799a1f8de599d8c9ffa74c4420bb115cc1b70fa54f4ca3b5b8d6aa2ba9017",
+    "results/raw/D1-03/proof-recovery-01/setup-04/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "results/raw/D1-03/proof-recovery-01/setup-04/stdout.log": "833f29a948c0699d71550a6b5a98cb89393aac632f4b70a0a4eda4ad6a108398",
+    "results/raw/D1-03/proof-recovery-01/setup-05/command.json": "81bcab75077446b358d0135ae773c88af57f181f554894f62b0afcd8ce160d61",
+    "results/raw/D1-03/proof-recovery-01/setup-05/result.json": "89acb80bac0520dcd3a60a1d0fd4bff1c952dee63ee85b4a7268ad30a2bfc9a6",
+    "results/raw/D1-03/proof-recovery-01/setup-05/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "results/raw/D1-03/proof-recovery-01/setup-05/stdout.log": "fed806e5293d4eeb5bec1297e546a23704e67832ba300e169567a52e31377d5d",
+    "results/raw/D1-03/proof-recovery-01/setup-06/command.json": "57308956139cc57194a2eea25c7be2c7f7c924b3ea3af37271f68dba3790d1e9",
+    "results/raw/D1-03/proof-recovery-01/setup-06/result.json": "f7be63a6c6fb980b54f5d14874fcad3ba33bc16759aa9d0239056b1896f6f221",
+    "results/raw/D1-03/proof-recovery-01/setup-06/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "results/raw/D1-03/proof-recovery-01/setup-06/stdout.log": "dacc36e20df33e4f2e536ff58a66b720d5c7973dca78a5c14c113f592c9f0e3d",
+    "results/raw/D1-03/proof-recovery-01/setup.json": "5a6365e616711571ab53caa58f211a80ccd6faf038df2fe8fdeb24f28cde94a8",
+    "results/raw/D1-03/proof-recovery-01/source-manifest.json": "0ff7f377d3b2bcca1a5e7dba651d42e751d5a7e6ca8370c2c2db78a09a73456f",
+    "results/raw/D1-03/proof-recovery-01/sources.json": "576b5a25a5070fcd6ea2bc0d8740ba3945221b4f01feb566d3ae510d395f804e",
+    "results/raw/D1-03/proof-recovery-01/thread-setting.json": "2e111d6c9feeb081e760bb78cfbeac6efeff2e164ba11c93249d135cd091628c",
+    "results/raw/D1-03/proof-recovery-01/upstream-bb-setup.rs": "fab05ab35b240d77197d7864d93b30f0f1f8d04fe6421526c974433d68a68b93"
+  }
+}

@@ -157,7 +157,7 @@ If proof/consumer paths and meaningful policies are available but static composi
 | D1-07 | WAITING | Frozen mechanism and an independent honest proving path |
 | D1-08 | WAITING | Feasibility and transfer justify a broader study |
 
-**Current checkpoint: concrete consumer execution/component checks complete; symbolic composition and accepted replay remain UNKNOWN. Replay/resource review required.** The
+**Current checkpoint: proof recovery blocked at final linking after two bounded builds; symbolic composition and accepted replay remain UNKNOWN. Review the proposed memory-conserving link attempt.** The
 [reconciliation report](../../reports/D1-02-reconciliation-01.md) recovers the
 completed D1-02 continuation without repeating it. Semaphore-Noir remains
 reserved for transfer; its artifact/key correspondence, decoding and policy
@@ -219,25 +219,37 @@ and verifier boundaries. 119 Python controls, 29 actual-artifact controls and
 failed-transfer/out-of-family UNKNOWN. This is not symbolic joint verification
 or an accepted full consumer replay. All 28 primary slots remain unused.
 
-**Review stop and next task:** restore and qualify replay inputs. The inspected
-local raw directories lack the historical T13/T16 proof/public-input bundles
-and summaries required by the existing full replay harnesses. The protocol
-allows zero new real proofs. Locate an archive, preserve its hashes, and check
-whether its inputs actually match the frozen v2 scopes; historical controls
-cannot silently replace S1/S2. Otherwise review a separately versioned proof
-budget/seed proposal. After replay feasibility is resolved, complete symbolic
-consumer/producer composition and the original D1-03 gates. No signature
-acceptance or unreviewed proof assumption is adopted. Baselines remain blocked.
+The user's subsequent request to commit/push and try alternatives authorizes
+[proof recovery 01](../../reports/D1-03-proof-recovery-01.md) under a new,
+separately frozen budget. Rust 1.91.0 and checksum-pinned Linux bb are available;
+source is isolated at B. The first build fails on missing libclang; pinned local
+compiler libraries resolve that prerequisite. The second compiles dependencies
+but fails at final linking with `Cannot allocate memory` under 4 GiB. Both
+build slots are consumed. 119 Python tests pass; no proof, native proof check,
+consumer replay, primary query or held-out run occurs. The old v2 zero-proof
+budget and numeric seeds remain immutable; no historical result is rewritten.
+
+**Review stop and next task:** consider the
+[one-build GNU BFD proposal](proof-recovery-02-proposal.md). It reuses the
+compiled cache with `--no-keep-memory` and `--strip-debug`, retaining 4 GiB and
+two jobs. Completion requires one honest proof chain, original/tampered native
+controls and five unchanged-consumer checks, or a precise UNKNOWN blocker.
+This requires a new build allowance; unused proof slots cannot be relabeled as
+build retries. Symbolic composition and actual realization of the frozen v2
+seeds remain unresolved even if proof recovery succeeds. Baselines stay blocked.
 
 Stop after D1-04 and D1-06, before held-out evaluation, and whenever continuing
 requires changing scope, policy assumptions, evaluation criteria or resource
 budget. Review checkpoints must give achievements, unresolved issues and a
 measurable next task. No automatic pivot, delegation or external contact.
 
-This session works in `/home/pollmix/Coding/BindCheck-d1 (copy)`. Its `.git`
-shares the original D1 worktree's index; see [workspace guidance](workspace.md).
-All old reports and seals remain unchanged. Exact prior living documents are
-archived under `results/raw/D1-02/reconciliation-01/prior-checkpoint/`.
+This session works in the independent repository
+`/home/pollmix/Coding/BindCheck-d1 (copy)` on `chatgpt-codex`; see the dated
+independent-checkout entry in [workspace guidance](workspace.md). The shared
+index description in older checkpoints is historical. All old reports and
+seals remain unchanged. Exact living documents before this update are archived
+under `results/raw/D1-03/proof-recovery-01/prior-checkpoint/`; older archives
+remain in place.
 
 ## 9 Provenance and limits
 

@@ -1,0 +1,46 @@
+{
+  "task": "D1-03 proof recovery 01",
+  "frozen_utc": "2026-10-23T23:20:48.431207+00:00",
+  "head": "cafe4dac50a24b36107ed9ef187abc2666156593",
+  "authorization": "User: Commit and Push. Try different approaches. If all fails then try alternative theories. Take help from internet as needed. We need to finish the project in any way possible. This prospectively authorizes bounded proof recovery; frozen v2 slots, seeds and claims are unchanged.",
+  "objective": "Recover an honest N=1000 proof and accepted unchanged local consumer replay using pinned B source; or record precise blocker. This is a replay prerequisite, not D1-03 completion or a v2 S1/S2 primary result.",
+  "completion": [
+    "Archive and preserve previous deliverables",
+    "Pin/fetch Linux bb and Rust 1.91.0; isolate upstream source without editing tools/cases",
+    "Attempt original honest mint proof chain; if generated verify original and tampered-input control and replay unchanged local consumer",
+    "Preserve commands, hashes, stdout/stderr, exit status and measured costs, write report, checkpoint, commit and push"
+  ],
+  "bounds": {
+    "task_wall_seconds": 7200,
+    "process_address_space_bytes": 4294967296,
+    "cargo_jobs": 2,
+    "setup_commands": 12,
+    "setup_timeout_seconds": 600,
+    "build_attempts": 2,
+    "build_timeout_seconds": 1200,
+    "honest_chain_attempts": 1,
+    "honest_chain_timeout_seconds": 1800,
+    "chain_max_prove_calls": 4,
+    "native_verify_controls": 2,
+    "native_verify_timeout_seconds": 300,
+    "forge_attempts": 2,
+    "forge_timeout_seconds": 600,
+    "other_checks": 12,
+    "other_check_timeout_seconds": 120,
+    "primary_queries": 0,
+    "heldout_runs": 0
+  },
+  "source_revision": "dcd5d96ee15664a59bc24ed0dc2bb78b73ac5e36",
+  "bb_url": "https://storage.googleapis.com/payy-public-fixtures/bb/v3.0.0-manual.20251030/barretenberg-amd64-linux.tar.gz",
+  "bb_sha256": "88586691621fdbf6105e064aca1b6e4f1f5345f2e75560d1d385693019480697",
+  "alternatives": [
+    "If first build fails, one corrected build is allowed for environment/packaging issues; record exact patch without changing circuit or verifier semantics",
+    "If proof run fails, no retry; diagnose and report. No mock acceptance, incompatible old fixture, or old report substitutes for proof bytes."
+  ],
+  "unchanged": [
+    "research contract and security verdict semantics",
+    "v2 28 primary slots and S1/S2 seeds",
+    "held-out separation",
+    "existing reports and raw evidence"
+  ]
+}
