@@ -1,0 +1,17 @@
+{
+  "name": "synth-settlement",
+  "messages_ref": "abi:messages",
+  "permission_ref": "abi:authorized",
+  "n": 9,
+  "grammar": {
+    "lengths": {"0": 3, "2": 3, "3": 3},
+    "pad_kind": 0,
+    "mint_kind": 2,
+    "burn_kind": 3,
+    "mint_id_offset": 1,
+    "burn_value_offset": 1,
+    "burn_recipient_offset": 2
+  },
+  "note": "SYNTHETIC authored policy. messages (public) are the consumer's settled records; authorized (private) is the certified permission stream. A committed burn must match a certified authorized burn (authorization); each certified record must be settled (coverage). Policy does not assert that the producer actually binds messages to authorized, nor any expected verdict.",
+  "assumptions": ["A4 canonical field words", "A5 atomic ERC20 token", "A7 owned prover"]
+}

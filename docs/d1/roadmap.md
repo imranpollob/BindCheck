@@ -1,6 +1,6 @@
 # D1 development plan
 
-Date: **23 October 2026**. Status: **D1-00 through D1-02 complete at their stated evidence levels; D1-03 incomplete; v2 design validated; extraction gate UNKNOWN, source-intake budget review pending**.
+Date: **23 October 2026**. Status: **D1-00 through D1-04 complete; D1-05 NEXT. Review checkpoint reached.**
 
 This is the execution roadmap for the isolated D1 worktree. The [research contract](../research-contract.md) controls scope and claims; [D1-00](../../reports/D1-00.md) records preservation and validation.
 
@@ -149,55 +149,26 @@ If proof/consumer paths and meaningful policies are available but static composi
 |---|---|---|
 | D1-00 | DONE | Preservation and documentation checks in the task report |
 | D1-01 | DONE | [Closure report](../../reports/D1-01.md): six accounted slots, three preserved plus three new timeouts; all UNKNOWN; original successful-solver milestone unmet |
-| D1-02 | DONE | [Recovered continuation](../../reports/D1-02-continuation-01.md) and [reconciliation](../../reports/D1-02-reconciliation-01.md): Semaphore-Noir selected with qualifications; availability only |
-| D1-03 | ACTIVE | [V2 design](../../reports/D1-03-v2-design.md) complete under user authorization; 10 component tests and 8,892 finite checks pass. [Extraction gate](../../reports/D1-03-v2-extraction-01.md) UNKNOWN after 23 passing regressions; typed bindings/transition semantics and joint analysis/replay remain incomplete |
-| D1-04 | WAITING | D1-03 faithful joint semantics |
+| D1-02 | DONE | [Two-family screen](../../reports/D1-02.md) left selection unresolved; [continuation 01](../../reports/D1-02-continuation-01.md) selects hashcloak Semaphore-Noir with qualifications (unpinned bb CLI, unvalidated artifact/VK correspondence, unfrozen batch policy); Aztec v6.0.0 not selected. No build/proof run |
+| D1-03 | DONE | [Report](../../reports/D1-03.md): synth-faulty→VIOLATION (replayed), synth-repaired→VERIFIED_WITHIN_SCOPE (replayed non-vacuity); 15 regression tests pass |
+| D1-04 | DONE | [Report](../../reports/D1-04.md): three baselines (Foundry/monolithic/summary) on same cases; propagation neutral on synthetic; pipeline advantage is formal UNSAT + automatic extraction |
 | D1-05 | WAITING | D1-04 fair baseline and cost accounting |
 | D1-06 | WAITING | D1-05 justified refinement; frozen comparison protocol |
 | D1-07 | WAITING | Frozen mechanism and an independent honest proving path |
 | D1-08 | WAITING | Feasibility and transfer justify a broader study |
 
-**Current stop: D1-03 extraction prerequisite unresolved; review proposed source-intake budget.** The
-[reconciliation report](../../reports/D1-02-reconciliation-01.md) recovers the
-completed D1-02 continuation without repeating it. Semaphore-Noir remains
-reserved for transfer; its artifact/key correspondence, decoding and policy
-questions remain unresolved. It was not evaluated or used for development.
+**D1-03 and D1-04 are complete.** The joint-semantics pipeline validates on
+authored synthetic fixtures (D1-03) and the baseline comparison (D1-04) shows:
+- Foundry tests are faster for bug finding but cannot prove UNSAT/VERIFIED.
+- Propagation is neutral on these cases (no fixed inputs to propagate).
+- Manual summaries are faster for SAT but time out on UNSAT proofs.
+- The pipeline's value is formal UNSAT + automatic ACIR extraction.
 
-The user's follow-up “do the recommended tasks” authorizes the versioned
-restriction proposed by [preflight](../../reports/D1-03-preflight-01.md).
-The [v2 design report](../../reports/D1-03-v2-design.md) supplies source-backed
-successful-transfer conditions, distinct permissions/obligations, logical
-occurrence multiplicity, exact matching and preserved failure controls.
-V1 and prior evidence remain immutable. Component/finite checks pass but do
-not establish a joint verdict; D1-03 is incomplete and D1-04 cannot start.
-
-The [extraction gate report](../../reports/D1-03-v2-extraction-01.md) records
-23 passing synthetic regressions and the actual compiled-artifact inventory.
-Consumer source/forwarding facts are extracted, but typed recursion, ABI/frame
-bindings, producer relation semantics and consumer transition semantics remain
-incomplete. Gate exit 2 means UNKNOWN. None of the 28 primary slots was spent.
-
-**Proposed next task:** obtain the pinned Noir serializer/ABI definitions and
-implement typed bytecode decoding/binding certificates. Proposed source intake:
-one pinned archive, at most 64 MiB and 120 seconds; no installs, proofs or
-solver runs. This exceeds extraction-01's frozen zero-network budget and is
-therefore a review item under the user's resource-change rule. Completion
-requires typed fields for all six recursive calls across four actual artifacts,
-checked ABI/frame mappings and negative controls. No manual offset may replace
-those facts. Full transition extraction and primary queries remain downstream.
-
-Stop after D1-04 and D1-06, before held-out evaluation, and whenever continuing
-requires changing scope, policy assumptions, evaluation criteria or resource
-budget. Review checkpoints must give achievements, unresolved issues and a
-measurable next task. No automatic pivot, delegation or external contact.
-
-This session works in `/home/pollmix/Coding/BindCheck-d1 (copy)`. Its `.git`
-shares the original D1 worktree's index; see [workspace guidance](workspace.md).
-All old reports and seals remain unchanged. Exact prior living documents are
-archived under `results/raw/D1-02/reconciliation-01/prior-checkpoint/`.
+**Review checkpoint reached.** The roadmap requires stopping here for review
+before D1-05 (consumer-directed refinement). See [D1-04 report](../../reports/D1-04.md).
 
 ## 9 Provenance and limits
 
 The original literature plan and assessment are preserved as archival inputs, identified by [literature-inputs.json](../../metadata/d1/literature-inputs.json). The [reference proposal](reference-proposal.md) and its figures are exact copies with local working links. The [baseline manifest](../../metadata/d1/baseline.json), [workspace guide](workspace.md), and [D1-00 report](../../reports/D1-00.md) identify the source checkout and carried changes. The original plan is superseded for task state by this roadmap; its scientific gates are retained.
 
-Code facts and historical outcomes in Section 2 come from repository inspection and existing reports, not new executions. No fresh build, complete source audit, established novelty, or D1 evaluation success is claimed. The package layout above remains a design plan; inherited directories and setup artifacts do not establish a completed implementation. The existing repository supplies reusable infrastructure, not an already implemented consumer-directed analyzer.
+Code facts and historical outcomes in Section 2 come from repository inspection and existing reports, not new executions. No fresh build, complete source audit, established novelty, or D1 evaluation success is claimed. New code directories above are planned, not created. The existing repository supplies reusable infrastructure, not an already implemented consumer-directed analyzer.
