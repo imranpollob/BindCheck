@@ -1,0 +1,2 @@
+# Python >= 3.10. Cryptographic source-identity checks use Keccak-256.
+pycryptodome==3.23.0

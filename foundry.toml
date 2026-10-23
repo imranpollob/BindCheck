@@ -60,15 +60,3 @@ fs_permissions = [
   { access = "read-write", path = "./results/raw/T18" },
   { access = "read-write", path = "./results/raw/T19" },
 ]
-
-# D1-04: Synthetic settlement baseline (authored consumer, no real proof verification)
-[profile.synth]
-src = "cases/d1/synth/contracts"
-test = "cases/d1/synth/test"
-out = "out-synth"
-cache_path = "cache-synth"
-libs = ["lib"]
-solc_version = "0.8.20"
-evm_version = "cancun"
-optimizer = true
-optimizer_runs = 200

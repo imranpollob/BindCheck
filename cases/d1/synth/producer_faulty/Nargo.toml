@@ -1,7 +1,0 @@
-[package]
-name = "synth_faulty"
-type = "bin"
-authors = ["BindCheck D1-03 (synthetic)"]
-compiler_version = ">=1.0.0"
-
-[dependencies]

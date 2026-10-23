@@ -1,0 +1,14 @@
+{
+  "repository": "https://github.com/noir-lang/noir",
+  "revision": "60ccd48e18ad8ce50d5ecda9baf813b712145051",
+  "source_path": "acvm-repo/acir/tests/test_program_serialization.rs",
+  "original_source_sha256": "28b8d5a90d62edce73dbbde61151305022c4889b592a7df105fb75fb3d8d8e8f",
+  "excerpt_sha256": "5525639f48a583484970f198e60b0e672ef3ad61eaa33a56c1e79e3af9da6e43",
+  "functions": [
+    "addition_circuit",
+    "multi_scalar_mul_circuit",
+    "simple_brillig_foreign_call"
+  ],
+  "license": "MIT; original notice included",
+  "purpose": "Verbatim upstream source test vectors make unit controls independent of ignored compiler downloads. These are test source excerpts, not new compiled programs or proofs."
+}

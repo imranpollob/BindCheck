@@ -1,0 +1,31 @@
+{
+  "task": "D1 codebase review 01",
+  "authorization": "User requested: Push it. check and verify the current codebase and push again. This authorizes a new verification envelope and one current guard artifact check, following the previously reported review stop.",
+  "frozen_at_utc": "2026-10-23T20:03:55.887996+00:00",
+  "completion_criteria": [
+    "Preserve incoming files, historical reports/protocol versions and raw evidence; publish coherent current checkout without generated artifacts or secrets",
+    "Run meaningful Python unit controls and legacy checker tests; document missing dependencies/evidence as failure, not safety",
+    "Run at most one fresh final-version guard artifact check; explicitly separate structural certificate from full-transition or security verification",
+    "Audit current provenance/checkpoint links and frozen identities; commit reviewed source/docs/tests/manifests and verify pushed remote branch equals local HEAD"
+  ],
+  "limits": {
+    "wall_minutes": 90,
+    "python_test_invocations": 3,
+    "node_test_invocations": 2,
+    "static_verification_invocations": 3,
+    "guard_artifact_invocations": 1,
+    "seconds_per_invocation": 120,
+    "address_space_bytes": 4294967296,
+    "primary_solver_queries": 0,
+    "new_proofs": 0,
+    "settlement_replays": 0,
+    "compilations": 0,
+    "dependency_installs": 0
+  },
+  "versions": {
+    "python": "3.12.12 (main, Oct 25 2025, 03:47:29) [GCC 13.3.0]",
+    "pycryptodome": "3.23.0",
+    "git": "git version 2.43.0"
+  },
+  "stop": "No additional artifact attempts, weakened controls, changed research policy/scope or held-out evaluation. D1-03 completion remains gated by full transition/producer/query/replay/repair/non-vacuity work."
+}

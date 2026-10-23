@@ -42,3 +42,9 @@ payy-consumer/src/
 out-payy-consumer/
 cache-payy-consumer/
 tools/oz-5.0.1/
+
+# Local Python environments and historical synthetic compiler output
+.venv/
+cache-synth/
+out-synth/
+cases/d1/synth/**/target/

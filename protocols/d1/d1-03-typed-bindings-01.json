@@ -1,0 +1,39 @@
+{
+  "task": "D1-03 typed bindings 01",
+  "frozen_at_utc": "2026-10-23T18:53:17.606523+00:00",
+  "authorization": "User: do the next recommended tasks; approves pinned source intake and typed binding implementation from D1-03-v2-extraction-01.",
+  "completion_criteria": [
+    "Archive pinned Noir source and hashes within approved intake cap",
+    "Decode typed recursion fields from all four actual serialized program artifacts, not a flat magic offset",
+    "Recover ABI witness allocation from pinned compiler implementation and validate actual declarations",
+    "Check active/padding logical-frame bindings against actual constraints with replayable algebraic certificates or report precise UNKNOWN",
+    "Run meaningful negative controls; preserve all historical evidence and update report/roadmap/checkpoint; no joint verdict from this task"
+  ],
+  "limits": {
+    "source_archives": 1,
+    "source_download_bytes": 67108864,
+    "source_download_wall_seconds": 120,
+    "source_expanded_bytes": 536870912,
+    "task_wall_minutes": 90,
+    "dependency_installations": 0,
+    "new_compilations": 0,
+    "primary_solver_queries": 0,
+    "new_proofs": 0,
+    "full_replays": 0,
+    "synthetic_test_invocations_max": 3,
+    "artifact_decode_and_binding_invocations_max": 4,
+    "per_validation_wall_seconds": 120,
+    "per_validation_address_space_bytes": 4294967296
+  },
+  "pins": {
+    "noir_revision": "60ccd48e18ad8ce50d5ecda9baf813b712145051",
+    "programs": [
+      "A-1000-agg_agg",
+      "A-1000-agg_final",
+      "B-1000-agg_agg",
+      "B-1000-agg_final"
+    ]
+  },
+  "pre_freeze_exposure": "Read previous gate/code/artifacts and known printed flattening; no typed decoder output or compiler source from this intake seen. Payy development data only.",
+  "failure_rule": "Preserve failed attempts and UNKNOWN; no guessed layout, assumed missing binding, changed policy, extra budget or primary-query run to bypass prerequisite."
+}

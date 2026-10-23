@@ -1,0 +1,24 @@
+{
+  "task": "D1-03 guard frame 01",
+  "frozen_at_utc": "2026-10-23T19:24:10.843016+00:00",
+  "completion_criteria": [
+    "Implement fail-closed structural write/call frame check over actual transitive guard AST; reject unsupported constructs and mutable reference parameters",
+    "Check use-site calldata/scalar argument correspondence and protected storage preservation; retain allowed state writes explicitly, with no signature acceptance assumption",
+    "Reject summary reuse after source, context, protected state, policy, bound, assumptions or argument changes; meaningful adversarial controls",
+    "One pinned-artifact gate and report/checkpoint; distinguish frame lemma from complete transition or verification"
+  ],
+  "limits": {
+    "wall_minutes": 45,
+    "synthetic_test_invocations": 2,
+    "artifact_gate_invocations": 1,
+    "seconds_per_invocation": 120,
+    "address_space_bytes": 4294967296,
+    "network_requests": 0,
+    "solver_queries": 0,
+    "new_proofs": 0,
+    "replays": 0,
+    "compilations": 0
+  },
+  "semantics": "For each supported concrete successful guard execution, preserve every state root outside the extracted may-write set and immutable calldata. Retain changed roots nondeterministically; include revert outcome. No acceptance or reachability guarantee. Projection to protected effects requires explicit use-site check and external behavior boundaries.",
+  "stop": "Any unsupported write/call or missing use-site condition is UNKNOWN; no changed assumptions or extra test/artifact budget. A frame lemma alone does not discharge full consumer symbolic execution."
+}

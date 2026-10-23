@@ -1,0 +1,36 @@
+{
+  "revision": "60ccd48e18ad8ce50d5ecda9baf813b712145051",
+  "source_root": "build/D1-03/noir-source-60ccd48e18ad8ce50d5ecda9baf813b712145051",
+  "archive_sha256": "069a7124742b0b0ae2b65ed333e19a35d49dc1ac7ca75062bbe9be09ba616438",
+  "source_files_sha256": {
+    "acvm-repo/acir/src/serialization.rs": "538f448d514d31b51c6434a6213723fb8469e6b8f3c1451dd7035cd8979bc950",
+    "acvm-repo/acir/src/circuit/mod.rs": "071b3c98157395a46e0804126800d39eac48889ca24061cca510d754dd56fdbb",
+    "acvm-repo/acir/src/circuit/opcodes.rs": "bd1c33580f39c2546913821c07007e81d633236a91644c93c29d574f63c4d720",
+    "acvm-repo/acir/src/circuit/opcodes/black_box_function_call.rs": "5e4809ab2db7ce75109c224dfe2c3475a612c98fe2548a5d10a5b80bd4a8a565",
+    "acvm-repo/acir/src/circuit/opcodes/memory_operation.rs": "db0051f67992e03dba2934d42f7411c348b6c7bd5699ef4f030bfc2e9240db2a",
+    "acvm-repo/acir/src/circuit/brillig.rs": "abfe59d1e5fcf6b0a9838439356c43e5bdb2b965ee23e5f40c013587f9810690",
+    "acvm-repo/acir/src/native_types/expression/mod.rs": "4e97648c40017bda8bf55a0f6156c6324e9b6fe3627a926b07668268ea706f81",
+    "acvm-repo/acir/src/native_types/witness.rs": "050068cf179253b64c2b80957cc404f4681031df4f93e810c82540f5a1a62016",
+    "acvm-repo/acir_field/src/field_element.rs": "ca840b2ee3360656b18280bf9e6d63a48f17001b90db0098d0d237e0b7cffb95",
+    "acvm-repo/brillig/src/opcodes.rs": "508f2079665ab154b0f5737bd467defb4c6bfbb5a5ae58c69a3b22beaeed887a",
+    "tooling/noirc_abi/src/lib.rs": "0c172d1775bb8be14d80257213e5e7c7cb21404de753967f7f657ea554696257",
+    "compiler/noirc_evaluator/src/ssa/mod.rs": "9c806110072dc7afeb2b8fc78e799c8d437978f10968baf52fc0442fa234681e",
+    "compiler/noirc_evaluator/src/acir/mod.rs": "447766ba7916c90e37f1f945cce718b31d30c5b83cc080130b9fe6128da55200",
+    "compiler/noirc_evaluator/src/acir/acir_context/generated_acir/mod.rs": "54978d9599780021ad149653f776a292f295bd749e6759521b3190726d423bd9",
+    "Cargo.lock": "18efd13c923c64eb90999a0f43c41390b9f2de98232fb13af68ec0d77fc10268",
+    "LICENSE-APACHE": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+    "LICENSE-MIT": "be3e86d697525ff4fda6ed8bce73ef1fc903f487ffd416919281d965bc154138",
+    "acvm-repo/acir/tests/test_program_serialization.rs": "28b8d5a90d62edce73dbbde61151305022c4889b592a7df105fb75fb3d8d8e8f"
+  },
+  "schema": "legacy bincode with pinned serde field/variant order; supported ACIR and structural Brillig subset",
+  "assumptions": [
+    "Pinned upstream compiler/serializer correctness",
+    "No cryptographic or token assumptions discharged by decoding"
+  ],
+  "excluded": [
+    "Other compiler versions/serialization formats",
+    "Unknown opcode variants",
+    "Cryptographic verification",
+    "Producer satisfiability or consumer transition verification"
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "task": "D1-03 consumer transition boundary 01",
+  "frozen_at_utc": "2026-10-23T19:11:18.498539+00:00",
+  "completion_criteria": [
+    "Extract the transitive verifyRollup function/modifier call boundary and preserve compiler AST identities/source hashes",
+    "Account for guards, loops, writes, external calls and rollback ordering on the full transition, including validator helpers rather than only message functions",
+    "Classify modeled and unmodeled operations against v2 and report whether a faithful complete transition is ready",
+    "Run synthetic graph/alias/missing-call negative controls and one actual artifact audit; preserve evidence and checkpoint"
+  ],
+  "limits": {
+    "wall_minutes": 45,
+    "network_requests": 0,
+    "compilations": 0,
+    "solver_queries": 0,
+    "new_proofs": 0,
+    "full_replays": 0,
+    "synthetic_test_invocations": 2,
+    "actual_audit_invocations": 1,
+    "per_invocation_seconds": 120,
+    "address_space_bytes": 4294967296
+  },
+  "interpretation": "This audit establishes implementation coverage, not semantics by name. A modeled category does not mean an implemented symbolic transition. Pure crypto abstraction or added state bounds must have a justified preservation rule before queries.",
+  "stop": "If faithful transition needs new scope restrictions or unapproved semantic assumptions, stop for review with concrete alternatives; leave D1-03 incomplete."
+}

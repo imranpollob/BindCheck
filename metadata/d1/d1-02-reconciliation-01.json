@@ -1,0 +1,126 @@
+{
+  "task": "D1-02 reconciliation-01",
+  "recorded_at_utc": "2026-10-23T17:14:53.203632+00:00",
+  "research_verdict": "UNKNOWN",
+  "raw_files": {
+    "results/raw/D1-02/reconciliation-01/audit-01.json": {
+      "sha256": "cfe5dc556a405f473d79d388c193472132f9ef86835e322f1046526ae18f815a",
+      "bytes": 56257
+    },
+    "results/raw/D1-02/reconciliation-01/audit-02.json": {
+      "sha256": "91c77ac5990ba9c49488f9e43b8288c031b00825d670a69ff0603cafb5ea6c83",
+      "bytes": 103877
+    },
+    "results/raw/D1-02/reconciliation-01/audit-03.json": {
+      "sha256": "1b69ae3600bd3793dccc74a6a2f54820776eaff4ec3cf24fb412f65ed3d33b1f",
+      "bytes": 105811
+    },
+    "results/raw/D1-02/reconciliation-01/audit-04.json": {
+      "sha256": "2af7dcd5f0c0b4ee6678cefdb8641457907cd7a8b8f707168374b96349df9fbf",
+      "bytes": 105811
+    },
+    "results/raw/D1-02/reconciliation-01/auditor-01.py": {
+      "sha256": "f6087323f206cf592c8986472a0ac89c0664d5d7d02eaa315b4aeeda8ad291c8",
+      "bytes": 8573
+    },
+    "results/raw/D1-02/reconciliation-01/initial-state.json": {
+      "sha256": "0102cc426b46d9e97efbf7d8e3ef9e90e92b1efa51dc455969c8c36e9fe04b7d",
+      "bytes": 165473
+    },
+    "results/raw/D1-02/reconciliation-01/missing-artifact-lookup.json": {
+      "sha256": "e3c64a4163d97bc652e5ec08724a4514015eac2a412a581fbe628c258d757d06",
+      "bytes": 3261
+    },
+    "results/raw/D1-02/reconciliation-01/prior-checkpoint/AGENTS.md": {
+      "sha256": "0940b1606dcfb72501e9a7a7cedd9bdfd8858720cbe381a21c56d090f1010181",
+      "bytes": 4390
+    },
+    "results/raw/D1-02/reconciliation-01/prior-checkpoint/README.md": {
+      "sha256": "c763e1739a645750c2bcc03b1b6aff740318d91445ffff14963dfd3cf34a6dbe",
+      "bytes": 7741
+    },
+    "results/raw/D1-02/reconciliation-01/prior-checkpoint/docs/d1/roadmap.md": {
+      "sha256": "1a5b5f20684ad24b43418e26cf0a0eb957f2754479dbc9683d8f8f77f54e6261",
+      "bytes": 23186
+    },
+    "results/raw/D1-02/reconciliation-01/prior-checkpoint/docs/d1/workspace.md": {
+      "sha256": "5bff6891f52aa5ff0b53e6f4fe87f576ec3eaadf6a20d5c3782397992961fe49",
+      "bytes": 5040
+    },
+    "results/raw/D1-02/reconciliation-01/prior-checkpoint/docs/project-status.md": {
+      "sha256": "a00fcb457c68788f5f8d4bca90e71e1390457c03da3f573470500fcbb6e8c3ad",
+      "bytes": 11241
+    },
+    "results/raw/D1-02/reconciliation-01/prior-checkpoint/metadata/d1/d1-02-intake.json": {
+      "sha256": "96d796429b8f8128ae275a50839c00ac4cfd63aa27f7c22ba21fb22a6208f312",
+      "bytes": 24345
+    },
+    "results/raw/D1-02/reconciliation-01/prior-checkpoint/metadata/d1/d1-02-provenance.json": {
+      "sha256": "1dfe2114190369872315973629c6c5e91a301003808190efe92ecefe9fe84b00",
+      "bytes": 2341
+    },
+    "results/raw/D1-02/reconciliation-01/prior-checkpoint/metadata/d1/d1-02-validation.json": {
+      "sha256": "895d182e41f1a5c3c7ca7c1a1cf164f8e5aaf3106fd6ccf1e8d8e5d07b11352a",
+      "bytes": 21635
+    },
+    "results/raw/D1-02/reconciliation-01/prior-checkpoint/protocols/d1/d1-02-intake.json": {
+      "sha256": "16f0afbd27bf28ee49013c88acc5d35bedf919c87d911559d90d03ab26d80931",
+      "bytes": 2328
+    },
+    "results/raw/D1-02/reconciliation-01/prior-checkpoint/reports/D1-02.md": {
+      "sha256": "a60765c80f5e534388d3d662960e24e7ee16df2270f55c199ab8d016fe2f0813",
+      "bytes": 15167
+    },
+    "results/raw/D1-02/reconciliation-01/prior-checkpoint/scripts/d1_02_fetch.py": {
+      "sha256": "7bec4855045c5c01a119c98fd98f0b67b7eb37ffc494ede15afe2c36ddcd35d8",
+      "bytes": 3238
+    },
+    "results/raw/D1-02/reconciliation-01/prior-checkpoint/scripts/d1_02_verify.py": {
+      "sha256": "af7a87085b2e70da811f184dcf9a2e76d5955c763639bf9efc4697649039d3a1",
+      "bytes": 10154
+    },
+    "results/raw/D1-02/reconciliation-01/recovered/metadata/d1/d1-02-continuation-01-intake.json": {
+      "sha256": "e72a4623621ec4c16376acbd9b70bd5f27d572fecf50dd4e2b028482b1204c68",
+      "bytes": 10581
+    },
+    "results/raw/D1-02/reconciliation-01/recovered/protocols/d1/d1-02-continuation-01.json": {
+      "sha256": "a4f5914f7e81412a84745ba154c6400ef100f14c02cb135036cc2b6a661a6d13",
+      "bytes": 3407
+    },
+    "results/raw/D1-02/reconciliation-01/recovered/protocols/d1/d1-03-joint-semantics.json": {
+      "sha256": "b9fa7c7bd3bb305b75ec64e534fab154c73c207f8fadddab38425d8d9131fcb1",
+      "bytes": 2609
+    },
+    "results/raw/D1-02/reconciliation-01/recovered/protocols/d1/d1-03-joint-semantics.md": {
+      "sha256": "39b7a1dd94f84210c5bfb1af99f2ee8d26dc89165830f6fb686be16d73cadf81",
+      "bytes": 11949
+    },
+    "results/raw/D1-02/reconciliation-01/recovered/reports/D1-02-continuation-01.md": {
+      "sha256": "a3cb1885276f41e612ae87ebfc1821ed8cda9e9525a70e81501b7085b33125c2",
+      "bytes": 9666
+    },
+    "results/raw/D1-02/reconciliation-01/recovered/scripts/d1_02c_fetch.py": {
+      "sha256": "8b02ccdd66286bdcd4f403f32bff6a9f3a3d050cab4d67c3c89676e36607433d",
+      "bytes": 3792
+    },
+    "results/raw/D1-02/reconciliation-01/recovery.json": {
+      "sha256": "4b07b581e4d7625213b4beef71f8c9a0c3e99ca7d41df5e7db1c212a9b308a9d",
+      "bytes": 2519
+    }
+  },
+  "deliverable_sha256": {
+    "protocols/d1/d1-02-reconciliation-01.json": "9da998f89fd8cef45b112b2bdd76299ddb2cdcfd6e8218ba446f3a00ebffd2be",
+    "scripts/d1_02_reconcile.py": "71f115cc6ee4ce83f551a9ae14c37d45b26458f838f21354a1da4f7d356bc491",
+    "reports/D1-02-reconciliation-01.md": "82f6ff19a0528960bb0b2b0bfed14139786bdc7a101062fa7c95b167abd89b47"
+  },
+  "new_solver_runs": 0,
+  "new_builds": 0,
+  "new_proofs": 0,
+  "new_replays": 0,
+  "task_status": "DONE",
+  "selection": "Semaphore-Noir, qualified availability only",
+  "audit_status": "PASS",
+  "checks": 386,
+  "validated_source_files": 46,
+  "preserved_prior_raw_files": 664
+}

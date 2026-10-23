@@ -45,11 +45,21 @@ flowchart TD
     d1 --> d100["D1-00 preserve and align [DONE]"]
     d100 --> d101["D1-01 T22 reporting closure [DONE]"]
     d100 --> d102["D1-02 target selection [DONE]"]
-    d101 --> d103["D1-03 joint semantics [DONE]"]
+    d101 --> d103["D1-03 joint semantics [ACTIVE]"]
     d102 --> d103
-    d103 --> d104["D1-04 fair baselines [DONE]"]
-    d104 --> d105["D1-05 checked refinement [DONE]"]
-    d105 --> d106["D1-06 frozen comparison [NEXT]"]
+    d103 --> d103preflight["D1-03 protocol preflight [DONE]"]
+    d103preflight --> d103review["D1-03 v2 design and component checks [DONE]"]
+    d103review --> d103impl["D1-03 extraction implementation [ACTIVE]"]
+    d103impl --> d103gate["D1-03 extraction prerequisite [UNKNOWN]"]
+    d103gate --> d103typed["Typed ACIR bindings [DONE]"]
+    d103typed --> d103consumer["Consumer transition extraction [ACTIVE]"]
+    d103consumer --> d103boundary["Transitive consumer audit [DONE]"]
+    d103boundary --> d103guardreview["Guard frame and current artifact check [DONE]"]
+    d103guardreview --> d103guards["Additional artifact-check budget authorized [DONE]"]
+    d103guards --> d103effects["Exact effects and rollback [NEXT]"]
+    d103 --> d104["D1-04 fair baselines [WAITING]"]
+    d104 --> d105["D1-05 checked refinement [WAITING]"]
+    d105 --> d106["D1-06 frozen comparison [WAITING]"]
     d106 --> d107["D1-07 independent transfer [WAITING]"]
     d107 --> d108["D1-08 full evaluation [WAITING]"]
     d101 -.-> t22
@@ -73,11 +83,11 @@ flowchart TD
     classDef waiting fill:#D9D9D9,stroke:#B3B3B3
     classDef unknown fill:#FFE0C2,stroke:#FF9E42
 
-    class foundation,fixture,payy,sourceCheck,coneGate,nineCases,failureAnalysis,v3Rerun,generalGate,tracking,livingTree,d100,d101,d102,d103,d104,d105 done
-    class analysis,d1 active
-    class evaluation,history,heldOut,baselines,manuscript,claims,artifacts,draft,transferCase,sensitivity,submit,t22,acirSummary,d107,d108 waiting
-    class d106 next
-    class contribution,primaryResult,generalResult unknown
+    class foundation,fixture,payy,sourceCheck,coneGate,nineCases,failureAnalysis,v3Rerun,generalGate,tracking,livingTree,d100,d101,d102,d103preflight,d103review,d103typed,d103boundary,d103guards,d103guardreview done
+    class analysis,d1,d103,d103impl,d103consumer active
+    class d103effects next
+    class evaluation,history,heldOut,baselines,manuscript,claims,artifacts,draft,transferCase,sensitivity,submit,t22,acirSummary,d104,d105,d106,d107,d108 waiting
+    class contribution,primaryResult,generalResult,d103gate unknown
 ```
 
 ## Immediate path
@@ -87,15 +97,18 @@ flowchart TD
 3. Done: [T22-v4](../reports/T22-v4.md) preserves a 22.5 KB, one-assertion non-vacuity goal that times out at 300 seconds with 93,696 KiB peak RSS. A fixed-stream ACIR branch returns conditional SAT in 79.9 seconds, while non-vacuity, prefix and tail in the full Boolean-rank query remain `UNKNOWN` after three 300-second timeouts. The check-added case has no verified verdict.
 4. Done: [D1-00](../reports/D1-00.md) creates the isolated worktree, preserves staged work and historical evidence, and aligns the contract and [roadmap](d1/roadmap.md).
 5. Done: [D1-01](../reports/D1-01.md) accounts for all six T22-v5 slots: three validated historical check-added timeouts and three new running-flag timeouts at 300 seconds/4 GiB. Reporting closure is complete, all six results remain UNKNOWN, and the original successful-solver milestone is unmet. No extended campaign or whole-system guarantee follows.
-6. Active: [D1-02](../reports/D1-02.md) screens pinned WarpToad and 0xbow Privacy Pools sources. The two-family availability screen is complete, but neither satisfies the full initial Noir/ACIR batched-settlement fragment. Initial-scope selection remains unresolved; no build/proof/replay or held-out transfer result follows. A separately bounded continuation or explicit scope decision is next.
-7. Done: [D1-02 continuation](../reports/D1-02-continuation-01.md) selects hashcloak Semaphore-Noir, with qualifications, as the reserved initial-scope transfer target; Aztec v6.0.0 is not selected. Nothing was built or proved.
-8. Done: [D1-03](../reports/D1-03.md) validates the joint-semantics pipeline on authored synthetic fixtures. synth-faulty yields VIOLATION with a replayed concrete model (unauthorized burn in the unconstrained message tail); synth-repaired yields VERIFIED_WITHIN_SCOPE with a replayed non-vacuity witness. 15 regression tests pass. Consumer contract not exercised; solver times within limits.
-9. Done: [D1-04](../reports/D1-04.md) baseline comparison: Foundry tests (7 pass, <1 ms), monolithic joint solving (identical to D1-03), and manual summary (faster SAT but UNKNOWN on repaired UNSAT). Pipeline advantage is formal UNSAT + automatic extraction. **Review checkpoint reached.**
-10. Done: [D1-05](../reports/D1-05.md) adds consumer-directed abstraction-refinement (CEGAR): abstract (0 ACIR constraints) → concretize → refine. Both synthetic cases reject a spurious abstract candidate via concretization; synth-faulty confirms VIOLATION at iteration 1 (11.75 s); synth-repaired proves VERIFIED at iteration 1 (107.3 s). Refinement is coarse-grained (all constraints in one step) on these small circuits. 16 regression tests pass. The concretization check is the new mechanism.
-11. Next: D1-06 frozen feasibility comparison, then independent transfer. Full evaluation and submission remain conditional on the feasibility decision.
+6. Historical first screen: [D1-02](../reports/D1-02.md) screens pinned WarpToad and 0xbow Privacy Pools sources. The two-family availability screen is complete, but neither satisfies the full initial Noir/ACIR batched-settlement fragment. At that checkpoint selection remained unresolved; the recovered continuation below supersedes that task state. No build/proof/replay or held-out transfer result follows.
+7. Done: [D1-02 continuation](../reports/D1-02-continuation-01.md), recovered by [reconciliation](../reports/D1-02-reconciliation-01.md), selects Semaphore-Noir with qualifications. No experiment repeated. D1-03 setup is inherited and incomplete. [Preflight](../reports/D1-03-preflight-01.md) is complete and requires policy/evaluation review; no full-query result follows.
+8. Done: [Authorized v2 design](../reports/D1-03-v2-design.md) separates P/O, preserves logical occurrence multiplicity, restricts transfer states explicitly and passes 10 component tests plus 8,892 finite checks. D1-03 joint extraction/verification remains incomplete.
+9. Active/UNKNOWN: [Extraction gate 01](../reports/D1-03-v2-extraction-01.md) implements core domains/policy and located compiled-artifact inventories, with 23 passing regressions. Typed recursion/ABI/frame bindings and full transition semantics were incomplete at that checkpoint. The source intake and bindings are completed below; primary slots remain unused.
+10. Done: [Typed bindings 01](../reports/D1-03-typed-bindings-01.md) decodes four serialized artifacts and checks six recursive/frame mappings. 27 controls pass; 9,788 equality certificates checked (3,042 nontrivial). Full transition extraction, joint queries and replay remain incomplete.
+11. Active: [Consumer-boundary audit](../reports/D1-03-consumer-boundary-01.md) locates 19 function/modifier bodies; nine controls pass after a preserved fixture-error correction. The full transition remains unmodeled; the subsequent guard-frame attempt is recorded below. No primary slot used.
+12. Done: [Codebase review](../reports/D1-codebase-review-01.md) performs the newly authorized final guard-artifact check; the frame prerequisite passes. All 81 Python controls pass in an isolated source/test copy. Legacy JavaScript tests are blocked by a missing dependency. Exact effects, rollback and the full joint D1-03 gates remain incomplete; all 28 primary slots are unused.
+13. Then: faithful joint semantics, equal-information baselines, checked consumer-directed refinement, frozen comparison, and independent transfer. Full evaluation and submission remain conditional on the feasibility decision.
 
 The end goal does not imply that submission is currently justified. The
-research contract's two principal properties remain unchanged, and unresolved T22 results remain UNKNOWN. D1 preparation, reporting closure, synthetic pipeline validation, baseline comparison, and consumer-directed refinement are complete. The CEGAR mechanism works correctly and the concretization check is a genuine new mechanism, but provides no measurable speed advantage on these small synthetic circuits. Foundry testing remains a strong baseline for bug finding. No method-evaluation result on real cases, no selective refinement advantage, and no generalization evidence has been established.
+research contract's two principal properties remain unchanged, and unresolved T22 results remain UNKNOWN. D1 preparation and reporting closure are complete; three missing historical query slots were executed. No new D1 analyzer or method-evaluation result has been completed.
+
 
 ## Checkpoint log
 
@@ -111,10 +124,20 @@ research contract's two principal properties remain unchanged, and unresolved T2
 | 2026-10-23 | D1-00 isolated worktree and research alignment | `[DONE]` | [D1-00](../reports/D1-00.md), [baseline](../metadata/d1/baseline.json), and [validation](../metadata/d1/d1-00-validation.json): preserve source index/staged patch, original files, historical reports, and an independent raw-evidence copy. Revise the prospective contract and roadmap; old verdicts remain unchanged. D1-01 reporting closure and D1-02 intake are next; old transfer deferral is replaced by early availability screening, not a transfer claim. |
 | 2026-10-23 | D1-01 T22-v5 reporting closure | `[DONE]` | [D1-01](../reports/D1-01.md), [six-slot matrix](../metadata/d1/d1-01-query-matrix.json), and [execution manifest](../metadata/d1/d1-01-execution-manifest.json): validate three preserved check-added timeouts and execute three missing running-flag queries once at 300 seconds/4 GiB. All six remain UNKNOWN; non-vacuity and the original successful-solver milestone are unresolved. Specification/reduction audits do not establish encoding soundness. Prior evidence and original/source indexes are preserved. D1-02 intake is next and has not started. |
 | 2026-10-23 | D1-02 two-family availability screen; selection unresolved | `[ACTIVE]` | [D1-02](../reports/D1-02.md), [intake matrix](../metadata/d1/d1-02-intake.json), and [protocol](../protocols/d1/d1-02-intake.json): inspect 65 pinned source files from WarpToad and 0xbow Privacy Pools, with licenses, public-input/consumer mappings, policy provenance, honest-path sources and blockers. WarpToad is single-claim Noir; 0xbow batches Circom proofs with additional modeling requirements. No initial-scope target selected; no build/proof/replay run. Preserve all 49 D1-01 raw files and six fixed deliverables; archive all nine sealed checkpoint versions before living-document updates. D1-03 not started. |
-| 2026-10-23 | D1-02 continuation 01: initial-scope target selected with qualifications | `[DONE]` | [Continuation report](../reports/D1-02-continuation-01.md), [intake](../metadata/d1/d1-02-continuation-01-intake.json), [protocol](../protocols/d1/d1-02-continuation-01.json): 46 pinned files from hashcloak Semaphore-Noir and Aztec v6.0.0. Semaphore-Noir (Noir recursive batch, per-item nullifier writes, Hardhat in-process honest route in source) is selected; its bb CLI pin, artifact/VK correspondence, prefix semantics and batch policy remain open. Aztec is not selected. Incidental exposure is disclosed. 0 builds/proofs/solver runs; verdict UNKNOWN. D1-02 is DONE; D1-03 is ACTIVE. |
-| 2026-10-23 | D1-03 joint semantics on synthetic fixtures | `[DONE]` | [D1-03 report](../reports/D1-03.md), [protocol v2](../protocols/d1/d1-03-joint-semantics.md), [results](../results/raw/D1-03/synthetic/summary.json): authored faulty/repaired producers (N=9, 3-word stride, 0 RANGE). synth-faulty→VIOLATION (CONCRETE_MODEL_REPLAYED, AUTH-UNMATCHED SAT at slot 0, nargo replay pass); synth-repaired→VERIFIED_WITHIN_SCOPE (CONCRETE_MODEL_REPLAYED, all AUTH/COV UNSAT, NONVAC SAT_REPLAYED). 15 regression tests pass. Consumer contract not exercised. D1-03 is DONE; D1-04 is NEXT. |
-| 2026-10-23 | D1-04 equal-information baselines | `[DONE]` | [D1-04 report](../reports/D1-04.md), [protocol](../protocols/d1/d1-04-baselines.md), [results](../results/raw/D1-04/baseline_results.json): B1 Foundry (7 tests, <1 ms, finds VIOLATION); B2 monolithic (identical to D1-03, propagation neutral); B3 manual summary (faulty SAT 1.0 s, repaired UNKNOWN 60 s timeout). Pipeline advantage: formal UNSAT + automatic extraction; no speed advantage on SAT. Honest assessment: no clear advantage over Foundry for bug finding on synthetic cases. **Review checkpoint reached.** D1-04 is DONE; D1-05 is NEXT. |
-| 2026-10-23 | D1-05 consumer-directed refinement | `[DONE]` | [D1-05 report](../reports/D1-05.md), [protocol](../protocols/d1/d1-05-refinement.md), [results](../results/raw/D1-05/synthetic/summary.json): CEGAR loop (abstract → concretize → refine). Both cases reject a spurious abstract candidate at iteration 0; synth-faulty confirms VIOLATION at iteration 1 (11.75 s, replayed); synth-repaired proves UNSAT at iteration 1 (107.3 s) → VERIFIED_WITHIN_SCOPE. Refinement coarse-grained on N=9 (all constraints in one step). 16 tests pass. Concretization is the new mechanism. D1-05 is DONE; D1-06 is NEXT. |
+| 2026-10-23 | D1-02 copied-workspace reconciliation | `[DONE]` | [Report](../reports/D1-02-reconciliation-01.md): restore six exact sibling files; protocol hashes match inherited freezes; check 46 source blobs and preserve 664 prior raw files. Recover qualified Semaphore-Noir selection without repeating intake. D1-03 setup remains incomplete; protocol preflight is next. |
+| 2026-10-23 | D1-03 protocol preflight; review stop | `[ACTIVE]` | [Preflight report](../reports/D1-03-preflight-01.md): conditional two-row diagnostic and unchanged consumer source expose the free-transfer-failure versus required `G-DEFER` UNSAT obstacle. No new solver/proof/replay; UNKNOWN retained. D1-03 incomplete, D1-04 waiting. Proposed versioned state/policy restriction requires review, not automatic execution. |
+
+| 2026-10-23 | D1-03 authorized v2 design and component validation | `[DONE]` | [Report](../reports/D1-03-v2-design.md): explicit funded standard-token family, separate P/O and occurrence matching; 10 component tests and 8,892 finite checks pass. Zero primary queries/proofs/full settlement replays. Design complete; D1-03 remains incomplete/UNKNOWN and D1-04 waiting. |
+
+| 2026-10-23 | D1-03 v2 extraction prerequisite gate | `[ACTIVE]` | [Report](../reports/D1-03-v2-extraction-01.md): 23 regressions pass; actual opcode/AST inventories and forwarding facts preserved. Gate exit 2/UNKNOWN: typed recursion/ABI/frame bindings and transition semantics unimplemented. Zero primary queries. D1-04 blocked; proposed pinned compiler-source intake exceeds frozen offline budget and is a review item. Prior evidence matches; shared index bytes drifted with unchanged HEAD/empty staged diff, preserved without restoration. |
+
+| 2026-10-23 | D1-03 typed decoding and binding certificates | `[DONE]` | [Report](../reports/D1-03-typed-bindings-01.md): approved pinned source intake within caps; four serialized artifacts and six recursive/frame mappings decoded/certified, 27 controls pass. Local implications only; zero primary queries/proofs/full replays. D1-03 remains incomplete/UNKNOWN; consumer transition extraction next. |
+
+| 2026-10-23 | D1-03 full consumer boundary audit | `[ACTIVE]` | [Report](../reports/D1-03-consumer-boundary-01.md): transitive audit complete; 19 bodies, three loops and actual state/external-call boundaries located. Nine controls pass after a preserved fixture failure. Consumer transition semantics remain incomplete/UNKNOWN; checked guard summaries and effects next. No narrower state family or assumed signature acceptance adopted. |
+
+| 2026-10-23 | D1-03 guard frame hardening; budget review stop | `[ACTIVE]` | [Report](../reports/D1-03-guard-frame-01.md): 22 final controls pass; initial artifact check covers seven bodies but predates virtual/operator exclusions and checker-version cache binding. Final artifact validation is incomplete/UNKNOWN; existing certificate is not reusable. Two synthetic slots and one artifact slot consumed. Recommend one fresh bounded artifact check; no solver/proof/replay, no narrowed state family. |
+
+| 2026-10-23 | Codebase verification and current guard artifact check | `[DONE]` | [Report](../reports/D1-codebase-review-01.md): 81 Python controls pass in an isolated source/test tree; the single newly authorized hardened guard check passes with seven bodies and 21 protected state roots. Legacy Node suite fails setup on missing `js-sha3`; no install or rerun hides it. Historical synthetic-branch deliverables archived exactly; current joint semantics remain incomplete/UNKNOWN. No primary solver/proof/replay work. |
 
 ## Update rule
 

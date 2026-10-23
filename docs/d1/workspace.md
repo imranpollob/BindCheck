@@ -55,3 +55,37 @@ against its archive/revision, classifies prospective document evolution, and
 checks the current task's starting Git state and pinned source fetches. It
 does not run a solver, claim a build, or replace either historical validation.
 Write each new review output under a new D1-02 filename.
+
+## 23 October 2026 copied-workspace reconciliation
+
+The current session uses `/home/pollmix/Coding/BindCheck-d1 (copy)`, initially
+clean at `481ee07e2155e4b4307b300470d6aa0155d411b3`. Its `.git` points to
+`BindCheck/.git/worktrees/BindCheck-d1`, whose registered path is the sibling
+`BindCheck-d1`. The copy has separate files but shares that worktree's index;
+do not infer Git isolation from the directory name. This task uses read-only
+Git commands with `GIT_OPTIONAL_LOCKS=0`, performs no index/ref/registration
+mutation, and writes only into the copy.
+
+The [reconciliation report](../../reports/D1-02-reconciliation-01.md) records
+six restored files, exact sibling snapshots and matches to the pre-existing
+protocol hashes. It archives all 12 D1-02 sealed deliverables before changing
+living documents, checks 664 inherited raw files, and preserves unfinished
+D1-03 setup. Its separately versioned offline auditor is
+`scripts/d1_02_reconcile.py`; use a new output filename for every invocation.
+Old checkpoint verifiers retain their historical path and HEAD assumptions.
+
+## 23 October 2026 independent checkout
+
+At the user's request, `/home/pollmix/Coding/BindCheck-d1 (copy)` now has its
+own `.git` directory and branch `chatgpt-codex`, created at
+`1b4d5683d87cd8f71b37e140d0b99c9fd21b856f`. This supersedes the copied-workspace
+shared-index description above for future work in this folder. The sibling
+`BindCheck-d1` remains registered with the original repository.
+
+The independent repository contains copied Git objects and its own index; it
+has no object alternates or shared worktree metadata. The existing origin URL
+is retained. All local modifications, deletions, untracked files and raw
+evidence were preserved during detachment; no commit or push was performed.
+The prior gitfile, index, workspace guide, status and preservation manifest
+are archived under `results/raw/workspace-detach/20261023T195925Z/`. Historical
+reports and checkpoint identities continue to describe their original runs.

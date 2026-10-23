@@ -1,0 +1,422 @@
+{
+  "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+  "archive_type": "exact historical copies; not current task claims",
+  "deliverables": [
+    {
+      "source_path": "reports/D1-03.md",
+      "archived_path": "docs/history/synthetic-branch-1b4d568/reports/D1-03.md",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "a60135f3b870203fdc8b7a704c3cca08416e4d68f42f2f7bf1e0cecb7bee5e20"
+    },
+    {
+      "source_path": "reports/D1-04.md",
+      "archived_path": "docs/history/synthetic-branch-1b4d568/reports/D1-04.md",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "34c817e46604c46dae02967208448ca851fdee49a30f330488b7ea9ff20127fc"
+    },
+    {
+      "source_path": "reports/D1-05.md",
+      "archived_path": "docs/history/synthetic-branch-1b4d568/reports/D1-05.md",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "9a0dcfd52efd9b328ac14dcb0e2d8617ae431b9c2e0010a936c4d02f448e48a3"
+    },
+    {
+      "source_path": "protocols/d1/d1-03-joint-semantics.json",
+      "archived_path": "docs/history/synthetic-branch-1b4d568/protocols/d1/d1-03-joint-semantics.json",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "27d1c84325001247ae2d71ca1476edb5ddd01fb8a753869774dda803d57a1ee1"
+    },
+    {
+      "source_path": "protocols/d1/d1-03-joint-semantics.md",
+      "archived_path": "docs/history/synthetic-branch-1b4d568/protocols/d1/d1-03-joint-semantics.md",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "956a81c8dbf6c6fd5107c2c58fa1f71fb38e6942db83c8b77fd1cefce710ff75"
+    },
+    {
+      "source_path": "protocols/d1/d1-04-baselines.md",
+      "archived_path": "docs/history/synthetic-branch-1b4d568/protocols/d1/d1-04-baselines.md",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "43ba5278402016d78663d6aa7bda4030d44ba19314123d907720737c7e9a3333"
+    },
+    {
+      "source_path": "protocols/d1/d1-05-refinement.md",
+      "archived_path": "docs/history/synthetic-branch-1b4d568/protocols/d1/d1-05-refinement.md",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "b710374f09276a9bbdabbae146fcc2ce4d233ec95f5c12a72966639599b59416"
+    }
+  ],
+  "incoming_deleted_files": [
+    {
+      "path": "cache-synth/solidity-files-cache.json",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "d7e2233cd5656f647ae26dd6b6a9bea2e58d8f342d6db5312f7ef792e46dc310",
+      "raw_archive": "results/raw/D1-review/codebase-01/inherited-deletions/cache-synth/solidity-files-cache.json"
+    },
+    {
+      "path": "cases/d1/synth/contracts/SynthSettlement.sol",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "37cf659218b2f9080774ad56bca3880a173942c91af4798b738f0f509f675e4e",
+      "raw_archive": "results/raw/D1-review/codebase-01/inherited-deletions/cases/d1/synth/contracts/SynthSettlement.sol"
+    },
+    {
+      "path": "cases/d1/synth/policy.json",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "0ea2854e7390840afb96ca0bfe5390d55d14c629c342c4c977647f1fde3abb81",
+      "raw_archive": "results/raw/D1-review/codebase-01/inherited-deletions/cases/d1/synth/policy.json"
+    },
+    {
+      "path": "cases/d1/synth/producer_faulty/Nargo.toml",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "a8da9fca7b64bfdd65496fa544b05799fd498acc2cbfdb0db2d6e91f479374be",
+      "raw_archive": "results/raw/D1-review/codebase-01/inherited-deletions/cases/d1/synth/producer_faulty/Nargo.toml"
+    },
+    {
+      "path": "cases/d1/synth/producer_faulty/src/main.nr",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "c1de0709b69cf5ac3dd67f2a15a86b0e523f1e49460e9e51f781b4bd5a25b660",
+      "raw_archive": "results/raw/D1-review/codebase-01/inherited-deletions/cases/d1/synth/producer_faulty/src/main.nr"
+    },
+    {
+      "path": "cases/d1/synth/producer_faulty/target/acir.txt",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "ef6ccdcac00238efb555612e63fe021eb071feeaaab85cf337ad9ac6fb8b9701",
+      "raw_archive": "results/raw/D1-review/codebase-01/inherited-deletions/cases/d1/synth/producer_faulty/target/acir.txt"
+    },
+    {
+      "path": "cases/d1/synth/producer_faulty/target/synth_faulty.gz",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "e3321e44ab21bce36e01a91b3cef095f68538a8e2aa185189aa4de8aa42e2551",
+      "raw_archive": "results/raw/D1-review/codebase-01/inherited-deletions/cases/d1/synth/producer_faulty/target/synth_faulty.gz"
+    },
+    {
+      "path": "cases/d1/synth/producer_faulty/target/synth_faulty.json",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "fc5e475c93183f7ffff1fa155170958b47bfec7ff999257aef61e78e7bd10011",
+      "raw_archive": "results/raw/D1-review/codebase-01/inherited-deletions/cases/d1/synth/producer_faulty/target/synth_faulty.json"
+    },
+    {
+      "path": "cases/d1/synth/producer_repaired/Nargo.toml",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "6644352f4e32c586783a7bdbcff450f248ab5ee89199b51130d0639482384cf2",
+      "raw_archive": "results/raw/D1-review/codebase-01/inherited-deletions/cases/d1/synth/producer_repaired/Nargo.toml"
+    },
+    {
+      "path": "cases/d1/synth/producer_repaired/src/main.nr",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "ffced0ff0cd3d06d7dad43c2d61b50e3f6b217663ae1133f04d3a6fe3f6a6126",
+      "raw_archive": "results/raw/D1-review/codebase-01/inherited-deletions/cases/d1/synth/producer_repaired/src/main.nr"
+    },
+    {
+      "path": "cases/d1/synth/producer_repaired/target/acir.txt",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "24914f401c4f36e807a5dbf2994143ba382adcc0836cefef452d0e8235a91d2e",
+      "raw_archive": "results/raw/D1-review/codebase-01/inherited-deletions/cases/d1/synth/producer_repaired/target/acir.txt"
+    },
+    {
+      "path": "cases/d1/synth/producer_repaired/target/synth_repaired.gz",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "1bf04c3ffbed91038bf29390c566d41952144ddf0214d2e144b1f75abf6d26ed",
+      "raw_archive": "results/raw/D1-review/codebase-01/inherited-deletions/cases/d1/synth/producer_repaired/target/synth_repaired.gz"
+    },
+    {
+      "path": "cases/d1/synth/producer_repaired/target/synth_repaired.json",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "71e22454011dffb03d3c1efafd3a89be65c86c18ce8621e786cbce896c590d9c",
+      "raw_archive": "results/raw/D1-review/codebase-01/inherited-deletions/cases/d1/synth/producer_repaired/target/synth_repaired.json"
+    },
+    {
+      "path": "cases/d1/synth/test/SynthBaseline.t.sol",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "64394d8671016d7082c8ab08c0a95c2ce2e8e766e00b707677e7367fb8b272d7",
+      "raw_archive": "results/raw/D1-review/codebase-01/inherited-deletions/cases/d1/synth/test/SynthBaseline.t.sol"
+    },
+    {
+      "path": "out-synth/Base.sol/CommonBase.json",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "5ebbf7db4c6ac9b02c553bfc428ed57342944f009fdde7d2139fe3b68a1c4a1f",
+      "raw_archive": "results/raw/D1-review/codebase-01/inherited-deletions/out-synth/Base.sol/CommonBase.json"
+    },
+    {
+      "path": "out-synth/Base.sol/ScriptBase.json",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "e209d9f112ab4477a7ceb46102b6fd5e3e4df8e1268fb9434a1485b3c9202747",
+      "raw_archive": "results/raw/D1-review/codebase-01/inherited-deletions/out-synth/Base.sol/ScriptBase.json"
+    },
+    {
+      "path": "out-synth/Base.sol/TestBase.json",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "a001b11e422d078866909e08202dbb1e6740dc9966d4ade6783fc995dbe63d0e",
+      "raw_archive": "results/raw/D1-review/codebase-01/inherited-deletions/out-synth/Base.sol/TestBase.json"
+    },
+    {
+      "path": "out-synth/IMulticall3.sol/IMulticall3.json",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "6273ef70a103f4a3a7b18ad46c0f290084805ef97cc62d30ce3238ec1475cf81",
+      "raw_archive": "results/raw/D1-review/codebase-01/inherited-deletions/out-synth/IMulticall3.sol/IMulticall3.json"
+    },
+    {
+      "path": "out-synth/StdAssertions.sol/StdAssertions.json",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "89a857012288c8ed0f6caa67ad7086ac209e1a2b5307611a61a6167edb2e4b07",
+      "raw_archive": "results/raw/D1-review/codebase-01/inherited-deletions/out-synth/StdAssertions.sol/StdAssertions.json"
+    },
+    {
+      "path": "out-synth/StdChains.sol/StdChains.json",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "0e1a75fd8947af50c222583a28e4dd3b630081c50ba5e58d7cbd8a18799da743",
+      "raw_archive": "results/raw/D1-review/codebase-01/inherited-deletions/out-synth/StdChains.sol/StdChains.json"
+    },
+    {
+      "path": "out-synth/StdCheats.sol/StdCheats.json",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "ed4c0db434459b60d27c0db527b5bbbf36e8d026b4a5e256fb2a06a52aa5c460",
+      "raw_archive": "results/raw/D1-review/codebase-01/inherited-deletions/out-synth/StdCheats.sol/StdCheats.json"
+    },
+    {
+      "path": "out-synth/StdCheats.sol/StdCheatsSafe.json",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "d98096c1a93cf379b6082677415f17b10715ed57f1fdc074b14e29b59c9b88fe",
+      "raw_archive": "results/raw/D1-review/codebase-01/inherited-deletions/out-synth/StdCheats.sol/StdCheatsSafe.json"
+    },
+    {
+      "path": "out-synth/StdConstants.sol/StdConstants.json",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "d345d6e3416e87dd8590a1cb8f3c29b5e9760b4f2623588076ff443ab86375ee",
+      "raw_archive": "results/raw/D1-review/codebase-01/inherited-deletions/out-synth/StdConstants.sol/StdConstants.json"
+    },
+    {
+      "path": "out-synth/StdError.sol/stdError.json",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "1844cce92618e83f8e704b4ee033120ae39e4d61b9446eb468b58931a15f87fc",
+      "raw_archive": "results/raw/D1-review/codebase-01/inherited-deletions/out-synth/StdError.sol/stdError.json"
+    },
+    {
+      "path": "out-synth/StdInvariant.sol/StdInvariant.json",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "29fe744f059146f6f0b30a81fa68c82e4d55309d5b2773dc5965036bc0fa289d",
+      "raw_archive": "results/raw/D1-review/codebase-01/inherited-deletions/out-synth/StdInvariant.sol/StdInvariant.json"
+    },
+    {
+      "path": "out-synth/StdJson.sol/stdJson.json",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "6a6bbc26b6c7d734bfa1cdbf67b93ebeadfe28aa41efb69804f682f80f69a8dd",
+      "raw_archive": "results/raw/D1-review/codebase-01/inherited-deletions/out-synth/StdJson.sol/stdJson.json"
+    },
+    {
+      "path": "out-synth/StdMath.sol/stdMath.json",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "5f22206c97722db63d1aae6e104a3f8d309f599b1d408031d7acc5e913342b93",
+      "raw_archive": "results/raw/D1-review/codebase-01/inherited-deletions/out-synth/StdMath.sol/stdMath.json"
+    },
+    {
+      "path": "out-synth/StdStorage.sol/stdStorage.json",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "5e638043dc7206e9692022447d38f155e5c72507c312851d1ae55e497633ba31",
+      "raw_archive": "results/raw/D1-review/codebase-01/inherited-deletions/out-synth/StdStorage.sol/stdStorage.json"
+    },
+    {
+      "path": "out-synth/StdStorage.sol/stdStorageSafe.json",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "5596ba9d5a0613a30c14dc43cf29f15f4eae15f466c448fe40bf93cf6c0cc5fb",
+      "raw_archive": "results/raw/D1-review/codebase-01/inherited-deletions/out-synth/StdStorage.sol/stdStorageSafe.json"
+    },
+    {
+      "path": "out-synth/StdStyle.sol/StdStyle.json",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "d157a25b66636d05058d591da954658472143d5b8979c2be0eb9725c791e4894",
+      "raw_archive": "results/raw/D1-review/codebase-01/inherited-deletions/out-synth/StdStyle.sol/StdStyle.json"
+    },
+    {
+      "path": "out-synth/StdToml.sol/stdToml.json",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "95283cd31376742efb54278a7015d623d2b7fa020579361e77b7737bc3109694",
+      "raw_archive": "results/raw/D1-review/codebase-01/inherited-deletions/out-synth/StdToml.sol/stdToml.json"
+    },
+    {
+      "path": "out-synth/StdUtils.sol/StdUtils.json",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "9133eb6304d3fc2a49e60d44fde0190b9e97d232f8fa703cee4467faa147a824",
+      "raw_archive": "results/raw/D1-review/codebase-01/inherited-deletions/out-synth/StdUtils.sol/StdUtils.json"
+    },
+    {
+      "path": "out-synth/SynthBaseline.t.sol/SynthBaselineTest.json",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "5c5a988be4d172caabfc51d343470152f16929ff2b8399fdbe5b36f999ca122f",
+      "raw_archive": "results/raw/D1-review/codebase-01/inherited-deletions/out-synth/SynthBaseline.t.sol/SynthBaselineTest.json"
+    },
+    {
+      "path": "out-synth/SynthSettlement.sol/SynthSettlement.json",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "6dbeb2390acc02fcc31d79550397260e2712358c2df75cd64a9606245808ce13",
+      "raw_archive": "results/raw/D1-review/codebase-01/inherited-deletions/out-synth/SynthSettlement.sol/SynthSettlement.json"
+    },
+    {
+      "path": "out-synth/Test.sol/Test.json",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "658c572ae1b54dc0aa2bf83097c0b2e536aa136152c5c276e3cf47151bd29472",
+      "raw_archive": "results/raw/D1-review/codebase-01/inherited-deletions/out-synth/Test.sol/Test.json"
+    },
+    {
+      "path": "out-synth/Vm.sol/Vm.json",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "cf0d5e8324b13a6b13586f5b4911a07d83bab3014d5e36d45c2c44313616a85e",
+      "raw_archive": "results/raw/D1-review/codebase-01/inherited-deletions/out-synth/Vm.sol/Vm.json"
+    },
+    {
+      "path": "out-synth/Vm.sol/VmSafe.json",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "509200220abe7500a7191400c275ec5b69ec1d1f78ee6898dd9610d2efc88e1f",
+      "raw_archive": "results/raw/D1-review/codebase-01/inherited-deletions/out-synth/Vm.sol/VmSafe.json"
+    },
+    {
+      "path": "out-synth/build-info/c956fb7318178f10.json",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "7bd6142c4333203be0bfbfa6c00a5b60a4d6468e0894dc78b2e65771181bf703",
+      "raw_archive": "results/raw/D1-review/codebase-01/inherited-deletions/out-synth/build-info/c956fb7318178f10.json"
+    },
+    {
+      "path": "out-synth/console.sol/console.json",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "39940f85f6c65372e55c61f3e990fc5465c9a84b55bd8312e71f91fa7e716615",
+      "raw_archive": "results/raw/D1-review/codebase-01/inherited-deletions/out-synth/console.sol/console.json"
+    },
+    {
+      "path": "out-synth/safeconsole.sol/safeconsole.json",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "0b7c8b2c56ec13d6784bb0c3a94add4ff9ffd0e8f5873515dac9d4f0bc57c43a",
+      "raw_archive": "results/raw/D1-review/codebase-01/inherited-deletions/out-synth/safeconsole.sol/safeconsole.json"
+    },
+    {
+      "path": "protocols/d1/d1-04-baselines.md",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "43ba5278402016d78663d6aa7bda4030d44ba19314123d907720737c7e9a3333",
+      "raw_archive": "results/raw/D1-review/codebase-01/inherited-deletions/protocols/d1/d1-04-baselines.md"
+    },
+    {
+      "path": "protocols/d1/d1-05-refinement.md",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "b710374f09276a9bbdabbae146fcc2ce4d233ec95f5c12a72966639599b59416",
+      "raw_archive": "results/raw/D1-review/codebase-01/inherited-deletions/protocols/d1/d1-05-refinement.md"
+    },
+    {
+      "path": "reports/D1-03.md",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "a60135f3b870203fdc8b7a704c3cca08416e4d68f42f2f7bf1e0cecb7bee5e20",
+      "raw_archive": "results/raw/D1-review/codebase-01/inherited-deletions/reports/D1-03.md"
+    },
+    {
+      "path": "reports/D1-04.md",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "34c817e46604c46dae02967208448ca851fdee49a30f330488b7ea9ff20127fc",
+      "raw_archive": "results/raw/D1-review/codebase-01/inherited-deletions/reports/D1-04.md"
+    },
+    {
+      "path": "reports/D1-05.md",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "9a0dcfd52efd9b328ac14dcb0e2d8617ae431b9c2e0010a936c4d02f448e48a3",
+      "raw_archive": "results/raw/D1-review/codebase-01/inherited-deletions/reports/D1-05.md"
+    },
+    {
+      "path": "scripts/d1_03_run.py",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "3530ac3076857e23070737a4e6a52ba0ffda67a575ae41950c159fcd67dcc7d2",
+      "raw_archive": "results/raw/D1-review/codebase-01/inherited-deletions/scripts/d1_03_run.py"
+    },
+    {
+      "path": "scripts/d1_03_setup.sh",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "2ceafea80a6985f3e3e882f9bb2ef545587c684feae72c5d58e979a1e505e75b",
+      "raw_archive": "results/raw/D1-review/codebase-01/inherited-deletions/scripts/d1_03_setup.sh"
+    },
+    {
+      "path": "scripts/d1_04_baselines.py",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "f556bc8b38d75179dc2b02f2563fa74594aeaa81fef287666f4efd2b2ae9cd10",
+      "raw_archive": "results/raw/D1-review/codebase-01/inherited-deletions/scripts/d1_04_baselines.py"
+    },
+    {
+      "path": "scripts/d1_05_refinement.py",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "8e14041e11e4256bae62e7c886e43eda6abc9af024b289340386a1de9e3d12ed",
+      "raw_archive": "results/raw/D1-review/codebase-01/inherited-deletions/scripts/d1_05_refinement.py"
+    },
+    {
+      "path": "src/bindcheck_d1/analysis/__init__.py",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_archive": "results/raw/D1-review/codebase-01/inherited-deletions/src/bindcheck_d1/analysis/__init__.py"
+    },
+    {
+      "path": "src/bindcheck_d1/analysis/joint.py",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "a84a64de0c7d1dc78203e3f9fe0bd2052c329168a6b23f0e181e001504229d36",
+      "raw_archive": "results/raw/D1-review/codebase-01/inherited-deletions/src/bindcheck_d1/analysis/joint.py"
+    },
+    {
+      "path": "src/bindcheck_d1/analysis/propagate.py",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "0957b5f15e11c255577e6b6603bb52b742f326e55fbce6425f1cd29ab484e7f2",
+      "raw_archive": "results/raw/D1-review/codebase-01/inherited-deletions/src/bindcheck_d1/analysis/propagate.py"
+    },
+    {
+      "path": "src/bindcheck_d1/analysis/refinement.py",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "ea06c583b778b4f0f6662fbaf22962f691a4446f2a18a27614aa5a317b4e4194",
+      "raw_archive": "results/raw/D1-review/codebase-01/inherited-deletions/src/bindcheck_d1/analysis/refinement.py"
+    },
+    {
+      "path": "src/bindcheck_d1/artifacts.py",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "1c6050bd404c8db08861c39eaa57aa593a0ed865612a6f49f62956c93c0cdfd7",
+      "raw_archive": "results/raw/D1-review/codebase-01/inherited-deletions/src/bindcheck_d1/artifacts.py"
+    },
+    {
+      "path": "src/bindcheck_d1/backends/__init__.py",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_archive": "results/raw/D1-review/codebase-01/inherited-deletions/src/bindcheck_d1/backends/__init__.py"
+    },
+    {
+      "path": "src/bindcheck_d1/frontends/acir.py",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "fe0d93e6c2057a099dbac6c2ca9428c3d5a7733f68bc87ecd100c8360d4f4cc4",
+      "raw_archive": "results/raw/D1-review/codebase-01/inherited-deletions/src/bindcheck_d1/frontends/acir.py"
+    },
+    {
+      "path": "src/bindcheck_d1/frontends/solidity.py",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "d730974188a862f53f5e1ecf06ff748a65d7ba56342674e61d59bc9deaecfe41",
+      "raw_archive": "results/raw/D1-review/codebase-01/inherited-deletions/src/bindcheck_d1/frontends/solidity.py"
+    },
+    {
+      "path": "src/bindcheck_d1/policy.py",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "176d0dd365da1ba417166128ae6248ebfbd7f93492741900c2af4f25d4ee2780",
+      "raw_archive": "results/raw/D1-review/codebase-01/inherited-deletions/src/bindcheck_d1/policy.py"
+    },
+    {
+      "path": "src/bindcheck_d1/replay/__init__.py",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_archive": "results/raw/D1-review/codebase-01/inherited-deletions/src/bindcheck_d1/replay/__init__.py"
+    },
+    {
+      "path": "src/bindcheck_d1/result.py",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "2334141931c4606acab0db51f63dd13e33b380362e9b43a780b8d3bc01118830",
+      "raw_archive": "results/raw/D1-review/codebase-01/inherited-deletions/src/bindcheck_d1/result.py"
+    },
+    {
+      "path": "tests/d1/test_d1_03_synth.py",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "b3da4a347123de80fc617433e3bdcd1c8d54c2d8db35932b191d90126dd69974",
+      "raw_archive": "results/raw/D1-review/codebase-01/inherited-deletions/tests/d1/test_d1_03_synth.py"
+    },
+    {
+      "path": "tests/d1/test_d1_05_refinement.py",
+      "source_revision": "1b4d5683d87cd8f71b37e140d0b99c9fd21b856f",
+      "sha256": "89ef1807520a29d450020ed92d5c0ce17058a2c7f91cc5d226e83c1eaecfdecf",
+      "raw_archive": "results/raw/D1-review/codebase-01/inherited-deletions/tests/d1/test_d1_05_refinement.py"
+    }
+  ]
+}
