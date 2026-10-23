@@ -1,0 +1,27 @@
+{
+  "task": "D1-03 preflight-01",
+  "frozen_at_utc": "2026-10-23T17:09:25.253397+00:00",
+  "objective": "Check internal consistency of recovered D1-03 v1 before resuming implementation or experiments",
+  "completion_criteria": [
+    "Check declared clean-case success criterion against admitted transfer-failure branch and unchanged consumer source",
+    "Check whether a mandatory coverage policy has independent provenance rather than equating every permission with an obligation",
+    "Record source locations, hashes, limits and a concrete recommendation; stop if policy, criteria or budget must change"
+  ],
+  "limits": {
+    "wall_clock_minutes": 20,
+    "network_requests": 0,
+    "builds": 0,
+    "solver_runs": 0,
+    "proof_runs": 0,
+    "replays": 0,
+    "new_analyzer_runs": 0,
+    "diagnostic": "At most one exhaustive two-row Boolean truth table for ok_j, conditional on a matching burn attempt. This is protocol logic only, not a producer/consumer satisfiability result."
+  },
+  "inputs": {
+    "protocols/d1/d1-03-joint-semantics.md": "39b7a1dd94f84210c5bfb1af99f2ee8d26dc89165830f6fb686be16d73cadf81",
+    "protocols/d1/d1-03-joint-semantics.json": "b9fa7c7bd3bb305b75ec64e534fab154c73c207f8fadddab38425d8d9131fcb1",
+    "build/D1-03/consumer/src/rollup3/RollupV1.sol": "7062065cc95f447fea8bb28242d51c836c3cf9e39f1625180ecf9c240a5ffd8f",
+    "docs/research-contract.md": "bfd25a0f75eeaa5d1a7f5ae9ab942283542d085c3cf0a082a07ea19d1b851050"
+  },
+  "no_changes": "Do not revise v1, implement new policy, suppress DEFER, restrict states after seeing results, or manufacture a whole-system verdict. Original three verdicts unchanged."
+}

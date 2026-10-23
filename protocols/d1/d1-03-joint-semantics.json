@@ -1,12 +1,7 @@
 {
   "task": "D1-03",
-  "protocol_version": 2,
-  "scope_decision": "synthetic-first; authored fixtures only; no third-party source built/proved/replayed in D1-03; VIOLATION replayed against our own compiled ACIR and our own consumer, labeled SYNTHETIC; Payy and Semaphore-Noir retained as context only",
+  "protocol_version": 1,
   "human_readable": "protocols/d1/d1-03-joint-semantics.md",
-  "synthetic_cases": {
-    "synth-faulty": {"producer": "cases/d1/synth/producer_faulty", "consumer": "cases/d1/synth/SynthSettlement.sol", "scope": "FREE", "expected_design": "VIOLATION"},
-    "synth-repaired": {"producer": "cases/d1/synth/producer_repaired", "consumer": "cases/d1/synth/SynthSettlement.sol", "scope": "FREE", "expected_design": "VERIFIED_WITHIN_SCOPE"}
-  },
   "cases": {
     "payy-A-1000": {"revision": "c4d2c9021b8fb9988816eb6987a734b830bfce15", "scale": null, "scopes": ["SEED-S1", "SEED-S2"]},
     "payy-B-1000": {"revision": "dcd5d96ee15664a59bc24ed0dc2bb78b73ac5e36", "scale": null, "scopes": ["SEED-S1", "SEED-S2"]},

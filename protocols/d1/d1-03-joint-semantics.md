@@ -4,30 +4,8 @@ Date: 23 October 2026. Authority: [research contract](../../docs/research-contra
 §4–§8 and [roadmap](../../docs/d1/roadmap.md) D1-03. Machine-readable twin:
 [`d1-03-joint-semantics.json`](d1-03-joint-semantics.json). Both files are
 hashed into `results/raw/D1-03/freeze/` before the first analyzer run on any
-case. Later changes require a new protocol version and a new run ID; earlier
-outputs are preserved.
-
-## 0 Scope decision — synthetic-first (protocol v2, 23 October 2026)
-
-The user authorized a synthetic-first execution of D1-03 on this local
-defensive research project. The analyzer is validated end to end on **authored
-fixtures only**: a self-contained Noir batch producer (faulty and repaired
-variants) and an authored Solidity consumer, run in an owned local EVM with
-synthetic assets. No third-party protocol source is analyzed, built, proved or
-replayed in D1-03.
-
-This changes the §1 "faulty case" criterion from an actual-Payy constraint to
-an **authored-constraint** one: the VIOLATION model is replayed against the
-real compiled ACIR of our own circuit (`nargo execute`, exit 0) and our own
-consumer (Foundry), never against a third-party system. All such evidence is
-labeled SYNTHETIC. The Payy cases in §2 and the Payy-specific extraction below
-are retained as *design context and a future increment*, not run in D1-03 v2.
-Semaphore-Noir stays the reserved transfer target and is not touched here.
-
-The pre-freeze exposure in §8 and the frozen limits in §7 are unchanged. The
-v1 protocol bytes are preserved; this v2 header and the `synthetic` case block
-in §2 are the only changes, made before any analyzer, solver or replay ran on
-any case (producer compilation for ACIR profiling only, as §8 records).
+Payy case. Later changes require a new protocol version and a new run ID;
+earlier outputs are preserved.
 
 ## 1 Completion criteria (from the roadmap, made measurable)
 

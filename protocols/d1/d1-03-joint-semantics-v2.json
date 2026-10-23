@@ -1,0 +1,180 @@
+{
+  "task": "D1-03",
+  "protocol_version": 2,
+  "human_readable": "protocols/d1/d1-03-joint-semantics-v2.md",
+  "status": "prospective design; execution requires hash-complete implementation/artifact manifest",
+  "cases": {
+    "payy-A-1000": {
+      "revision": "c4d2c9021b8fb9988816eb6987a734b830bfce15",
+      "scale": null,
+      "scopes": [
+        "SEED-S1",
+        "SEED-S2"
+      ]
+    },
+    "payy-B-1000": {
+      "revision": "dcd5d96ee15664a59bc24ed0dc2bb78b73ac5e36",
+      "scale": null,
+      "scopes": [
+        "SEED-S1",
+        "SEED-S2"
+      ]
+    },
+    "payy-A-8": {
+      "revision": "c4d2c9021b8fb9988816eb6987a734b830bfce15",
+      "scale": 8,
+      "scopes": [
+        "FREE"
+      ]
+    },
+    "payy-B-8": {
+      "revision": "dcd5d96ee15664a59bc24ed0dc2bb78b73ac5e36",
+      "scale": 8,
+      "scopes": [
+        "FREE"
+      ]
+    },
+    "payy-m4-8": {
+      "revision": "dcd5d96ee15664a59bc24ed0dc2bb78b73ac5e36",
+      "scale": 8,
+      "variant": "t22-m4-running-flag",
+      "scopes": [
+        "FREE"
+      ]
+    }
+  },
+  "seeds": {
+    "S1": [
+      {
+        "old_root": "0x11",
+        "new_root": "0x12",
+        "commit_hash": "0x13",
+        "verification_key_hash": "AGG_UTXO_VK_HASH",
+        "messages_prefix": [
+          "0x2",
+          "0x4b",
+          "0x64",
+          "0x4801"
+        ]
+      },
+      {
+        "old_root": "0x0",
+        "new_root": "0x0",
+        "commit_hash": "0x0",
+        "verification_key_hash": "AGG_UTXO_VK_HASH",
+        "messages_prefix": []
+      }
+    ],
+    "S2": [
+      {
+        "old_root": "0x11",
+        "new_root": "0x12",
+        "commit_hash": "0x13",
+        "verification_key_hash": "AGG_UTXO_VK_HASH",
+        "messages_prefix": [
+          "0x2",
+          "0x4b",
+          "0x64",
+          "0x4801"
+        ]
+      },
+      {
+        "old_root": "0x12",
+        "new_root": "0x14",
+        "commit_hash": "0x15",
+        "verification_key_hash": "AGG_UTXO_VK_HASH",
+        "messages_prefix": [
+          "0x3",
+          "0x4b",
+          "0x7",
+          "0x4802",
+          "0xdead"
+        ]
+      }
+    ],
+    "label": "SYNTHETIC seeds; realizability is assumption A8"
+  },
+  "seed_binding": "logical pre-substitution frames; verify activation and correspondence to actual recursive arguments",
+  "policy": {
+    "permissions": "separate occurrence list",
+    "obligations": "separate occurrence list; immediate mandatory mint/burn classification",
+    "identity": [
+      "logical_frame",
+      "offset"
+    ],
+    "padding": "no permission or obligation",
+    "deduplicate_equal_vectors": false,
+    "compatibility": "exact semantic key equality; recipient low160",
+    "authorization": "injective E to P",
+    "coverage": "injective O to E"
+  },
+  "prestate": {
+    "registered_note_kinds": [
+      "0x4b"
+    ],
+    "token_model": "exact OZ-5.0.1 ERC20; no transfer overrides",
+    "mint_registry": "symbolic, initially unspent",
+    "substitutions": "none",
+    "root": "equals outer old_root",
+    "burn_amount_max": "18446744073709551615",
+    "initial_rollup_token_balance": "N * (2^64-1)",
+    "other_token_balances": 0,
+    "recipient": "low160(word) != 0 for consumed burns",
+    "transfer_success": "derived from sequential token balance and address checks; never free Boolean"
+  },
+  "goals": [
+    "AUTH",
+    "COVERAGE",
+    "DEFER",
+    "NONVAC"
+  ],
+  "limits": {
+    "primary_attempts_total": 28,
+    "primary_attempts_per_case_scope": 4,
+    "solver_seconds_per_query": 300,
+    "solver_address_space_bytes": 4294967296,
+    "solver_seconds_total_max": 8400,
+    "replay_candidates_total_max": 21,
+    "nargo_execute_seconds_per_candidate": 600,
+    "forge_seconds_per_candidate": 600,
+    "retries": 0,
+    "new_real_proofs": 0,
+    "free_scope_at_n1000": "not attempted"
+  },
+  "toolchain": {
+    "nargo": "1.0.0-beta.14+60ccd48e18ad8ce50d5ecda9baf813b712145051",
+    "cvc5": "1.4.2 282d5e0 GPL/CoCoA",
+    "cvc5_options": [
+      "--lang=smt2",
+      "--ff-solver=split"
+    ],
+    "solc": "0.8.20 viaIR optimizer 200",
+    "forge": "1.4.1-stable",
+    "openzeppelin": "5.0.1 (yarn.lock integrity)"
+  },
+  "assumptions": [
+    "A1",
+    "A2",
+    "A3",
+    "A4",
+    "A5",
+    "A6",
+    "A7",
+    "A8-SEED-only",
+    "A9"
+  ],
+  "unsupported_controls": [
+    "failed transfer => UNKNOWN/DEFERRAL_UNSUPPORTED",
+    "unmodeled token => UNKNOWN",
+    "unknown frame/certification link => UNKNOWN",
+    "out-of-fragment amounts or recipient => UNKNOWN",
+    "unsupported message policy => UNKNOWN"
+  ],
+  "verdicts": [
+    "VIOLATION",
+    "VERIFIED_WITHIN_SCOPE",
+    "UNKNOWN"
+  ],
+  "exposure": "Payy development cases and prior results known; no independent annotation or held-out evaluation",
+  "primary_queries_executed_by_design_task": 0
+}
