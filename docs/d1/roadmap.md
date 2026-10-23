@@ -1,6 +1,6 @@
 # D1 development plan
 
-Date: **23 October 2026**. Status: **D1-00 and D1-01 complete; D1-02 ACTIVE with selection unresolved; new analyzer implementation not started**.
+Date: **23 October 2026**. Status: **D1-00 through D1-03 complete; D1-04 NEXT**.
 
 This is the execution roadmap for the isolated D1 worktree. The [research contract](../research-contract.md) controls scope and claims; [D1-00](../../reports/D1-00.md) records preservation and validation.
 
@@ -149,34 +149,26 @@ If proof/consumer paths and meaningful policies are available but static composi
 |---|---|---|
 | D1-00 | DONE | Preservation and documentation checks in the task report |
 | D1-01 | DONE | [Closure report](../../reports/D1-01.md): six accounted slots, three preserved plus three new timeouts; all UNKNOWN; original successful-solver milestone unmet |
-| D1-02 | ACTIVE | [Two-family screen](../../reports/D1-02.md) complete; no initial-scope selection. Conditional alternatives need changed frontend/batching support; continuation required |
-| D1-03 | WAITING | Close the old evidence record, review intake, and freeze the supported fragment/policy; old UNKNOWN need not become safe |
-| D1-04 | WAITING | D1-03 faithful joint semantics |
+| D1-02 | DONE | [Two-family screen](../../reports/D1-02.md) left selection unresolved; [continuation 01](../../reports/D1-02-continuation-01.md) selects hashcloak Semaphore-Noir with qualifications (unpinned bb CLI, unvalidated artifact/VK correspondence, unfrozen batch policy); Aztec v6.0.0 not selected. No build/proof run |
+| D1-03 | DONE | [Report](../../reports/D1-03.md): synth-faulty→VIOLATION (replayed), synth-repaired→VERIFIED_WITHIN_SCOPE (replayed non-vacuity); 15 regression tests pass |
+| D1-04 | NEXT | D1-03 faithful joint semantics |
 | D1-05 | WAITING | D1-04 fair baseline and cost accounting |
 | D1-06 | WAITING | D1-05 justified refinement; frozen comparison protocol |
 | D1-07 | WAITING | Frozen mechanism and an independent honest proving path |
 | D1-08 | WAITING | Feasibility and transfer justify a broader study |
 
-**Current bounded task: D1-02, independent target intake.** The
-[two-family screen](../../reports/D1-02.md) is complete, but its initial-scope
-selection gate is unresolved. WarpToad is Noir/EVM with single-claim minting;
-0xbow Privacy Pools has batch consumption with a Circom/Groth16 producer and
-aggregation/splitting requirements. No build, proof, replay, adapter or policy
-expansion was performed. D1-02 remains ACTIVE and D1-03 has not started.
+**D1-03 is complete.** The joint-semantics pipeline validates on authored synthetic
+fixtures: synth-faulty yields VIOLATION with a replayed model (unauthorized burn
+in the unconstrained tail); synth-repaired yields VERIFIED_WITHIN_SCOPE with a
+replayed non-vacuity witness. All 15 regression tests pass. See [D1-03 report](../../reports/D1-03.md).
+The consumer contract (Solidity frontend) was not exercised; producer-side joint
+encoding and nargo replay carry the verdicts. Solver times are within limits but
+suggest scaling work for N=1000.
 
-**Recommended continuation:** freeze a further screen of at most two
-Noir/ACIR batched EVM families. Select one pinned, licensed candidate with
-source-mapped producer/consumer facts, policy provenance and a documented
-honest local proving route, or record failures and an explicit scope decision.
-Do not silently substitute a conditional fallback for the initial-scope gate.
-Screening remains separate from a build or held-out transfer result.
+D1-02 closed through a [frozen continuation](../../reports/D1-02-continuation-01.md):
+hashcloak Semaphore-Noir is the reserved transfer target with stated qualifications.
 
-[D1-01](../../reports/D1-01.md) and its seal retain their historical meaning.
-The three living status documents evolve prospectively; exact sealed versions
-are preserved at the reviewed commit and in the D1-02 prior-checkpoint archive.
-This roadmap does not authorize delegation or external contact.
-
-**User-side action:** open `/home/pollmix/Coding/BindCheck-d1` for future implementation. No manual stash, empty repository, or deletion is needed. Review the policy and actor capabilities before freezing evaluation labels. No full-paper commitment is implied.
+**Next: D1-04 baselines.** Stop for review after D1-04.
 
 ## 9 Provenance and limits
 

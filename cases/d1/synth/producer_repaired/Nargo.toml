@@ -1,0 +1,7 @@
+[package]
+name = "synth_repaired"
+type = "bin"
+authors = ["BindCheck D1-03 (synthetic)"]
+compiler_version = ">=1.0.0"
+
+[dependencies]

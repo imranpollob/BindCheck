@@ -1,0 +1,154 @@
+{
+  "task": "D1-02 continuation 01",
+  "created_at_utc": "2026-10-23T16:36:51.733199+00:00",
+  "protocol": "protocols/d1/d1-02-continuation-01.json",
+  "protocol_sha256": "a4f5914f7e81412a84745ba154c6400ef100f14c02cb135036cc2b6a661a6d13",
+  "selection_gate": "PASSED_WITH_QUALIFICATIONS",
+  "selected_initial_scope_target": "semaphore-noir",
+  "research_verdict": "UNKNOWN",
+  "substantive_families_screened": 2,
+  "source_files_fetched": 46,
+  "source_files_requested": 46,
+  "github_api_requests": 9,
+  "policy_snapshots": 2,
+  "builds_attempted": 0,
+  "proofs_generated": 0,
+  "solver_queries": 0,
+  "validated_findings": 0,
+  "confirmed_safe_controls": 0,
+  "candidates": [
+    {
+      "id": "semaphore-noir",
+      "repository": "hashcloak/semaphore-noir",
+      "revision": "6e24a48b2cb22c05a0c13361b5228d5e1c99bd0d",
+      "tree": "2c0b95308cb208229575631c6c20368151f06403",
+      "license": "MIT; root LICENSE, package LICENSE files and SPDX headers inspected",
+      "independence": "GitHub fork of semaphore-protocol/semaphore (PSE) extended by hashcloak; no Payy lineage observed. Shares the Noir/Barretenberg recursive-aggregation pattern with Payy agg circuits (disclosed). Full ancestry not audited.",
+      "producer": {
+        "leaf": "packages/circuits-noir/src/main.nr (Semaphore membership; 4 public values: hashed scope, hashed message, root, nullifier; MAX_DEPTH 10)",
+        "batch": [
+          "packages/noir-proof-batch/circuits/batch_2_leaves/src/main.nr: verify_proof x2 then keccak256 over 8x32 bytes of inner public inputs -> pub Field",
+          "packages/noir-proof-batch/circuits/batch_2_nodes/src/main.nr: verify_proof x2 over [public_inputs_hash] then keccak256 over 2x32 bytes -> pub Field"
+        ]
+      },
+      "consumer": "packages/contracts-noir/contracts/SemaphoreNoir.sol validateBatchedProof(groupIds, proof) L189-232 -> verifyBatchedProof L249-356 (root validity per item, keccak pairing tree % MODULUS compared to publicInputs[0], verifier.verify(proofBytes, publicInputs, 0, true)) -> nullifier state writes L220-222",
+      "public_input_order_source_only": [
+        "publicInputs[0]: final keccak tree hash (Field)",
+        "publicInputs[1..16]: 16-word proof prefix appended by the test harness (test/Semaphore.ts L686-690); semantics not established"
+      ],
+      "protected_effects": "groups[groupIds[i]].nullifiers[proof.nullifiers[i]] = true for each batch item (state writes with occurrence identity (groupId, nullifier)); event BatchedProofValidated. No token transfers.",
+      "policy_provenance": "Semaphore V4 technical reference (snapshot policy/docs_semaphore_pse_dev_technical-reference_contracts.html): validateProof checks a nullifier was not used, verifies, then saves it. ISemaphoreNoir NatSpec: batched-proof arrays describe 'all the child proofs batched in this proof'. Batch-specific policy is source-comment level only; not frozen or human-reviewed.",
+      "honest_path": "Source-supported: hardhat in-process network (no fork); contracts-noir/test/Semaphore.ts '# batchVerify' creates a group, adds members, generates Semaphore proofs (generateNoirProofForBatching), batches 5 or 6 proofs with batchSemaphoreNoirProofs(..., keccak=true) via the bb CLI, and calls validateBatchedProof. Not executed.",
+      "toolchain_pins_source_only": {
+        "@aztec/bb.js": "0.82.2",
+        "@noir-lang/noir_js": "1.0.0-beta.3",
+        "@noir-lang/noir_wasm": "1.0.0-beta.3",
+        "solidity": "0.8.27",
+        "bb_cli": "unpinned in inspected sources (spawned as 'bb' from PATH)",
+        "keccak256_noir_lib": "v0.1.0",
+        "circuit_artifacts": "@zk-kit/artifacts (remote artifact download; version not inspected)"
+      },
+      "initial_scope_fit": true,
+      "fit_notes": [
+        "Noir/ACIR producer: yes; recursion (std::verify_proof) must remain an explicit backend/soundness assumption, as for Payy",
+        "Batched EVM settlement: yes (N>=3 per batchSemaphoreNoirProofs; consumer accepts any length)",
+        "Occurrence-level discharge: yes; no aggregation, splitting or deferral of assets",
+        "External calls: verifier view call only; no tokens; non-reentrant path",
+        "keccak256 in both producer and consumer and Field/uint256 reduction (Field::from_be_bytes vs % MODULUS) need explicit field/byte/integer boundary modeling"
+      ],
+      "decision": "SELECTED_INITIAL_SCOPE_TARGET_WITH_QUALIFICATIONS",
+      "security_verdict": "UNKNOWN",
+      "unresolved_prerequisites": [
+        "bb CLI version not pinned in source; must match bb.js 0.82.2 proving/verifier/VK generation",
+        "Compiled circuits/VKs come from @zk-kit/artifacts downloads; correspondence with in-repo Nargo sources, HonkVerificationKey.sol and SemaphoreNoirVerifier.sol unvalidated",
+        "The 16-word proof prefix appended to publicInputs needs a documented meaning before decoding is modeled",
+        "Batch policy (which groups/roots/messages a batch may cover; ordering) needs an analyst-frozen specification before evaluation",
+        "Large verifier/key files (SemaphoreNoirVerifier*.sol, circuit.json) inventoried but not fetched or validated"
+      ],
+      "exposure": "Read consumer, batch circuits, leaf circuit and batch tests in full for mapping. Incidentally noted while mapping: batch circuits receive verification_key and key_hash as private inputs; consumer length relations among nullifiers/roots/scopes/messages/groupIds are only partly checked. Neither was investigated, tested or classified; no finding is claimed. Do not present these mechanisms as a blind holdout.",
+      "build_status": "NOT_RUN",
+      "proof_status": "NOT_RUN",
+      "source_links": {
+        "consumer": "https://github.com/hashcloak/semaphore-noir/blob/6e24a48b2cb22c05a0c13361b5228d5e1c99bd0d/packages/contracts-noir/contracts/SemaphoreNoir.sol",
+        "batch_leaves": "https://github.com/hashcloak/semaphore-noir/blob/6e24a48b2cb22c05a0c13361b5228d5e1c99bd0d/packages/noir-proof-batch/circuits/batch_2_leaves/src/main.nr",
+        "batch_nodes": "https://github.com/hashcloak/semaphore-noir/blob/6e24a48b2cb22c05a0c13361b5228d5e1c99bd0d/packages/noir-proof-batch/circuits/batch_2_nodes/src/main.nr",
+        "leaf_circuit": "https://github.com/hashcloak/semaphore-noir/blob/6e24a48b2cb22c05a0c13361b5228d5e1c99bd0d/packages/circuits-noir/src/main.nr",
+        "honest_test": "https://github.com/hashcloak/semaphore-noir/blob/6e24a48b2cb22c05a0c13361b5228d5e1c99bd0d/packages/contracts-noir/test/Semaphore.ts"
+      }
+    },
+    {
+      "id": "aztec",
+      "repository": "AztecProtocol/aztec-packages",
+      "revision": "0219f11d8133970df3974fe5ae65e006bf8c193a",
+      "tree": "26adfe78f6cd666661acff8e7b7a180c30d188d5",
+      "release": "v6.0.0",
+      "license": "Apache-2.0 root LICENSE inspected",
+      "independence": "Separate organization/architecture from Payy; shares Noir/Barretenberg.",
+      "producer": "Noir protocol circuits under noir-projects/fnd/noir-protocol-circuits (tree inventoried only; root rollup source not fetched)",
+      "consumer": "l1-contracts/src/core/libraries/rollup/EpochProofLib.sol computeEpochProofPublicInputs L290-434 and verifyEpochRootProof L589-607; outHash inserted into Outbox L175-179; RewardLib.handleRewardsAndFees L85",
+      "initial_scope_fit": false,
+      "decision": "NOT_SELECTED",
+      "security_verdict": "UNKNOWN",
+      "blockers": [
+        "L2->L1 effects are deferred: the epoch proof inserts an out-hash root; users later consume via Outbox.consume with a Merkle path (pending-obligation semantics outside the initial fragment)",
+        "Fees/rewards are aggregated per epoch (aggregation semantics outside the fragment)",
+        "Public inputs include blob/KZG accumulator values and attestation-derived headers; consumer path involves committee signatures, staking and governance-managed configuration",
+        "README locates node/client/prover in the 'labs' submodule (update=none), outside the pinned tree; no source-supported self-contained honest local epoch-proving route was found within the screening bound",
+        "Epoch root proving requires the full recursive rollup stack; resource cost unestimated and likely beyond the D1 budget"
+      ],
+      "exposure": "Read release tags, top-level README/.gitmodules, L1 README, Rollup.sol, EpochProofLib.sol, Outbox interfaces. No audit or issue material.",
+      "build_status": "NOT_RUN",
+      "proof_status": "NOT_RUN"
+    }
+  ],
+  "discovery_only_leads": [
+    {
+      "repo": "distributed-lab/noir-semaphore",
+      "note": "MIT, single-proof Semaphore port; no batching observed in metadata"
+    },
+    {
+      "repo": "nickthelegend/kakushi-arc",
+      "note": "MIT, Noir shielded USDC pool, created 2026-10-13; single-proof per description"
+    },
+    {
+      "repo": "jinali98/zk-mini-rollup",
+      "note": "No license in metadata"
+    },
+    {
+      "repo": "TalDerei/noir-circuits",
+      "note": "No license; 2023"
+    },
+    {
+      "repo": "Mach-34/rollup-noir",
+      "note": "No license; 2023"
+    },
+    {
+      "repo": "tomerweller/soribium",
+      "note": "Stellar consumer, not EVM"
+    },
+    {
+      "repo": "TACEO Merces",
+      "note": "No public repository found in discovery"
+    }
+  ],
+  "evidence": {
+    "fetch_logs": [
+      "results/raw/D1-02/continuation-01/fetch-log-01.json",
+      "results/raw/D1-02/continuation-01/fetch-log-02.json"
+    ],
+    "api_log": "results/raw/D1-02/continuation-01/api-log.json",
+    "pins": "results/raw/D1-02/continuation-01/pins.json",
+    "policy": [
+      "results/raw/D1-02/continuation-01/policy/docs_semaphore_pse_dev_.html",
+      "results/raw/D1-02/continuation-01/policy/docs_semaphore_pse_dev_technical-reference_contracts.html"
+    ]
+  },
+  "evidence_sha256": {
+    "results/raw/D1-02/continuation-01/fetch-log-01.json": "1005afa2f5200214eba87a16f46a74c73ec5427a37c67013b8d1f4d50e003e3e",
+    "results/raw/D1-02/continuation-01/fetch-log-02.json": "304b382324a51918b4d4e652cf17847582a098fdecf6aa726e4ceff67f781066",
+    "results/raw/D1-02/continuation-01/api-log.json": "edcf653ecd4c414cc994bbb79a405beb9747751e232a11dc414d7142ced47ad7",
+    "results/raw/D1-02/continuation-01/pins.json": "549148aa33685f0e989bcb24ad0d839011db310459b6d57df24e4730d07e9faf",
+    "results/raw/D1-02/continuation-01/policy/docs_semaphore_pse_dev_.html": "eba536ee968d4e8d20b68ea8166eb69a74d0a8f48cf47b4b82d633e93f0ed3a1",
+    "results/raw/D1-02/continuation-01/policy/docs_semaphore_pse_dev_technical-reference_contracts.html": "6bc20cc439fae79505af7147553aa3d073cb842a8589c71f8f4733145e93541d"
+  }
+}

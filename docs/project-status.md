@@ -44,10 +44,10 @@ flowchart TD
     analysis --> d1["D1 investigation [ACTIVE]"]
     d1 --> d100["D1-00 preserve and align [DONE]"]
     d100 --> d101["D1-01 T22 reporting closure [DONE]"]
-    d100 --> d102["D1-02 target selection [ACTIVE]"]
-    d101 --> d103["D1-03 joint semantics [WAITING]"]
+    d100 --> d102["D1-02 target selection [DONE]"]
+    d101 --> d103["D1-03 joint semantics [DONE]"]
     d102 --> d103
-    d103 --> d104["D1-04 fair baselines [WAITING]"]
+    d103 --> d104["D1-04 fair baselines [NEXT]"]
     d104 --> d105["D1-05 checked refinement [WAITING]"]
     d105 --> d106["D1-06 frozen comparison [WAITING]"]
     d106 --> d107["D1-07 independent transfer [WAITING]"]
@@ -73,9 +73,10 @@ flowchart TD
     classDef waiting fill:#D9D9D9,stroke:#B3B3B3
     classDef unknown fill:#FFE0C2,stroke:#FF9E42
 
-    class foundation,fixture,payy,sourceCheck,coneGate,nineCases,failureAnalysis,v3Rerun,generalGate,tracking,livingTree,d100,d101 done
-    class analysis,d1,d102 active
-    class evaluation,history,heldOut,baselines,manuscript,claims,artifacts,draft,transferCase,sensitivity,submit,t22,acirSummary,d103,d104,d105,d106,d107,d108 waiting
+    class foundation,fixture,payy,sourceCheck,coneGate,nineCases,failureAnalysis,v3Rerun,generalGate,tracking,livingTree,d100,d101,d102,d103 done
+    class analysis,d1 active
+    class evaluation,history,heldOut,baselines,manuscript,claims,artifacts,draft,transferCase,sensitivity,submit,t22,acirSummary,d105,d106,d107,d108 waiting
+    class d104 next
     class contribution,primaryResult,generalResult unknown
 ```
 
@@ -87,10 +88,12 @@ flowchart TD
 4. Done: [D1-00](../reports/D1-00.md) creates the isolated worktree, preserves staged work and historical evidence, and aligns the contract and [roadmap](d1/roadmap.md).
 5. Done: [D1-01](../reports/D1-01.md) accounts for all six T22-v5 slots: three validated historical check-added timeouts and three new running-flag timeouts at 300 seconds/4 GiB. Reporting closure is complete, all six results remain UNKNOWN, and the original successful-solver milestone is unmet. No extended campaign or whole-system guarantee follows.
 6. Active: [D1-02](../reports/D1-02.md) screens pinned WarpToad and 0xbow Privacy Pools sources. The two-family availability screen is complete, but neither satisfies the full initial Noir/ACIR batched-settlement fragment. Initial-scope selection remains unresolved; no build/proof/replay or held-out transfer result follows. A separately bounded continuation or explicit scope decision is next.
-7. Then: faithful joint semantics, equal-information baselines, checked consumer-directed refinement, frozen comparison, and independent transfer. Full evaluation and submission remain conditional on the feasibility decision.
+7. Done: [D1-02 continuation](../reports/D1-02-continuation-01.md) selects hashcloak Semaphore-Noir, with qualifications, as the reserved initial-scope transfer target; Aztec v6.0.0 is not selected. Nothing was built or proved.
+8. Done: [D1-03](../reports/D1-03.md) validates the joint-semantics pipeline on authored synthetic fixtures. synth-faulty yields VIOLATION with a replayed concrete model (unauthorized burn in the unconstrained message tail); synth-repaired yields VERIFIED_WITHIN_SCOPE with a replayed non-vacuity witness. 15 regression tests pass. Consumer contract not exercised; solver times within limits.
+9. Next: D1-04 baselines. Then: equal-information baselines, checked consumer-directed refinement, frozen comparison, and independent transfer. Full evaluation and submission remain conditional on the feasibility decision.
 
 The end goal does not imply that submission is currently justified. The
-research contract's two principal properties remain unchanged, and unresolved T22 results remain UNKNOWN. D1 preparation and reporting closure are complete; three missing historical query slots were executed. No new D1 analyzer or method-evaluation result has been completed.
+research contract's two principal properties remain unchanged, and unresolved T22 results remain UNKNOWN. D1 preparation, reporting closure, and synthetic pipeline validation are complete. No method-evaluation result on real cases, no consumer-directed advantage, and no generalization evidence has been established.
 
 ## Checkpoint log
 
@@ -106,6 +109,8 @@ research contract's two principal properties remain unchanged, and unresolved T2
 | 2026-10-23 | D1-00 isolated worktree and research alignment | `[DONE]` | [D1-00](../reports/D1-00.md), [baseline](../metadata/d1/baseline.json), and [validation](../metadata/d1/d1-00-validation.json): preserve source index/staged patch, original files, historical reports, and an independent raw-evidence copy. Revise the prospective contract and roadmap; old verdicts remain unchanged. D1-01 reporting closure and D1-02 intake are next; old transfer deferral is replaced by early availability screening, not a transfer claim. |
 | 2026-10-23 | D1-01 T22-v5 reporting closure | `[DONE]` | [D1-01](../reports/D1-01.md), [six-slot matrix](../metadata/d1/d1-01-query-matrix.json), and [execution manifest](../metadata/d1/d1-01-execution-manifest.json): validate three preserved check-added timeouts and execute three missing running-flag queries once at 300 seconds/4 GiB. All six remain UNKNOWN; non-vacuity and the original successful-solver milestone are unresolved. Specification/reduction audits do not establish encoding soundness. Prior evidence and original/source indexes are preserved. D1-02 intake is next and has not started. |
 | 2026-10-23 | D1-02 two-family availability screen; selection unresolved | `[ACTIVE]` | [D1-02](../reports/D1-02.md), [intake matrix](../metadata/d1/d1-02-intake.json), and [protocol](../protocols/d1/d1-02-intake.json): inspect 65 pinned source files from WarpToad and 0xbow Privacy Pools, with licenses, public-input/consumer mappings, policy provenance, honest-path sources and blockers. WarpToad is single-claim Noir; 0xbow batches Circom proofs with additional modeling requirements. No initial-scope target selected; no build/proof/replay run. Preserve all 49 D1-01 raw files and six fixed deliverables; archive all nine sealed checkpoint versions before living-document updates. D1-03 not started. |
+| 2026-10-23 | D1-02 continuation 01: initial-scope target selected with qualifications | `[DONE]` | [Continuation report](../reports/D1-02-continuation-01.md), [intake](../metadata/d1/d1-02-continuation-01-intake.json), [protocol](../protocols/d1/d1-02-continuation-01.json): 46 pinned files from hashcloak Semaphore-Noir and Aztec v6.0.0. Semaphore-Noir (Noir recursive batch, per-item nullifier writes, Hardhat in-process honest route in source) is selected; its bb CLI pin, artifact/VK correspondence, prefix semantics and batch policy remain open. Aztec is not selected. Incidental exposure is disclosed. 0 builds/proofs/solver runs; verdict UNKNOWN. D1-02 is DONE; D1-03 is ACTIVE. |
+| 2026-10-23 | D1-03 joint semantics on synthetic fixtures | `[DONE]` | [D1-03 report](../reports/D1-03.md), [protocol v2](../protocols/d1/d1-03-joint-semantics.md), [results](../results/raw/D1-03/synthetic/summary.json): authored faulty/repaired producers (N=9, 3-word stride, 0 RANGE). synth-faulty→VIOLATION (CONCRETE_MODEL_REPLAYED, AUTH-UNMATCHED SAT at slot 0, nargo replay pass); synth-repaired→VERIFIED_WITHIN_SCOPE (CONCRETE_MODEL_REPLAYED, all AUTH/COV UNSAT, NONVAC SAT_REPLAYED). 15 regression tests pass. Consumer contract not exercised. D1-03 is DONE; D1-04 is NEXT. |
 
 ## Update rule
 

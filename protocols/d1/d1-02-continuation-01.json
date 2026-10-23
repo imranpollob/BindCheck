@@ -1,0 +1,35 @@
+{
+  "task": "D1-02 continuation 01",
+  "frozen_before_pinned_source_inspection": true,
+  "purpose": "Bounded search for one initial-scope (Noir/ACIR producer, batched Solidity/EVM settlement) independent target, as recommended by reports/D1-02.md",
+  "parent_protocol": "protocols/d1/d1-02-intake.json",
+  "families": [
+    {"repo": "hashcloak/semaphore-noir", "revision": "6e24a48b2cb22c05a0c13361b5228d5e1c99bd0d", "ref": "main"},
+    {"repo": "AztecProtocol/aztec-packages", "revision": "0219f11d8133970df3974fe5ae65e006bf8c193a", "ref": "tag v6.0.0"}
+  ],
+  "selection_criteria": [
+    "Pinned publicly retrievable producer and Solidity consumer sources with usable license evidence",
+    "Producer is Noir source compiled to ACIR; the proof consumed on EVM covers more than one application item (batched settlement)",
+    "Source-traceable public-input construction, decoding, verifier call and protected effects (transfers or state writes with identity)",
+    "Primary policy documentation separate from assumed implementation correctness",
+    "A documented or source-supported honest local proving and replay route without live networks, forks or third-party services, with unresolved prerequisites explicit",
+    "Independent application lineage from Payy, with shared cryptographic dependencies and prior exposure disclosed"
+  ],
+  "selection_rule": "Select at most one family as the initial-scope target only if every criterion is source-supported. A recursion, hash or Merkle relation may remain an explicit assumption as in the D1 fragment. Deferral, aggregation or splitting semantics required by the protected path are recorded as fragment gaps, not silently admitted. If no family qualifies, D1-02 closes with a FAILED selection gate and a scope/feasibility decision is handed to the user.",
+  "scope_gate": "No frontend, threat-model or fragment expansion is authorized. A conditional fallback is not an initial-scope selection.",
+  "limits": {
+    "substantive_families": 2,
+    "maximum_source_files_per_family": 60,
+    "maximum_single_source_file_bytes": 1500000,
+    "request_timeout_seconds": 30,
+    "github_api_requests_total": 30,
+    "dependency_installations": 0,
+    "builds": 0,
+    "solver_runs": 0,
+    "proof_runs": 0
+  },
+  "outcomes": "SELECTED with all qualifications, or selection gate FAILED with recorded blockers. No security verdict follows; research verdict remains UNKNOWN.",
+  "exposure": "Discovery read web-search summaries, GitHub repository-search listings and repository metadata (results/raw/D1-02/continuation-01/discovery/). For hashcloak/semaphore-noir the recursive main-branch path inventory (file names and sizes, no file contents) and branch list were read before this freeze; search summaries described recursive Semaphore-Noir batching verified by a Solidity contract. For Aztec, release tags only. General prior knowledge of Aztec and Semaphore architecture is disclosed; no claim of blindness.",
+  "holdout_rule": "Availability/source correspondence inspection is disclosed exposure. Do not tune an analyzer, inspect audit/defect labels or create mutations here. Retire a case as held-out if later results guide rule changes.",
+  "preservation": "All D1-00, D1-01 and D1-02 evidence, reports, seals and scripts are immutable. New raw output only under results/raw/D1-02/continuation-01. No stage, commit, push, external contact or delegation."
+}

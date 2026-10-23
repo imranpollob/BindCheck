@@ -1,0 +1,55 @@
+Compiled ACIR for main (non-transformed):
+func 0
+private parameters: [w0, w1, w2, w3, w4, w5, w6, w7, w8]
+public parameters: [w9, w10, w11, w12, w13, w14, w15, w16, w17]
+return values: []
+BRILLIG CALL func: 0, inputs: [w0], outputs: [w18]
+ASSERT w19 = -w0*w18 + 1
+ASSERT 0 = w0*w19
+ASSERT 0 = w0*w19
+ASSERT 0 = w1*w19
+ASSERT 0 = w2*w19
+ASSERT 0 = w9*w19
+ASSERT 0 = w10*w19
+ASSERT 0 = w11*w19
+ASSERT w9 = -w0*w19 + w9*w19 + w0
+ASSERT w10 = -w1*w19 + w10*w19 + w1
+ASSERT w11 = -w2*w19 + w11*w19 + w2
+BRILLIG CALL func: 0, inputs: [w3], outputs: [w20]
+ASSERT w21 = -w3*w20 + 1
+ASSERT 0 = w3*w21
+ASSERT w22 = -w19*w21 + w19 + w21
+ASSERT 0 = w3*w22
+ASSERT 0 = w4*w22
+ASSERT 0 = w5*w22
+ASSERT 0 = w12*w22
+ASSERT 0 = w13*w22
+ASSERT 0 = w14*w22
+ASSERT w12 = -w3*w22 + w12*w22 + w3
+ASSERT w13 = -w4*w22 + w13*w22 + w4
+ASSERT w14 = -w5*w22 + w14*w22 + w5
+BRILLIG CALL func: 0, inputs: [w6], outputs: [w23]
+ASSERT w24 = -w6*w23 + 1
+ASSERT 0 = w6*w24
+ASSERT w25 = -w22*w24 + w22 + w24
+ASSERT 0 = w6*w25
+ASSERT 0 = w7*w25
+ASSERT 0 = w8*w25
+ASSERT 0 = w15*w25
+ASSERT 0 = w16*w25
+ASSERT 0 = w17*w25
+ASSERT w15 = -w6*w25 + w15*w25 + w6
+ASSERT w16 = -w7*w25 + w16*w25 + w7
+ASSERT w17 = -w8*w25 + w17*w25 + w8
+
+unconstrained func 0: directive_invert
+0: @21 = const u32 1
+1: @20 = const u32 0
+2: @0 = calldata copy [@20; @21]
+3: @2 = const field 0
+4: @3 = field eq @0, @2
+5: jump if @3 to 8
+6: @1 = const field 1
+7: @0 = field field_div @1, @0
+8: stop &[@20; @21]
+
