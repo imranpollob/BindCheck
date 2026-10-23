@@ -1,6 +1,6 @@
 # D1 development plan
 
-Date: **23 October 2026**. Status: **D1-00 through D1-02 complete at their stated evidence levels; D1-03 incomplete; typed bindings complete; consumer boundary audited, hardened guard frame validated; transition semantics and joint gates incomplete**.
+Date: **23 October 2026**. Status: **D1-00 through D1-02 complete at their stated evidence levels; D1-03 incomplete; typed bindings complete; consumer boundary audited, hardened guard frame validated; concrete consumer execution checked, symbolic composition and accepted replay incomplete**.
 
 This is the execution roadmap for the isolated D1 worktree. The [research contract](../research-contract.md) controls scope and claims; [D1-00](../../reports/D1-00.md) records preservation and validation.
 
@@ -157,7 +157,7 @@ If proof/consumer paths and meaningful policies are available but static composi
 | D1-07 | WAITING | Frozen mechanism and an independent honest proving path |
 | D1-08 | WAITING | Feasibility and transfer justify a broader study |
 
-**Current checkpoint: hardened guard frame validated; full transition and joint gates remain UNKNOWN.** The
+**Current checkpoint: concrete consumer execution/component checks complete; symbolic composition and accepted replay remain UNKNOWN. Replay/resource review required.** The
 [reconciliation report](../../reports/D1-02-reconciliation-01.md) recovers the
 completed D1-02 continuation without repeating it. Semaphore-Noir remains
 reserved for transfer; its artifact/key correspondence, decoding and policy
@@ -211,11 +211,23 @@ The legacy JavaScript suite is blocked by its missing installed `js-sha3`
 dependency; no dependency installation or additional research query occurs.
 This discharges the current guard-frame artifact prerequisite, not D1-03.
 
-**Next dependent implementation:** exact message traversal, registry/token
-effects and whole-transition rollback, retaining validator state and v2's
-state family. A local frame rule is not complete consumer semantics. No
-signature acceptance, one-validator restriction or unsupported cryptographic
-assumption is adopted. Baselines remain blocked by the D1-03 joint gates.
+The [consumer execution task](../../reports/D1-03-consumer-execution-01.md)
+implements concrete interpretation of the actual message/outer-entry AST,
+registry/token state and atomic rollback, retaining explicit abstract guard
+and verifier boundaries. 119 Python controls, 29 actual-artifact controls and
+13 unchanged-Solidity component tests pass. Separate v2 admission preserves
+failed-transfer/out-of-family UNKNOWN. This is not symbolic joint verification
+or an accepted full consumer replay. All 28 primary slots remain unused.
+
+**Review stop and next task:** restore and qualify replay inputs. The inspected
+local raw directories lack the historical T13/T16 proof/public-input bundles
+and summaries required by the existing full replay harnesses. The protocol
+allows zero new real proofs. Locate an archive, preserve its hashes, and check
+whether its inputs actually match the frozen v2 scopes; historical controls
+cannot silently replace S1/S2. Otherwise review a separately versioned proof
+budget/seed proposal. After replay feasibility is resolved, complete symbolic
+consumer/producer composition and the original D1-03 gates. No signature
+acceptance or unreviewed proof assumption is adopted. Baselines remain blocked.
 
 Stop after D1-04 and D1-06, before held-out evaluation, and whenever continuing
 requires changing scope, policy assumptions, evaluation criteria or resource

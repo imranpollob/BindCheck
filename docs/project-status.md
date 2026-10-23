@@ -56,7 +56,10 @@ flowchart TD
     d103consumer --> d103boundary["Transitive consumer audit [DONE]"]
     d103boundary --> d103guardreview["Guard frame and current artifact check [DONE]"]
     d103guardreview --> d103guards["Additional artifact-check budget authorized [DONE]"]
-    d103guards --> d103effects["Exact effects and rollback [NEXT]"]
+    d103guards --> d103effects["Effects and rollback composition [ACTIVE]"]
+    d103effects --> d103concrete["Concrete AST execution and component checks [DONE]"]
+    d103concrete --> d103replayreview["Replay inputs and budget review [NEXT]"]
+    d103effects --> d103symbolic["Full symbolic composition [WAITING]"]
     d103 --> d104["D1-04 fair baselines [WAITING]"]
     d104 --> d105["D1-05 checked refinement [WAITING]"]
     d105 --> d106["D1-06 frozen comparison [WAITING]"]
@@ -83,10 +86,10 @@ flowchart TD
     classDef waiting fill:#D9D9D9,stroke:#B3B3B3
     classDef unknown fill:#FFE0C2,stroke:#FF9E42
 
-    class foundation,fixture,payy,sourceCheck,coneGate,nineCases,failureAnalysis,v3Rerun,generalGate,tracking,livingTree,d100,d101,d102,d103preflight,d103review,d103typed,d103boundary,d103guards,d103guardreview done
-    class analysis,d1,d103,d103impl,d103consumer active
-    class d103effects next
-    class evaluation,history,heldOut,baselines,manuscript,claims,artifacts,draft,transferCase,sensitivity,submit,t22,acirSummary,d104,d105,d106,d107,d108 waiting
+    class foundation,fixture,payy,sourceCheck,coneGate,nineCases,failureAnalysis,v3Rerun,generalGate,tracking,livingTree,d100,d101,d102,d103preflight,d103review,d103typed,d103boundary,d103guards,d103guardreview,d103concrete done
+    class analysis,d1,d103,d103impl,d103consumer,d103effects active
+    class d103replayreview next
+    class evaluation,history,heldOut,baselines,manuscript,claims,artifacts,draft,transferCase,sensitivity,submit,t22,acirSummary,d104,d105,d106,d107,d108,d103symbolic waiting
     class contribution,primaryResult,generalResult,d103gate unknown
 ```
 
@@ -104,7 +107,8 @@ flowchart TD
 10. Done: [Typed bindings 01](../reports/D1-03-typed-bindings-01.md) decodes four serialized artifacts and checks six recursive/frame mappings. 27 controls pass; 9,788 equality certificates checked (3,042 nontrivial). Full transition extraction, joint queries and replay remain incomplete.
 11. Active: [Consumer-boundary audit](../reports/D1-03-consumer-boundary-01.md) locates 19 function/modifier bodies; nine controls pass after a preserved fixture-error correction. The full transition remains unmodeled; the subsequent guard-frame attempt is recorded below. No primary slot used.
 12. Done: [Codebase review](../reports/D1-codebase-review-01.md) performs the newly authorized final guard-artifact check; the frame prerequisite passes. All 81 Python controls pass in an isolated source/test copy. Legacy JavaScript tests are blocked by a missing dependency. Exact effects, rollback and the full joint D1-03 gates remain incomplete; all 28 primary slots are unused.
-13. Then: faithful joint semantics, equal-information baselines, checked consumer-directed refinement, frozen comparison, and independent transfer. Full evaluation and submission remain conditional on the feasibility decision.
+13. Done at component level: [Consumer execution 01](../reports/D1-03-consumer-execution-01.md) implements concrete AST execution and rollback; 119 Python tests, 29 actual-artifact controls and 13 Solidity component tests pass. Full symbolic semantics and accepted replay remain UNKNOWN. Missing historical proof bundles and zero-new-proof budget require replay/resource review; no primary slot spent.
+14. Then: faithful joint semantics, equal-information baselines, checked consumer-directed refinement, frozen comparison, and independent transfer. Full evaluation and submission remain conditional on the feasibility decision.
 
 The end goal does not imply that submission is currently justified. The
 research contract's two principal properties remain unchanged, and unresolved T22 results remain UNKNOWN. D1 preparation and reporting closure are complete; three missing historical query slots were executed. No new D1 analyzer or method-evaluation result has been completed.
@@ -138,6 +142,8 @@ research contract's two principal properties remain unchanged, and unresolved T2
 | 2026-10-23 | D1-03 guard frame hardening; budget review stop | `[ACTIVE]` | [Report](../reports/D1-03-guard-frame-01.md): 22 final controls pass; initial artifact check covers seven bodies but predates virtual/operator exclusions and checker-version cache binding. Final artifact validation is incomplete/UNKNOWN; existing certificate is not reusable. Two synthetic slots and one artifact slot consumed. Recommend one fresh bounded artifact check; no solver/proof/replay, no narrowed state family. |
 
 | 2026-10-23 | Codebase verification and current guard artifact check | `[DONE]` | [Report](../reports/D1-codebase-review-01.md): 81 Python controls pass in an isolated source/test tree; the single newly authorized hardened guard check passes with seven bodies and 21 protected state roots. Legacy Node suite fails setup on missing `js-sha3`; no install or rerun hides it. Historical synthetic-branch deliverables archived exactly; current joint semantics remain incomplete/UNKNOWN. No primary solver/proof/replay work. |
+
+| 2026-10-23 | Consumer AST execution and replay-readiness review | `[DONE]` | [Report](../reports/D1-03-consumer-execution-01.md): concrete execution/component task complete, with 119 Python, 29 artifact and 13 Foundry controls passing. Explicit abstract guard/verifier boundaries prevent a joint claim. Historical proof/public-input bundles are unavailable in inspected local raw directories; zero-new-proof budget unchanged. Full symbolic composition and D1-03 remain UNKNOWN; D1-04 WAITING. Review replay inputs before proceeding. |
 
 ## Update rule
 

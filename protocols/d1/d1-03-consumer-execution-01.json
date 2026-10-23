@@ -1,0 +1,28 @@
+{
+  "task": "D1-03 consumer execution 01",
+  "frozen_at_utc": "2026-10-23T22:47:04.806772+00:00",
+  "starting_revision": "42bd0ebbf365469fe3147bb13d7359b129319aa2",
+  "authorization": "User: Finish rest of the tasks; continuation within v2, no policy or primary-budget change",
+  "completion_criteria": [
+    "Implement a fail-closed AST execution relation for message traversal, registry writes, funded exact-token effects and atomic rollback with declaration/type/source provenance",
+    "Preserve checked validator-frame boundary and explicit verifier call inputs/outcomes; never infer guard acceptance or proof validity from component execution",
+    "Validate actual pinned-artifact executions and independent unchanged-Solidity component controls including duplicates, bounds, last slot, truncation, zero/self and rollback",
+    "Evaluate readiness for joint symbolic composition, report every residual unsupported requirement, preserve evidence and update checkpoints; do not advance D1-04 on component success"
+  ],
+  "limits": {
+    "wall_minutes": 120,
+    "python_test_invocations": 24,
+    "artifact_invocations": 12,
+    "forge_invocations": 4,
+    "seconds_per_python_or_artifact": 120,
+    "seconds_per_forge": 600,
+    "address_space_bytes": 4294967296,
+    "network_requests": 0,
+    "dependency_installs": 0,
+    "primary_solver_queries": 0,
+    "new_real_proofs": 0,
+    "primary_candidate_replays": 0,
+    "held_out_evaluations": 0
+  },
+  "scope": "Owned local synthetic component validation only. Actual AST executions with explicit abstract validator/verifier outcomes are not complete concrete rollup replay. Unsupported symbolic domains remain UNKNOWN. Existing 28 primary slots untouched. No retries of historical experiments."
+}
