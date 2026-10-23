@@ -1,6 +1,6 @@
 # D1 development plan
 
-Date: **23 October 2026**. Status: **D1-00 through D1-05 complete; D1-06 NEXT.**
+Date: **23 October 2026**. Status: **D1-00 through D1-06 complete. Feasibility gate not passed; D1-07/D1-08 not justified.**
 
 This is the execution roadmap for the isolated D1 worktree. The [research contract](../research-contract.md) controls scope and claims; [D1-00](../../reports/D1-00.md) records preservation and validation.
 
@@ -153,19 +153,21 @@ If proof/consumer paths and meaningful policies are available but static composi
 | D1-03 | DONE | [Report](../../reports/D1-03.md): synth-faulty→VIOLATION (replayed), synth-repaired→VERIFIED_WITHIN_SCOPE (replayed non-vacuity); 15 regression tests pass |
 | D1-04 | DONE | [Report](../../reports/D1-04.md): three baselines (Foundry/monolithic/summary) on same cases; propagation neutral on synthetic; pipeline advantage is formal UNSAT + automatic extraction |
 | D1-05 | DONE | [Report](../../reports/D1-05.md): CEGAR on synthetic; spurious candidates rejected; same verdicts as D1-03; 16 tests pass |
-| D1-06 | NEXT | D1-05 justified refinement; frozen comparison protocol |
-| D1-07 | WAITING | Frozen mechanism and an independent honest proving path |
-| D1-08 | WAITING | Feasibility and transfer justify a broader study |
+| D1-06 | DONE | [Report](../../reports/D1-06.md): frozen comparison; CEGAR ties monolithic; N=8 all UNKNOWN; three stop criteria met; contribution not supported |
+| D1-07 | BLOCKED | D1-06 feasibility gate not passed; no advantage demonstrated |
+| D1-08 | BLOCKED | D1-06 feasibility gate not passed |
 
-**D1-03 through D1-05 are complete.** D1-05 adds consumer-directed
-abstraction-refinement (CEGAR): abstract → concretize → refine. On both
-synthetic cases, the mechanism correctly rejects spurious abstract candidates
-via concretization and produces the same final verdicts as D1-03. Refinement
-is coarse-grained on these small circuits (all constraints added in one step).
-The CEGAR overhead is 3–9% vs monolithic; the concretization check is the
-genuine new mechanism. See [D1-05 report](../../reports/D1-05.md).
+**D1-00 through D1-06 are complete.** D1-06 concludes that the CEGAR
+mechanism is correct and sound but provides no measurable advantage over
+monolithic joint solving. The N=8 Payy controls remain all UNKNOWN (solver
+timeout). Three of five roadmap stop criteria are met: the modular adapter
+ties at comparable cost, the N=8 controls are unresolved, and no independent
+transfer path has been tested. The feasibility gate is not passed.
+See [D1-06 report](../../reports/D1-06.md).
 
-D1-06 (frozen feasibility comparison) is NEXT.
+D1-07 (independent transfer) and D1-08 (full evaluation) are not justified
+without resolving the solver scalability limit or demonstrating a selective
+refinement advantage on larger circuits.
 
 ## 9 Provenance and limits
 

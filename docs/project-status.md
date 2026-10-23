@@ -49,8 +49,8 @@ flowchart TD
     d102 --> d103
     d103 --> d104["D1-04 fair baselines [DONE]"]
     d104 --> d105["D1-05 checked refinement [DONE]"]
-    d105 --> d106["D1-06 frozen comparison [NEXT]"]
-    d106 --> d107["D1-07 independent transfer [WAITING]"]
+    d105 --> d106["D1-06 frozen comparison [DONE]"]
+    d106 --> d107["D1-07 independent transfer [BLOCKED]"]
     d107 --> d108["D1-08 full evaluation [WAITING]"]
     d101 -.-> t22
     d106 -.-> acirSummary
@@ -73,10 +73,9 @@ flowchart TD
     classDef waiting fill:#D9D9D9,stroke:#B3B3B3
     classDef unknown fill:#FFE0C2,stroke:#FF9E42
 
-    class foundation,fixture,payy,sourceCheck,coneGate,nineCases,failureAnalysis,v3Rerun,generalGate,tracking,livingTree,d100,d101,d102,d103,d104,d105 done
+    class foundation,fixture,payy,sourceCheck,coneGate,nineCases,failureAnalysis,v3Rerun,generalGate,tracking,livingTree,d100,d101,d102,d103,d104,d105,d106 done
     class analysis,d1 active
     class evaluation,history,heldOut,baselines,manuscript,claims,artifacts,draft,transferCase,sensitivity,submit,t22,acirSummary,d107,d108 waiting
-    class d106 next
     class contribution,primaryResult,generalResult unknown
 ```
 
@@ -92,10 +91,11 @@ flowchart TD
 8. Done: [D1-03](../reports/D1-03.md) validates the joint-semantics pipeline on authored synthetic fixtures. synth-faulty yields VIOLATION with a replayed concrete model (unauthorized burn in the unconstrained message tail); synth-repaired yields VERIFIED_WITHIN_SCOPE with a replayed non-vacuity witness. 15 regression tests pass. Consumer contract not exercised; solver times within limits.
 9. Done: [D1-04](../reports/D1-04.md) baseline comparison: Foundry tests (7 pass, <1 ms), monolithic joint solving (identical to D1-03), and manual summary (faster SAT but UNKNOWN on repaired UNSAT). Pipeline advantage is formal UNSAT + automatic extraction. **Review checkpoint reached.**
 10. Done: [D1-05](../reports/D1-05.md) adds consumer-directed abstraction-refinement (CEGAR): abstract (0 ACIR constraints) → concretize → refine. Both synthetic cases reject a spurious abstract candidate via concretization; synth-faulty confirms VIOLATION at iteration 1 (11.75 s); synth-repaired proves VERIFIED at iteration 1 (107.3 s). Refinement is coarse-grained (all constraints in one step) on these small circuits. 16 regression tests pass. The concretization check is the new mechanism.
-11. Next: D1-06 frozen feasibility comparison, then independent transfer. Full evaluation and submission remain conditional on the feasibility decision.
+11. Done: [D1-06](../reports/D1-06.md) frozen feasibility comparison. CEGAR ties monolithic at ±9% on synthetic N=9. All six N=8 Payy queries remain UNKNOWN (D1-01 timeouts). Three of five roadmap stop criteria are met: modular adapter ties, N=8 controls unresolved, no transfer tested. **Feasibility gate not passed.** The contribution is not currently supported.
+12. Blocked: D1-07 (independent transfer) and D1-08 (full evaluation) are not justified without resolving the solver scalability limit or demonstrating a selective refinement advantage.
 
 The end goal does not imply that submission is currently justified. The
-research contract's two principal properties remain unchanged, and unresolved T22 results remain UNKNOWN. D1 preparation, reporting closure, synthetic pipeline validation, baseline comparison, and consumer-directed refinement are complete. The CEGAR mechanism works correctly and the concretization check is a genuine new mechanism, but provides no measurable speed advantage on these small synthetic circuits. Foundry testing remains a strong baseline for bug finding. No method-evaluation result on real cases, no selective refinement advantage, and no generalization evidence has been established.
+research contract's two principal properties remain unchanged, and unresolved T22 results remain UNKNOWN. D1-00 through D1-06 are complete. The CEGAR mechanism is correct and sound but provides no measurable advantage over monolithic joint solving or Foundry testing on available cases. The solver scalability limit (N=8 timeouts) blocks real-case evaluation. Three roadmap stop criteria are met. No method-evaluation result on real cases, no selective refinement advantage, and no generalization evidence has been established. **The D1 feasibility gate is not passed.**
 
 ## Checkpoint log
 
@@ -115,6 +115,7 @@ research contract's two principal properties remain unchanged, and unresolved T2
 | 2026-10-23 | D1-03 joint semantics on synthetic fixtures | `[DONE]` | [D1-03 report](../reports/D1-03.md), [protocol v2](../protocols/d1/d1-03-joint-semantics.md), [results](../results/raw/D1-03/synthetic/summary.json): authored faulty/repaired producers (N=9, 3-word stride, 0 RANGE). synth-faulty→VIOLATION (CONCRETE_MODEL_REPLAYED, AUTH-UNMATCHED SAT at slot 0, nargo replay pass); synth-repaired→VERIFIED_WITHIN_SCOPE (CONCRETE_MODEL_REPLAYED, all AUTH/COV UNSAT, NONVAC SAT_REPLAYED). 15 regression tests pass. Consumer contract not exercised. D1-03 is DONE; D1-04 is NEXT. |
 | 2026-10-23 | D1-04 equal-information baselines | `[DONE]` | [D1-04 report](../reports/D1-04.md), [protocol](../protocols/d1/d1-04-baselines.md), [results](../results/raw/D1-04/baseline_results.json): B1 Foundry (7 tests, <1 ms, finds VIOLATION); B2 monolithic (identical to D1-03, propagation neutral); B3 manual summary (faulty SAT 1.0 s, repaired UNKNOWN 60 s timeout). Pipeline advantage: formal UNSAT + automatic extraction; no speed advantage on SAT. Honest assessment: no clear advantage over Foundry for bug finding on synthetic cases. **Review checkpoint reached.** D1-04 is DONE; D1-05 is NEXT. |
 | 2026-10-23 | D1-05 consumer-directed refinement | `[DONE]` | [D1-05 report](../reports/D1-05.md), [protocol](../protocols/d1/d1-05-refinement.md), [results](../results/raw/D1-05/synthetic/summary.json): CEGAR loop (abstract → concretize → refine). Both cases reject a spurious abstract candidate at iteration 0; synth-faulty confirms VIOLATION at iteration 1 (11.75 s, replayed); synth-repaired proves UNSAT at iteration 1 (107.3 s) → VERIFIED_WITHIN_SCOPE. Refinement coarse-grained on N=9 (all constraints in one step). 16 tests pass. Concretization is the new mechanism. D1-05 is DONE; D1-06 is NEXT. |
+| 2026-10-23 | D1-06 frozen feasibility comparison | `[DONE]` | [D1-06 report](../reports/D1-06.md), [protocol](../protocols/d1/d1-06-comparison.md): frozen comparison across D1-03/D1-04/D1-05 on synthetic N=9. CEGAR ties monolithic at ±9%; N=8 Payy all UNKNOWN (D1-01 timeouts); three of five roadmap stop criteria met (adapter ties, controls unresolved, no transfer). **Feasibility gate not passed.** The contribution is not currently supported. D1-07/D1-08 blocked. |
 
 ## Update rule
 
