@@ -1,6 +1,6 @@
 # D1 development plan
 
-Date: **23 October 2026**. Status: **D1-00 through D1-06 complete. Feasibility gate not passed; D1-07/D1-08 not justified.**
+Date: **23 October 2026**. Status: **CLOSED. D1-00 through D1-06 complete. Feasibility gate not passed; D1-07/D1-08 not justified. See [closing report](../../reports/D1-closing.md).**
 
 This is the execution roadmap for the isolated D1 worktree. The [research contract](../research-contract.md) controls scope and claims; [D1-00](../../reports/D1-00.md) records preservation and validation.
 
@@ -157,17 +157,18 @@ If proof/consumer paths and meaningful policies are available but static composi
 | D1-07 | BLOCKED | D1-06 feasibility gate not passed; no advantage demonstrated |
 | D1-08 | BLOCKED | D1-06 feasibility gate not passed |
 
-**D1-00 through D1-06 are complete.** D1-06 concludes that the CEGAR
+**D1 is closed.** D1-00 through D1-06 are complete. D1-06 concludes that the CEGAR
 mechanism is correct and sound but provides no measurable advantage over
 monolithic joint solving. The N=8 Payy controls remain all UNKNOWN (solver
 timeout). Three of five roadmap stop criteria are met: the modular adapter
 ties at comparable cost, the N=8 controls are unresolved, and no independent
 transfer path has been tested. The feasibility gate is not passed.
-See [D1-06 report](../../reports/D1-06.md).
+See [D1-06 report](../../reports/D1-06.md) and [closing report](../../reports/D1-closing.md).
 
 D1-07 (independent transfer) and D1-08 (full evaluation) are not justified
 without resolving the solver scalability limit or demonstrating a selective
-refinement advantage on larger circuits.
+refinement advantage on larger circuits. The [closing report](../../reports/D1-closing.md)
+documents conditions under which D1 could be reopened.
 
 ## 9 Provenance and limits
 
