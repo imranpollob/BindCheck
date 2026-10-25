@@ -1,0 +1,125 @@
+{
+  "task": "D1P-04",
+  "status": "FROZEN_BEFORE_SOLVER_EXECUTION",
+  "frozen_at_utc": "2026-10-25T19:24:13Z",
+  "repository_head": "2ad4f699d527490149f3704e6f6f228494f2d4bd",
+  "scope": "non-primary 25-cell SMT transformation equivalence only",
+  "artifact_manifest_sha256": "1a713bc5f464eda5e33218cd7985882405f06e5cccb8a3a79b7d5f1cb1e7e2ff",
+  "ordered_specialized_hash_list_sha256": "9548450503ee7599d27fec4d127a6d93163822b1a6f862a4ba93218f5ef7ebc2",
+  "ordered_equivalence_hash_list_sha256": "e43fc7a71519872f72821c5e7cb1aee70841e3b4ebc311435ecd74c42478b68b",
+  "platform": {
+    "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+    "machine": "arm64",
+    "python": "3.13.7"
+  },
+  "solver": {
+    "path": "/Users/imranpollob/Coding/bc/BindCheck/tools/cvc5-1.4.2-gpl/bin/cvc5",
+    "sha256": "a083a7f56a3f61691583b699076322bbcbf6732decfb4f6dc41850dbcc3df027",
+    "version": "cvc5 1.4.2, arm64 GPL/CoCoA build",
+    "version_provenance": "reports/D1P-00.md and reports/D1P-03.md; binary-specific SHA-256 and Mach-O identity rechecked without an extra process call",
+    "arguments": [
+      "--lang=smt2",
+      "--ff-solver=split"
+    ],
+    "stdin": "exact frozen query bytes"
+  },
+  "limits": {
+    "calls_max": 152,
+    "seconds_per_call": 30,
+    "solver_wall_seconds_max": 4560,
+    "address_space_bytes": 4294967296,
+    "attempts_per_call": 1,
+    "sequential": true
+  },
+  "call_order": [
+    "known_equivalence control (expected UNSAT)",
+    "deliberate_mismatch control (expected SAT)",
+    "150 equivalence queries in artifact-manifest order (expected UNSAT)"
+  ],
+  "stop_rules": [
+    "stop on either failed control",
+    "stop on any frozen identity mismatch",
+    "stop on SAT equivalence counterexample",
+    "stop on timeout, error, malformed output, or nonzero exit",
+    "no retries, tuning, alternate solver, or primary execution"
+  ],
+  "controls": [
+    {
+      "name": "known_equivalence",
+      "sha256": "a059c6d1ef0b0490bcefde03dfddf4b8df07973f72c86a97a9c98403db72300d",
+      "expected": "unsat"
+    },
+    {
+      "name": "deliberate_mismatch",
+      "sha256": "deceff64314775c5f1dd4b1eef23d6d2e7770ebc6f856951920e6d4a9d1c7a6d",
+      "expected": "sat"
+    }
+  ],
+  "frozen_files": [
+    {
+      "path": "docs/d1-paper/d1p-04-protocol.md",
+      "sha256": "4918e3c376158174dc1657a9ee6beb9cb573f52a5cbe386e123b67043f70e4b0"
+    },
+    {
+      "path": "scripts/d1p_04_specialize.py",
+      "sha256": "afb0d15492b8b5aafdba1a52a18b11a96fe7a02485111083ae7b8f4a1b1cf9c3"
+    },
+    {
+      "path": "scripts/d1p_04_validate.py",
+      "sha256": "f9be40bd3ef2161cfaea30557a331c5b5013143984260627343455abf23760bc"
+    },
+    {
+      "path": "tests/d1/test_d1p_04_specialize.py",
+      "sha256": "84321c8e888e6249b813c3b14f632845c6479c6b70a3ee4782d7b28ce40416d8"
+    },
+    {
+      "path": "docs/d1-paper/d1p-03-protocol.md",
+      "sha256": "15e2c245c9ac3ee4b1a89c0cff0163a3268e756576d7d2f9c775ecd7fec93b68"
+    },
+    {
+      "path": "reports/D1P-03.md",
+      "sha256": "e77215940b4ec7ec21ce8d696d1651b47d72d029eec2961686cf7edb7c545c83"
+    },
+    {
+      "path": "scripts/d1p_03_partition_check.py",
+      "sha256": "ecdcb5b8192c2354e660ccea041af7667876802988a516ba9fe977b6dd6c6ae2"
+    },
+    {
+      "path": "scripts/t22_v5_compact.py",
+      "sha256": "39cb3731d6e2921ac0a59c21dbd5d18a7a91bec18628e0e6bb843382d766c792"
+    },
+    {
+      "path": "scripts/t22_specs/payy_agg_agg.json",
+      "sha256": "dd7e17ed2c9cd74000182ea613184a53f86bd1944f86a5c5cc8016663a203e1c"
+    },
+    {
+      "path": "metadata/d1/d1-01-execution-manifest.json",
+      "sha256": "00b965f2d918506f5c8660ad5468303e82fb671291432a6aaeb9821a4ac57033"
+    },
+    {
+      "path": "results/raw/D1P-02/generated/check_added/nonvacuous.smt2",
+      "sha256": "c0312431ed84da5b55094fc4b27212f607789d143ad56b54db52359235b794b3"
+    },
+    {
+      "path": "results/raw/D1P-02/generated/check_added/prefix.smt2",
+      "sha256": "4ae2be7bcedcfe992966dc406d4cd8f2b43f1823fa49efd8fbfa14044631e781"
+    },
+    {
+      "path": "results/raw/D1P-02/generated/check_added/tail.smt2",
+      "sha256": "3621cdfca8269e404aca638a24aa852da0406be1013f2c29511df47b6ff0a7a1"
+    },
+    {
+      "path": "results/raw/D1P-02/generated/running_flag/nonvacuous.smt2",
+      "sha256": "af1ae83aafa43b9dbb06e110270dda0bff11c90371c2666143916fb067b21ff8"
+    },
+    {
+      "path": "results/raw/D1P-02/generated/running_flag/prefix.smt2",
+      "sha256": "6ac4b20422b09c0deea148b977159919d1542b7d587cdde38a9e9583671b82b4"
+    },
+    {
+      "path": "results/raw/D1P-02/generated/running_flag/tail.smt2",
+      "sha256": "4d80a119dfe1f781eb2a47cb60490143afc930eb150dec2b4da980370d900a3c"
+    }
+  ],
+  "interpretation": "UNSAT equivalence plus byte audit establishes only cell transformation eligibility; research verdict remains UNKNOWN"
+}

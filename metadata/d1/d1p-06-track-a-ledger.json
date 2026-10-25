@@ -1,0 +1,2315 @@
+{
+  "counts": {
+    "attempted_calls": 4,
+    "combined_attempted": 0,
+    "controls_attempted": 2,
+    "controls_passed": 2,
+    "partitioned_cells_attempted": 0,
+    "planned_calls": 166,
+    "primary_attempted": 2,
+    "primary_usable": 1,
+    "unrun_calls": 162,
+    "unusable_attempted_calls": 1,
+    "usable_completed_calls": 3
+  },
+  "freeze": {
+    "path": "metadata/d1/d1p-06-execution-freeze.json",
+    "sha256": "e4e54916e272fb5c7031824ca287780a1350a5ff1eb10c154c9d1c58340a150a"
+  },
+  "historical_linux_background": {
+    "elapsed_seconds": [
+      300.207,
+      300.131,
+      300.147,
+      300.167,
+      300.127,
+      300.192
+    ],
+    "resource_policy": "4 GiB RLIMIT_AS on Linux x86_64",
+    "result": "six timeouts/UNKNOWN",
+    "scope": "six exact combined queries only; background, not timing parity"
+  },
+  "input_manifest": {
+    "path": "metadata/d1/d1p-06-input-manifest.json",
+    "sha256": "67f588f4e1254b28cc17e226b31039574c6d2b26db4b16214c9d63a813b0fef5"
+  },
+  "interpretation": "The controls and one goal-only diagnostic are usable. The fourth call's SAT text is not a usable result because exit/resource/elapsed recording did not complete. No combined or partitioned query ran, so D1P-06 does not answer the decomposition question. The sampled cutoff is not a hard cap, and the D1 verdict remains UNKNOWN.",
+  "known_usable_solver_wall_seconds": 0.225923,
+  "limits": {
+    "attempts_per_query": 1,
+    "control_aggregate_seconds": 60.0,
+    "control_seconds": 30.0,
+    "controls_max": 2,
+    "partitioned_cell_seconds": 12.0,
+    "partitioned_slot_seconds": 300.0,
+    "primary_aggregate_seconds": 6000.0,
+    "primary_calls_max": 164,
+    "rss_cutoff_bytes": 4294967296,
+    "rss_sample_interval_seconds": 0.05,
+    "sequential": true,
+    "unsplit_slot_seconds": 300.0
+  },
+  "observations": {
+    "comparison": [
+      {
+        "cell_counts": {
+          "sat": 0,
+          "unknown": 0,
+          "unrun": 25,
+          "unsat": 0
+        },
+        "overhead_seconds": null,
+        "partitioned_elapsed_seconds": null,
+        "partitioned_result": "UNRUN",
+        "resource_use": null,
+        "slot": "check_added/nonvacuous",
+        "unsplit_elapsed_seconds": null,
+        "unsplit_result": "UNRUN"
+      },
+      {
+        "cell_counts": {
+          "sat": 0,
+          "unknown": 0,
+          "unrun": 25,
+          "unsat": 0
+        },
+        "overhead_seconds": null,
+        "partitioned_elapsed_seconds": null,
+        "partitioned_result": "UNRUN",
+        "resource_use": null,
+        "slot": "check_added/prefix",
+        "unsplit_elapsed_seconds": null,
+        "unsplit_result": "UNRUN"
+      },
+      {
+        "cell_counts": {
+          "sat": 0,
+          "unknown": 0,
+          "unrun": 25,
+          "unsat": 0
+        },
+        "overhead_seconds": null,
+        "partitioned_elapsed_seconds": null,
+        "partitioned_result": "UNRUN",
+        "resource_use": null,
+        "slot": "check_added/tail",
+        "unsplit_elapsed_seconds": null,
+        "unsplit_result": "UNRUN"
+      },
+      {
+        "cell_counts": {
+          "sat": 0,
+          "unknown": 0,
+          "unrun": 25,
+          "unsat": 0
+        },
+        "overhead_seconds": null,
+        "partitioned_elapsed_seconds": null,
+        "partitioned_result": "UNRUN",
+        "resource_use": null,
+        "slot": "running_flag/nonvacuous",
+        "unsplit_elapsed_seconds": null,
+        "unsplit_result": "UNRUN"
+      },
+      {
+        "cell_counts": {
+          "sat": 0,
+          "unknown": 0,
+          "unrun": 25,
+          "unsat": 0
+        },
+        "overhead_seconds": null,
+        "partitioned_elapsed_seconds": null,
+        "partitioned_result": "UNRUN",
+        "resource_use": null,
+        "slot": "running_flag/prefix",
+        "unsplit_elapsed_seconds": null,
+        "unsplit_result": "UNRUN"
+      },
+      {
+        "cell_counts": {
+          "sat": 0,
+          "unknown": 0,
+          "unrun": 25,
+          "unsat": 0
+        },
+        "overhead_seconds": null,
+        "partitioned_elapsed_seconds": null,
+        "partitioned_result": "UNRUN",
+        "resource_use": null,
+        "slot": "running_flag/tail",
+        "unsplit_elapsed_seconds": null,
+        "unsplit_result": "UNRUN"
+      }
+    ],
+    "cone_only": [],
+    "controls": [
+      {
+        "elapsed_seconds": 0.112347,
+        "name": "known_equivalence",
+        "peak_tree_rss_bytes": 6062080,
+        "result": "UNSAT"
+      },
+      {
+        "elapsed_seconds": 0.056733,
+        "name": "deliberate_mismatch",
+        "peak_tree_rss_bytes": 475136,
+        "result": "SAT"
+      }
+    ],
+    "goal_only": [
+      {
+        "attempted": true,
+        "elapsed_seconds": 0.05825,
+        "observed_peak_tree_rss_bytes": 475136,
+        "result": "SAT",
+        "slot": "check_added/nonvacuous",
+        "usable": true
+      },
+      {
+        "attempted": true,
+        "elapsed_seconds": null,
+        "observed_peak_tree_rss_bytes": null,
+        "result": "UNKNOWN",
+        "slot": "check_added/prefix",
+        "usable": false
+      },
+      {
+        "attempted": false,
+        "elapsed_seconds": null,
+        "observed_peak_tree_rss_bytes": null,
+        "result": "UNRUN",
+        "slot": "check_added/tail",
+        "usable": false
+      },
+      {
+        "attempted": false,
+        "elapsed_seconds": null,
+        "observed_peak_tree_rss_bytes": null,
+        "result": "UNRUN",
+        "slot": "running_flag/nonvacuous",
+        "usable": false
+      },
+      {
+        "attempted": false,
+        "elapsed_seconds": null,
+        "observed_peak_tree_rss_bytes": null,
+        "result": "UNRUN",
+        "slot": "running_flag/prefix",
+        "usable": false
+      },
+      {
+        "attempted": false,
+        "elapsed_seconds": null,
+        "observed_peak_tree_rss_bytes": null,
+        "result": "UNRUN",
+        "slot": "running_flag/tail",
+        "usable": false
+      }
+    ]
+  },
+  "observed_peak_tree_rss_bytes_over_usable_records": 6062080,
+  "recorded_at_utc": "2026-10-25T20:10:59.142806+00:00",
+  "records": [
+    {
+      "argv": [
+        "/Users/imranpollob/Coding/bc/BindCheck/tools/cvc5-1.4.2-gpl/bin/cvc5",
+        "--lang=smt2",
+        "--ff-solver=split"
+      ],
+      "arm": "control",
+      "attempts": 1,
+      "control_pass": true,
+      "elapsed_seconds": 0.112347,
+      "error": null,
+      "exit_status": 0,
+      "expected": "unsat",
+      "finished_utc": "2026-10-25T20:09:53.906130+00:00",
+      "index": 1,
+      "input_bytes": 412,
+      "input_path": "results/raw/D1P-06/inputs/controls/known_equivalence.smt2",
+      "input_sha256": "a059c6d1ef0b0490bcefde03dfddf4b8df07973f72c86a97a9c98403db72300d",
+      "kind": "control",
+      "last_sample": {
+        "pids": [
+          45859
+        ],
+        "process_count": 1,
+        "resident_bytes": 6062080,
+        "root_present": true
+      },
+      "memory_cutoff": false,
+      "memory_policy": {
+        "cutoff_bytes": 4294967296,
+        "hard_address_space_cap": false,
+        "metric": "sum of libproc proc_taskinfo resident bytes over root and recursive children",
+        "sample_interval_seconds": 0.05,
+        "sampling_can_overshoot": true
+      },
+      "memory_samples": 2,
+      "monitor_failed": false,
+      "name": "known_equivalence",
+      "parsed": "unsat",
+      "peak_tree_process_count": 1,
+      "peak_tree_rss_bytes": 6062080,
+      "pid": 45859,
+      "process_group": 45859,
+      "process_group_sigkill_sent": false,
+      "process_launched": true,
+      "query_path": "results/raw/D1P-06/inputs/controls/known_equivalence.smt2",
+      "query_sha256": "a059c6d1ef0b0490bcefde03dfddf4b8df07973f72c86a97a9c98403db72300d",
+      "record_path": "results/raw/D1P-06/track-a-macos/calls/001_control_known_equivalence.json",
+      "result": "UNSAT",
+      "sat_witness_output_preserved": false,
+      "started_utc": "2026-10-25T20:09:53.793673+00:00",
+      "status": "COMPLETED",
+      "stderr_path": "results/raw/D1P-06/track-a-macos/calls/001_control_known_equivalence.stderr",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdin": "exact input_path bytes",
+      "stdout_path": "results/raw/D1P-06/track-a-macos/calls/001_control_known_equivalence.stdout",
+      "stdout_sha256": "5c17dfcc2a8f1f30d9e96df6a9825a5030ade046d560332c19de74d93d591a18",
+      "timed_out": false,
+      "timeout_seconds": 30.0,
+      "validated_full_acir_evidence": false
+    },
+    {
+      "argv": [
+        "/Users/imranpollob/Coding/bc/BindCheck/tools/cvc5-1.4.2-gpl/bin/cvc5",
+        "--lang=smt2",
+        "--ff-solver=split"
+      ],
+      "arm": "control",
+      "attempts": 1,
+      "control_pass": true,
+      "elapsed_seconds": 0.056733,
+      "error": null,
+      "exit_status": 0,
+      "expected": "sat",
+      "finished_utc": "2026-10-25T20:09:53.964289+00:00",
+      "index": 2,
+      "input_bytes": 412,
+      "input_path": "results/raw/D1P-06/inputs/controls/deliberate_mismatch.smt2",
+      "input_sha256": "deceff64314775c5f1dd4b1eef23d6d2e7770ebc6f856951920e6d4a9d1c7a6d",
+      "kind": "control",
+      "last_sample": {
+        "pids": [
+          45860
+        ],
+        "process_count": 1,
+        "resident_bytes": 475136,
+        "root_present": true
+      },
+      "memory_cutoff": false,
+      "memory_policy": {
+        "cutoff_bytes": 4294967296,
+        "hard_address_space_cap": false,
+        "metric": "sum of libproc proc_taskinfo resident bytes over root and recursive children",
+        "sample_interval_seconds": 0.05,
+        "sampling_can_overshoot": true
+      },
+      "memory_samples": 1,
+      "monitor_failed": false,
+      "name": "deliberate_mismatch",
+      "parsed": "sat",
+      "peak_tree_process_count": 1,
+      "peak_tree_rss_bytes": 475136,
+      "pid": 45860,
+      "process_group": 45860,
+      "process_group_sigkill_sent": false,
+      "process_launched": true,
+      "query_path": "results/raw/D1P-06/inputs/controls/deliberate_mismatch.smt2",
+      "query_sha256": "deceff64314775c5f1dd4b1eef23d6d2e7770ebc6f856951920e6d4a9d1c7a6d",
+      "record_path": "results/raw/D1P-06/track-a-macos/calls/002_control_deliberate_mismatch.json",
+      "result": "SAT",
+      "sat_witness_output_preserved": false,
+      "started_utc": "2026-10-25T20:09:53.907540+00:00",
+      "status": "COMPLETED",
+      "stderr_path": "results/raw/D1P-06/track-a-macos/calls/002_control_deliberate_mismatch.stderr",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdin": "exact input_path bytes",
+      "stdout_path": "results/raw/D1P-06/track-a-macos/calls/002_control_deliberate_mismatch.stdout",
+      "stdout_sha256": "d9dbf94b05b8314af9ca7f2034e92685c33447917605a7243b1099c693a12e5e",
+      "timed_out": false,
+      "timeout_seconds": 30.0,
+      "validated_full_acir_evidence": false
+    },
+    {
+      "anticipated_result_not_observation": "sat",
+      "argv": [
+        "/Users/imranpollob/Coding/bc/BindCheck/tools/cvc5-1.4.2-gpl/bin/cvc5",
+        "--lang=smt2",
+        "--ff-solver=split"
+      ],
+      "arm": "goal_only",
+      "attempts": 1,
+      "charged_overhead_seconds": 0.001407,
+      "elapsed_seconds": 0.056843,
+      "error": null,
+      "exit_status": 0,
+      "finished_utc": "2026-10-25T20:09:54.022770+00:00",
+      "index": 3,
+      "input_bytes": 21895,
+      "input_path": "results/raw/D1P-06/inputs/goal-only/check_added/nonvacuous.smt2",
+      "input_sha256": "88d4ef5cc7b6a213b8c68b68a01362c08909d1c4c0c2a1bc99363516884c1e39",
+      "kind": "goal_only",
+      "last_sample": {
+        "pids": [
+          45861
+        ],
+        "process_count": 1,
+        "resident_bytes": 475136,
+        "root_present": true
+      },
+      "memory_cutoff": false,
+      "memory_policy": {
+        "cutoff_bytes": 4294967296,
+        "hard_address_space_cap": false,
+        "metric": "sum of libproc proc_taskinfo resident bytes over root and recursive children",
+        "sample_interval_seconds": 0.05,
+        "sampling_can_overshoot": true
+      },
+      "memory_samples": 1,
+      "monitor_failed": false,
+      "name": "check_added/nonvacuous",
+      "parsed": "sat",
+      "peak_tree_process_count": 1,
+      "peak_tree_rss_bytes": 475136,
+      "pid": 45861,
+      "process_group": 45861,
+      "process_group_sigkill_sent": false,
+      "process_launched": true,
+      "query_path": "results/raw/D1P-06/inputs/goal-only/check_added/nonvacuous.smt2",
+      "query_sha256": "88d4ef5cc7b6a213b8c68b68a01362c08909d1c4c0c2a1bc99363516884c1e39",
+      "record_path": "results/raw/D1P-06/track-a-macos/calls/003_goal_only_check_added__nonvacuous.json",
+      "result": "SAT",
+      "sat_witness_output_preserved": true,
+      "slot_elapsed_seconds": 0.05825,
+      "started_utc": "2026-10-25T20:09:53.965904+00:00",
+      "status": "COMPLETED",
+      "stderr_path": "results/raw/D1P-06/track-a-macos/calls/003_goal_only_check_added__nonvacuous.stderr",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdin": "exact input_path bytes",
+      "stdout_path": "results/raw/D1P-06/track-a-macos/calls/003_goal_only_check_added__nonvacuous.stdout",
+      "stdout_sha256": "23fbbf6b384adbc88b5d0f4a16b05c492d417dec2b546f61e6104b7275e7f6c5",
+      "timed_out": false,
+      "timeout_seconds": 300.0,
+      "validated_full_acir_evidence": false
+    },
+    {
+      "arm": "goal_only",
+      "attempts": 1,
+      "elapsed_seconds": null,
+      "error": "D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "exit_status": null,
+      "index": 4,
+      "kind": "goal_only",
+      "memory_samples": null,
+      "name": "check_added/prefix",
+      "parsed_stdout": "sat",
+      "peak_tree_rss_bytes": null,
+      "query_path": "results/raw/D1P-06/inputs/goal-only/check_added/prefix.smt2",
+      "query_sha256": "c9e0ddff9b85d230550bc03a3844970fd49d642934b2e8ded6c56fb6b94faf3e",
+      "result": "UNKNOWN",
+      "sat_witness_output_present_but_unusable": true,
+      "status": "MONITORING_CLEANUP_EXCEPTION",
+      "stderr_path": "results/raw/D1P-06/track-a-macos/calls/004_goal_only_check_added__prefix.stderr",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_path": "results/raw/D1P-06/track-a-macos/calls/004_goal_only_check_added__prefix.stdout",
+      "stdout_sha256": "6b8fd139aa1ca4548b8978ffe1068ac0f65aa4fbc38797b2db8eb4bd9efbb09b",
+      "validated_full_acir_evidence": false
+    },
+    {
+      "arm": "goal_only",
+      "attempts": 0,
+      "index": 5,
+      "name": "check_added/tail",
+      "query_path": "results/raw/D1P-06/inputs/goal-only/check_added/tail.smt2",
+      "query_sha256": "3a8eac18d376ad5f8efa6e935b82d146d2f75e85e262f6eca89dd2a4e5b3c5ef",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "goal_only",
+      "attempts": 0,
+      "index": 6,
+      "name": "running_flag/nonvacuous",
+      "query_path": "results/raw/D1P-06/inputs/goal-only/running_flag/nonvacuous.smt2",
+      "query_sha256": "fa0294678277bb021529ab9073b59b6113b56151ab01149a4e9570f75b3dd66e",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "goal_only",
+      "attempts": 0,
+      "index": 7,
+      "name": "running_flag/prefix",
+      "query_path": "results/raw/D1P-06/inputs/goal-only/running_flag/prefix.smt2",
+      "query_sha256": "b7e05a73472e6a416bb989982c9a447a8edc5d5e31651d563f9b4c921b540383",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "goal_only",
+      "attempts": 0,
+      "index": 8,
+      "name": "running_flag/tail",
+      "query_path": "results/raw/D1P-06/inputs/goal-only/running_flag/tail.smt2",
+      "query_sha256": "b6c794b30b590e6f87228bbdbda35bf3e57bf0427751d9539e1dd38efc1b0b14",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "cone_only",
+      "attempts": 0,
+      "index": 9,
+      "name": "check_added",
+      "query_path": "results/raw/D1P-06/inputs/cone-only/check_added.smt2",
+      "query_sha256": "74c49910d10f5b58c428fcdd36845402c716516972feff1afca4ac62e2a3e757",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "cone_only",
+      "attempts": 0,
+      "index": 10,
+      "name": "running_flag",
+      "query_path": "results/raw/D1P-06/inputs/cone-only/running_flag.smt2",
+      "query_sha256": "9b07f79afa1ad4b20078c805533c386b113850556094d77d32c70282e7565219",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "combined",
+      "attempts": 0,
+      "index": 11,
+      "name": "check_added/nonvacuous",
+      "query_path": "results/raw/D1P-06/inputs/combined/check_added/nonvacuous.smt2",
+      "query_sha256": "c0312431ed84da5b55094fc4b27212f607789d143ad56b54db52359235b794b3",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "combined",
+      "attempts": 0,
+      "index": 12,
+      "name": "check_added/prefix",
+      "query_path": "results/raw/D1P-06/inputs/combined/check_added/prefix.smt2",
+      "query_sha256": "4ae2be7bcedcfe992966dc406d4cd8f2b43f1823fa49efd8fbfa14044631e781",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "combined",
+      "attempts": 0,
+      "index": 13,
+      "name": "check_added/tail",
+      "query_path": "results/raw/D1P-06/inputs/combined/check_added/tail.smt2",
+      "query_sha256": "3621cdfca8269e404aca638a24aa852da0406be1013f2c29511df47b6ff0a7a1",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "combined",
+      "attempts": 0,
+      "index": 14,
+      "name": "running_flag/nonvacuous",
+      "query_path": "results/raw/D1P-06/inputs/combined/running_flag/nonvacuous.smt2",
+      "query_sha256": "af1ae83aafa43b9dbb06e110270dda0bff11c90371c2666143916fb067b21ff8",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "combined",
+      "attempts": 0,
+      "index": 15,
+      "name": "running_flag/prefix",
+      "query_path": "results/raw/D1P-06/inputs/combined/running_flag/prefix.smt2",
+      "query_sha256": "6ac4b20422b09c0deea148b977159919d1542b7d587cdde38a9e9583671b82b4",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "combined",
+      "attempts": 0,
+      "index": 16,
+      "name": "running_flag/tail",
+      "query_path": "results/raw/D1P-06/inputs/combined/running_flag/tail.smt2",
+      "query_sha256": "4d80a119dfe1f781eb2a47cb60490143afc930eb150dec2b4da980370d900a3c",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 17,
+      "name": "check_added/nonvacuous/00_inactive__inactive",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/nonvacuous/00_inactive__inactive.smt2",
+      "query_sha256": "13740227694830184d7d8cb62d978245500a70402e5854facb514222c91d7547",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 18,
+      "name": "check_added/nonvacuous/01_inactive__active_empty",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/nonvacuous/01_inactive__active_empty.smt2",
+      "query_sha256": "cf6dd445630cb42cfda858e121c5eb5bf747626d5e957567074e659b2eb7ce03",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 19,
+      "name": "check_added/nonvacuous/02_inactive__length_4",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/nonvacuous/02_inactive__length_4.smt2",
+      "query_sha256": "1f81aef16f8e6b81ad409a014f22d22181f5e5f4db5f1582c13e171e59aefb9f",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 20,
+      "name": "check_added/nonvacuous/03_inactive__length_5",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/nonvacuous/03_inactive__length_5.smt2",
+      "query_sha256": "4bc02f20921ca5965e3aa14462f3a0b2fd5c8bc4377c1671a23317c4f8a97c97",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 21,
+      "name": "check_added/nonvacuous/04_inactive__truncated_8",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/nonvacuous/04_inactive__truncated_8.smt2",
+      "query_sha256": "70e4d99cf16544d63995a35c5d36adc39eea0e3551568328bbfedad9692b9d7a",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 22,
+      "name": "check_added/nonvacuous/05_active_empty__inactive",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/nonvacuous/05_active_empty__inactive.smt2",
+      "query_sha256": "dcd96b8ad882ffe560cced25fd4dcbe28bfea4c3a66b865971b5eb6ce302ca71",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 23,
+      "name": "check_added/nonvacuous/06_active_empty__active_empty",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/nonvacuous/06_active_empty__active_empty.smt2",
+      "query_sha256": "b4e4ec30d50249aacc37bf2e4d1b095091c3f736ec11045aaa080799fdf70cfa",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 24,
+      "name": "check_added/nonvacuous/07_active_empty__length_4",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/nonvacuous/07_active_empty__length_4.smt2",
+      "query_sha256": "0e817cbb751c7a85709643945704f073fa924d6170ab2eff22c265d6bceba73c",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 25,
+      "name": "check_added/nonvacuous/08_active_empty__length_5",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/nonvacuous/08_active_empty__length_5.smt2",
+      "query_sha256": "9085204155dac8590e5d141493d5e0096fc6f887b0e24bf0e76676157d887ab6",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 26,
+      "name": "check_added/nonvacuous/09_active_empty__truncated_8",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/nonvacuous/09_active_empty__truncated_8.smt2",
+      "query_sha256": "1d16dc3b522df5cac6e7845370cd6f3424bf3b4572d2cb9d1f9a9a141133a79a",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 27,
+      "name": "check_added/nonvacuous/10_length_4__inactive",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/nonvacuous/10_length_4__inactive.smt2",
+      "query_sha256": "4752873ff7c66005cb0346cb23154ad078bc61336ea7fbcc400c7acd126adfa8",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 28,
+      "name": "check_added/nonvacuous/11_length_4__active_empty",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/nonvacuous/11_length_4__active_empty.smt2",
+      "query_sha256": "deb9477715dc40f752137ba9eb3fe37982aa65e46ef800057740e84311a186ab",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 29,
+      "name": "check_added/nonvacuous/12_length_4__length_4",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/nonvacuous/12_length_4__length_4.smt2",
+      "query_sha256": "0f5655ac307a9c396caee033a84460e14d68378f2cc7538664676241a1a65669",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 30,
+      "name": "check_added/nonvacuous/13_length_4__length_5",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/nonvacuous/13_length_4__length_5.smt2",
+      "query_sha256": "175173ea5b44b7b90b247666563dae3722ae12d461dc8191a3f0f31d3174ddc4",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 31,
+      "name": "check_added/nonvacuous/14_length_4__truncated_8",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/nonvacuous/14_length_4__truncated_8.smt2",
+      "query_sha256": "667ecc93f8d037edb8d032c340efd149735f8bb1500ac8b7291d004b0ab38120",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 32,
+      "name": "check_added/nonvacuous/15_length_5__inactive",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/nonvacuous/15_length_5__inactive.smt2",
+      "query_sha256": "c919575f8f35d3b178e33c99e826d5cadba4a86f5ce59f1a5d768ef8ac319c9c",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 33,
+      "name": "check_added/nonvacuous/16_length_5__active_empty",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/nonvacuous/16_length_5__active_empty.smt2",
+      "query_sha256": "ae935e638546349b0d103e3c2f5fde038b4eb2f0e449496874cdabd5eafd0171",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 34,
+      "name": "check_added/nonvacuous/17_length_5__length_4",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/nonvacuous/17_length_5__length_4.smt2",
+      "query_sha256": "71111bae199c2a1627642bd5669fffcc4d40716d6148acd9e2964c423e097811",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 35,
+      "name": "check_added/nonvacuous/18_length_5__length_5",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/nonvacuous/18_length_5__length_5.smt2",
+      "query_sha256": "fc2c2daed790de6738d944e82fac7b8e8a0539aab5e6d987210e6213d9a2270c",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 36,
+      "name": "check_added/nonvacuous/19_length_5__truncated_8",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/nonvacuous/19_length_5__truncated_8.smt2",
+      "query_sha256": "32fc87429c4cc5224e4c2f5a030cf140ac102416746ceb4577c140a9eb58a826",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 37,
+      "name": "check_added/nonvacuous/20_truncated_8__inactive",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/nonvacuous/20_truncated_8__inactive.smt2",
+      "query_sha256": "2ed6f0ebe96ff6d75277be29fb42c551f6f38b92abaf7f97dfd15fdee47faf1d",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 38,
+      "name": "check_added/nonvacuous/21_truncated_8__active_empty",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/nonvacuous/21_truncated_8__active_empty.smt2",
+      "query_sha256": "1558bbe24546998a1e01d1f827125d108392ce5ae2d816394bf82d8e6fde9a38",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 39,
+      "name": "check_added/nonvacuous/22_truncated_8__length_4",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/nonvacuous/22_truncated_8__length_4.smt2",
+      "query_sha256": "05dc2c07dcb0f9865acf95f667762936f4a004724e565d838a4f8bddc9562a6c",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 40,
+      "name": "check_added/nonvacuous/23_truncated_8__length_5",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/nonvacuous/23_truncated_8__length_5.smt2",
+      "query_sha256": "abca298f3f4a4e6de88c2b94274329f407648f856681ebc45f198a621885412e",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 41,
+      "name": "check_added/nonvacuous/24_truncated_8__truncated_8",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/nonvacuous/24_truncated_8__truncated_8.smt2",
+      "query_sha256": "2f2618dbdaf094fed6bee44eb1ddc26c8a98b2cd5288f0952323f2a78b2a8054",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 42,
+      "name": "check_added/prefix/00_inactive__inactive",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/prefix/00_inactive__inactive.smt2",
+      "query_sha256": "13740227694830184d7d8cb62d978245500a70402e5854facb514222c91d7547",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 43,
+      "name": "check_added/prefix/01_inactive__active_empty",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/prefix/01_inactive__active_empty.smt2",
+      "query_sha256": "cf6dd445630cb42cfda858e121c5eb5bf747626d5e957567074e659b2eb7ce03",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 44,
+      "name": "check_added/prefix/02_inactive__length_4",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/prefix/02_inactive__length_4.smt2",
+      "query_sha256": "93b1bcaa6f4743929c50ccb54c30a9b8b099198323268d41463d322d8c05e857",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 45,
+      "name": "check_added/prefix/03_inactive__length_5",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/prefix/03_inactive__length_5.smt2",
+      "query_sha256": "273a52dc2aa649cdd89a1af6aaf046178150062a086d442768b309ebea3a0fd8",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 46,
+      "name": "check_added/prefix/04_inactive__truncated_8",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/prefix/04_inactive__truncated_8.smt2",
+      "query_sha256": "88f429c29be96bdeba70ce092838fbc93e452e715af61bcdc7c412b405ac1a79",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 47,
+      "name": "check_added/prefix/05_active_empty__inactive",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/prefix/05_active_empty__inactive.smt2",
+      "query_sha256": "dcd96b8ad882ffe560cced25fd4dcbe28bfea4c3a66b865971b5eb6ce302ca71",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 48,
+      "name": "check_added/prefix/06_active_empty__active_empty",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/prefix/06_active_empty__active_empty.smt2",
+      "query_sha256": "b4e4ec30d50249aacc37bf2e4d1b095091c3f736ec11045aaa080799fdf70cfa",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 49,
+      "name": "check_added/prefix/07_active_empty__length_4",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/prefix/07_active_empty__length_4.smt2",
+      "query_sha256": "71433c796e7f4cee72a29439ffb6a7aa037cfbb7f01ccda8b26fc25e45821e41",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 50,
+      "name": "check_added/prefix/08_active_empty__length_5",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/prefix/08_active_empty__length_5.smt2",
+      "query_sha256": "4544e951347fae18ef3c5dddc89ce1a25a6edd0c29e108cbbb251f3953a0ff70",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 51,
+      "name": "check_added/prefix/09_active_empty__truncated_8",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/prefix/09_active_empty__truncated_8.smt2",
+      "query_sha256": "03300c508b9c8a83f5bdeb851cb7bcaa0e783cee284ae319972d38f52c783e4c",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 52,
+      "name": "check_added/prefix/10_length_4__inactive",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/prefix/10_length_4__inactive.smt2",
+      "query_sha256": "d3e2f84ec5cc02b82dcac11e5e036b0c1f381c7fc1eda91a1618d589026f9962",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 53,
+      "name": "check_added/prefix/11_length_4__active_empty",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/prefix/11_length_4__active_empty.smt2",
+      "query_sha256": "2c5904745d90308a3df643207c8f95e2cc399a3307c9e52e9b81855a58d9107d",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 54,
+      "name": "check_added/prefix/12_length_4__length_4",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/prefix/12_length_4__length_4.smt2",
+      "query_sha256": "70a5a2c157dd4db37c65bfc72e57a2bdb25a344c3953f860c4eb43eb8d1e41b5",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 55,
+      "name": "check_added/prefix/13_length_4__length_5",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/prefix/13_length_4__length_5.smt2",
+      "query_sha256": "4056c8f91b38c1308a4ece29104744461fcee946762840080c76f9ed2f719911",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 56,
+      "name": "check_added/prefix/14_length_4__truncated_8",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/prefix/14_length_4__truncated_8.smt2",
+      "query_sha256": "c4f18ab6c9557e3bc5145dabd91cd099915db8b8ff66d665a343f869e0ebe4de",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 57,
+      "name": "check_added/prefix/15_length_5__inactive",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/prefix/15_length_5__inactive.smt2",
+      "query_sha256": "ba622929829402698b77f6469f0c4c0c231224a8325ad55a9cddb9bed4296004",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 58,
+      "name": "check_added/prefix/16_length_5__active_empty",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/prefix/16_length_5__active_empty.smt2",
+      "query_sha256": "67e991a84f063c51852d11ed6af92df91b94dd88c77aa47abfa44dca06118919",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 59,
+      "name": "check_added/prefix/17_length_5__length_4",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/prefix/17_length_5__length_4.smt2",
+      "query_sha256": "1f523014508d2bcdeddbacbde946d07e560b592c2e4e406f993bfc80cb3248b3",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 60,
+      "name": "check_added/prefix/18_length_5__length_5",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/prefix/18_length_5__length_5.smt2",
+      "query_sha256": "46344a7a47e305805d978ae42ee44233a4c1aa48e86944b996eea2a4d2c5ce72",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 61,
+      "name": "check_added/prefix/19_length_5__truncated_8",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/prefix/19_length_5__truncated_8.smt2",
+      "query_sha256": "1bd452a925ce95da723604ceee633b324712b654cf2f93cbb0f390c42682415c",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 62,
+      "name": "check_added/prefix/20_truncated_8__inactive",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/prefix/20_truncated_8__inactive.smt2",
+      "query_sha256": "04bc2f12e7224b428404dd6a421bc937632a908b7c1cbb1a9676de3fcd67661b",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 63,
+      "name": "check_added/prefix/21_truncated_8__active_empty",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/prefix/21_truncated_8__active_empty.smt2",
+      "query_sha256": "f6a4eab864a04f044c5cc042cc1c68f57c4f3d6765c28dd0d9f4e3004bb2783f",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 64,
+      "name": "check_added/prefix/22_truncated_8__length_4",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/prefix/22_truncated_8__length_4.smt2",
+      "query_sha256": "e181af66b64375b7afd5d138befe916ad4a4dd2d34c35990d6f3cf565a2f3db7",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 65,
+      "name": "check_added/prefix/23_truncated_8__length_5",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/prefix/23_truncated_8__length_5.smt2",
+      "query_sha256": "cb181b15af69f15b4a4d3511b143eb16de41c4f8ef334808d291b4ff99cedd82",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 66,
+      "name": "check_added/prefix/24_truncated_8__truncated_8",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/prefix/24_truncated_8__truncated_8.smt2",
+      "query_sha256": "f527747c0ae16c885f29ed2272ff98ee7d0e22041e1acbf3a63aa77317e40729",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 67,
+      "name": "check_added/tail/00_inactive__inactive",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/tail/00_inactive__inactive.smt2",
+      "query_sha256": "62c7b7e8fc279eb52e28a8374558a7aa249d887312ee41087a2bd28436281839",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 68,
+      "name": "check_added/tail/01_inactive__active_empty",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/tail/01_inactive__active_empty.smt2",
+      "query_sha256": "3f8c27790bf930a5981832ab27c188aaed2a7729b831acb6a1dd9efa973954ac",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 69,
+      "name": "check_added/tail/02_inactive__length_4",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/tail/02_inactive__length_4.smt2",
+      "query_sha256": "802e78577df96e441e73b29a8d6e1841125f38069e3605c5cb9aa8ae3e6c07d2",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 70,
+      "name": "check_added/tail/03_inactive__length_5",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/tail/03_inactive__length_5.smt2",
+      "query_sha256": "029eb5736a8bd16a97c534ce681266c7ed8fd989469a20689cd7ab53df69892b",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 71,
+      "name": "check_added/tail/04_inactive__truncated_8",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/tail/04_inactive__truncated_8.smt2",
+      "query_sha256": "37d6396aa1026534a782d32456ee0e395b24d20587448315b84e9b754c771b6a",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 72,
+      "name": "check_added/tail/05_active_empty__inactive",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/tail/05_active_empty__inactive.smt2",
+      "query_sha256": "135c4f1b6e520f91002a88bbb08a84b08624446436ad9def0aa8d31b17ba978f",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 73,
+      "name": "check_added/tail/06_active_empty__active_empty",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/tail/06_active_empty__active_empty.smt2",
+      "query_sha256": "f84daab678b2bfffd186c25826f36255a189fdeb397c2c0b8928a8a90ef969bb",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 74,
+      "name": "check_added/tail/07_active_empty__length_4",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/tail/07_active_empty__length_4.smt2",
+      "query_sha256": "48ecb68197614549644fa91546287354800ee943f634d8d4ee49efe65704e08e",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 75,
+      "name": "check_added/tail/08_active_empty__length_5",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/tail/08_active_empty__length_5.smt2",
+      "query_sha256": "9c7cf9c9866e6bf61eaddde94bfab019c52ce7c326a0ccfae973e8c9556fdb7d",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 76,
+      "name": "check_added/tail/09_active_empty__truncated_8",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/tail/09_active_empty__truncated_8.smt2",
+      "query_sha256": "30d64030a8b04500744b6edeb70a174cb6247f8067bbb4da5235ead6f8612373",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 77,
+      "name": "check_added/tail/10_length_4__inactive",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/tail/10_length_4__inactive.smt2",
+      "query_sha256": "04d5ee203adb47c29673afc33d340b840fcb379ca4601db338118e8b11e8c8ad",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 78,
+      "name": "check_added/tail/11_length_4__active_empty",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/tail/11_length_4__active_empty.smt2",
+      "query_sha256": "7cd5e47e815337a302e15b2838776e799c0e66b38399b4cd01aece121710a66f",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 79,
+      "name": "check_added/tail/12_length_4__length_4",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/tail/12_length_4__length_4.smt2",
+      "query_sha256": "81b36f7adea1a2d412439c587de358a6cb3ce00ba0718c03c6543ce9129acc38",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 80,
+      "name": "check_added/tail/13_length_4__length_5",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/tail/13_length_4__length_5.smt2",
+      "query_sha256": "175173ea5b44b7b90b247666563dae3722ae12d461dc8191a3f0f31d3174ddc4",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 81,
+      "name": "check_added/tail/14_length_4__truncated_8",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/tail/14_length_4__truncated_8.smt2",
+      "query_sha256": "667ecc93f8d037edb8d032c340efd149735f8bb1500ac8b7291d004b0ab38120",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 82,
+      "name": "check_added/tail/15_length_5__inactive",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/tail/15_length_5__inactive.smt2",
+      "query_sha256": "8d720204a380f752c0151c4676e5e40ac904ca1b9881fa40dfcee771906a991d",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 83,
+      "name": "check_added/tail/16_length_5__active_empty",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/tail/16_length_5__active_empty.smt2",
+      "query_sha256": "1d6955559b1fba0a83aca19a6eefa5dded0ecffe01e71e6d4dcf7ec7b55a46f5",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 84,
+      "name": "check_added/tail/17_length_5__length_4",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/tail/17_length_5__length_4.smt2",
+      "query_sha256": "71111bae199c2a1627642bd5669fffcc4d40716d6148acd9e2964c423e097811",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 85,
+      "name": "check_added/tail/18_length_5__length_5",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/tail/18_length_5__length_5.smt2",
+      "query_sha256": "fc2c2daed790de6738d944e82fac7b8e8a0539aab5e6d987210e6213d9a2270c",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 86,
+      "name": "check_added/tail/19_length_5__truncated_8",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/tail/19_length_5__truncated_8.smt2",
+      "query_sha256": "32fc87429c4cc5224e4c2f5a030cf140ac102416746ceb4577c140a9eb58a826",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 87,
+      "name": "check_added/tail/20_truncated_8__inactive",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/tail/20_truncated_8__inactive.smt2",
+      "query_sha256": "811e62a80c61d870c68d3ddd55b6aec34b20412ae2e059fc250f48bf356a375a",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 88,
+      "name": "check_added/tail/21_truncated_8__active_empty",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/tail/21_truncated_8__active_empty.smt2",
+      "query_sha256": "53887dba7cf5f8ae2868fb34703c00e010171c2fa6657d8350c67aae32261cbe",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 89,
+      "name": "check_added/tail/22_truncated_8__length_4",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/tail/22_truncated_8__length_4.smt2",
+      "query_sha256": "05dc2c07dcb0f9865acf95f667762936f4a004724e565d838a4f8bddc9562a6c",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 90,
+      "name": "check_added/tail/23_truncated_8__length_5",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/tail/23_truncated_8__length_5.smt2",
+      "query_sha256": "abca298f3f4a4e6de88c2b94274329f407648f856681ebc45f198a621885412e",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 91,
+      "name": "check_added/tail/24_truncated_8__truncated_8",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/check_added/tail/24_truncated_8__truncated_8.smt2",
+      "query_sha256": "2f2618dbdaf094fed6bee44eb1ddc26c8a98b2cd5288f0952323f2a78b2a8054",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 92,
+      "name": "running_flag/nonvacuous/00_inactive__inactive",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/nonvacuous/00_inactive__inactive.smt2",
+      "query_sha256": "96b8d20581f71a5c467ab37c288acaddee7208a14d1b07ff2b3059e8fc8c10ca",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 93,
+      "name": "running_flag/nonvacuous/01_inactive__active_empty",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/nonvacuous/01_inactive__active_empty.smt2",
+      "query_sha256": "d97f5b9ec1259dc6413badc2c29fd854c1fdfd42a116c3e8915a0c33c54eae27",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 94,
+      "name": "running_flag/nonvacuous/02_inactive__length_4",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/nonvacuous/02_inactive__length_4.smt2",
+      "query_sha256": "488f78431dea36b1832786f7f5d5dc48c3d5a2afde5dbc3af097b057ac3a3ed3",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 95,
+      "name": "running_flag/nonvacuous/03_inactive__length_5",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/nonvacuous/03_inactive__length_5.smt2",
+      "query_sha256": "729c41196f1a9ad6c89ae4dc98f81f310880942acb1472e7f169307d12c29b09",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 96,
+      "name": "running_flag/nonvacuous/04_inactive__truncated_8",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/nonvacuous/04_inactive__truncated_8.smt2",
+      "query_sha256": "bfa68cd453add6a1df4609753ae686287981c961c863c1e5a3c8e04eea12418f",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 97,
+      "name": "running_flag/nonvacuous/05_active_empty__inactive",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/nonvacuous/05_active_empty__inactive.smt2",
+      "query_sha256": "4c01fe50fe3e68bb43883d3b6fa5a7cb6012e22179cabc390ee6c489a7bf26ca",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 98,
+      "name": "running_flag/nonvacuous/06_active_empty__active_empty",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/nonvacuous/06_active_empty__active_empty.smt2",
+      "query_sha256": "fda6785cef8ffdc021176ba350850e8c92ba5ada0bb8b4bb3973c1662380b580",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 99,
+      "name": "running_flag/nonvacuous/07_active_empty__length_4",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/nonvacuous/07_active_empty__length_4.smt2",
+      "query_sha256": "8c1d327598ce5b8bbb27e5cd43b177b986e899ad4a4cf064d3beadfb270126a1",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 100,
+      "name": "running_flag/nonvacuous/08_active_empty__length_5",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/nonvacuous/08_active_empty__length_5.smt2",
+      "query_sha256": "324866e8dba5d46185a7805e0d543063bdf3bd4a4dc6d8c802a3ad8fd93f6b25",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 101,
+      "name": "running_flag/nonvacuous/09_active_empty__truncated_8",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/nonvacuous/09_active_empty__truncated_8.smt2",
+      "query_sha256": "dc1044f9364eb7fe21cf89447c4fbbc6397a000e62901747bff62d55ff27d009",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 102,
+      "name": "running_flag/nonvacuous/10_length_4__inactive",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/nonvacuous/10_length_4__inactive.smt2",
+      "query_sha256": "bdd555a5484016ffb234248d57ec5caaff9cb10ace53d25ca73ca6ed0a5f9067",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 103,
+      "name": "running_flag/nonvacuous/11_length_4__active_empty",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/nonvacuous/11_length_4__active_empty.smt2",
+      "query_sha256": "37d539e11185e73b819da839277083dbe51aca9ef2420229fb6aad3925bf0dc3",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 104,
+      "name": "running_flag/nonvacuous/12_length_4__length_4",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/nonvacuous/12_length_4__length_4.smt2",
+      "query_sha256": "a7d36478052a670c5393b1a0f9734a43d34ad6b0c9e009793f1708c136d39204",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 105,
+      "name": "running_flag/nonvacuous/13_length_4__length_5",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/nonvacuous/13_length_4__length_5.smt2",
+      "query_sha256": "7370908dafb72fff96add3f74975832ccc609b1b8a22d5641c55da6c40bf6fef",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 106,
+      "name": "running_flag/nonvacuous/14_length_4__truncated_8",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/nonvacuous/14_length_4__truncated_8.smt2",
+      "query_sha256": "9755b5b8cc88ea5fe55f66105ec8db7ad540b781f50f3ad54cb44092fcf38633",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 107,
+      "name": "running_flag/nonvacuous/15_length_5__inactive",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/nonvacuous/15_length_5__inactive.smt2",
+      "query_sha256": "c8b6a9c77936ffd69270b08e7685abbc34470ffae00f75eb17e208527ca63ae1",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 108,
+      "name": "running_flag/nonvacuous/16_length_5__active_empty",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/nonvacuous/16_length_5__active_empty.smt2",
+      "query_sha256": "49f327e0c7ee00857cc59314d450bb2210ce33c8f7626b62f9e0143a6a45b881",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 109,
+      "name": "running_flag/nonvacuous/17_length_5__length_4",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/nonvacuous/17_length_5__length_4.smt2",
+      "query_sha256": "3f98c66fd6923fda142e59f236372961b31acf09788d7a0645c972702f254099",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 110,
+      "name": "running_flag/nonvacuous/18_length_5__length_5",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/nonvacuous/18_length_5__length_5.smt2",
+      "query_sha256": "71a6fde1df6bbc0e354e059dc5c0537316a3d4c4bcf3e9c70365e5bbb234c39e",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 111,
+      "name": "running_flag/nonvacuous/19_length_5__truncated_8",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/nonvacuous/19_length_5__truncated_8.smt2",
+      "query_sha256": "03d42dee3dd7177077ea0b09c411c82c62b293f7be3850afe538c5ea44f5ba21",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 112,
+      "name": "running_flag/nonvacuous/20_truncated_8__inactive",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/nonvacuous/20_truncated_8__inactive.smt2",
+      "query_sha256": "cd00b88165838a5ea06aea9b9a1b04c82d5eae8c857fa3542090cc06389ebf51",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 113,
+      "name": "running_flag/nonvacuous/21_truncated_8__active_empty",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/nonvacuous/21_truncated_8__active_empty.smt2",
+      "query_sha256": "3e3eb76c3ca8156b4fdec314bcab5838752a4fcc3eb7786f9ada9922159ae67f",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 114,
+      "name": "running_flag/nonvacuous/22_truncated_8__length_4",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/nonvacuous/22_truncated_8__length_4.smt2",
+      "query_sha256": "f5137e5911e28be174eb6a77c92bfd8590d236035ddd3ef66eb8a102fa5a333f",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 115,
+      "name": "running_flag/nonvacuous/23_truncated_8__length_5",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/nonvacuous/23_truncated_8__length_5.smt2",
+      "query_sha256": "a9103e5f4dae42e25bbffb1bdb40f9c182669378795c9308e0a10a74f71495c2",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 116,
+      "name": "running_flag/nonvacuous/24_truncated_8__truncated_8",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/nonvacuous/24_truncated_8__truncated_8.smt2",
+      "query_sha256": "3fc124e1f6d3ff66f8c0d3808c21c7d1a9d1177da275268b085a8a620c5c9122",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 117,
+      "name": "running_flag/prefix/00_inactive__inactive",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/prefix/00_inactive__inactive.smt2",
+      "query_sha256": "96b8d20581f71a5c467ab37c288acaddee7208a14d1b07ff2b3059e8fc8c10ca",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 118,
+      "name": "running_flag/prefix/01_inactive__active_empty",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/prefix/01_inactive__active_empty.smt2",
+      "query_sha256": "d97f5b9ec1259dc6413badc2c29fd854c1fdfd42a116c3e8915a0c33c54eae27",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 119,
+      "name": "running_flag/prefix/02_inactive__length_4",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/prefix/02_inactive__length_4.smt2",
+      "query_sha256": "c51d9c201dda86016b9b237c5e269dd8c24160115a0a54c923cb69ef307f9054",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 120,
+      "name": "running_flag/prefix/03_inactive__length_5",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/prefix/03_inactive__length_5.smt2",
+      "query_sha256": "ef76849fc4db96f65e87ae23f782016bf83d10b10c71966904ea1a668e4e6c43",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 121,
+      "name": "running_flag/prefix/04_inactive__truncated_8",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/prefix/04_inactive__truncated_8.smt2",
+      "query_sha256": "b430bc1bcaf85832c00d28e9e82758ef96f121f859c063eac90e500af9fffc87",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 122,
+      "name": "running_flag/prefix/05_active_empty__inactive",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/prefix/05_active_empty__inactive.smt2",
+      "query_sha256": "4c01fe50fe3e68bb43883d3b6fa5a7cb6012e22179cabc390ee6c489a7bf26ca",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 123,
+      "name": "running_flag/prefix/06_active_empty__active_empty",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/prefix/06_active_empty__active_empty.smt2",
+      "query_sha256": "fda6785cef8ffdc021176ba350850e8c92ba5ada0bb8b4bb3973c1662380b580",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 124,
+      "name": "running_flag/prefix/07_active_empty__length_4",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/prefix/07_active_empty__length_4.smt2",
+      "query_sha256": "9d2bcc6b089a2491029ebd306c6f70e54dd236626d221a0c58ff965d1b151a68",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 125,
+      "name": "running_flag/prefix/08_active_empty__length_5",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/prefix/08_active_empty__length_5.smt2",
+      "query_sha256": "7f71ab203acd6b397519bc7f690f4c74938736cbb284deec105b8105a45b55f0",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 126,
+      "name": "running_flag/prefix/09_active_empty__truncated_8",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/prefix/09_active_empty__truncated_8.smt2",
+      "query_sha256": "40cf176876b6335b286ba02ef078a1a9e5462bbf04956f4e974e47ccc796884b",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 127,
+      "name": "running_flag/prefix/10_length_4__inactive",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/prefix/10_length_4__inactive.smt2",
+      "query_sha256": "dcea0c3f8052c21fd7a09cc18fa6274e581a977567d4f580303b0b0059358fb9",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 128,
+      "name": "running_flag/prefix/11_length_4__active_empty",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/prefix/11_length_4__active_empty.smt2",
+      "query_sha256": "62912273eacc63769d90ce66f0a84100a77a9cff50a3557f78fca74ed44498a7",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 129,
+      "name": "running_flag/prefix/12_length_4__length_4",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/prefix/12_length_4__length_4.smt2",
+      "query_sha256": "de5c7f04e309bb72029f8661cd1bceea71e7b415d83b27beac98948a2d5eb785",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 130,
+      "name": "running_flag/prefix/13_length_4__length_5",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/prefix/13_length_4__length_5.smt2",
+      "query_sha256": "0d6bd406a7b1b52f3acf1b5fa79b5c14e7ecf2c0817efd9b5e4d5f337e56a74b",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 131,
+      "name": "running_flag/prefix/14_length_4__truncated_8",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/prefix/14_length_4__truncated_8.smt2",
+      "query_sha256": "bcf88be5a74de9d2c19337787f55291104c11632876498558f2eb4365e81819f",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 132,
+      "name": "running_flag/prefix/15_length_5__inactive",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/prefix/15_length_5__inactive.smt2",
+      "query_sha256": "44f83f8b5a82b1059d223bee0b8149df778602c079e6d6db5cd6aada91dd0ca9",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 133,
+      "name": "running_flag/prefix/16_length_5__active_empty",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/prefix/16_length_5__active_empty.smt2",
+      "query_sha256": "14e53b64a6d2aa5ce542cd70decd122a53b736bf44efa4701867cea9b6db3bd1",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 134,
+      "name": "running_flag/prefix/17_length_5__length_4",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/prefix/17_length_5__length_4.smt2",
+      "query_sha256": "d5134aacfbbe437eccf61938c47936f11d103bc414312ebbfca14de6ab464121",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 135,
+      "name": "running_flag/prefix/18_length_5__length_5",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/prefix/18_length_5__length_5.smt2",
+      "query_sha256": "ae463f522fe7b6b2fec59c855ec9d4eea368b0a4af04fc00ff6e3b9fa0932e59",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 136,
+      "name": "running_flag/prefix/19_length_5__truncated_8",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/prefix/19_length_5__truncated_8.smt2",
+      "query_sha256": "f07dc8c4f43bdbfcfae50f7c418bfff414a78f726efbfe4dffaa6feeaaf5f281",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 137,
+      "name": "running_flag/prefix/20_truncated_8__inactive",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/prefix/20_truncated_8__inactive.smt2",
+      "query_sha256": "1f8bd290ad49591959c23c2c72cc73167c7397bdab5c941b2c4e3fcc8addd36a",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 138,
+      "name": "running_flag/prefix/21_truncated_8__active_empty",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/prefix/21_truncated_8__active_empty.smt2",
+      "query_sha256": "198079194061977faef5fffd7bc93ec37d4c63987291cdcdbb8753b4c824e9c4",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 139,
+      "name": "running_flag/prefix/22_truncated_8__length_4",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/prefix/22_truncated_8__length_4.smt2",
+      "query_sha256": "e365916ad5d7ae331336e6a256f9a6099eebb11e44be33a6df4bc657b162471c",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 140,
+      "name": "running_flag/prefix/23_truncated_8__length_5",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/prefix/23_truncated_8__length_5.smt2",
+      "query_sha256": "9792d67043ee29bf0fe733b58ea4afcfe841c50f31ba8423ffda32686d8d7b09",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 141,
+      "name": "running_flag/prefix/24_truncated_8__truncated_8",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/prefix/24_truncated_8__truncated_8.smt2",
+      "query_sha256": "7e33c5b4882c59431a781eda384eccf3ce6830365f9d4660bd944c018b94c9d6",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 142,
+      "name": "running_flag/tail/00_inactive__inactive",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/tail/00_inactive__inactive.smt2",
+      "query_sha256": "ed56ebb4d1e378f15179189a9c79ce59ae613853c26e273a30e8e4c7ee646bb0",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 143,
+      "name": "running_flag/tail/01_inactive__active_empty",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/tail/01_inactive__active_empty.smt2",
+      "query_sha256": "74e1afb6ba960c5ce9f904052385245677a8801b9cffc9cb40c4b64d4d5fa283",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 144,
+      "name": "running_flag/tail/02_inactive__length_4",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/tail/02_inactive__length_4.smt2",
+      "query_sha256": "92858b6643b1d0ce91ed78804600e8aa4d8c9bd00160d81275fe94cf2907071d",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 145,
+      "name": "running_flag/tail/03_inactive__length_5",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/tail/03_inactive__length_5.smt2",
+      "query_sha256": "c3d7b5689ec40ea3851570ce935027527d866049c34ab697d483eb45ab10d308",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 146,
+      "name": "running_flag/tail/04_inactive__truncated_8",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/tail/04_inactive__truncated_8.smt2",
+      "query_sha256": "4433e83aa059ba9b4f8abf841f7d95795cae700971130ce505671a486a576b69",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 147,
+      "name": "running_flag/tail/05_active_empty__inactive",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/tail/05_active_empty__inactive.smt2",
+      "query_sha256": "bffebb71305defbfb32a982e8a060a04c8560486a32da15d8a13b4df0bd982b1",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 148,
+      "name": "running_flag/tail/06_active_empty__active_empty",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/tail/06_active_empty__active_empty.smt2",
+      "query_sha256": "9570c4ec148217d3735c13280dd8b0b5fdabc0a43aac5616c44e6c578733155e",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 149,
+      "name": "running_flag/tail/07_active_empty__length_4",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/tail/07_active_empty__length_4.smt2",
+      "query_sha256": "de8747ddb9af0846929aa6ddffa9229b97324cc5f576ad3b06537914ba708eec",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 150,
+      "name": "running_flag/tail/08_active_empty__length_5",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/tail/08_active_empty__length_5.smt2",
+      "query_sha256": "aacf6cba084ecb5a4ef387e3f093031b6003d2246381cbc733c98347e19b023a",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 151,
+      "name": "running_flag/tail/09_active_empty__truncated_8",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/tail/09_active_empty__truncated_8.smt2",
+      "query_sha256": "636af84f194257fe629f5fb15926339d257bbe969d1b6e8845bcbc5e69b4cd58",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 152,
+      "name": "running_flag/tail/10_length_4__inactive",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/tail/10_length_4__inactive.smt2",
+      "query_sha256": "7509d01210cbec527aad3930e63389acc7190d5e13e43975b2b8313a736e7a57",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 153,
+      "name": "running_flag/tail/11_length_4__active_empty",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/tail/11_length_4__active_empty.smt2",
+      "query_sha256": "1ce96e051b6bdaef5f0733cc13372108ea936aac81914ff02e9036d5c6408e92",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 154,
+      "name": "running_flag/tail/12_length_4__length_4",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/tail/12_length_4__length_4.smt2",
+      "query_sha256": "252704eb391d4791c8174c5a72ef68752f33c6d7c10799d4d5cb973de1b36e33",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 155,
+      "name": "running_flag/tail/13_length_4__length_5",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/tail/13_length_4__length_5.smt2",
+      "query_sha256": "7370908dafb72fff96add3f74975832ccc609b1b8a22d5641c55da6c40bf6fef",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 156,
+      "name": "running_flag/tail/14_length_4__truncated_8",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/tail/14_length_4__truncated_8.smt2",
+      "query_sha256": "9755b5b8cc88ea5fe55f66105ec8db7ad540b781f50f3ad54cb44092fcf38633",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 157,
+      "name": "running_flag/tail/15_length_5__inactive",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/tail/15_length_5__inactive.smt2",
+      "query_sha256": "cdf3e05b197b912edb82a62975b2220c8b7dc57aeee6bd7b4ea0534c0614c859",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 158,
+      "name": "running_flag/tail/16_length_5__active_empty",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/tail/16_length_5__active_empty.smt2",
+      "query_sha256": "39cb2f1aa06e1d799220111d078095e81e6504c1ccf4d0f1feb0cb1b9655f905",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 159,
+      "name": "running_flag/tail/17_length_5__length_4",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/tail/17_length_5__length_4.smt2",
+      "query_sha256": "3f98c66fd6923fda142e59f236372961b31acf09788d7a0645c972702f254099",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 160,
+      "name": "running_flag/tail/18_length_5__length_5",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/tail/18_length_5__length_5.smt2",
+      "query_sha256": "71a6fde1df6bbc0e354e059dc5c0537316a3d4c4bcf3e9c70365e5bbb234c39e",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 161,
+      "name": "running_flag/tail/19_length_5__truncated_8",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/tail/19_length_5__truncated_8.smt2",
+      "query_sha256": "03d42dee3dd7177077ea0b09c411c82c62b293f7be3850afe538c5ea44f5ba21",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 162,
+      "name": "running_flag/tail/20_truncated_8__inactive",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/tail/20_truncated_8__inactive.smt2",
+      "query_sha256": "c1ad3f2f15df994f56623015a8570f5d2916fa613fa22ebcfe58946404f9b551",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 163,
+      "name": "running_flag/tail/21_truncated_8__active_empty",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/tail/21_truncated_8__active_empty.smt2",
+      "query_sha256": "c59445e71973a601aa61915dbac94609e5a8c0146df94ec34b36b42bbb9e768a",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 164,
+      "name": "running_flag/tail/22_truncated_8__length_4",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/tail/22_truncated_8__length_4.smt2",
+      "query_sha256": "f5137e5911e28be174eb6a77c92bfd8590d236035ddd3ef66eb8a102fa5a333f",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 165,
+      "name": "running_flag/tail/23_truncated_8__length_5",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/tail/23_truncated_8__length_5.smt2",
+      "query_sha256": "a9103e5f4dae42e25bbffb1bdb40f9c182669378795c9308e0a10a74f71495c2",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    },
+    {
+      "arm": "partitioned",
+      "attempts": 0,
+      "index": 166,
+      "name": "running_flag/tail/24_truncated_8__truncated_8",
+      "query_path": "results/raw/D1P-06/inputs/partitioned/running_flag/tail/24_truncated_8__truncated_8.smt2",
+      "query_sha256": "3fc124e1f6d3ff66f8c0d3808c21c7d1a9d1177da275268b085a8a620c5c9122",
+      "reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+      "result": "UNRUN",
+      "status": "UNRUN"
+    }
+  ],
+  "reference_environment": {
+    "commands": {
+      "hardware": {
+        "argv": [
+          "/usr/sbin/system_profiler",
+          "SPHardwareDataType",
+          "-json"
+        ],
+        "exit_status": 0,
+        "fields": {
+          "chip_type": "Apple M1",
+          "machine_model": "MacBookAir10,1",
+          "machine_name": "MacBook Air",
+          "number_processors": "proc 8:0:4:4",
+          "physical_memory": "8 GB"
+        },
+        "stderr": ""
+      },
+      "solver_file": {
+        "argv": [
+          "/usr/bin/file",
+          "/Users/imranpollob/Coding/bc/BindCheck/tools/cvc5-1.4.2-gpl/bin/cvc5"
+        ],
+        "exit_status": 0,
+        "stderr": "",
+        "stdout": "/Users/imranpollob/Coding/bc/BindCheck/tools/cvc5-1.4.2-gpl/bin/cvc5: Mach-O 64-bit executable arm64\n"
+      },
+      "solver_otool": {
+        "argv": [
+          "/usr/bin/otool",
+          "-L",
+          "/Users/imranpollob/Coding/bc/BindCheck/tools/cvc5-1.4.2-gpl/bin/cvc5"
+        ],
+        "exit_status": 0,
+        "stderr": "",
+        "stdout": "/Users/imranpollob/Coding/bc/BindCheck/tools/cvc5-1.4.2-gpl/bin/cvc5:\n\t@rpath/libcvc5parser.1.dylib (compatibility version 1.0.0, current version 1.4.2)\n\t@rpath/libcvc5.1.dylib (compatibility version 1.0.0, current version 1.4.2)\n\t/usr/lib/libc++.1.dylib (compatibility version 1.0.0, current version 2200.27.0)\n\t/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1359.0.0)\n"
+      },
+      "sw_vers": {
+        "argv": [
+          "/usr/bin/sw_vers"
+        ],
+        "exit_status": 0,
+        "stderr": "",
+        "stdout": "ProductName:\t\tmacOS\nProductVersion:\t\t27.0.1\nBuildVersion:\t\t26A434\n"
+      },
+      "uname": {
+        "argv": [
+          "/usr/bin/uname",
+          "-a"
+        ],
+        "exit_status": 0,
+        "stderr": "",
+        "stdout": "Darwin Imrans-MacBook-Air.local 27.0.0 Darwin Kernel Version 27.0.0: Tue Aug 11 21:05:27 PDT 2026; root:xnu-13432.1.9~1/RELEASE_ARM64_T8103 arm64\n"
+      }
+    },
+    "linked_libraries": [
+      {
+        "file_available": true,
+        "install_name": "@rpath/libcvc5parser.1.dylib",
+        "resolved_path": "/Users/imranpollob/Coding/bc/BindCheck/tools/cvc5-1.4.2-gpl/lib/libcvc5parser.1.4.2.dylib",
+        "sha256": "01b4e8089d3674bbc0763c9b6aa9893962b27c5c04d011a8936e3704aa9acc0b"
+      },
+      {
+        "file_available": true,
+        "install_name": "@rpath/libcvc5.1.dylib",
+        "resolved_path": "/Users/imranpollob/Coding/bc/BindCheck/tools/cvc5-1.4.2-gpl/lib/libcvc5.1.4.2.dylib",
+        "sha256": "d24940c3861a5655a7fd873d4c5f0214b46094d7d471bc063dd87560f71c60dc"
+      },
+      {
+        "file_available": false,
+        "install_name": "/usr/lib/libc++.1.dylib",
+        "resolved_path": "/usr/lib/libc++.1.dylib",
+        "sha256": null
+      },
+      {
+        "file_available": false,
+        "install_name": "/usr/lib/libSystem.B.dylib",
+        "resolved_path": "/usr/lib/libSystem.B.dylib",
+        "sha256": null
+      }
+    ],
+    "platform": {
+      "machine": "arm64",
+      "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+      "python": "3.13.7",
+      "python_executable": "/Users/imranpollob/Coding/bc/bindcheck-d1-paper/.venv-d1p-00/bin/python",
+      "release": "27.0.0",
+      "system": "Darwin"
+    }
+  },
+  "research_verdict": "UNKNOWN",
+  "resource_policy": {
+    "hard_address_space_cap": false,
+    "metric": "sampled aggregate recursive process-tree RSS",
+    "path": "metadata/d1/d1p-06-resource-policy.json",
+    "sampling_can_overshoot": true,
+    "sha256": "021d4fa927ed5516f2cebdd4bd7074f695ee22e67de18260d4dadab5d27cd7d0"
+  },
+  "solver": {
+    "arguments": [
+      "--lang=smt2",
+      "--ff-solver=split"
+    ],
+    "path": "/Users/imranpollob/Coding/bc/BindCheck/tools/cvc5-1.4.2-gpl/bin/cvc5",
+    "sha256": "a083a7f56a3f61691583b699076322bbcbf6732decfb4f6dc41850dbcc3df027",
+    "version": "cvc5 1.4.2 arm64 GPL/CoCoA (recorded D1P-05 provenance)"
+  },
+  "status": "CAMPAIGN_STOPPED_INFRASTRUCTURE_FAILURE",
+  "stop_reason": "infrastructure failure on frozen call 4: D1P-05 run_monitored observed the goal-only prefix solver root disappear before Popen.poll() reported completion, then kill_process_group raised PermissionError: [Errno 1] Operation not permitted. The exception escaped before a per-call JSON record or campaign ledger was written.",
+  "task": "D1P-06",
+  "task_completion": "INCOMPLETE"
+}

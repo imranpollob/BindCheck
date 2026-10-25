@@ -1,0 +1,36 @@
+{
+  "task": "D1P-05",
+  "policy_version": 1,
+  "platform": "macOS",
+  "monitor": {
+    "child_enumeration_api": "libproc proc_listchildpids",
+    "library": "/usr/lib/libproc.dylib",
+    "maximum_children_per_process": 4096,
+    "metric": "sum of proc_taskinfo pti_resident_size for root and recursively observed descendants",
+    "pid_info_api": "libproc proc_pidinfo PROC_PIDTASKINFO",
+    "sample_interval_seconds": 0.05
+  },
+  "cutoff": {
+    "bytes": 4294967296,
+    "comparison": "observed aggregate resident bytes > cutoff",
+    "termination": "SIGKILL to process group"
+  },
+  "timeout": {
+    "seconds_per_call": 30.0,
+    "termination": "SIGKILL to process group"
+  },
+  "limitations": {
+    "hard_address_space_cap": false,
+    "sampling_can_miss_short_lived_descendants": true,
+    "sampling_can_overshoot_cutoff": true,
+    "timing_or_resource_parity_with_historical_linux_runs": false
+  },
+  "failure_policy": {
+    "cell_memory_cutoff": "cell unusable; continue fixed schedule",
+    "cell_timeout_or_unknown": "cell unusable; continue fixed schedule",
+    "control_failure": "stop campaign",
+    "hash_or_identity_mismatch": "stop before solver execution",
+    "launch_or_monitoring_failure": "kill affected process group when present; stop campaign; mark remaining calls unrun",
+    "sat_cell": "stop campaign as equivalence counterexample"
+  }
+}

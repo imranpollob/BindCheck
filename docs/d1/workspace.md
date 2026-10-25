@@ -12,6 +12,10 @@ reattached on 25 October 2026 at
 follow the [D1 paper integration plan](../d1-paper/integration-plan.md) and port
 only reviewed components under new tasks.
 
+The D1P-04/05/06/07 tasks started from `d1-paper` HEAD
+`2ad4f699d527490149f3704e6f6f228494f2d4bd`. Current D1P-04–07 files are
+uncommitted by instruction; do not reset or hide them when continuing review.
+
 The destination branch and worktree registration existed before D1P-00. The
 registered directory was absent and prunable, while the branch contained no
 commits beyond `chatgpt-codex`. `git worktree add --force ... d1-paper`
@@ -56,6 +60,58 @@ from the actual configurable-length consumer decoder and preserves the six
 historical UNKNOWN outcomes. Do not interpret the offline PASS as ACIR, solver,
 proof, consumer, or security evidence. Both planners must resolve the listed
 protocol decisions before any execution or Track B implementation.
+
+D1P-04 places 150 specialized queries, 150 equivalence queries, and two
+controls in the fresh ignored `results/raw/D1P-04/generated/` namespace. The
+tracked artifact manifest records all output hashes and 150/150 byte-identical
+ordered producer-prefix audits. The first control did not reach cvc5 because
+native macOS rejected the frozen validator's 4 GiB `RLIMIT_AS` pre-exec
+assignment. The controls-first/no-retry rule left both controls and all 150
+cells unrun; see `metadata/d1/d1p-04-equivalence-ledger.json` and
+[D1P-04](../../reports/D1P-04.md). Do not use any D1P-04 cell in primary work.
+A separately authorized, new-version portable equivalence task must preserve
+the query bytes, freeze a working limit mechanism, pass both controls, and
+establish all 150 cells before the partition is eligible. Research verdict
+remains UNKNOWN.
+
+D1P-05 completes that prospective portability task without rewriting D1P-04.
+The final pre-freeze harmless-helper gate passes launch, timeout, process-tree
+RSS cutoff, cleanup, monitoring-failure, and structured launch-error checks.
+The new runner then verifies all 152 D1P-04 input hashes, passes both controls,
+and obtains UNSAT for all 150 equivalence cells. The D1P-05 tracked ledger is
+`metadata/d1/d1p-05-equivalence-ledger.json`; raw helper and per-call evidence
+is under the fresh ignored `results/raw/D1P-05/` namespace. The complete
+partition is eligible for later primary use at the transformation-evidence
+level only. The 50 ms libproc RSS policy can overshoot 4 GiB and is not a hard
+address-space cap. Do not treat native macOS timings as primary comparison
+data, and do not infer parent satisfiability, consumer effectiveness, proof or
+D1 security from equivalence. Research verdict remains UNKNOWN.
+
+D1P-06 makes this native Mac the prospective Track A reference without
+rewriting D1P-05. The fresh input manifest checks two controls, six goal-only,
+two cone-only, six byte-identical combined and 150 byte-identical specialized
+queries. The final harmless-helper preflight passes and the sampled 50 ms
+libproc policy, equal 300-second per-obligation budgets, solver, platform and
+all input hashes are frozen before execution. Both controls and one goal-only
+SAT complete. The next goal-only call writes SAT/witness text but hits a
+process-exit monitor/cleanup race before a complete record, so it is UNKNOWN.
+The frozen infrastructure-stop rule leaves all combined and partitioned calls
+unrun. Preserve `results/raw/D1P-06/`, the tracked stopped ledger, and the
+[D1P-06 report](../../reports/D1P-06.md). Do not resume or repeat consumed
+calls without a new planner-approved protocol. Decomposition effectiveness and
+the D1 verdict remain UNKNOWN.
+
+D1P-07 supplies that separately versioned protocol and explicitly authorizes
+a fresh call-1 campaign. It preserves every D1P-06 byte and reuses the exact
+166 input hashes, solver, ordering and budgets. The new runner bounds exit
+confirmation and both cleanup waits, catches termination errors, always emits
+call/campaign records, and records missing memory samples as null. Seven
+focused tests, 154 complete D1 tests and 13 preflight helper checks pass. The
+fresh campaign attempts all 166 calls with no infrastructure failure: six
+combined queries time out; the partitions return 58 UNSAT cells and 92
+timeouts, leaving all six aggregates UNKNOWN. Preserve
+`results/raw/D1P-07/` and the tracked ledger/report. Do not retune or extend
+these Track A queries. No consumer-direction or D1 verdict follows.
 
 Before D1P-00 changed living documents, their exact starting bytes were copied
 to `results/raw/D1P-00/prior-checkpoint/`. See

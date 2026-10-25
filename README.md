@@ -4,7 +4,8 @@ BindCheck investigates whether the guarantees of an accepted zero-knowledge proo
 
 The current integration checkout is the linked worktree
 `/Users/imranpollob/Coding/bc/bindcheck-d1-paper` on `d1-paper`, currently at
-`7f0828a8a431b4bf7e3b962b337e6f040db36e0c`. It was established from
+`2ad4f699d527490149f3704e6f6f228494f2d4bd` plus the uncommitted D1P-04–07
+working changes. It was established from
 `chatgpt-codex` revision `cce1a966eb84e8e9819c6f658ca4ce07fd670036`.
 [D1P-00](reports/D1P-00.md) records the branch/worktree baseline and the
 source-inspected selective-reuse review of `claude-code`; the
@@ -57,6 +58,42 @@ The principal directories are `circuits/` and `contracts/` for the small fixture
   truncated records. The check establishes only partition/rewrite equivalence.
   Track A execution and the unimplemented Track B joint solver remain pending
   both planners' decisions; research status is UNKNOWN.
+- [D1P-04](reports/D1P-04.md) corrects the prospective comparison protocol and
+  emits six parents × 25 cells as 150 specialized queries plus 150 producer-
+  free two-direction equivalence queries. All 150 complete ordered producer
+  prefixes are byte-identical to their parents, and six focused tests plus
+  the complete 134-test D1 suite pass without solver calls. SMT equivalence is
+  nevertheless **unestablished**: macOS rejected the frozen 4 GiB pre-exec
+  address-space limit before the first control could launch cvc5. The no-retry
+  rule left 0/150 cells validated and all 150 ineligible for primary use.
+  Task reporting is complete, validation is incomplete, and the D1 research
+  verdict remains UNKNOWN.
+- [D1P-05](reports/D1P-05.md) preserves D1P-04 and executes the unchanged
+  equivalence suite with a macOS libproc process-tree RSS monitor. Both
+  controls pass and all 150 cell queries return UNSAT with exit zero; all 150
+  producer-prefix audits remain true. The complete partition is now eligible
+  for later primary use at the transformation-evidence level. The 50 ms RSS
+  sampling can overshoot and is not a hard address-space cap; observed timing
+  is non-primary macOS evidence. No parent satisfiability, consumer-direction,
+  proof, consumer, or D1 verdict follows. The research verdict remains UNKNOWN.
+- [D1P-06](reports/D1P-06.md) prepares and freezes the equal-budget Track A
+  matrix on the planner-selected native Mac reference. The byte gate passes
+  for all 166 inputs, all eight harmless-helper preflight checks pass, and the
+  complete D1 suite passes 147/147. Both solver controls pass and one goal-only
+  diagnostic returns usable SAT. The next goal-only call writes SAT text but
+  hits a monitor/process-exit cleanup race before its exit/resource record is
+  complete. The frozen infrastructure-stop rule leaves all six combined
+  queries and all 150 cells unrun. Track A effectiveness is therefore
+  unestablished and the D1 verdict remains UNKNOWN.
+- [D1P-07](reports/D1P-07.md) repairs the process-exit race and completes a
+  fresh frozen campaign from call 1. Focused tests pass 7/7, the complete D1
+  suite passes 154/154, all 13 helper checks pass, and all 166 solver calls
+  receive structured records. All six combined and all six partitioned
+  logical obligations remain UNKNOWN: partitioning resolves 58/150 cells
+  UNSAT but leaves 92 timeouts, improving zero complete obligations. Goal-only
+  diagnostics are 6/6 SAT and both cone-only diagnostics time out. This is
+  producer-side partial-progress evidence, not consumer-direction or D1
+  security evidence; the D1 verdict remains UNKNOWN.
 - T15–T19 locally reproduce the public Payy message-tail mechanism with real proofs and committed token-balance effects, then validate the repair and an honest control.
 - T20 maps those claims to pinned source and advisory evidence.
 - T21 is an in-sample, source-pattern prototype; it does not establish generalization.

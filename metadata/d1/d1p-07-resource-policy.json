@@ -1,0 +1,53 @@
+{
+  "task": "D1P-07",
+  "policy_version": 1,
+  "reference_environment": "native macOS arm64",
+  "monitor": {
+    "child_enumeration_api": "libproc proc_listchildpids",
+    "pid_info_api": "libproc proc_pidinfo PROC_PIDTASKINFO",
+    "metric": "sum of proc_taskinfo pti_resident_size for root and recursively observed descendants",
+    "sample_interval_seconds": 0.05,
+    "missing_root_policy": "bounded wait confirms and reaps exit before normal completion; otherwise monitoring failure",
+    "exit_confirmation_seconds": 0.25
+  },
+  "termination": {
+    "primary": "SIGKILL to process group",
+    "fallback": "direct child kill after a bounded wait",
+    "wait_seconds_per_stage": 0.25,
+    "permission_and_other_errors": "record structurally; never wait indefinitely; campaign treats cleanup errors as infrastructure failure"
+  },
+  "cutoff": {
+    "bytes": 4294967296,
+    "comparison": "observed aggregate resident bytes > cutoff",
+    "termination": "bounded process-group cleanup"
+  },
+  "timeouts": {
+    "control_seconds": 30.0,
+    "unsplit_slot_seconds": 300.0,
+    "partitioned_slot_seconds": 300.0,
+    "partitioned_cell_seconds": 12.0,
+    "primary_aggregate_seconds": 6000.0,
+    "control_aggregate_seconds": 60.0
+  },
+  "limits": {
+    "controls_max": 2,
+    "primary_calls_max": 164,
+    "attempts_per_query": 1,
+    "sequential": true
+  },
+  "limitations": {
+    "hard_address_space_cap": false,
+    "sampling_can_overshoot_cutoff": true,
+    "sampling_can_miss_short_lived_allocations_or_descendants": true,
+    "unavailable_memory_observations_are_null": true,
+    "historical_linux_timing_parity": false
+  },
+  "failure_policy": {
+    "control_failure": "stop campaign",
+    "hash_or_identity_mismatch": "stop before the affected solver call",
+    "genuine_launch_monitor_or_cleanup_failure": "preserve logs and call record; stop campaign; mark remaining calls unrun",
+    "timeout_memory_cutoff_unknown_or_solver_error": "mark unresolved and continue fixed schedule",
+    "validated_equivalent_formula_contradiction": "stop campaign",
+    "partition_sat": "require preserved solver witness output; stop that logical slot and mark later cells unrun"
+  }
+}

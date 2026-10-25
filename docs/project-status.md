@@ -48,7 +48,12 @@ flowchart TD
     d1p01 --> d1p01artifact["N=8 artifact recovery [DONE]"]
     d1p01artifact --> d1p02["D1P-02 archive byte gate [DONE]"]
     d1p02 --> d1p03["D1P-03 protocol + offline validation [DONE]"]
-    d1p03 --> d1preview["Two-planner execution decision [WAITING]"]
+    d1p03 --> d1p04["D1P-04 specializer task [DONE]"]
+    d1p04 --> d1p05["D1P-05 portable equivalence run [DONE]"]
+    d1p05 --> d1p04elig["25-cell SMT eligibility [DONE]"]
+    d1p04elig --> d1p06["D1P-06 Mac Track A attempt [UNKNOWN]"]
+    d1p06 --> d1p07["D1P-07 race-safe Track A [DONE]"]
+    d1p07 --> d1p07review["Track A interpretation review [NEXT]"]
     d1 --> d100["D1-00 preserve and align [DONE]"]
     d100 --> d101["D1-01 T22 reporting closure [DONE]"]
     d100 --> d102["D1-02 target selection [DONE]"]
@@ -96,11 +101,11 @@ flowchart TD
     classDef waiting fill:#D9D9D9,stroke:#B3B3B3
     classDef unknown fill:#FFE0C2,stroke:#FF9E42
 
-    class foundation,fixture,payy,sourceCheck,coneGate,nineCases,failureAnalysis,v3Rerun,generalGate,tracking,livingTree,d100,d101,d102,d103preflight,d103review,d103typed,d103boundary,d103guards,d103guardreview,d103concrete,d103replayreview,d103recovery,d1p00,d1p01,d1p01artifact,d1p02,d1p03 done
+    class foundation,fixture,payy,sourceCheck,coneGate,nineCases,failureAnalysis,v3Rerun,generalGate,tracking,livingTree,d100,d101,d102,d103preflight,d103review,d103typed,d103boundary,d103guards,d103guardreview,d103concrete,d103replayreview,d103recovery,d1p00,d1p01,d1p01artifact,d1p02,d1p03,d1p04,d1p05,d1p04elig,d1p07 done
     class analysis,d1,d1paper,d103,d103impl,d103consumer,d103effects active
-    class d103linkreview next
-    class evaluation,history,heldOut,baselines,manuscript,claims,artifacts,draft,transferCase,sensitivity,submit,t22,acirSummary,d104,d105,d106,d107,d108,d103symbolic,d1preview waiting
-    class contribution,primaryResult,generalResult,d103gate,d103recoveryresult unknown
+    class d103linkreview,d1p07review next
+    class evaluation,history,heldOut,baselines,manuscript,claims,artifacts,draft,transferCase,sensitivity,submit,t22,acirSummary,d104,d105,d106,d107,d108,d103symbolic waiting
+    class contribution,primaryResult,generalResult,d103gate,d103recoveryresult,d1p06 unknown
 ```
 
 ## Immediate path
@@ -149,6 +154,41 @@ flowchart TD
     enumeration passes 781,250 stream cases, 25 pair cells, and 12,825 goal
     cases. This is rewrite evidence only; no solver/proof/replay ran and the
     verdict remains UNKNOWN. Both planners' execution decision is waiting.
+20. Done as a bounded implementation/reporting task, validation incomplete:
+    [D1P-04](../reports/D1P-04.md) corrects the prospective comparison design,
+    emits 150 specialized and 150 producer-free equivalence queries, and
+    records 150/150 byte-identical ordered producer-prefix audits. Six focused
+    tests and all 134 D1 tests pass without solver calls. The first frozen
+    control could not launch cvc5 because macOS rejected the 4 GiB pre-exec
+    address-space limit; the no-retry rule left both controls and all 150 cells
+    unrun. Cell/partition eligibility and the research verdict remain UNKNOWN.
+    A separately authorized portable equivalence-runner review is next.
+21. Done: [D1P-05](../reports/D1P-05.md) preserves every D1P-04 identity,
+    passes the final harmless-helper launch/timeout/tree-memory/cleanup gate,
+    and executes the fixed 152-call schedule with sampled macOS libproc RSS.
+    Both controls pass and all 150 cells return UNSAT; all 150 producer-prefix
+    audits pass, with no timeout, UNKNOWN, SAT cell, memory cutoff, error, or
+    unrun call. The exact partition is transformation-eligible. The sampled
+    policy can overshoot and native macOS observations are non-primary; parent
+    satisfiability, method effectiveness, and the D1 verdict remain UNKNOWN.
+22. Stopped/UNKNOWN: [D1P-06](../reports/D1P-06.md) freezes the planner-
+    selected native-Mac Track A reference after 166/166 input checks, an 8/8
+    harmless-helper gate, and 147/147 D1 tests. Both solver controls pass and
+    one goal-only SAT is usable. Call 4 writes SAT/witness text but a
+    process-exit monitor race raises during cleanup before the required
+    exit/time/resource record completes. The infrastructure-stop rule leaves
+    all six combined and all 150 partitioned calls unrun. Producer-side
+    decomposition effectiveness and the D1 verdict remain UNKNOWN; runner-
+    race and consumed-call policy review is next.
+23. Done: [D1P-07](../reports/D1P-07.md) preserves D1P-06, repairs bounded
+    exit confirmation and cleanup, passes 7/7 focused, 154/154 complete D1,
+    and 13/13 helper checks, then executes a fresh 166-call campaign from call
+    1. All six combined and partitioned logical obligations remain UNKNOWN.
+    Partitioning returns 58 UNSAT cells and 92 timeouts, improving zero
+    complete outcomes; goal-only is 6/6 SAT and cone-only is 2/2 timeout.
+    There is no infrastructure failure, SAT cell, contradiction, consumer-
+    direction result or D1 verdict. Interpretation and Track B readiness
+    review is next; do not retune Track A.
 
 The end goal does not imply that submission is currently justified. The
 research contract's two principal properties remain unchanged, and unresolved T22 results remain UNKNOWN. D1 preparation and reporting closure are complete; three missing historical query slots were executed. No new D1 analyzer or method-evaluation result has been completed.
@@ -190,6 +230,10 @@ research contract's two principal properties remain unchanged, and unresolved T2
 | 2026-10-25 | D1P-01 local baseline and N=8 intake | `[UNKNOWN]` | [Report](../reports/D1P-01.md) and updated [integration checkpoint](d1-paper/integration-plan.md): exact Pycryptodome 3.23.0 enables 119/119 pre-change tests; five intake controls bring post-change discovery to 124/124, and the separate compact-walk self-check covers 65,536 vectors. The serialization-only adapter validates provenance before output and cannot launch a solver. Intake implementation is done, but artifact recovery is BLOCKED because the exact two ACIR/ABI pairs are absent; no query hash or security verdict is established. D1P-02 archive byte gate is next. |
 | 2026-10-25 | D1P-02 archive-backed N=8 byte gate | `[DONE]` | [Report](../reports/D1P-02.md) and [integration checkpoint](d1-paper/integration-plan.md): all four recovered inputs are byte-identical to evidence commit `7d098cd3...` and match the frozen manifest; the unchanged adapter reproduces all six historical query hashes in a fresh ignored namespace. Independent checks find no solver record and zero solver processes. Artifact recovery is complete, but this is same-implementation byte reproducibility, not a solver/proof/replay/security result; research verdict remains UNKNOWN. D1P-03 protocol review is next. |
 | 2026-10-25 | D1P-03 experiment protocol and offline validation | `[DONE]` | [Report](../reports/D1P-03.md) and [protocol](d1-paper/d1p-03-protocol.md): correct the configurable-length consumer decoder separately from the frozen producer walk; define exact Track A cone/goal diagnostics and unimplemented V2 Track B; freeze equal-budget schedules and fail-closed stopping rules. Solver-free enumeration passes 781,250 stream cases, 25 pair cells and 12,825 goal cases, including overflow/inactive/truncation. No solver, proof, replay, held-out evaluation, or security result; both planners' decision remains `[WAITING]`. |
+| 2026-10-25 | D1P-04 protocol corrections and SMT specializer | `[DONE]` bounded task / `[UNKNOWN]` eligibility | [Report](../reports/D1P-04.md), [protocol](d1-paper/d1p-04-protocol.md), artifact manifest, and equivalence ledger: correct Track B to five methods/140 method-slots with shared partition treatment and separate candidate/final-validation budgets; generate six × 25 specialized queries and matching producer-free XOR checks. All 150 producer prefixes pass byte audit and 134 unit tests pass. The first control failed in the macOS 4 GiB pre-exec hook before cvc5 launched, so zero solver calls ran and all 150 cells are explicitly unrun/ineligible. No primary query, proof, replay, Track B implementation, or verdict; portable equivalence validation awaits review. |
+| 2026-10-25 | D1P-05 macOS-compatible equivalence execution | `[DONE]` | [Report](../reports/D1P-05.md), [protocol](d1-paper/d1p-05-protocol.md), resource policy, freeze, and ledger: final harmless-helper infrastructure gate passes; all 152 frozen D1P-04 query hashes match; expected UNSAT/SAT controls pass; all 150 cell XOR queries return UNSAT with 150/150 prefix audits. The exact partition is transformation-eligible. Sampled 50 ms libproc RSS may overshoot and is not a hard cap; native macOS timing is non-primary. No primary query, proof, replay, joint solver, consumer-effect result, or D1 verdict; Linux Track A manifest review is next. |
+| 2026-10-25 | D1P-06 native-Mac Track A attempt | `[UNKNOWN]` | [Report](../reports/D1P-06.md), [protocol](d1-paper/d1p-06-protocol.md), input manifest, resource policy, freeze, and stopped ledger: validate 166/166 inputs, pass 8/8 harmless helper checks and 147/147 D1 tests, then pass both controls. One goal-only SAT completes; the next call's SAT text is unusable after a monitor-root exit race and cleanup `PermissionError`. Infrastructure-stop rules leave 162 calls unrun, including every combined query and cell. No decomposition result, Track B work, proof/replay, held-out result, or D1 verdict. Runner repair and consumed-call policy require planner review. |
+| 2026-10-25 | D1P-07 race-safe native-Mac Track A | `[DONE]` task / `[UNKNOWN]` obligations | [Report](../reports/D1P-07.md), [protocol](d1-paper/d1p-07-protocol.md), resource policy, freeze, and ledger: preserve D1P-06, pass 7 focused regressions, 154 D1 tests, 13 helper checks and 166/166 input hashes, then execute every fresh call once. Goal-only is 6 SAT; cone-only is 2 timeouts; six combined are timeouts; 150 partition cells give 58 UNSAT and 92 timeouts. All six unsplit and partition aggregates remain UNKNOWN, so decomposition improves zero complete outcomes. No infrastructure failure, proof/replay, Track B, held-out result, consumer-direction result, or D1 verdict. Interpretation review is next. |
 
 ## Update rule
 

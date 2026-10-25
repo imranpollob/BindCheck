@@ -1,0 +1,128 @@
+{
+  "task": "D1P-05",
+  "status": "FROZEN_BEFORE_SOLVER_EXECUTION",
+  "frozen_at_utc": "2026-10-25T19:39:13.894616+00:00",
+  "repository_head": "2ad4f699d527490149f3704e6f6f228494f2d4bd",
+  "scope": "non-primary execution of unchanged D1P-04 SMT equivalence queries",
+  "platform": {
+    "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+    "machine": "arm64",
+    "python": "3.13.7"
+  },
+  "artifact_manifest": {
+    "path": "metadata/d1/d1p-04-artifact-manifest.json",
+    "sha256": "1a713bc5f464eda5e33218cd7985882405f06e5cccb8a3a79b7d5f1cb1e7e2ff"
+  },
+  "resource_policy": {
+    "path": "metadata/d1/d1p-05-resource-policy.json",
+    "sha256": "a1279579b1c5aca917591092044c6a2082a1c43043c808f8bfc17507e09a3d40",
+    "monitor_library": "/usr/lib/libproc.dylib",
+    "metric": "aggregate recursively observed process-tree resident bytes",
+    "hard_address_space_cap": false,
+    "sampling_can_overshoot": true
+  },
+  "solver": {
+    "path": "/Users/imranpollob/Coding/bc/BindCheck/tools/cvc5-1.4.2-gpl/bin/cvc5",
+    "sha256": "a083a7f56a3f61691583b699076322bbcbf6732decfb4f6dc41850dbcc3df027",
+    "version": "cvc5 1.4.2, arm64 GPL/CoCoA build",
+    "version_provenance": "D1P-04 freeze and D1P-00/D1P-03 records; D1P-05 rechecked the exact binary SHA-256 and Mach-O arm64 identity without an extra solver process",
+    "arguments": [
+      "--lang=smt2",
+      "--ff-solver=split"
+    ],
+    "stdin": "exact frozen query bytes"
+  },
+  "limits": {
+    "calls_max": 152,
+    "seconds_per_call": 30.0,
+    "solver_wall_seconds_max": 4560.0,
+    "rss_cutoff_bytes": 4294967296,
+    "rss_sample_interval_seconds": 0.05,
+    "hard_address_space_cap": false,
+    "sampling_can_overshoot": true,
+    "attempts_per_query": 1,
+    "sequential": true
+  },
+  "call_order": [
+    "known_equivalence control (expected UNSAT)",
+    "deliberate_mismatch control (expected SAT)",
+    "150 equivalence queries in D1P-04 artifact-manifest order (expected UNSAT)"
+  ],
+  "ordered_hash_lists": {
+    "algorithm": "SHA-256 of lowercase content hashes joined in order with one newline after every hash",
+    "control_count": 2,
+    "control_hash_list_sha256": "ea684a333c18d46a1fef9bf7be8ae27d7de9e2f4b59c74b7bcdd3a411bf83d22",
+    "equivalence_count": 150,
+    "equivalence_hash_list_sha256": "e43fc7a71519872f72821c5e7cb1aee70841e3b4ebc311435ecd74c42478b68b",
+    "complete_call_hash_list_sha256": "1ef028624f1ed00a2fe77aeb1b02ae4f1730e6712ba2b1c894ab96bd9bfb6a0a",
+    "specialized_output_count": 150,
+    "specialized_output_hash_list_sha256": "9548450503ee7599d27fec4d127a6d93163822b1a6f862a4ba93218f5ef7ebc2"
+  },
+  "pre_freeze_infrastructure_check": {
+    "path": "results/raw/D1P-05/infrastructure-02/infrastructure-check.json",
+    "sha256": "f41f05cab4198aa89527a102e5db1677eacb8f5074d582c455dcc8ee9d4e3932",
+    "status": "PASS",
+    "solver_queries": 0,
+    "research_result": false
+  },
+  "stop_rules": [
+    "stop on failed control, frozen identity mismatch, cell SAT, launch failure, monitoring failure, malformed output, or nonzero exit",
+    "continue the fixed schedule after a cell timeout, solver UNKNOWN, or observed RSS cutoff; that cell remains unusable",
+    "no retry, tuning, reordered call, alternate solver, alternate query, or primary execution"
+  ],
+  "frozen_files": [
+    {
+      "path": "scripts/d1p_05_validate.py",
+      "sha256": "16cc0ae39e7ff3a01439b3c168e4bede93ab53b25bfc1d6b3d27efb3a8651d55"
+    },
+    {
+      "path": "tests/d1/test_d1p_05_validate.py",
+      "sha256": "f9bd1da6828c7739c54dea15a38f178ff83fb6eb0289865b0c8a26c746833482"
+    },
+    {
+      "path": "docs/d1-paper/d1p-05-protocol.md",
+      "sha256": "a92ae752a11b03bac1235549387f574037813e1a172203104281808db4ea3337"
+    },
+    {
+      "path": "metadata/d1/d1p-05-resource-policy.json",
+      "sha256": "a1279579b1c5aca917591092044c6a2082a1c43043c808f8bfc17507e09a3d40"
+    },
+    {
+      "path": "results/raw/D1P-05/infrastructure-02/infrastructure-check.json",
+      "sha256": "f41f05cab4198aa89527a102e5db1677eacb8f5074d582c455dcc8ee9d4e3932"
+    },
+    {
+      "path": "docs/d1-paper/d1p-04-protocol.md",
+      "sha256": "4918e3c376158174dc1657a9ee6beb9cb573f52a5cbe386e123b67043f70e4b0"
+    },
+    {
+      "path": "reports/D1P-04.md",
+      "sha256": "ca4f2e050ddb2f03c5921e119923977ed069c0ec3c4b55bd38ae538386fe5803"
+    },
+    {
+      "path": "scripts/d1p_04_specialize.py",
+      "sha256": "afb0d15492b8b5aafdba1a52a18b11a96fe7a02485111083ae7b8f4a1b1cf9c3"
+    },
+    {
+      "path": "scripts/d1p_04_validate.py",
+      "sha256": "f9be40bd3ef2161cfaea30557a331c5b5013143984260627343455abf23760bc"
+    },
+    {
+      "path": "scripts/d1p_04_record_abort.py",
+      "sha256": "b8f2df60832477acbf709e7a43e0560fc7543a7d0ac0203de5c30f00a1e31e9f"
+    },
+    {
+      "path": "metadata/d1/d1p-04-artifact-manifest.json",
+      "sha256": "1a713bc5f464eda5e33218cd7985882405f06e5cccb8a3a79b7d5f1cb1e7e2ff"
+    },
+    {
+      "path": "metadata/d1/d1p-04-execution-freeze.json",
+      "sha256": "f38244e906e9e48954bd711671524ed08701d9d9cb92b57f338719feef2f37b0"
+    },
+    {
+      "path": "metadata/d1/d1p-04-equivalence-ledger.json",
+      "sha256": "7abe95a9278c092033ffe0b1deab8844a71ab1a55cadb533aa725110dd0619ee"
+    }
+  ],
+  "interpretation": "Passing all calls can establish only exact D1P-04 transformation eligibility; research verdict remains UNKNOWN"
+}
