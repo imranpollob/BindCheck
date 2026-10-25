@@ -1,6 +1,57 @@
 # D1 workspace and preservation
 
-Use `/home/pollmix/Coding/BindCheck-d1`, branch `research/d1`. It is a Git worktree of `/home/pollmix/Coding/BindCheck` at base commit `41093d1905e44af347e1d39cd6718728d4157c77`. Worktrees share object/history and administrative worktree metadata, but have separate indexes and working files. This is not a separate repository or an independent backup of Git history.
+## Current D1 paper integration workspace
+
+Use `/Users/imranpollob/Coding/bc/bindcheck-d1-paper`, branch `d1-paper`.
+It is a linked worktree of `/Users/imranpollob/Coding/bc/BindCheck` and was
+reattached on 25 October 2026 at
+`cce1a966eb84e8e9819c6f658ca4ce07fd670036`, exactly the reviewed
+`chatgpt-codex` tip. The selective-reuse source is
+`/Users/imranpollob/Coding/bc/bindcheck-claude-code`, branch `claude-code`, at
+`9d90b93e00a8fe96d0fcd56261f9ee41d392cab5`. Do not merge those branches;
+follow the [D1 paper integration plan](../d1-paper/integration-plan.md) and port
+only reviewed components under new tasks.
+
+The destination branch and worktree registration existed before D1P-00. The
+registered directory was absent and prunable, while the branch contained no
+commits beyond `chatgpt-codex`. `git worktree add --force ... d1-paper`
+reattached it without moving the ref. Worktrees share Git objects and
+administrative metadata but have separate indexes and working files. The
+linked worktree is not an independent backup.
+
+Ignored proof bundles, toolchains, build products and historical raw results
+are not present in the integration worktree. Some T13/T16/T18/T19 replay
+inputs and toolchains are present only in the preservation checkout
+`/Users/imranpollob/Coding/bc/BindCheck`. Do not make new experiments depend
+directly on those mutable caches: copy exact required bytes to a new ignored
+D1P namespace, verify their recorded hashes, and write a manifest first. The
+exact two v5 printed ACIR/ABI pairs and six N=8 query files were not found
+locally during D1P-00.
+
+D1P-01 rechecked only the evidence roots named by the prior reports and this
+guide; the four exact inputs and six-query bundle remain absent. Its
+path-neutral adapter is `scripts/d1p_01_n8_intake.py`. It validates the frozen
+D1-01 manifest and all inputs before creating output, and its query sink cannot
+launch or return a solver result. Artifact recovery is **BLOCKED** pending the
+archive request in `reports/D1P-01.md`; do not compile or substitute a local
+reconstruction without a separately authorized task and distinct provenance.
+The isolated `.venv-d1p-00` now contains exactly PyCryptodome 3.23.0, and the
+documented 119-test baseline passes. D1P-00's earlier incomplete test result
+remains historical evidence.
+
+Before D1P-00 changed living documents, their exact starting bytes were copied
+to `results/raw/D1P-00/prior-checkpoint/`. See
+[D1P-00](../../reports/D1P-00.md) for hashes, tool availability and the local
+unit-test dependency blocker.
+
+## Historical D1 worktree
+
+The original D1-00 instruction was to use `/home/pollmix/Coding/BindCheck-d1`,
+branch `research/d1`. It was a Git worktree of
+`/home/pollmix/Coding/BindCheck` at base commit
+`41093d1905e44af347e1d39cd6718728d4157c77`. The statements below preserve
+that historical workspace and later detachment chronology; they are not
+instructions to recreate an old index or redirect current integration work.
 
 ## Carried work
 

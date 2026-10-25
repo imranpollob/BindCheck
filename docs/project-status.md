@@ -42,6 +42,11 @@ flowchart TD
     t22 --> sensitivity["Sensitivity checks [WAITING]"]
 
     analysis --> d1["D1 investigation [ACTIVE]"]
+    d1 --> d1paper["D1 paper integration [ACTIVE]"]
+    d1paper --> d1p00["D1P-00 integration baseline [DONE]"]
+    d1p00 --> d1p01["D1P-01 intake implementation [DONE]"]
+    d1p01 --> d1p01artifact["N=8 artifact recovery blocker [UNKNOWN]"]
+    d1p01artifact --> d1p02["D1P-02 archive byte gate [NEXT]"]
     d1 --> d100["D1-00 preserve and align [DONE]"]
     d100 --> d101["D1-01 T22 reporting closure [DONE]"]
     d100 --> d102["D1-02 target selection [DONE]"]
@@ -89,11 +94,11 @@ flowchart TD
     classDef waiting fill:#D9D9D9,stroke:#B3B3B3
     classDef unknown fill:#FFE0C2,stroke:#FF9E42
 
-    class foundation,fixture,payy,sourceCheck,coneGate,nineCases,failureAnalysis,v3Rerun,generalGate,tracking,livingTree,d100,d101,d102,d103preflight,d103review,d103typed,d103boundary,d103guards,d103guardreview,d103concrete,d103replayreview,d103recovery done
-    class analysis,d1,d103,d103impl,d103consumer,d103effects active
-    class d103linkreview next
+    class foundation,fixture,payy,sourceCheck,coneGate,nineCases,failureAnalysis,v3Rerun,generalGate,tracking,livingTree,d100,d101,d102,d103preflight,d103review,d103typed,d103boundary,d103guards,d103guardreview,d103concrete,d103replayreview,d103recovery,d1p00,d1p01 done
+    class analysis,d1,d1paper,d103,d103impl,d103consumer,d103effects active
+    class d103linkreview,d1p02 next
     class evaluation,history,heldOut,baselines,manuscript,claims,artifacts,draft,transferCase,sensitivity,submit,t22,acirSummary,d104,d105,d106,d107,d108,d103symbolic waiting
-    class contribution,primaryResult,generalResult,d103gate,d103recoveryresult unknown
+    class contribution,primaryResult,generalResult,d103gate,d103recoveryresult,d1p01artifact unknown
 ```
 
 ## Immediate path
@@ -113,6 +118,21 @@ flowchart TD
 13. Done at component level: [Consumer execution 01](../reports/D1-03-consumer-execution-01.md) implements concrete AST execution and rollback; 119 Python tests, 29 actual-artifact controls and 13 Solidity component tests pass. Full symbolic semantics and accepted replay remain UNKNOWN. Missing historical proof bundles and zero-new-proof budget require replay/resource review; no primary slot spent.
 14. Done as a bounded attempt: [Proof recovery 01](../reports/D1-03-proof-recovery-01.md) provisions pinned Linux tooling and isolated source; both builds fail (missing libclang, then final-link allocation failure). Local compiler-library setup fixes the first blocker. All 119 Python tests pass; no proof/replay ran. Recovery and D1-03 remain UNKNOWN. Review the [one-build BFD proposal](d1/proof-recovery-02-proposal.md); do not reuse exhausted slots.
 15. Then: faithful joint semantics, equal-information baselines, checked consumer-directed refinement, frozen comparison, and independent transfer. Full evaluation and submission remain conditional on the feasibility decision.
+16. Done: [D1P-00](../reports/D1P-00.md) creates the actual `d1-paper`
+    linked worktree at the `chatgpt-codex` tip and completes a source-inspected
+    integration inventory. No branch merge or implementation port occurs. The
+    exact N=8 input/query bundle and local PyCryptodome dependency are missing;
+    27 unit tests load and pass while four modules fail import. The
+    [integration plan](d1-paper/integration-plan.md) makes a provenance-checked,
+    no-solver N=8 query-bundle intake the next gate. Research status remains
+    UNKNOWN.
+17. Done at the tool boundary, artifact-blocked: [D1P-01](../reports/D1P-01.md)
+    installs exact PyCryptodome 3.23.0 and records a clean 119-test baseline,
+    then adds five passing intake controls (124 total) and a passing
+    65,536-vector self-check. The path-neutral adapter rejects missing or
+    mismatched inputs before generation and cannot launch a solver. The exact
+    two ACIR/ABI pairs remain absent, so artifact recovery is **BLOCKED**, no
+    six-query byte match was claimed, and the research verdict stays UNKNOWN.
 
 The end goal does not imply that submission is currently justified. The
 research contract's two principal properties remain unchanged, and unresolved T22 results remain UNKNOWN. D1 preparation and reporting closure are complete; three missing historical query slots were executed. No new D1 analyzer or method-evaluation result has been completed.
@@ -150,6 +170,8 @@ research contract's two principal properties remain unchanged, and unresolved T2
 | 2026-10-23 | Consumer AST execution and replay-readiness review | `[DONE]` | [Report](../reports/D1-03-consumer-execution-01.md): concrete execution/component task complete, with 119 Python, 29 artifact and 13 Foundry controls passing. Explicit abstract guard/verifier boundaries prevent a joint claim. Historical proof/public-input bundles are unavailable in inspected local raw directories; zero-new-proof budget unchanged. Full symbolic composition and D1-03 remain UNKNOWN; D1-04 WAITING. Review replay inputs before proceeding. |
 
 | 2026-10-23 | Proof recovery attempt and linker resource review | `[DONE]` | [Report](../reports/D1-03-proof-recovery-01.md): pinned Rust/Linux bb and 2,667 original source files preserved. First build fails for missing libclang; locally extracted pinned libraries resolve it. Second build fails at final linking under 4 GiB. Both build slots consumed, no proof/replay/query/held-out run; 119 Python tests pass. Recovery remains UNKNOWN, D1-03 incomplete and D1-04 WAITING. [Proposed next task](d1/proof-recovery-02-proposal.md): one memory-conserving BFD link, then real proof/replay controls only if it succeeds. |
+| 2026-10-25 | D1P-00 integration workspace and baseline | `[DONE]` | [Report](../reports/D1P-00.md) and [integration plan](d1-paper/integration-plan.md): reattach the pre-existing `d1-paper` branch/worktree at the exact `chatgpt-codex` revision; inspect both source branches; retain the Codex semantic/consumer base and identify only selective Claude refinement reuse. No merge, port, solver, proof or replay occurs. Exact N=8 inputs are missing; isolated local unit discovery has 27 passes and four dependency import errors. D1 security verdict remains UNKNOWN; D1P-01 query-bundle intake is next. |
+| 2026-10-25 | D1P-01 local baseline and N=8 intake | `[UNKNOWN]` | [Report](../reports/D1P-01.md) and updated [integration checkpoint](d1-paper/integration-plan.md): exact Pycryptodome 3.23.0 enables 119/119 pre-change tests; five intake controls bring post-change discovery to 124/124, and the separate compact-walk self-check covers 65,536 vectors. The serialization-only adapter validates provenance before output and cannot launch a solver. Intake implementation is done, but artifact recovery is BLOCKED because the exact two ACIR/ABI pairs are absent; no query hash or security verdict is established. D1P-02 archive byte gate is next. |
 
 ## Update rule
 

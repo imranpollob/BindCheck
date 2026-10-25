@@ -2,7 +2,16 @@
 
 BindCheck investigates whether the guarantees of an accepted zero-knowledge proof justify the effects a blockchain application executes. The current D1 direction is **consumer-directed extraction and checked summary refinement** across producer constraints, public-input decoding, and consumer effects. This remains a research hypothesis. The new method is not implemented or validated yet.
 
-This checkout is an independent Git repository at `/home/pollmix/Coding/BindCheck-d1 (copy)` on `chatgpt-codex`; its index and objects are independent of the original repository and sibling worktree. Start with the [D1 brief](docs/d1/brief.md), [development roadmap](docs/d1/roadmap.md), and [workspace preservation guide](docs/d1/workspace.md). [D1-00](reports/D1-00.md) records preparation and preservation checks.
+The current integration checkout is the linked worktree
+`/Users/imranpollob/Coding/bc/bindcheck-d1-paper` on `d1-paper`, based exactly
+on `chatgpt-codex` revision `cce1a966eb84e8e9819c6f658ca4ce07fd670036`.
+[D1P-00](reports/D1P-00.md) records the branch/worktree baseline and the
+source-inspected selective-reuse review of `claude-code`; the
+[integration plan](docs/d1-paper/integration-plan.md) controls prospective
+paper integration. The earlier independent Linux checkout description remains
+historical context in the [workspace preservation guide](docs/d1/workspace.md).
+Start with the [D1 brief](docs/d1/brief.md) and [development roadmap](docs/d1/roadmap.md).
+[D1-00](reports/D1-00.md) records the original D1 preparation and preservation checks.
 
 Start with the [research contract](docs/research-contract.md). It is authoritative for the research questions, threat model, scope, specification boundary, and evidence rules. The [living project checkpoint tree](docs/project-status.md) shows the path from current work to a possible paper submission without replacing the underlying evidence. The [Payy case study](docs/payy-case-study.md) gives the pinned versions, commands, expected outcomes, evidence locations, and limits for the independently built local reproduction of a publicly disclosed message-tail flaw.
 
@@ -14,6 +23,23 @@ The principal directories are `circuits/` and `contracts/` for the small fixture
 
 ## Current status
 
+- [D1P-00](reports/D1P-00.md) establishes the clean `d1-paper` linked
+  worktree and an integration baseline without merging or porting code. The
+  Codex V2/typed-consumer line remains the base; the Claude refinement loop is
+  a selective reimplementation candidate, not a branch-merge candidate. The
+  exact six-query N=8 input bundle is locally missing. An isolated Python
+  baseline passes 27 tests but has four import errors because
+  `pycryptodome==3.23.0` could not be installed through the sandboxed package
+  index; this is not a 119-test pass. Research status remains UNKNOWN.
+- [D1P-01](reports/D1P-01.md) installs the exact pinned Python dependency and
+  completes the local baseline: 119 pre-change tests and 124 post-change tests
+  pass with no failures or errors. A path-neutral, provenance-checked intake
+  now rejects missing or mismatched inputs before generation and enforces a
+  serialization-only no-solver boundary. Its five focused controls and the
+  separate 65,536-vector compact-walk self-check pass. The exact two N=8
+  ACIR/ABI pairs remain absent from recorded local evidence roots, so artifact
+  recovery is BLOCKED, none of the six query hashes is newly reproduced, and
+  research status remains UNKNOWN.
 - T15–T19 locally reproduce the public Payy message-tail mechanism with real proofs and committed token-balance effects, then validate the repair and an honest control.
 - T20 maps those claims to pinned source and advisory evidence.
 - T21 is an in-sample, source-pattern prototype; it does not establish generalization.

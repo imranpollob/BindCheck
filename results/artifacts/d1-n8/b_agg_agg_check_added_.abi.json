@@ -1,0 +1,150 @@
+{
+  "parameters": [
+    {
+      "name": "proofs",
+      "type": {
+        "kind": "array",
+        "length": 2,
+        "type": {
+          "kind": "struct",
+          "path": "AggProof",
+          "fields": [
+            {
+              "name": "proof",
+              "type": {
+                "kind": "array",
+                "length": 508,
+                "type": {
+                  "kind": "field"
+                }
+              }
+            },
+            {
+              "name": "old_root",
+              "type": {
+                "kind": "field"
+              }
+            },
+            {
+              "name": "new_root",
+              "type": {
+                "kind": "field"
+              }
+            },
+            {
+              "name": "commit_hash",
+              "type": {
+                "kind": "field"
+              }
+            },
+            {
+              "name": "messages",
+              "type": {
+                "kind": "array",
+                "length": 8,
+                "type": {
+                  "kind": "field"
+                }
+              }
+            },
+            {
+              "name": "verification_key",
+              "type": {
+                "kind": "array",
+                "length": 115,
+                "type": {
+                  "kind": "field"
+                }
+              }
+            },
+            {
+              "name": "verification_key_hash",
+              "type": {
+                "kind": "field"
+              }
+            }
+          ]
+        }
+      },
+      "visibility": "private"
+    },
+    {
+      "name": "verification_key_hash",
+      "type": {
+        "kind": "array",
+        "length": 2,
+        "type": {
+          "kind": "field"
+        }
+      },
+      "visibility": "public"
+    },
+    {
+      "name": "old_root",
+      "type": {
+        "kind": "field"
+      },
+      "visibility": "public"
+    },
+    {
+      "name": "new_root",
+      "type": {
+        "kind": "field"
+      },
+      "visibility": "public"
+    },
+    {
+      "name": "commit_hash",
+      "type": {
+        "kind": "field"
+      },
+      "visibility": "public"
+    },
+    {
+      "name": "messages",
+      "type": {
+        "kind": "array",
+        "length": 8,
+        "type": {
+          "kind": "field"
+        }
+      },
+      "visibility": "public"
+    }
+  ],
+  "return_type": null,
+  "error_types": {
+    "5038784177220246380": {
+      "error_kind": "string",
+      "string": "proof must be one of the valid proofs"
+    },
+    "5986124078905135123": {
+      "error_kind": "string",
+      "string": "messages cannot have gaps"
+    },
+    "6782591386587895349": {
+      "error_kind": "string",
+      "string": "proof message must be exported"
+    },
+    "14990209321349310352": {
+      "error_kind": "string",
+      "string": "attempt to add with overflow"
+    },
+    "15807167347632280816": {
+      "error_kind": "string",
+      "string": "Roots must match"
+    },
+    "16317344318398924037": {
+      "error_kind": "string",
+      "string": "Message is not zero"
+    },
+    "17952015221782842739": {
+      "error_kind": "string",
+      "string": "proof old_root must match previous root"
+    },
+    "17984877903173405971": {
+      "error_kind": "string",
+      "string": "proof messages exceed compacted range"
+    }
+  }
+}
