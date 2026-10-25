@@ -45,8 +45,10 @@ flowchart TD
     d1 --> d1paper["D1 paper integration [ACTIVE]"]
     d1paper --> d1p00["D1P-00 integration baseline [DONE]"]
     d1p00 --> d1p01["D1P-01 intake implementation [DONE]"]
-    d1p01 --> d1p01artifact["N=8 artifact recovery blocker [UNKNOWN]"]
-    d1p01artifact --> d1p02["D1P-02 archive byte gate [NEXT]"]
+    d1p01 --> d1p01artifact["N=8 artifact recovery [DONE]"]
+    d1p01artifact --> d1p02["D1P-02 archive byte gate [DONE]"]
+    d1p02 --> d1p03["D1P-03 protocol + offline validation [DONE]"]
+    d1p03 --> d1preview["Two-planner execution decision [WAITING]"]
     d1 --> d100["D1-00 preserve and align [DONE]"]
     d100 --> d101["D1-01 T22 reporting closure [DONE]"]
     d100 --> d102["D1-02 target selection [DONE]"]
@@ -94,11 +96,11 @@ flowchart TD
     classDef waiting fill:#D9D9D9,stroke:#B3B3B3
     classDef unknown fill:#FFE0C2,stroke:#FF9E42
 
-    class foundation,fixture,payy,sourceCheck,coneGate,nineCases,failureAnalysis,v3Rerun,generalGate,tracking,livingTree,d100,d101,d102,d103preflight,d103review,d103typed,d103boundary,d103guards,d103guardreview,d103concrete,d103replayreview,d103recovery,d1p00,d1p01 done
+    class foundation,fixture,payy,sourceCheck,coneGate,nineCases,failureAnalysis,v3Rerun,generalGate,tracking,livingTree,d100,d101,d102,d103preflight,d103review,d103typed,d103boundary,d103guards,d103guardreview,d103concrete,d103replayreview,d103recovery,d1p00,d1p01,d1p01artifact,d1p02,d1p03 done
     class analysis,d1,d1paper,d103,d103impl,d103consumer,d103effects active
-    class d103linkreview,d1p02 next
-    class evaluation,history,heldOut,baselines,manuscript,claims,artifacts,draft,transferCase,sensitivity,submit,t22,acirSummary,d104,d105,d106,d107,d108,d103symbolic waiting
-    class contribution,primaryResult,generalResult,d103gate,d103recoveryresult,d1p01artifact unknown
+    class d103linkreview next
+    class evaluation,history,heldOut,baselines,manuscript,claims,artifacts,draft,transferCase,sensitivity,submit,t22,acirSummary,d104,d105,d106,d107,d108,d103symbolic,d1preview waiting
+    class contribution,primaryResult,generalResult,d103gate,d103recoveryresult unknown
 ```
 
 ## Immediate path
@@ -133,6 +135,20 @@ flowchart TD
     mismatched inputs before generation and cannot launch a solver. The exact
     two ACIR/ABI pairs remain absent, so artifact recovery is **BLOCKED**, no
     six-query byte match was claimed, and the research verdict stays UNKNOWN.
+18. Done: [D1P-02](../reports/D1P-02.md) binds the recovered four-file bundle
+    to evidence commit `7d098cd3...`, obtains 4/4 frozen input matches and 6/6
+    historical query-hash matches with the unchanged serialization-only
+    adapter, and independently confirms zero solver records/processes. The
+    artifact blocker is resolved; this is byte reproducibility only, and all
+    historical solver results and the D1 verdict remain UNKNOWN. D1P-03
+    protocol review is next.
+19. Done for review: [D1P-03](../reports/D1P-03.md) and its
+    [protocol](d1-paper/d1p-03-protocol.md) separate exact producer-cone Track
+    A from unimplemented joint Track B, correct actual consumer decoding from
+    pinned source, and freeze fair budgets/stopping rules. Solver-free
+    enumeration passes 781,250 stream cases, 25 pair cells, and 12,825 goal
+    cases. This is rewrite evidence only; no solver/proof/replay ran and the
+    verdict remains UNKNOWN. Both planners' execution decision is waiting.
 
 The end goal does not imply that submission is currently justified. The
 research contract's two principal properties remain unchanged, and unresolved T22 results remain UNKNOWN. D1 preparation and reporting closure are complete; three missing historical query slots were executed. No new D1 analyzer or method-evaluation result has been completed.
@@ -172,6 +188,8 @@ research contract's two principal properties remain unchanged, and unresolved T2
 | 2026-10-23 | Proof recovery attempt and linker resource review | `[DONE]` | [Report](../reports/D1-03-proof-recovery-01.md): pinned Rust/Linux bb and 2,667 original source files preserved. First build fails for missing libclang; locally extracted pinned libraries resolve it. Second build fails at final linking under 4 GiB. Both build slots consumed, no proof/replay/query/held-out run; 119 Python tests pass. Recovery remains UNKNOWN, D1-03 incomplete and D1-04 WAITING. [Proposed next task](d1/proof-recovery-02-proposal.md): one memory-conserving BFD link, then real proof/replay controls only if it succeeds. |
 | 2026-10-25 | D1P-00 integration workspace and baseline | `[DONE]` | [Report](../reports/D1P-00.md) and [integration plan](d1-paper/integration-plan.md): reattach the pre-existing `d1-paper` branch/worktree at the exact `chatgpt-codex` revision; inspect both source branches; retain the Codex semantic/consumer base and identify only selective Claude refinement reuse. No merge, port, solver, proof or replay occurs. Exact N=8 inputs are missing; isolated local unit discovery has 27 passes and four dependency import errors. D1 security verdict remains UNKNOWN; D1P-01 query-bundle intake is next. |
 | 2026-10-25 | D1P-01 local baseline and N=8 intake | `[UNKNOWN]` | [Report](../reports/D1P-01.md) and updated [integration checkpoint](d1-paper/integration-plan.md): exact Pycryptodome 3.23.0 enables 119/119 pre-change tests; five intake controls bring post-change discovery to 124/124, and the separate compact-walk self-check covers 65,536 vectors. The serialization-only adapter validates provenance before output and cannot launch a solver. Intake implementation is done, but artifact recovery is BLOCKED because the exact two ACIR/ABI pairs are absent; no query hash or security verdict is established. D1P-02 archive byte gate is next. |
+| 2026-10-25 | D1P-02 archive-backed N=8 byte gate | `[DONE]` | [Report](../reports/D1P-02.md) and [integration checkpoint](d1-paper/integration-plan.md): all four recovered inputs are byte-identical to evidence commit `7d098cd3...` and match the frozen manifest; the unchanged adapter reproduces all six historical query hashes in a fresh ignored namespace. Independent checks find no solver record and zero solver processes. Artifact recovery is complete, but this is same-implementation byte reproducibility, not a solver/proof/replay/security result; research verdict remains UNKNOWN. D1P-03 protocol review is next. |
+| 2026-10-25 | D1P-03 experiment protocol and offline validation | `[DONE]` | [Report](../reports/D1P-03.md) and [protocol](d1-paper/d1p-03-protocol.md): correct the configurable-length consumer decoder separately from the frozen producer walk; define exact Track A cone/goal diagnostics and unimplemented V2 Track B; freeze equal-budget schedules and fail-closed stopping rules. Solver-free enumeration passes 781,250 stream cases, 25 pair cells and 12,825 goal cases, including overflow/inactive/truncation. No solver, proof, replay, held-out evaluation, or security result; both planners' decision remains `[WAITING]`. |
 
 ## Update rule
 

@@ -1,18 +1,19 @@
 # D1 paper integration plan
 
-Date: **25 October 2026**. Preparation task: **D1P-00 DONE**. Research
-verdict: **UNKNOWN**. This plan records an integration boundary; it does not
-establish a D1 security result, solver result, proof result, or paper claim.
+Date: **25 October 2026**. Preparation through **D1P-03 DONE FOR PLANNER
+REVIEW**. Research verdict: **UNKNOWN**. This plan records an integration
+boundary and reviewed experiment protocol; it does not establish a D1 security
+result, solver result, proof result, or paper claim.
 
 ## 1. Workspace and reviewed revisions
 
 The integration worktree is
-`/Users/imranpollob/Coding/bc/bindcheck-d1-paper`, branch `d1-paper`, at
-`cce1a966eb84e8e9819c6f658ca4ce07fd670036`. The branch already existed at
-the `chatgpt-codex` tip; its previous registered worktree directory was
-missing and marked prunable. `git worktree add --force ... d1-paper`
-reattached that branch without creating, resetting, merging, or rewriting it.
-At intake, `d1-paper` and `chatgpt-codex` had identical trees and revisions.
+`/Users/imranpollob/Coding/bc/bindcheck-d1-paper`, branch `d1-paper`, currently
+at `7f0828a8a431b4bf7e3b962b337e6f040db36e0c`. D1P-00 reattached the
+already-existing branch at `cce1a966eb84e8e9819c6f658ca4ce07fd670036`, the
+then-current `chatgpt-codex` tip, without creating, resetting, merging, or
+rewriting it. The later tracked preparation/artifact commit is recorded in
+D1P-02; D1P-03 performed no Git write.
 
 Reviewed sources:
 
@@ -57,7 +58,7 @@ the D1P-00 local baseline. Historical success is not a fresh reproduction.
 | N=8 ACIR parser, cone builder, FF encoder, and solver wrapper: `scripts/t22_v3_tailspec.py` | Last changed `19fb42761ca8afbe1f600a9fd9544faac1eb67d4`; identical on both source branches; SHA-256 `81a1cd43cd3e6e735dc325535f05d9b2a88c6c9794b434ab53e834061ff700c8` | Python stdlib; printed beta.14 ACIR; cvc5 finite-field support | Cone omission assumes omitted components are satisfiable; recursive proof feasibility and parser/encoding soundness are not proved. `scripts/t22_v3_checks.py` contains seven historical soundness regressions. | **Reuse through a pinned adapter.** Keep the byte identity and regressions; add an explicit artifact/result interface and fail closed on unsupported ACIR. Do not make it the D1 architecture or edit it in place. |
 | Six-query compact baseline: `scripts/t22_v5_compact.py`, `scripts/t22_v5_protocol.md`, and `scripts/t22_specs/payy_agg_agg.json` | `41093d1905e44af347e1d39cd6718728d4157c77`; encoder SHA-256 `39cb3731d6e2921ac0a59c21dbd5d18a7a91bec18628e0e6bb843382d766c792` | Previous parser; two printed ACIR/ABI pairs; GPL/CoCoA cvc5 1.4.2 | Exactly N=8, two streams, kinds 2→4 and 3/4→5. The compact walk self-checks 65,536 category vectors, but that is not an ACIR summary proof. All six historical full queries timed out at 300 seconds/4 GiB. | **Retain as the frozen comparison.** A new adapter may regenerate bytes in a fresh namespace, but may not rewrite the encoder, historical outputs, limits, or UNKNOWN outcomes. |
 | D1-01 closure runner and manifests: `scripts/d1_01_closure.py`, `metadata/d1/d1-01-{query-matrix,execution-manifest}.json` | Runner last changed `30fb03ee78bb732169442047d8c9b5b16d2412e0` | Hard-coded historical Linux paths, local cvc5 tree, archived raw inputs | Runner targets old output locations and an already-consumed budget. Manifests contain the six query hashes and exact historical observations. | **Reuse manifests only. Reject the runner for execution.** Write a path-neutral, fresh-output importer/validator; never invoke `prepare`, `run`, or cleanup behavior from the old task. |
-| Exact N=8 input/query bundle | Payy B source `dcd5d96ee15664a59bc24ed0dc2bb78b73ac5e36`; noirc `60ccd48e18ad8ce50d5ecda9baf813b712145051` | Check-added and running-flag printed ACIR/ABI; six SMT files; matching solver | Tracked metadata records their hashes, but the exact printed artifacts and six v5 SMT files are absent from all three linked worktrees and the local preservation checkout. Older T22 SMT files are not substitutes. | **Missing prerequisite.** Restore exact hash-matching copies from an archive, or authorize a separately versioned rebuild. Until then the N=8 experiment is not runnable. |
+| Exact N=8 input/query bundle | Payy B source `dcd5d96ee15664a59bc24ed0dc2bb78b73ac5e36`; noirc `60ccd48e18ad8ce50d5ecda9baf813b712145051` | Check-added and running-flag printed ACIR/ABI; six SMT files; matching solver | D1P-02 validates the four inputs against evidence commit `7d098cd3...` and reproduces all six frozen query hashes through the unchanged no-solver adapter. | **Recovered and byte-gated.** Preserve D1P-01's historical blocker, use a fresh namespace for later diagnostics, and do not infer solver or semantic correctness from byte equality. |
 | V2 semantic domains, occurrence policy, token fragment, and admission: `model_v2.py`, `policy_v2.py`, `consumer_scope_v2.py` | `42bd0ebbf365469fe3147bb13d7359b129319aa2` and `cafe4dac50a24b36107ed9ef187abc2666156593` | Python stdlib | Separates field/EVM words, P/O, identities, committed traces, and unsupported deferral. Uses exact `Counter` multiplicity and funded standard-token admission. Twenty-three `test_v2_core.py` methods are defined; D1P-00 could not import that module without PyCryptodome. | **Retain as the semantic base.** Add symbolic forms without weakening canonicality, multiplicity, rollback, or UNKNOWN behavior. |
 | Typed ACIR decoding and binding certificates: `acir_binary_v1.py`, `acir_bindings_v1.py`, `binding_certificate_check_v1.py` | `42bd0ebbf365469fe3147bb13d7359b129319aa2` | Python stdlib; pinned beta.14 serialization schema and tracked upstream excerpts | Checks typed recursive calls, ABI/frame mappings, polynomial certificates, canonical fields, caps, and unsupported tags. All 27 defined tests passed locally in D1P-00 without PyCryptodome. | **Reuse.** Make it the provenance/binding authority and adapt legacy printed-ACIR nodes into it; do not replace it with sequential-layout guesses. |
 | Source-bound consumer inventory, guard frame, execution, rollback: `consumer_boundary_v1.py`, `guard_frame_v1.py`, `consumer_execution_v1.py` | Frame/boundary `42bd0ebbf365469fe3147bb13d7359b129319aa2`; execution `cafe4dac50a24b36107ed9ef187abc2666156593` | PyCryptodome 3.23.0; pinned solc 0.8.20 AST/source artifacts; ordinary OZ 5.0.1 token model | Keeps guard/verifier choices abstract, commits effects only on return, and fails closed on unsupported nodes. Nine boundary, 22 frame, and 38 execution tests are defined. All three modules failed D1P-00 discovery solely because `Crypto.Hash.keccak` was unavailable. | **Reuse after dependency and artifact provisioning.** Add a symbolic lowering that is checked against this concrete interpreter; do not import the weaker synthetic consumer walk as the real consumer. |
@@ -79,7 +80,7 @@ seal them in a manifest.
 
 | Requirement | D1 worktree | Local preservation checkout / host | Consequence |
 | --- | --- | --- | --- |
-| Six exact v5 SMT queries and the two printed ACIR/ABI pairs | Missing | Missing; only older T22 SMT files found | Blocks byte-reproduction and all six N=8 executions. Tracked expected hashes remain available. |
+| Six exact v5 SMT queries and the two printed ACIR/ABI pairs | Available: four tracked inputs under `results/artifacts/d1-n8/`; six ignored byte-matching queries under `results/raw/D1P-02/generated/` | Evidence commit `7d098cd3...` and frozen manifest bind the input bytes | D1P-02 closes artifact intake. Any future query run must copy/audit into a fresh namespace and retain the six historical UNKNOWN outcomes. |
 | cvc5 1.4.2 with finite-field split/CoCoA | Missing local tool tree | GPL/CoCoA arm64 binary present under `BindCheck/tools`; PATH also has a different unrestricted build | Copy and hash-pin the intended binary; do not compare timing across the historical Linux binary without disclosing platform change. |
 | nargo/noirc beta.14 | Missing | Correct pinned arm64 binary present under `BindCheck/tools/noir-1.0.0-beta.14` | Available for a later separately authorized rebuild; no compile ran in D1P-00. |
 | T13 mint proof/input | Missing | Present: 10,560/32,096 bytes; SHA-256 `10eb689c...` / `2a0f2b2a...` | Eligible for a manifest-backed honest control after revision/key checks. |
@@ -87,7 +88,7 @@ seal them in a manifest.
 | Revision-matched verifier binaries and RollupV1 source | Missing | T12/T18 binaries and Payy revision worktrees present | Available, but must stay paired to the correct proof/key revision. |
 | Forge stack | Forge on PATH | Forge 1.4.1; solc 0.8.20 exists under `~/.svm`; forge-std and OZ 5.0.1 exist only in preservation checkout | Build an isolated replay tree with explicit remappings. Default `solc` is 0.8.30 and must not be used accidentally. |
 | bb | Missing local tool tree/PATH | arm64 `3.0.0-manual.20251030` present; differs from the historical Linux recovery package | Sufficient for a later native verification compatibility check only after pinning; no proof build is authorized here. |
-| Codex Python dependency | `pycryptodome==3.23.0` not installed | No local wheel or installed copy found; PyPI unavailable from sandbox | Current unit baseline is incomplete for four modules. Provision a pinned wheel before claiming a clean suite. |
+| Codex Python dependency | `.venv-d1p-00` contains `pycryptodome==3.23.0` | Python 3.13.7; full D1P-03 discovery passes 128 tests | Use the isolated environment; D1P-00's incomplete result remains historical. |
 | Rust recovery toolchain | Host Rust/Cargo 1.99 | Historical recovery pinned Rust 1.91 and Linux-specific linker setup | Do not reuse the old build command on macOS or treat host availability as recovery readiness. |
 
 ## 5. Semantic conflicts requiring planner decisions
@@ -101,9 +102,13 @@ seal them in a manifest.
    `authorized` array. Payy supplies recursive proof inputs and messages, not
    that authored abstraction. Freeze how P and O are derived without asserting
    the implementation binding under test.
-3. **Record grammar and termination.** Real Payy uses variable lengths
-   2→4 and 3/4→5 and stops at the first invalid kind. The Claude joint encoder
-   assumes uniform length three and does not model pad/end as termination.
+3. **Producer walk versus consumer decoding.** The N=8 producer specification
+   uses active-frame lengths 2→4 and 3/4→5 and stops export at the first other
+   kind. The actual consumer instead uses a verifier-configured length, advances
+   one word for kind 0, consumes four for kind 2 and five for kind 3, and reverts
+   on kind 4 or any other kind; truncated record reads also revert. The Claude
+   joint encoder's uniform length-three walk matches neither relation. Track B
+   must encode both relations and their forwarding link separately.
 4. **Multiplicity.** The Claude goals allow reuse of one matching permission;
    V2 requires occurrence identity and exact multiset discharge. The integrated
    method must use the V2 rule.
@@ -164,21 +169,47 @@ contains the exact archive request and a reviewed, unexecuted reconstruction
 recipe pinned to the Payy B revision, beta.14/noirc revision, historical
 scaling, and running-flag transformation. Research verdict remains UNKNOWN.
 
-## 8. Minimal next implementation task
+## 8. D1P-02 archive byte-gate checkpoint
 
-**D1P-02 — Archive-backed N=8 restore and byte gate.** Supply the precise
-archive requested by D1P-01, copy its four inputs into a fresh ignored D1P
-namespace, and run the completed adapter without invoking cvc5. It must:
+On 25 October 2026, [D1P-02](../../reports/D1P-02.md) validated all four
+recovered inputs as byte-identical to evidence commit
+`7d098cd393c5cc8609765b663d393fcaebf24aeb` and as exact matches for the
+frozen D1-01 manifest. The unchanged D1P-01 adapter then serialized all six v5
+queries into `results/raw/D1P-02/generated/`; every SHA-256 matched the frozen
+historical identity. The adapter and independent audit record zero solver
+processes and no solver record. The D1P-01 artifact blocker is resolved, but
+the research verdict remains UNKNOWN.
 
-- match all four ACIR/ABI SHA-256 identities before query generation;
-- preserve any incompatible archive or reconstruction under distinct
-  provenance rather than substituting it;
-- serialize all six queries and match their SHA-256 values recorded in
-  `metadata/d1/d1-01-execution-manifest.json`;
-- emit the adapter's fresh manifest in the new D1P namespace; and
-- launch no solver and preserve all historical outputs.
+This establishes same-implementation query-byte reproducibility, not parser,
+cone, encoding, specification, solver, proof, or consumer correctness. The six
+historical primary outcomes remain timeouts/UNKNOWN, the goal-only v3-derived
+timeout remains separate from v5 specification-only SAT diagnostics, and N=8
+producer queries remain a different evidence grade from N=1000 real-proof
+consumer replay.
 
-Completion is 4/4 exact input matches plus 6/6 exact query matches, or one
-precise incompatible-artifact report. This is the smallest remaining gate
-before a separately authorized N=8 solver experiment; it does not port the
-refinement engine or establish a security verdict.
+## 9. D1P-03 protocol and offline-check checkpoint
+
+On 25 October 2026, [D1P-03](../../reports/D1P-03.md) produced the
+[review protocol](d1p-03-protocol.md) without executing a solver. It separates
+Track A's exact six selected-cone producer queries from an unimplemented Track
+B joint producer/decoder/consumer experiment; `C` is explicitly the selected
+cone, not the full producer relation. The protocol defines goal-only,
+cone-only, combined, and 25-cell diagnostics, labels SAT/UNSAT directions only
+as expectations, retains V2 P/O/E and funded/no-substitution scope, separates
+concrete-model from real-proof evidence, and freezes numeric fair-budget and
+stopping rules for review.
+
+The independent offline checker exhaustively covers 781,250 activation/word-
+class stream cases, all 25 cell pairs, and 12,825 goal cases. Coverage,
+exclusion, and specialized walk/goal equivalence pass, including inactive,
+overflow, and truncated-record cases. This is finite specification-rewrite
+evidence only: no ACIR, SMT, solver, proof, consumer, or security claim follows.
+
+## 10. Next review gate
+
+**Two-planner protocol decision.** The ten open decisions in D1P-03 must be
+resolved before either track executes. If Track A preparation is authorized,
+the smallest next task is a serialization-only diagnostic/cell-query generator
+with six unchanged parent hashes, exhaustive provenance, and zero solver
+processes. Track B implementation and every solver/replay slot remain waiting
+for separate authorization. Research verdict remains UNKNOWN.

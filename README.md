@@ -3,8 +3,9 @@
 BindCheck investigates whether the guarantees of an accepted zero-knowledge proof justify the effects a blockchain application executes. The current D1 direction is **consumer-directed extraction and checked summary refinement** across producer constraints, public-input decoding, and consumer effects. This remains a research hypothesis. The new method is not implemented or validated yet.
 
 The current integration checkout is the linked worktree
-`/Users/imranpollob/Coding/bc/bindcheck-d1-paper` on `d1-paper`, based exactly
-on `chatgpt-codex` revision `cce1a966eb84e8e9819c6f658ca4ce07fd670036`.
+`/Users/imranpollob/Coding/bc/bindcheck-d1-paper` on `d1-paper`, currently at
+`7f0828a8a431b4bf7e3b962b337e6f040db36e0c`. It was established from
+`chatgpt-codex` revision `cce1a966eb84e8e9819c6f658ca4ce07fd670036`.
 [D1P-00](reports/D1P-00.md) records the branch/worktree baseline and the
 source-inspected selective-reuse review of `claude-code`; the
 [integration plan](docs/d1-paper/integration-plan.md) controls prospective
@@ -40,6 +41,22 @@ The principal directories are `circuits/` and `contracts/` for the small fixture
   ACIR/ABI pairs remain absent from recorded local evidence roots, so artifact
   recovery is BLOCKED, none of the six query hashes is newly reproduced, and
   research status remains UNKNOWN.
+- [D1P-02](reports/D1P-02.md) resolves that local artifact blocker without
+  rewriting D1P-01: four inputs imported from evidence commit `7d098cd3...`
+  independently match the frozen D1-01 manifest, and the unchanged
+  serialization-only adapter reproduces all six historical v5 query hashes in
+  a fresh ignored namespace. No solver process or solver record exists. This
+  is a byte-reproducibility result only; all six historical timeout outcomes
+  and the D1 research verdict remain UNKNOWN.
+- [D1P-03](reports/D1P-03.md) supplies the no-execution
+  [experiment protocol](docs/d1-paper/d1p-03-protocol.md). It corrects the
+  actual consumer scan to configurable length, kind-0 advance, four-word kind
+  2, five-word kind 3, and revert for all other kinds, distinct from the frozen
+  producer walk. A solver-free checker exhaustively validates 781,250 stream
+  cases, all 25 cell pairs, and 12,825 goal cases, including overflow and
+  truncated records. The check establishes only partition/rewrite equivalence.
+  Track A execution and the unimplemented Track B joint solver remain pending
+  both planners' decisions; research status is UNKNOWN.
 - T15–T19 locally reproduce the public Payy message-tail mechanism with real proofs and committed token-balance effects, then validate the repair and an honest control.
 - T20 maps those claims to pinned source and advisory evidence.
 - T21 is an in-sample, source-pattern prototype; it does not establish generalization.

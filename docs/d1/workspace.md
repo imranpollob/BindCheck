@@ -39,6 +39,24 @@ The isolated `.venv-d1p-00` now contains exactly PyCryptodome 3.23.0, and the
 documented 119-test baseline passes. D1P-00's earlier incomplete test result
 remains historical evidence.
 
+D1P-02 resolves the local artifact-availability blocker prospectively. The
+four files under `results/artifacts/d1-n8/` are byte-identical to evidence
+commit `7d098cd393c5cc8609765b663d393fcaebf24aeb` and match the frozen D1-01
+manifest. The unchanged adapter serialized 4/4 accepted inputs into 6/6
+hash-matching v5 queries under `results/raw/D1P-02/generated/`, with zero
+solver processes. See [D1P-02](../../reports/D1P-02.md) and the ignored
+`results/raw/D1P-02/provenance.json`. Keep the artifact directory immutable;
+future runs must use a new raw namespace and must not overwrite D1P-02.
+
+D1P-03 adds a reviewed, no-execution experiment protocol at
+`docs/d1-paper/d1p-03-protocol.md`. Its solver-free partition checker records
+781,250 stream cases, 25 pair cells, and 12,825 goal cases under
+`results/raw/D1P-03/offline-check.json`. It distinguishes the producer walk
+from the actual configurable-length consumer decoder and preserves the six
+historical UNKNOWN outcomes. Do not interpret the offline PASS as ACIR, solver,
+proof, consumer, or security evidence. Both planners must resolve the listed
+protocol decisions before any execution or Track B implementation.
+
 Before D1P-00 changed living documents, their exact starting bytes were copied
 to `results/raw/D1P-00/prior-checkpoint/`. See
 [D1P-00](../../reports/D1P-00.md) for hashes, tool availability and the local
