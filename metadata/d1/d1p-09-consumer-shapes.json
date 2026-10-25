@@ -1,0 +1,887 @@
+{
+  "generator_sha256": "9e3fe75bdaf64718e423c14a5b2ee0a89c0b04456abe90f83738c14905b57aea",
+  "scope": "successful N=8 consumer decoding only; payloads symbolic",
+  "semantics": {
+    "failed_transfer": "scan may continue with no committed transfer effect",
+    "kind_4": "consumer-invalid even though producer export grammar accepts it",
+    "later_revert": "rolls back earlier mint spent-writes and successful token effects",
+    "zero_value_mint": "successful registry match still writes spent=true"
+  },
+  "separate_guards": {
+    "commit": [
+      "verifyCommitHash is a source-level placeholder in the pinned consumer"
+    ],
+    "execution": [
+      "onlyProver",
+      "validator signatures",
+      "outer transaction rollback"
+    ],
+    "state": [
+      "root equality",
+      "height monotonicity",
+      "mint registry",
+      "funded token state"
+    ],
+    "verifier": [
+      "enabled exact verification key",
+      "registered message length 8",
+      "proof accepted for exact public-input vector"
+    ]
+  },
+  "shapes": [
+    {
+      "consumer_public_input_positions": {
+        "0": 3,
+        "1": 4,
+        "2": 5,
+        "3": 6,
+        "4": 7,
+        "5": 8,
+        "6": 9,
+        "7": 10
+      },
+      "fixed_kind_positions": {
+        "0": 0,
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 0,
+        "7": 0
+      },
+      "id": "00_0-0-0-0-0-0-0-0",
+      "kinds": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "predicate": "outer_message[0] == 0 and outer_message[1] == 0 and outer_message[2] == 0 and outer_message[3] == 0 and outer_message[4] == 0 and outer_message[5] == 0 and outer_message[6] == 0 and outer_message[7] == 0",
+      "producer_outer_witness_bindings": {
+        "0": 1275,
+        "1": 1276,
+        "2": 1277,
+        "3": 1278,
+        "4": 1279,
+        "5": 1280,
+        "6": 1281,
+        "7": 1282
+      },
+      "records": [
+        {
+          "kind": 0,
+          "ordinal": 0,
+          "payload_positions": [],
+          "start": 0,
+          "width": 1
+        },
+        {
+          "kind": 0,
+          "ordinal": 1,
+          "payload_positions": [],
+          "start": 1,
+          "width": 1
+        },
+        {
+          "kind": 0,
+          "ordinal": 2,
+          "payload_positions": [],
+          "start": 2,
+          "width": 1
+        },
+        {
+          "kind": 0,
+          "ordinal": 3,
+          "payload_positions": [],
+          "start": 3,
+          "width": 1
+        },
+        {
+          "kind": 0,
+          "ordinal": 4,
+          "payload_positions": [],
+          "start": 4,
+          "width": 1
+        },
+        {
+          "kind": 0,
+          "ordinal": 5,
+          "payload_positions": [],
+          "start": 5,
+          "width": 1
+        },
+        {
+          "kind": 0,
+          "ordinal": 6,
+          "payload_positions": [],
+          "start": 6,
+          "width": 1
+        },
+        {
+          "kind": 0,
+          "ordinal": 7,
+          "payload_positions": [],
+          "start": 7,
+          "width": 1
+        }
+      ],
+      "symbolic_payload_positions": []
+    },
+    {
+      "consumer_public_input_positions": {
+        "0": 3,
+        "1": 4,
+        "2": 5,
+        "3": 6,
+        "4": 7
+      },
+      "fixed_kind_positions": {
+        "0": 0,
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 2
+      },
+      "id": "01_0-0-0-0-2",
+      "kinds": [
+        0,
+        0,
+        0,
+        0,
+        2
+      ],
+      "predicate": "outer_message[0] == 0 and outer_message[1] == 0 and outer_message[2] == 0 and outer_message[3] == 0 and outer_message[4] == 2",
+      "producer_outer_witness_bindings": {
+        "0": 1275,
+        "1": 1276,
+        "2": 1277,
+        "3": 1278,
+        "4": 1279
+      },
+      "records": [
+        {
+          "kind": 0,
+          "ordinal": 0,
+          "payload_positions": [],
+          "start": 0,
+          "width": 1
+        },
+        {
+          "kind": 0,
+          "ordinal": 1,
+          "payload_positions": [],
+          "start": 1,
+          "width": 1
+        },
+        {
+          "kind": 0,
+          "ordinal": 2,
+          "payload_positions": [],
+          "start": 2,
+          "width": 1
+        },
+        {
+          "kind": 0,
+          "ordinal": 3,
+          "payload_positions": [],
+          "start": 3,
+          "width": 1
+        },
+        {
+          "kind": 2,
+          "ordinal": 4,
+          "payload_positions": [
+            5,
+            6,
+            7
+          ],
+          "start": 4,
+          "width": 4
+        }
+      ],
+      "symbolic_payload_positions": [
+        5,
+        6,
+        7
+      ]
+    },
+    {
+      "consumer_public_input_positions": {
+        "0": 3,
+        "1": 4,
+        "2": 5,
+        "3": 6,
+        "7": 10
+      },
+      "fixed_kind_positions": {
+        "0": 0,
+        "1": 0,
+        "2": 0,
+        "3": 2,
+        "7": 0
+      },
+      "id": "02_0-0-0-2-0",
+      "kinds": [
+        0,
+        0,
+        0,
+        2,
+        0
+      ],
+      "predicate": "outer_message[0] == 0 and outer_message[1] == 0 and outer_message[2] == 0 and outer_message[3] == 2 and outer_message[7] == 0",
+      "producer_outer_witness_bindings": {
+        "0": 1275,
+        "1": 1276,
+        "2": 1277,
+        "3": 1278,
+        "7": 1282
+      },
+      "records": [
+        {
+          "kind": 0,
+          "ordinal": 0,
+          "payload_positions": [],
+          "start": 0,
+          "width": 1
+        },
+        {
+          "kind": 0,
+          "ordinal": 1,
+          "payload_positions": [],
+          "start": 1,
+          "width": 1
+        },
+        {
+          "kind": 0,
+          "ordinal": 2,
+          "payload_positions": [],
+          "start": 2,
+          "width": 1
+        },
+        {
+          "kind": 2,
+          "ordinal": 3,
+          "payload_positions": [
+            4,
+            5,
+            6
+          ],
+          "start": 3,
+          "width": 4
+        },
+        {
+          "kind": 0,
+          "ordinal": 4,
+          "payload_positions": [],
+          "start": 7,
+          "width": 1
+        }
+      ],
+      "symbolic_payload_positions": [
+        4,
+        5,
+        6
+      ]
+    },
+    {
+      "consumer_public_input_positions": {
+        "0": 3,
+        "1": 4,
+        "2": 5,
+        "3": 6
+      },
+      "fixed_kind_positions": {
+        "0": 0,
+        "1": 0,
+        "2": 0,
+        "3": 3
+      },
+      "id": "03_0-0-0-3",
+      "kinds": [
+        0,
+        0,
+        0,
+        3
+      ],
+      "predicate": "outer_message[0] == 0 and outer_message[1] == 0 and outer_message[2] == 0 and outer_message[3] == 3",
+      "producer_outer_witness_bindings": {
+        "0": 1275,
+        "1": 1276,
+        "2": 1277,
+        "3": 1278
+      },
+      "records": [
+        {
+          "kind": 0,
+          "ordinal": 0,
+          "payload_positions": [],
+          "start": 0,
+          "width": 1
+        },
+        {
+          "kind": 0,
+          "ordinal": 1,
+          "payload_positions": [],
+          "start": 1,
+          "width": 1
+        },
+        {
+          "kind": 0,
+          "ordinal": 2,
+          "payload_positions": [],
+          "start": 2,
+          "width": 1
+        },
+        {
+          "kind": 3,
+          "ordinal": 3,
+          "payload_positions": [
+            4,
+            5,
+            6,
+            7
+          ],
+          "start": 3,
+          "width": 5
+        }
+      ],
+      "symbolic_payload_positions": [
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    {
+      "consumer_public_input_positions": {
+        "0": 3,
+        "1": 4,
+        "2": 5,
+        "6": 9,
+        "7": 10
+      },
+      "fixed_kind_positions": {
+        "0": 0,
+        "1": 0,
+        "2": 2,
+        "6": 0,
+        "7": 0
+      },
+      "id": "04_0-0-2-0-0",
+      "kinds": [
+        0,
+        0,
+        2,
+        0,
+        0
+      ],
+      "predicate": "outer_message[0] == 0 and outer_message[1] == 0 and outer_message[2] == 2 and outer_message[6] == 0 and outer_message[7] == 0",
+      "producer_outer_witness_bindings": {
+        "0": 1275,
+        "1": 1276,
+        "2": 1277,
+        "6": 1281,
+        "7": 1282
+      },
+      "records": [
+        {
+          "kind": 0,
+          "ordinal": 0,
+          "payload_positions": [],
+          "start": 0,
+          "width": 1
+        },
+        {
+          "kind": 0,
+          "ordinal": 1,
+          "payload_positions": [],
+          "start": 1,
+          "width": 1
+        },
+        {
+          "kind": 2,
+          "ordinal": 2,
+          "payload_positions": [
+            3,
+            4,
+            5
+          ],
+          "start": 2,
+          "width": 4
+        },
+        {
+          "kind": 0,
+          "ordinal": 3,
+          "payload_positions": [],
+          "start": 6,
+          "width": 1
+        },
+        {
+          "kind": 0,
+          "ordinal": 4,
+          "payload_positions": [],
+          "start": 7,
+          "width": 1
+        }
+      ],
+      "symbolic_payload_positions": [
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "consumer_public_input_positions": {
+        "0": 3,
+        "1": 4,
+        "2": 5,
+        "7": 10
+      },
+      "fixed_kind_positions": {
+        "0": 0,
+        "1": 0,
+        "2": 3,
+        "7": 0
+      },
+      "id": "05_0-0-3-0",
+      "kinds": [
+        0,
+        0,
+        3,
+        0
+      ],
+      "predicate": "outer_message[0] == 0 and outer_message[1] == 0 and outer_message[2] == 3 and outer_message[7] == 0",
+      "producer_outer_witness_bindings": {
+        "0": 1275,
+        "1": 1276,
+        "2": 1277,
+        "7": 1282
+      },
+      "records": [
+        {
+          "kind": 0,
+          "ordinal": 0,
+          "payload_positions": [],
+          "start": 0,
+          "width": 1
+        },
+        {
+          "kind": 0,
+          "ordinal": 1,
+          "payload_positions": [],
+          "start": 1,
+          "width": 1
+        },
+        {
+          "kind": 3,
+          "ordinal": 2,
+          "payload_positions": [
+            3,
+            4,
+            5,
+            6
+          ],
+          "start": 2,
+          "width": 5
+        },
+        {
+          "kind": 0,
+          "ordinal": 3,
+          "payload_positions": [],
+          "start": 7,
+          "width": 1
+        }
+      ],
+      "symbolic_payload_positions": [
+        3,
+        4,
+        5,
+        6
+      ]
+    },
+    {
+      "consumer_public_input_positions": {
+        "0": 3,
+        "1": 4,
+        "5": 8,
+        "6": 9,
+        "7": 10
+      },
+      "fixed_kind_positions": {
+        "0": 0,
+        "1": 2,
+        "5": 0,
+        "6": 0,
+        "7": 0
+      },
+      "id": "06_0-2-0-0-0",
+      "kinds": [
+        0,
+        2,
+        0,
+        0,
+        0
+      ],
+      "predicate": "outer_message[0] == 0 and outer_message[1] == 2 and outer_message[5] == 0 and outer_message[6] == 0 and outer_message[7] == 0",
+      "producer_outer_witness_bindings": {
+        "0": 1275,
+        "1": 1276,
+        "5": 1280,
+        "6": 1281,
+        "7": 1282
+      },
+      "records": [
+        {
+          "kind": 0,
+          "ordinal": 0,
+          "payload_positions": [],
+          "start": 0,
+          "width": 1
+        },
+        {
+          "kind": 2,
+          "ordinal": 1,
+          "payload_positions": [
+            2,
+            3,
+            4
+          ],
+          "start": 1,
+          "width": 4
+        },
+        {
+          "kind": 0,
+          "ordinal": 2,
+          "payload_positions": [],
+          "start": 5,
+          "width": 1
+        },
+        {
+          "kind": 0,
+          "ordinal": 3,
+          "payload_positions": [],
+          "start": 6,
+          "width": 1
+        },
+        {
+          "kind": 0,
+          "ordinal": 4,
+          "payload_positions": [],
+          "start": 7,
+          "width": 1
+        }
+      ],
+      "symbolic_payload_positions": [
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "consumer_public_input_positions": {
+        "0": 3,
+        "1": 4,
+        "6": 9,
+        "7": 10
+      },
+      "fixed_kind_positions": {
+        "0": 0,
+        "1": 3,
+        "6": 0,
+        "7": 0
+      },
+      "id": "07_0-3-0-0",
+      "kinds": [
+        0,
+        3,
+        0,
+        0
+      ],
+      "predicate": "outer_message[0] == 0 and outer_message[1] == 3 and outer_message[6] == 0 and outer_message[7] == 0",
+      "producer_outer_witness_bindings": {
+        "0": 1275,
+        "1": 1276,
+        "6": 1281,
+        "7": 1282
+      },
+      "records": [
+        {
+          "kind": 0,
+          "ordinal": 0,
+          "payload_positions": [],
+          "start": 0,
+          "width": 1
+        },
+        {
+          "kind": 3,
+          "ordinal": 1,
+          "payload_positions": [
+            2,
+            3,
+            4,
+            5
+          ],
+          "start": 1,
+          "width": 5
+        },
+        {
+          "kind": 0,
+          "ordinal": 2,
+          "payload_positions": [],
+          "start": 6,
+          "width": 1
+        },
+        {
+          "kind": 0,
+          "ordinal": 3,
+          "payload_positions": [],
+          "start": 7,
+          "width": 1
+        }
+      ],
+      "symbolic_payload_positions": [
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "consumer_public_input_positions": {
+        "0": 3,
+        "4": 7,
+        "5": 8,
+        "6": 9,
+        "7": 10
+      },
+      "fixed_kind_positions": {
+        "0": 2,
+        "4": 0,
+        "5": 0,
+        "6": 0,
+        "7": 0
+      },
+      "id": "08_2-0-0-0-0",
+      "kinds": [
+        2,
+        0,
+        0,
+        0,
+        0
+      ],
+      "predicate": "outer_message[0] == 2 and outer_message[4] == 0 and outer_message[5] == 0 and outer_message[6] == 0 and outer_message[7] == 0",
+      "producer_outer_witness_bindings": {
+        "0": 1275,
+        "4": 1279,
+        "5": 1280,
+        "6": 1281,
+        "7": 1282
+      },
+      "records": [
+        {
+          "kind": 2,
+          "ordinal": 0,
+          "payload_positions": [
+            1,
+            2,
+            3
+          ],
+          "start": 0,
+          "width": 4
+        },
+        {
+          "kind": 0,
+          "ordinal": 1,
+          "payload_positions": [],
+          "start": 4,
+          "width": 1
+        },
+        {
+          "kind": 0,
+          "ordinal": 2,
+          "payload_positions": [],
+          "start": 5,
+          "width": 1
+        },
+        {
+          "kind": 0,
+          "ordinal": 3,
+          "payload_positions": [],
+          "start": 6,
+          "width": 1
+        },
+        {
+          "kind": 0,
+          "ordinal": 4,
+          "payload_positions": [],
+          "start": 7,
+          "width": 1
+        }
+      ],
+      "symbolic_payload_positions": [
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "consumer_public_input_positions": {
+        "0": 3,
+        "4": 7
+      },
+      "fixed_kind_positions": {
+        "0": 2,
+        "4": 2
+      },
+      "id": "09_2-2",
+      "kinds": [
+        2,
+        2
+      ],
+      "predicate": "outer_message[0] == 2 and outer_message[4] == 2",
+      "producer_outer_witness_bindings": {
+        "0": 1275,
+        "4": 1279
+      },
+      "records": [
+        {
+          "kind": 2,
+          "ordinal": 0,
+          "payload_positions": [
+            1,
+            2,
+            3
+          ],
+          "start": 0,
+          "width": 4
+        },
+        {
+          "kind": 2,
+          "ordinal": 1,
+          "payload_positions": [
+            5,
+            6,
+            7
+          ],
+          "start": 4,
+          "width": 4
+        }
+      ],
+      "symbolic_payload_positions": [
+        1,
+        2,
+        3,
+        5,
+        6,
+        7
+      ]
+    },
+    {
+      "consumer_public_input_positions": {
+        "0": 3,
+        "5": 8,
+        "6": 9,
+        "7": 10
+      },
+      "fixed_kind_positions": {
+        "0": 3,
+        "5": 0,
+        "6": 0,
+        "7": 0
+      },
+      "id": "10_3-0-0-0",
+      "kinds": [
+        3,
+        0,
+        0,
+        0
+      ],
+      "predicate": "outer_message[0] == 3 and outer_message[5] == 0 and outer_message[6] == 0 and outer_message[7] == 0",
+      "producer_outer_witness_bindings": {
+        "0": 1275,
+        "5": 1280,
+        "6": 1281,
+        "7": 1282
+      },
+      "records": [
+        {
+          "kind": 3,
+          "ordinal": 0,
+          "payload_positions": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "start": 0,
+          "width": 5
+        },
+        {
+          "kind": 0,
+          "ordinal": 1,
+          "payload_positions": [],
+          "start": 5,
+          "width": 1
+        },
+        {
+          "kind": 0,
+          "ordinal": 2,
+          "payload_positions": [],
+          "start": 6,
+          "width": 1
+        },
+        {
+          "kind": 0,
+          "ordinal": 3,
+          "payload_positions": [],
+          "start": 7,
+          "width": 1
+        }
+      ],
+      "symbolic_payload_positions": [
+        1,
+        2,
+        3,
+        4
+      ]
+    }
+  ],
+  "task": "D1P-09",
+  "validation": {
+    "alphabet": {
+      "0": "padding",
+      "1": "representative unsupported nonzero kind",
+      "2": "mint",
+      "3": "burn",
+      "4": "producer-supported but consumer-invalid kind"
+    },
+    "assignments": 390625,
+    "classification_counts": {
+      "invalid_kind": 291312,
+      "truncated": 80562,
+      "valid": 18751
+    },
+    "coverage_on_structurally_valid_decoding": true,
+    "invalid_and_truncated_outside_union": true,
+    "mutual_exclusion_on_structurally_valid_decoding": true,
+    "scope": "exhaustive over equality/control-flow classes for eight words; payload field values remain symbolic and guards/state/verifier/commit are excluded",
+    "shape_assignment_counts": {
+      "00_0-0-0-0-0-0-0-0": 1,
+      "01_0-0-0-0-2": 125,
+      "02_0-0-0-2-0": 125,
+      "03_0-0-0-3": 625,
+      "04_0-0-2-0-0": 125,
+      "05_0-0-3-0": 625,
+      "06_0-2-0-0-0": 125,
+      "07_0-3-0-0": 625,
+      "08_2-0-0-0-0": 125,
+      "09_2-2": 15625,
+      "10_3-0-0-0": 625
+    }
+  }
+}

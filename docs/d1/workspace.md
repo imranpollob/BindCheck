@@ -13,8 +13,10 @@ follow the [D1 paper integration plan](../d1-paper/integration-plan.md) and port
 only reviewed components under new tasks.
 
 The D1P-04/05/06/07 tasks started from `d1-paper` HEAD
-`2ad4f699d527490149f3704e6f6f228494f2d4bd`. Current D1P-04–07 files are
-uncommitted by instruction; do not reset or hide them when continuing review.
+`2ad4f699d527490149f3704e6f6f228494f2d4bd`. D1P-08 and D1P-09 started from
+current `d1-paper` HEAD `95e8ba144a3b0fd148a802d706394868397e4516`;
+their files remain uncommitted by instruction. Do not reset or hide current or
+historical work when continuing review.
 
 The destination branch and worktree registration existed before D1P-00. The
 registered directory was absent and prunable, while the branch contained no
@@ -112,6 +114,42 @@ combined queries time out; the partitions return 58 UNSAT cells and 92
 timeouts, leaving all six aggregates UNKNOWN. Preserve
 `results/raw/D1P-07/` and the tracked ledger/report. Do not retune or extend
 these Track A queries. No consumer-direction or D1 verdict follows.
+
+D1P-08 does not rerun Track A. Its offline hash audit classifies the frozen
+D1P-07 cells as 58 literal-false/UNSAT, 42 literal-true/timeouts, and 50
+nontrivial/timeouts; six goal-only diagnostics are SAT and both cone-only
+diagnostics time out. The new solver-neutral symbolic consumer reuses the V2
+policy, admission, token and concrete-execution foundations, and keeps
+decoding, guards, sequential state, verifier/key/vector binding, rollback,
+unsupported behavior, P/O/E, and occurrence multiplicity explicit. Thirteen
+focused and 167 complete D1 tests pass; 12 pinned-source symbolic/concrete
+assignments match. Preserve `results/raw/D1P-08/` and the
+[D1P-08 report](../../reports/D1P-08.md). The proposed 11-trace N=8
+consumer-success intersection currently removes zero producer constraints;
+an offline forwarding/full-relation occurrence certificate is the next gate.
+Do not infer a joint-method benefit or D1 verdict from the component checks.
+
+D1P-09 keeps that scope at check-added N=8 and prepares only AUTH/NONVAC. The
+tracked binding manifest distinguishes a locally preserved full 1,303-opcode
+producer artifact from the historical 620/540 selected cone. It records 1,280
+checked producer-boundary equalities and an N=1000 forwarding certificate as
+background, but no matching N=8 `agg_final` artifact exists. The one authorized
+isolated compile preserves the exact 1000→8 and 1005→13 source diff, then exits
+101 because Nargo cannot lock its external local cache; it creates no artifact
+and is not retried. Preserve `results/raw/D1P-09/agg-final-compile/`.
+
+The final offline output is `results/raw/D1P-09/offline-07/`. Eleven successful
+consumer shapes are exhaustive/disjoint over 390,625 equality/control-flow
+classes, retain the all-padding case, and fix no payload. One conservative
+propagator runs on the unspecialized cone, all 11 shapes, and all 25 producer
+cells; the full case predicate and interface reconstruction remain in every
+reduction. Consumer shapes leave 612–616 original cone operations. Eleven
+focused tests are supplemented by a free-extension regression, for 12 focused
+and 179 complete D1 tests passing. Preserve the tracked D1P-09 manifests
+and [report](../../reports/D1P-09.md). Full-relation propagation, exact N=8
+forwarding/key binding, joint solving, proof/replay, AUTH/NONVAC, and the D1
+verdict remain UNKNOWN. Both planners decide the next gate; do not
+automatically retry compilation or build the joint encoder.
 
 Before D1P-00 changed living documents, their exact starting bytes were copied
 to `results/raw/D1P-00/prior-checkpoint/`. See

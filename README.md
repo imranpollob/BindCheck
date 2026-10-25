@@ -1,11 +1,11 @@
 # BindCheck
 
-BindCheck investigates whether the guarantees of an accepted zero-knowledge proof justify the effects a blockchain application executes. The current D1 direction is **consumer-directed extraction and checked summary refinement** across producer constraints, public-input decoding, and consumer effects. This remains a research hypothesis. The new method is not implemented or validated yet.
+BindCheck investigates whether the guarantees of an accepted zero-knowledge proof justify the effects a blockchain application executes. The current D1 direction is **consumer-directed extraction and checked summary refinement** across producer constraints, public-input decoding, and consumer effects. This remains a research hypothesis. A minimal symbolic consumer and an offline N=8 selected-cone propagation component now exist, but the joint method, full-relation propagation, and exact N=8 `agg_final` artifact/key binding are not implemented or validated.
 
 The current integration checkout is the linked worktree
 `/Users/imranpollob/Coding/bc/bindcheck-d1-paper` on `d1-paper`, currently at
-`2ad4f699d527490149f3704e6f6f228494f2d4bd` plus the uncommitted D1P-04–07
-working changes. It was established from
+`95e8ba144a3b0fd148a802d706394868397e4516` plus the uncommitted D1P-08 and
+D1P-09 working changes. It was established from
 `chatgpt-codex` revision `cce1a966eb84e8e9819c6f658ca4ce07fd670036`.
 [D1P-00](reports/D1P-00.md) records the branch/worktree baseline and the
 source-inspected selective-reuse review of `claude-code`; the
@@ -94,6 +94,26 @@ The principal directories are `circuits/` and `contracts/` for the small fixture
   diagnostics are 6/6 SAT and both cone-only diagnostics time out. This is
   producer-side partial-progress evidence, not consumer-direction or D1
   security evidence; the D1 verdict remains UNKNOWN.
+- [D1P-08](reports/D1P-08.md) verifies the D1P-07 cell split without rerunning
+  Track A: 58 literal-false goals are UNSAT, while 42 literal-true and 50
+  nontrivial goals time out; all six goal-only diagnostics are SAT and both
+  cone-only diagnostics time out. A minimal solver-neutral symbolic consumer
+  now preserves exact decoding, guards, sequential effects, rollback, V2
+  admission, and occurrence matching. Thirteen focused and all 167 D1 tests
+  pass; 12 symbolic/concrete source-bound cases match. The proposed next gate
+  is an offline forwarding/occurrence certificate plus 11 exact N=8 consumer
+  trace predicates. No joint solver, proof, replay, or D1 verdict follows.
+- [D1P-09](reports/D1P-09.md) inventories the exact N=8 producer, forwarding,
+  and consumer boundary; generates all 11 successful consumer decoding shapes;
+  and applies one conservative propagation implementation to the unspecialized
+  620/540 check-added cone, all 11 consumer shapes, and all 25 producer cells.
+  The shape partition is exhaustive/disjoint over 390,625 control-flow classes,
+  12 focused and 179 complete D1 tests pass, and consumer kind facts discharge
+  4–8 original cone operations without fixing payloads. The one authorized
+  isolated N=8 `agg_final` compile fails before output when Nargo cannot lock
+  its external cache, so exact N=8 forwarding/key correspondence and all
+  full-relation claims remain blocked. No solver, proof, replay, joint encoder,
+  AUTH/NONVAC result, or D1 verdict follows.
 - T15–T19 locally reproduce the public Payy message-tail mechanism with real proofs and committed token-balance effects, then validate the repair and an honest control.
 - T20 maps those claims to pinned source and advisory evidence.
 - T21 is an in-sample, source-pattern prototype; it does not establish generalization.
@@ -110,7 +130,13 @@ The principal directories are `circuits/` and `contracts/` for the small fixture
 - [Proof recovery 01](reports/D1-03-proof-recovery-01.md) uses a newly authorized, separately frozen recovery budget. Pinned Rust/Linux bb and an isolated source copy are ready. Build 1 fails on missing libclang; local pinned libraries fix that prerequisite, but build 2 fails at final linking with `Cannot allocate memory` under 4 GiB. Both build slots are consumed. All 119 Python checks pass; no proof or full replay ran. D1-03 remains UNKNOWN. Review the [one-build GNU BFD proposal](docs/d1/proof-recovery-02-proposal.md) before another attempt. The v2 seeds and 28 primary query slots are unchanged.
 - No held-out application result or general research contribution has been established.
 
-**D1-01 reporting closure and D1-02 availability selection are complete; research results remain UNKNOWN. D1-03 is incomplete:** the authorized v2 design addresses the preflight conflict prospectively, but no full joint query, proof or accepted full settlement replay has run. Concrete AST and Solidity helper checks are not joint verification. New joint semantics and equal-information baselines precede consumer-directed optimization. The two principal properties remain authorization and coverage.
+**D1-01 reporting closure and D1-02 availability selection are complete;
+research results remain UNKNOWN. D1-03 is incomplete:** D1P-09 validates the
+11-trace predicates and a small selected-cone propagation opportunity, but the
+exact N=8 forwarding artifact/key, full-producer propagation, joint query,
+proof, and accepted full settlement replay remain absent. Offline component
+checks are not joint verification. The two principal properties remain
+authorization and coverage.
 
 D1-00 ran preservation and documentation checks only. D1-01 validated the saved check-added records and ran only the three missing running-flag slots. No D1 method-feasibility or novelty claim follows from preparation or reporting closure.
 
@@ -128,8 +154,9 @@ The principal directories are `circuits/` and `contracts/` for the small fixture
 
 ## Checking this checkout
 
-The D1 Python controls were checked with Python 3.12.12 and PyCryptodome
-3.23.0. The small upstream Noir test-source excerpts, provenance and MIT notice
+The latest D1 Python controls were checked with Python 3.13.7 and PyCryptodome
+3.23.0 (179/179 passing in D1P-09). The small upstream Noir test-source
+excerpts, provenance and MIT notice
 are included under `tests/d1/fixtures/`; unit controls need no compiler download,
 proof, solver, generated artifact or historical raw log. To set up and run them:
 
