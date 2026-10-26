@@ -1,0 +1,99 @@
+{
+  "task": "D1P-11",
+  "title": "bounded development-corpus screening",
+  "frozen_at_utc": "2026-10-26T01:19:19Z",
+  "frozen_before_application_inspection": true,
+  "purpose": "Exploratory screening of an already exposed development pool for real, tractable proof-to-consumer applications and meaningful joint security obligations. This is not independent annotation, prevalence measurement, held-out evaluation, solver experimentation, tool tuning, or vulnerability ground truth.",
+  "prerequisite": {
+    "report": "reports/D1P-10.md",
+    "status": "COMPLETE",
+    "head_at_task_start": "103d4bc00761dd0a9c88cfdd6818d55745740257",
+    "research_verdict": "UNKNOWN"
+  },
+  "bounds": {
+    "maximum_applications": 12,
+    "maximum_families": 6,
+    "maximum_active_screening_hours": 4,
+    "actual_prefrozen_pool_applications": 4,
+    "actual_prefrozen_pool_families": 4,
+    "stop_rule": "Stop at the first bound. Do not add applications or families to fill unused capacity."
+  },
+  "permitted_applications": [
+    {
+      "id": "payy-rollup",
+      "repository": "polybase/payy",
+      "pinned_revision": "dcd5d96ee15664a59bc24ed0dc2bb78b73ac5e36",
+      "provisional_family": "payy-rollup",
+      "permission_basis": "Explicit development case in docs/research-contract.md, docs/d1/roadmap.md, reports/T20.md, and reports/D1P-09.md.",
+      "organization_evidence": "Payy application repository and application-specific agg_utxo/agg_agg/agg_final plus RollupV1 settlement lineage. Its historical mutants and earlier/fixed revisions remain one family.",
+      "exposure_status": "development; public advisory and defect details already known"
+    },
+    {
+      "id": "warp-toad",
+      "repository": "warptoad/warp-toad",
+      "pinned_revision": "973e7d1e4b60d0d8a8ca299b0cabd9193b147ef8",
+      "provisional_family": "warptoad",
+      "permission_basis": "Pinned source and application mapping already inspected in reports/D1-02.md and metadata/d1/d1-02-intake.json.",
+      "organization_evidence": "Separate warptoad repository and application-specific withdraw/WarpToadCore burn-to-mint templates; shared Noir, Barretenberg, Poseidon, or EVM libraries do not merge it with another family.",
+      "exposure_status": "exposed availability-screen case; source warning and test intent previously seen"
+    },
+    {
+      "id": "privacy-pools",
+      "repository": "0xbow-io/privacy-pools-core",
+      "pinned_revision": "d494b63e79f33bb2b0c8ece6cdacdca465c3b884",
+      "provisional_family": "0xbow-privacy-pools",
+      "permission_basis": "Pinned source and application mapping already inspected in reports/D1-02.md and metadata/d1/d1-02-intake.json.",
+      "organization_evidence": "Separate 0xbow/Wonderland repository and application-specific PrivacyPool/BatchRelayer templates using Circom/Groth16. Shared Poseidon, Merkle, Groth16, or EVM libraries do not merge it with another family.",
+      "exposure_status": "exposed availability-screen case; source/schema/success-test intent previously seen"
+    },
+    {
+      "id": "aztec-v6-epoch-rollup",
+      "repository": "AztecProtocol/aztec-packages",
+      "pinned_revision": "0219f11d8133970df3974fe5ae65e006bf8c193a",
+      "provisional_family": "aztec-epoch-rollup",
+      "permission_basis": "Pinned release and consumer mapping already inspected and rejected for the initial fragment in reports/D1-02-continuation-01.md and metadata/d1/d1-02-continuation-01-intake.json.",
+      "organization_evidence": "Separate Aztec monorepo and application-specific epoch-rollup, outbox, rewards, blob/KZG, and attestation templates. Shared Noir or Barretenberg alone does not merge it with Payy or WarpToad.",
+      "exposure_status": "exposed availability-screen case; release/source mapping previously seen, no audit material previously read"
+    }
+  ],
+  "protected_or_unpermitted": [
+    {
+      "id": "semaphore-noir",
+      "reason": "Reserved transfer application. reports/D1-02-continuation-01.md explicitly says it must not be used for development or tuning. Existing incidental exposure does not override that reservation. No D1P-11 inspection or search is permitted."
+    },
+    {
+      "id": "d1-02-discovery-only-leads",
+      "reason": "Search snippets or repository metadata do not constitute a human development allowlist. No source, audit, issue, or family discovery is permitted."
+    }
+  ],
+  "family_rules": [
+    "Group by application code lineage and shared application-specific producer/consumer templates.",
+    "A generic verifier, proof system, hash library, Merkle library, Solidity base, or frontend alone never defines a family.",
+    "Keep separate organizations and application-specific settlement architectures separate unless primary ancestry or copied application templates establish common lineage.",
+    "Treat uncertain relationships as the same family for cap accounting but do not assert lineage without evidence."
+  ],
+  "screening_rules": {
+    "sources": "Prefer pinned primary repository source, first-party documentation, and first-party security/advisory material. Record third-party audits separately from documented intended policy.",
+    "targeted_search_only": "Target-specific searches are permitted only for the four listed applications and only for first-party policy/artifact records or identified audit reports. Do not run ecosystem, repository-discovery, or related-project searches.",
+    "public_output_use": "Record the complete public-output layout when available; separately identify verifier binding, guard dependencies, protected-effect dependencies, and outputs merely forwarded. Include both all-output and subset guard/effect use represented in the permitted pool; do not assume subset use is easier.",
+    "joint_obligation": "State one concrete obligation joining proof-established permissions or required transitions to committed consumer effects. Do not encode an expected verdict or inferred missing relation.",
+    "audit_handling": "Record relevant audit findings as reported evidence only. No finding is ground truth without separate validation, and an audit without a finding is not a negative control.",
+    "decision": "Include only if a concrete joint obligation is meaningful and the source/constraints/ABI/key/proof/consumer/repair path is sufficiently available for a bounded prospective task. Otherwise exclude with explicit gaps.",
+    "verdict_boundary": "Every application remains UNKNOWN in this screen. Source availability or an audit label is not VIOLATION or VERIFIED_WITHIN_SCOPE.",
+    "prohibited": [
+      "solver experiments",
+      "tool tuning",
+      "vulnerability validation or ground-truth labeling",
+      "live-chain testing",
+      "maintainer contact",
+      "inspection of reserved applications",
+      "broad discovery of new applications or families"
+    ]
+  },
+  "planned_outputs": {
+    "ledger": "metadata/d1/d1p-11-screening-ledger.json",
+    "report": "reports/D1P-11.md",
+    "living_status": "docs/project-status.md"
+  },
+  "ai_label": "All screening labels are AI-assisted development notes requiring author review; they are not independent human annotations."
+}

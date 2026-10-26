@@ -4,8 +4,8 @@ BindCheck investigates whether the guarantees of an accepted zero-knowledge proo
 
 The current integration checkout is the linked worktree
 `/Users/imranpollob/Coding/bc/bindcheck-d1-paper` on `d1-paper`, currently at
-`2bbe5eabafcd93283acbcbf82e8748f24dfef078` plus the uncommitted D1P-10
-working changes. It was established from
+`103d4bc00761dd0a9c88cfdd6818d55745740257` plus the uncommitted D1P-11
+screening records. It was established from
 `chatgpt-codex` revision `cce1a966eb84e8e9819c6f658ca4ce07fd670036`.
 [D1P-00](reports/D1P-00.md) records the branch/worktree baseline and the
 source-inspected selective-reuse review of `claude-code`; the
@@ -125,6 +125,18 @@ The principal directories are `circuits/` and `contracts/` for the small fixture
   Total observed solver-call wall is 1,954.640027 seconds across 44 calls;
   there is no SAT model, solved obligation, validated encoding improvement,
   proof, replay, or D1 security result. The research verdict remains UNKNOWN.
+- [D1P-11](reports/D1P-11.md) completes a prospective, bounded screening of
+  the entire permitted development pool: four applications in four families,
+  below the 12-application/six-family/four-hour ceilings. Semaphore-Noir and
+  discovery-only leads remain protected and outside the denominator. The
+  screen retains WarpToad as the first tractable candidate, 0xbow Privacy
+  Pools as contingent on an explicit Circom/aggregation scope decision, and
+  Payy only for calibration; it excludes the Aztec v6 epoch rollup as too
+  broad for the current fragment. The ledger records both all-output and
+  subset consumer use, concrete joint obligations, audit evidence separately
+  from policy, artifacts and unresolved assumptions. No solver, build, proof,
+  replay, vulnerability validation, live-chain test, or held-out evaluation
+  ran. All four application verdicts and the D1 result remain UNKNOWN.
 - T15–T19 locally reproduce the public Payy message-tail mechanism with real proofs and committed token-balance effects, then validate the repair and an honest control.
 - T20 maps those claims to pinned source and advisory evidence.
 - T21 is an in-sample, source-pattern prototype; it does not establish generalization.
@@ -146,7 +158,10 @@ research results remain UNKNOWN. D1-03 is incomplete:** D1P-09 validates the
 11-trace predicates and a small selected-cone propagation opportunity. D1P-10
 does not turn that opportunity into a validated solver comparison: both
 transformed arms fail their frozen pre-main gates and all four eligible
-baseline obligations time out. The exact N=8 forwarding artifact/key,
+baseline obligations time out. D1P-11 consequently screens the four permitted
+development applications instead of extending that tuning line; WarpToad is
+the first candidate for a source/artifact/key/proof correspondence gate, not
+an implementation or security result. The exact N=8 forwarding artifact/key,
 full-producer propagation, joint query, proof, and accepted full settlement
 replay remain absent. Offline component checks are not joint verification.
 The two principal properties remain authorization and coverage.

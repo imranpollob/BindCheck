@@ -1,0 +1,481 @@
+{
+  "schema": "bindcheck.d1p11.screening-ledger/v1",
+  "task": "D1P-11",
+  "screening_date_local": "2026-10-25",
+  "search_date_utc": "2026-10-26",
+  "screening_window": {
+    "started_utc": "2026-10-26T01:19:19Z",
+    "finished_utc": "2026-10-26T01:50:43Z",
+    "elapsed_wall_seconds": 1884,
+    "active_time_bound": "less than or equal to 31 minutes 24 seconds, below the four-hour active-screening stop"
+  },
+  "protocol": "protocols/d1/d1p-11-screening.json",
+  "research_verdict": "UNKNOWN",
+  "annotation_status": "AI-assisted development screening notes; not independent human annotations, vulnerability ground truth, prevalence evidence, or held-out evaluation",
+  "sampling_frame": {
+    "description": "Already exposed or explicit development applications, excluding the reserved Semaphore-Noir transfer application and discovery-only leads",
+    "maximum_applications": 12,
+    "maximum_families": 6,
+    "maximum_active_hours": 4,
+    "actual_denominator_applications": 4,
+    "actual_denominator_families": 4,
+    "applications_screened": 4,
+    "families_screened": 4,
+    "included_candidates": 3,
+    "excluded_applications": 1,
+    "reserved_applications_not_inspected": 1,
+    "new_families_discovered": 0,
+    "family_counts": {
+      "payy-rollup": 1,
+      "warptoad": 1,
+      "0xbow-privacy-pools": 1,
+      "aztec-epoch-rollup": 1
+    },
+    "consumer_output_use_coverage": {
+      "complete_vector_verifier_binding": [
+        "payy-rollup",
+        "warp-toad",
+        "privacy-pools",
+        "aztec-v6-epoch-rollup"
+      ],
+      "all_proof_outputs_used_by_guard_or_effect_path": [
+        "privacy-pools pool.withdraw"
+      ],
+      "subset_guard_or_effect_use": [
+        "payy-rollup: commitHash is passed to the verifier but verifyCommitHash is empty",
+        "privacy-pools: BatchRelayer directly reads withdrawnValue and relies on pool/context checks for the other seven signals",
+        "aztec-v6-epoch-rollup: outHash, fee recipients/amounts, and prover identity drive immediate effects while other values principally bind verification and guards"
+      ],
+      "interpretation": "Subset use is recorded descriptively and is not assumed to be easier."
+    }
+  },
+  "protected_pool": {
+    "semaphore-noir": {
+      "status": "RESERVED_NOT_INSPECTED",
+      "basis": "reports/D1-02-continuation-01.md explicitly reserves it for transfer and forbids development or tuning"
+    },
+    "discovery_only_leads": {
+      "status": "UNPERMITTED_NOT_INSPECTED",
+      "basis": "No human development allowlist; prior snippets/metadata did not authorize source or audit inspection"
+    }
+  },
+  "applications": [
+    {
+      "id": "payy-rollup",
+      "family": "payy-rollup",
+      "family_assignment": {
+        "status": "retained",
+        "organization_evidence": "polybase/payy application lineage with application-specific agg_utxo, agg_agg, agg_final, Rust prover, and RollupV1 templates; earlier, repaired, and authored mutant revisions remain one family",
+        "shared_generic_verifier_not_used_as_family_evidence": true
+      },
+      "repository": "https://github.com/polybase/payy",
+      "pinned_revision": "dcd5d96ee15664a59bc24ed0dc2bb78b73ac5e36",
+      "paired_historical_revision": "c4d2c9021b8fb9988816eb6987a734b830bfce15",
+      "chain": "Ethereum/EVM settlement for a Payy private rollup",
+      "proof_stack": "Noir/ACIR recursive UltraHonk with Barretenberg; keccak-flavored final proof and generated Solidity Honk verifier",
+      "producer_languages": ["Noir", "Rust"],
+      "consumer_languages": ["Solidity"],
+      "public_outputs": {
+        "layout": [
+          {"index": 0, "role": "old_root"},
+          {"index": 1, "role": "new_root"},
+          {"index": 2, "role": "commit_hash"},
+          {"range": "3..1002 at the pinned N=1000 source", "role": "typed messages/padding"}
+        ],
+        "guard_dependencies": ["old_root", "new_root through validator signatures and final state update", "message kinds and mint registry fields", "height and otherHashFromBlockHash are consumer calldata outside the proof vector"],
+        "effect_dependencies": ["mint message hash/value/note kind -> spent write", "burn message note kind/value/hash/low-160 recipient -> token transfer attempt"],
+        "forwarded_or_verifier_only": ["commit_hash: passed to the verifier, but verifyCommitHash is an empty placeholder in the pinned consumer"],
+        "use_class": "complete vector passed to verifier; subset has implemented consumer guards/effects"
+      },
+      "verifier_public_input_binding": "verificationKeyHash selects an enabled registry entry, verifier address, and messages_length; the entire supplied vector is passed unchanged to that verifier. T09-T12 establish source/artifact/key/verifier correspondence and a real accepted N=1000 route. The registry label is deployment configuration rather than the verifier's embedded VK hash. Exact N=8 agg_final/key binding remains absent.",
+      "protected_effects": [
+        "mints[hash].spent write",
+        "ERC-20 transfer for a burn occurrence",
+        "rootHash and blockHeight advancement after successful verification"
+      ],
+      "required_attacker_role": "A registered prover plus a validator quorum capable of authorizing the consumer call under the evaluated deployment model; prior local evidence used owned prover and validator identities, not an arbitrary external caller.",
+      "documented_intended_policy": {
+        "summary": "The whitepaper/source comments describe rollup state transitions and compact mint/burn messages; each accepted effect should correspond to an authorized inner transaction, padding should be inert, registered mints are single-use, and burns transfer the stated asset/amount/recipient.",
+        "evidence": [
+          "docs/payy-case-study.md",
+          "reports/T08.md",
+          "reports/T15.md",
+          "https://polybase.github.io/zk-rollup/whitepaper.pdf"
+        ],
+        "status": "partly documented; exact failed-burn, signature, and economic policy assumptions still require analyst review"
+      },
+      "relevant_audit_findings": {
+        "separate_from_policy": true,
+        "records": [
+          "AuditOne's public landing page reports a November 2024 manual Rollup contract review with 1 high, 1 medium, 5 low, and 3 QA items, but the detailed report returned HTTP 403 and its commit pair could not be mapped to this public mirror.",
+          "GHSA-fhxc-63vg-9gwr is a public advisory, not an audit. reports/T20.md separately reconciles its claims with source and local replay evidence; D1P-11 adds no ground-truth classification."
+        ],
+        "scope_correspondence": "UNRESOLVED for the AuditOne review; do not treat the audit as a control for dcd5d96 or for the producer relation"
+      },
+      "available_artifacts": {
+        "source": "Pinned producer and consumer source available locally and public; relevant hashes recorded in results/raw/D1P-11/retrieved-source-hashes.json",
+        "constraints": "N=1000 compiled programs and historical N=8 agg_agg artifacts exist; D1P-09 distinguishes the 1,303-opcode full serialized N=8 producer from the 620-operation selected cone",
+        "abi": "Pinned N=1000 and recovered N=8 ABI evidence exists",
+        "keys": "Revision-matched N=1000 verification keys and generated Solidity verifiers were reproduced; N=8 agg_final key is missing",
+        "proofs": "Real N=1000 proofs and accepted local consumer replays exist for honest, historical candidate, and repair-control paths; no accepted N=8 bundle",
+        "repairs": "c4d2c90/dcd5d96 source pair plus T15-T20 local candidate and repair evidence",
+        "screening_execution": "No build, proof, replay, or solver run in D1P-11"
+      },
+      "current_frontend_compatibility": {
+        "rating": "PARTIAL_APPLICATION_SPECIFIC",
+        "supported": ["Noir/ACIR decoding for the pinned compiler fragment", "typed Payy recursive/frame certificates", "Payy-specific concrete and symbolic RollupV1 path", "occurrence-level mint/burn effects"],
+        "gaps": ["full producer relation support", "Poseidon/Brillig/recursive implication support", "exact N=8 agg_final/key/consumer forwarding", "general joint encoder", "measured consumer-direction advantage"],
+        "d1p_10_effect": "D1P-10 found no measured benefit and made both transformed selected-cone arms ineligible; it does not justify more selected-cone tuning."
+      },
+      "joint_security_obligation": "For every successful verifyRollup transition, each committed mint-spent write or burn transfer must match exactly one proof-authorized inner message occurrence with the same identity, asset, amount, beneficiary, and domain, every required inner occurrence must be covered, and padding/tail words must authorize no effect.",
+      "decision": {
+        "include": true,
+        "label": "INCLUDE_AS_DEVELOPMENT_CALIBRATION_ONLY",
+        "candidate_rank": 3,
+        "reason": "Artifact-rich and replay-validated, but already heavily developed and D1P-10 establishes no consumer-direction advantage. Retain for calibration and repair controls; do not reopen selected-cone tuning."
+      },
+      "evidence_links": [
+        "reports/T09.md",
+        "reports/T12.md",
+        "reports/T15.md",
+        "reports/T18.md",
+        "reports/T19.md",
+        "reports/T20.md",
+        "reports/D1P-09.md",
+        "reports/D1P-10.md",
+        "https://github.com/polybase/payy/security/advisories/GHSA-fhxc-63vg-9gwr",
+        "https://www.auditone.io/audit-report/payy-rollup"
+      ],
+      "exposure_status": "Development family; advisory, source details, analyzer behavior, local proof/replay, and repair are already known. Not held out.",
+      "unresolved_assumptions": [
+        "Exact policy for failed token transfers and substitution",
+        "Attacker access to registered prover and validator authorization outside owned local tests",
+        "N=8 source-to-agg_final/key/deployment correspondence",
+        "Full-relation extraction and abstraction preservation",
+        "Live deployment and version mapping beyond the reported local revisions"
+      ],
+      "verdict": "UNKNOWN"
+    },
+    {
+      "id": "warp-toad",
+      "family": "warptoad",
+      "family_assignment": {
+        "status": "retained",
+        "organization_evidence": "Independent warptoad repository with application-specific withdraw circuit, WarpToadCore burn-to-mint flow, bridge roots, and fee templates",
+        "shared_generic_verifier_not_used_as_family_evidence": true
+      },
+      "repository": "https://github.com/warptoad/warp-toad",
+      "pinned_revision": "973e7d1e4b60d0d8a8ca299b0cabd9193b147ef8",
+      "chain": "EVM chain-local mint path in a cross-chain Ethereum/Scroll/Aztec bridge design",
+      "proof_stack": "Standalone Noir withdraw relation with UltraHonk/Barretenberg and a Solidity verifier generated in keccakZK mode",
+      "producer_languages": ["Noir", "TypeScript"],
+      "consumer_languages": ["Solidity"],
+      "public_outputs": {
+        "layout": [
+          "nullifier",
+          "chain_id",
+          "amount",
+          "giga_root",
+          "destination_local_root",
+          "aztec_warptoad_address",
+          "fee_factor",
+          "priority_fee",
+          "max_fee",
+          "relayer_address",
+          "recipient_address"
+        ],
+        "guard_dependencies": ["giga_root and destination_local_root are checked against consumer histories", "nullifier must be unused and is written", "fee_factor/priority_fee/max_fee constrain fee handling"],
+        "effect_dependencies": ["amount, fee_factor, priority_fee, max_fee, relayer_address, recipient_address determine ERC-20 mint amounts and beneficiaries"],
+        "producer_or_verifier_binding": ["chain_id", "giga_root", "destination_local_root", "aztec_warptoad_address", "nullifier", "amount", "fee and beneficiary fields"],
+        "use_class": "all eleven outputs are assembled in order and passed to the verifier; only a subset directly controls consumer guards/effects"
+      },
+      "verifier_public_input_binding": "WarpToadCore._formatPublicInputs constructs the exact eleven-word vector, substituting block.chainid and the configured aztecWarptoadAddress, then calls the fixed withdrawVerifier. The source-level order matches the Noir signature. Compiled artifact, ABI, VK, generated verifier, and deployment correspondence were not validated.",
+      "protected_effects": [
+        "nullifiers[nullifier] = true",
+        "wrapped-token mint to recipient",
+        "optional wrapped-token mint to relayer"
+      ],
+      "required_attacker_role": "Any external caller can invoke mint, including acting as a permissionless relayer; success still requires a proof accepted by the fixed verifier and accepted roots. No privileged role is required by the inspected entry point.",
+      "documented_intended_policy": {
+        "summary": "The README, circuit comments, and same-chain test describe shielded burn-to-mint transfer, origin/destination root membership, nullifier single use, destination chain binding, and optional relayer compensation bounded by max_fee.",
+        "evidence": [
+          "reports/D1-02.md",
+          "https://github.com/warptoad/warp-toad/blob/973e7d1e4b60d0d8a8ca299b0cabd9193b147ef8/backend/circuits/withdraw/src/main.nr",
+          "https://github.com/warptoad/warp-toad/blob/973e7d1e4b60d0d8a8ca299b0cabd9193b147ef8/backend/test/testL1ToL1.ts"
+        ],
+        "status": "source-supported intent; no frozen, human-reviewed policy"
+      },
+      "relevant_audit_findings": {
+        "separate_from_policy": true,
+        "records": [],
+        "scope_correspondence": "No application-specific audit report was located in the bounded targeted search or prior pinned-tree inventory. This is not evidence of no findings and is not a negative control."
+      },
+      "available_artifacts": {
+        "source": "Pinned Noir, Solidity, TypeScript proving, verifier-generation, and honest-test sources available and hash-matched to D1-02",
+        "constraints": "A compiled frontend circuit was inventoried in the pinned tree but exceeded the earlier 1.5 MB fetch bound; no compiled-constraint correspondence check exists",
+        "abi": "Public schema source-mapped only; compiled ABI not validated",
+        "keys": "Verifier-generation route is present; VK and generated verifier correspondence not validated",
+        "proofs": "Source-supported Noir.execute/UltraHonkBackend generation and honest test route; no proof generated or accepted locally",
+        "repairs": "No validated repair pair. The source's explicit warning is exposure, not a D1P-11 finding.",
+        "screening_execution": "No build, proof, replay, or solver run in D1P-11"
+      },
+      "current_frontend_compatibility": {
+        "rating": "PROMISING_BUT_NOT_CURRENTLY_RUNNABLE",
+        "supported": ["Noir/ACIR conceptual frontend match", "simple non-recursive one-proof relation", "Solidity/EVM consumer", "occurrence-level nullifier and mint effects"],
+        "gaps": ["compiler version/artifact compatibility", "full source-to-ACIR/ABI/VK binding", "Merkle/Poseidon assumptions", "application-specific Solidity extraction", "block.basefee and relayer-fee arithmetic", "ERC-20 mint model", "cross-chain initialization"],
+        "scope_note": "Single-claim rather than batched settlement; useful for semantic fidelity and a clean real-application obligation, not by itself evidence for batched consumer-directed advantage."
+      },
+      "joint_security_obligation": "For every successful mint, one proof-authorized source commitment for the configured application, origin/destination domain, chain, and nullifier must authorize exactly amount wrapped units, split only into the computed bounded relayer fee and amount-minus-fee recipient mint, while the same nullifier is consumed once.",
+      "decision": {
+        "include": true,
+        "label": "INCLUDE_TRACTABLE_CANDIDATE",
+        "candidate_rank": 1,
+        "reason": "Smallest independent real application in the permitted pool, native Noir/EVM shape, eleven explicit outputs, one public entry point, and meaningful authorization/conservation effects. Start only with an artifact/key/proof correspondence gate."
+      },
+      "evidence_links": [
+        "reports/D1-02.md",
+        "metadata/d1/d1-02-intake.json",
+        "https://github.com/warptoad/warp-toad/blob/973e7d1e4b60d0d8a8ca299b0cabd9193b147ef8/backend/circuits/withdraw/src/main.nr",
+        "https://github.com/warptoad/warp-toad/blob/973e7d1e4b60d0d8a8ca299b0cabd9193b147ef8/backend/contracts/core/WarpToadCore.sol",
+        "https://github.com/warptoad/warp-toad/blob/973e7d1e4b60d0d8a8ca299b0cabd9193b147ef8/backend/test/testL1ToL1.ts"
+      ],
+      "exposure_status": "Previously exposed availability-screen case; source warning and public test mint were already seen. D1P-11 development screening retires it from any future blind holdout claim.",
+      "unresolved_assumptions": [
+        "Configured aztecWarptoadAddress and cross-chain root provenance",
+        "Field/address canonicality and chain ID representation",
+        "Merkle/Poseidon correctness",
+        "Standard wrapped-token mint semantics",
+        "Fee-factor units, overflow behavior, and intended relayer policy",
+        "Pinned compiler/artifact/VK/verifier/deployment correspondence",
+        "Owned fork-free initialization"
+      ],
+      "verdict": "UNKNOWN"
+    },
+    {
+      "id": "privacy-pools",
+      "family": "0xbow-privacy-pools",
+      "family_assignment": {
+        "status": "retained",
+        "organization_evidence": "Independent 0xbow/Wonderland application repository with application-specific Withdraw circuit, PrivacyPool, association-set state, Entrypoint, and BatchRelayer templates",
+        "shared_generic_verifier_not_used_as_family_evidence": true
+      },
+      "repository": "https://github.com/0xbow-io/privacy-pools-core",
+      "pinned_revision": "d494b63e79f33bb2b0c8ece6cdacdca465c3b884",
+      "chain": "EVM privacy pools supporting native assets and ERC-20s; prior honest-path harness uses an Ethereum mainnet fork",
+      "proof_stack": "Circom 2.2.0 Withdraw(32), Groth16, snarkjs, R1CS/WASM/zkey/vkey artifacts, generated Solidity verifier",
+      "producer_languages": ["Circom", "TypeScript"],
+      "consumer_languages": ["Solidity"],
+      "public_outputs": {
+        "layout": [
+          {"index": 0, "role": "newCommitmentHash", "origin": "circuit output"},
+          {"index": 1, "role": "existingNullifierHash", "origin": "circuit output"},
+          {"index": 2, "role": "withdrawnValue", "origin": "declared public input"},
+          {"index": 3, "role": "stateRoot", "origin": "declared public input"},
+          {"index": 4, "role": "stateTreeDepth", "origin": "declared public input"},
+          {"index": 5, "role": "ASPRoot", "origin": "declared public input"},
+          {"index": 6, "role": "ASPTreeDepth", "origin": "declared public input"},
+          {"index": 7, "role": "context", "origin": "declared public input"}
+        ],
+        "guard_dependencies": ["context binds Withdrawal plus pool SCOPE", "tree depths are bounded", "stateRoot must be known", "ASPRoot must be latest"],
+        "effect_dependencies": ["existingNullifierHash -> spend", "newCommitmentHash -> state insertion", "withdrawnValue -> pool-to-processooor transfer"],
+        "batch_subset_use": ["BatchRelayer directly sums only withdrawnValue from each proof", "batchSize, totalValue, recipient, feeRecipient, and relayFeeBPS come from context-bound withdrawal.data"],
+        "use_class": "all eight signals are used by the composed pool path; the outer batch consumer directly observes a subset"
+      },
+      "verifier_public_input_binding": "ProofLib fixes the eight-signal order and PrivacyPool passes the complete pubSignals array to its immutable withdrawal verifier. The Circom build script declares six public inputs and Circom outputs precede them. Source-to-R1CS/zkey/vkey/generated-verifier correspondence is unvalidated.",
+      "protected_effects": [
+        "nullifier spend",
+        "new commitment insertion",
+        "pool-to-BatchRelayer native/ERC-20 transfer per proof",
+        "final recipient transfer",
+        "final fee-recipient transfer"
+      ],
+      "required_attacker_role": "Any external caller may invoke BatchRelayer.batchRelay with proof array and context-bound withdrawal data; the BatchRelayer must be the pool's declared processooor. Proof possession/witness construction and accepted roots remain required.",
+      "documented_intended_policy": {
+        "summary": "Protocol documentation and source describe proving ownership/membership in current state and approved association set, withdrawing a bounded amount, consuming the old nullifier, inserting change, and optionally batching complete withdrawals with an explicitly bounded fee split.",
+        "evidence": [
+          "reports/D1-02.md",
+          "https://github.com/0xbow-io/privacy-pools-core/blob/d494b63e79f33bb2b0c8ece6cdacdca465c3b884/docs/docs/protocol/withdrawal.md",
+          "https://github.com/0xbow-io/privacy-pools-core/blob/d494b63e79f33bb2b0c8ece6cdacdca465c3b884/packages/contracts/src/contracts/BatchRelayer.sol"
+        ],
+        "status": "documented source intent; docs/code Withdrawal schema difference must be resolved before freezing policy"
+      },
+      "relevant_audit_findings": {
+        "separate_from_policy": true,
+        "records": [
+          "Auditware reviewed ancestor f0b8fe5... and reported medium items for ERC-20 approval handling (mitigated), root-history overwrite DoS (partially mitigated), and an unaudited Poseidon library (acknowledged), plus three lower items including an unbounded relayer fee (mitigated).",
+          "GitHub compare reports d494b63... is 335 commits ahead and zero behind f0b8fe5..., but D1P-11 did not validate any mitigation or map every scoped file across those commits.",
+          "The Oxorio May 2024 Privacy Pools v1 audit covers an older proofOfInnocence.circom/application layout and is not treated as evidence about this Withdraw(32)/BatchRelayer path."
+        ],
+        "scope_correspondence": "PARTIAL: Auditware covers the same repository lineage and core pool contracts, but not the exact pin and its listed scope omits BatchRelayer"
+      },
+      "available_artifacts": {
+        "source": "Pinned Circom, Solidity, SDK proving, policy, and batch-test sources available and hash-matched to D1-02",
+        "constraints": "Repository tree inventories R1CS and WASM artifacts; not fetched or checked in D1P-11",
+        "abi": "ProofLib provides exact eight-signal decoder; Solidity ABI/source available",
+        "keys": "Repository tree inventories zkey and vkey; only the small vkey was fetched in D1-02; verifier correspondence unvalidated",
+        "proofs": "SDK has fullProve and Foundry FFI route; tests cover one/two-proof batches at source level; no proof generated or replayed locally",
+        "repairs": "Auditware points to later mitigation commits, but no repair pair was validated against the pinned screen",
+        "screening_execution": "No build, proof, replay, or solver run in D1P-11"
+      },
+      "current_frontend_compatibility": {
+        "rating": "INCOMPATIBLE_PRODUCER_FRONTEND_WITH_TRACTABLE_BOUNDARY",
+        "supported": ["Solidity/EVM target class", "occurrence identity for nullifier/commitment effects", "standard atomic token model is conceptually applicable", "explicit fixed eight-signal decoder"],
+        "gaps": ["Circom/R1CS/Groth16 producer adapter", "R1CS/zkey/vkey/verifier provenance", "aggregation and fee-splitting policy", "ABI decoding of nested structs and proof arrays", "proxy/fork-free initialization", "native-asset call path", "ASP/root-history model"],
+        "scope_note": "This is the permitted pool's strongest batched subset-consumer obligation, but implementation requires a deliberate frontend/fragment expansion."
+      },
+      "joint_security_obligation": "For every successful batch, each accepted proof must authorize exactly one spent nullifier, one change commitment, and one withdrawal occurrence for the same pool/asset/context; the multiset sum of those proof-authorized amounts must equal the pooled amount, which must be split exactly once into the context-bound recipient amount and bounded relayer fee with no omitted, duplicated, or reused occurrence.",
+      "decision": {
+        "include": true,
+        "label": "INCLUDE_CONTINGENT_TRACTABLE_CANDIDATE",
+        "candidate_rank": 2,
+        "reason": "Real batched consumer with clear all-output pool checks and subset batch use, meaningful occurrence/aggregation obligation, and source-supported honest route. Proceed only after an explicit Circom and aggregation/splitting scope decision."
+      },
+      "evidence_links": [
+        "reports/D1-02.md",
+        "metadata/d1/d1-02-intake.json",
+        "https://github.com/0xbow-io/privacy-pools-core/blob/d494b63e79f33bb2b0c8ece6cdacdca465c3b884/packages/circuits/circuits/withdraw.circom",
+        "https://github.com/0xbow-io/privacy-pools-core/blob/d494b63e79f33bb2b0c8ece6cdacdca465c3b884/packages/contracts/src/contracts/PrivacyPool.sol",
+        "https://github.com/0xbow-io/privacy-pools-core/blob/d494b63e79f33bb2b0c8ece6cdacdca465c3b884/packages/contracts/src/contracts/BatchRelayer.sol",
+        "https://github.com/Auditware/audits/blob/9f3770bfdd75f9f5073ecde2bbbcf6f5a48c620a/0xbow/Privacy%20Pools%20Core/Privacy%20Pools%20Core%20Audit%20Report.md"
+      ],
+      "exposure_status": "Previously exposed availability-screen case; D1P-11 additionally reads audit material and treats the family as development-only, not blind or held out.",
+      "unresolved_assumptions": [
+        "Exact docs-versus-interface Withdrawal/context schema",
+        "Circom signal ordering and compiled artifact correspondence",
+        "Groth16 setup/zkey/vkey/generated-verifier correspondence",
+        "Poseidon and Merkle correctness",
+        "Latest ASP and admitted root-history policy",
+        "Standard ERC-20/native transfer behavior and atomicity",
+        "Fork-free owned initialization without unsupported proxy behavior",
+        "Authorized aggregation and fee-splitting transformation"
+      ],
+      "verdict": "UNKNOWN"
+    },
+    {
+      "id": "aztec-v6-epoch-rollup",
+      "family": "aztec-epoch-rollup",
+      "family_assignment": {
+        "status": "retained",
+        "organization_evidence": "Independent Aztec monorepo with application-specific root-rollup, checkpoint, Outbox, blob/KZG, fee/reward, committee, and governance templates",
+        "shared_generic_verifier_not_used_as_family_evidence": true
+      },
+      "repository": "https://github.com/AztecProtocol/aztec-packages",
+      "pinned_revision": "0219f11d8133970df3974fe5ae65e006bf8c193a",
+      "release": "v6.0.0",
+      "chain": "Aztec Network rollup settled on Ethereum L1",
+      "proof_stack": "Recursive Aztec/Noir root-rollup proof with Barretenberg/Honk plus EIP-4844 batched blob/KZG validation and a configured Solidity epoch verifier",
+      "producer_languages": ["Noir", "C++", "TypeScript"],
+      "consumer_languages": ["Solidity"],
+      "public_outputs": {
+        "layout": [
+          "previous_archive_root",
+          "end_archive_root",
+          "out_hash",
+          "previous_inbox_rolling_hash",
+          "end_inbox_rolling_hash",
+          "checkpointHeaderHashes[MAX_CHECKPOINTS_PER_EPOCH]",
+          "fees[MAX_CHECKPOINTS_PER_EPOCH] as coinbase/accumulatedFees pairs",
+          "chain_id",
+          "version",
+          "vk_tree_root",
+          "protocol_contracts_hash",
+          "prover_id",
+          "FinalBlobAccumulator fields: commitments hash, z, three y limbs, two commitment limbs"
+        ],
+        "guard_dependencies": ["archive roots and previous inbox rolling hash match stored state", "checkpoint header hashes bind stored proposals", "last checkpoint attestation/outHash is checked", "blob inputs pass EIP-4844 validation"],
+        "effect_dependencies": ["out_hash insertion into Outbox", "fee recipients/amounts and prover_id feed reward/fee accounting", "proven chain tip/activity advancement"],
+        "verifier_only_or_configuration": ["chain_id", "version", "vk_tree_root", "protocol_contracts_hash", "remaining blob accumulator fields"],
+        "use_class": "complete vector reconstructed and passed to verifier; immediate protected effects depend on a subset"
+      },
+      "verifier_public_input_binding": "EpochProofLib reconstructs the fixed root-rollup public vector from stored archives/header hashes, calldata, deployment configuration, fees, prover identity, and blob inputs; it validates the batched blob and passes the vector to the configured epochProofVerifier. The prior screen did not retrieve or bind the root-rollup producer artifact, ABI, VK tree, key, or proof bundle.",
+      "protected_effects": [
+        "proven chain-tip/archive progression",
+        "Outbox insertion of out_hash",
+        "prover/sequencer reward and fee accounting/transfers",
+        "prover activity accounting"
+      ],
+      "required_attacker_role": "An epoch-proof submitter/prover satisfying checkpoint, timing, header, blob, and required committee-attestation conditions; not an arbitrary proof-only caller.",
+      "documented_intended_policy": {
+        "summary": "The v6.0.0 release, AZUP-3/AZIPs, and source comments describe proving a checkpoint range, advancing the proven chain, publishing its L2-to-L1 outbox commitment, and attributing fees/rewards to bound checkpoint recipients and prover identity.",
+        "evidence": [
+          "reports/D1-02-continuation-01.md",
+          "https://github.com/AztecProtocol/aztec-packages/releases/tag/v6.0.0",
+          "https://github.com/AztecProtocol/governance/blob/main/AZUPs/azup-3.md",
+          "https://github.com/AztecProtocol/aztec-packages/blob/0219f11d8133970df3974fe5ae65e006bf8c193a/l1-contracts/src/core/libraries/rollup/EpochProofLib.sol"
+        ],
+        "status": "rich first-party protocol intent, but too broad for a frozen D1 occurrence-only policy"
+      },
+      "relevant_audit_findings": {
+        "separate_from_policy": true,
+        "records": [
+          "Pinned SECURITY.md says the network is under internal and external review and reports aggregate high/critical counts for v4 and v5 only.",
+          "No exact v6.0.0 root-rollup/EpochProofLib audit report was located in the bounded search. The v6 release's security/correctness notes are release claims, not an audit or negative control."
+        ],
+        "scope_correspondence": "NONE ESTABLISHED for the exact v6.0.0 epoch path"
+      },
+      "available_artifacts": {
+        "source": "Pinned L1 EpochProofLib, Rollup, Outbox interface, RewardLib, root README, and submodule configuration inspected; producer path previously inventoried but not fetched",
+        "constraints": "Root-rollup source/constraints not available in the screened artifact set",
+        "abi": "Consumer ABI/source is available; producer ABI not bound",
+        "keys": "Release announces a new VK tree and provides bb binaries with hashes; exact VK/key-to-consumer correspondence not available in the screen",
+        "proofs": "No self-contained local epoch proof route or proof bundle identified",
+        "repairs": "v6 release includes broad proving-system hardening but no D1P-11 repair pair for the stated obligation",
+        "screening_execution": "No build, proof, replay, solver, or live-chain action in D1P-11"
+      },
+      "current_frontend_compatibility": {
+        "rating": "NOT_TRACTABLE_IN_CURRENT_FRAGMENT",
+        "supported": ["Noir-family producer in principle", "Solidity/EVM consumer in principle"],
+        "gaps": ["full recursive rollup stack", "producer source/artifact/ABI/VK binding", "blob/KZG and EIP-4844 precompile model", "committee signatures and checkpoint history", "aggregation", "pending-obligation/Outbox deferral", "reward distribution and external calls", "large application-specific consumer semantics"],
+        "scope_note": "Would require multiple major fragment expansions before the first joint obligation could run."
+      },
+      "joint_security_obligation": "For every accepted epoch proof, the out_hash inserted into the Outbox and every immediately credited fee/reward occurrence must correspond to the same proved checkpoint range, headers, fee recipients/amounts, prover identity, and domain; each deferred L2-to-L1 message represented by out_hash must later be dischargeable at most once under the protocol's pending-obligation rules.",
+      "decision": {
+        "include": false,
+        "label": "EXCLUDE_NOT_TRACTABLE_CURRENT_FRAGMENT",
+        "candidate_rank": null,
+        "reason": "Meaningful obligation but requires recursion, blob/KZG, aggregation, deferral, signatures, reward accounting, and a missing self-contained producer/proof route. Do not expand implementation to this family now."
+      },
+      "evidence_links": [
+        "reports/D1-02-continuation-01.md",
+        "metadata/d1/d1-02-continuation-01-intake.json",
+        "https://github.com/AztecProtocol/aztec-packages/blob/0219f11d8133970df3974fe5ae65e006bf8c193a/l1-contracts/src/core/libraries/rollup/EpochProofLib.sol",
+        "https://github.com/AztecProtocol/aztec-packages/blob/0219f11d8133970df3974fe5ae65e006bf8c193a/SECURITY.md",
+        "https://github.com/AztecProtocol/aztec-packages/releases/tag/v6.0.0"
+      ],
+      "exposure_status": "Previously exposed availability-screen case; release and consumer source now screened as development notes. No holdout or prevalence claim.",
+      "unresolved_assumptions": [
+        "Root-rollup producer source, compiled constraints, ABI, VK tree, verifier, and proof correspondence",
+        "Reachable checkpoint/committee/attestation history",
+        "Blob/KZG and EIP-4844 correctness",
+        "Exact fee/reward policy and external call behavior",
+        "Pending L2-to-L1 obligation semantics and Outbox consumption",
+        "Resource feasibility of local epoch proving"
+      ],
+      "verdict": "UNKNOWN"
+    }
+  ],
+  "candidate_summary": [
+    {
+      "rank": 1,
+      "application": "warp-toad",
+      "obligation": "Configured-domain burn proof authorizes exactly one nullifier consumption and amount-conserving recipient/relayer mint split.",
+      "required_artifacts": ["compiled withdraw ACIR and ABI", "matching VK and generated Solidity verifier", "one accepted honest proof/vector", "owned local roots/token initialization", "pinned policy for fee units and protected scope"],
+      "remaining_implementation_gaps": ["compiler/artifact intake", "Merkle/Poseidon assumptions", "WarpToad consumer adapter", "mint/fee arithmetic and basefee model"]
+    },
+    {
+      "rank": 2,
+      "application": "privacy-pools",
+      "obligation": "Each proof occurrence authorizes one state transition and withdrawal, and the batch conserves the multiset total through one bounded recipient/fee split.",
+      "required_artifacts": ["Withdraw(32) R1CS/WASM", "zkey/vkey/generated verifier correspondence", "one/two-proof accepted batch fixtures", "fork-free pool/BatchRelayer initialization", "frozen aggregation/splitting policy"],
+      "remaining_implementation_gaps": ["Circom/R1CS frontend", "Groth16 provenance", "nested ABI/array consumer adapter", "aggregation and splitting semantics", "proxy/fork removal"]
+    },
+    {
+      "rank": 3,
+      "application": "payy-rollup",
+      "obligation": "Every committed mint/burn effect matches one proof-authorized inner message occurrence; padding authorizes none.",
+      "required_artifacts": ["existing N=1000 proof/key/verifier/replay bundle", "full producer relation", "exact forwarding certificate", "policy for failed transfers/substitution", "legitimate and repair controls"],
+      "remaining_implementation_gaps": ["full-relation support", "recursive/Poseidon/Brillig implications", "joint encoder", "measured advantage over equal-information baselines"],
+      "restriction": "Calibration only; D1P-10 does not justify more selected-cone tuning."
+    }
+  ]
+}
