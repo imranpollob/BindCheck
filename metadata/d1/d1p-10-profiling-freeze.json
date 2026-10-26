@@ -1,0 +1,137 @@
+{
+  "candidate_pool": {
+    "fixed_before_profiling": [
+      "radix4",
+      "radix16",
+      "radix256"
+    ],
+    "selection_rule": [
+      "more resolved SAT/UNSAT profiling obligations",
+      "lower aggregate elapsed with unresolved charged 30 seconds",
+      "lower aggregate observed peak RSS; missing ranks last",
+      "smaller aggregate profiling input bytes",
+      "fixed order radix4, radix16, radix256"
+    ],
+    "universal_argument": "digit root polynomial has exactly the distinct canonical radix roots; radix reconstruction is below the pinned field modulus in both directions"
+  },
+  "frozen_at_utc": "2026-10-26T00:14:37.478036+00:00",
+  "frozen_files": [
+    {
+      "path": "scripts/d1p_10_encoding_study.py",
+      "sha256": "9666ffb4f21ff89e7543a9d022717bb12d1fce88cf2ff4fe872711b15875ce19"
+    },
+    {
+      "path": "tests/d1/test_d1p_10_encoding_study.py",
+      "sha256": "8964608a49338c2fb7ef14de739c2d890fa1678e172c75882bb6d4a12ff15824"
+    },
+    {
+      "path": "docs/d1-paper/d1p-10-protocol.md",
+      "sha256": "954f8af1f8f0b38d7bfbbac5543b280f78ae29fb68a0168e6f0471b335faf9ab"
+    },
+    {
+      "path": "metadata/d1/d1p-10-resource-policy.json",
+      "sha256": "56dbff03fbbe948888f46003d6ebcae842cd135198ef89b4c76b61ca379a74b3"
+    },
+    {
+      "path": "scripts/d1p_07_track_a.py",
+      "sha256": "cba540dcb8cd310c6d12a010c2833f79fdd09fe9ec17c900f5d5fc5b401dd6fe"
+    },
+    {
+      "path": "metadata/d1/d1p-07-resource-policy.json",
+      "sha256": "d292323e8123c0f4bf38469c3bfeb7ba9a2733f709a0e5229be0c34913ffc885"
+    },
+    {
+      "path": "metadata/d1/d1p-10-input-manifest.json",
+      "sha256": "d7923fd3f3724615c533ebeaf2d773a825f44c1755d5b652d965d0c921664fcf"
+    }
+  ],
+  "limits": {
+    "aggregate_seconds": 300.0,
+    "attempts_per_query": 1,
+    "calls_max": 10,
+    "planned_calls": 8,
+    "rss_cutoff_bytes": 4294967296,
+    "seconds_per_call": 30.0,
+    "sequential": true
+  },
+  "manifest": {
+    "items_checked": 156,
+    "path": "metadata/d1/d1p-10-input-manifest.json",
+    "sha256": "d7923fd3f3724615c533ebeaf2d773a825f44c1755d5b652d965d0c921664fcf"
+  },
+  "preflight": {
+    "path": "results/raw/D1P-10/preflight-macos/preflight.json",
+    "sha256": "71b2f01dcabbfd758ec66fcb8c7693382504b7bf1cbe124a16ae4863ac7710f2"
+  },
+  "repository_head": "2bbe5eabafcd93283acbcbf82e8748f24dfef078",
+  "research_verdict": "UNKNOWN",
+  "schedule": [
+    {
+      "arm": "baseline",
+      "bytes": 720098,
+      "obligation": "cone",
+      "path": "results/raw/D1P-10/prepared/baseline/cone.smt2",
+      "sha256": "309634b60c627f112ac00b231e749d740ba5cb874aa461abc617a5b4013952df"
+    },
+    {
+      "arm": "baseline",
+      "bytes": 741139,
+      "obligation": "nonvacuous",
+      "path": "results/raw/D1P-10/prepared/baseline/nonvacuous.smt2",
+      "sha256": "88cee095aff7d3cd9ffc94f3a7e7a6c3c0d7d28ee47a82fd66c02a1ec9e42de2"
+    },
+    {
+      "arm": "radix4",
+      "bytes": 503931,
+      "obligation": "cone",
+      "path": "results/raw/D1P-10/prepared/candidates/radix4/cone.smt2",
+      "sha256": "fd28e3a30fdc30df54c8453a5dbb21955d907fb9dbfcf731a4d5ce8b28fff31f"
+    },
+    {
+      "arm": "radix4",
+      "bytes": 524972,
+      "obligation": "nonvacuous",
+      "path": "results/raw/D1P-10/prepared/candidates/radix4/nonvacuous.smt2",
+      "sha256": "6ce1341b3c3074d71ca4f29788d52cdd83130594e075d6ae262f02f4ccb3f784"
+    },
+    {
+      "arm": "radix16",
+      "bytes": 848205,
+      "obligation": "cone",
+      "path": "results/raw/D1P-10/prepared/candidates/radix16/cone.smt2",
+      "sha256": "4965aa12f14e0c4c8cbc43823680767dfd994f428fb214d6134719a3ede2e7c9"
+    },
+    {
+      "arm": "radix16",
+      "bytes": 869246,
+      "obligation": "nonvacuous",
+      "path": "results/raw/D1P-10/prepared/candidates/radix16/nonvacuous.smt2",
+      "sha256": "ded5df333d64c2bb0b37380422208cd3690fb6c84983d013494c4cb133bfc30d"
+    },
+    {
+      "arm": "radix256",
+      "bytes": 5825889,
+      "obligation": "cone",
+      "path": "results/raw/D1P-10/prepared/candidates/radix256/cone.smt2",
+      "sha256": "0d99ddb26cbd63fc9deafb14408a74df4d53500c5ba1025fbf6c6ab54f6d52fc"
+    },
+    {
+      "arm": "radix256",
+      "bytes": 5846930,
+      "obligation": "nonvacuous",
+      "path": "results/raw/D1P-10/prepared/candidates/radix256/nonvacuous.smt2",
+      "sha256": "d5cb999151ea7b69b4f5d326d34180526af2fbe5a3a048fd62a831349ee4885a"
+    }
+  ],
+  "scope": "historical check-added N=8 selected producer cone only; not full producer relation",
+  "solver": {
+    "arguments": [
+      "--lang=smt2",
+      "--ff-solver=split"
+    ],
+    "path": "/Users/imranpollob/Coding/bc/BindCheck/tools/cvc5-1.4.2-gpl/bin/cvc5",
+    "sha256": "a083a7f56a3f61691583b699076322bbcbf6732decfb4f6dc41850dbcc3df027"
+  },
+  "status": "PROFILING_FROZEN_BEFORE_SOLVER_CALL_1",
+  "task": "D1P-10"
+}

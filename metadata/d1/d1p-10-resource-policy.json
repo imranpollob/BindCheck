@@ -1,0 +1,58 @@
+{
+  "task": "D1P-10",
+  "policy_version": 1,
+  "reference_environment": "native macOS arm64",
+  "solver": {
+    "arguments": [
+      "--lang=smt2",
+      "--ff-solver=split"
+    ],
+    "sha256": "a083a7f56a3f61691583b699076322bbcbf6732decfb4f6dc41850dbcc3df027",
+    "version": "cvc5 1.4.2 arm64 GPL/CoCoA"
+  },
+  "monitor": {
+    "runner": "D1P-07 race-safe run_monitored",
+    "metric": "sum of libproc proc_taskinfo resident bytes for root and recursively observed descendants",
+    "sample_interval_seconds": 0.05,
+    "exit_confirmation_seconds": 0.25
+  },
+  "termination": {
+    "primary": "SIGKILL to process group",
+    "fallback": "direct child kill after bounded wait",
+    "wait_seconds_per_stage": 0.25
+  },
+  "cutoff": {
+    "bytes": 4294967296,
+    "hard_address_space_cap": false,
+    "sampling_can_overshoot": true,
+    "sampling_can_miss_short_lived_use": true
+  },
+  "budgets": {
+    "profiling": {
+      "calls_max": 10,
+      "seconds_per_call": 30.0,
+      "aggregate_seconds": 300.0,
+      "planned_calls": 8
+    },
+    "controls_and_transformation_validation": {
+      "calls_max": 70,
+      "seconds_per_call": 30.0,
+      "aggregate_seconds": 2100.0
+    },
+    "main": {
+      "obligations": 4,
+      "arms_max": 3,
+      "seconds_per_arm_obligation": 300.0,
+      "aggregate_seconds": 3600.0,
+      "partitioned_cell_seconds": 12.0,
+      "partitioned_cells": 25
+    },
+    "overall_configured_solver_wall_seconds": 6000.0,
+    "unused_time_transfer": false
+  },
+  "execution": {
+    "sequential": true,
+    "attempts_per_query": 1,
+    "preserve_all_logs_and_models": true
+  }
+}

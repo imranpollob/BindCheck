@@ -4,8 +4,8 @@ BindCheck investigates whether the guarantees of an accepted zero-knowledge proo
 
 The current integration checkout is the linked worktree
 `/Users/imranpollob/Coding/bc/bindcheck-d1-paper` on `d1-paper`, currently at
-`95e8ba144a3b0fd148a802d706394868397e4516` plus the uncommitted D1P-08 and
-D1P-09 working changes. It was established from
+`2bbe5eabafcd93283acbcbf82e8748f24dfef078` plus the uncommitted D1P-10
+working changes. It was established from
 `chatgpt-codex` revision `cce1a966eb84e8e9819c6f658ca4ce07fd670036`.
 [D1P-00](reports/D1P-00.md) records the branch/worktree baseline and the
 source-inspected selective-reuse review of `claude-code`; the
@@ -114,6 +114,17 @@ The principal directories are `circuits/` and `contracts/` for the small fixture
   its external cache, so exact N=8 forwarding/key correspondence and all
   full-relation claims remain blocked. No solver, proof, replay, joint encoder,
   AUTH/NONVAC result, or D1 verdict follows.
+- [D1P-10](reports/D1P-10.md) completes a newly frozen, in-sample feasibility
+  study of only the 620/540 check-added selected producer cone. Eight
+  30-second profiling calls all time out; the predeclared RSS tie-break selects
+  radix 4, not a measured solver advantage. Both controls and the T22
+  lost-equality regression pass, but only 12/25 exact propagation XOR checks
+  return UNSAT, 13 time out, and all four radix-4 boundary controls time out.
+  Both transformed arms are therefore ineligible and remain unrun. The four
+  eligible unchanged-baseline obligations each time out at 300 seconds.
+  Total observed solver-call wall is 1,954.640027 seconds across 44 calls;
+  there is no SAT model, solved obligation, validated encoding improvement,
+  proof, replay, or D1 security result. The research verdict remains UNKNOWN.
 - T15–T19 locally reproduce the public Payy message-tail mechanism with real proofs and committed token-balance effects, then validate the repair and an honest control.
 - T20 maps those claims to pinned source and advisory evidence.
 - T21 is an in-sample, source-pattern prototype; it does not establish generalization.
@@ -132,11 +143,13 @@ The principal directories are `circuits/` and `contracts/` for the small fixture
 
 **D1-01 reporting closure and D1-02 availability selection are complete;
 research results remain UNKNOWN. D1-03 is incomplete:** D1P-09 validates the
-11-trace predicates and a small selected-cone propagation opportunity, but the
-exact N=8 forwarding artifact/key, full-producer propagation, joint query,
-proof, and accepted full settlement replay remain absent. Offline component
-checks are not joint verification. The two principal properties remain
-authorization and coverage.
+11-trace predicates and a small selected-cone propagation opportunity. D1P-10
+does not turn that opportunity into a validated solver comparison: both
+transformed arms fail their frozen pre-main gates and all four eligible
+baseline obligations time out. The exact N=8 forwarding artifact/key,
+full-producer propagation, joint query, proof, and accepted full settlement
+replay remain absent. Offline component checks are not joint verification.
+The two principal properties remain authorization and coverage.
 
 D1-00 ran preservation and documentation checks only. D1-01 validated the saved check-added records and ran only the three missing running-flag slots. No D1 method-feasibility or novelty claim follows from preparation or reporting closure.
 
@@ -155,7 +168,7 @@ The principal directories are `circuits/` and `contracts/` for the small fixture
 ## Checking this checkout
 
 The latest D1 Python controls were checked with Python 3.13.7 and PyCryptodome
-3.23.0 (179/179 passing in D1P-09). The small upstream Noir test-source
+3.23.0 (189/189 passing in D1P-10). The small upstream Noir test-source
 excerpts, provenance and MIT notice
 are included under `tests/d1/fixtures/`; unit controls need no compiler download,
 proof, solver, generated artifact or historical raw log. To set up and run them:

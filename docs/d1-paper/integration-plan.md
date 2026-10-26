@@ -1,25 +1,23 @@
 # D1 paper integration plan
 
-Date: **25 October 2026**. D1P-09 N=8 binding/propagation feasibility:
-**COMPLETE WITH AN EXPLICIT FORWARDING-ARTIFACT BLOCKER**. Complete 25-cell transformation
-eligibility remains **PASS** from D1P-05; decomposition resolves no complete
-logical obligation under the frozen D1P-07 budget. D1P-09 validates all 11
-consumer shapes and a small selected-cone propagation opportunity, but the
-exact N=8 `agg_final` artifact/key, full-producer integration, and
-consumer-direction effectiveness remain unestablished. Research verdict:
-**UNKNOWN**.
+Date: **25 October 2026**. D1P-10 bounded producer-encoding feasibility:
+**COMPLETE WITH A NULL RESULT**. Under its separately frozen in-sample budget,
+the unchanged selected-cone encoding times out on all four obligations. The
+25-cell conservative-propagation arm and profiled radix-4 arm fail their
+pre-main validation gates and remain unrun in the primary comparison. No
+encoding has a measured solver advantage. Forwarding reconstruction and joint
+integration remain paused. Research verdict: **UNKNOWN**.
 
 ## 1. Workspace and reviewed revisions
 
 The integration worktree is
 `/Users/imranpollob/Coding/bc/bindcheck-d1-paper`, branch `d1-paper`, currently
-at `95e8ba144a3b0fd148a802d706394868397e4516` plus uncommitted D1P-08 and
-D1P-09 working changes. D1P-00 reattached the
+at `2bbe5eabafcd93283acbcbf82e8748f24dfef078` plus uncommitted D1P-10
+working changes. D1P-00 reattached the
 already-existing branch at `cce1a966eb84e8e9819c6f658ca4ce07fd670036`, the
 then-current `chatgpt-codex` tip, without creating, resetting, merging, or
 rewriting it. The later tracked preparation/artifact commit is recorded in
-D1P-02. D1P-08 and D1P-09 performed no Git commit, push, merge, or branch
-change.
+D1P-02. D1P-10 performed no Git commit, push, merge, or branch change.
 
 Reviewed sources:
 
@@ -71,6 +69,7 @@ the D1P-00 local baseline. Historical success is not a fresh reproduction.
 | D1P-07 race-safe Track A runner | Task-start HEAD `2ad4f699...`; runner `cba540dc...`; D1P-06 inputs unchanged | Python stdlib; macOS libproc; exact arm64 cvc5; bounded wait/cleanup policy | Confirms a missing root with bounded reap, catches termination errors, falls back to bounded direct kill, always records calls/ledger, and uses null for unavailable memory. Seven focused, 154 full-suite and 13 helper checks pass. All 166 calls execute once; six combined and six partitions remain UNKNOWN, with 58 UNSAT and 92 timed-out cells. | **Retain as completed negative/partial Track A evidence.** Partitioning improves zero logical outcomes under the frozen budget. Do not treat lower partial elapsed time or cell UNSAT results as consumer-direction effectiveness or a D1 verdict. |
 | D1P-08 symbolic consumer and feasibility | Task-start HEAD `95e8ba144...`; symbolic component `a97b8043...`; Payy B `dcd5d96...` | Existing V2 model/policy/admission/concrete executor; Python 3.13.7; PyCryptodome 3.23.0; pinned solc 0.8.20 for AST-only comparison | Exact configurable decoding, abstract guards with stated capabilities, sequential mint/token state, low-160 recipients, outer rollback, exact key/vector verifier claim, separate P/O/E, and injective multiplicity. Thirteen focused and 167 full-suite tests pass; 12 symbolic/concrete assignments match. Frozen Track A audit confirms 58 false/UNSAT, 42 true/timeouts, 50 nontrivial/timeouts. | **Retain as a component and design candidate only.** The 11 successful N=8 consumer trace shapes are a proposed beyond-slicing partition that currently removes zero producer constraints. Require offline forwarding/full-relation occurrence certification before joint encoding or performance claims. |
 | D1P-09 N=8 binding and conservative propagation | Task-start HEAD `95e8ba144...`; producer evidence `7d098cd3...`; propagator `d7305a8a...`; shape generator `9e3fe75b...` | Exact check-added printed ACIR/ABI; locally preserved matching full producer artifact; typed binding checkers; pinned Payy source; Python 3.13.7 | Eleven shapes exhaustively cover/disjoint 18,751 successful classes among 390,625 category vectors; invalid/truncated cases are outside. One rule set measures the 620/540 cone for baseline, 11 shapes, and 25 producer cells. Consumer shapes retain payloads and leave 612–616 original ops. Twelve focused and 179 complete tests pass. Full typed producer has 1,303 opcodes; recursion, Poseidon, Brillig and printed/serialized correspondence block full-relation propagation. One N=8 `agg_final` compile exits 101 on an external-cache lock and produces no artifact. | **Retain as selected-cone transformation evidence only.** The 4–8-op consumer reduction is a concrete beyond-slicing opportunity but no performance/security evidence. Exact N=8 forwarding/key binding and full-relation propagation remain prerequisites; planners decide before any joint implementation. |
+| D1P-10 bounded producer encoding | Task-start HEAD `2bbe5eab...`; protocol `954f8af1...`; input manifest `d7923fd3...`; pinned cvc5 `a083a7f5...` | Exact D1P-07 selected-cone inputs and runner policy; D1P-09 conservative propagator; exact radix candidates; native macOS arm64 | Eight profiling calls all time out. The frozen tie-break selects radix 4 without a solver-result advantage. Two controls and the T22 regression pass, but 13/25 propagation XOR checks and all four selected-radix boundary checks time out. Both transformed arms therefore fail closed. The four eligible unchanged queries all time out at 300 seconds. Ten focused and 189 complete tests pass. | **Retain as a bounded null result.** Do not adopt either transformed arm from this study, infer a range bottleneck, or reopen forwarding/joint work. A planner may retire selected-cone encoding tuning or authorize a solver-independent certificate gate as a separate prerequisite study. |
 | V2 semantic domains, occurrence policy, token fragment, and admission: `model_v2.py`, `policy_v2.py`, `consumer_scope_v2.py` | `42bd0ebbf365469fe3147bb13d7359b129319aa2` and `cafe4dac50a24b36107ed9ef187abc2666156593` | Python stdlib | Separates field/EVM words, P/O, identities, committed traces, and unsupported deferral. Uses exact `Counter` multiplicity and funded standard-token admission. Twenty-three `test_v2_core.py` methods are defined; D1P-00 could not import that module without PyCryptodome. | **Retain as the semantic base.** Add symbolic forms without weakening canonicality, multiplicity, rollback, or UNKNOWN behavior. |
 | Typed ACIR decoding and binding certificates: `acir_binary_v1.py`, `acir_bindings_v1.py`, `binding_certificate_check_v1.py` | `42bd0ebbf365469fe3147bb13d7359b129319aa2` | Python stdlib; pinned beta.14 serialization schema and tracked upstream excerpts | Checks typed recursive calls, ABI/frame mappings, polynomial certificates, canonical fields, caps, and unsupported tags. All 27 defined tests passed locally in D1P-00 without PyCryptodome. | **Reuse.** Make it the provenance/binding authority and adapt legacy printed-ACIR nodes into it; do not replace it with sequential-layout guesses. |
 | Source-bound consumer inventory, guard frame, execution, rollback: `consumer_boundary_v1.py`, `guard_frame_v1.py`, `consumer_execution_v1.py` | Frame/boundary `42bd0ebbf365469fe3147bb13d7359b129319aa2`; execution `cafe4dac50a24b36107ed9ef187abc2666156593` | PyCryptodome 3.23.0; pinned solc 0.8.20 AST/source artifacts; ordinary OZ 5.0.1 token model | Keeps guard/verifier choices abstract, commits effects only on return, and fails closed on unsupported nodes. Nine boundary, 22 frame, and 38 execution tests are defined. All three modules failed D1P-00 discovery solely because `Crypto.Hash.keccak` was unavailable. | **Reuse after dependency and artifact provisioning.** Add a symbolic lowering that is checked against this concrete interpreter; do not import the weaker synthetic consumer walk as the real consumer. |
@@ -93,14 +92,14 @@ seal them in a manifest.
 | Requirement | D1 worktree | Local preservation checkout / host | Consequence |
 | --- | --- | --- | --- |
 | Six exact v5 SMT queries and the two printed ACIR/ABI pairs | Available: four tracked inputs under `results/artifacts/d1-n8/`; six ignored byte-matching queries under `results/raw/D1P-02/generated/` | Evidence commit `7d098cd3...` and frozen manifest bind the input bytes | D1P-02 closes artifact intake. Any future query run must copy/audit into a fresh namespace and retain the six historical UNKNOWN outcomes. |
-| cvc5 1.4.2 with finite-field split/CoCoA | Not copied into this worktree | GPL/CoCoA arm64 binary present under `BindCheck/tools`; SHA-256 `a083a7f5...`; PATH also has a different unrestricted build | D1P-07 completes the native-Mac within-campaign Track A comparison. Historical Linux remains background and no timing/resource parity claim is allowed. |
+| cvc5 1.4.2 with finite-field split/CoCoA | Not copied into this worktree | GPL/CoCoA arm64 binary present under `BindCheck/tools`; SHA-256 `a083a7f5...`; PATH also has a different unrestricted build | D1P-10 reuses the D1P-07 native-Mac resource policy for its separate campaign. Historical Linux remains background and no timing/resource parity claim is allowed. |
 | nargo/noirc beta.14 | Missing | Correct pinned arm64 binary present under `BindCheck/tools/noir-1.0.0-beta.14` | D1P-09's one authorized isolated N=8 `agg_final` compile exits 101 because Nargo cannot lock the external local dependency cache; no artifact is emitted and no retry occurs. A future retry needs separate authority and a writable pinned local cache. |
 | T13 mint proof/input | Missing | Present: 10,560/32,096 bytes; SHA-256 `10eb689c...` / `2a0f2b2a...` | Eligible for a manifest-backed honest control after revision/key checks. |
 | T16 control and candidate proof/input | Missing | Present; control `4e7f214f...` / `2a0f2b2a...`, candidate `cdf4b9de...` / `b6f92efa...` | Eligible for an existing-bundle real replay after copying and checking T16 summary/key/source identities. |
 | Revision-matched verifier binaries and RollupV1 source | Missing | T12/T18 binaries and Payy revision worktrees present | Available, but must stay paired to the correct proof/key revision. |
 | Forge stack | Forge on PATH | Forge 1.4.1; solc 0.8.20 exists under `~/.svm`; forge-std and OZ 5.0.1 exist only in preservation checkout | Build an isolated replay tree with explicit remappings. Default `solc` is 0.8.30 and must not be used accidentally. |
 | bb | Missing local tool tree/PATH | arm64 `3.0.0-manual.20251030` present; differs from the historical Linux recovery package | Sufficient for a later native verification compatibility check only after pinning; no proof build is authorized here. |
-| Codex Python dependency | `.venv-d1p-00` contains `pycryptodome==3.23.0` | Python 3.13.7; full D1P-09 discovery passes 179 tests | Use the isolated environment; D1P-00's incomplete result remains historical. D1P-09 focused/offline work launches no solver. |
+| Codex Python dependency | `.venv-d1p-00` contains `pycryptodome==3.23.0` | Python 3.13.7; full D1P-10 discovery passes 189 tests | Use the isolated environment; D1P-00's incomplete result remains historical. |
 | Rust recovery toolchain | Host Rust/Cargo 1.99 | Historical recovery pinned Rust 1.91 and Linux-specific linker setup | Do not reuse the old build command on macOS or treat host availability as recovery readiness. |
 
 ## 5. Semantic conflicts requiring planner decisions
@@ -129,9 +128,10 @@ seal them in a manifest.
    grades before importing the CEGAR loop.
 6. **Consumer-success transformation.** D1P-09 validates the 11 exact N=8
    decoding predicates and shows a 4–8-operation reduction on the 620-operation
-   selected cone. Decide whether that small concrete opportunity justifies
-   implementing full-relation propagation and exact forwarding. It is not
-   solver-performance or consumer-direction effectiveness evidence.
+   selected cone. D1P-10 then finds no measured solver advantage and cannot
+   validate either transformed arm under its frozen gate.
+   Forwarding and joint integration remain paused; neither task establishes
+   solver-performance or consumer-direction effectiveness.
 7. **Consumer success family.** Decide whether the initial theorem retains the
    V2 funded standard-token restriction. Failed transfers and unimplemented
    deferral must remain UNKNOWN if that restriction is relaxed.
@@ -353,13 +353,39 @@ proved feasible or impossible. Twelve focused and 179 complete D1 tests pass.
 No full-relation, solver, joint method, proof, replay, AUTH/NONVAC, or D1
 result follows.
 
-## 16. Next review gate
+## 16. D1P-10 producer-encoding checkpoint
 
-**Two-planner full-relation/forwarding decision.** Decide whether the small
-consumer-conditioned cone reduction justifies funding the remaining
-full-relation propagation and forwarding work. If yes, the minimal next task
-is a separately authorized N=8 `agg_final` artifact recovery plus typed
-forwarding-certificate gate using a writable pinned local dependency cache.
-Do not retune Track A or build the joint solver automatically. Full-relation,
-key/vector, policy, multiplicity, padding, rollback, and unsupported-case
-obligations remain. Research verdict remains UNKNOWN.
+On 25 October 2026, [D1P-10](../../reports/D1P-10.md) preserves D1P-07's
+results and stop decision while opening a separate in-sample study of only the
+check-added N=8 selected producer cone. The protocol, 156 prepared inputs,
+selection rule, transformation gates, nontransferable phase budgets, and
+resource policy were frozen before the first solver call.
+
+All eight 30-second profiling calls time out. The predeclared tie-break selects
+radix 4 on summed sampled RSS, which is a null selection rather than a solver
+advantage. Both controls and the T22 lost-equality regression pass. Twelve of
+25 complete conservative-propagation XOR checks are UNSAT, but 13 time out;
+all four selected-radix boundary checks time out. Both transformed arms fail
+their all-checks validation gates and receive no primary calls.
+
+The four eligible unchanged queries—cone satisfiability, original
+nonvacuity, original prefix violation, and original tail violation—each time
+out at 300 seconds. Thus every primary row remains UNKNOWN. Forty-four calls
+use 1,954.640027 seconds of solver-process wall under the 6,000-second ceiling;
+unused phase allowance is not transferred. No SAT model, aggregate UNSAT,
+forwarding, full-relation, joint, proof, replay, held-out, or security result
+follows.
+
+## 17. Next review gate
+
+**Retire-or-certify selected-cone encoding decision.** The recommended default
+is to retire additional selected-cone encoding tuning: D1P-10 measures no
+solver advantage and neither transformed arm clears its frozen validation
+gate. If planners authorize one last prerequisite, make it a separately
+bounded solver-independent certificate checker that validates all 25 exact
+propagation transformations and the selected radix equivalence without
+changing D1P-10 inputs. Do not start another solver campaign, forwarding
+reconstruction, or joint integration unless that gate passes under a new
+prospective protocol. Full-relation, key/vector, policy, multiplicity,
+padding, rollback, and unsupported-case obligations remain. Research verdict
+remains UNKNOWN.

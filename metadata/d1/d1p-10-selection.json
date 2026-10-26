@@ -1,0 +1,90 @@
+{
+  "does_not_establish": "range constraints are the bottleneck",
+  "input_manifest": {
+    "path": "metadata/d1/d1p-10-input-manifest.json",
+    "sha256": "d7923fd3f3724615c533ebeaf2d773a825f44c1755d5b652d965d0c921664fcf"
+  },
+  "no_post_primary_tuning": true,
+  "profile_ledger": {
+    "path": "metadata/d1/d1p-10-profiling-ledger.json",
+    "sha256": "75f785996a93fd029f38689618585c9a64f95e746e2b4bd4d13873657e96a281"
+  },
+  "radix": 4,
+  "ranking": [
+    {
+      "candidate": "radix4",
+      "charged_seconds": 60.0,
+      "fixed_order_rank": 0,
+      "peak_rss_sum_bytes": 1361608704,
+      "profiling_input_bytes": 1028903,
+      "records": [
+        "results/raw/D1P-10/profiling-macos/calls/003_profile_radix4__cone.json",
+        "results/raw/D1P-10/profiling-macos/calls/004_profile_radix4__nonvacuous.json"
+      ],
+      "resolved": 0,
+      "rss_missing": false,
+      "score": [
+        0,
+        60.0,
+        0,
+        1361608704,
+        1028903,
+        0
+      ]
+    },
+    {
+      "candidate": "radix16",
+      "charged_seconds": 60.0,
+      "fixed_order_rank": 1,
+      "peak_rss_sum_bytes": 1443217408,
+      "profiling_input_bytes": 1717451,
+      "records": [
+        "results/raw/D1P-10/profiling-macos/calls/005_profile_radix16__cone.json",
+        "results/raw/D1P-10/profiling-macos/calls/006_profile_radix16__nonvacuous.json"
+      ],
+      "resolved": 0,
+      "rss_missing": false,
+      "score": [
+        0,
+        60.0,
+        0,
+        1443217408,
+        1717451,
+        1
+      ]
+    },
+    {
+      "candidate": "radix256",
+      "charged_seconds": 60.0,
+      "fixed_order_rank": 2,
+      "peak_rss_sum_bytes": 2802565120,
+      "profiling_input_bytes": 11672819,
+      "records": [
+        "results/raw/D1P-10/profiling-macos/calls/007_profile_radix256__cone.json",
+        "results/raw/D1P-10/profiling-macos/calls/008_profile_radix256__nonvacuous.json"
+      ],
+      "resolved": 0,
+      "rss_missing": false,
+      "score": [
+        0,
+        60.0,
+        0,
+        2802565120,
+        11672819,
+        2
+      ]
+    }
+  ],
+  "research_verdict": "UNKNOWN",
+  "selected": "radix4",
+  "selected_at_utc": "2026-10-26T00:18:49.989529+00:00",
+  "selection_rule": [
+    "more resolved SAT/UNSAT profiling obligations",
+    "lower aggregate elapsed with unresolved charged 30 seconds",
+    "lower aggregate observed peak RSS; missing ranks last",
+    "smaller aggregate profiling input bytes",
+    "fixed order radix4, radix16, radix256"
+  ],
+  "status": "ALTERNATIVE_SELECTED_AND_FROZEN",
+  "task": "D1P-10"
+}

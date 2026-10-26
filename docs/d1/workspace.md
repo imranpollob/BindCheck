@@ -151,6 +151,19 @@ forwarding/key binding, joint solving, proof/replay, AUTH/NONVAC, and the D1
 verdict remain UNKNOWN. Both planners decide the next gate; do not
 automatically retry compilation or build the joint encoder.
 
+D1P-10 is a separate, in-sample encoding study of only the historical 620/540
+check-added selected cone. Its protocol and eight-call profiling schedule were
+frozen before solver execution. All profiling calls time out; radix 4 is
+selected only by the predeclared RSS tie-break. The T22 reconstruction
+regression and 12/25 propagation XOR checks pass, but 13 XOR checks and all
+four radix-4 boundary controls time out. Both transformed arms are therefore
+ineligible and unrun. The four unchanged baseline obligations each time out
+at 300 seconds. Preserve `results/raw/D1P-10/`, the tracked freezes, ledgers,
+manifest, selection, protocol, and [report](../../reports/D1P-10.md). Do not
+retune these candidates or treat their unrun primary rows as negative solver
+results. Full-relation propagation, forwarding, joint solving, proof/replay,
+and the D1 verdict remain UNKNOWN.
+
 Before D1P-00 changed living documents, their exact starting bytes were copied
 to `results/raw/D1P-00/prior-checkpoint/`. See
 [D1P-00](../../reports/D1P-00.md) for hashes, tool availability and the local

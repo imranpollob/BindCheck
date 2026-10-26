@@ -55,7 +55,10 @@ flowchart TD
     d1p06 --> d1p07["D1P-07 race-safe Track A [DONE]"]
     d1p07 --> d1p08["D1P-08 symbolic consumer + feasibility [DONE]"]
     d1p08 --> d1p09["D1P-09 binding + offline propagation [DONE]"]
-    d1p09 --> d1p09decision["Full-relation/forwarding decision [NEXT]"]
+    d1p09 --> d1p10["D1P-10 producer encoding study [DONE]"]
+    d1p10 --> d1p10result["Transformed-arm eligibility [UNKNOWN]"]
+    d1p10result --> d1p10decision["Selected-cone backend decision [NEXT]"]
+    d1p09 -.-> d1p09decision["Full-relation/forwarding decision [WAITING]"]
     d1 --> d100["D1-00 preserve and align [DONE]"]
     d100 --> d101["D1-01 T22 reporting closure [DONE]"]
     d100 --> d102["D1-02 target selection [DONE]"]
@@ -103,11 +106,11 @@ flowchart TD
     classDef waiting fill:#D9D9D9,stroke:#B3B3B3
     classDef unknown fill:#FFE0C2,stroke:#FF9E42
 
-    class foundation,fixture,payy,sourceCheck,coneGate,nineCases,failureAnalysis,v3Rerun,generalGate,tracking,livingTree,d100,d101,d102,d103preflight,d103review,d103typed,d103boundary,d103guards,d103guardreview,d103concrete,d103replayreview,d103recovery,d1p00,d1p01,d1p01artifact,d1p02,d1p03,d1p04,d1p05,d1p04elig,d1p07,d1p08,d1p09 done
+    class foundation,fixture,payy,sourceCheck,coneGate,nineCases,failureAnalysis,v3Rerun,generalGate,tracking,livingTree,d100,d101,d102,d103preflight,d103review,d103typed,d103boundary,d103guards,d103guardreview,d103concrete,d103replayreview,d103recovery,d1p00,d1p01,d1p01artifact,d1p02,d1p03,d1p04,d1p05,d1p04elig,d1p07,d1p08,d1p09,d1p10 done
     class analysis,d1,d1paper,d103,d103impl,d103consumer,d103effects active
-    class d103linkreview,d1p09decision next
-    class evaluation,history,heldOut,baselines,manuscript,claims,artifacts,draft,transferCase,sensitivity,submit,t22,acirSummary,d104,d105,d106,d107,d108,d103symbolic waiting
-    class contribution,primaryResult,generalResult,d103gate,d103recoveryresult,d1p06 unknown
+    class d103linkreview,d1p10decision next
+    class evaluation,history,heldOut,baselines,manuscript,claims,artifacts,draft,transferCase,sensitivity,submit,t22,acirSummary,d104,d105,d106,d107,d108,d103symbolic,d1p09decision waiting
+    class contribution,primaryResult,generalResult,d103gate,d103recoveryresult,d1p06,d1p10result unknown
 ```
 
 ## Immediate path
@@ -213,13 +216,25 @@ flowchart TD
     full-relation propagation, joint solving, AUTH/NONVAC, proof/replay, and
     the D1 verdict remain UNKNOWN. Both planners decide whether the small
     checked opportunity warrants the remaining prerequisites.
+26. Done as a bounded null feasibility result: [D1P-10](../reports/D1P-10.md)
+    freezes an eight-call profile, exact transformation gates and a
+    four-obligation/three-arm matrix for only the check-added selected cone.
+    All eight profiles time out; radix 4 is selected only by the frozen RSS
+    tie-break. Both controls and the T22 lost-equality regression pass, but
+    13/25 propagation XOR checks and all four radix-4 boundary checks time out,
+    so both transformed arms are ineligible and unrun. The four unchanged
+    baseline obligations each time out at 300 seconds. Forty-four calls use
+    1,954.640027 seconds observed solver wall with no SAT model or solved
+    obligation. The task is complete, encoding benefit and the D1 verdict are
+    UNKNOWN, and selected-cone backend continuation is a planner decision.
 
 The end goal does not imply that submission is currently justified. The
 research contract's two principal properties remain unchanged, and unresolved
 T22 results remain UNKNOWN. D1P-09 adds an offline selected-cone transformation
-component, not a method-evaluation or security result. D1 preparation and
-reporting closure are complete; three missing historical query slots were
-executed.
+component, and D1P-10 does not establish that component or the selected radix
+as a usable solver improvement. Neither is a method-evaluation or security
+result. D1 preparation and reporting closure are complete; three missing
+historical query slots were executed.
 
 
 ## Checkpoint log
@@ -264,6 +279,7 @@ executed.
 | 2026-10-25 | D1P-07 race-safe native-Mac Track A | `[DONE]` task / `[UNKNOWN]` obligations | [Report](../reports/D1P-07.md), [protocol](d1-paper/d1p-07-protocol.md), resource policy, freeze, and ledger: preserve D1P-06, pass 7 focused regressions, 154 D1 tests, 13 helper checks and 166/166 input hashes, then execute every fresh call once. Goal-only is 6 SAT; cone-only is 2 timeouts; six combined are timeouts; 150 partition cells give 58 UNSAT and 92 timeouts. All six unsplit and partition aggregates remain UNKNOWN, so decomposition improves zero complete outcomes. No infrastructure failure, proof/replay, Track B, held-out result, consumer-direction result, or D1 verdict. Interpretation review is next. |
 | 2026-10-25 | D1P-08 symbolic consumer and feasibility | `[DONE]` component / `[UNKNOWN]` research | [Report](../reports/D1P-08.md), [review](d1-paper/d1p-08-review.md), and [feasibility table](d1-paper/d1p-08-feasibility.md): independently verify all 150 D1P-07 goal classes and identify selected-cone difficulty; implement an inspectable solver-neutral consumer with exact decoding, explicit verifier/attacker boundaries, sequential protected effects and rollback. 13 focused and 167 complete tests pass; 12 symbolic/concrete assignments match. Propose an 11-shape N=8 consumer-success intersection while conservatively removing zero producer constraints. No solver/proof/replay/joint method or D1 verdict; offline forwarding/occurrence certification is next. |
 | 2026-10-25 | D1P-09 N=8 binding and offline propagation | `[DONE]` component / `[UNKNOWN]` research | [Report](../reports/D1P-09.md), [feasibility note](d1-paper/d1p-09-feasibility.md), binding/shape/audit manifests: distinguish full 1,303-opcode producer from the 620/540 historical cone; replay 1,280 producer and 1,630 N=1000-background forwarding equalities; exhaustively validate 11 consumer shapes over 390,625 classes; and measure one conservative propagator on baseline, 11 shapes and 25 producer cells. Consumer shapes leave 612–616 operations with symbolic payloads. Twelve focused and 179 complete tests pass. The single authorized N=8 `agg_final` compile exits 101 on an external-cache lock and emits no artifact. No solver/proof/replay/joint method, AUTH/NONVAC result, or D1 verdict; both planners review the full-relation/forwarding decision. |
+| 2026-10-25 | D1P-10 bounded producer-encoding feasibility | `[DONE]` task / `[UNKNOWN]` benefit | [Report](../reports/D1P-10.md), [protocol](d1-paper/d1p-10-protocol.md), input/freeze/selection/validation/main ledgers: all eight profiling calls time out; radix 4 is selected only by the frozen RSS tie-break. Controls and the T22 reconstruction regression pass, but only 12/25 propagation XOR checks complete UNSAT and all four radix boundary controls time out. Both transformed arms are ineligible and unrun. All four unchanged baseline obligations time out at 300 seconds. Forty-four calls use 1,954.640027 seconds observed solver wall; no SAT model, solved obligation, full-relation/proof/consumer result, or D1 verdict follows. Selected-cone backend continuation is `[NEXT]`; forwarding remains `[WAITING]`. |
 
 ## Update rule
 
