@@ -57,7 +57,10 @@ flowchart TD
     d1p08 --> d1p09["D1P-09 binding + offline propagation [DONE]"]
     d1p09 --> d1p10["D1P-10 producer encoding study [DONE]"]
     d1p10 --> d1p11["D1P-11 development screening [DONE]"]
-    d1p11 --> warptoadGate["WarpToad correspondence gate [NEXT]"]
+    d1p11 --> d1p12["D1P-12 WarpToad fixture gate [DONE]"]
+    d1p12 --> warptoadRecovery["Pinned source/toolchain recovery [DONE]"]
+    warptoadRecovery --> d1p12r["D1P-12R honest local fixture [DONE]"]
+    d1p12r --> warptoadJoint["Joint policy/analyzer work [WAITING]"]
     d1p10 --> d1p10result["Transformed-arm eligibility [UNKNOWN]"]
     d1p10result --> d1p10decision["Selected-cone backend reconsideration [WAITING]"]
     d1p09 -.-> d1p09decision["Full-relation/forwarding decision [WAITING]"]
@@ -108,10 +111,10 @@ flowchart TD
     classDef waiting fill:#D9D9D9,stroke:#B3B3B3
     classDef unknown fill:#FFE0C2,stroke:#FF9E42
 
-    class foundation,fixture,payy,sourceCheck,coneGate,nineCases,failureAnalysis,v3Rerun,generalGate,tracking,livingTree,d100,d101,d102,d103preflight,d103review,d103typed,d103boundary,d103guards,d103guardreview,d103concrete,d103replayreview,d103recovery,d1p00,d1p01,d1p01artifact,d1p02,d1p03,d1p04,d1p05,d1p04elig,d1p07,d1p08,d1p09,d1p10,d1p11 done
+    class foundation,fixture,payy,sourceCheck,coneGate,nineCases,failureAnalysis,v3Rerun,generalGate,tracking,livingTree,d100,d101,d102,d103preflight,d103review,d103typed,d103boundary,d103guards,d103guardreview,d103concrete,d103replayreview,d103recovery,d1p00,d1p01,d1p01artifact,d1p02,d1p03,d1p04,d1p05,d1p04elig,d1p07,d1p08,d1p09,d1p10,d1p11,d1p12,warptoadRecovery,d1p12r done
     class analysis,d1,d1paper,d103,d103impl,d103consumer,d103effects active
-    class d103linkreview,warptoadGate next
-    class evaluation,history,heldOut,baselines,manuscript,claims,artifacts,draft,transferCase,sensitivity,submit,t22,acirSummary,d104,d105,d106,d107,d108,d103symbolic,d1p09decision,d1p10decision waiting
+    class d103linkreview next
+    class evaluation,history,heldOut,baselines,manuscript,claims,artifacts,draft,transferCase,sensitivity,submit,t22,acirSummary,d104,d105,d106,d107,d108,d103symbolic,d1p09decision,d1p10decision,warptoadJoint waiting
     class contribution,primaryResult,generalResult,d103gate,d103recoveryresult,d1p06,d1p10result unknown
 ```
 
@@ -239,6 +242,30 @@ flowchart TD
     outside the denominator. No solver/build/proof/replay, vulnerability
     validation, live-chain test or held-out evaluation ran. All application
     labels and the D1 verdict remain UNKNOWN.
+28. Done with an exact setup blocker: [D1P-12](../reports/D1P-12.md) preserves
+    a fresh ignored WarpToad source slice whose five files match all five
+    D1P-11 hashes, but cannot establish the complete pinned revision or obtain
+    the missing lock/build inputs, compiled withdraw artifact/ABI, matching
+    VK/generated verifier, or Noir beta.22/bb.js 5.0.0 route. Direct GitHub
+    retrieval was blocked by environment DNS/origin policy. The existing ACIR
+    reader is locked to beta.14, outside the project's declared beta.22 Noir JS
+    route; the missing artifact prevents an exact compatibility check. A
+    setup-only preflight, protocol, manifest, eleven-input provenance table and
+    hash-dependence requirements are recorded. Zero builds, proof attempts,
+    consumer executions or solver calls ran. The bounded task is done at
+    blocker evidence level; all effects and the D1 verdict remain UNKNOWN.
+29. Done as development artifact/behavior validation:
+    [D1P-12R](../reports/D1P-12R.md) preserves D1P-12 and recovers the exact
+    checkout, lock-selected dependencies, committed beta.22 artifact and
+    supported bb.js 5.0.0 route. A newly saved 1,888-byte VK produces a
+    verifier byte-identical to the committed verifier; solc 0.8.29 compiles
+    it. One real proof is accepted by bb.js and Solidity; the unchanged mint
+    consumes its nullifier and makes a bounded nonzero-fee split to an ordinary
+    named relayer and recipient. Identical replay rejects, and all 22 field
+    boundary cases revert rather than reduce. The existing beta.14 ACIR reader
+    is exactly incompatible. This is not an independent Noir source rebuild,
+    cross-chain result, policy validation, vulnerability verdict, performance
+    result or D1 verdict. Joint policy/analyzer work is waiting; D1 is UNKNOWN.
 
 The end goal does not imply that submission is currently justified. The
 research contract's two principal properties remain unchanged, and unresolved
@@ -246,7 +273,11 @@ T22 results remain UNKNOWN. D1P-09 adds an offline selected-cone transformation
 component, and D1P-10 does not establish that component or the selected radix
 as a usable solver improvement. D1P-11 identifies a bounded WarpToad
 correspondence gate instead of extending that selected-cone tuning line.
-Neither screen nor component is a method-evaluation or security result. D1
+D1P-12 records a reproducible source/toolchain blocker; D1P-12R preserves that
+record and completes the exact-artifact owned-local proof-to-mint fixture,
+including nonzero-fee effects, replay rejection and strict field canonicality.
+Neither screen, blocker nor development fixture is a method-evaluation,
+cross-chain, policy or security result. D1
 preparation and reporting closure are complete; three missing historical query
 slots were executed.
 
@@ -295,6 +326,8 @@ slots were executed.
 | 2026-10-25 | D1P-09 N=8 binding and offline propagation | `[DONE]` component / `[UNKNOWN]` research | [Report](../reports/D1P-09.md), [feasibility note](d1-paper/d1p-09-feasibility.md), binding/shape/audit manifests: distinguish full 1,303-opcode producer from the 620/540 historical cone; replay 1,280 producer and 1,630 N=1000-background forwarding equalities; exhaustively validate 11 consumer shapes over 390,625 classes; and measure one conservative propagator on baseline, 11 shapes and 25 producer cells. Consumer shapes leave 612–616 operations with symbolic payloads. Twelve focused and 179 complete tests pass. The single authorized N=8 `agg_final` compile exits 101 on an external-cache lock and emits no artifact. No solver/proof/replay/joint method, AUTH/NONVAC result, or D1 verdict; both planners review the full-relation/forwarding decision. |
 | 2026-10-25 | D1P-10 bounded producer-encoding feasibility | `[DONE]` task / `[UNKNOWN]` benefit | [Report](../reports/D1P-10.md), [protocol](d1-paper/d1p-10-protocol.md), input/freeze/selection/validation/main ledgers: all eight profiling calls time out; radix 4 is selected only by the frozen RSS tie-break. Controls and the T22 reconstruction regression pass, but only 12/25 propagation XOR checks complete UNSAT and all four radix boundary controls time out. Both transformed arms are ineligible and unrun. All four unchanged baseline obligations time out at 300 seconds. Forty-four calls use 1,954.640027 seconds observed solver wall; no SAT model, solved obligation, full-relation/proof/consumer result, or D1 verdict follows. Selected-cone backend continuation is `[NEXT]`; forwarding remains `[WAITING]`. |
 | 2026-10-25 | D1P-11 bounded development-corpus screening | `[DONE]` task / `[UNKNOWN]` applications | [Report](../reports/D1P-11.md), [protocol](../protocols/d1/d1p-11-screening.json), and [ledger](../metadata/d1/d1p-11-screening-ledger.json): screen the complete prefrozen permitted pool of four applications/four families. Rank WarpToad first, retain Privacy Pools contingently and Payy for calibration, and exclude Aztec v6 from the current fragment. Preserve Semaphore-Noir and discovery-only leads outside the denominator. Both complete-output and layered subset consumers are represented; no subset-ease or audit-negative-control inference follows. No solver/build/proof/replay, finding validation, live-chain test, maintainer contact or held-out evaluation. A WarpToad correspondence gate is `[NEXT]`; all security verdicts remain `[UNKNOWN]`. |
+| 2026-10-26 | D1P-12 WarpToad executable-fixture gate | `[DONE]` blocker / `[UNKNOWN]` effects and security | [Report](../reports/D1P-12.md), [protocol](../protocols/d1/d1p-12-warptoad-fixture.json), and [manifest](../metadata/d1/d1p-12-artifact-manifest.json): preserve 5/5 D1P-11 hash-matching source files in an isolated ignored workspace and stop at setup. The full pinned checkout, lock/build inputs, compiled artifact/ABI, matching VK/generated verifier and declared Noir beta.22/bb.js 5.0.0 route are unavailable; GitHub retrieval is blocked by environment DNS/origin policy. The existing ACIR reader is pinned to beta.14, outside the declared beta.22 Noir JS route, and the absent artifact prevents an exact compatibility check. Zero builds, proofs, consumer executions or solver calls; no receipts, effects, fee example, performance or D1 verdict. Exact pinned source/toolchain recovery is `[NEXT]`. |
+| 2026-10-26 | D1P-12R WarpToad executable-fixture continuation | `[DONE]` development fixture / `[UNKNOWN]` security | [Report](../reports/D1P-12R.md), [protocol](../protocols/d1/d1p-12r-warptoad-fixture.json), and [manifest](../metadata/d1/d1p-12r-artifact-manifest.json): preserve D1P-12, recover the exact pin and frozen dependencies, validate the committed beta.22 artifact through a newly saved VK, byte-identical generated verifier and solc 0.8.29 build. One real UltraHonk proof is accepted in JS/Solidity and the unchanged mint records nullifier plus nonzero-fee recipient/ordinary-relayer effects; identical replay rejects. All 22 public-word `P`/`P+1` calls revert with `ValueGeFieldOrder()`; the beta.14 ACIR reader rejects the artifact version. No independent Noir rebuild, solver, fork/live chain, cross-chain reachability, performance, policy/vulnerability or D1 verdict. Joint policy/analyzer work is `[WAITING]`; D1 remains `[UNKNOWN]`. |
 
 ## Update rule
 

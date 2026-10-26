@@ -1,0 +1,205 @@
+{
+  "schema": "bindcheck.d1p12r.artifact-manifest/v1",
+  "task": "D1P-12R",
+  "created_at_utc": "2026-10-26T15:06:00Z",
+  "result": "PASS_OWNED_LOCAL_HONEST_PROOF_TO_MINT",
+  "d1_security_verdict": "UNKNOWN",
+  "source": {
+    "repository": "https://github.com/warptoad/warp-toad.git",
+    "revision": "973e7d1e4b60d0d8a8ca299b0cabd9193b147ef8",
+    "isolated_workspace": "results/raw/D1P-12R/workspace/source",
+    "exact_fetch_exit_code": 0,
+    "exact_fetch_head_matches": true,
+    "blocked_request": null,
+    "initial_status_clean": true,
+    "final_tracked_diff_empty": true,
+    "d1p11_hashes_matched": 5,
+    "d1p11_hashes_expected": 5
+  },
+  "preservation": {
+    "prior_namespace": "results/raw/D1P-12/",
+    "prior_file_count": 7,
+    "prior_regular_file_bytes": 62925,
+    "prior_tree_manifest_sha256": "f2ebc18f236368afcd3a5618c390401a40db9dcae3234216dbdb3742b5424471",
+    "representative_hash_checks_matched": 6,
+    "representative_hash_checks_expected": 6,
+    "modified": false
+  },
+  "toolchain": {
+    "node": "26.12.0",
+    "pnpm": "10.8.1",
+    "pnpm_launcher": "/opt/homebrew/bin/npx --yes pnpm@10.8.1",
+    "noir_js": "1.0.0-beta.22",
+    "artifact_noir_version": "1.0.0-beta.22+c57152f91260ecdb9faad4efc20abb14b6d2ece7",
+    "bb_js": "5.0.0",
+    "hardhat": "3.3.0",
+    "solc": "0.8.29",
+    "solc_settings": "optimizer enabled; runs 1; evmVersion cancun",
+    "proof_system": "UltraHonk",
+    "proof_and_verifier_options": {
+      "keccakZK": true,
+      "threads": 8
+    },
+    "lockfile_sha256": "d984410433a0349df3d32ab9c188bd76c30ffdfcfdb7e05bc67c473949f6f8e0"
+  },
+  "circuit_crates": [
+    {
+      "path": "backend/circuits/hashing/Nargo.toml",
+      "sha256": "384b570ce244f852ed7919a4dfc4876e2e3e591328b1f80a02f15fd0869bdeae"
+    },
+    {
+      "path": "backend/circuits/hashing/src/lib.nr",
+      "sha256": "f3d0fc75df6ab61fff55f1dba4aa84be1196a32a8cfe6c2c189724614f00862f"
+    },
+    {
+      "path": "backend/circuits/nargo_hashing/Nargo.toml",
+      "sha256": "ff55caf959d33eab84eeeee46c3fa3707e73a4530041b3ac2b10e452b0ab04d3",
+      "role": "withdraw dependency aliased as hashing"
+    },
+    {
+      "path": "backend/circuits/nargo_hashing/src/lib.nr",
+      "sha256": "ec0ad211ff92580652244a7b6871db8874222e3928c8b25934ef8ac2882871d3",
+      "role": "withdraw dependency aliased as hashing"
+    },
+    {
+      "path": "backend/circuits/constants/Nargo.toml",
+      "sha256": "7e60cc78d981e1c6f830ae39a6e32822ea9381ac6864bb288b1c6d842cc77c1b"
+    },
+    {
+      "path": "backend/circuits/constants/src/lib.nr",
+      "sha256": "5f5538be0fae7ce0254cb78f22662c4f45b84afbe1ec0bafee65613c0520aeba"
+    }
+  ],
+  "artifact_chain": {
+    "historical_compiled_circuit": {
+      "path": "frontend/src/lib/circuits/withdraw.json",
+      "sha256": "0cfad465d740c852c47268b60e17bc3a4b0ae301345447ec60fa70c2b6058d0d",
+      "bytes": 2395571,
+      "classification": "committed historical artifact; exact-copied into the supported target path"
+    },
+    "abi": {
+      "public_parameter_count": 11,
+      "public_order": [
+        "nullifier",
+        "chain_id",
+        "amount",
+        "giga_root",
+        "destination_local_root",
+        "aztec_warptoad_address",
+        "fee_factor",
+        "priority_fee",
+        "max_fee",
+        "relayer_address",
+        "recipient_address"
+      ],
+      "private_top_level_parameter_count": 7,
+      "return_type": null
+    },
+    "verification_key": {
+      "path": "results/raw/D1P-12R/artifacts/generated/withdraw-vk.bin",
+      "sha256": "563a018cba2ace1d27b337191428e4aaf5925483dd1350f995d112b67db6ab69",
+      "bytes": 1888,
+      "vk_hash": "0x26e1ebf45eab2f48cbd19808700c7ede4e35b6c408cff5d19a4bbec018c698d5",
+      "circuit_size": 131072,
+      "log_circuit_size": 17,
+      "verifier_public_inputs_total": 19,
+      "proof_pairing_point_inputs": 8,
+      "caller_application_inputs": 11,
+      "classification": "newly generated D1P-12R"
+    },
+    "historical_verifier": {
+      "sha256": "d9a822a5c16253bec2b690e06f16cb9d444ca9886be6ebf2302e4c5e55f04b48",
+      "bytes": 103923,
+      "classification": "committed at pinned revision"
+    },
+    "generated_verifier": {
+      "path": "results/raw/D1P-12R/artifacts/generated/WithdrawVerifier-from-saved-vk.sol",
+      "sha256": "d9a822a5c16253bec2b690e06f16cb9d444ca9886be6ebf2302e4c5e55f04b48",
+      "bytes": 103923,
+      "byte_identical_to_historical": true,
+      "classification": "newly generated D1P-12R"
+    },
+    "hardhat_verifier_artifact": {
+      "sha256": "b71aee20a39f03f9a7b71d250d7af9f99098bcb28e9d76af9aafe14c9283c70b",
+      "bytes": 73878,
+      "classification": "newly compiled D1P-12R"
+    },
+    "source_compile": {
+      "attempted": false,
+      "claim": "historical artifact validated through supported ABI/proving/VK/verifier route; no independent Noir source rebuild correspondence claim"
+    }
+  },
+  "reader": {
+    "status": "INCOMPATIBLE",
+    "reason": "COMPILER_VERSION_UNSUPPORTED",
+    "reader_version": "1.0.0-beta.14+60ccd48e18ad8ce50d5ecda9baf813b712145051",
+    "artifact_version": "1.0.0-beta.22+c57152f91260ecdb9faad4efc20abb14b6d2ece7",
+    "frontend_changed": false
+  },
+  "proof": {
+    "attempts_consumed": 1,
+    "attempt_limit": 2,
+    "attempt_timeout_seconds": 1800,
+    "proof_sha256": "07467f3d1e11e18f7ab47857a32370296333c11f6cd05d79cd97be17907f968d",
+    "proof_bytes": 9152,
+    "public_input_count": 11,
+    "javascript_verified": true,
+    "solidity_verified": true
+  },
+  "execution": {
+    "network": "owned in-process Hardhat edr-simulated chain 31337",
+    "fork": false,
+    "live_chain": false,
+    "ordinary_named_relayer": "0x70997970c51812dc3a010c7d01b50e0d17dc79c8",
+    "address_one_wildcard_used": false,
+    "mint_transaction_hash": "0xc4a6bdbeeef8d0e12989dff490eced67322fa42fb1700f78669b4d2523942de0",
+    "mint_status": "success",
+    "nullifier_consumed": true,
+    "recipient_delta": "4739930889869669148",
+    "relayer_delta": "260069110130330852",
+    "total_supply_delta": "5000000000000000000",
+    "fee_factor": "974405002",
+    "priority_fee": "100000000",
+    "base_fee_per_gas": "166900426",
+    "max_fee": "5000000000000000000",
+    "computed_relayer_fee": "260069110130330852",
+    "nonzero_fee_example": true,
+    "identical_calldata_replay_rejected": true,
+    "replay_reason": "nullifier already exists"
+  },
+  "canonicality": {
+    "field_modulus_decimal": "21888242871839275222246405745257275088548364400416034343698204186575808495617",
+    "positions_tested": 11,
+    "values_per_position": [
+      "field modulus",
+      "field modulus plus one"
+    ],
+    "case_count": 22,
+    "all_reverted": true,
+    "error": "ValueGeFieldOrder()",
+    "selector": "0x20a33589",
+    "behavior": "rejects; does not reduce",
+    "claim_boundary": "field-boundary behavior and modeling obligation only; no vulnerability claim"
+  },
+  "controls": {
+    "proof_public_inputs_equal_expected_abi_order": true,
+    "proof_public_inputs_equal_consumer_format_output": true,
+    "same_proof_replay_rejected": true,
+    "reader_tests_passed": 50,
+    "reader_subtests_passed": 272
+  },
+  "deliverables": {
+    "protocol": "protocols/d1/d1p-12r-warptoad-fixture.json",
+    "runner": "scripts/d1p_12r_warptoad_fixture.py",
+    "execution_fixture": "scripts/fixtures/d1p_12r_warptoad_fixture.ts",
+    "vk_fixture": "scripts/fixtures/d1p_12r_generate_vk.ts",
+    "report": "reports/D1P-12R.md",
+    "raw_namespace": "results/raw/D1P-12R/",
+    "raw_manifest": "results/raw/D1P-12R/evidence-manifest.json",
+    "raw_manifest_sha256": "ff0c5ac76a16627bb06a19965d0918ea5e395af045e86bff61ec9a54f509aca0",
+    "raw_manifest_record_count": 55,
+    "raw_manifest_regular_file_bytes": 3422974
+  },
+  "prohibited_actions_observed": [],
+  "claim_boundary": "Development artifact/behavior validation only. No solver, fork, live chain, maintainer contact, held-out inspection, Circom expansion, Payy work, performance result, protocol security claim, or D1 verdict."
+}

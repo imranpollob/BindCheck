@@ -1,0 +1,200 @@
+{
+  "schema": "bindcheck.d1p12.artifact-manifest/v1",
+  "task": "D1P-12",
+  "date": "2026-10-26",
+  "status": "BLOCKED_SETUP",
+  "bounded_task_result": "EXACT_REPRODUCIBLE_BLOCKER",
+  "research_verdict": "UNKNOWN",
+  "evidence_class": "development artifact/provenance preflight only",
+  "application": {
+    "repository": "https://github.com/warptoad/warp-toad",
+    "pinned_revision": "973e7d1e4b60d0d8a8ca299b0cabd9193b147ef8"
+  },
+  "controlling_inputs": [
+    {
+      "path": "reports/D1P-11.md",
+      "sha256": "e15557a6356d48597742ac26f268532f2376c8b045e4ad0fd8b0a4f4a27d2297"
+    },
+    {
+      "path": "metadata/d1/d1p-11-screening-ledger.json",
+      "sha256": "413e093c0af8e86071bec3e6080c927908371f8591baea80562f8d31df198de9"
+    },
+    {
+      "path": "results/raw/D1P-11/retrieved-source-hashes.json",
+      "sha256": "ac8c19ed99e0bfb38f0e6fde7383d4fd60eac51383382b7cec73cc1c090ce61b"
+    },
+    {
+      "path": "metadata/d1/d1-02-intake.json",
+      "sha256": "96d796429b8f8128ae275a50839c00ac4cfd63aa27f7c22ba21fb22a6208f312"
+    },
+    {
+      "path": "src/bindcheck_d1/frontends/acir_binary_v1.py",
+      "sha256": "c3c07f14ac0e3388944359c752aa60145f35f5be8ccfcb5c371a823d9184b85a"
+    }
+  ],
+  "task_artifacts": [
+    {
+      "path": "scripts/d1p_12_warptoad_fixture.py",
+      "sha256": "20ee14663351b9ae283ecebc83657b46fafa08418bc9e31dec63609845b106f4",
+      "role": "setup-only preflight and prospective fixture gate"
+    },
+    {
+      "path": "protocols/d1/d1p-12-warptoad-fixture.json",
+      "sha256": "6bf31890ffd85eed1fa45f93bfe77f34dfdd9b362c2bb1ecdafff39eb4434657",
+      "role": "proof-attempt, resource, execution and claim controls"
+    },
+    {
+      "path": "results/raw/D1P-12/preflight.json",
+      "sha256": "e1392aaf4349603ea568aa3ed0e959013e58986ca34827bc00651b384c5c9eb5",
+      "role": "ignored raw setup result"
+    },
+    {
+      "path": "results/raw/D1P-12/commands.txt",
+      "sha256": "483a4238a94d7bc35676e47612f9d645dbcd99d32f6dbc1f06f5052ccee10a75",
+      "role": "ignored exact command, attempt and validation record"
+    }
+  ],
+  "isolated_workspace": {
+    "path": "results/raw/D1P-12/workspace",
+    "ignored_by": ".gitignore:3",
+    "source_kind": "five-file D1P-11 hash-matched slice",
+    "complete_checkout": false,
+    "git_revision_independently_observed": false
+  },
+  "source_slice": [
+    {
+      "path": "backend/circuits/withdraw/src/main.nr",
+      "sha256": "ce4bf56bb44e2e1106560251f3ff28dc8545fc9b7b7256c9d7695f6e28de192f",
+      "bytes": 13878,
+      "matches_d1p11": true
+    },
+    {
+      "path": "backend/contracts/core/WarpToadCore.sol",
+      "sha256": "323a1cf26c7449f67cf277ff0a46c31e12f725c555f9fa165d5a60011e122c39",
+      "bytes": 8609,
+      "matches_d1p11": true
+    },
+    {
+      "path": "backend/test/testL1ToL1.ts",
+      "sha256": "1c831d9e3832191ef6b1b1aac679c5c517ad89cdf3adfc708e4266a4780ff349",
+      "bytes": 4038,
+      "matches_d1p11": true
+    },
+    {
+      "path": "backend/lib/proving.ts",
+      "sha256": "e1c7e4d209e82fe9b51b536605671bb32545e52f27bccf0240892f2c24d8323c",
+      "bytes": 19582,
+      "matches_d1p11": true
+    },
+    {
+      "path": "backend/package.json",
+      "sha256": "01f2bae4590b1cbe14716c1ff1cd50209bd4b1cb5be9fc20e13da8801b0aa57b",
+      "bytes": 5600,
+      "matches_d1p11": true
+    }
+  ],
+  "unavailable_pinned_inputs": [
+    {
+      "path": "README.md",
+      "prior_recorded_sha256": "0ed136c9360145a7329f3ca4b10c582c9df735f81442ad446959b6d859e854be"
+    },
+    {
+      "path": "package.json",
+      "prior_recorded_sha256": "549fd528d032e51467cc1a89d91ff13baee4ceef88b46aea029ba3d7e3219178"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "prior_recorded_sha256": null
+    },
+    {
+      "path": "backend/hardhat.config.ts",
+      "prior_recorded_sha256": null
+    },
+    {
+      "path": "backend/circuits/withdraw/Nargo.toml",
+      "prior_recorded_sha256": null
+    },
+    {
+      "path": "backend/circuits/withdraw/target/withdraw.json",
+      "prior_recorded_sha256": null
+    },
+    {
+      "path": "backend/scripts/regenerateVerifier.ts",
+      "prior_recorded_sha256": "9268ae8b5e14aae28f79f21016039e1308f2d8a0d5741f6c3daa47f0a9f339c5"
+    },
+    {
+      "path": "backend/test/helpers/setup.ts",
+      "prior_recorded_sha256": "89c28bf2f548e2efc39c0b16e50f9a2ca1153d8b29fea71225c2c32969589f79"
+    }
+  ],
+  "compiled_artifact_inventory": {
+    "historical_tree_record": {
+      "path": "frontend/src/lib/circuits/withdraw.json",
+      "git_blob_sha1": "b897e4d5d9d1550bf622228e781242176984285e",
+      "bytes": 2395571,
+      "retrieved": false,
+      "sha256": null,
+      "correspondence_established": false
+    },
+    "locally_generated_artifacts": [],
+    "compiled_abi": null,
+    "verification_key": null,
+    "generated_solidity_verifier": null,
+    "accepted_proof": null,
+    "note": "The historical Git blob identity is inventory evidence only; it is not a local artifact hash or a source/build/key correspondence proof."
+  },
+  "declared_versions_and_modes": {
+    "noir_js": "1.0.0-beta.22",
+    "bb_js": "5.0.0",
+    "hardhat_range": "^3.0.0",
+    "solidity_pragma": "0.8.29",
+    "proof_system": "UltraHonk",
+    "proof_generation_mode": "keccakZK:true",
+    "js_self_verification_mode": "keccakZK:true"
+  },
+  "existing_reader": {
+    "accepted_noir_version": "1.0.0-beta.14+60ccd48e18ad8ce50d5ecda9baf813b712145051",
+    "declared_noir_js_beta22_route_within_reader_pin": false,
+    "artifact_specific_run": "BLOCKED_ARTIFACT_UNAVAILABLE",
+    "new_frontend_implemented": false
+  },
+  "local_nonmatching_candidates_not_used": [
+    {
+      "path": "/Users/imranpollob/Coding/bc/BindCheck/tools/noir-1.0.0-beta.14/nargo",
+      "version": "1.0.0-beta.14+60ccd48e18ad8ce50d5ecda9baf813b712145051",
+      "sha256": "a0528f1c7a070f51addcefc707f889f2f9cbd85b17261e43f4b8dcf3d1d81eb8"
+    },
+    {
+      "path": "/Users/imranpollob/Coding/bc/BindCheck/tools/bb-3.0.0-manual.20251030/bb",
+      "version": "3.0.0-manual.20251030",
+      "sha256": "b89b6a9a3e2f4c1efa495bd974ef7fa8de417dfb1b2c5853ebeceae1ff67bcb4"
+    }
+  ],
+  "attempt_accounting": {
+    "build_attempts": 0,
+    "proof_generation_attempts": 0,
+    "consumer_execution_attempts": 0,
+    "proof_attempts_remaining_under_protocol": 2,
+    "second_attempt_reason": null
+  },
+  "effect_evidence": {
+    "verifier_acceptance": "NOT_RUN",
+    "nullifier_consumption": "NOT_RUN",
+    "recipient_balance_change": "NOT_RUN",
+    "relayer_balance_change": "NOT_RUN",
+    "total_minted": "NOT_RUN",
+    "fee_inputs": "SOURCE_ONLY",
+    "repeated_nullifier_rejection": "NOT_RUN",
+    "receipts": []
+  },
+  "blockers": [
+    "Full pinned source checkout/archive identity unavailable",
+    "Pinned lockfile, build scripts, circuit dependencies and local initialization sources unavailable",
+    "Compiled withdraw artifact/ABI unavailable",
+    "Matching verification key and generated Solidity verifier unavailable",
+    "Pinned pnpm/Noir/bb dependencies unavailable locally",
+    "Direct GitHub retrieval failed under environment network policy and browser-origin access was not granted",
+    "Exact ACIR reader compatibility cannot be tested without the artifact; the declared beta.22 Noir JS route is outside the reader's beta.14 version pin"
+  ],
+  "claim_boundary": "No build, proof, verification, mint, state change, performance measurement, D1 verdict, or source/artifact/key correspondence result. D1 remains UNKNOWN."
+}

@@ -1,0 +1,67 @@
+{
+  "schema": "bindcheck.d1p12.protocol/v1",
+  "task": "D1P-12",
+  "title": "WarpToad executable development fixture",
+  "date": "2026-10-26",
+  "application": "warptoad/warp-toad",
+  "pinned_revision": "973e7d1e4b60d0d8a8ca299b0cabd9193b147ef8",
+  "evidence_class": "development artifact and behavior validation only",
+  "research_verdict_before_and_after": "UNKNOWN",
+  "workspace": "results/raw/D1P-12/workspace",
+  "setup_gate": {
+    "requirements": [
+      "complete pinned checkout or archive identity",
+      "all five D1P-11 source hashes match",
+      "pinned lockfile and build scripts present",
+      "compiled circuit and ABI identity recorded",
+      "matching prover/verifier-generation route available",
+      "normal fork-free local consumer initialization available"
+    ],
+    "failure_action": "Stop before builds or proofs and report an exact blocker.",
+    "acir_reader_rule": "Run the existing reader only against the pinned artifact. Report version/schema incompatibility; do not implement a new frontend in D1P-12."
+  },
+  "artifact_chain": [
+    "pinned source",
+    "withdraw ACIR bytecode and ABI",
+    "verification key",
+    "keccakZK generated Solidity verifier",
+    "real proof and eleven public inputs",
+    "actual WarpToadCore.mint execution"
+  ],
+  "proof_generation": {
+    "maximum_attempts": 2,
+    "timeout_seconds_each": 1800,
+    "parameter_search": false,
+    "old_four_gib_analysis_cap_applies": false,
+    "second_attempt_rule": "Record a concrete, corrigible reason from attempt one before a second attempt; do not change the circuit, witness policy, proving mode, or parameters to seek success.",
+    "resource_stop": "Stop on sustained unsafe memory pressure, disk exhaustion, runaway process trees, or inability to retain required evidence."
+  },
+  "proof_mode": {
+    "backend": "UltraHonkBackend",
+    "keccakZK": true,
+    "mock_verifier": false,
+    "circuit_weakening": false,
+    "consumer_guard_removal": false
+  },
+  "required_effect_checks": [
+    "verifier acceptance",
+    "nullifier false-to-true transition",
+    "recipient balance delta",
+    "relayer balance delta",
+    "total minted amount",
+    "fee factor, priority fee, maximum fee, block base fee and computed relayer fee",
+    "same-proof repeated-nullifier rejection with revert evidence"
+  ],
+  "restrictions": [
+    "owned local execution and synthetic assets only",
+    "no fork or live-chain access",
+    "no cross-chain reachability claim",
+    "no solver campaign",
+    "no held-out inspection",
+    "no Circom expansion",
+    "no Payy work",
+    "no maintainer contact",
+    "no D1 security or performance verdict"
+  ],
+  "completion": "One coherent accepted proof-to-mint chain with effects and replay rejection, or one exact reproducible blocker."
+}

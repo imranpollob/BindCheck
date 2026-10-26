@@ -4,8 +4,8 @@ BindCheck investigates whether the guarantees of an accepted zero-knowledge proo
 
 The current integration checkout is the linked worktree
 `/Users/imranpollob/Coding/bc/bindcheck-d1-paper` on `d1-paper`, currently at
-`103d4bc00761dd0a9c88cfdd6818d55745740257` plus the uncommitted D1P-11
-screening records. It was established from
+`9fabd0893bcc0d3851247484da9017e5ff37ab95` plus the uncommitted D1P-12
+blocker and D1P-12R continuation records. It was established from
 `chatgpt-codex` revision `cce1a966eb84e8e9819c6f658ca4ce07fd670036`.
 [D1P-00](reports/D1P-00.md) records the branch/worktree baseline and the
 source-inspected selective-reuse review of `claude-code`; the
@@ -137,6 +137,32 @@ The principal directories are `circuits/` and `contracts/` for the small fixture
   from policy, artifacts and unresolved assumptions. No solver, build, proof,
   replay, vulnerability validation, live-chain test, or held-out evaluation
   ran. All four application verdicts and the D1 result remain UNKNOWN.
+- [D1P-12](reports/D1P-12.md) completes the bounded WarpToad executable-
+  fixture gate with an exact setup blocker. Five surviving D1P-11 source files
+  match 5/5 recorded SHA-256 values in a fresh ignored workspace, but the full
+  pinned checkout, lockfile, circuit dependencies, compiled artifact/ABI,
+  matching VK/generated verifier and declared Noir beta.22/bb.js 5.0.0 route
+  are unavailable. Direct Git retrieval cannot resolve GitHub under the
+  environment policy and browser-origin access was not granted. The existing
+  ACIR reader is version-locked to Noir beta.14, outside the declared beta.22
+  Noir JS route; the absent artifact prevents an exact compatibility check.
+  A setup-only checker, frozen two-attempt protocol, manifest and source-level
+  eleven-input/hash-dependence analysis are preserved. Zero builds, proofs,
+  consumer executions or solver calls ran; no effects or performance were
+  measured, and the D1 verdict remains UNKNOWN.
+- [D1P-12R](reports/D1P-12R.md) preserves D1P-12 and completes the owned-local
+  WarpToad development fixture at the exact pinned revision. The committed
+  beta.22 artifact deterministically yields a saved 1,888-byte VK and a
+  Solidity verifier byte-identical to the committed verifier; exact solc
+  0.8.29 compiles it. One real 9,152-byte UltraHonk `keccakZK` proof is
+  accepted by bb.js and the generated verifier, then the unchanged `mint`
+  consumes the nullifier and splits 5e18 raw units between an ordinary named
+  relayer and recipient with a nonzero fee. Identical proof/calldata replay is
+  rejected. All 22 `P`/`P+1` public-word probes revert with
+  `ValueGeFieldOrder()`, so this verifier rejects rather than reduces
+  noncanonical words. The historical circuit artifact was behavior-validated,
+  not independently rebuilt from source; no cross-chain, performance,
+  protocol-policy, vulnerability or D1 verdict follows. D1 remains UNKNOWN.
 - T15–T19 locally reproduce the public Payy message-tail mechanism with real proofs and committed token-balance effects, then validate the repair and an honest control.
 - T20 maps those claims to pinned source and advisory evidence.
 - T21 is an in-sample, source-pattern prototype; it does not establish generalization.
@@ -159,9 +185,13 @@ research results remain UNKNOWN. D1-03 is incomplete:** D1P-09 validates the
 does not turn that opportunity into a validated solver comparison: both
 transformed arms fail their frozen pre-main gates and all four eligible
 baseline obligations time out. D1P-11 consequently screens the four permitted
-development applications instead of extending that tuning line; WarpToad is
-the first candidate for a source/artifact/key/proof correspondence gate, not
-an implementation or security result. The exact N=8 forwarding artifact/key,
+development applications instead of extending that tuning line. D1P-12
+records the first WarpToad setup blocker; D1P-12R preserves it and completes a
+real owned-local proof-to-mint chain from the exact committed artifact through
+a regenerated VK/verifier, nonzero-fee effects, replay rejection and strict
+public-field canonicality. This is development artifact/behavior evidence,
+not an independent Noir source rebuild, policy validation, cross-chain result
+or security result. The exact N=8 forwarding artifact/key,
 full-producer propagation, joint query, proof, and accepted full settlement
 replay remain absent. Offline component checks are not joint verification.
 The two principal properties remain authorization and coverage.

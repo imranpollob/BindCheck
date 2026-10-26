@@ -1,0 +1,79 @@
+{
+  "schema": "bindcheck.d1p12r.protocol/v1",
+  "task": "D1P-12R",
+  "title": "WarpToad executable development fixture continuation",
+  "frozen_at_utc": "2026-10-26T14:48:17Z",
+  "application": "warptoad/warp-toad",
+  "pinned_revision": "973e7d1e4b60d0d8a8ca299b0cabd9193b147ef8",
+  "inherits": "protocols/d1/d1p-12-warptoad-fixture.json",
+  "prior_evidence": {
+    "report": "reports/D1P-12.md",
+    "raw_namespace": "results/raw/D1P-12/",
+    "raw_file_count": 7,
+    "raw_regular_file_bytes": 62925,
+    "raw_tree_manifest_sha256": "f2ebc18f236368afcd3a5618c390401a40db9dcae3234216dbdb3742b5424471",
+    "preservation_rule": "D1P-12 tracked and raw evidence is read-only and must remain byte-identical."
+  },
+  "workspace": "results/raw/D1P-12R/",
+  "evidence_class": "development artifact and behavior validation only",
+  "research_verdict_before_and_after": "UNKNOWN",
+  "retrieval": {
+    "authorized": true,
+    "scope": "the pinned source revision, its lockfile-selected dependencies, and its supported toolchain",
+    "source_url": "https://github.com/warptoad/warp-toad.git",
+    "archive_url": "https://github.com/warptoad/warp-toad/archive/973e7d1e4b60d0d8a8ca299b0cabd9193b147ef8.tar.gz",
+    "origin_rule": "Use ordinary approved network access. Do not use an alternate origin or bypass a denied origin. Record exact URL, origin and error for any failure."
+  },
+  "setup_gate": [
+    "observe exact Git revision or archive revision identity",
+    "match all five D1P-11 source hashes",
+    "hash and inspect hashing and constants crates before builds",
+    "inspect root/backend manifests, lockfile, compiler route, proving route and verifier generation settings",
+    "inventory historical compiled artifacts and generated verifiers separately from new local output",
+    "confirm sufficient free disk and no unsafe memory condition"
+  ],
+  "proof_generation": {
+    "maximum_attempts": 2,
+    "attempts_consumed_before_continuation": 0,
+    "timeout_seconds_each": 1800,
+    "parameter_search": false,
+    "old_four_gib_analysis_cap_applies": false,
+    "second_attempt_rule": "Record a concrete corrigible cause from attempt one. Keep circuit, witness policy, proof mode and parameters unchanged."
+  },
+  "fixture": {
+    "network": "owned ephemeral local Hardhat network only",
+    "fork": false,
+    "live_chain": false,
+    "cross_chain_reachability_claim": false,
+    "relayer": "ordinary named local account; address(1) wildcard forbidden",
+    "fee_preference": "Use a nonzero fee factor and record priority fee, maximum fee, base fee and computed fee. If only zero fee succeeds, label that limitation.",
+    "proof_mode": "UltraHonk keccakZK:true",
+    "consumer": "unchanged pinned WarpToadCore.mint with matching generated verifier",
+    "repeat_check": "Reuse the identical accepted proof and calldata; require repeated-nullifier rejection and retain revert evidence."
+  },
+  "canonicality": {
+    "prerequisite": "real generated verifier and one honest accepted proof/public vector",
+    "field_modulus_decimal": "21888242871839275222246405745257275088548364400416034343698204186575808495617",
+    "tests": [
+      "for each of 11 public-input positions, replace the honest word with field modulus",
+      "for each of 11 public-input positions, replace the honest word with field modulus plus one",
+      "record return false, revert selector/data, or acceptance separately for every call"
+    ],
+    "interpretation": "Report rejection, reduction or acceptance as verifier boundary behavior and a modeling obligation, not a vulnerability verdict."
+  },
+  "prohibited": [
+    "solver campaign",
+    "mock verifier",
+    "circuit weakening",
+    "consumer guard removal",
+    "parameter search",
+    "fork or live-chain access",
+    "maintainer contact",
+    "held-out inspection",
+    "Circom expansion",
+    "Payy work",
+    "D1 security or performance verdict",
+    "commit, push or merge"
+  ],
+  "completion": "One coherent accepted proof-to-mint chain with effects, same-proof replay rejection and verifier canonicality results, or one exact reproducible blocker."
+}
