@@ -489,4 +489,3 @@ def encode_query(
 
 
 fixed_terminal_query = d1p20.fixed_terminal_query
-

@@ -122,4 +122,3 @@ class D1P21BTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-

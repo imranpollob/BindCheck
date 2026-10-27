@@ -268,4 +268,3 @@ open. A measurable next gate is to derive at least one G1–G5-style obligation
 from versioned policy input and extracted occurrences without a manual
 callsite-role map, while retaining the pinned/M-SRC polarity and all current
 fail-closed controls.
-

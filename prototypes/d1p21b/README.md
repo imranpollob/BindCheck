@@ -9,4 +9,3 @@ admitted Omega state/environment.
 `validate_d1p21b.py` performs only fixed archived-execution, deterministic
 control, fixed-input polarity, and parse-only checks. It launches no primary
 solver search. `test_d1p21b.py` contains the focused regressions.
-
