@@ -43,11 +43,9 @@ specifications, modular summaries and selective unfolding are prior work
 **"Automatically derived" must be demonstrated.** No obligation in this
 draft is yet derived by the tool. The current WarpToad discriminating
 obligations, O1 (DOM-AZ) and O2 (SRC-EVM), are defined in
-[d1p-b02-discriminating.md](/Users/imranpollob/Coding/bc/bindcheck-lane-b/docs/d1-paper/d1p-b02-discriminating.md)
+[d1p-b02-discriminating.md](../docs/d1-paper/d1p-b02-discriminating.md)
 §§1–2, which records them as planner-written and not automatically derived
-(its "Provenance" note and §6). *(Integration note: after integration this
-link becomes the repository-relative
-`../docs/d1-paper/d1p-b02-discriminating.md`.)* Any claim that
+(its "Provenance" note and §6). Any claim that
 BindCheck derives `P`, `O` or the relevant producer facts automatically
 requires an experiment where the tool does so from the artifacts, with
 manual inputs counted (contract §6). **[TODO-EVIDENCE]**

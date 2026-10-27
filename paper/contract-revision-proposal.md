@@ -73,10 +73,10 @@ earlier hypothesis and its results are preserved, not withdrawn** (§4).
   artifacts, and report candidate mismatches, with manual inputs counted
   (§6)? "Automatically derived" must be demonstrated by an experiment. The
   current WarpToad obligations O1 (DOM-AZ) and O2 (SRC-EVM), defined in
-  [`docs/d1-paper/d1p-b02-discriminating.md`](/Users/imranpollob/Coding/bc/bindcheck-lane-b/docs/d1-paper/d1p-b02-discriminating.md)
-  §§1–2, are planner-written and do not count as derived. *(Integration
-  note: after integration the link becomes repository-relative,
-  `d1-paper/d1p-b02-discriminating.md` from `docs/research-contract.md`.)*
+  [`docs/d1-paper/d1p-b02-discriminating.md`](../docs/d1-paper/d1p-b02-discriminating.md)
+  §§1–2, are planner-written and do not count as derived. *(Application
+  note: when this text is applied to `docs/research-contract.md`, the link
+  becomes `d1-paper/d1p-b02-discriminating.md`.)*
 - **RQ3 — Automated validation** *(new primary)*: does BindCheck take its
   candidates to an end-to-end validated mismatch (E4, §8) without
   hand-performed steps, or with those steps counted and disclosed?
