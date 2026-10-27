@@ -1,0 +1,181 @@
+{
+  "task": "D1P-C01 validation follow-up",
+  "notice": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented.",
+  "recorded_at_utc": "2026-10-26T14:50:55.828725Z",
+  "python": "3.13.7",
+  "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+  "validator": "jsonschema.Draft202012Validator",
+  "packages": {
+    "attrs": "25.4.0",
+    "jsonschema-specifications": "2025.9.1",
+    "jsonschema": "4.26.0",
+    "referencing": "0.37.0",
+    "rfc3339-validator": "0.1.4",
+    "rpds-py": "0.30.0",
+    "six": "1.17.0",
+    "typing-extensions": "4.15.0"
+  },
+  "schema": {
+    "file": "ledger.schema.json",
+    "sha256": "713034927f1b2b684486c3fcae531d41e00b38eee906c5cf1179414aecac981c",
+    "version": "0.1.0",
+    "meta_schema_valid": true
+  },
+  "runner_sha256": "0634eadbd9e64616a9db5030dd3d65c58accb67a6e414b547407200d059d3994",
+  "requirements_sha256": "ad943e43ce86ccc2e4b59e7b92b2940b4791066968d8557915df8b0978badd08",
+  "fixture_manifest_sha256": "98eb410e012abb582cd589b118d339e8307dbb3f335ce3697ebc0087e36f3c70",
+  "format_assertions": [
+    {
+      "format": "date",
+      "value": "2026-10-26",
+      "expected_valid": true,
+      "actual_valid": true,
+      "passed": true
+    },
+    {
+      "format": "date",
+      "value": "2026-02-30",
+      "expected_valid": false,
+      "actual_valid": false,
+      "passed": true
+    },
+    {
+      "format": "date-time",
+      "value": "2026-10-26T00:00:00Z",
+      "expected_valid": true,
+      "actual_valid": true,
+      "passed": true
+    },
+    {
+      "format": "date-time",
+      "value": "2026-10-26T00:00:00",
+      "expected_valid": false,
+      "actual_valid": false,
+      "passed": true
+    }
+  ],
+  "fixtures": [
+    {
+      "file": "fixtures/valid-01-unassessed.json",
+      "sha256": "c076508ed36b884b37ea23262a69819ad5bcee224907ad86a735bb0f1c300c97",
+      "description": "Unassessed candidate row; no result.",
+      "expected_valid": true,
+      "actual_valid": true,
+      "expected_error": null,
+      "intended_rejection_confirmed": true,
+      "passed": true,
+      "errors": []
+    },
+    {
+      "file": "fixtures/valid-02-relevance-pending.json",
+      "sha256": "ff52a02a60bc5e679d603139ed92339e14ba1dc08b2cadec37a2b36b1e14329d",
+      "description": "Illustrative screened row with unresolved relevance; later stages remain unattempted.",
+      "expected_valid": true,
+      "actual_valid": true,
+      "expected_error": null,
+      "intended_rejection_confirmed": true,
+      "passed": true,
+      "errors": []
+    },
+    {
+      "file": "fixtures/valid-03-analyzed-unknown.json",
+      "sha256": "2f835de0b8de37c8b95c0a3d3e9cfb41d6363d01e2675647b42262e3166d5401",
+      "description": "Illustrative completed, inconclusive analysis; UNKNOWN is not validated.",
+      "expected_valid": true,
+      "actual_valid": true,
+      "expected_error": null,
+      "intended_rejection_confirmed": true,
+      "passed": true,
+      "errors": []
+    },
+    {
+      "file": "fixtures/invalid-01-missing-source-ids.json",
+      "sha256": "63f281860976b88ae4f764271fc23d74eccef0561a588b28c81c0e7afc9f9c81",
+      "description": "Missing required source_ids on the finding row.",
+      "expected_valid": false,
+      "actual_valid": false,
+      "expected_error": {
+        "instance_path": "/findings/0",
+        "validator": "required"
+      },
+      "intended_rejection_confirmed": true,
+      "passed": true,
+      "errors": [
+        {
+          "instance_path": "/findings/0",
+          "schema_path": "/properties/findings/items/required",
+          "validator": "required",
+          "message": "'source_ids' is a required property"
+        }
+      ]
+    },
+    {
+      "file": "fixtures/invalid-02-skipped-screening.json",
+      "sha256": "c77664fc879d9e1abdb51a66a65a2d3a99f21d7de90f27e74cb7c57b9b960304",
+      "description": "Relevant and later stages met while screened is not_attempted.",
+      "expected_valid": false,
+      "actual_valid": false,
+      "expected_error": {
+        "instance_path": "/findings/0/funnel/screened/status",
+        "validator": "const"
+      },
+      "intended_rejection_confirmed": true,
+      "passed": true,
+      "errors": [
+        {
+          "instance_path": "/findings/0/funnel/screened/status",
+          "schema_path": "/properties/findings/items/properties/funnel/allOf/0/then/properties/screened/properties/status/const",
+          "validator": "const",
+          "message": "'met' was expected"
+        },
+        {
+          "instance_path": "/findings/0/funnel/screened/status",
+          "schema_path": "/properties/findings/items/properties/funnel/allOf/1/then/properties/screened/properties/status/const",
+          "validator": "const",
+          "message": "'met' was expected"
+        },
+        {
+          "instance_path": "/findings/0/funnel/screened/status",
+          "schema_path": "/properties/findings/items/properties/funnel/allOf/2/then/properties/screened/properties/status/const",
+          "validator": "const",
+          "message": "'met' was expected"
+        },
+        {
+          "instance_path": "/findings/0/funnel/screened/status",
+          "schema_path": "/properties/findings/items/properties/funnel/allOf/3/then/properties/screened/properties/status/const",
+          "validator": "const",
+          "message": "'met' was expected"
+        }
+      ]
+    },
+    {
+      "file": "fixtures/invalid-03-unknown-validated.json",
+      "sha256": "fde3fcccae7b2b0414b4c42036b5775b1c82ca2b4b577338f1b29a3b10027a0c",
+      "description": "UNKNOWN result falsely advances to validated.",
+      "expected_valid": false,
+      "actual_valid": false,
+      "expected_error": {
+        "instance_path": "/findings/0/result/verdict",
+        "validator": "enum"
+      },
+      "intended_rejection_confirmed": true,
+      "passed": true,
+      "errors": [
+        {
+          "instance_path": "/findings/0/result/verdict",
+          "schema_path": "/properties/findings/items/allOf/5/then/properties/result/allOf/1/properties/verdict/enum",
+          "validator": "enum",
+          "message": "'UNKNOWN' is not one of ['VIOLATION', 'VERIFIED_WITHIN_SCOPE']"
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "expected_valid": 3,
+    "expected_invalid": 3,
+    "passed": 6,
+    "failed": 0
+  },
+  "exit_status": 0,
+  "limits": "Schema and synthetic structural validation only; no screening, application labeling, cross-record evidence validation, human review, or freeze."
+}

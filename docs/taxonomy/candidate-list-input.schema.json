@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:bindcheck:d1p-c04:candidate-list-input:0.2.0",
+  "title": "D1P-C04 custodian-classified candidate metadata input",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "sources"],
+  "properties": {
+    "schema_version": {"const": "0.2.0"},
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["endpoint_id", "listing_format", "custodian_attestation", "entries"],
+        "properties": {
+          "endpoint_id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"},
+          "listing_format": {"enum": ["names_only", "custodian_sanitized_names_only", "mixed_names_and_bug_descriptions", "unknown"]},
+          "custodian_attestation": {"anyOf": [{"type": "string", "minLength": 1}, {"type": "null"}]},
+          "entries": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["application_or_project_name", "repository_url"],
+              "properties": {
+                "application_or_project_name": {"type": "string", "minLength": 1},
+                "repository_url": {"anyOf": [{"type": "string", "pattern": "^https?://"}, {"type": "null"}]}
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

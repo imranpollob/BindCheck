@@ -1,0 +1,77 @@
+{
+  "note": "Dependency provenance only; no application artifacts inspected. Cache integrity checks do not independently authenticate upstream origin. Downloaded/repacked dependency bytes remain in the ignored local venv.",
+  "initial_install": "Python 3.14.7 pip install failed with PyPI DNS resolution errors; exit 1. Recreated only the task-owned venv using Python 3.13.7 for the cached cp313 rpds wheel.",
+  "packages": [
+    {
+      "package": "jsonschema",
+      "version": "4.26.0",
+      "source_kind": "uv cached wheel contents; RECORD hashes checked; repacked without source changes",
+      "source": "/Users/imranpollob/.cache/uv/archive-v0/kWYT-Ny4LVeG_oO_cSiAg",
+      "wheel": "jsonschema-4.26.0-py3-none-any.whl",
+      "sha256": "b82311b9bcfd5d13ee65f761446126ff0e9db821c93e09cf371fc41627587720",
+      "record_entries_checked": 43
+    },
+    {
+      "package": "jsonschema-specifications",
+      "version": "2025.9.1",
+      "source_kind": "uv cached wheel contents; RECORD hashes checked; repacked without source changes",
+      "source": "/Users/imranpollob/.cache/uv/archive-v0/oWfq-MltpaABO14ZZVHxy",
+      "wheel": "jsonschema_specifications-2025.9.1-py3-none-any.whl",
+      "sha256": "2733d87592344124db7b3afe0dafcc49a4180e3507dab36e3357fde21213eb2c",
+      "record_entries_checked": 28
+    },
+    {
+      "package": "referencing",
+      "version": "0.37.0",
+      "source_kind": "uv cached wheel contents; RECORD hashes checked; repacked without source changes",
+      "source": "/Users/imranpollob/.cache/uv/archive-v0/lzXUF-ayb0kIbHJoWzIfY",
+      "wheel": "referencing-0.37.0-py3-none-any.whl",
+      "sha256": "e2a7b7293b171ebac794983c94e0bb9ce8068c80b064b953a490d5350e6ec9f7",
+      "record_entries_checked": 19
+    },
+    {
+      "package": "attrs",
+      "version": "25.4.0",
+      "source_kind": "uv cached wheel contents; RECORD hashes checked; repacked without source changes",
+      "source": "/Users/imranpollob/.cache/uv/archive-v0/0J-rqNAcqGTkjaCZbfKFj",
+      "wheel": "attrs-25.4.0-py3-none-any.whl",
+      "sha256": "690d82f47d6920082d059b0a92062664b617cf7fe01bbdf98b2f1edc036fbae4",
+      "record_entries_checked": 35
+    },
+    {
+      "package": "rpds-py",
+      "version": "0.30.0",
+      "source_kind": "uv cached wheel contents; RECORD hashes checked; repacked without source changes",
+      "source": "/Users/imranpollob/.cache/uv/archive-v0/PP4kDOH69o3TbwcluDajh",
+      "wheel": "rpds_py-0.30.0-cp313-cp313-macosx_11_0_arm64.whl",
+      "sha256": "02dd51fc5a54b2ebcc5b324aae16183ec42cc7447e012bd2087579b706cdb608",
+      "record_entries_checked": 8
+    },
+    {
+      "package": "typing-extensions",
+      "version": "4.15.0",
+      "source_kind": "uv cached wheel contents; RECORD hashes checked; repacked without source changes",
+      "source": "/Users/imranpollob/.cache/uv/archive-v0/qKs6pFa9saNdQPUe0fuln",
+      "wheel": "typing_extensions-4.15.0-py3-none-any.whl",
+      "sha256": "0ef55159f27c503e9a41986c3c7aeff346249e443747e0927d2adc66a3858ee1",
+      "record_entries_checked": 5
+    },
+    {
+      "package": "six",
+      "version": "1.17.0",
+      "source_kind": "uv cached wheel contents; RECORD hashes checked; repacked without source changes",
+      "source": "/Users/imranpollob/.cache/uv/archive-v0/fFosXULS9yZ_cRZ7F8YhM",
+      "wheel": "six-1.17.0-py3-none-any.whl",
+      "sha256": "6d7452683425ee36ddef8e66a4affb94dcc880f51fb6df797e80dc63ae6824ee",
+      "record_entries_checked": 6
+    },
+    {
+      "package": "rfc3339-validator",
+      "version": "0.1.4",
+      "source_kind": "pip cached original wheel; RECORD hashes checked",
+      "source": "/Users/imranpollob/Library/Caches/pip/http-v2/b/4/e/9/6/b4e9620d34c4c3af841265cf8b90b558623e1faf947bbd60def37523.body",
+      "wheel": "rfc3339_validator-0.1.4-py2.py3-none-any.whl",
+      "sha256": "24f6ec1eda14ef823da9e36ec7113124b39c04d50a4d3d3a3c2859577e7791fa"
+    }
+  ]
+}

@@ -1,0 +1,293 @@
+{
+  "schema_version": "0.2.0",
+  "protocol_ref": "docs/taxonomy/protocol.md",
+  "created_at": "2026-10-26T00:00:00Z",
+  "updated_at": "2026-10-26T00:00:00Z",
+  "search_plan": {
+    "id": "illustrative-plan",
+    "protocol_sha256": null,
+    "publication_start": "2018-01-01",
+    "publication_end": "2026-10-27",
+    "date_basis": "earliest_public_primary_disclosure",
+    "languages": [
+      "English"
+    ],
+    "sampling_frame": "proof_consuming_zk_systems_across_languages_chains_and_proof_stacks",
+    "claim_boundary": "these mechanisms recur across independent families in the sampled public disclosures",
+    "source_class_order": [],
+    "seed_endpoint_ids": [],
+    "source_endpoints": [],
+    "traversal_steps_in_order": [],
+    "mechanism_keyword_groups": [],
+    "maximum_results_per_endpoint": {
+      "status": "PROPOSED",
+      "value": 100,
+      "unit": "results",
+      "justification": "Synthetic fixture only.",
+      "approved_by_planner_review_ids": []
+    },
+    "active_time_budget_minutes": {
+      "status": "PROPOSED",
+      "value": 60,
+      "unit": "minutes",
+      "justification": "Synthetic fixture only.",
+      "approved_by_planner_review_ids": []
+    },
+    "pagination_policy": "AI-written illustrative fixture only; no retrieval or screening is represented.",
+    "stop_rule": "AI-written illustrative fixture only; no retrieval or screening is represented.",
+    "audit_report_completeness_rule": "screen_all_findings_in_any_selected_audit_report_used_for_percentages",
+    "discovery_route_rule": "tag_seed_and_systematic_routes_before_deduplication_and_preserve_all_overlap_tags",
+    "language_rationales": [
+      {
+        "language": "English",
+        "reason": "Synthetic fixture only."
+      }
+    ],
+    "inclusion_boundary": "evidence supports a disagreement between what the accepted proof relation establishes and what the proof-consuming system interprets as authorized or required; relevance is independent of BindCheck support",
+    "consecutive_irrelevant_pages_stop": {
+      "status": "PROPOSED",
+      "value": 3,
+      "unit": "pages",
+      "justification": "Synthetic fixture only.",
+      "approved_by_planner_review_ids": []
+    },
+    "candidate_list_rule": "output_only_application_or_project_name_repository_url_and_endpoint_id; mixed-description listings require human sanitization",
+    "content_access_rule": "planning_agents_must_not_open_or_read_findings_report_bodies_or_bug_descriptions"
+  },
+  "actors": [
+    {
+      "id": "illustrative-human",
+      "kind": "human",
+      "display_name": "Fictional human actor; AI-written illustrative fixture",
+      "role": "Fixture placeholder; no human judgment asserted",
+      "provider": null,
+      "model": null,
+      "model_version": null,
+      "session_id": null,
+      "metadata_gap": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented."
+    }
+  ],
+  "search_runs": [],
+  "source_records": [
+    {
+      "id": "illustrative-source",
+      "source_class": "repository_report",
+      "title": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented.",
+      "publisher": "Fictional fixture publisher",
+      "uri": "urn:illustrative:no-source",
+      "aliases": [],
+      "primary": false,
+      "disclosure_ids": [],
+      "published_on": null,
+      "incident_on": null,
+      "audit_on": null,
+      "patch_on": null,
+      "retrieved": {
+        "start": null,
+        "end": null,
+        "date_utc": "2026-10-26",
+        "precision": "date_only",
+        "basis": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented."
+      },
+      "retrieved_by_actor_id": "illustrative-human",
+      "sha256": null,
+      "revision": null,
+      "access_status": "unavailable",
+      "reported_status": null,
+      "affected_revisions": [],
+      "limitations": [
+        "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented."
+      ],
+      "related_source_ids": []
+    }
+  ],
+  "organizations": [],
+  "libraries": [],
+  "family_relations": [],
+  "families": [
+    {
+      "id": "illustrative-family",
+      "name": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented.",
+      "aliases": [],
+      "status": "provisional",
+      "application_ids": [
+        "illustrative-application"
+      ],
+      "organization_ids": [],
+      "library_ids": [],
+      "relation_ids": [],
+      "independence_group_id": "illustrative-group",
+      "independence_rationale": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented.",
+      "exposure_completeness": "unknown",
+      "evidence": []
+    }
+  ],
+  "applications": [
+    {
+      "id": "illustrative-application",
+      "name": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented.",
+      "family_id": "illustrative-family",
+      "organization_ids": [],
+      "library_uses": [],
+      "repository_uri": "urn:illustrative:no-repository",
+      "revisions": [],
+      "producer_stack": [],
+      "consumer_stack": [],
+      "development_scope_basis": [
+        {
+          "source_id": "illustrative-source",
+          "location": "urn:illustrative:no-evidence",
+          "revision": null,
+          "sha256": null,
+          "pin_gap": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented."
+        }
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "id": "illustrative-finding",
+      "title": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented.",
+      "family_ids": [
+        "illustrative-family"
+      ],
+      "application_ids": [
+        "illustrative-application"
+      ],
+      "source_ids": [
+        "illustrative-source"
+      ],
+      "disclosed_on": null,
+      "date_status": "unresolved",
+      "duplicate_of": null,
+      "duplicate_status": "unreviewed",
+      "duplicate_rationale": null,
+      "duplicate_evidence": [],
+      "manifestations": [],
+      "related_variant_ids": [],
+      "boundary": {
+        "accepted_relation": null,
+        "program_key_configuration": null,
+        "public_statement": null,
+        "decoder_consumer_interpretation": null,
+        "independent_policy": null,
+        "protected_effect_or_obligation": null,
+        "mismatch_argument": null,
+        "feasibility_and_gaps": [],
+        "evidence": []
+      },
+      "relevance": {
+        "decision": "unassessed",
+        "reason_codes": [],
+        "rationale": null,
+        "actor_id": null,
+        "decided_at": null,
+        "evidence": []
+      },
+      "artifacts": [],
+      "facts": [],
+      "capability_review": {
+        "status": "unassessed",
+        "reviewer_actor_id": null,
+        "reviewed_at": null,
+        "fragment_version": null,
+        "policy_version": null,
+        "bounds": [],
+        "assumptions": [],
+        "unsupported_features": [],
+        "evidence": []
+      },
+      "attempts": [],
+      "evidence_claims": [],
+      "result": null,
+      "annotation_round_ids": [],
+      "discovery_routes": [
+        "systematic_source_index"
+      ],
+      "disclosure_assessment": {
+        "screened": {
+          "status": "not_attempted",
+          "decided_at": null,
+          "actor_id": null,
+          "reason_codes": [],
+          "rationale": null,
+          "evidence": [],
+          "missing_prerequisites": []
+        },
+        "relevant": {
+          "status": "not_attempted",
+          "decided_at": null,
+          "actor_id": null,
+          "reason_codes": [],
+          "rationale": null,
+          "evidence": [],
+          "missing_prerequisites": []
+        }
+      },
+      "tool_funnel": {
+        "artifacts_available": {
+          "status": "not_attempted",
+          "decided_at": null,
+          "actor_id": null,
+          "reason_codes": [],
+          "rationale": null,
+          "evidence": [],
+          "missing_prerequisites": []
+        },
+        "supported": {
+          "status": "not_attempted",
+          "decided_at": null,
+          "actor_id": null,
+          "reason_codes": [],
+          "rationale": null,
+          "evidence": [],
+          "missing_prerequisites": []
+        },
+        "analyzed": {
+          "status": "not_attempted",
+          "decided_at": null,
+          "actor_id": null,
+          "reason_codes": [],
+          "rationale": null,
+          "evidence": [],
+          "missing_prerequisites": []
+        },
+        "validated": {
+          "status": "not_attempted",
+          "decided_at": null,
+          "actor_id": null,
+          "reason_codes": [],
+          "rationale": null,
+          "evidence": [],
+          "missing_prerequisites": []
+        }
+      }
+    }
+  ],
+  "exposure_events": [],
+  "annotation_rounds": [],
+  "agreement_reports": [],
+  "change_log": [],
+  "protocol_states": {
+    "design_frozen": false,
+    "design_frozen_at": null,
+    "protocol_sha256": null,
+    "search_plan_sha256": null,
+    "reservation_completed": false,
+    "reservation_completed_at": null,
+    "annotation_round_completed": false,
+    "annotation_round_completed_at": null
+  },
+  "planner_reviews": [],
+  "reservation": {
+    "commitment_scheme": "sha256-nonce-concat-canonical-manifest-v1",
+    "commitment_sha256": null,
+    "custodian_attestation": null,
+    "commitment_limitations": [
+      "The commitment can show consistency with a later opening.",
+      "The commitment does not prove randomness or timing.",
+      "Operational exclusion of reserved-family code, findings, and results from development is the essential protection."
+    ]
+  },
+  "summary": null
+}

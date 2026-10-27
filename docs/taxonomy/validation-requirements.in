@@ -1,0 +1,3 @@
+# Standard Draft 2020-12 validator plus explicit RFC 3339 format checking.
+jsonschema==4.26.0
+rfc3339-validator==0.1.4

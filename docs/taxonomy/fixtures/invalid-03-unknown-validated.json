@@ -1,0 +1,704 @@
+{
+  "schema_version": "0.2.0",
+  "protocol_ref": "docs/taxonomy/protocol.md",
+  "created_at": "2026-10-26T00:00:00Z",
+  "updated_at": "2026-10-26T00:00:00Z",
+  "search_plan": {
+    "id": "illustrative-plan",
+    "protocol_sha256": null,
+    "publication_start": "2018-01-01",
+    "publication_end": "2026-10-27",
+    "date_basis": "earliest_public_primary_disclosure",
+    "languages": [
+      "English"
+    ],
+    "sampling_frame": "proof_consuming_zk_systems_across_languages_chains_and_proof_stacks",
+    "claim_boundary": "these mechanisms recur across independent families in the sampled public disclosures",
+    "source_class_order": [],
+    "seed_endpoint_ids": [],
+    "source_endpoints": [],
+    "traversal_steps_in_order": [],
+    "mechanism_keyword_groups": [],
+    "maximum_results_per_endpoint": {
+      "status": "PROPOSED",
+      "value": 100,
+      "unit": "results",
+      "justification": "Synthetic fixture only.",
+      "approved_by_planner_review_ids": []
+    },
+    "active_time_budget_minutes": {
+      "status": "PROPOSED",
+      "value": 60,
+      "unit": "minutes",
+      "justification": "Synthetic fixture only.",
+      "approved_by_planner_review_ids": []
+    },
+    "pagination_policy": "AI-written illustrative fixture only; no retrieval or screening is represented.",
+    "stop_rule": "AI-written illustrative fixture only; no retrieval or screening is represented.",
+    "audit_report_completeness_rule": "screen_all_findings_in_any_selected_audit_report_used_for_percentages",
+    "discovery_route_rule": "tag_seed_and_systematic_routes_before_deduplication_and_preserve_all_overlap_tags",
+    "language_rationales": [
+      {
+        "language": "English",
+        "reason": "Synthetic fixture only."
+      }
+    ],
+    "inclusion_boundary": "evidence supports a disagreement between what the accepted proof relation establishes and what the proof-consuming system interprets as authorized or required; relevance is independent of BindCheck support",
+    "consecutive_irrelevant_pages_stop": {
+      "status": "PROPOSED",
+      "value": 3,
+      "unit": "pages",
+      "justification": "Synthetic fixture only.",
+      "approved_by_planner_review_ids": []
+    },
+    "candidate_list_rule": "output_only_application_or_project_name_repository_url_and_endpoint_id; mixed-description listings require human sanitization",
+    "content_access_rule": "planning_agents_must_not_open_or_read_findings_report_bodies_or_bug_descriptions"
+  },
+  "actors": [
+    {
+      "id": "illustrative-human",
+      "kind": "human",
+      "display_name": "Fictional human actor; AI-written illustrative fixture",
+      "role": "Fixture placeholder; no human judgment asserted",
+      "provider": null,
+      "model": null,
+      "model_version": null,
+      "session_id": null,
+      "metadata_gap": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented."
+    }
+  ],
+  "search_runs": [],
+  "source_records": [
+    {
+      "id": "illustrative-source",
+      "source_class": "repository_report",
+      "title": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented.",
+      "publisher": "Fictional fixture publisher",
+      "uri": "urn:illustrative:no-source",
+      "aliases": [],
+      "primary": false,
+      "disclosure_ids": [],
+      "published_on": null,
+      "incident_on": null,
+      "audit_on": null,
+      "patch_on": null,
+      "retrieved": {
+        "start": null,
+        "end": null,
+        "date_utc": "2026-10-26",
+        "precision": "date_only",
+        "basis": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented."
+      },
+      "retrieved_by_actor_id": "illustrative-human",
+      "sha256": null,
+      "revision": null,
+      "access_status": "unavailable",
+      "reported_status": null,
+      "affected_revisions": [],
+      "limitations": [
+        "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented."
+      ],
+      "related_source_ids": []
+    }
+  ],
+  "organizations": [],
+  "libraries": [],
+  "family_relations": [],
+  "families": [
+    {
+      "id": "illustrative-family",
+      "name": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented.",
+      "aliases": [],
+      "status": "provisional",
+      "application_ids": [
+        "illustrative-application"
+      ],
+      "organization_ids": [],
+      "library_ids": [],
+      "relation_ids": [],
+      "independence_group_id": "illustrative-group",
+      "independence_rationale": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented.",
+      "exposure_completeness": "unknown",
+      "evidence": []
+    }
+  ],
+  "applications": [
+    {
+      "id": "illustrative-application",
+      "name": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented.",
+      "family_id": "illustrative-family",
+      "organization_ids": [],
+      "library_uses": [],
+      "repository_uri": "urn:illustrative:no-repository",
+      "revisions": [],
+      "producer_stack": [],
+      "consumer_stack": [],
+      "development_scope_basis": [
+        {
+          "source_id": "illustrative-source",
+          "location": "urn:illustrative:no-evidence",
+          "revision": null,
+          "sha256": null,
+          "pin_gap": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented."
+        }
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "id": "illustrative-finding",
+      "title": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented.",
+      "family_ids": [
+        "illustrative-family"
+      ],
+      "application_ids": [
+        "illustrative-application"
+      ],
+      "source_ids": [
+        "illustrative-source"
+      ],
+      "disclosed_on": "2026-10-26",
+      "date_status": "in_window",
+      "duplicate_of": null,
+      "duplicate_status": "canonical",
+      "duplicate_rationale": null,
+      "duplicate_evidence": [],
+      "manifestations": [],
+      "related_variant_ids": [],
+      "boundary": {
+        "accepted_relation": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented.",
+        "program_key_configuration": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented.",
+        "public_statement": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented.",
+        "decoder_consumer_interpretation": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented.",
+        "independent_policy": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented.",
+        "protected_effect_or_obligation": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented.",
+        "mismatch_argument": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented.",
+        "feasibility_and_gaps": [],
+        "evidence": [
+          {
+            "source_id": "illustrative-source",
+            "location": "urn:illustrative:no-evidence",
+            "revision": null,
+            "sha256": null,
+            "pin_gap": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented."
+          }
+        ]
+      },
+      "relevance": {
+        "decision": "include",
+        "reason_codes": [
+          "ILLUSTRATIVE_ONLY"
+        ],
+        "rationale": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented.",
+        "actor_id": "illustrative-human",
+        "decided_at": "2026-10-26T00:00:00Z",
+        "evidence": [
+          {
+            "source_id": "illustrative-source",
+            "location": "urn:illustrative:no-evidence",
+            "revision": null,
+            "sha256": null,
+            "pin_gap": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented."
+          }
+        ]
+      },
+      "artifacts": [
+        {
+          "id": "illustrative-producer_source",
+          "kind": "producer_source",
+          "required": true,
+          "availability": "available",
+          "location": "urn:illustrative:producer_source",
+          "revision": "illustrative-not-a-real-revision",
+          "sha256": null,
+          "correspondence": "assumed",
+          "correspondence_evidence": [],
+          "rationale_or_gap": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented.",
+          "retrieved_by_actor_id": "illustrative-human",
+          "retrieved_at": "2026-10-26T00:00:00Z"
+        },
+        {
+          "id": "illustrative-compiled_relation",
+          "kind": "compiled_relation",
+          "required": true,
+          "availability": "available",
+          "location": "urn:illustrative:compiled_relation",
+          "revision": "illustrative-not-a-real-revision",
+          "sha256": null,
+          "correspondence": "assumed",
+          "correspondence_evidence": [],
+          "rationale_or_gap": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented.",
+          "retrieved_by_actor_id": "illustrative-human",
+          "retrieved_at": "2026-10-26T00:00:00Z"
+        },
+        {
+          "id": "illustrative-abi",
+          "kind": "abi",
+          "required": true,
+          "availability": "available",
+          "location": "urn:illustrative:abi",
+          "revision": "illustrative-not-a-real-revision",
+          "sha256": null,
+          "correspondence": "assumed",
+          "correspondence_evidence": [],
+          "rationale_or_gap": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented.",
+          "retrieved_by_actor_id": "illustrative-human",
+          "retrieved_at": "2026-10-26T00:00:00Z"
+        },
+        {
+          "id": "illustrative-program_identity",
+          "kind": "program_identity",
+          "required": true,
+          "availability": "available",
+          "location": "urn:illustrative:program_identity",
+          "revision": "illustrative-not-a-real-revision",
+          "sha256": null,
+          "correspondence": "assumed",
+          "correspondence_evidence": [],
+          "rationale_or_gap": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented.",
+          "retrieved_by_actor_id": "illustrative-human",
+          "retrieved_at": "2026-10-26T00:00:00Z"
+        },
+        {
+          "id": "illustrative-verification_key",
+          "kind": "verification_key",
+          "required": true,
+          "availability": "available",
+          "location": "urn:illustrative:verification_key",
+          "revision": "illustrative-not-a-real-revision",
+          "sha256": null,
+          "correspondence": "assumed",
+          "correspondence_evidence": [],
+          "rationale_or_gap": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented.",
+          "retrieved_by_actor_id": "illustrative-human",
+          "retrieved_at": "2026-10-26T00:00:00Z"
+        },
+        {
+          "id": "illustrative-verifier",
+          "kind": "verifier",
+          "required": true,
+          "availability": "available",
+          "location": "urn:illustrative:verifier",
+          "revision": "illustrative-not-a-real-revision",
+          "sha256": null,
+          "correspondence": "assumed",
+          "correspondence_evidence": [],
+          "rationale_or_gap": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented.",
+          "retrieved_by_actor_id": "illustrative-human",
+          "retrieved_at": "2026-10-26T00:00:00Z"
+        },
+        {
+          "id": "illustrative-consumer_source",
+          "kind": "consumer_source",
+          "required": true,
+          "availability": "available",
+          "location": "urn:illustrative:consumer_source",
+          "revision": "illustrative-not-a-real-revision",
+          "sha256": null,
+          "correspondence": "assumed",
+          "correspondence_evidence": [],
+          "rationale_or_gap": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented.",
+          "retrieved_by_actor_id": "illustrative-human",
+          "retrieved_at": "2026-10-26T00:00:00Z"
+        },
+        {
+          "id": "illustrative-consumer_configuration",
+          "kind": "consumer_configuration",
+          "required": true,
+          "availability": "available",
+          "location": "urn:illustrative:consumer_configuration",
+          "revision": "illustrative-not-a-real-revision",
+          "sha256": null,
+          "correspondence": "assumed",
+          "correspondence_evidence": [],
+          "rationale_or_gap": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented.",
+          "retrieved_by_actor_id": "illustrative-human",
+          "retrieved_at": "2026-10-26T00:00:00Z"
+        },
+        {
+          "id": "illustrative-policy",
+          "kind": "policy",
+          "required": true,
+          "availability": "available",
+          "location": "urn:illustrative:policy",
+          "revision": "illustrative-not-a-real-revision",
+          "sha256": null,
+          "correspondence": "assumed",
+          "correspondence_evidence": [],
+          "rationale_or_gap": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented.",
+          "retrieved_by_actor_id": "illustrative-human",
+          "retrieved_at": "2026-10-26T00:00:00Z"
+        },
+        {
+          "id": "illustrative-proof_fixture",
+          "kind": "proof_fixture",
+          "required": true,
+          "availability": "available",
+          "location": "urn:illustrative:proof_fixture",
+          "revision": "illustrative-not-a-real-revision",
+          "sha256": null,
+          "correspondence": "assumed",
+          "correspondence_evidence": [],
+          "rationale_or_gap": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented.",
+          "retrieved_by_actor_id": "illustrative-human",
+          "retrieved_at": "2026-10-26T00:00:00Z"
+        },
+        {
+          "id": "illustrative-replay_initialization",
+          "kind": "replay_initialization",
+          "required": true,
+          "availability": "available",
+          "location": "urn:illustrative:replay_initialization",
+          "revision": "illustrative-not-a-real-revision",
+          "sha256": null,
+          "correspondence": "assumed",
+          "correspondence_evidence": [],
+          "rationale_or_gap": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented.",
+          "retrieved_by_actor_id": "illustrative-human",
+          "retrieved_at": "2026-10-26T00:00:00Z"
+        }
+      ],
+      "facts": [],
+      "capability_review": {
+        "status": "supported",
+        "reviewer_actor_id": "illustrative-human",
+        "reviewed_at": "2026-10-26T00:00:00Z",
+        "fragment_version": "illustrative-only",
+        "policy_version": "illustrative-only",
+        "bounds": [
+          "Illustrative single transition"
+        ],
+        "assumptions": [
+          "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented."
+        ],
+        "unsupported_features": [],
+        "evidence": [
+          {
+            "source_id": "illustrative-source",
+            "location": "urn:illustrative:no-evidence",
+            "revision": null,
+            "sha256": null,
+            "pin_gap": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented."
+          }
+        ]
+      },
+      "attempts": [
+        {
+          "id": "illustrative-attempt",
+          "kind": "analysis",
+          "status": "completed",
+          "command": "ILLUSTRATIVE_ONLY_NO_COMMAND_WAS_RUN",
+          "tools": [
+            {
+              "name": "illustrative-no-analyzer",
+              "version": "not-run"
+            }
+          ],
+          "pins": [
+            {
+              "source_id": "illustrative-source",
+              "location": "urn:illustrative:no-evidence",
+              "revision": null,
+              "sha256": null,
+              "pin_gap": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented."
+            }
+          ],
+          "environment": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented.",
+          "time": {
+            "start": null,
+            "end": null,
+            "date_utc": "2026-10-26",
+            "precision": "date_only",
+            "basis": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented."
+          },
+          "exit_code": 0,
+          "wall_seconds": null,
+          "peak_rss_bytes": null,
+          "bounds": [
+            "Illustrative single transition"
+          ],
+          "assumptions": [
+            "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented."
+          ],
+          "logs": [
+            {
+              "source_id": "illustrative-source",
+              "location": "urn:illustrative:no-evidence",
+              "revision": null,
+              "sha256": null,
+              "pin_gap": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented."
+            }
+          ],
+          "reason_codes": [
+            "ILLUSTRATIVE_INCONCLUSIVE"
+          ],
+          "rationale": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented."
+        }
+      ],
+      "evidence_claims": [
+        {
+          "id": "illustrative-claim",
+          "claim": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented.",
+          "grade": "reported",
+          "evidence": [
+            {
+              "source_id": "illustrative-source",
+              "location": "urn:illustrative:no-evidence",
+              "revision": null,
+              "sha256": null,
+              "pin_gap": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented."
+            }
+          ],
+          "reviewer_actor_ids": [],
+          "limitations": [
+            "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented."
+          ]
+        }
+      ],
+      "result": {
+        "verdict": "UNKNOWN",
+        "evidence_grade": "reported",
+        "attempt_ids": [
+          "illustrative-attempt"
+        ],
+        "scope": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented.",
+        "bounds": [
+          "Illustrative single transition"
+        ],
+        "assumptions": [
+          "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented."
+        ],
+        "reason_codes": [
+          "ILLUSTRATIVE_CONCRETIZATION_UNRESOLVED"
+        ],
+        "non_vacuity": "unknown",
+        "evidence_claim_ids": [
+          "illustrative-claim"
+        ],
+        "fact_ids": [],
+        "validation": {
+          "reviewer_human_ids": [
+            "illustrative-human"
+          ],
+          "reviewed_at": "2026-10-26T00:00:00Z",
+          "checks": {
+            "human_semantics": {
+              "status": "passed",
+              "evidence": [
+                {
+                  "source_id": "illustrative-source",
+                  "location": "urn:illustrative:no-evidence",
+                  "revision": null,
+                  "sha256": null,
+                  "pin_gap": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented."
+                }
+              ],
+              "rationale": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented."
+            },
+            "concrete_feasibility": {
+              "status": "not_checked",
+              "evidence": [],
+              "rationale": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented."
+            },
+            "real_proof": {
+              "status": "not_checked",
+              "evidence": [],
+              "rationale": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented."
+            },
+            "original_consumer_replay": {
+              "status": "not_checked",
+              "evidence": [],
+              "rationale": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented."
+            },
+            "committed_effect": {
+              "status": "not_checked",
+              "evidence": [],
+              "rationale": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented."
+            },
+            "state_or_history_feasibility": {
+              "status": "not_checked",
+              "evidence": [],
+              "rationale": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented."
+            },
+            "non_vacuity": {
+              "status": "not_checked",
+              "evidence": [],
+              "rationale": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented."
+            },
+            "extraction_abstraction": {
+              "status": "not_checked",
+              "evidence": [],
+              "rationale": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented."
+            },
+            "bounded_obligations": {
+              "status": "not_checked",
+              "evidence": [],
+              "rationale": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented."
+            },
+            "legitimate_controls": {
+              "status": "not_checked",
+              "evidence": [],
+              "rationale": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented."
+            },
+            "repair_controls": {
+              "status": "not_checked",
+              "evidence": [],
+              "rationale": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented."
+            }
+          },
+          "limitations": [
+            "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented."
+          ]
+        }
+      },
+      "annotation_round_ids": [],
+      "discovery_routes": [
+        "systematic_source_index"
+      ],
+      "disclosure_assessment": {
+        "screened": {
+          "status": "met",
+          "decided_at": "2026-10-26T00:00:00Z",
+          "actor_id": "illustrative-human",
+          "reason_codes": [
+            "ILLUSTRATIVE_ONLY"
+          ],
+          "rationale": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented.",
+          "evidence": [
+            {
+              "source_id": "illustrative-source",
+              "location": "urn:illustrative:no-evidence",
+              "revision": null,
+              "sha256": null,
+              "pin_gap": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented."
+            }
+          ],
+          "missing_prerequisites": []
+        },
+        "relevant": {
+          "status": "met",
+          "decided_at": "2026-10-26T00:00:00Z",
+          "actor_id": "illustrative-human",
+          "reason_codes": [
+            "ILLUSTRATIVE_ONLY"
+          ],
+          "rationale": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented.",
+          "evidence": [
+            {
+              "source_id": "illustrative-source",
+              "location": "urn:illustrative:no-evidence",
+              "revision": null,
+              "sha256": null,
+              "pin_gap": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented."
+            }
+          ],
+          "missing_prerequisites": []
+        }
+      },
+      "tool_funnel": {
+        "artifacts_available": {
+          "status": "met",
+          "decided_at": "2026-10-26T00:00:00Z",
+          "actor_id": "illustrative-human",
+          "reason_codes": [
+            "ILLUSTRATIVE_ONLY"
+          ],
+          "rationale": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented.",
+          "evidence": [
+            {
+              "source_id": "illustrative-source",
+              "location": "urn:illustrative:no-evidence",
+              "revision": null,
+              "sha256": null,
+              "pin_gap": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented."
+            }
+          ],
+          "missing_prerequisites": []
+        },
+        "supported": {
+          "status": "met",
+          "decided_at": "2026-10-26T00:00:00Z",
+          "actor_id": "illustrative-human",
+          "reason_codes": [
+            "ILLUSTRATIVE_ONLY"
+          ],
+          "rationale": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented.",
+          "evidence": [
+            {
+              "source_id": "illustrative-source",
+              "location": "urn:illustrative:no-evidence",
+              "revision": null,
+              "sha256": null,
+              "pin_gap": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented."
+            }
+          ],
+          "missing_prerequisites": []
+        },
+        "analyzed": {
+          "status": "met",
+          "decided_at": "2026-10-26T00:00:00Z",
+          "actor_id": "illustrative-human",
+          "reason_codes": [
+            "ILLUSTRATIVE_ONLY"
+          ],
+          "rationale": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented.",
+          "evidence": [
+            {
+              "source_id": "illustrative-source",
+              "location": "urn:illustrative:no-evidence",
+              "revision": null,
+              "sha256": null,
+              "pin_gap": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented."
+            }
+          ],
+          "missing_prerequisites": []
+        },
+        "validated": {
+          "status": "met",
+          "decided_at": "2026-10-26T00:00:00Z",
+          "actor_id": "illustrative-human",
+          "reason_codes": [
+            "ILLUSTRATIVE_ONLY"
+          ],
+          "rationale": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented.",
+          "evidence": [
+            {
+              "source_id": "illustrative-source",
+              "location": "urn:illustrative:no-evidence",
+              "revision": null,
+              "sha256": null,
+              "pin_gap": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented."
+            }
+          ],
+          "missing_prerequisites": []
+        }
+      }
+    }
+  ],
+  "exposure_events": [],
+  "annotation_rounds": [],
+  "agreement_reports": [],
+  "change_log": [],
+  "protocol_states": {
+    "design_frozen": false,
+    "design_frozen_at": null,
+    "protocol_sha256": null,
+    "search_plan_sha256": null,
+    "reservation_completed": false,
+    "reservation_completed_at": null,
+    "annotation_round_completed": false,
+    "annotation_round_completed_at": null
+  },
+  "planner_reviews": [],
+  "reservation": {
+    "commitment_scheme": "sha256-nonce-concat-canonical-manifest-v1",
+    "commitment_sha256": null,
+    "custodian_attestation": null,
+    "commitment_limitations": [
+      "The commitment can show consistency with a later opening.",
+      "The commitment does not prove randomness or timing.",
+      "Operational exclusion of reserved-family code, findings, and results from development is the essential protection."
+    ]
+  },
+  "summary": null
+}

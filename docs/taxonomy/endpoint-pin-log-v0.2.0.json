@@ -1,0 +1,49 @@
+{
+  "recorded_on": "2026-10-27",
+  "method": "git ls-remote --symref <url> HEAD",
+  "content_fetched": false,
+  "attempts": [
+    {
+      "endpoint_id": "seed-0xparc-zk-bug-tracker",
+      "url": "https://github.com/0xPARC/zk-bug-tracker.git",
+      "exit_status": 0,
+      "default_branch": "main",
+      "head_commit": "56a996672fb50486279126c8e12530f2bf933d0b"
+    },
+    {
+      "endpoint_id": "backbone-trailofbits-publications",
+      "url": "https://github.com/trailofbits/publications.git",
+      "exit_status": 0,
+      "default_branch": "master",
+      "head_commit": "89940dfbec07ad03b0989e67d78e84250765366b"
+    },
+    {
+      "endpoint_id": "backbone-zellic-publications",
+      "url": "https://github.com/Zellic/publications.git",
+      "exit_status": 0,
+      "default_branch": "master",
+      "head_commit": "73cc37579b498cfd95da0312518d5f85f3124c2e"
+    },
+    {
+      "endpoint_id": "excluded-guessed-veridise-audits-repo",
+      "url": "https://github.com/Veridise/Audits.git",
+      "exit_status": 128,
+      "error": "remote: Repository not found; fatal: repository not found",
+      "disposition": "Guessed repository path excluded; custodian must verify the public web listing."
+    },
+    {
+      "endpoint_id": "excluded-guessed-zksecurity-audits-repo",
+      "url": "https://github.com/zksecurity/audits.git",
+      "exit_status": 128,
+      "error": "remote: Repository not found; fatal: repository not found",
+      "disposition": "Guessed repository path excluded; custodian must verify the public web listing."
+    },
+    {
+      "endpoint_id": "backbone-spearbit-portfolio",
+      "url": "https://github.com/spearbit/portfolio.git",
+      "exit_status": 0,
+      "default_branch": "master",
+      "head_commit": "43ec5f894014cd5c7918c426a9d0e544c82b6768"
+    }
+  ]
+}

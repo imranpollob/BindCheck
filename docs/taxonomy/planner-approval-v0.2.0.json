@@ -1,0 +1,57 @@
+{
+  "schema_version": "0.2.0",
+  "protocol_version": "0.2.0",
+  "record_status": "complete",
+  "handoff_assertion": "The D1P-C03 task handoff states that the design changes were approved by two planners.",
+  "identity_gap": null,
+  "design_items": [
+    {"id": "D01", "description": "Widen scope to proof-consuming ZK systems and traverse source indexes with seed and supplemental keyword routes."},
+    {"id": "D02", "description": "Reserve half of newly eligible unexposed provisional family groups by a private human draw and store only a salted commitment plus attestation."},
+    {"id": "D03", "description": "Use typed AI-planner design reviews and limit human sign-off to staffing, reservation, and annotation rounds."},
+    {"id": "D04", "description": "Separate design_frozen, reservation_completed, and annotation_round_completed schema states."},
+    {"id": "D05", "description": "Pilot 20 development packets as four unscored calibration packets and 16 fresh independent packets."},
+    {"id": "D06", "description": "Keep human disclosure assessment separate from the artifacts-to-validation tool funnel."}
+  ],
+  "reviewers": [
+    {
+      "reviewer_name": "Codex Astra 6",
+      "reviewer_type": "ai_planner",
+      "provider": "OpenAI",
+      "platform": "OpenAI Codex",
+      "model": "Codex Astra 6",
+      "reasoning_effort": "high",
+      "session_or_record_id": null,
+      "reviewed_on": "2026-10-27",
+      "decision": "approve",
+      "design_item_ids": ["D01", "D02", "D03", "D04", "D05", "D06"],
+      "review_summary": "Approved the taxonomy protocol v0.2.0 design with amendments; all amendments were incorporated in D1P-C03."
+    },
+    {
+      "reviewer_name": "Claude Opus 5.5",
+      "reviewer_type": "ai_planner",
+      "provider": "Anthropic",
+      "platform": "Anthropic",
+      "model": "claude-opus-5-5",
+      "reasoning_effort": "high",
+      "session_or_record_id": null,
+      "reviewed_on": "2026-10-27",
+      "decision": "approve",
+      "design_item_ids": ["D01", "D02", "D03", "D04", "D05", "D06"],
+      "review_summary": "Concurred with all amendments to the taxonomy protocol v0.2.0 design."
+    }
+  ],
+  "freeze_assessment": {
+    "assessed_on": "2026-10-27",
+    "design_frozen": false,
+    "design_frozen_at": null,
+    "protocol_sha256": "24358dddc1623fd84b0df5df6b76db37a1d0011dda2c83e5daf520f7d3009ed4",
+    "search_plan_sha256": "f6bfa5980c071c87cb31d83859a220e0efb2b80a1dbf7f68315cd203a7f0a7b6",
+    "missing_requirements": [
+      "Two AI planners must approve the PROPOSED values 100 results per endpoint, 1200 active-time minutes total, and 3 consecutive irrelevant pages; then their review IDs must be recorded, the payload rehashed, and design_frozen set with an actual UTC timestamp."
+    ],
+    "reservation_completed": false,
+    "reservation_completed_at": null,
+    "annotation_round_completed": false,
+    "annotation_round_completed_at": null
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "notice": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented.",
+  "scope": "Three schema-valid and three schema-invalid v0.2.0 ledger envelopes, each with exactly one synthetic finding row and all protocol completion states false. They test structure only and must never enter the research ledger or agreement calculations.",
+  "schema": "../ledger.schema.json",
+  "cases": [
+    {
+      "file": "valid-01-unassessed.json",
+      "expected_valid": true,
+      "description": "Unassessed candidate row; no result.",
+      "expected_error": null
+    },
+    {
+      "file": "valid-02-relevance-pending.json",
+      "expected_valid": true,
+      "description": "Illustrative screened row with unresolved relevance; the separate tool funnel remains unattempted.",
+      "expected_error": null
+    },
+    {
+      "file": "valid-03-analyzed-unknown.json",
+      "expected_valid": true,
+      "description": "Illustrative completed, inconclusive analysis; UNKNOWN is not validated.",
+      "expected_error": null
+    },
+    {
+      "file": "invalid-01-missing-source-ids.json",
+      "expected_valid": false,
+      "description": "Missing required source_ids on the finding row.",
+      "expected_error": {
+        "instance_path": "/findings/0",
+        "validator": "required"
+      }
+    },
+    {
+      "file": "invalid-02-skipped-screening.json",
+      "expected_valid": false,
+      "description": "Disclosure relevance is met while disclosure screening is not_attempted.",
+      "expected_error": {
+        "instance_path": "/findings/0/disclosure_assessment/screened/status",
+        "validator": "const"
+      }
+    },
+    {
+      "file": "invalid-03-unknown-validated.json",
+      "expected_valid": false,
+      "description": "UNKNOWN result falsely advances to validated.",
+      "expected_error": {
+        "instance_path": "/findings/0/result/verdict",
+        "validator": "enum"
+      }
+    }
+  ]
+}
