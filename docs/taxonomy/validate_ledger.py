@@ -139,16 +139,58 @@ def main():
                  if endpoint["verification_status"] == "to_verify_by_custodian"]
     numeric_parameters = ["maximum_results_per_endpoint", "active_time_budget_minutes",
                           "consecutive_irrelevant_pages_stop"]
-    if any(search_plan_envelope["search_plan"][name]["status"] != "PROPOSED"
+    if any(search_plan_envelope["search_plan"][name]["status"] != "APPROVED"
            for name in numeric_parameters):
-        raise RuntimeError("Every numeric search-plan parameter must remain PROPOSED")
+        raise RuntimeError("Every numeric search-plan parameter must be APPROVED")
+    numeric_review_ids = {
+        review_id
+        for name in numeric_parameters
+        for review_id in search_plan_envelope["search_plan"][name][
+            "approved_by_planner_review_ids"
+        ]
+    }
+    if any(len(search_plan_envelope["search_plan"][name][
+            "approved_by_planner_review_ids"]) != 2 for name in numeric_parameters):
+        raise RuntimeError("Every numeric parameter must reference exactly two planner reviews")
+    plan = search_plan_envelope["search_plan"]
+    expected_values = {
+        "maximum_results_per_endpoint": 100,
+        "active_time_budget_minutes": 1200,
+        "consecutive_irrelevant_pages_stop": 3,
+    }
+    if any(plan[name]["value"] != value for name, value in expected_values.items()):
+        raise RuntimeError("Frozen numeric search-plan values changed")
+    expected_applicability = {
+        "maximum_results_per_endpoint": ["supplemental_keyword_query"],
+        "active_time_budget_minutes": [
+            "seed", "backbone_index", "supplemental_keyword_query"
+        ],
+        "consecutive_irrelevant_pages_stop": ["supplemental_keyword_query"],
+    }
+    if any(plan[name].get("applies_to_endpoint_tiers") != tiers
+           for name, tiers in expected_applicability.items()):
+        raise RuntimeError("Frozen numeric applicability does not implement the amendment")
+    if plan.get("backbone_traversal_rule") != (
+            "complete_frozen_indexes_subject_to_total_budget_and_access_failure"):
+        raise RuntimeError("Backbone traversal is not complete-with-budget")
+    expected_incomplete_recording = {
+        "last_position": "record_last_cursor_or_page",
+        "remaining_coverage": "record_where_known_else_unknown",
+        "relevance_definition": "broad_inclusion_scope_not_taxonomy_support",
+        "absence_claim": "stopping_rule_does_not_establish_absence",
+    }
+    if plan.get("incomplete_endpoint_recording") != expected_incomplete_recording:
+        raise RuntimeError("Incomplete endpoint and stopping semantics are not frozen")
     one_approval = copy.deepcopy(search_plan_envelope)
-    one_approval["search_plan"]["maximum_results_per_endpoint"]["status"] = "APPROVED"
     one_approval["search_plan"]["maximum_results_per_endpoint"]["approved_by_planner_review_ids"] = ["one-review-only"]
     if not list(envelope_validator.iter_errors(one_approval)):
         raise RuntimeError("Search-plan schema accepted a numeric approval with only one planner review")
-    if search_plan_envelope["protocol_states"]["design_frozen"]:
-        raise RuntimeError("Draft search plan must remain design_frozen=false")
+    states = search_plan_envelope["protocol_states"]
+    if (not states["design_frozen"] or states["design_frozen_at"] is None or
+            states["reservation_completed"] or states["reservation_completed_at"] is not None or
+            states["annotation_round_completed"] or
+            states["annotation_round_completed_at"] is not None):
+        raise RuntimeError("Frozen search plan has inconsistent protocol completion states")
     approval_schema_path = ROOT / "planner-approval.schema.json"
     approval_record_path = ROOT / "planner-approval-v0.2.0.json"
     approval_validator = Draft202012Validator(load(approval_schema_path),
@@ -157,21 +199,35 @@ def main():
     approval_errors = list(approval_validator.iter_errors(approval_record))
     if approval_errors:
         raise RuntimeError("Planner-approval record is structurally invalid")
-    if approval_record["record_status"] != "complete" or len(approval_record["reviewers"]) != 2:
-        raise RuntimeError("Planner approval must contain exactly two completed reviewer records")
+    if (approval_record["record_status"] != "complete" or
+            len(approval_record["reviewers"]) != 2 or
+            len(approval_record["search_plan_reviews"]) != 2):
+        raise RuntimeError("Planner approval must contain two design and two search-plan reviews")
     incomplete_approval = copy.deepcopy(approval_record)
     incomplete_approval["reviewers"] = incomplete_approval["reviewers"][:1]
     if not list(approval_validator.iter_errors(incomplete_approval)):
         raise RuntimeError("Planner approval schema accepted complete without two reviewers")
+    incomplete_search_approval = copy.deepcopy(approval_record)
+    incomplete_search_approval["search_plan_reviews"] = incomplete_search_approval[
+        "search_plan_reviews"
+    ][:1]
+    if not list(approval_validator.iter_errors(incomplete_search_approval)):
+        raise RuntimeError("Planner approval schema accepted freeze with one search-plan review")
+    recorded_search_review_ids = {
+        review["id"] for review in approval_record["search_plan_reviews"]
+    }
+    if numeric_review_ids != recorded_search_review_ids:
+        raise RuntimeError("Numeric approvals do not reference both search-plan review records")
     freeze_assessment = approval_record["freeze_assessment"]
     if freeze_assessment["protocol_sha256"] != sha256(ROOT / "protocol.md"):
         raise RuntimeError("Freeze assessment protocol SHA-256 does not match protocol.md")
     if freeze_assessment["search_plan_sha256"] != canonical_plan_sha256:
         raise RuntimeError("Freeze assessment search-plan SHA-256 mismatch")
-    if (freeze_assessment["design_frozen"] or
-            freeze_assessment["design_frozen_at"] is not None or
-            not freeze_assessment["missing_requirements"]):
-        raise RuntimeError("Incomplete search-plan gate must remain explicitly unfrozen")
+    if (not freeze_assessment["design_frozen"] or
+            freeze_assessment["design_frozen_at"] is None or
+            freeze_assessment["missing_requirements"] or
+            freeze_assessment["design_frozen_at"] != states["design_frozen_at"]):
+        raise RuntimeError("Completed search-plan gate must be explicitly and consistently frozen")
     manifest_path = ROOT / "fixtures/manifest.json"
     manifest = load(manifest_path)
     cases = manifest["cases"]
@@ -292,8 +348,14 @@ def main():
             "record_status": approval_record["record_status"],
             "reviewer_names": [reviewer["reviewer_name"]
                                for reviewer in approval_record["reviewers"]],
+            "search_plan_review_ids": sorted(recorded_search_review_ids),
+            "search_plan_reviewer_names": [
+                reviewer["reviewer_name"]
+                for reviewer in approval_record["search_plan_reviews"]
+            ],
             "valid": True,
             "complete_without_reviewers_rejected": True,
+            "freeze_with_one_search_plan_review_rejected": True,
             "freeze_assessment": freeze_assessment,
         },
         "search_plan": {
@@ -301,10 +363,12 @@ def main():
             "file_sha256": sha256(search_plan_path),
             "canonical_payload_sha256": canonical_plan_sha256,
             "schema_valid": True,
-            "design_frozen": False,
+            "design_frozen": True,
+            "design_frozen_at": states["design_frozen_at"],
             "endpoint_counts_by_tier": endpoint_counts,
             "to_verify_by_custodian": to_verify,
-            "numeric_parameter_status": "PROPOSED",
+            "numeric_parameter_status": "APPROVED",
+            "numeric_parameter_review_ids": sorted(numeric_review_ids),
             "single_planner_numeric_approval_rejected": True,
         },
         "protocol_state_controls": state_controls,

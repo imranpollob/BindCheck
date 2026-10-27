@@ -1,11 +1,11 @@
 # D1P-C04 search-plan rationale
 
-The companion [`search-plan-v0.2.0.json`](search-plan-v0.2.0.json) is a draft
-for design freeze, not authorization to search or screen. It fixes source
+The companion [`search-plan-v0.2.0.json`](search-plan-v0.2.0.json) is frozen
+design, not authorization to search or screen. It fixes source
 tiers, snapshot handling, English-language coverage, traversal order,
 mechanism-keyword groups, the proof-consuming-system inclusion boundary, and
-bounded pagination/stopping rules. `design_frozen`, `reservation_completed`,
-and `annotation_round_completed` remain false.
+bounded pagination/stopping rules. `design_frozen` is true; reservation and
+annotation completion remain false.
 
 ## Endpoint frame
 
@@ -52,34 +52,34 @@ The metadata-only probes of guessed repositories
 “Repository not found.” Those guessed repository paths are excluded; no
 replacement repository was inferred.
 
-## Proposed numeric choices
+## Approved numeric choices and traversal amendment
 
-Every design-choice number remains `PROPOSED` and records its one-line
-justification in JSON:
+Codex Astra 6 and Claude Opus 5.5 approved each value on 2026-10-27:
 
-- **100 results per endpoint:** bounds source dominance while retaining a
-  substantial returned-order slice. The cap never truncates findings inside a
-  selected audit report used for percentages.
+- **100 results per supplemental keyword endpoint:** bounds supplemental
+  queries only. It does not cap backbone traversal or findings inside a selected
+  audit report used for percentages.
 - **1,200 active minutes total:** a bounded 20-hour traversal budget across the
   broad index frame, including logged failures and truncations.
-- **3 consecutive irrelevant pages:** a source-local saturation signal that
-  does not depend on finding a desired number of positives.
+- **3 consecutive irrelevant pages per supplemental keyword endpoint:**
+  irrelevant means outside the broad inclusion scope, never failure to support
+  the taxonomy or a preferred mechanism.
 
-The exact remaining design-freeze step is approval of these three values by
-two AI planners. If approved without another change, record their review IDs,
-change the three statuses to `APPROVED`, recompute the plan hash, and record an
-actual UTC `design_frozen_at`. Any amendment requires rehashing and a review of
-the amended payload.
+Every frozen backbone index is traversed completely, subject to exact access
+failure and the total budget. Every incomplete endpoint records its last
+cursor/page and remaining coverage where known. A cap or stopping rule never
+establishes absence of findings. The two approval records and amendment are in
+[`planner-approval-v0.2.0.json`](planner-approval-v0.2.0.json).
 
 ## Canonical hash
 
 `search_plan_sha256` is
-`f6bfa5980c071c87cb31d83859a220e0efb2b80a1dbf7f68315cd203a7f0a7b6`.
+`4bc618d626e8b02fe1c8da583cebd4a33a64c762448672070609fe2cafc575d2`.
 It is SHA-256 over the UTF-8 JSON serialization of the `search_plan` payload
 with keys sorted, no insignificant whitespace, and non-ASCII characters left
 as UTF-8. The envelope is excluded to avoid a self-referential hash. The
 controlling protocol hash is
-`24358dddc1623fd84b0df5df6b76db37a1d0011dda2c83e5daf520f7d3009ed4`.
+`fa06ef9abe7aeea1de6133d771856339834be5f1c3b0b6a202afa9b8a67459a9`.
 
 ## Content and exposure boundary
 

@@ -2,21 +2,21 @@
   "schema_version": "0.2.0",
   "canonicalization": "utf8-json-sort-keys-compact-v1",
   "hash_scope": "search_plan",
-  "search_plan_sha256": "f6bfa5980c071c87cb31d83859a220e0efb2b80a1dbf7f68315cd203a7f0a7b6",
+  "search_plan_sha256": "4bc618d626e8b02fe1c8da583cebd4a33a64c762448672070609fe2cafc575d2",
   "protocol_states": {
-    "design_frozen": false,
-    "design_frozen_at": null,
-    "protocol_sha256": "24358dddc1623fd84b0df5df6b76db37a1d0011dda2c83e5daf520f7d3009ed4",
-    "search_plan_sha256": "f6bfa5980c071c87cb31d83859a220e0efb2b80a1dbf7f68315cd203a7f0a7b6",
+    "design_frozen": true,
+    "design_frozen_at": "2026-10-27T21:56:27Z",
+    "protocol_sha256": "fa06ef9abe7aeea1de6133d771856339834be5f1c3b0b6a202afa9b8a67459a9",
+    "search_plan_sha256": "4bc618d626e8b02fe1c8da583cebd4a33a64c762448672070609fe2cafc575d2",
     "reservation_completed": false,
     "reservation_completed_at": null,
     "annotation_round_completed": false,
     "annotation_round_completed_at": null
   },
-  "remaining_freeze_step": "Two AI planners must approve the three PROPOSED numeric parameters without changing the plan; record their review IDs, change each status to APPROVED, recompute search_plan_sha256, and set design_frozen with an actual UTC timestamp.",
+  "remaining_freeze_step": "None; design freeze is complete. The next empirical step is custodian verification and snapshotting of endpoints, followed by family grouping and reservation without agent access to finding content.",
   "search_plan": {
     "id": "d1p-c04-search-plan-v0.2.0",
-    "protocol_sha256": "24358dddc1623fd84b0df5df6b76db37a1d0011dda2c83e5daf520f7d3009ed4",
+    "protocol_sha256": "fa06ef9abe7aeea1de6133d771856339834be5f1c3b0b6a202afa9b8a67459a9",
     "publication_start": "2018-01-01",
     "publication_end": "2026-10-27",
     "date_basis": "earliest_public_primary_disclosure",
@@ -355,12 +355,12 @@
     ],
     "traversal_steps_in_order": [
       "Before any finding view, the custodian verifies every to_verify_by_custodian endpoint, snapshots each web listing, classifies whether its format is names-only, mixed, or unknown, and supplies sanitized name-only enumerations where required.",
-      "Enumerate names from audit-report backbone indexes in the source_endpoints order without opening report bodies; preserve endpoint ID and repository URL only.",
-      "Enumerate names from contest-platform backbone indexes in the source_endpoints order without opening findings; preserve endpoint ID and repository URL only.",
-      "Enumerate names from the advisory database only from a custodian-sanitized list because advisory listings mix names and descriptions.",
+      "Traverse every frozen audit-report backbone index completely in source_endpoints order, subject only to access failure and the total active-time budget; do not open report bodies, and preserve endpoint ID and repository URL only.",
+      "Traverse every frozen contest-platform backbone index completely in source_endpoints order, subject only to access failure and the total active-time budget; do not open findings, and preserve endpoint ID and repository URL only.",
+      "Traverse the frozen advisory database index completely, subject only to access failure and the total active-time budget, using a custodian-sanitized list because advisory listings mix names and descriptions.",
       "Import the two custodian-sanitized seed enumerations, tagging seed_snark_sok or seed_0xparc before deduplication.",
       "After the family reservation is complete, human screeners traverse only non-reserved families; agents never screen reserved families.",
-      "Run mechanism-keyword queries only as a supplement, preserve result rank and exact query, and tag overlap with all discovery routes.",
+      "Run mechanism-keyword queries only as a supplement, preserve result rank and exact query, apply the approved supplemental-only cap and irrelevant-page stop, and tag overlap with all discovery routes.",
       "Deduplicate sources and findings under the protocol while preserving unresolved matches and every discovery tag.",
       "If a selected audit report contributes any reported percentage, human screeners inventory and screen every finding in that report."
     ],
@@ -391,28 +391,55 @@
       }
     ],
     "maximum_results_per_endpoint": {
-      "status": "PROPOSED",
+      "status": "APPROVED",
       "value": 100,
-      "unit": "index entries or query results",
-      "justification": "A uniform first-100 cap bounds source dominance while retaining a substantial returned-order slice; once an audit report is selected, the all-findings rule overrides this cap inside that report.",
-      "approved_by_planner_review_ids": []
+      "unit": "returned results per supplemental keyword endpoint",
+      "justification": "A first-100 cap bounds each supplemental query while backbone indexes remain complete-traversal endpoints and selected audit reports remain subject to the all-findings rule.",
+      "approved_by_planner_review_ids": [
+        "D1P-C04-FREEZE-CODEX-ASTRA-6-2026-10-27",
+        "D1P-C04-FREEZE-CLAUDE-OPUS-5.5-2026-10-27"
+      ],
+      "applies_to_endpoint_tiers": [
+        "supplemental_keyword_query"
+      ]
     },
     "active_time_budget_minutes": {
-      "status": "PROPOSED",
+      "status": "APPROVED",
       "value": 1200,
       "unit": "active human or agent minutes across all endpoints",
       "justification": "Twenty active hours bounds the broad multi-index traversal while allowing failures, inaccessible endpoints, and truncation to be logged rather than hidden.",
-      "approved_by_planner_review_ids": []
+      "approved_by_planner_review_ids": [
+        "D1P-C04-FREEZE-CODEX-ASTRA-6-2026-10-27",
+        "D1P-C04-FREEZE-CLAUDE-OPUS-5.5-2026-10-27"
+      ],
+      "applies_to_endpoint_tiers": [
+        "seed",
+        "backbone_index",
+        "supplemental_keyword_query"
+      ]
     },
     "consecutive_irrelevant_pages_stop": {
-      "status": "PROPOSED",
+      "status": "APPROVED",
       "value": 3,
-      "unit": "consecutive fully triaged index pages",
-      "justification": "Three consecutive pages with no eligible proof-consuming ZK project provides a source-local saturation signal without stopping after a desired positive count.",
-      "approved_by_planner_review_ids": []
+      "unit": "consecutive fully triaged pages per supplemental keyword endpoint",
+      "justification": "Three supplemental-query pages with no result inside the broad proof-consuming-ZK inclusion scope provide a bounded stop independent of taxonomy support or desired positive findings; the rule never applies to backbone indexes.",
+      "approved_by_planner_review_ids": [
+        "D1P-C04-FREEZE-CODEX-ASTRA-6-2026-10-27",
+        "D1P-C04-FREEZE-CLAUDE-OPUS-5.5-2026-10-27"
+      ],
+      "applies_to_endpoint_tiers": [
+        "supplemental_keyword_query"
+      ]
     },
-    "pagination_policy": "Traverse each endpoint in its native stable order. Record every page/cursor and result rank. Continue until exhaustion, the endpoint result cap, the total active-time budget, or the approved consecutive-irrelevant-page rule; inaccessible or dynamic pagination is logged. The cap applies to index/query retrieval, not to findings inside a selected audit report.",
-    "stop_rule": "Stop an endpoint only at exhaustion, the approved per-endpoint cap, the approved consecutive-irrelevant-page threshold, an exact access failure, or exhaustion of the approved total budget. Never stop because enough positive findings were found. Finish all findings in any selected audit report used for percentages.",
+    "pagination_policy": "Traverse each endpoint in its native stable order and record every page/cursor and result rank. Traverse every frozen backbone index completely unless access fails or the 1,200-minute total budget is exhausted. Apply the 100-result cap and three-consecutive-irrelevant-page threshold only to supplemental keyword endpoints. For every incomplete endpoint record the last cursor/page and remaining coverage where known; log inaccessible or dynamic pagination exactly. No cap truncates findings inside a selected audit report.",
+    "backbone_traversal_rule": "complete_frozen_indexes_subject_to_total_budget_and_access_failure",
+    "incomplete_endpoint_recording": {
+      "last_position": "record_last_cursor_or_page",
+      "remaining_coverage": "record_where_known_else_unknown",
+      "relevance_definition": "broad_inclusion_scope_not_taxonomy_support",
+      "absence_claim": "stopping_rule_does_not_establish_absence"
+    },
+    "stop_rule": "Backbone indexes stop only at exhaustion, exact access failure, or exhaustion of the approved total budget. Supplemental keyword endpoints may additionally stop at 100 returned results or after three consecutive fully triaged pages with no result inside the broad proof-consuming-ZK inclusion scope. Irrelevant never means failure to support the taxonomy or a preferred mechanism. Never stop because enough positive findings were found, and never interpret any stopping rule as evidence that findings are absent. Finish all findings in any selected audit report used for percentages.",
     "audit_report_completeness_rule": "screen_all_findings_in_any_selected_audit_report_used_for_percentages",
     "discovery_route_rule": "tag_seed_and_systematic_routes_before_deduplication_and_preserve_all_overlap_tags",
     "candidate_list_rule": "output_only_application_or_project_name_repository_url_and_endpoint_id; mixed-description listings require human sanitization",

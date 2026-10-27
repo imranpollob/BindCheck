@@ -1013,6 +1013,33 @@
           "type": "string",
           "minLength": 1
         },
+        "backbone_traversal_rule": {
+          "const": "complete_frozen_indexes_subject_to_total_budget_and_access_failure"
+        },
+        "incomplete_endpoint_recording": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "last_position",
+            "remaining_coverage",
+            "relevance_definition",
+            "absence_claim"
+          ],
+          "properties": {
+            "last_position": {
+              "const": "record_last_cursor_or_page"
+            },
+            "remaining_coverage": {
+              "const": "record_where_known_else_unknown"
+            },
+            "relevance_definition": {
+              "const": "broad_inclusion_scope_not_taxonomy_support"
+            },
+            "absence_claim": {
+              "const": "stopping_rule_does_not_establish_absence"
+            }
+          }
+        },
         "stop_rule": {
           "type": "string",
           "minLength": 1
@@ -7673,6 +7700,18 @@
             "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "minItems": 0,
+          "uniqueItems": true
+        },
+        "applies_to_endpoint_tiers": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "seed",
+              "backbone_index",
+              "supplemental_keyword_query"
+            ]
+          },
+          "minItems": 1,
           "uniqueItems": true
         }
       },

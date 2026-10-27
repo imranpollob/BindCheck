@@ -291,14 +291,17 @@ validation. The [planner approval record](planner-approval-v0.2.0.json) names
 Codex Astra 6 and Claude Opus 5.5 as the two approving AI planners for D01–D06;
 it makes no human claim.
 
-Planner approval alone does not freeze empirical retrieval. D1P-C04 drafts a
+Planner approval alone does not freeze empirical retrieval. D1P-C04 provides a
 non-synthetic [search plan](search-plan-v0.2.0.json) fixing endpoint tiers and
 snapshot handling, seed IDs, English-language coverage, traversal order,
-supplemental keyword groups, pagination, and stopping rules. Its three numeric
-choices—results per endpoint, total active-time budget, and consecutive
-irrelevant-page stop count—remain `PROPOSED`. The exact remaining design-freeze
-step is planner approval of those values; until then, `design_frozen` is false
-and `design_frozen_at` is null.
+supplemental keyword groups, pagination, and stopping rules. Codex Astra 6 and
+Claude Opus 5.5 approved a 1,200-minute total active-time budget and approved
+the 100-result cap and three-consecutive-irrelevant-page stop only for
+supplemental keyword endpoints. Backbone indexes are traversed completely in
+their frozen order, subject only to access failure and the total budget. Every
+incomplete endpoint records its last cursor/page and remaining coverage where
+known. Relevance for stopping means the broad inclusion scope, never support
+for a preferred taxonomy; stopping never establishes absence of findings.
 
 Store both protocol and search-plan hashes in `protocol_states`.
 `search_plan_sha256` is the SHA-256 of the canonical UTF-8 JSON `search_plan`
