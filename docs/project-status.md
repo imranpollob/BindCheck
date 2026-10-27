@@ -60,7 +60,9 @@ flowchart TD
     d1p11 --> d1p12["D1P-12 WarpToad fixture gate [DONE]"]
     d1p12 --> warptoadRecovery["Pinned source/toolchain recovery [DONE]"]
     warptoadRecovery --> d1p12r["D1P-12R honest local fixture [DONE]"]
-    d1p12r --> warptoadJoint["Joint policy/analyzer work [WAITING]"]
+    d1p12r --> d1p13["D1P-13 beta.22 correspondence + component checks [DONE]"]
+    d1p13 --> d1p14a["D1P-14A fee-cap concrete fixtures [DONE]"]
+    d1p14a --> warptoadJoint["Joint policy/analyzer work [WAITING]"]
     d1p10 --> d1p10result["Transformed-arm eligibility [UNKNOWN]"]
     d1p10result --> d1p10decision["Selected-cone backend reconsideration [WAITING]"]
     d1p09 -.-> d1p09decision["Full-relation/forwarding decision [WAITING]"]
@@ -111,7 +113,7 @@ flowchart TD
     classDef waiting fill:#D9D9D9,stroke:#B3B3B3
     classDef unknown fill:#FFE0C2,stroke:#FF9E42
 
-    class foundation,fixture,payy,sourceCheck,coneGate,nineCases,failureAnalysis,v3Rerun,generalGate,tracking,livingTree,d100,d101,d102,d103preflight,d103review,d103typed,d103boundary,d103guards,d103guardreview,d103concrete,d103replayreview,d103recovery,d1p00,d1p01,d1p01artifact,d1p02,d1p03,d1p04,d1p05,d1p04elig,d1p07,d1p08,d1p09,d1p10,d1p11,d1p12,warptoadRecovery,d1p12r done
+    class foundation,fixture,payy,sourceCheck,coneGate,nineCases,failureAnalysis,v3Rerun,generalGate,tracking,livingTree,d100,d101,d102,d103preflight,d103review,d103typed,d103boundary,d103guards,d103guardreview,d103concrete,d103replayreview,d103recovery,d1p00,d1p01,d1p01artifact,d1p02,d1p03,d1p04,d1p05,d1p04elig,d1p07,d1p08,d1p09,d1p10,d1p11,d1p12,warptoadRecovery,d1p12r,d1p13,d1p14a done
     class analysis,d1,d1paper,d103,d103impl,d103consumer,d103effects active
     class d103linkreview next
     class evaluation,history,heldOut,baselines,manuscript,claims,artifacts,draft,transferCase,sensitivity,submit,t22,acirSummary,d104,d105,d106,d107,d108,d103symbolic,d1p09decision,d1p10decision,warptoadJoint waiting
@@ -266,6 +268,31 @@ flowchart TD
     is exactly incompatible. This is not an independent Noir source rebuild,
     cross-chain result, policy validation, vulnerability verdict, performance
     result or D1 verdict. Joint policy/analyzer work is waiting; D1 is UNKNOWN.
+30. Done as source correspondence and component semantic validation:
+    [D1P-13](../reports/D1P-13.md) preserves D1P-12/D1P-12R and rebuilds the
+    exact pinned withdraw circuit with beta.22. ACIR bytes, decoded program,
+    ABI, bb.js 5.0.0 VK and generated verifier match; seven `file_map` paths
+    are the only nonsemantic differences. The separate fail-closed beta.22
+    decoder classifies 25,073 opcodes without changing beta.14. The honest
+    witness satisfies all 24,967 supported arithmetic/range constraints, but
+    86 proof-enforced Poseidon2 permutations remain unsupported; 20 Brillig
+    calls are separately witness-generation machinery. Two frozen mutations
+    fail as expected; the focused set passes 58 tests/284 subtests and the
+    complete D1 suite passes 197/312. No solver, joint encoder,
+    new proof, fork or live chain ran. Joint policy/whole-circuit analysis is
+    waiting and D1 remains UNKNOWN.
+31. Done as concrete fee-cap development evidence:
+    [D1P-14A](../reports/D1P-14A.md) preserves all earlier evidence and uses
+    the exact D1P-12R/D1P-13 artifact/verifier route. FC-POS proves
+    `max_fee < amount`, mints a nonzero within-cap fee to an ordinary relayer,
+    pays the remainder to the recipient, conserves `5e18`, and consumes the
+    nullifier. FC-NEG reuses the exact proof/calldata, changes only local
+    `block.basefee`, reaches the pinned fee require with a valid proof, mines a
+    reverted receipt, and leaves all consumer state unchanged. A second real
+    proof exercises `fee_factor=0`, with zero relayer mint and conserved `4e18`
+    recipient mint. Exactly two bounded proof attempts ran. No solver, joint
+    encoder, fork/live chain, general policy, performance or security result
+    follows; D1 remains UNKNOWN.
 
 The end goal does not imply that submission is currently justified. The
 research contract's two principal properties remain unchanged, and unresolved
@@ -276,7 +303,10 @@ correspondence gate instead of extending that selected-cone tuning line.
 D1P-12 records a reproducible source/toolchain blocker; D1P-12R preserves that
 record and completes the exact-artifact owned-local proof-to-mint fixture,
 including nonzero-fee effects, replay rejection and strict field canonicality.
-Neither screen, blocker nor development fixture is a method-evaluation,
+D1P-13 establishes pinned source/artifact correspondence and supported
+arithmetic/range satisfaction, with Poseidon2 still uninterpreted. D1P-14A
+adds exact-proof positive, over-cap-revert and zero-fee receipts without a
+general fee-policy claim. Neither screen, blocker, development fixture nor component check is a method-evaluation,
 cross-chain, policy or security result. D1
 preparation and reporting closure are complete; three missing historical query
 slots were executed.
@@ -328,6 +358,8 @@ slots were executed.
 | 2026-10-25 | D1P-11 bounded development-corpus screening | `[DONE]` task / `[UNKNOWN]` applications | [Report](../reports/D1P-11.md), [protocol](../protocols/d1/d1p-11-screening.json), and [ledger](../metadata/d1/d1p-11-screening-ledger.json): screen the complete prefrozen permitted pool of four applications/four families. Rank WarpToad first, retain Privacy Pools contingently and Payy for calibration, and exclude Aztec v6 from the current fragment. Preserve Semaphore-Noir and discovery-only leads outside the denominator. Both complete-output and layered subset consumers are represented; no subset-ease or audit-negative-control inference follows. No solver/build/proof/replay, finding validation, live-chain test, maintainer contact or held-out evaluation. A WarpToad correspondence gate is `[NEXT]`; all security verdicts remain `[UNKNOWN]`. |
 | 2026-10-26 | D1P-12 WarpToad executable-fixture gate | `[DONE]` blocker / `[UNKNOWN]` effects and security | [Report](../reports/D1P-12.md), [protocol](../protocols/d1/d1p-12-warptoad-fixture.json), and [manifest](../metadata/d1/d1p-12-artifact-manifest.json): preserve 5/5 D1P-11 hash-matching source files in an isolated ignored workspace and stop at setup. The full pinned checkout, lock/build inputs, compiled artifact/ABI, matching VK/generated verifier and declared Noir beta.22/bb.js 5.0.0 route are unavailable; GitHub retrieval is blocked by environment DNS/origin policy. The existing ACIR reader is pinned to beta.14, outside the declared beta.22 Noir JS route, and the absent artifact prevents an exact compatibility check. Zero builds, proofs, consumer executions or solver calls; no receipts, effects, fee example, performance or D1 verdict. Exact pinned source/toolchain recovery is `[NEXT]`. |
 | 2026-10-26 | D1P-12R WarpToad executable-fixture continuation | `[DONE]` development fixture / `[UNKNOWN]` security | [Report](../reports/D1P-12R.md), [protocol](../protocols/d1/d1p-12r-warptoad-fixture.json), and [manifest](../metadata/d1/d1p-12r-artifact-manifest.json): preserve D1P-12, recover the exact pin and frozen dependencies, validate the committed beta.22 artifact through a newly saved VK, byte-identical generated verifier and solc 0.8.29 build. One real UltraHonk proof is accepted in JS/Solidity and the unchanged mint records nullifier plus nonzero-fee recipient/ordinary-relayer effects; identical replay rejects. All 22 public-word `P`/`P+1` calls revert with `ValueGeFieldOrder()`; the beta.14 ACIR reader rejects the artifact version. No independent Noir rebuild, solver, fork/live chain, cross-chain reachability, performance, policy/vulnerability or D1 verdict. Joint policy/analyzer work is `[WAITING]`; D1 remains `[UNKNOWN]`. |
+| 2026-10-26 | D1P-13 beta.22 correspondence and component semantic checking | `[DONE]` correspondence/component / `[UNKNOWN]` security | [Report](../reports/D1P-13.md), [protocol](../protocols/d1/d1p-13-beta22-acir.json), and [manifest](../metadata/d1/d1p-13-artifact-manifest.json): preserve D1P-12/D1P-12R; exact beta.22 rebuild matches committed ACIR/ABI and the bb.js 5.0.0 VK/verifier, with only seven diagnostic path differences. A separate fail-closed beta.22 decoder parses 25,073 opcodes while beta.14 remains byte-unchanged. The honest witness satisfies 24,967 supported arithmetic/range constraints; 86 proof-enforced Poseidon2 permutations remain unsupported and 20 Brillig calls are separately witness-generation. Two frozen mutations match expectations; the focused set passes 58 tests/284 subtests and the complete D1 suite passes 197/312. No solver, joint encoder, new proof, fork/live chain, policy validation or D1 verdict; whole-circuit/joint work is `[WAITING]`. |
+| 2026-10-27 | D1P-14A WarpToad fee-cap concrete fixtures | `[DONE]` development fixture / `[UNKNOWN]` security | [Report](../reports/D1P-14A.md), [protocol](../protocols/d1/d1p-14a-fee-cap.json), and [manifest](../metadata/d1/d1p-14a-artifact-manifest.json): preserve D1P-12/D1P-12R/D1P-13 and run the exact pinned artifact/verifier/consumer route on owned-local EDR. FC-POS uses `max_fee < amount`, a real proof and an ordinary relayer; the nonzero fee and recipient remainder conserve `5e18` and consume the nullifier. FC-NEG reuses identical proof/calldata, changes only `block.basefee`, mines the exact fee-cap revert and rolls back all consumer state. A second real proof confirms the zero-fee branch mints zero to the relayer and conserved `4e18` to the recipient. Exactly two bounded proof attempts; no solver, encoder, fork/live chain, general policy, performance or D1 verdict. Joint fee-policy/analyzer work remains `[WAITING]`. |
 
 ## Update rule
 

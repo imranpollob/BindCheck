@@ -4,8 +4,8 @@ BindCheck investigates whether the guarantees of an accepted zero-knowledge proo
 
 The current integration checkout is the linked worktree
 `/Users/imranpollob/Coding/bc/bindcheck-d1-paper` on `d1-paper`, currently at
-`9fabd0893bcc0d3851247484da9017e5ff37ab95` plus the uncommitted D1P-12
-blocker and D1P-12R continuation records. It was established from
+`46dbfc3bf15dda805106254ab7572e3729428dcc` plus the uncommitted D1P-13 and
+D1P-14A development-evidence records. It was established from
 `chatgpt-codex` revision `cce1a966eb84e8e9819c6f658ca4ce07fd670036`.
 [D1P-00](reports/D1P-00.md) records the branch/worktree baseline and the
 source-inspected selective-reuse review of `claude-code`; the
@@ -163,6 +163,33 @@ The principal directories are `circuits/` and `contracts/` for the small fixture
   noncanonical words. The historical circuit artifact was behavior-validated,
   not independently rebuilt from source; no cross-chain, performance,
   protocol-policy, vulnerability or D1 verdict follows. D1 remains UNKNOWN.
+- [D1P-13](reports/D1P-13.md) independently rebuilds the pinned WarpToad
+  withdraw circuit with exact Noir beta.22. Rebuilt ACIR bytecode, decoded
+  constraints, ABI, bb.js 5.0.0 VK and generated verifier all match the
+  committed route; the only whole-JSON differences are seven nonsemantic
+  diagnostic source paths. A separate fail-closed beta.22 MessagePack decoder
+  classifies all 25,073 opcodes while the beta.14 decoder stays byte-unchanged.
+  The D1P-12R honest inputs satisfy all 24,967 supported arithmetic/range
+  constraints; 86 proof-enforced Poseidon2 permutations remain explicitly
+  unsupported, separately from 20 Brillig witness-generation calls. Two
+  predeclared mutation controls fail their named constraints, the focused
+  set passes 58 tests/284 subtests and the complete D1 suite passes 197/312,
+  and decoded witnesses 0–10 map
+  exactly to the consumer order. No solver, joint encoder or new proof ran;
+  this is correspondence/component evidence, not policy or security
+  validation. D1 remains UNKNOWN.
+- [D1P-14A](reports/D1P-14A.md) adds concrete fee-cap fixtures on the same
+  exact-artifact, owned-local route. One new 9,152-byte proof with `max_fee`
+  below amount succeeds at a frozen `0.1 gwei` base fee, consuming its
+  nullifier and conserving `5e18` across an ordinary relayer
+  (`194881000400000000`) and recipient (`4805118999600000000`). The unchanged
+  proof and calldata are mined at `2 gwei` and revert at the pinned cap check
+  because the computed fee is `2046250504200000000 > 1e18`; all consumer
+  token/nullifier/root state rolls back. A second real proof with the
+  proof-bound fee factor zero mints `4e18` to the recipient and zero to the
+  relayer. Exactly two bounded proof attempts ran; no solver, encoder, fork,
+  live-chain action, performance claim, policy validation or security verdict
+  follows. D1 remains UNKNOWN.
 - T15–T19 locally reproduce the public Payy message-tail mechanism with real proofs and committed token-balance effects, then validate the repair and an honest control.
 - T20 maps those claims to pinned source and advisory evidence.
 - T21 is an in-sample, source-pattern prototype; it does not establish generalization.
@@ -189,9 +216,13 @@ development applications instead of extending that tuning line. D1P-12
 records the first WarpToad setup blocker; D1P-12R preserves it and completes a
 real owned-local proof-to-mint chain from the exact committed artifact through
 a regenerated VK/verifier, nonzero-fee effects, replay rejection and strict
-public-field canonicality. This is development artifact/behavior evidence,
-not an independent Noir source rebuild, policy validation, cross-chain result
-or security result. The exact N=8 forwarding artifact/key,
+public-field canonicality. D1P-13 then establishes exact pinned
+source-to-bytecode/ABI/VK/verifier correspondence and checks every supported
+arithmetic/range constraint on the honest witness, while leaving 86 Poseidon2
+constraints uninterpreted. D1P-14A concretely exercises the nonzero fee cap,
+an unchanged-proof over-cap revert, and the zero-fee branch with real proofs
+and receipts. These are development artifact/component results, not general
+policy validation, cross-chain evidence or a security result. The exact N=8 forwarding artifact/key,
 full-producer propagation, joint query, proof, and accepted full settlement
 replay remain absent. Offline component checks are not joint verification.
 The two principal properties remain authorization and coverage.

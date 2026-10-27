@@ -1,0 +1,181 @@
+{
+  "schema": "bindcheck.d1p14a.artifact-manifest/v1",
+  "task": "D1P-14A",
+  "created_at_utc": "2026-10-27T05:50:00Z",
+  "result": "PASS_OWNED_LOCAL_FEE_CAP_FIXTURES",
+  "d1_security_verdict": "UNKNOWN",
+  "source": {
+    "repository": "https://github.com/warptoad/warp-toad.git",
+    "revision": "973e7d1e4b60d0d8a8ca299b0cabd9193b147ef8",
+    "isolated_workspace": "results/raw/D1P-14A/workspace/source",
+    "tracked_diff_empty": true,
+    "d1p11_hashes_matched": 5,
+    "d1p11_hashes_expected": 5
+  },
+  "artifact_route": {
+    "committed_withdraw_artifact_sha256": "0cfad465d740c852c47268b60e17bc3a4b0ae301345447ec60fa70c2b6058d0d",
+    "target_artifact_exact_copy": true,
+    "hardhat_honk_verifier_artifact_sha256": "b71aee20a39f03f9a7b71d250d7af9f99098bcb28e9d76af9aafe14c9283c70b",
+    "noir": "1.0.0-beta.22+c57152f91260ecdb9faad4efc20abb14b6d2ece7",
+    "bb_js": "5.0.0",
+    "proof_system": "UltraHonk",
+    "keccakZK": true,
+    "source_correspondence_basis": "D1P-13 exact ACIR/ABI/VK correspondence",
+    "consumer_changed": false,
+    "verifier_changed": false,
+    "circuit_changed": false
+  },
+  "network": {
+    "kind": "Hardhat edr-simulated",
+    "chain_id": 31337,
+    "fork": false,
+    "live_chain": false,
+    "cross_chain_reachability_claim": false,
+    "ordinary_named_relayer": "0x70997970c51812dc3a010c7d01b50e0d17dc79c8",
+    "recipient": "0x90f79bf6eb2c4f870365e785982e1f101e93b906",
+    "address_one_wildcard_used": false,
+    "execution_overlay": "throwOnTransactionFailures=false solely to mine and retain the FC-NEG reverted receipt"
+  },
+  "fc_pos": {
+    "amount": "5000000000000000000",
+    "fee_factor": "974405002",
+    "priority_fee": "100000000",
+    "max_fee": "1000000000000000000",
+    "max_fee_below_amount": true,
+    "base_fee": "100000000",
+    "computed_relayer_fee": "194881000400000000",
+    "fee_nonzero_and_within_cap": true,
+    "proof_bytes": 9152,
+    "proof_sha256": "74e67045a630fa2f99cf66f944242d98f2c48bb7b94c1a3768681cf07f91b137",
+    "generated_verifier_accepted": true,
+    "burn_transaction": "0x402438e6d37840b1f0007782721942f115cd541af29c401a337813feabea5c5b",
+    "mint_transaction": "0x1b4427f9308a03abf55a22368ef256598ba189a14b8f4a09a321b9a9635de804",
+    "mint_status": "success",
+    "nullifier_consumed": true,
+    "relayer_delta": "194881000400000000",
+    "recipient_delta": "4805118999600000000",
+    "total_supply_delta": "5000000000000000000",
+    "conserved": true
+  },
+  "fc_neg": {
+    "reused_fc_pos_proof_unchanged": true,
+    "reused_fc_pos_calldata_unchanged": true,
+    "calldata_sha256": "a9f9369ccf227726e7a903824a8814254ba3073695e2094777783a58aa10b05c",
+    "changed_proof_bound_inputs": false,
+    "changed_environment_value": "block.basefee",
+    "base_fee": "2000000000",
+    "computed_relayer_fee": "2046250504200000000",
+    "cap_exceeded": true,
+    "transaction": "0x38fc8a51662ce311f28c4cb71c8a54feb5c4ba5b69142070d0ca1c43b7bf2185",
+    "status": "reverted",
+    "gas_used": "4002199",
+    "exact_revert_reason": "_relayerFee is larger than _maxFee",
+    "pinned_revert_location": "backend/contracts/core/WarpToadCore.sol:166",
+    "trace_failed": true,
+    "trace_opcode_steps": 395121,
+    "consumer_state_unchanged": true,
+    "nullifier_remained_absent": true,
+    "transaction_envelope_effects_recorded_separately": true
+  },
+  "zero_fee": {
+    "amount": "4000000000000000000",
+    "fee_factor": "0",
+    "priority_fee": "100000000",
+    "max_fee": "1000000000000000000",
+    "base_fee": "100000000",
+    "proof_bytes": 9152,
+    "proof_sha256": "2f8bc64ad5d3d2409a44695539241ef198092d9db71b8ab67213cfaf577e964f",
+    "generated_verifier_accepted": true,
+    "burn_transaction": "0x54711a65c8e9cf3be30bfe337fff22d836be3704b6c02ab4df6e97264adc84cc",
+    "mint_transaction": "0xdc57c679c9c2820cfc6675df73078e482811ee684b727f0a330af238d8a00824",
+    "mint_status": "success",
+    "nullifier_consumed": true,
+    "relayer_delta": "0",
+    "recipient_delta": "4000000000000000000",
+    "total_supply_delta": "4000000000000000000",
+    "no_fee_mint": true,
+    "conserved": true
+  },
+  "proof_attempts": {
+    "maximum": 2,
+    "consumed": 2,
+    "per_attempt_timeout_seconds": 1800,
+    "old_four_gib_analysis_cap_applied": false,
+    "parameter_search": false,
+    "attempts": [
+      {
+        "attempt": 1,
+        "reason": "new FC-POS proof with max_fee below amount and a nonzero in-cap fee",
+        "proof_generated": true,
+        "bb_js_verified": true,
+        "solidity_verifier_accepted": true,
+        "command_exit": 1,
+        "exit_explanation": "the proof succeeded; the later default-EDR FC-NEG send returned the expected revert as an RPC error instead of a receipt",
+        "timed_out": false,
+        "wall_seconds": 9.286,
+        "max_process_tree_rss_kib_observed": 1070208
+      },
+      {
+        "attempt": 2,
+        "reason": "distinct proof required because the zero-fee fee_factor is proof-bound",
+        "proof_generated": true,
+        "bb_js_verified": true,
+        "solidity_verifier_accepted": true,
+        "command_exit": 0,
+        "timed_out": false,
+        "wall_seconds": 9.26,
+        "max_process_tree_rss_kib_observed": 1218016
+      }
+    ],
+    "unsafe_resource_exhaustion": false,
+    "performance_claim": false
+  },
+  "controls": {
+    "preflight_passed": true,
+    "all_audit_checks_pass": true,
+    "same_fc_proof": true,
+    "same_fc_calldata": true,
+    "positive_conservation": true,
+    "negative_revert_and_rollback": true,
+    "zero_fee_no_relayer_mint": true,
+    "solver_calls": 0,
+    "joint_encoder": false,
+    "prior_evidence_checks": 11,
+    "prior_evidence_matches": 11,
+    "commit_push_merge": false
+  },
+  "raw_evidence": {
+    "manifest_path": "results/raw/D1P-14A/evidence-manifest.json",
+    "manifest_sha256": "4f2e759194a872ee35f6f93e90bb6cf85cf3b88209e8bd60957d89352afe9a69",
+    "record_count": 40,
+    "regular_file_bytes": 49956820,
+    "fc_pos_proof_record_sha256": "a85d28996665744354b9ea4f6fe3ba6d0275ec5e5b320d213eed5cf89a86f1d7",
+    "fc_pos_receipt_record_sha256": "97d692de57e137b15a8973fc8fbeba55550e26fc8018c64734163d1a1897da9c",
+    "fc_neg_receipt_record_sha256": "09830b2ee21057f7e4d87f3cc8520d547a2f05ecc9bceeee37d135077ee7cb99",
+    "zero_fee_proof_record_sha256": "8e413ea3393f3df6df6c4216460dc20b835acbb48b99d4750eb7209b9725259c",
+    "zero_fee_receipt_record_sha256": "c2fcf6c859e259fe1954a39014f8b886ee1faca510e4bb601111490b7eccf99d"
+  },
+  "deliverables": {
+    "protocol": {
+      "path": "protocols/d1/d1p-14a-fee-cap.json",
+      "sha256": "ec0b21c1a45cfb5ee6127cfb01087ca8fed0c32fff4d977160dfe02a8999079d"
+    },
+    "runner": {
+      "path": "scripts/d1p_14a_fee_cap_fixture.py",
+      "sha256": "e1303c0cefcb7c560be6419b8d63884fdf4d87835706c32b6964d9e7ecc59a20"
+    },
+    "fixture": {
+      "path": "scripts/fixtures/d1p_14a_fee_cap_fixture.ts",
+      "sha256": "f2b420847c501c1bf31ecc0cb3d2f1cf88078d4976ce6de1e2741449bcfe43bf"
+    },
+    "execution_config": {
+      "path": "scripts/fixtures/d1p_14a_hardhat.config.ts",
+      "sha256": "d79b7ce36774a83fdafef632ba0d0f0a608f9d5216e01fdc5693777484ad1699"
+    },
+    "report": {
+      "path": "reports/D1P-14A.md",
+      "sha256": "1ff7e8a62a4d37f507decf7c207688c4da64b49713f33612a55af8ace1b804f4"
+    }
+  },
+  "claim_boundary": "Concrete owned-local fee-cap and zero-fee behavior for the frozen inputs only; no cross-chain reachability, general policy, vulnerability, performance or D1 security conclusion."
+}

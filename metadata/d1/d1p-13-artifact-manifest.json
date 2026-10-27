@@ -1,0 +1,167 @@
+{
+  "schema": "bindcheck.d1p13.artifact-manifest/v1",
+  "task": "D1P-13",
+  "created_at_utc": "2026-10-26T15:40:00Z",
+  "result": "MATCH_SOURCE_ARTIFACT_AND_SUPPORTED_COMPONENT_SEMANTICS",
+  "d1_security_verdict": "UNKNOWN",
+  "source": {
+    "repository": "https://github.com/warptoad/warp-toad.git",
+    "revision": "973e7d1e4b60d0d8a8ca299b0cabd9193b147ef8",
+    "isolated_workspace": "results/raw/D1P-13/workspace/source",
+    "tracked_diff_empty": true,
+    "d1p11_hashes_matched": 5,
+    "d1p11_hashes_expected": 5
+  },
+  "toolchain": {
+    "nargo": "1.0.0-beta.22",
+    "noirc": "1.0.0-beta.22+c57152f91260ecdb9faad4efc20abb14b6d2ece7",
+    "nargo_executable_sha256": "37f7d55d9795af0da3b471db2306e0296fa34c528386a828ce556fc3ebbf6e7b",
+    "bb_js": "5.0.0",
+    "vk_settings": {
+      "backend": "UltraHonkBackend",
+      "keccakZK": true,
+      "threads": 8
+    },
+    "poseidon_declared_tag": "v0.3.0",
+    "poseidon_resolved_commit": "0880c371e88e583d39515fd3f877538657ac41eb"
+  },
+  "source_correspondence": {
+    "status": "MATCH",
+    "committed_artifact_sha256": "0cfad465d740c852c47268b60e17bc3a4b0ae301345447ec60fa70c2b6058d0d",
+    "rebuilt_artifact_sha256": "7190813f623967b79ba80a1635536fcc9c8524c1d1cb9f00696832f644b38327",
+    "whole_json_byte_identical": false,
+    "acir_compressed_sha256": "f10f910ce75dc833689ed9ed84d8e44c560fb6e91c80876263090ad26a148e84",
+    "acir_decoded_sha256": "b15e0a1cceb8c03973bdc84188ec60b5566552149cae4fa03eb9a21c48abe739",
+    "decoded_semantic_canonical_sha256": "934c21fe21b8ba7e148596b2af94f229f79ed5bb6b2c34f1d81152bb212ca93f",
+    "bytecode_identical": true,
+    "decoded_program_identical": true,
+    "abi_identical": true,
+    "abi_canonical_sha256": "9d1778b43162df9acb7e845b91291369c72af15c1040a194f3316cf3be82edbf",
+    "verification_key_identical": true,
+    "verification_key_sha256": "563a018cba2ace1d27b337191428e4aaf5925483dd1350f995d112b67db6ab69",
+    "verification_key_bytes": 1888,
+    "generated_verifier_identical": true,
+    "generated_verifier_sha256": "d9a822a5c16253bec2b690e06f16cb9d444ca9886be6ebf2302e4c5e55f04b48",
+    "file_map_path_only_differences": 7,
+    "debug_symbols_identical": true,
+    "difference_classification": "nonsemantic diagnostic build paths only"
+  },
+  "decoder": {
+    "version": "separate beta.22 MessagePack-compact format-3 reader",
+    "constrained_function_count": 1,
+    "decoded_opcode_count": 25073,
+    "unconstrained_function_count": 5,
+    "unknown_policy": "named fail-closed Unsupported reason; never skipped",
+    "beta14_decoder_byte_unchanged": true,
+    "beta14_decoder_sha256": "c3c07f14ac0e3388944359c752aa60145f35f5be8ccfcb5c371a823d9184b85a"
+  },
+  "semantics": {
+    "honest_witness_count": 25384,
+    "honest_public_witnesses_equal_accepted_d1p12r_vector": true,
+    "supported_proof_enforced": {
+      "AssertZero": 24860,
+      "RANGE": 107,
+      "total": 24967,
+      "satisfied": 24967
+    },
+    "unsupported_proof_enforced": {
+      "Poseidon2Permutation": 86,
+      "MemoryInit": 0,
+      "MemoryOp": 0,
+      "Call": 0,
+      "total": 86
+    },
+    "witness_generation_only": {
+      "BrilligCall": 20,
+      "brillig_function_count": 5,
+      "brillig_opcode_count": 96
+    },
+    "no_skipped_acir_opcodes": true,
+    "whole_circuit_semantic_validation": false
+  },
+  "mutations": {
+    "plan_frozen_before_evaluation": true,
+    "count": 2,
+    "expected_target_failures": 2,
+    "observed_target_failures": 2,
+    "expectations_matched": true
+  },
+  "public_inputs": {
+    "decoded_witness_order": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+    "consumer_position_count": 11,
+    "mapping_exact": true,
+    "calldata_supplied": 9,
+    "consumer_supplied_block_value": 1,
+    "consumer_supplied_configuration": 1,
+    "proof_only": 0
+  },
+  "controls": {
+    "tests_passed": 58,
+    "subtests_passed": 284,
+    "complete_d1_tests_passed": 197,
+    "complete_d1_subtests_passed": 312,
+    "failures": 0,
+    "beta22_focused_file": "tests/d1/test_acir_beta22.py",
+    "beta14_regression_files": [
+      "tests/d1/test_typed_bindings.py",
+      "tests/d1/test_v2_core.py"
+    ]
+  },
+  "execution_bounds": {
+    "solver_calls": 0,
+    "joint_encoder": false,
+    "new_proof_generation": false,
+    "proof_generation_attempts": 0,
+    "fork": false,
+    "live_chain": false,
+    "commit_push_merge": false,
+    "unsafe_resource_exhaustion": false
+  },
+  "preservation": {
+    "d1p12_d1p12r_representative_checks": 9,
+    "d1p12_d1p12r_representative_matches": 9,
+    "modified": false
+  },
+  "deliverables": {
+    "protocol": {
+      "path": "protocols/d1/d1p-13-beta22-acir.json",
+      "sha256": "010d8d0560ddfa534b90cf55f9e2c214b5c05b5701f1f0894ae80245e45f4dbd"
+    },
+    "runner": {
+      "path": "scripts/d1p_13_warptoad_correspondence.py",
+      "sha256": "11a61095e9b2913ce48c97b2e875ef4f28fbdfb423dddd113f13ff39d9dba6ed"
+    },
+    "semantic_runner": {
+      "path": "scripts/d1p_13_semantic_check.py",
+      "sha256": "c0790a068558a9d16ee6642ea0e0c9a632e71328ef26ce02c6bc012abf6c2f7d"
+    },
+    "witness_fixture": {
+      "path": "scripts/fixtures/d1p_13_extract_witness.ts",
+      "sha256": "29765b2cd53f48e0ecb35faffd3162198a49f65fa220e5778f972d5dd23d7581"
+    },
+    "decoder": {
+      "path": "src/bindcheck_d1/frontends/acir_binary_beta22.py",
+      "sha256": "60260a59770d2d2f77f303349fb0145da699b18c5941fadf5bd8c105c005c99b"
+    },
+    "semantic_checker": {
+      "path": "src/bindcheck_d1/frontends/acir_semantics_beta22.py",
+      "sha256": "219e1c5774ac5df3a558145ac898e39ab364cc78681dd88ff6cfaee0dd1fc098"
+    },
+    "tests": {
+      "path": "tests/d1/test_acir_beta22.py",
+      "sha256": "5e84c367bc80a13d8ba81a6db2b9f19c8154b2f35ecca200ac953bb24f7f998f"
+    },
+    "report": {
+      "path": "reports/D1P-13.md",
+      "sha256": "c43d07f48d22eaa177e2847ef73baf716f3826747c5a9f35b28b6645b09cea15"
+    },
+    "raw_manifest": {
+      "path": "results/raw/D1P-13/evidence-manifest.json",
+      "sha256": "2766a16ba712c624eb561b9d99a74a08b5402562edde4804183f1abb30e82edb",
+      "record_count": 60,
+      "regular_file_bytes": 4667402
+    }
+  },
+  "prior_proof_boundary": "The accepted D1P-12R proof validates the committed artifact/verifier route. D1P-13 generated no proof and establishes correspondence through independent exact bytecode, ABI and VK equality.",
+  "claim_boundary": "Pinned source/artifact correspondence and supported component semantic checking only. Poseidon2, whole-circuit semantics, joint consumer policy, cross-chain reachability, vulnerability claims and D1 security remain unvalidated."
+}

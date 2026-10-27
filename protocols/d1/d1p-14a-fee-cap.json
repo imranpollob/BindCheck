@@ -1,0 +1,85 @@
+{
+  "schema": "bindcheck.d1p14a.protocol/v1",
+  "task": "D1P-14A",
+  "title": "WarpToad fee-cap concrete execution fixtures",
+  "frozen_at_utc": "2026-10-27T05:32:33Z",
+  "workspace": "results/raw/D1P-14A/",
+  "application": "warptoad/warp-toad",
+  "pinned_revision": "973e7d1e4b60d0d8a8ca299b0cabd9193b147ef8",
+  "artifact_route": {
+    "circuit": "the D1P-12R committed beta.22 withdraw artifact, whose source correspondence was established by D1P-13",
+    "backend": "@aztec/bb.js 5.0.0 UltraHonk with keccakZK:true",
+    "verifier": "the D1P-12R generated Solidity verifier, byte-identical to the pinned committed verifier",
+    "consumer": "the pinned unmodified L1WarpToad mint implementation",
+    "network": "owned in-process Hardhat EDR chain, no fork and no live-chain access"
+  },
+  "frozen_inputs": {
+    "fee_factor": "974405002",
+    "priority_fee": "100000000",
+    "max_fee": "1000000000000000000",
+    "fc_pos": {
+      "amount": "5000000000000000000",
+      "secret": "1234",
+      "nullifier_preimage": "4321",
+      "next_block_basefee": "100000000",
+      "expected_computed_relayer_fee": "194881000400000000",
+      "expected_recipient_amount": "4805118999600000000"
+    },
+    "fc_neg": {
+      "proof": "reuse the FC-POS proof and identical mint calldata",
+      "next_block_basefee": "2000000000",
+      "expected_computed_relayer_fee": "2046250504200000000",
+      "expected_revert": "_relayerFee is larger than _maxFee",
+      "ordering": "submit the reverting FC-NEG transaction before FC-POS so the positive mint remains in final local state; both use the same already-generated FC-POS proof and calldata"
+    },
+    "zero_fee": {
+      "amount": "4000000000000000000",
+      "secret": "12341111111",
+      "nullifier_preimage": "432111111",
+      "fee_factor": "0",
+      "priority_fee": "100000000",
+      "max_fee": "1000000000000000000",
+      "next_block_basefee": "100000000",
+      "expected_relayer_amount": "0",
+      "expected_recipient_amount": "4000000000000000000"
+    }
+  },
+  "proof_attempts": {
+    "maximum": 2,
+    "timeout_seconds_each": 1800,
+    "attempt_1_reason": "Generate the new FC-POS honest proof with max_fee below amount and a nonzero in-cap fee.",
+    "attempt_2_reason": "A distinct proof is required for the supported zero-fee control because fee_factor is proof-bound.",
+    "parameter_search": false,
+    "old_four_gib_analysis_cap": false
+  },
+  "execution_controls": {
+    "ordinary_named_relayer": true,
+    "address_one_wildcard": false,
+    "fc_neg_changes_only_block_basefee": true,
+    "fc_neg_transaction_is_sent_with_explicit_gas_to_avoid_estimation_short-circuit": true,
+    "fc_neg_no_consumer_state_change": true,
+    "record_transaction_fee_and_nonce_side_effects_separately": true,
+    "zero_fee_requires_no_relayer_token_mint": true
+  },
+  "preserve": [
+    "results/raw/D1P-12/",
+    "results/raw/D1P-12R/",
+    "results/raw/D1P-13/",
+    "reports/D1P-12.md",
+    "reports/D1P-12R.md",
+    "reports/D1P-13.md"
+  ],
+  "forbidden": [
+    "solver",
+    "joint encoder",
+    "source or consumer weakening",
+    "mock verifier",
+    "fork",
+    "live-chain action",
+    "commit",
+    "push",
+    "merge"
+  ],
+  "claim_boundary": "Concrete owned-local development evidence only. This is not a performance result, vulnerability claim, protocol-policy validation, cross-chain reachability result, or D1 security verdict.",
+  "d1_security_verdict": "UNKNOWN"
+}
