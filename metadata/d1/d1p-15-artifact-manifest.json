@@ -1,0 +1,175 @@
+{
+  "schema": "bindcheck.d1p15.artifact-manifest/v1",
+  "task": "D1P-15",
+  "created_at_utc": "2026-10-27T19:12:01Z",
+  "result": "PASS for the requested P2/P5 and injected M-DOM gates",
+  "source": {
+    "application": "warptoad/warp-toad",
+    "revision": "973e7d1e4b60d0d8a8ca299b0cabd9193b147ef8",
+    "workspace": "results/raw/D1P-15/workspace/source",
+    "workspace_ignored": true,
+    "pinned_beta22_artifact_sha256": "7190813f623967b79ba80a1635536fcc9c8524c1d1cb9f00696832f644b38327",
+    "decoded_acir_sha256": "b15e0a1cceb8c03973bdc84188ec60b5566552149cae4fa03eb9a21c48abe739"
+  },
+  "poseidon2_provenance": {
+    "compiled_permutations": 86,
+    "source_level_logical_hashes": 44,
+    "equation": "2 + (42 * 2) = 86",
+    "counts": {
+      "siloed_note": 1,
+      "unique_note": 1,
+      "merkle_node_left": 42,
+      "merkle_node_right": 42
+    },
+    "record": {
+      "path": "results/raw/D1P-15/poseidon2-provenance.json",
+      "sha256": "254cc857149067bab57141be6f3de5ca13f9ac2cf568d24148ca2bfc70574183",
+      "bytes": 352784
+    }
+  },
+  "reference_checks": {
+    "fixtures": [
+      "D1P-12R honest",
+      "D1P-14A FC-POS honest"
+    ],
+    "poseidon2_full_tuple_checks": 172,
+    "bn254_constructions": [
+      "hash_1 nullifier",
+      "hash_3 precommitment",
+      "hash_2 commitment",
+      "hash_2 ground EVM Merkle tree"
+    ],
+    "status": "PASS",
+    "record": {
+      "path": "results/raw/D1P-15/hash-reference-check.json",
+      "sha256": "0b465c2a5508075ae997cadea95795ecef73a06364525d7cb0abb7a1575b9d5f",
+      "bytes": 218080
+    }
+  },
+  "injected_mutation": {
+    "name": "M-DOM",
+    "classification": "INJECTED mechanism-derived mutation",
+    "artifact": {
+      "path": "results/raw/D1P-15/artifacts/m-dom-withdraw.json",
+      "sha256": "db1a0a17b2717cce2fe9a9a01e114632634fcf43f0f813d062dfa9c660aa7f2f",
+      "bytes": 2396506
+    },
+    "verification_key": {
+      "path": "results/raw/D1P-15/artifacts/m-dom-vk.bin",
+      "sha256": "3bc51af97886fc03f14ea3273973d1edcf7d9125e19ddf0c7abdb509b540ff09",
+      "bytes": 1888,
+      "distinct_from_pinned_vk": true,
+      "pinned_vk_sha256": "563a018cba2ace1d27b337191428e4aaf5925483dd1350f995d112b67db6ab69"
+    },
+    "generated_verifier": {
+      "path": "results/raw/D1P-15/artifacts/MdomWithdrawVerifier.sol",
+      "sha256": "d5ceca6e181a4ff50b113b6c37605c8efe4e077ef3f54f2acdff1b02e956cb69",
+      "bytes": 103923
+    }
+  },
+  "v_exec": {
+    "status": "PASS",
+    "honest": {
+      "proof_sha256": "b21118d5c094f05ec5c82efdd44d10c56d3e15f04562e548fe7b1e02b25779f5",
+      "proof_bytes": 9152,
+      "mutation_mint": true,
+      "pinned_witness": "accepted"
+    },
+    "foreign": {
+      "proof_sha256": "41976eb29e1492ef3941dc99f856b295080e8d4e1d03e63e920ca4254aa0e69f",
+      "proof_bytes": 9152,
+      "mutation_mint": true,
+      "pinned_witness": "rejected: Cannot satisfy constraint"
+    },
+    "execution_record": {
+      "path": "results/raw/D1P-15/o1-execution.json",
+      "sha256": "66c144a82783d55cf0baef87b086ef06706599661ce0addeb71834f4f87b21a1",
+      "bytes": 22202
+    },
+    "proof_attempts": 2,
+    "proof_attempt_limit": 2,
+    "parameter_search": false
+  },
+  "prerequisites": {
+    "P1": "OPEN",
+    "P2": "COMPLETE for specified constructions and fixtures",
+    "P3": "PARTIAL: M-DOM complete; M-SRC open",
+    "P4": "PARTIAL: O1 gate states frozen; canonical combined S_DOM and S_SRC open",
+    "P5": "COMPLETE for pinned beta.22 withdraw artifact",
+    "P6": "PARTIAL: P2 identity/domains and O1 key pairing checked; full mechanical audit open"
+  },
+  "tests": {
+    "python": {
+      "result": "14 passed, 12 subtests passed",
+      "record": "results/raw/D1P-15/command-records/focused-python-tests.json"
+    },
+    "typescript": {
+      "result": "3 passed",
+      "record": "results/raw/D1P-15/command-records/hash-reference-typescript-tests.json"
+    },
+    "solver_commands": 0
+  },
+  "deliverables": [
+    {
+      "path": "reports/D1P-15.md",
+      "sha256": "6ebca04d4cfd337eb999c42f9c5b4be76a4b24762a943b37caf19a1010655046"
+    },
+    {
+      "path": "protocols/d1/d1p-15-o1-prerequisites.json",
+      "sha256": "b12a2775214285ad92ca1f3ad84d5fbca6f7ca47a76bf4fd5c0a577612c26f3d"
+    },
+    {
+      "path": "scripts/d1p15_prepare.py",
+      "sha256": "17187dae4830520d0e71cd8d22c177641213a28053a11db55fb96954faba542a"
+    },
+    {
+      "path": "scripts/d1p_15_o1_fixture.py",
+      "sha256": "0afed02aee4eded2aaf466f234cfe05717f3e663f1cbd8ae50751e4c570fc65e"
+    },
+    {
+      "path": "scripts/fixtures/D1P15SyntheticRootProvider.sol",
+      "sha256": "329124e542ccaa2c0c84b1fbea9e4e257620370e946be715480225b169e2b31e"
+    },
+    {
+      "path": "scripts/fixtures/d1p_15_decode_nargo_witness.ts",
+      "sha256": "187b3914c9b56d927f032de9efcc0290e91376f4ecea77cdaa24e546c2959fea"
+    },
+    {
+      "path": "scripts/fixtures/d1p_15_hash_reference.ts",
+      "sha256": "83108d10752bf6991239ea17e1f4a6a116ec60ed57c65671026a73ea30e4b7a1"
+    },
+    {
+      "path": "scripts/fixtures/d1p_15_hash_reference.test.ts",
+      "sha256": "488b51a5c2e93f622e7c2e3e567357a31e9008fb03a5269c2d94914d80bdc40e"
+    },
+    {
+      "path": "scripts/fixtures/d1p_15_o1_fixture.ts",
+      "sha256": "71516d85ede3882515c290df23f22ecc7cc1c36a28af98ff7f12a3743de8c334"
+    },
+    {
+      "path": "src/bindcheck_d1/warptoad_poseidon_provenance.py",
+      "sha256": "d5def3983091f66f3be10b799f100581e3115428333e2ebb11a97abfce530045"
+    },
+    {
+      "path": "tests/d1/test_d1p15_poseidon_provenance.py",
+      "sha256": "4edd7094ae117190a2c876848d89caf1b9774ccb8d1d99d73baa1bf62caf3c89"
+    },
+    {
+      "path": "tests/d1/test_d1p15_evidence.py",
+      "sha256": "3e657b55920148ad94f9ee22d63317af304a61b10234b7581aad352d21801a02"
+    },
+    {
+      "path": "results/raw/D1P-15/evidence-manifest.json",
+      "sha256": "cf5a2cab5ac686e015440b1ffdda83cce1a4ab121789b0c396eb2009093dfff0",
+      "files": 43,
+      "bytes_total": 7359010
+    }
+  ],
+  "audit": {
+    "path": "results/raw/D1P-15/audit.json",
+    "sha256": "c59ec50889b426cb7b7b6ab0905edbdad738908a7e4773308ac775acbdc55c02",
+    "status": "PASS"
+  },
+  "claim_boundary": "Injected owned-local development evidence only; synthetic privileged pre-state, no cross-chain reachability, deployed-defect, automatic-discovery, performance or security claim.",
+  "d1_security_verdict": "UNKNOWN"
+}

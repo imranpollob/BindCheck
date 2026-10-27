@@ -70,7 +70,8 @@ flowchart TD
     d1p14d --> d1p14dresult["AUTH-1 / NONVAC-1 diagnostics [UNKNOWN]"]
     d1p14dresult --> warptoadJoint["Joint policy/analyzer work [WAITING]"]
     d1p14dresult --> d1pint1["D1P-INT1 contract revision 2 [DONE]"]
-    d1pint1 --> capabilityGate["Automated discovery + E4 capability gate [NEXT]"]
+    d1pint1 --> d1p15["D1P-15 O1 hash + injected gates [DONE]"]
+    d1p15 --> capabilityGate["Automated discovery + E4 capability gate [NEXT]"]
     d1p10 --> d1p10result["Transformed-arm eligibility [UNKNOWN]"]
     d1p10result --> d1p10decision["Selected-cone backend reconsideration [WAITING]"]
     d1p09 -.-> d1p09decision["Full-relation/forwarding decision [WAITING]"]
@@ -121,11 +122,11 @@ flowchart TD
     classDef waiting fill:#D9D9D9,stroke:#B3B3B3
     classDef unknown fill:#FFE0C2,stroke:#FF9E42
 
-    class foundation,fixture,payy,sourceCheck,coneGate,nineCases,failureAnalysis,v3Rerun,generalGate,tracking,livingTree,d100,d101,d102,d103preflight,d103review,d103typed,d103boundary,d103guards,d103guardreview,d103concrete,d103replayreview,d103recovery,d1p00,d1p01,d1p01artifact,d1p02,d1p03,d1p04,d1p05,d1p04elig,d1p07,d1p08,d1p09,d1p10,d1p11,d1p12,warptoadRecovery,d1p12r,d1p13,d1p14a,d1p14b done
+    class foundation,fixture,payy,sourceCheck,coneGate,nineCases,failureAnalysis,v3Rerun,generalGate,tracking,livingTree,d100,d101,d102,d103preflight,d103review,d103typed,d103boundary,d103guards,d103guardreview,d103concrete,d103replayreview,d103recovery,d1p00,d1p01,d1p01artifact,d1p02,d1p03,d1p04,d1p05,d1p04elig,d1p07,d1p08,d1p09,d1p10,d1p11,d1p12,warptoadRecovery,d1p12r,d1p13,d1p14a,d1p14b,d1p14c,d1p14d,d1pint1,d1p15 done
     class analysis,d1,d1paper,d103,d103impl,d103consumer,d103effects active
-    class d103linkreview next
+    class d103linkreview,capabilityGate next
     class evaluation,history,heldOut,baselines,manuscript,claims,artifacts,draft,transferCase,sensitivity,submit,t22,acirSummary,d104,d105,d106,d107,d108,d103symbolic,d1p09decision,d1p10decision,warptoadJoint waiting
-    class contribution,primaryResult,generalResult,d103gate,d103recoveryresult,d1p06,d1p10result,d1p14bresult unknown
+    class contribution,primaryResult,generalResult,d103gate,d103recoveryresult,d1p06,d1p10result,d1p14bresult,d1p14cresult,d1p14dresult unknown
 ```
 
 ## Immediate path
@@ -301,6 +302,19 @@ flowchart TD
     recipient mint. Exactly two bounded proof attempts ran. No solver, joint
     encoder, fork/live chain, general policy, performance or security result
     follows; D1 remains UNKNOWN.
+32. Done as an injected O1 prerequisite fixture:
+    [D1P-15](../reports/D1P-15.md) preserves every prior namespace, recovers
+    complete construction boundaries for all 86 Poseidon2 permutations and
+    resolves the prior `44`/`86` count directly from the two Merkle branch
+    call sites. Reference H3/BN constructions and a ground-tree builder match
+    all 172 permutation tuples from fresh beta.22 execution of the D1P-12R
+    and D1P-14A honest inputs. Mechanism-derived M-DOM compiles under the pin,
+    receives its own distinct VK/generated verifier, mints an honest note, and
+    passes a real-proof foreign-contract V-EXEC case that the pinned circuit
+    rejects. Root admission is synthetic and privileged; no cross-chain,
+    deployed-defect, automatic-discovery, solver, performance or D1 claim
+    follows. P2/P5 pass for this scope; P1 and the remaining P3/P4/P6 work
+    stay open. D1 remains UNKNOWN.
 
 The end goal does not imply that submission is currently justified. Contract
 revision 2 retains authorization and coverage but makes automated discovery
@@ -317,7 +331,10 @@ including nonzero-fee effects, replay rejection and strict field canonicality.
 D1P-13 establishes pinned source/artifact correspondence and supported
 arithmetic/range satisfaction, with Poseidon2 still uninterpreted. D1P-14A
 adds exact-proof positive, over-cap-revert and zero-fee receipts without a
-general fee-policy claim. Neither screen, blocker, development fixture nor component check is a method-evaluation,
+general fee-policy claim. D1P-15 closes the pinned Poseidon2 call-site
+boundary inventory and the injected M-DOM fixture gates without running a
+solver or completing the capability gate. Neither screen, blocker,
+development fixture nor component check is a method-evaluation,
 cross-chain, policy or security result. D1
 preparation and reporting closure are complete; three missing historical query
 slots were executed.
@@ -375,6 +392,7 @@ slots were executed.
 | 2026-10-27 | D1P-14C repaired WarpToad joint diagnostic | `[DONE]` exact control blocker / `[UNKNOWN]` AUTH-1 and NONVAC-1 | [Report](../reports/D1P-14C.md), [protocol](../protocols/d1/d1p-14c-joint-repair.json), and [frozen manifest](../metadata/d1/d1p-14c-artifact-manifest.json): preserve D1P-14B; fix and preflight the SMT syntax; separate the `MANUAL / ASSUMED` transition/effect model from the unchanged policy; retain full G1–G5 using explicit occurrence/write derivation; and match the five prior concrete executions as supporting evidence only. All seven queries pass balance and pinned-cvc5 parse checks. C1 returns SAT and its assignment validates the intended G1 mutant, but C2 times out at its frozen 60-second single attempt. The mandatory gate stops C3, C4 and Q1–Q3 unrun, with no retry, tuning, proof or V-EXEC. No Solidity-equivalence, automatic-discovery, performance, vulnerability or D1 verdict follows; AUTH-1, NONVAC-1 and D1 remain `[UNKNOWN]`. |
 | 2026-10-27 | D1P-14D deterministic controls and first diagnostics | `[DONE]` regressions / `[UNKNOWN]` AUTH-1 and NONVAC-1 | [Report](../reports/D1P-14D.md), [protocol](../protocols/d1/d1p-14d-deterministic-controls.json), and [frozen manifest](../metadata/d1/d1p-14d-artifact-manifest.json): preserve D1P-14B/C; freeze the honest FC-POS public/environment/state fixture and independently expected effects; then pass all four mutant-positive SAT and four BASE-negative UNSAT controls at identical fixed inputs. All eleven inputs parse and the three D1P-14C primary hashes match before launch. Q1/Q2 time out at 300 seconds; Q3 encounters a root-process monitor error at 229.747027 seconds with no solver answer. No primary SAT, proof, V-EXEC, tuning or retry occurs. The original symbolic C2 timeout remains separate. The manual/assumed controls make no search, performance, automatic-extraction, semantic-equivalence or vulnerability claim; AUTH-1, NONVAC-1 and D1 remain `[UNKNOWN]`. |
 | 2026-10-27 | D1P-INT1 contract revision 2 integration | `[DONE]` prospective contract change | [Canonical contract](research-contract.md), [approved proposal](../paper/contract-revision-proposal.md), and byte-identical [revision-1 archive](history/research-contract-2026-10-23.md): move the prospective target from an efficiency advantage to automated discovery and E4 end-to-end validation capability; retain efficiency as secondary RQ5; add the E0–E4 ladder, generic/default and same-policy baseline arms, development/held-out scope rules, and the four-part capability gate. No earlier result is relabeled or rerun. Revision-1 efficiency results keep their original meaning and cannot be cited as capability evidence. Research verdicts remain unchanged. |
+| 2026-10-27 | D1P-15 O1 hash boundaries and injected fixture gates | `[DONE]` prerequisites/fixture / `[UNKNOWN]` security | [Report](../reports/D1P-15.md), [protocol](../protocols/d1/d1p-15-o1-prerequisites.json), and [manifest](../metadata/d1/d1p-15-artifact-manifest.json): attribute every one of the pinned beta.22 artifact's 86 Poseidon2 permutations to an exact H3 boundary and mechanically resolve `44` source hashes versus `86` compiled branch candidates; match 172 full permutation tuples and BN construction outputs on the D1P-12R/D1P-14A honest witnesses. Compile injected M-DOM with its own distinct key/verifier, then pass real-proof honest and foreign-note V-EXEC mints while the pinned circuit rejects the foreign semantic input. Synthetic privileged root admission carries no cross-chain or deployed-defect claim. P2/P5 pass in scope; P1 and remaining P3/P4/P6 work stay open. No solver or AUTH/NONVAC rerun; D1 remains `[UNKNOWN]`. |
 
 ## Update rule
 

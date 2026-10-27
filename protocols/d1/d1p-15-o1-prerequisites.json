@@ -1,0 +1,76 @@
+{
+  "schema": "bindcheck.d1p15.protocol/v1",
+  "task": "D1P-15",
+  "title": "O1 prerequisites: hash-construction boundaries and fixture gates",
+  "date": "2026-10-27",
+  "application": "warptoad/warp-toad",
+  "pinned_revision": "973e7d1e4b60d0d8a8ca299b0cabd9193b147ef8",
+  "namespace": "results/raw/D1P-15/",
+  "poseidon2_inventory": {
+    "artifact": "D1P-13 source-corresponding beta.22 withdraw build",
+    "required_permutations": 86,
+    "logical_source_hashes": 44,
+    "count_equation": "2 top-level + 42 levels * 2 compiled orientation candidates = 86",
+    "required_boundaries": [
+      "initial state",
+      "absorption roles and witnesses",
+      "domain separator",
+      "permutation count",
+      "finalization",
+      "output selection",
+      "debug-symbol call stack"
+    ]
+  },
+  "reference_constructions": {
+    "poseidon2_h3": "width 4, rate 3, IV=3*2^64, absorb domain/left/right, one permutation, no final permutation, lane 0",
+    "bn254": ["hash_1", "hash_2", "hash_3"],
+    "ground_tree": "siblings leaf-to-root, little-endian leaf-index bits",
+    "checks": [
+      "all 86 nargo-execute opcode tuples on the D1P-12R honest input",
+      "all 86 nargo-execute opcode tuples on the D1P-14A FC-POS input",
+      "BN commitment/nullifier and EVM root on both inputs"
+    ]
+  },
+  "mutation": {
+    "name": "M-DOM",
+    "classification": "INJECTED mechanism-derived mutation",
+    "change": "private aztec_merkle_data.contract_address replaces public word 5 as the silo-address input; public ABI and consumer remain unchanged",
+    "own_artifact_and_key_required": true,
+    "gates": [
+      "compile with pinned beta.22 nargo",
+      "derive a distinct VK and generated Solidity verifier with locked bb.js 5.0.0 keccakZK route",
+      "honest configured-contract note: real proof, generated verifier acceptance, actual consumer mint",
+      "foreign-contract note: real proof, generated verifier acceptance, actual consumer mint",
+      "same foreign proof input rejected during witness execution by the pinned repaired artifact"
+    ]
+  },
+  "execution": {
+    "network": "owned-local Hardhat EDR, no fork",
+    "configured_address": "0x123456789abcdef",
+    "foreign_address": "0xfedcba987654321",
+    "ordinary_named_relayer": "0x70997970c51812dc3a010c7d01b50e0d17dc79c8",
+    "synthetic_root_provider": "D1P-15-only fixed-root test provider registered through GigaBridge initialization",
+    "privileged_initialization": true,
+    "cross_chain_reachability_claim": false
+  },
+  "proof_bounds": {
+    "maximum": 2,
+    "timeout_seconds_each": 1800,
+    "attempt_1": "honest configured-contract note gate",
+    "attempt_2": "foreign-contract differential gate",
+    "parameter_search": false,
+    "old_four_gib_cap": false
+  },
+  "forbidden": [
+    "solver campaign",
+    "AUTH-1",
+    "NONVAC-1",
+    "fork",
+    "live-chain action",
+    "commit",
+    "push",
+    "merge"
+  ],
+  "claim_boundary": "Injected owned-local development evidence only. It does not establish automatic discovery, a deployed defect, cross-chain reachability, performance, collision resistance, or a D1 security verdict.",
+  "d1_security_verdict": "UNKNOWN"
+}

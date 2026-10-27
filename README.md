@@ -4,8 +4,8 @@ BindCheck investigates whether the guarantees of an accepted zero-knowledge proo
 
 The current integration checkout is the linked worktree
 `/Users/imranpollob/Coding/bc/bindcheck-d1-paper` on `d1-paper`, currently at
-`46dbfc3bf15dda805106254ab7572e3729428dcc` plus the uncommitted D1P-13 and
-D1P-14A development-evidence records. It was established from
+`fc7416a5e546c8c6557ddccc04756034a1d15e4a` plus the uncommitted D1P-15
+development-evidence records. It was established from
 `chatgpt-codex` revision `cce1a966eb84e8e9819c6f658ca4ce07fd670036`.
 [D1P-00](reports/D1P-00.md) records the branch/worktree baseline and the
 source-inspected selective-reuse review of `claude-code`; the
@@ -27,6 +27,20 @@ The principal directories are `circuits/` and `contracts/` for the small fixture
 
 ## Current status
 
+- [D1P-15](reports/D1P-15.md) mechanically attributes all 86 beta.22
+  Poseidon2 permutation opcodes to complete H3 construction boundaries and
+  resolves `44` versus `86` as two top-level hashes plus both compiled
+  orientation candidates at each of 42 Merkle levels. Locked reference
+  implementations match 172 `nargo execute` permutation tuples across the
+  D1P-12R and D1P-14A honest inputs. The **INJECTED** M-DOM mutation compiles
+  with its own artifact, distinct VK and generated verifier; real proofs mint
+  both an honest configured-contract note and a foreign-contract note through
+  the unchanged owned-local consumer, while the pinned repaired circuit
+  rejects the foreign semantic input. Synthetic privileged root admission is
+  recorded and makes no cross-chain, deployed-defect, automatic-discovery,
+  performance or security claim. P2 and P5 are complete for this scope;
+  P1, the M-SRC half of P3, the canonical combined states in P4 and full P6
+  remain open. No solver ran and D1 remains UNKNOWN.
 - [D1P-INT1](paper/contract-revision-proposal.md) applies research contract
   revision 2 prospectively and archives revision 1 byte-for-byte under
   `docs/history/`. The target contribution is now automated discovery plus E4
@@ -269,7 +283,10 @@ required sensitivity gate when C1 validates as SAT but C2 times out; C3, C4
 and all three primary queries remain unrun. D1P-14D replaces that gate with
 eight deterministic fixed-input polarity regressions, all of which pass, then
 runs the unchanged primaries: Q1/Q2 time out and Q3 has a monitor error, so all
-three diagnostics remain UNKNOWN.
+three diagnostics remain UNKNOWN. D1P-15 separately completes the pinned
+Poseidon2 boundary inventory and the injected O1 M-DOM build/honest/foreign
+fixture gates with its own key; it does not run or reinterpret those
+diagnostics.
 These are development artifact/component results, not general
 policy validation, cross-chain evidence or a security result. The exact N=8 forwarding artifact/key,
 full-producer propagation, joint query, proof, and accepted full settlement
