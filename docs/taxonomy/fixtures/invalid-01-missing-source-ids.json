@@ -1,29 +1,30 @@
 {
-  "schema_version": "0.1.0",
+  "schema_version": "0.2.0",
   "protocol_ref": "docs/taxonomy/protocol.md",
   "created_at": "2026-10-26T00:00:00Z",
   "updated_at": "2026-10-26T00:00:00Z",
   "search_plan": {
     "id": "illustrative-plan",
-    "status": "draft",
-    "frozen_at": null,
-    "approved_by_human_id": null,
     "protocol_sha256": null,
     "publication_start": "2018-01-01",
-    "publication_end": "2026-10-26",
+    "publication_end": "2026-10-27",
     "date_basis": "earliest_public_primary_disclosure",
     "languages": [
       "English"
     ],
-    "permitted_application_ids": [
-      "illustrative-application"
-    ],
+    "sampling_frame": "proof_consuming_zk_systems_across_languages_chains_and_proof_stacks",
+    "claim_boundary": "these mechanisms recur across independent families in the sampled public disclosures",
+    "source_class_order": [],
+    "seed_endpoint_ids": [],
     "source_endpoints": [],
-    "queries_in_order": [],
-    "maximum_results_per_query": 100,
+    "traversal_steps_in_order": [],
+    "mechanism_keyword_groups": [],
+    "maximum_results_per_endpoint": 100,
     "active_time_budget_minutes": null,
-    "pagination_policy": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented.",
-    "stop_rule": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented."
+    "pagination_policy": "AI-written illustrative fixture only; no retrieval or screening is represented.",
+    "stop_rule": "AI-written illustrative fixture only; no retrieval or screening is represented.",
+    "audit_report_completeness_rule": "screen_all_findings_in_any_selected_audit_report_used_for_percentages",
+    "discovery_route_rule": "tag_seed_and_systematic_routes_before_deduplication_and_preserve_all_overlap_tags"
   },
   "actors": [
     {
@@ -152,7 +153,27 @@
         "decided_at": null,
         "evidence": []
       },
-      "funnel": {
+      "artifacts": [],
+      "facts": [],
+      "capability_review": {
+        "status": "unassessed",
+        "reviewer_actor_id": null,
+        "reviewed_at": null,
+        "fragment_version": null,
+        "policy_version": null,
+        "bounds": [],
+        "assumptions": [],
+        "unsupported_features": [],
+        "evidence": []
+      },
+      "attempts": [],
+      "evidence_claims": [],
+      "result": null,
+      "annotation_round_ids": [],
+      "discovery_routes": [
+        "systematic_source_index"
+      ],
+      "disclosure_assessment": {
         "screened": {
           "status": "not_attempted",
           "decided_at": null,
@@ -170,7 +191,9 @@
           "rationale": null,
           "evidence": [],
           "missing_prerequisites": []
-        },
+        }
+      },
+      "tool_funnel": {
         "artifacts_available": {
           "status": "not_attempted",
           "decided_at": null,
@@ -207,29 +230,31 @@
           "evidence": [],
           "missing_prerequisites": []
         }
-      },
-      "artifacts": [],
-      "facts": [],
-      "capability_review": {
-        "status": "unassessed",
-        "reviewer_actor_id": null,
-        "reviewed_at": null,
-        "fragment_version": null,
-        "policy_version": null,
-        "bounds": [],
-        "assumptions": [],
-        "unsupported_features": [],
-        "evidence": []
-      },
-      "attempts": [],
-      "evidence_claims": [],
-      "result": null,
-      "annotation_round_ids": []
+      }
     }
   ],
   "exposure_events": [],
   "annotation_rounds": [],
   "agreement_reports": [],
-  "funnel_summary": null,
-  "change_log": []
+  "change_log": [],
+  "protocol_states": {
+    "design_frozen": false,
+    "design_frozen_at": null,
+    "reservation_completed": false,
+    "reservation_completed_at": null,
+    "annotation_round_completed": false,
+    "annotation_round_completed_at": null
+  },
+  "planner_reviews": [],
+  "reservation": {
+    "commitment_scheme": "sha256-nonce-concat-canonical-manifest-v1",
+    "commitment_sha256": null,
+    "custodian_attestation": null,
+    "commitment_limitations": [
+      "The commitment can show consistency with a later opening.",
+      "The commitment does not prove randomness or timing.",
+      "Operational exclusion of reserved-family code, findings, and results from development is the essential protection."
+    ]
+  },
+  "summary": null
 }

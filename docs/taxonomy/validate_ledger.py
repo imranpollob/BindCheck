@@ -2,6 +2,7 @@
 """Validate the schema and six AI-written illustrative fixtures, without network I/O."""
 
 import argparse
+import copy
 from datetime import datetime, timezone
 import hashlib
 from importlib.metadata import version
@@ -77,6 +78,16 @@ def main():
         raise RuntimeError("Schema does not select the standard Draft 2020-12 validator")
     local_references_only(schema)
     Draft202012Validator.check_schema(schema)
+    auxiliary_schema_results = []
+    for name in ["planner-approval.schema.json", "grouped-families.schema.json"]:
+        auxiliary_path = ROOT / name
+        auxiliary = load(auxiliary_path)
+        if validator_for(auxiliary) is not Draft202012Validator:
+            raise RuntimeError(f"{name} does not select Draft 2020-12")
+        local_references_only(auxiliary)
+        Draft202012Validator.check_schema(auxiliary)
+        auxiliary_schema_results.append({"file": name, "sha256": sha256(auxiliary_path),
+                                         "meta_schema_valid": True})
     checker = FormatChecker(formats=["date", "date-time"])
     format_controls = []
     for fmt, value, expected in [
@@ -92,6 +103,19 @@ def main():
                                 "actual_valid": actual, "passed": True})
 
     validator = Draft202012Validator(schema, format_checker=checker)
+    approval_schema_path = ROOT / "planner-approval.schema.json"
+    approval_record_path = ROOT / "planner-approval-v0.2.0.json"
+    approval_validator = Draft202012Validator(load(approval_schema_path),
+                                               format_checker=checker)
+    approval_record = load(approval_record_path)
+    approval_errors = list(approval_validator.iter_errors(approval_record))
+    if approval_errors:
+        raise RuntimeError("Pending planner-approval record is structurally invalid")
+    false_complete = copy.deepcopy(approval_record)
+    false_complete["record_status"] = "complete"
+    false_complete["identity_gap"] = None
+    if not list(approval_validator.iter_errors(false_complete)):
+        raise RuntimeError("Planner approval schema accepted complete without two reviewers")
     manifest_path = ROOT / "fixtures/manifest.json"
     manifest = load(manifest_path)
     cases = manifest["cases"]
@@ -128,15 +152,88 @@ def main():
             "errors": details,
         })
 
+    base = load(ROOT / "fixtures/valid-01-unassessed.json")
+    state_controls = []
+    for label, flag, timestamp in [
+        ("design freeze requires two approving AI-planner records and a frozen plan",
+         "design_frozen", "design_frozen_at"),
+        ("reservation completion requires a commitment and custodian attestation",
+         "reservation_completed", "reservation_completed_at"),
+        ("annotation completion requires a completed annotation round",
+         "annotation_round_completed", "annotation_round_completed_at"),
+    ]:
+        candidate = copy.deepcopy(base)
+        candidate["protocol_states"][flag] = True
+        candidate["protocol_states"][timestamp] = "2026-10-27T00:00:00Z"
+        rejected = bool(list(validator.iter_errors(candidate)))
+        if not rejected:
+            raise RuntimeError(f"Protocol-state control was not rejected: {flag}")
+        state_controls.append({"control": label, "expected_valid": False,
+                               "actual_valid": False, "passed": True})
+
+    source_level = copy.deepcopy(base)
+    source_level["search_plan"]["source_endpoints"] = [{
+        "id": "illustrative-source-index",
+        "source_class": "audit_report_index",
+        "source_role": "backbone_index",
+        "endpoint": "urn:illustrative:source-index",
+        "revision_or_snapshot": None,
+        "access_limitations": ["Synthetic structural control only."],
+    }]
+    endpoint_errors = list(validator.iter_errors(source_level))
+    if endpoint_errors:
+        raise RuntimeError("Source-level endpoint without application ID was rejected")
+    state_controls.append({
+        "control": "source-level index endpoint requires no application ID",
+        "expected_valid": True, "actual_valid": True, "passed": True,
+    })
+
+    if "approved_by_human_id" in schema["$defs"]["search_plan"]["properties"]:
+        raise RuntimeError("Design schema still contains approved_by_human_id")
+    finding_required = set(schema["$defs"]["finding"]["required"])
+    if "funnel" in finding_required or not {
+        "disclosure_assessment", "tool_funnel"
+    }.issubset(finding_required):
+        raise RuntimeError("Disclosure assessment and tool funnel are not separated")
+
+    archive_root = ROOT / "history/v0.1.0"
+    archive_manifest = load(archive_root / "manifest.json")
+    archive_files = []
+    for entry in archive_manifest["files"]:
+        archived = (archive_root / entry["path"]).resolve()
+        if not archived.is_relative_to(archive_root.resolve()):
+            raise RuntimeError("Archived path escapes v0.1.0 directory")
+        actual = sha256(archived)
+        passed_archive = actual == entry["sha256"] and archived.stat().st_size == entry["bytes"]
+        if not passed_archive:
+            raise RuntimeError(f"v0.1.0 archive mismatch: {entry['path']}")
+        archive_files.append({"path": entry["path"], "sha256": actual,
+                              "bytes": archived.stat().st_size, "passed": True})
+
     passed = all(result["passed"] for result in results)
     report = {
-        "task": "D1P-C01 validation follow-up", "notice": manifest["notice"],
+        "task": "D1P-C03 taxonomy protocol v0.2.0 validation", "notice": manifest["notice"],
         "recorded_at_utc": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
         "python": platform.python_version(), "platform": platform.platform(),
         "validator": "jsonschema.Draft202012Validator", "packages": pins,
         "schema": {"file": "ledger.schema.json", "sha256": sha256(schema_path),
                    "version": schema["properties"]["schema_version"]["const"],
                    "meta_schema_valid": True},
+        "auxiliary_schemas": auxiliary_schema_results,
+        "planner_approval_record": {
+            "file": approval_record_path.name,
+            "sha256": sha256(approval_record_path),
+            "record_status": approval_record["record_status"],
+            "valid": True,
+            "complete_without_reviewers_rejected": True,
+        },
+        "protocol_state_controls": state_controls,
+        "v0_1_0_archive": {
+            "source_commit": archive_manifest["source_commit"],
+            "manifest_sha256": sha256(archive_root / "manifest.json"),
+            "files_verified": len(archive_files),
+            "files": archive_files,
+        },
         "runner_sha256": sha256(Path(__file__)),
         "requirements_sha256": sha256(ROOT / "validation-requirements.txt"),
         "fixture_manifest_sha256": sha256(manifest_path),
@@ -145,8 +242,9 @@ def main():
                     "passed": sum(result["passed"] for result in results),
                     "failed": sum(not result["passed"] for result in results)},
         "exit_status": 0 if passed else 1,
-        "limits": "Schema and synthetic structural validation only; no screening, application "
-                  "labeling, cross-record evidence validation, human review, or freeze.",
+        "limits": "Schema and synthetic structural validation only; no source traversal, "
+                  "screening, labeling, reservation draw, human attestation, annotation round, "
+                  "cross-record evidence validation, or protocol-state completion.",
     }
     if output:
         with output.open("x") as stream:
@@ -154,6 +252,8 @@ def main():
             stream.write("\n")
     print(json.dumps({"meta_schema_valid": True, **report["summary"],
                       "format_controls_passed": len(format_controls),
+                      "protocol_state_controls_passed": len(state_controls),
+                      "archived_files_verified": len(archive_files),
                       "output": str(output.relative_to(ROOT)) if output else None}))
     return report["exit_status"]
 

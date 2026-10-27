@@ -1,0 +1,16 @@
+{
+  "schema_version": "0.2.0",
+  "protocol_version": "0.2.0",
+  "record_status": "pending_reviewer_identity",
+  "handoff_assertion": "The D1P-C03 task handoff states that the design changes were approved by two planners.",
+  "identity_gap": "The handoff supplied no planner names, provider/model identifiers, session IDs, or dated review records; none were fabricated.",
+  "design_items": [
+    {"id": "D01", "description": "Widen scope to proof-consuming ZK systems and traverse source indexes with seed and supplemental keyword routes."},
+    {"id": "D02", "description": "Reserve half of newly eligible unexposed provisional family groups by a private human draw and store only a salted commitment plus attestation."},
+    {"id": "D03", "description": "Use typed AI-planner design reviews and limit human sign-off to staffing, reservation, and annotation rounds."},
+    {"id": "D04", "description": "Separate design_frozen, reservation_completed, and annotation_round_completed schema states."},
+    {"id": "D05", "description": "Pilot 20 development packets as four unscored calibration packets and 16 fresh independent packets."},
+    {"id": "D06", "description": "Keep human disclosure assessment separate from the artifacts-to-validation tool funnel."}
+  ],
+  "reviewers": []
+}

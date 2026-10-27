@@ -1,157 +1,63 @@
-# D1P-C01 — standard schema validation and review package
+# D1P-C03 taxonomy v0.2.0 validation report
 
-**Complete: schema validation and synthetic fixture checks. Pending: human
-review and freeze.** Recorded 26 October 2026 at lane HEAD
-`9fabd0893bcc0d3851247484da9017e5ff37ab95`. No schema changes were needed.
-The schema remains draft `0.1.0`; protocol clarification and the review package
-do not constitute a human-approved freeze.
+Recorded at `2026-10-27T07:53:03.305144Z`. The pinned local validator exited
+`0`; no network access or package installation was used.
 
-Standard validator: `jsonschema.Draft202012Validator`, **jsonschema 4.26.0**,
-Python **3.13.7**, macOS 27.0.1 ARM64. `check_schema` passed against the
-standard Draft 2020-12 meta-schema. Explicit `date` and `date-time` format
-assertions were enabled and tested. The validator was installed in the
-ignored, isolated `docs/taxonomy/.venv-validation/`; dependency changes were
-confined to that directory. No global package environment was modified.
+## Results
 
-## Recorded results
+- `ledger.schema.json` selects JSON Schema draft 2020-12 and passes the
+  standard meta-schema check. Schema version: `0.2.0`; SHA-256:
+  `012ee5f97880418d7579886ae525d30a48aeb74f1c8f7def0c54a028cdd5d8b4`.
+- `planner-approval.schema.json` and `grouped-families.schema.json` also pass
+  the draft 2020-12 meta-schema check.
+- All three valid illustrative fixtures were accepted and all three invalid
+  fixtures were rejected for their intended reason. Four date/date-time
+  format controls passed.
+- Four focused controls passed: incomplete design freeze, reservation
+  completion, and annotation completion states were rejected; a source-index
+  endpoint without an application ID was accepted.
+- The pending planner-approval record is structurally valid. Changing it to
+  `complete` without two named AI-planner reviewer records is rejected.
+- All 16 archived v0.1.0 artifacts match the byte counts and SHA-256 values in
+  the archive manifest and the versions introduced by commit
+  `785ff402793d0b2cf5f28de2735a97a338e1ad4d`.
+- `scripts/taxonomy/test_reserve_families.py` passed five synthetic unit tests:
+  deterministic stratified selection with a fixed test seed, exact commitment
+  construction, eligibility-aware strata, rejection of an all-unsupported
+  pool, and rejection of worktree output.
+  The reservation CLI was not run and no draw or selection was produced.
 
-[Machine-readable results](validation-results.json) were written at
-`2026-10-26T14:50:55.828725Z`; exit status **0**. The runner also confirms the
-schema selects Draft 2020-12, rejects external `$ref` resolution, verifies all
-dependency pins, checks fixture count/shape, and confirms each intended
-negative-test error path. Six fixture outcomes matched expectations:
+Machine-readable evidence is in
+[`validation-results.json`](validation-results.json). Its SHA-256 is
+`6d31da79ddad8427665653e9954cc671b194efc79c0e468dd1449484a446c71e`.
+The validator SHA-256 is
+`431566daa49c4edcb2d472f4d886597ef363a4baa56b8ccb3d38f9b73b82159f`.
+The reservation script SHA-256 is
+`4a3120ce148970251bf690b99b38ad53b6fb9ed98ccba2fff17188950439a0a4`.
 
-| Fixture (each contains one finding row in a complete ledger envelope) | Expected | Observed |
-| --- | --- | --- |
-| [valid-01-unassessed](fixtures/valid-01-unassessed.json) | Accept | Accepted; zero errors |
-| [valid-02-relevance-pending](fixtures/valid-02-relevance-pending.json) | Accept | Accepted; zero errors |
-| [valid-03-analyzed-unknown](fixtures/valid-03-analyzed-unknown.json) | Accept | Accepted; zero errors |
-| [invalid-01-missing-source-ids](fixtures/invalid-01-missing-source-ids.json) | Reject: required `source_ids` | Rejected at `/findings/0`; `required` |
-| [invalid-02-skipped-screening](fixtures/invalid-02-skipped-screening.json) | Reject: later stages met without screened | Rejected at `/findings/0/funnel/screened/status`; `const` (four prerequisite errors) |
-| [invalid-03-unknown-validated](fixtures/invalid-03-unknown-validated.json) | Reject: `UNKNOWN` marked validated | Rejected at `/findings/0/result/verdict`; `enum` |
-
-**Every fixture, actor, source, finding row, timestamp, status, artifact, and
-claimed event in these examples is AI-written and illustrative.** No real
-application or observed behavior is represented. “Valid” means structurally
-accepted by this schema, not true, complete, scientifically admissible, or
-human-approved. Annotation rounds are empty in every fixture. Apparent human
-actors/decisions and command strings are fictional placeholders, not an
-assertion that people reviewed findings or an analyzer ran. Keep these files
-outside all research denominators and reliability calculations. The
-[fixture manifest](fixtures/manifest.json) records intent and expected paths.
-
-Four format controls passed: a valid date and UTC timestamp were accepted;
-an impossible calendar date and a timestamp without a timezone were rejected.
-These are additional in-memory format controls, not extra ledger fixtures.
-
-| Validated input or output | SHA-256 |
-| --- | --- |
-| `ledger.schema.json` | `713034927f1b2b684486c3fcae531d41e00b38eee906c5cf1179414aecac981c` |
-| `validate_ledger.py` | `0634eadbd9e64616a9db5030dd3d65c58accb67a6e414b547407200d059d3994` |
-| `validation-requirements.txt` | `ad943e43ce86ccc2e4b59e7b92b2940b4791066968d8557915df8b0978badd08` |
-| `fixtures/manifest.json` | `98eb410e012abb582cd589b118d339e8307dbb3f335ce3697ebc0087e36f3c70` |
-| `validation-results.json` | `58b76950bb6027eced9f66e3eb5d1decb085096b3a562d425c40ba2c07fb530a` |
-
-The results file includes each fixture's hash, all rejection diagnostics,
-installed dependency versions, Python/platform, format controls, counts, and
-exit status. These hashes identify validation inputs, **not a protocol
-freeze**. Human freeze hashes will be generated by the separate checklist
-procedure after approval.
-
-## Setup, recovery, and exact validation commands
-
-The first permitted setup used Python 3.14.7 and these commands:
+## Commands
 
 ```sh
-python3 -m venv docs/taxonomy/.venv-validation
-docs/taxonomy/.venv-validation/bin/python -m pip --disable-pip-version-check install \
-  --no-cache-dir -r docs/taxonomy/validation-requirements.in
+PYTHONDONTWRITEBYTECODE=1 docs/taxonomy/.venv-validation/bin/python -B \
+  docs/taxonomy/validate_ledger.py --output validation-results.json
+PYTHONDONTWRITEBYTECODE=1 python3 -B \
+  scripts/taxonomy/test_reserve_families.py
 ```
 
-Venv creation succeeded; package installation exited **1** because the shell
-could not resolve `pypi.org`. The “no matching distribution” message followed
-DNS failures and was not evidence that version 4.26.0 was unavailable.
-A read-only package-cache probe found that exact standard validator and its
-dependencies locally. No application repository or other worktree was read.
-The pip cache CLI also reported its cache disabled because the directory was
-not writable; cache files were read directly without changing them.
+The pinned validation environment uses Python `3.13.7`, `jsonschema 4.26.0`,
+`jsonschema-specifications 2025.9.1`, `referencing 0.37.0`, and
+`rpds-py 0.30.0`; the unchanged pins remain in
+`validation-requirements.txt`.
 
-The available binary dependency was a CPython 3.13 ARM64 `rpds-py` wheel, so
-only the task-created venv was recreated using Python 3.13.7:
+## Limits and pending empirical gates
 
-```sh
-python3.13 -m venv --clear docs/taxonomy/.venv-validation
-```
+These checks establish syntax and synthetic structural behavior only. They do
+not establish source coverage, evidence correctness, family independence,
+screening or labels, a random/timely reservation draw, human staffing,
+annotation reliability, or a BindCheck result.
 
-Seven cached uv distributions were repacked into local wheels after verifying
-their `RECORD` SHA-256 digests and sizes; the cached original
-`rfc3339-validator` wheel was copied and its `RECORD` checked. No package
-source was edited. Paths, versions, wheel hashes, and integrity-check details
-are in [validator-cache-provenance.json](validator-cache-provenance.json).
-The exact recovery code is retained in the task tool transcript. Dependency
-bytes stay under the ignored venv; the repository contains only pins and
-provenance, not package binaries. Cache integrity is not an independent
-authentication of upstream origin.
-
-The following commands then succeeded (each exit **0**):
-
-```sh
-docs/taxonomy/.venv-validation/bin/python -m pip --disable-pip-version-check install \
-  --no-cache-dir --no-index --find-links docs/taxonomy/.venv-validation/wheelhouse \
-  -r docs/taxonomy/validation-requirements.txt
-docs/taxonomy/.venv-validation/bin/python -m pip check
-docs/taxonomy/.venv-validation/bin/python -B docs/taxonomy/validate_ledger.py \
-  --output validation-results.json
-```
-
-`pip check` reported no broken requirements. All eight dependencies are
-exactly pinned in [validation-requirements.txt](validation-requirements.txt).
-On a machine with package-index access, recreate the Python 3.13 environment
-and install that lock file with `pip install --no-cache-dir -r ...`; the
-original `.in` file documents the initial direct-dependency request.
-
-To rerun without overwriting evidence, omit `--output` for a read-only check
-or choose a new result filename under `docs/taxonomy/`. The runner refuses to
-overwrite an existing result or write outside that directory. The freeze
-procedure requires a new versioned result for final approved bytes.
-
-## Review handoff and limits
-
-The [human review checklist](review-checklist.md) covers scope, dates, sources,
-query/deduplication rules, inclusion/counter-examples, family independence,
-every cause/consequence/role code, missingness, independent human annotation,
-agreement, adjudication, exposure, all six funnel stages, schema record
-definitions, and cross-record semantic checks. It specifies versioning, actual
-UTC timestamps, SHA-256 byte snapshots/manifests, human approvals, subsequent
-annotation-round freezes, and immutable change history.
-
-The protocol and checklist explicitly require: **reserved families are chosen
-and stored by humans outside all worktrees before any new development
-screening.** This package neither selects them nor asserts the prerequisite
-has happened. No selection identity, membership list, storage location, or
-selection hash is requested or stored.
-
-Structural validation does not prove reference resolution across ledger rows,
-deduplication truth, ancestry, scientific evidence, independent human review,
-exposure completeness, or actual funnel eligibility. Those checks remain
-explicit human/semantic gates. Six examples are focused regression coverage,
-not exhaustive proof of the schema or a full semantic validator.
-
-All repository additions/edits are within `docs/taxonomy/`: fixtures and their
-manifest, validator script/pins/provenance/results, this report, the review
-checklist, localized ignore rules, and protocol follow-up text. The original
-schema hash is unchanged. No application screening, labeling, builds/proofs,
-shared-status edit, other-worktree modification, commit, push, or merge ran.
-
-Final package checks covered all 17 deliverable files: JSON parsing, local
-Markdown links, validation-input/fixture hashes, all 40 schema-definition
-review IDs, all 24 code definitions, unchecked human decisions, whitespace,
-and working-tree scope passed. `git diff --no-index --check /dev/null <file>`
-returned 1 for new-file differences with no whitespace diagnostics; the first
-package-check wrapper incorrectly required 0, then corrected that exit-code
-interpretation and passed (wrapper exit 0). No schema or fixture repair was
-needed. Exact checking commands are retained in the task tool transcript.
-
-Next measurable task: two humans dispose every checklist/definition/code ID,
-resolve changes, complete the external prerequisite, then freeze approved
-bytes using the stated procedure. This agent has not supplied human approval.
+The task handoff reports approval by two planners but provides no planner
+names or dated reviewer records. The typed approval record therefore remains
+`pending_reviewer_identity`, and `design_frozen` remains false. The reservation
+and annotation states also remain false; no human signature or attestation was
+fabricated.

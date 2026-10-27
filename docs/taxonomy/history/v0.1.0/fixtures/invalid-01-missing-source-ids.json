@@ -1,0 +1,235 @@
+{
+  "schema_version": "0.1.0",
+  "protocol_ref": "docs/taxonomy/protocol.md",
+  "created_at": "2026-10-26T00:00:00Z",
+  "updated_at": "2026-10-26T00:00:00Z",
+  "search_plan": {
+    "id": "illustrative-plan",
+    "status": "draft",
+    "frozen_at": null,
+    "approved_by_human_id": null,
+    "protocol_sha256": null,
+    "publication_start": "2018-01-01",
+    "publication_end": "2026-10-26",
+    "date_basis": "earliest_public_primary_disclosure",
+    "languages": [
+      "English"
+    ],
+    "permitted_application_ids": [
+      "illustrative-application"
+    ],
+    "source_endpoints": [],
+    "queries_in_order": [],
+    "maximum_results_per_query": 100,
+    "active_time_budget_minutes": null,
+    "pagination_policy": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented.",
+    "stop_rule": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented."
+  },
+  "actors": [
+    {
+      "id": "illustrative-human",
+      "kind": "human",
+      "display_name": "Fictional human actor; AI-written illustrative fixture",
+      "role": "Fixture placeholder; no human judgment asserted",
+      "provider": null,
+      "model": null,
+      "model_version": null,
+      "session_id": null,
+      "metadata_gap": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented."
+    }
+  ],
+  "search_runs": [],
+  "source_records": [
+    {
+      "id": "illustrative-source",
+      "source_class": "repository_report",
+      "title": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented.",
+      "publisher": "Fictional fixture publisher",
+      "uri": "urn:illustrative:no-source",
+      "aliases": [],
+      "primary": false,
+      "disclosure_ids": [],
+      "published_on": null,
+      "incident_on": null,
+      "audit_on": null,
+      "patch_on": null,
+      "retrieved": {
+        "start": null,
+        "end": null,
+        "date_utc": "2026-10-26",
+        "precision": "date_only",
+        "basis": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented."
+      },
+      "retrieved_by_actor_id": "illustrative-human",
+      "sha256": null,
+      "revision": null,
+      "access_status": "unavailable",
+      "reported_status": null,
+      "affected_revisions": [],
+      "limitations": [
+        "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented."
+      ],
+      "related_source_ids": []
+    }
+  ],
+  "organizations": [],
+  "libraries": [],
+  "family_relations": [],
+  "families": [
+    {
+      "id": "illustrative-family",
+      "name": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented.",
+      "aliases": [],
+      "status": "provisional",
+      "application_ids": [
+        "illustrative-application"
+      ],
+      "organization_ids": [],
+      "library_ids": [],
+      "relation_ids": [],
+      "independence_group_id": "illustrative-group",
+      "independence_rationale": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented.",
+      "exposure_completeness": "unknown",
+      "evidence": []
+    }
+  ],
+  "applications": [
+    {
+      "id": "illustrative-application",
+      "name": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented.",
+      "family_id": "illustrative-family",
+      "organization_ids": [],
+      "library_uses": [],
+      "repository_uri": "urn:illustrative:no-repository",
+      "revisions": [],
+      "producer_stack": [],
+      "consumer_stack": [],
+      "development_scope_basis": [
+        {
+          "source_id": "illustrative-source",
+          "location": "urn:illustrative:no-evidence",
+          "revision": null,
+          "sha256": null,
+          "pin_gap": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented."
+        }
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "id": "illustrative-finding",
+      "title": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented.",
+      "family_ids": [
+        "illustrative-family"
+      ],
+      "application_ids": [
+        "illustrative-application"
+      ],
+      "disclosed_on": null,
+      "date_status": "unresolved",
+      "duplicate_of": null,
+      "duplicate_status": "unreviewed",
+      "duplicate_rationale": null,
+      "duplicate_evidence": [],
+      "manifestations": [],
+      "related_variant_ids": [],
+      "boundary": {
+        "accepted_relation": null,
+        "program_key_configuration": null,
+        "public_statement": null,
+        "decoder_consumer_interpretation": null,
+        "independent_policy": null,
+        "protected_effect_or_obligation": null,
+        "mismatch_argument": null,
+        "feasibility_and_gaps": [],
+        "evidence": []
+      },
+      "relevance": {
+        "decision": "unassessed",
+        "reason_codes": [],
+        "rationale": null,
+        "actor_id": null,
+        "decided_at": null,
+        "evidence": []
+      },
+      "funnel": {
+        "screened": {
+          "status": "not_attempted",
+          "decided_at": null,
+          "actor_id": null,
+          "reason_codes": [],
+          "rationale": null,
+          "evidence": [],
+          "missing_prerequisites": []
+        },
+        "relevant": {
+          "status": "not_attempted",
+          "decided_at": null,
+          "actor_id": null,
+          "reason_codes": [],
+          "rationale": null,
+          "evidence": [],
+          "missing_prerequisites": []
+        },
+        "artifacts_available": {
+          "status": "not_attempted",
+          "decided_at": null,
+          "actor_id": null,
+          "reason_codes": [],
+          "rationale": null,
+          "evidence": [],
+          "missing_prerequisites": []
+        },
+        "supported": {
+          "status": "not_attempted",
+          "decided_at": null,
+          "actor_id": null,
+          "reason_codes": [],
+          "rationale": null,
+          "evidence": [],
+          "missing_prerequisites": []
+        },
+        "analyzed": {
+          "status": "not_attempted",
+          "decided_at": null,
+          "actor_id": null,
+          "reason_codes": [],
+          "rationale": null,
+          "evidence": [],
+          "missing_prerequisites": []
+        },
+        "validated": {
+          "status": "not_attempted",
+          "decided_at": null,
+          "actor_id": null,
+          "reason_codes": [],
+          "rationale": null,
+          "evidence": [],
+          "missing_prerequisites": []
+        }
+      },
+      "artifacts": [],
+      "facts": [],
+      "capability_review": {
+        "status": "unassessed",
+        "reviewer_actor_id": null,
+        "reviewed_at": null,
+        "fragment_version": null,
+        "policy_version": null,
+        "bounds": [],
+        "assumptions": [],
+        "unsupported_features": [],
+        "evidence": []
+      },
+      "attempts": [],
+      "evidence_claims": [],
+      "result": null,
+      "annotation_round_ids": []
+    }
+  ],
+  "exposure_events": [],
+  "annotation_rounds": [],
+  "agreement_reports": [],
+  "funnel_summary": null,
+  "change_log": []
+}

@@ -1,0 +1,23 @@
+{
+  "archive_version": "0.1.0",
+  "source_commit": "785ff402793d0b2cf5f28de2735a97a338e1ad4d",
+  "hash_algorithm": "sha256",
+  "files": [
+    {"path": "fixtures/invalid-01-missing-source-ids.json", "bytes": 7391, "sha256": "63f281860976b88ae4f764271fc23d74eccef0561a588b28c81c0e7afc9f9c81"},
+    {"path": "fixtures/invalid-02-skipped-screening.json", "bytes": 25318, "sha256": "c77664fc879d9e1abdb51a66a65a2d3a99f21d7de90f27e74cb7c57b9b960304"},
+    {"path": "fixtures/invalid-03-unknown-validated.json", "bytes": 26778, "sha256": "fde3fcccae7b2b0414b4c42036b5775b1c82ca2b4b577338f1b29a3b10027a0c"},
+    {"path": "fixtures/manifest.json", "bytes": 1889, "sha256": "98eb410e012abb582cd589b118d339e8307dbb3f335ce3697ebc0087e36f3c70"},
+    {"path": "fixtures/valid-01-unassessed.json", "bytes": 7452, "sha256": "c076508ed36b884b37ea23262a69819ad5bcee224907ad86a735bb0f1c300c97"},
+    {"path": "fixtures/valid-02-relevance-pending.json", "bytes": 9067, "sha256": "ff52a02a60bc5e679d603139ed92339e14ba1dc08b2cadec37a2b36b1e14329d"},
+    {"path": "fixtures/valid-03-analyzed-unknown.json", "bytes": 25832, "sha256": "2f835de0b8de37c8b95c0a3d3e9cfb41d6363d01e2675647b42262e3166d5401"},
+    {"path": "ledger.schema.json", "bytes": 108552, "sha256": "713034927f1b2b684486c3fcae531d41e00b38eee906c5cf1179414aecac981c"},
+    {"path": "protocol.md", "bytes": 38579, "sha256": "d38a8fa894be2264c89fb035c7c3c4c95bdf87598306a1039d389f690a7d3611"},
+    {"path": "review-checklist.md", "bytes": 36117, "sha256": "b25bf350f5278e97027b0b97801cd31b16a3d28981abb8f83b879ca00bbd42d3"},
+    {"path": "validate_ledger.py", "bytes": 6925, "sha256": "0634eadbd9e64616a9db5030dd3d65c58accb67a6e414b547407200d059d3994"},
+    {"path": "validation-report.md", "bytes": 9254, "sha256": "e5ca5a98f0a1be9ca2944fbd6f40e6ef67498851af5bba265dc51739593eff5b"},
+    {"path": "validation-requirements.in", "bytes": 119, "sha256": "61220c41191d3b0b5237596a90261fb44b4f2f325b6cdded380bd07a6be265fa"},
+    {"path": "validation-requirements.txt", "bytes": 168, "sha256": "ad943e43ce86ccc2e4b59e7b92b2940b4791066968d8557915df8b0978badd08"},
+    {"path": "validation-results.json", "bytes": 6460, "sha256": "58b76950bb6027eced9f66e3eb5d1decb085096b3a562d425c40ba2c07fb530a"},
+    {"path": "validator-cache-provenance.json", "bytes": 3901, "sha256": "4cb50592acb1c88d5a3f90426253e5c103fb6f13b5fc2e3c1cfa8a03237b7532"}
+  ]
+}

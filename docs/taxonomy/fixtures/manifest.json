@@ -1,6 +1,6 @@
 {
   "notice": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented.",
-  "scope": "Three schema-valid and three schema-invalid complete ledger envelopes, each with exactly one synthetic finding row. They test structure only and must never enter the research ledger or agreement calculations.",
+  "scope": "Three schema-valid and three schema-invalid v0.2.0 ledger envelopes, each with exactly one synthetic finding row and all protocol completion states false. They test structure only and must never enter the research ledger or agreement calculations.",
   "schema": "../ledger.schema.json",
   "cases": [
     {
@@ -12,7 +12,7 @@
     {
       "file": "valid-02-relevance-pending.json",
       "expected_valid": true,
-      "description": "Illustrative screened row with unresolved relevance; later stages remain unattempted.",
+      "description": "Illustrative screened row with unresolved relevance; the separate tool funnel remains unattempted.",
       "expected_error": null
     },
     {
@@ -33,9 +33,9 @@
     {
       "file": "invalid-02-skipped-screening.json",
       "expected_valid": false,
-      "description": "Relevant and later stages met while screened is not_attempted.",
+      "description": "Disclosure relevance is met while disclosure screening is not_attempted.",
       "expected_error": {
-        "instance_path": "/findings/0/funnel/screened/status",
+        "instance_path": "/findings/0/disclosure_assessment/screened/status",
         "validator": "const"
       }
     },

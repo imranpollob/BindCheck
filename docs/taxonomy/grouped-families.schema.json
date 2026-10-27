@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:bindcheck:d1p-c03:grouped-families:0.2.0",
+  "title": "D1P-C03 name-only grouped family candidates",
+  "description": "Metadata-only input for the human-run reservation script; do not include finding descriptions.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "grouped_at", "rounding", "groups"],
+  "properties": {
+    "schema_version": {"const": "0.2.0"},
+    "grouped_at": {"type": "string", "minLength": 1},
+    "rounding": {"enum": ["ceil_per_stratum", "floor_per_stratum"]},
+    "groups": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["group_id", "candidate_application_names", "newly_eligible", "exposed", "tool_transfer_eligibility", "stratum_id", "grouping_basis"],
+        "properties": {
+          "group_id": {"type": "string", "minLength": 1},
+          "candidate_application_names": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+          "newly_eligible": {"type": "boolean"},
+          "exposed": {"type": "boolean"},
+          "tool_transfer_eligibility": {"enum": ["eligible", "ineligible", "unknown"]},
+          "stratum_id": {"type": "string", "minLength": 1},
+          "grouping_basis": {"type": "string", "minLength": 1}
+        }
+      }
+    }
+  }
+}
