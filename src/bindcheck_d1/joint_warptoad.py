@@ -39,6 +39,7 @@ PUBLIC_INPUTS = [
 ]
 
 IMPLEMENTATION_VARIANTS = {"BASE", "C1_FULL_RECIPIENT_PLUS_FEE", "C2_FEE_TO_RECIPIENT", "C3_EXTRA_MINT", "C4_WRONG_NULLIFIER_WRITE"}
+BACKEND_OPTIONS = {"BASE", "T-ARITH", "T-OVF"}
 
 
 def canonical_bytes(value: Any) -> bytes:
@@ -523,6 +524,14 @@ def _bv_product_no_overflow(lhs: str, rhs: str) -> str:
     return f"(= ((_ extract 511 256) (bvmul ((_ zero_extend 256) {lhs}) ((_ zero_extend 256) {rhs}))) {_bv(0)})"
 
 
+def _native_bv_sum_no_overflow(lhs: str, rhs: str) -> str:
+    return f"(not (bvuaddo {lhs} {rhs}))"
+
+
+def _native_bv_product_no_overflow(lhs: str, rhs: str) -> str:
+    return f"(not (bvumulo {lhs} {rhs}))"
+
+
 def _bool_or(values: list[str]) -> str:
     if not values:
         return "false"
@@ -563,13 +572,25 @@ def _summary_expr(value: str) -> str:
     return exact[value]
 
 
-def _emit_consumer_transition(lines: list[str], omega: dict[str, Any]) -> dict[str, Any]:
+def _emit_consumer_transition(
+    lines: list[str], omega: dict[str, Any], *, backend_option: str,
+) -> dict[str, Any]:
     """Emit only the MANUAL/ASSUMED transition and effect representation."""
+    if backend_option not in BACKEND_OPTIONS:
+        raise ValueError(f"unknown backend option: {backend_option}")
     summary = omega["consumer_T_mint"]["transition_and_effects"]
     giga_roots = [int(value) for value in omega["fixed_pre_state_S0"]["giga_root_history"]]
     local_roots = [int(value) for value in omega["fixed_pre_state_S0"]["local_root_history"]]
     total_supply = int(omega["fixed_pre_state_S0"]["total_supply"])
     root_or = lambda word, roots: _bool_or([f"(= {word} {_bv(root)})" for root in roots])
+    sum_no_overflow = (
+        _native_bv_sum_no_overflow("basefee", "pi7")
+        if backend_option == "T-OVF" else _bv_sum_no_overflow("basefee", "pi7")
+    )
+    product_no_overflow = (
+        _native_bv_product_no_overflow("pi6", "fee_base")
+        if backend_option == "T-OVF" else _bv_product_no_overflow("pi6", "fee_base")
+    )
     lines.extend([
         "; IMPLEMENTATION_SUMMARY MANUAL_ASSUMED begin",
         "; source guards and successful-transition arithmetic",
@@ -580,9 +601,21 @@ def _emit_consumer_transition(lines: list[str], omega: dict[str, Any]) -> dict[s
         f"(assert (not (= pi9 {_bv(1)})))",
         "(define-fun fee_branch () Bool (not (= pi6 (_ bv0 256))))",
         "(define-fun fee_base () (_ BitVec 256) (bvadd basefee pi7))",
-        "(define-fun fee_amount () (_ BitVec 256) (bvmul pi6 fee_base))",
-        f"(assert (=> fee_branch {_bv_sum_no_overflow('basefee', 'pi7')}))",
-        f"(assert (=> fee_branch {_bv_product_no_overflow('pi6', 'fee_base')}))",
+    ])
+    if backend_option != "BASE":
+        lines.insert(lines.index("; source guards and successful-transition arithmetic"),
+                     f"; BACKEND_OPTION {backend_option}")
+    if backend_option == "T-ARITH":
+        lines.extend([
+            "; T-ARITH over-approximation: fee_amount is fresh; every concrete",
+            "; successful execution extends by assigning the original product.",
+            "(declare-const fee_amount (_ BitVec 256))",
+        ])
+    else:
+        lines.append("(define-fun fee_amount () (_ BitVec 256) (bvmul pi6 fee_base))")
+    lines.extend([
+        f"(assert (=> fee_branch {sum_no_overflow}))",
+        f"(assert (=> fee_branch {product_no_overflow}))",
         "(assert (=> fee_branch (bvule fee_amount pi8)))",
         "(assert (=> fee_branch (bvule fee_amount pi2)))",
         "; explicit mint occurrences, independently of policy",
@@ -732,8 +765,13 @@ def balanced_smt_parentheses(data: bytes) -> dict[str, Any]:
             "column": column, "reason": None if depth == 0 and not in_string else "unclosed parenthesis or string"}
 
 
-def encode_query(omega: dict[str, Any], *, drop_producer: bool = False) -> tuple[bytes, dict[str, Any]]:
+def encode_query(
+    omega: dict[str, Any], *, drop_producer: bool = False,
+    backend_option: str = "BASE",
+) -> tuple[bytes, dict[str, Any]]:
     """Encode one of the three frozen queries and return bytes plus certificate."""
+    if backend_option not in BACKEND_OPTIONS:
+        raise ValueError(f"unknown backend option: {backend_option}")
     goal = omega["goal"]["name"]
     if drop_producer and goal != "AUTH-1":
         raise ValueError("only AUTH-1 Q1 may drop R_v")
@@ -747,6 +785,8 @@ def encode_query(omega: dict[str, Any], *, drop_producer: bool = False) -> tuple
         "(set-logic ALL)", "(set-option :produce-models true)",
         f"(define-sort F () (_ FiniteField {FIELD_MODULUS}))",
     ]
+    if backend_option != "BASE":
+        lines.insert(1, f"; D1P-17 backend_option={backend_option}")
     emitted = Counter()
     referenced: set[int] = set(range(11))
     if not drop_producer:
@@ -798,7 +838,7 @@ def encode_query(omega: dict[str, Any], *, drop_producer: bool = False) -> tuple
                 raise ValueError(f"fail closed: unsupported opcode {kind} at {index}")
             emitted[kind] += 1
 
-    effects = _emit_consumer_transition(lines, omega)
+    effects = _emit_consumer_transition(lines, omega, backend_option=backend_option)
     _emit_policy(lines, omega, effects)
     lines.append("(check-sat)")
     data = ("\n".join(lines) + "\n").encode("utf-8")
@@ -808,6 +848,8 @@ def encode_query(omega: dict[str, Any], *, drop_producer: bool = False) -> tuple
     certificate = {
         "schema": "bindcheck.d1p14c.transformation/v1",
         "omega_sha256": canonical_sha256(omega), "goal": goal,
+        "backend_option": backend_option,
+        "backend_options_are_mutually_exclusive": True,
         "producer_relation": "dropped by Q1 definition" if drop_producer else "full",
         "decoded_opcode_counts": dict(sorted(counts.items())),
         "emitted_opcode_counts": dict(sorted(emitted.items())),
@@ -827,6 +869,21 @@ def encode_query(omega: dict[str, Any], *, drop_producer: bool = False) -> tuple
         },
         "query_sha256": hashlib.sha256(data).hexdigest(), "query_bytes": len(data),
     }
+    if backend_option == "T-ARITH":
+        certificate["preservation_argument"] = (
+            "For every concrete successful execution, assign fresh fee_amount "
+            "the original uint256 value fee_factor*(basefee+priority_fee). The "
+            "unchanged branch and successful-path overflow/cap/amount guards then "
+            "hold, so every concrete execution has an abstract representative. "
+            "Only abstract UNSAT transfers under this inclusion; abstract SAT is "
+            "a candidate requiring original-arithmetic, full-producer, and consumer validation."
+        )
+    elif backend_option == "T-OVF":
+        certificate["overflow_identity"] = (
+            "For unsigned w-bit x,y, not bvumulo(x,y) iff the upper w bits of "
+            "the 2w-bit product of their w-bit zero extensions are zero; and "
+            "not bvuaddo(x,y) iff bvadd(x,y) is unsigned-greater-or-equal to x."
+        )
     audit_transformation(omega, data, certificate, drop_producer=drop_producer)
     return data, certificate
 
@@ -858,4 +915,15 @@ def audit_transformation(
             raise ValueError(f"missing query marker {marker}")
     if "collision" in text.lower() or "injective" in text.lower():
         raise ValueError("forbidden hash axiom text in solver input")
+    option = certificate.get("backend_option", "BASE")
+    if option != "BASE" and text.count(f"; BACKEND_OPTION {option}") != 1:
+        raise ValueError("backend option marker mismatch")
+    if option == "T-ARITH":
+        if text.count("(declare-const fee_amount (_ BitVec 256))") != 1:
+            raise ValueError("T-ARITH fresh fee declaration mismatch")
+        if "(define-fun fee_amount" in text:
+            raise ValueError("T-ARITH retained concrete fee definition")
+    elif option == "T-OVF":
+        if "(not (bvuaddo basefee pi7))" not in text or "(not (bvumulo pi6 fee_base))" not in text:
+            raise ValueError("T-OVF native predicates missing")
 
