@@ -69,6 +69,8 @@ flowchart TD
     d1p14cresult --> d1p14d["D1P-14D deterministic controls [DONE]"]
     d1p14d --> d1p14dresult["AUTH-1 / NONVAC-1 diagnostics [UNKNOWN]"]
     d1p14dresult --> warptoadJoint["Joint policy/analyzer work [WAITING]"]
+    d1p14dresult --> d1pint1["D1P-INT1 contract revision 2 [DONE]"]
+    d1pint1 --> capabilityGate["Automated discovery + E4 capability gate [NEXT]"]
     d1p10 --> d1p10result["Transformed-arm eligibility [UNKNOWN]"]
     d1p10result --> d1p10decision["Selected-cone backend reconsideration [WAITING]"]
     d1p09 -.-> d1p09decision["Full-relation/forwarding decision [WAITING]"]
@@ -300,8 +302,11 @@ flowchart TD
     encoder, fork/live chain, general policy, performance or security result
     follows; D1 remains UNKNOWN.
 
-The end goal does not imply that submission is currently justified. The
-research contract's two principal properties remain unchanged, and unresolved
+The end goal does not imply that submission is currently justified. Contract
+revision 2 retains authorization and coverage but makes automated discovery
+and E4 end-to-end validation the primary prospective capability target;
+efficiency is secondary RQ5. The required two-arm baselines and frozen
+held-out-family transfer have not been completed. Unresolved
 T22 results remain UNKNOWN. D1P-09 adds an offline selected-cone transformation
 component, and D1P-10 does not establish that component or the selected radix
 as a usable solver improvement. D1P-11 identifies a bounded WarpToad
@@ -369,6 +374,7 @@ slots were executed.
 | 2026-10-27 | D1P-14B first WarpToad joint encoder | `[DONE]` bounded attempt / `[UNKNOWN]` AUTH-1 and NONVAC-1 | [Report](../reports/D1P-14B.md), [protocol](../protocols/d1/d1p-14b-joint.json), and [frozen manifest](../metadata/d1/d1p-14b-artifact-manifest.json): preserve all earlier evidence; extract `T_mint` with ordered occurrences and exact OpenZeppelin 5.6.1 behavior; match the D1P-12R honest/replay anchor and all D1P-14A fee controls; serialize/hash both Omega objects; and account for every beta.22 opcode under the amended section 6.4 L0 hash layer. Exactly three sequential, one-shot cvc5 processes ran under D1P-07 RSS sampling, but all stopped at the same frozen missing-parenthesis parse error before SAT/UNSAT. The no-refinement rule exhausts the schedule; no SAT validation or proof generation ran. AUTH-1 is not consumer-direction evidence, all query results and D1 remain `[UNKNOWN]`. |
 | 2026-10-27 | D1P-14C repaired WarpToad joint diagnostic | `[DONE]` exact control blocker / `[UNKNOWN]` AUTH-1 and NONVAC-1 | [Report](../reports/D1P-14C.md), [protocol](../protocols/d1/d1p-14c-joint-repair.json), and [frozen manifest](../metadata/d1/d1p-14c-artifact-manifest.json): preserve D1P-14B; fix and preflight the SMT syntax; separate the `MANUAL / ASSUMED` transition/effect model from the unchanged policy; retain full G1–G5 using explicit occurrence/write derivation; and match the five prior concrete executions as supporting evidence only. All seven queries pass balance and pinned-cvc5 parse checks. C1 returns SAT and its assignment validates the intended G1 mutant, but C2 times out at its frozen 60-second single attempt. The mandatory gate stops C3, C4 and Q1–Q3 unrun, with no retry, tuning, proof or V-EXEC. No Solidity-equivalence, automatic-discovery, performance, vulnerability or D1 verdict follows; AUTH-1, NONVAC-1 and D1 remain `[UNKNOWN]`. |
 | 2026-10-27 | D1P-14D deterministic controls and first diagnostics | `[DONE]` regressions / `[UNKNOWN]` AUTH-1 and NONVAC-1 | [Report](../reports/D1P-14D.md), [protocol](../protocols/d1/d1p-14d-deterministic-controls.json), and [frozen manifest](../metadata/d1/d1p-14d-artifact-manifest.json): preserve D1P-14B/C; freeze the honest FC-POS public/environment/state fixture and independently expected effects; then pass all four mutant-positive SAT and four BASE-negative UNSAT controls at identical fixed inputs. All eleven inputs parse and the three D1P-14C primary hashes match before launch. Q1/Q2 time out at 300 seconds; Q3 encounters a root-process monitor error at 229.747027 seconds with no solver answer. No primary SAT, proof, V-EXEC, tuning or retry occurs. The original symbolic C2 timeout remains separate. The manual/assumed controls make no search, performance, automatic-extraction, semantic-equivalence or vulnerability claim; AUTH-1, NONVAC-1 and D1 remain `[UNKNOWN]`. |
+| 2026-10-27 | D1P-INT1 contract revision 2 integration | `[DONE]` prospective contract change | [Canonical contract](research-contract.md), [approved proposal](../paper/contract-revision-proposal.md), and byte-identical [revision-1 archive](history/research-contract-2026-10-23.md): move the prospective target from an efficiency advantage to automated discovery and E4 end-to-end validation capability; retain efficiency as secondary RQ5; add the E0–E4 ladder, generic/default and same-policy baseline arms, development/held-out scope rules, and the four-part capability gate. No earlier result is relabeled or rerun. Revision-1 efficiency results keep their original meaning and cannot be cited as capability evidence. Research verdicts remain unchanged. |
 
 ## Update rule
 

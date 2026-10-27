@@ -1,7 +1,7 @@
 # Proposed research-contract revision 2: capability framing
 
-**Status:** PROPOSAL, drafted 27 October 2026 (D1P-D03). **Not applied.**
-Until it is, contract revision 1 (23 October 2026) controls all work.
+**Status:** APPROVED AND APPLIED on 27 October 2026 by D1P-INT1; drafted
+27 October 2026 (D1P-D03). The canonical contract is revision 2.
 
 **Application rule.** A single integrator applies this revision to the
 canonical [`docs/research-contract.md`](../docs/research-contract.md), after

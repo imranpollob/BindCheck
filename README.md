@@ -1,6 +1,6 @@
 # BindCheck
 
-BindCheck investigates whether the guarantees of an accepted zero-knowledge proof justify the effects a blockchain application executes. The current D1 direction is **consumer-directed extraction and checked summary refinement** across producer constraints, public-input decoding, and consumer effects. This remains a research hypothesis. A minimal symbolic consumer and an offline N=8 selected-cone propagation component now exist, but the joint method, full-relation propagation, and exact N=8 `agg_final` artifact/key binding are not implemented or validated.
+BindCheck investigates whether the guarantees of an accepted zero-knowledge proof justify the effects a blockchain application executes. Under D1 research contract revision 2, the prospective target is **automated discovery and end-to-end validation of proof-to-execution mismatches** from producer constraints, public-input decoding, and consumer effects. Consumer-directed selection and refinement remain a secondary efficiency question (RQ5), not an established advantage. The capability claim, comparative baselines, held-out transfer, and E4 validation have not been established.
 
 The current integration checkout is the linked worktree
 `/Users/imranpollob/Coding/bc/bindcheck-d1-paper` on `d1-paper`, currently at
@@ -17,6 +17,8 @@ Start with the [D1 brief](docs/d1/brief.md) and [development roadmap](docs/d1/ro
 
 Start with the [research contract](docs/research-contract.md). It is authoritative for the research questions, threat model, scope, specification boundary, and evidence rules. The [living project checkpoint tree](docs/project-status.md) shows the path from current work to a possible paper submission without replacing the underlying evidence. The [Payy case study](docs/payy-case-study.md) gives the pinned versions, commands, expected outcomes, evidence locations, and limits for the independently built local reproduction of a publicly disclosed message-tail flaw.
 
+[D1P-INT1](paper/contract-revision-proposal.md) applies the approved capability-framing revision prospectively on 27 October 2026. It adds automated-discovery and automated-validation research questions, the E0–E4 evidence ladder, generic/default plus same-policy baseline arms, and a four-part capability gate. [Revision 1](docs/history/research-contract-2026-10-23.md) is preserved byte-for-byte. No earlier result is relabeled or rerun; D1P-07, D1P-09, D1P-10, D1-01/T22 and the historical synthetic results remain evidence about the former efficiency hypothesis, now secondary RQ5, and do not count as capability evidence.
+
 For a shareable introduction to the project and completed work, use the [research and work summary](docs/research-and-work-summary.md), dated 22 October 2026. It separates demonstrated results and open research claims at that historical checkpoint; the D1 roadmap now controls the next task.
 
 The [research guide](BindCheck_Research_Guide.md) and [16 October progress update](2026-10-16-research-update.md) are historical planning and progress records. They remain useful context, but their evidence status and schedules may have been superseded.
@@ -25,6 +27,13 @@ The principal directories are `circuits/` and `contracts/` for the small fixture
 
 ## Current status
 
+- [D1P-INT1](paper/contract-revision-proposal.md) applies research contract
+  revision 2 prospectively and archives revision 1 byte-for-byte under
+  `docs/history/`. The target contribution is now automated discovery plus E4
+  end-to-end validation, compared with generic/default and same-policy
+  baselines and transferred to a frozen held-out family. Efficiency is
+  retained as secondary RQ5. No historical report, evidence level or verdict
+  changes, and no experiment is rerun.
 - [D1P-00](reports/D1P-00.md) establishes the clean `d1-paper` linked
   worktree and an integration baseline without merging or porting code. The
   Codex V2/typed-consumer line remains the base; the Claude refinement loop is
@@ -266,6 +275,12 @@ policy validation, cross-chain evidence or a security result. The exact N=8 forw
 full-producer propagation, joint query, proof, and accepted full settlement
 replay remain absent. Offline component checks are not joint verification.
 The two principal properties remain authorization and coverage.
+
+Prospective work is governed by contract revision 2's capability gate:
+automated artifact-derived discovery with manual inputs counted, automated E4
+validation on a development case, both baseline arms, and transfer to a frozen
+held-out family without a new defect-specific rule. None of those four gate
+conditions is currently complete.
 
 D1-00 ran preservation and documentation checks only. D1-01 validated the saved check-added records and ran only the three missing running-flag slots. No D1 method-feasibility or novelty claim follows from preparation or reporting closure.
 
