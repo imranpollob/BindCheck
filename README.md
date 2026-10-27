@@ -4,9 +4,12 @@ BindCheck investigates whether the guarantees of an accepted zero-knowledge proo
 
 The current integration checkout is the linked worktree
 `/Users/imranpollob/Coding/bc/bindcheck-d1-paper` on `d1-paper`, currently at
-`fc7416a5e546c8c6557ddccc04756034a1d15e4a` plus the uncommitted D1P-15
-development-evidence records. It was established from
-`chatgpt-codex` revision `cce1a966eb84e8e9819c6f658ca4ce07fd670036`.
+the integrated `main`/`d1-paper` revision
+`b2366b5262cf8ce51521f2c21141aa5a54313b2a` plus the uncommitted D1P-19
+prerequisite evidence. This state includes D1P-17 and the merged Lane C
+taxonomy/extraction work as well as the committed D1P-15 evidence. The linked
+worktree was originally established from `chatgpt-codex` revision
+`cce1a966eb84e8e9819c6f658ca4ce07fd670036`.
 [D1P-00](reports/D1P-00.md) records the branch/worktree baseline and the
 source-inspected selective-reuse review of `claude-code`; the
 [integration plan](docs/d1-paper/integration-plan.md) controls prospective
@@ -27,6 +30,34 @@ The principal directories are `circuits/` and `contracts/` for the small fixture
 
 ## Current status
 
+- [D1P-19](reports/D1P-19.md) completes the remaining bounded B02
+  prerequisites without a solver campaign. An artifact-specific P1 extractor
+  checks locality and straight-line functionality for all 77 compiled BN254
+  Poseidon regions while retaining exact arithmetic. The **INJECTED** M-SRC
+  consumer mutation uses the unchanged pinned artifact/VK/verifier: one new
+  real proof mints through M-SRC, and the identical valid proof reaches and
+  fails the pinned K2 local-root guard with no state change. Hash-recorded
+  `S_DOM`/`S_SRC`, complete pinned/M-DOM/M-SRC provenance, and the P6
+  term/function/domain audit pass. The future O1/O2 protocol and L1 functional
+  Poseidon2 layer remain draft and unfrozen pending D1P-20 and planner review.
+  No security, cross-chain, performance, automatic-discovery or D1 verdict
+  follows; D1 remains UNKNOWN.
+- [D1P-17](reports/D1P-17-consumer-backends.md) closes the bounded consumer-
+  arithmetic backend study. **T-ARITH kept as a shared over-approximation;
+  T-OVF retired: multiplication equivalence unresolved, no demonstrated
+  benefit; Q3 termination cause still unidentified.** T-ARITH Q1 resolves
+  only the producer-dropped abstract diagnostic as UNSAT; the full-producer
+  call and the remaining primary calls stay UNKNOWN. This is not a solver-
+  advantage, semantic-equivalence, capability or security result.
+- Merged Lane C work introduces taxonomy protocol v0.2.0 and the bounded
+  [D1P-16 extraction feasibility](docs/extraction/d1p-16-feasibility.md) /
+  [D1P-18 hardening](docs/extraction/d1p-18-hardening.md) records. The pinned
+  `WarpToadCore.mint` extractor recovers 22 terminal families and reports
+  **22/22 combined structural/control coverage**. That phrase does not mean 22
+  EVM executions: five archived executions select only `p02`, `p06`, `p18`,
+  and `p21`; the rest are covered by structural inspection, rollback checks,
+  and deterministic semantic/source-mutation controls. Taxonomy design,
+  reservation, annotation, and tool-capability evidence remain separate.
 - [D1P-15](reports/D1P-15.md) mechanically attributes all 86 beta.22
   Poseidon2 permutation opcodes to complete H3 construction boundaries and
   resolves `44` versus `86` as two top-level hashes plus both compiled
@@ -38,9 +69,9 @@ The principal directories are `circuits/` and `contracts/` for the small fixture
   the unchanged owned-local consumer, while the pinned repaired circuit
   rejects the foreign semantic input. Synthetic privileged root admission is
   recorded and makes no cross-chain, deployed-defect, automatic-discovery,
-  performance or security claim. P2 and P5 are complete for this scope;
-  P1, the M-SRC half of P3, the canonical combined states in P4 and full P6
-  remain open. No solver ran and D1 remains UNKNOWN.
+  performance or security claim. P2 and P5 are complete for this scope; D1P-19
+  subsequently completes the bounded P1, M-SRC/P3, P4 and P6 prerequisites.
+  No solver ran and D1 remains UNKNOWN.
 - [D1P-INT1](paper/contract-revision-proposal.md) applies research contract
   revision 2 prospectively and archives revision 1 byte-for-byte under
   `docs/history/`. The target contribution is now automated discovery plus E4
@@ -286,7 +317,12 @@ runs the unchanged primaries: Q1/Q2 time out and Q3 has a monitor error, so all
 three diagnostics remain UNKNOWN. D1P-15 separately completes the pinned
 Poseidon2 boundary inventory and the injected O1 M-DOM build/honest/foreign
 fixture gates with its own key; it does not run or reinterpret those
-diagnostics.
+diagnostics. D1P-17 keeps T-ARITH only as a shared over-approximation and
+retires T-OVF because multiplication equivalence is unresolved with no
+demonstrated benefit; its Q3 termination cause remains unidentified. The
+merged Lane C extractor records 22/22 combined structural/control coverage,
+not 22 EVM executions. D1P-19 completes the bounded B02 P1/P3/P4/P6
+prerequisites and drafts—but does not freeze or run—the future O1/O2 campaign.
 These are development artifact/component results, not general
 policy validation, cross-chain evidence or a security result. The exact N=8 forwarding artifact/key,
 full-producer propagation, joint query, proof, and accepted full settlement
@@ -315,8 +351,10 @@ The principal directories are `circuits/` and `contracts/` for the small fixture
 
 ## Checking this checkout
 
-The latest D1 Python controls were checked with Python 3.13.7 and PyCryptodome
-3.23.0 (189/189 passing in D1P-10). The small upstream Noir test-source
+The D1P-10 complete unittest checkpoint used Python 3.13.7 and PyCryptodome
+3.23.0 (189/189 passing). D1P-19's targeted beta.22/D1P-15/D1P-19 pytest run
+used Python 3.14.7 and passed 18 tests plus 12 subtests; those artifact-specific
+tests require the ignored evidence workspaces. The small upstream Noir test-source
 excerpts, provenance and MIT notice
 are included under `tests/d1/fixtures/`; unit controls need no compiler download,
 proof, solver, generated artifact or historical raw log. To set up and run them:

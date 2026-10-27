@@ -68,10 +68,17 @@ flowchart TD
     d1p14c --> d1p14cresult["Sensitivity gate [UNKNOWN]"]
     d1p14cresult --> d1p14d["D1P-14D deterministic controls [DONE]"]
     d1p14d --> d1p14dresult["AUTH-1 / NONVAC-1 diagnostics [UNKNOWN]"]
+    d1p14dresult --> d1p17["D1P-17 arithmetic backends [DONE]"]
+    d1p17 --> d1p17result["Full-producer backend result [UNKNOWN]"]
     d1p14dresult --> warptoadJoint["Joint policy/analyzer work [WAITING]"]
     d1p14dresult --> d1pint1["D1P-INT1 contract revision 2 [DONE]"]
+    d1pint1 --> d1p16["D1P-16 AST extraction feasibility [DONE]"]
+    d1p16 --> d1p18["D1P-18 fail-closed hardening [DONE]"]
     d1pint1 --> d1p15["D1P-15 O1 hash + injected gates [DONE]"]
-    d1p15 --> capabilityGate["Automated discovery + E4 capability gate [NEXT]"]
+    d1p15 --> d1p19["D1P-19 remaining B02 prerequisites [DONE]"]
+    d1p19 --> d1p20["D1P-20 remaining campaign inputs [NEXT]"]
+    d1p20 --> plannerReview["O1/O2 planner review + freeze [WAITING]"]
+    plannerReview --> capabilityGate["Automated discovery + E4 capability gate [WAITING]"]
     d1p10 --> d1p10result["Transformed-arm eligibility [UNKNOWN]"]
     d1p10result --> d1p10decision["Selected-cone backend reconsideration [WAITING]"]
     d1p09 -.-> d1p09decision["Full-relation/forwarding decision [WAITING]"]
@@ -122,11 +129,11 @@ flowchart TD
     classDef waiting fill:#D9D9D9,stroke:#B3B3B3
     classDef unknown fill:#FFE0C2,stroke:#FF9E42
 
-    class foundation,fixture,payy,sourceCheck,coneGate,nineCases,failureAnalysis,v3Rerun,generalGate,tracking,livingTree,d100,d101,d102,d103preflight,d103review,d103typed,d103boundary,d103guards,d103guardreview,d103concrete,d103replayreview,d103recovery,d1p00,d1p01,d1p01artifact,d1p02,d1p03,d1p04,d1p05,d1p04elig,d1p07,d1p08,d1p09,d1p10,d1p11,d1p12,warptoadRecovery,d1p12r,d1p13,d1p14a,d1p14b,d1p14c,d1p14d,d1pint1,d1p15 done
+    class foundation,fixture,payy,sourceCheck,coneGate,nineCases,failureAnalysis,v3Rerun,generalGate,tracking,livingTree,d100,d101,d102,d103preflight,d103review,d103typed,d103boundary,d103guards,d103guardreview,d103concrete,d103replayreview,d103recovery,d1p00,d1p01,d1p01artifact,d1p02,d1p03,d1p04,d1p05,d1p04elig,d1p07,d1p08,d1p09,d1p10,d1p11,d1p12,warptoadRecovery,d1p12r,d1p13,d1p14a,d1p14b,d1p14c,d1p14d,d1p17,d1pint1,d1p16,d1p18,d1p15,d1p19 done
     class analysis,d1,d1paper,d103,d103impl,d103consumer,d103effects active
-    class d103linkreview,capabilityGate next
-    class evaluation,history,heldOut,baselines,manuscript,claims,artifacts,draft,transferCase,sensitivity,submit,t22,acirSummary,d104,d105,d106,d107,d108,d103symbolic,d1p09decision,d1p10decision,warptoadJoint waiting
-    class contribution,primaryResult,generalResult,d103gate,d103recoveryresult,d1p06,d1p10result,d1p14bresult,d1p14cresult,d1p14dresult unknown
+    class d103linkreview,d1p20 next
+    class evaluation,history,heldOut,baselines,manuscript,claims,artifacts,draft,transferCase,sensitivity,submit,t22,acirSummary,d104,d105,d106,d107,d108,d103symbolic,d1p09decision,d1p10decision,warptoadJoint,plannerReview,capabilityGate waiting
+    class contribution,primaryResult,generalResult,d103gate,d103recoveryresult,d1p06,d1p10result,d1p14bresult,d1p14cresult,d1p14dresult,d1p17result unknown
 ```
 
 ## Immediate path
@@ -314,7 +321,40 @@ flowchart TD
     rejects. Root admission is synthetic and privileged; no cross-chain,
     deployed-defect, automatic-discovery, solver, performance or D1 claim
     follows. P2/P5 pass for this scope; P1 and the remaining P3/P4/P6 work
-    stay open. D1 remains UNKNOWN.
+    were open at that checkpoint and are completed by item 36 below. D1
+    remains UNKNOWN.
+33. Integrated from Lane C: taxonomy protocol v0.2.0 broadens the future
+    sampling frame to proof-consuming ZK systems, separates taxonomy inclusion
+    from tool support, and specifies private family reservation and independent
+    annotation. The design record remains explicit that final numeric search
+    limits are not yet planner-approved and `design_frozen`, reservation, and
+    annotation are all false. No source traversal, screening or result is
+    inferred from integration.
+34. Done at the bounded extraction/component level:
+    [D1P-16](extraction/d1p-16-feasibility.md) and
+    [D1P-18](extraction/d1p-18-hardening.md) recover and harden the pinned
+    `WarpToadCore.mint` AST relation. The accurate summary is **22/22 combined
+    structural/control coverage**, not 22 EVM executions. Five archived EVM
+    executions select only `p02`, `p06`, `p18`, and `p21`; the remaining
+    families are covered by fail-closed structural inspection, rollback,
+    checked-arithmetic, alias/zero-value, and source-mutation controls. This is
+    one supported entry point, not general extraction or policy evidence.
+35. Done as a bounded backend study:
+    [D1P-17](../reports/D1P-17-consumer-backends.md) keeps T-ARITH as a shared
+    over-approximation and retires T-OVF: multiplication equivalence is
+    unresolved and it demonstrated no benefit. T-ARITH Q1 is an abstract
+    producer-dropped UNSAT only; all full-producer backend results remain
+    UNKNOWN. The T-OVF Q3 termination cause is still unidentified. No result is
+    a performance, semantic-equivalence, consumer-direction or security claim.
+36. Done for the remaining bounded B02 prerequisites:
+    [D1P-19](../reports/D1P-19.md) checks 77 exact BN254 Poseidon regions,
+    passes the **INJECTED** M-SRC real-proof mint/same-proof pinned-K2
+    differential, freezes hash-recorded `S_DOM`/`S_SRC`, records all three
+    variant pairings/public layouts, and passes P6 term/function/domain checks.
+    L0 is documented as 344 independent Poseidon2 havoc outputs; draft L1 adds
+    only shared-function equality for equal inputs, never injectivity. The
+    O1/O2 protocol is not frozen and no solver ran. D1P-20 and planner review
+    are next; D1 remains UNKNOWN.
 
 The end goal does not imply that submission is currently justified. Contract
 revision 2 retains authorization and coverage but makes automated discovery
@@ -333,7 +373,13 @@ arithmetic/range satisfaction, with Poseidon2 still uninterpreted. D1P-14A
 adds exact-proof positive, over-cap-revert and zero-fee receipts without a
 general fee-policy claim. D1P-15 closes the pinned Poseidon2 call-site
 boundary inventory and the injected M-DOM fixture gates without running a
-solver or completing the capability gate. Neither screen, blocker,
+solver. D1P-17 keeps only T-ARITH as a shared over-approximation, retires
+T-OVF with multiplication equivalence unresolved and no demonstrated benefit,
+and leaves Q3's termination cause unidentified. Merged Lane C D1P-16/18 work
+records 22/22 combined structural/control coverage, not 22 EVM executions.
+D1P-19 completes the bounded B02 P1/P3/P4/P6 prerequisites, but the campaign
+draft waits for D1P-20 and planner review and does not complete the capability
+gate. Neither screen, blocker,
 development fixture nor component check is a method-evaluation,
 cross-chain, policy or security result. D1
 preparation and reporting closure are complete; three missing historical query
@@ -392,7 +438,11 @@ slots were executed.
 | 2026-10-27 | D1P-14C repaired WarpToad joint diagnostic | `[DONE]` exact control blocker / `[UNKNOWN]` AUTH-1 and NONVAC-1 | [Report](../reports/D1P-14C.md), [protocol](../protocols/d1/d1p-14c-joint-repair.json), and [frozen manifest](../metadata/d1/d1p-14c-artifact-manifest.json): preserve D1P-14B; fix and preflight the SMT syntax; separate the `MANUAL / ASSUMED` transition/effect model from the unchanged policy; retain full G1–G5 using explicit occurrence/write derivation; and match the five prior concrete executions as supporting evidence only. All seven queries pass balance and pinned-cvc5 parse checks. C1 returns SAT and its assignment validates the intended G1 mutant, but C2 times out at its frozen 60-second single attempt. The mandatory gate stops C3, C4 and Q1–Q3 unrun, with no retry, tuning, proof or V-EXEC. No Solidity-equivalence, automatic-discovery, performance, vulnerability or D1 verdict follows; AUTH-1, NONVAC-1 and D1 remain `[UNKNOWN]`. |
 | 2026-10-27 | D1P-14D deterministic controls and first diagnostics | `[DONE]` regressions / `[UNKNOWN]` AUTH-1 and NONVAC-1 | [Report](../reports/D1P-14D.md), [protocol](../protocols/d1/d1p-14d-deterministic-controls.json), and [frozen manifest](../metadata/d1/d1p-14d-artifact-manifest.json): preserve D1P-14B/C; freeze the honest FC-POS public/environment/state fixture and independently expected effects; then pass all four mutant-positive SAT and four BASE-negative UNSAT controls at identical fixed inputs. All eleven inputs parse and the three D1P-14C primary hashes match before launch. Q1/Q2 time out at 300 seconds; Q3 encounters a root-process monitor error at 229.747027 seconds with no solver answer. No primary SAT, proof, V-EXEC, tuning or retry occurs. The original symbolic C2 timeout remains separate. The manual/assumed controls make no search, performance, automatic-extraction, semantic-equivalence or vulnerability claim; AUTH-1, NONVAC-1 and D1 remain `[UNKNOWN]`. |
 | 2026-10-27 | D1P-INT1 contract revision 2 integration | `[DONE]` prospective contract change | [Canonical contract](research-contract.md), [approved proposal](../paper/contract-revision-proposal.md), and byte-identical [revision-1 archive](history/research-contract-2026-10-23.md): move the prospective target from an efficiency advantage to automated discovery and E4 end-to-end validation capability; retain efficiency as secondary RQ5; add the E0–E4 ladder, generic/default and same-policy baseline arms, development/held-out scope rules, and the four-part capability gate. No earlier result is relabeled or rerun. Revision-1 efficiency results keep their original meaning and cannot be cited as capability evidence. Research verdicts remain unchanged. |
-| 2026-10-27 | D1P-15 O1 hash boundaries and injected fixture gates | `[DONE]` prerequisites/fixture / `[UNKNOWN]` security | [Report](../reports/D1P-15.md), [protocol](../protocols/d1/d1p-15-o1-prerequisites.json), and [manifest](../metadata/d1/d1p-15-artifact-manifest.json): attribute every one of the pinned beta.22 artifact's 86 Poseidon2 permutations to an exact H3 boundary and mechanically resolve `44` source hashes versus `86` compiled branch candidates; match 172 full permutation tuples and BN construction outputs on the D1P-12R/D1P-14A honest witnesses. Compile injected M-DOM with its own distinct key/verifier, then pass real-proof honest and foreign-note V-EXEC mints while the pinned circuit rejects the foreign semantic input. Synthetic privileged root admission carries no cross-chain or deployed-defect claim. P2/P5 pass in scope; P1 and remaining P3/P4/P6 work stay open. No solver or AUTH/NONVAC rerun; D1 remains `[UNKNOWN]`. |
+| 2026-10-27 | D1P-15 O1 hash boundaries and injected fixture gates | `[DONE]` prerequisites/fixture / `[UNKNOWN]` security | [Report](../reports/D1P-15.md), [protocol](../protocols/d1/d1p-15-o1-prerequisites.json), and [manifest](../metadata/d1/d1p-15-artifact-manifest.json): attribute every one of the pinned beta.22 artifact's 86 Poseidon2 permutations to an exact H3 boundary and mechanically resolve `44` source hashes versus `86` compiled branch candidates; match 172 full permutation tuples and BN construction outputs on the D1P-12R/D1P-14A honest witnesses. Compile injected M-DOM with its own distinct key/verifier, then pass real-proof honest and foreign-note V-EXEC mints while the pinned circuit rejects the foreign semantic input. Synthetic privileged root admission carries no cross-chain or deployed-defect claim. P2/P5 pass in scope; P1 and remaining P3/P4/P6 were open at that checkpoint and are completed by D1P-19 without relabeling D1P-15. No solver or AUTH/NONVAC rerun; D1 remains `[UNKNOWN]`. |
+| 2026-10-27 | Lane C taxonomy protocol v0.2.0 integration | `[DONE]` merge / `[WAITING]` final design freeze and execution | [Protocol](taxonomy/protocol.md), [search plan](taxonomy/search-plan-v0.2.0.md), and [planner record](taxonomy/planner-approval-v0.2.0.json): broaden the future sampling frame, separate disclosure inclusion from tool support, and specify private family reservation and independent annotation. Final numeric search limits still lack the required two planner approvals, so `design_frozen`, reservation and annotation remain false. Integration performs no retrieval, screening, reservation draw, annotation or security analysis. |
+| 2026-10-27 | D1P-16/18 WarpToad consumer extraction and hardening | `[DONE]` bounded component / `[UNKNOWN]` capability and security | [Feasibility](extraction/d1p-16-feasibility.md) and [hardening](extraction/d1p-18-hardening.md): recover 22 pinned `WarpToadCore.mint` terminal families from the solc AST, fail closed on unsupported semantics or pin drift, and pass source-mutation plus edge controls. The accurate outcome is **22/22 combined structural/control coverage**, not 22 EVM executions: five archived executions select only `p02`, `p06`, `p18`, and `p21`. This one-entry-point result does not derive policy, establish general extraction, or satisfy the capability gate. |
+| 2026-10-27 | D1P-17 bounded consumer-arithmetic backend study | `[DONE]` bounded study / `[UNKNOWN]` full-producer results | [Report](../reports/D1P-17-consumer-backends.md), [monitor audit](../reports/D1P-17-monitor.md), [protocol](../protocols/d1/d1p-17-consumer-backends.json), and [freeze](../metadata/d1/d1p-17-primary-freeze.json): keep T-ARITH as a shared over-approximation; retire T-OVF because multiplication equivalence is unresolved and it demonstrated no benefit. T-ARITH Q1 resolves only an abstract producer-dropped diagnostic as UNSAT; its full-producer call and all T-OVF primaries remain UNKNOWN. Q3's termination cause remains unidentified. No performance, transformation-equivalence, consumer-direction, capability or security conclusion follows. |
+| 2026-10-27 | D1P-19 remaining B02 prerequisites | `[DONE]` prerequisites / `[UNKNOWN]` campaign and security | [Report](../reports/D1P-19.md), [protocol](../protocols/d1/d1p-19-prerequisites.json), and ignored evidence manifest: check locality/functionality for 77 exact compiler-lowered BN254 Poseidon regions; pass an **INJECTED** M-SRC real-proof mint and identical-proof pinned K2 rejection; freeze canonical `S_DOM`/`S_SRC`; record pinned/M-DOM/M-SRC artifact, key, verifier, witness and public-layout provenance; and pass P6 term/function/domain checks. L0 has 344 independent Poseidon2 havoc outputs; draft L1 adds shared functional equality only, never injectivity. No solver ran. The O1/O2 protocol remains unfrozen pending D1P-20 and planner review; D1 remains `[UNKNOWN]`. |
 
 ## Update rule
 

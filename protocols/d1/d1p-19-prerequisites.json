@@ -1,0 +1,43 @@
+{
+  "schema": "bindcheck.d1p19.protocol/v1",
+  "task": "D1P-19",
+  "date": "2026-10-27",
+  "repository_revision": "b2366b5262cf8ce51521f2c21141aa5a54313b2a",
+  "warptoad_revision": "973e7d1e4b60d0d8a8ca299b0cabd9193b147ef8",
+  "namespace": "results/raw/D1P-19",
+  "preserve_prior_evidence": true,
+  "solver_campaign": false,
+  "live_chain": false,
+  "fork": false,
+  "proof_generation": {
+    "maximum_attempts": 2,
+    "maximum_minutes_each": 30,
+    "parameter_search": false,
+    "old_analysis_memory_cap_applies": false
+  },
+  "required_outputs": [
+    "checked BN254 region extraction",
+    "M-SRC build and differential V-EXEC gates",
+    "canonical S_DOM and S_SRC",
+    "pinned/M-DOM/M-SRC provenance",
+    "P6 term/function/domain audit",
+    "unfrozen O1/O2 protocol draft"
+  ],
+  "claim_limits": [
+    "injected variants are development fixtures",
+    "synthetic admitted state is not cross-chain reachability",
+    "no automatic policy discovery claim",
+    "no security or performance verdict",
+    "D1 remains UNKNOWN"
+  ],
+  "reproduction": [
+    "PYTHONPATH=src python3 scripts/d1p_19_prerequisites.py setup",
+    "PYTHONPATH=src python3 scripts/d1p_19_prerequisites.py freeze-regions",
+    "results/raw/D1P-19/workspace/source/backend/node_modules/.bin/tsx scripts/fixtures/d1p_19_states.ts results/raw/D1P-15/honest-proof.json results/raw/D1P-15/foreign-proof.json results/raw/D1P-19/m-src-execution.json results/raw/D1P-19/canonical-states.json results/raw/D1P-19/workspace/source/backend/node_modules",
+    "PYTHONPATH=src python3 scripts/d1p_19_prerequisites.py freeze-p6",
+    "PYTHONPATH=src python3 scripts/d1p_19_prerequisites.py freeze-provenance",
+    "PYTHONPATH=src pytest -q tests/d1/test_d1p19_prerequisites.py",
+    "PYTHONPATH=src python3 scripts/d1p_19_prerequisites.py freeze-resources",
+    "PYTHONPATH=src python3 scripts/d1p_19_prerequisites.py freeze-manifest"
+  ]
+}
