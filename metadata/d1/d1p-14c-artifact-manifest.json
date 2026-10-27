@@ -1,0 +1,520 @@
+{
+  "auth_scope_choice": "AUTH-1[G1-G5]; G4/G5 derived from explicit effect/write representation",
+  "bounds": {
+    "attempts_per_query": 1,
+    "control_attempts": 4,
+    "control_seconds_each": 60,
+    "post_freeze_tuning": false,
+    "primary_attempts": 3,
+    "primary_seconds_each": 300,
+    "rss_cutoff_bytes": 4294967296,
+    "sample_interval_seconds": 0.05,
+    "sequential": true,
+    "stop_on_control_failure": true
+  },
+  "claim_boundary": "Internal consistency and sensitivity of the MANUAL / ASSUMED model only; no Solidity equivalence, automatic discovery, end-to-end vulnerability, or D1 verdict.",
+  "consumer_summary": {
+    "automatic_extraction_claim": false,
+    "classification": "MANUAL / ASSUMED",
+    "five_differential_checks": {
+      "bytes": 9663,
+      "path": "results/raw/D1P-14C/manual-summary-differential.json",
+      "sha256": "22b9502b580365c0a4bb3fd1352aacbe6c492eb892d2aeada9754de5dad47372"
+    }
+  },
+  "focused_tests": {
+    "argv": [
+      "/Users/imranpollob/.pyenv/shims/pytest",
+      "-q",
+      "tests/d1/test_joint_warptoad.py",
+      "tests/d1/test_acir_beta22.py"
+    ],
+    "cwd": "/Users/imranpollob/Coding/bc/bindcheck-d1-paper",
+    "exit_code": 0,
+    "input": null,
+    "label": "focused-tests-before-freeze",
+    "schema": "bindcheck.d1p14c.command/v1",
+    "stderr": {
+      "bytes": 0,
+      "path": "command-records/focused-tests-before-freeze.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout": {
+      "bytes": 108,
+      "path": "command-records/focused-tests-before-freeze.stdout",
+      "sha256": "49cb2728d46501f08b5061730d2ccd60c071ce02aeb4ccd689d5e04931657795"
+    },
+    "timed_out": false,
+    "timeout_seconds": 180,
+    "wall_seconds": 47.957219
+  },
+  "frozen_at_utc": "2026-10-27T06:35:36.610936+00:00",
+  "hash_complete_inputs": [
+    {
+      "bytes": 40683,
+      "path": "src/bindcheck_d1/joint_warptoad.py",
+      "sha256": "e12955435c1be660e90b76876cb38f3c11de59b967f042c68c5a5058f00d4ff7"
+    },
+    {
+      "bytes": 36804,
+      "path": "scripts/d1p_14c_joint_encoder.py",
+      "sha256": "0a7dc596af9dd93bb9278f446ac7de655f61bb5f98989dcaf10b5d40d51b3364"
+    },
+    {
+      "bytes": 7483,
+      "path": "tests/d1/test_joint_warptoad.py",
+      "sha256": "f4a9a81fc79fe94b8bd58c1212aa67bbb0a33395b6476aa0f542193b0f47fef2"
+    },
+    {
+      "bytes": 3490,
+      "path": "scripts/d1p_14c_preserve.py",
+      "sha256": "4742aabd53c96db1fe320d93c87a4b34175f9b824e16fd951d7528b752291ca5"
+    },
+    {
+      "bytes": 4521,
+      "path": "scripts/fixtures/d1p_14c_candidate_exec.ts",
+      "sha256": "d381f2f937c8e0d37e42c6afcaba164b22ac482af9f72a6c29b8b6f392d237c8"
+    },
+    {
+      "bytes": 670,
+      "path": "scripts/fixtures/D1P14BVectorVerifier.sol",
+      "sha256": "12820f839ca96f4ebb8a2235537336dd846e09475241f4ae859ad204712b6f52"
+    },
+    {
+      "bytes": 2771,
+      "path": "protocols/d1/d1p-14c-joint-repair.json",
+      "sha256": "dac8e68dc2922d8dc67fc29fbf38fad6f9e86539608fc2d04ca80621a82ba654"
+    },
+    {
+      "bytes": 85657,
+      "path": "/Users/imranpollob/Coding/bc/bindcheck-lane-b/docs/d1-paper/d1p-b01-design.md",
+      "sha256": "bc6527a9beab445471fce29c3dfe268e9e3834feec7b8760edc47b0b25075990"
+    },
+    {
+      "bytes": 19463,
+      "path": "docs/research-contract.md",
+      "sha256": "bfd25a0f75eeaa5d1a7f5ae9ab942283542d085c3cf0a082a07ea19d1b851050"
+    },
+    {
+      "bytes": 2177,
+      "path": "metadata/d1/d1p-07-resource-policy.json",
+      "sha256": "d292323e8123c0f4bf38469c3bfeb7ba9a2733f709a0e5229be0c34913ffc885"
+    },
+    {
+      "bytes": 50723,
+      "path": "scripts/d1p_07_track_a.py",
+      "sha256": "cba540dcb8cd310c6d12a010c2833f79fdd09fe9ec17c900f5d5fc5b401dd6fe"
+    },
+    {
+      "bytes": 31415,
+      "path": "scripts/d1p_05_validate.py",
+      "sha256": "16cc0ae39e7ff3a01439b3c168e4bede93ab53b25bfc1d6b3d27efb3a8651d55"
+    },
+    {
+      "bytes": 412184,
+      "path": "/Users/imranpollob/Coding/bc/BindCheck/tools/cvc5-1.4.2-gpl/bin/cvc5",
+      "sha256": "a083a7f56a3f61691583b699076322bbcbf6732decfb4f6dc41850dbcc3df027"
+    },
+    {
+      "bytes": 42540384,
+      "path": "results/raw/D1P-13/tools/nargo-beta22/nargo",
+      "sha256": "37f7d55d9795af0da3b471db2306e0296fa34c528386a828ce556fc3ebbf6e7b"
+    },
+    {
+      "bytes": 2395703,
+      "path": "results/raw/D1P-14C/workspace/source/backend/circuits/withdraw/target/withdraw.json",
+      "sha256": "7190813f623967b79ba80a1635536fcc9c8524c1d1cb9f00696832f644b38327"
+    },
+    {
+      "bytes": 1890,
+      "path": "results/raw/D1P-14C/fixed-s0.json",
+      "sha256": "13366cd12442bfe4cb771498e3b96447433be42815f6a38b6873f9b99d6162dc"
+    },
+    {
+      "bytes": 9663,
+      "path": "results/raw/D1P-14C/manual-summary-differential.json",
+      "sha256": "22b9502b580365c0a4bb3fd1352aacbe6c492eb892d2aeada9754de5dad47372"
+    },
+    {
+      "bytes": 3225,
+      "path": "results/raw/D1P-14C/d1p14b-preservation-baseline.json",
+      "sha256": "6a2f13ee4fa88050fd4dea10a9a6e38b20d7e83fa3e00c5df4373ca49a6a93e0"
+    },
+    {
+      "bytes": 18212689,
+      "path": "results/raw/D1P-14C/prepared/omega-c1.json",
+      "sha256": "fcd20bf7c76a5d981ae7ff372c3a8cfa15f85168aae5d8d5fd703caf396e6c6f"
+    },
+    {
+      "bytes": 9988,
+      "path": "results/raw/D1P-14C/prepared/c1-conservation.smt2",
+      "sha256": "872d4bdd8d433a74b5ee0b167e14dd770d687acc892dd288b0850921733b271b"
+    },
+    {
+      "bytes": 2359,
+      "path": "results/raw/D1P-14C/prepared/c1-transformation.json",
+      "sha256": "0185e1246993eb68d8afb3bcebb19668ce9d3fdcc4a521a1dd44f98e7c3efe88"
+    },
+    {
+      "bytes": 18212720,
+      "path": "results/raw/D1P-14C/prepared/omega-c2.json",
+      "sha256": "8d73d461e88b50f2aebb7ecbc707d68758610707dac967c6796af21084afb271"
+    },
+    {
+      "bytes": 10056,
+      "path": "results/raw/D1P-14C/prepared/c2-beneficiary.smt2",
+      "sha256": "532c97acbd73c778d798f66bd0383bf75297dbd31fc02b1b8b9793aa482ff3f7"
+    },
+    {
+      "bytes": 2352,
+      "path": "results/raw/D1P-14C/prepared/c2-transformation.json",
+      "sha256": "2975678f5a5d65ba347b57cc28f5db99d2917ba02550ecc920a15518dd938587"
+    },
+    {
+      "bytes": 18212710,
+      "path": "results/raw/D1P-14C/prepared/omega-c3.json",
+      "sha256": "1ffa035b4a52ae4e1a8006d417e310fafbf01d48d20e3e79bf9e041cf358ddf6"
+    },
+    {
+      "bytes": 9964,
+      "path": "results/raw/D1P-14C/prepared/c3-extra-mint.smt2",
+      "sha256": "48a6df28f18f0788a7ef886df5e0d7826cf7c06a47586aad5805258c8524dba2"
+    },
+    {
+      "bytes": 2344,
+      "path": "results/raw/D1P-14C/prepared/c3-transformation.json",
+      "sha256": "d638a62ef6f5e9b6810430e1da8f71fe800c56b64228ae458cb44d1fd8f1a25f"
+    },
+    {
+      "bytes": 18212722,
+      "path": "results/raw/D1P-14C/prepared/omega-c4.json",
+      "sha256": "5d5a6cfefe49126800693d5790a1181d1e8453aa4fc80e009162473f575809c9"
+    },
+    {
+      "bytes": 9965,
+      "path": "results/raw/D1P-14C/prepared/c4-wrong-nullifier.smt2",
+      "sha256": "313c9c003e3812606dff5238c42a57fe36f456c83769df96ef65d1200f28eaf2"
+    },
+    {
+      "bytes": 2360,
+      "path": "results/raw/D1P-14C/prepared/c4-transformation.json",
+      "sha256": "a077f2370ea56983835ee2bf788c44c40261ea44e851d41f86cd39b3ad363bb1"
+    },
+    {
+      "bytes": 18212595,
+      "path": "results/raw/D1P-14C/prepared/omega-auth1.json",
+      "sha256": "4d705b76936a914183b75dd243186fa4661d322c6f49a61c45c2721d8006c8b2"
+    },
+    {
+      "bytes": 9915,
+      "path": "results/raw/D1P-14C/prepared/q1-auth1-r-dropped.smt2",
+      "sha256": "a188b4a155b41b92a2531d0ae7c92593baaaf373f64f61068c739c66d2a5fa2b"
+    },
+    {
+      "bytes": 2205,
+      "path": "results/raw/D1P-14C/prepared/q1-transformation.json",
+      "sha256": "6b879fa0a8177faae12ac9f9815c70e94e3f3d00c3413d80c5b98c3b2e20e53c"
+    },
+    {
+      "bytes": 18212595,
+      "path": "results/raw/D1P-14C/prepared/omega-auth1.json",
+      "sha256": "4d705b76936a914183b75dd243186fa4661d322c6f49a61c45c2721d8006c8b2"
+    },
+    {
+      "bytes": 22125017,
+      "path": "results/raw/D1P-14C/prepared/q2-auth1-monolithic.smt2",
+      "sha256": "7aa4935a6d3fb5c8cb6b7141bace0c80f9a16745db662ce8220c636f927c7701"
+    },
+    {
+      "bytes": 2193,
+      "path": "results/raw/D1P-14C/prepared/q2-transformation.json",
+      "sha256": "6edb3f90c6a58e7cb71d9d8d3d34b14e06ac4c7bac1f6b0fa32d8f560765ce4b"
+    },
+    {
+      "bytes": 18212626,
+      "path": "results/raw/D1P-14C/prepared/omega-nonvac1.json",
+      "sha256": "a2c43bda445d8477d5edb60b7ffd75800f01f1a4ac24068e78bd440ccd73e080"
+    },
+    {
+      "bytes": 22125006,
+      "path": "results/raw/D1P-14C/prepared/q3-nonvac1-monolithic.smt2",
+      "sha256": "922df98e7d6fd04fb24628462039199515257aab78c08bc3b6ee02ea617b141d"
+    },
+    {
+      "bytes": 2197,
+      "path": "results/raw/D1P-14C/prepared/q3-transformation.json",
+      "sha256": "a29be45a224b106537e84c508dc180249542c60df1349077cb9dd04183197c14"
+    }
+  ],
+  "identities": {
+    "artifact": {
+      "bytes": 2395703,
+      "path": "results/raw/D1P-14C/workspace/source/backend/circuits/withdraw/target/withdraw.json",
+      "sha256": "7190813f623967b79ba80a1635536fcc9c8524c1d1cb9f00696832f644b38327"
+    },
+    "base_monitor": {
+      "bytes": 31415,
+      "path": "scripts/d1p_05_validate.py",
+      "sha256": "16cc0ae39e7ff3a01439b3c168e4bede93ab53b25bfc1d6b3d27efb3a8651d55"
+    },
+    "consumer": {
+      "bytes": 8609,
+      "path": "results/raw/D1P-14C/workspace/source/backend/contracts/core/WarpToadCore.sol",
+      "sha256": "323a1cf26c7449f67cf277ff0a46c31e12f725c555f9fa165d5a60011e122c39",
+      "summary_classification": "MANUAL / ASSUMED"
+    },
+    "decoder": {
+      "bytes": 20528,
+      "path": "src/bindcheck_d1/frontends/acir_binary_beta22.py",
+      "sha256": "60260a59770d2d2f77f303349fb0145da699b18c5941fadf5bd8c105c005c99b"
+    },
+    "monitor_runner": {
+      "bytes": 50723,
+      "path": "scripts/d1p_07_track_a.py",
+      "sha256": "cba540dcb8cd310c6d12a010c2833f79fdd09fe9ec17c900f5d5fc5b401dd6fe"
+    },
+    "nargo": {
+      "bytes": 42540384,
+      "path": "results/raw/D1P-13/tools/nargo-beta22/nargo",
+      "sha256": "37f7d55d9795af0da3b471db2306e0296fa34c528386a828ce556fc3ebbf6e7b",
+      "version": "1.0.0-beta.22+c57152f91260ecdb9faad4efc20abb14b6d2ece7"
+    },
+    "openzeppelin": {
+      "erc20_source": {
+        "bytes": 10800,
+        "path": "results/raw/D1P-14C/workspace/source/node_modules/.pnpm/@openzeppelin+contracts@5.6.1/node_modules/@openzeppelin/contracts/token/ERC20/ERC20.sol",
+        "sha256": "50f34ae16a067a41c2c1091445d11d63788e54c717677cb6d6b0e4cdea2ad21d"
+      },
+      "lockfile": {
+        "bytes": 326448,
+        "path": "results/raw/D1P-14C/workspace/source/pnpm-lock.yaml",
+        "sha256": "d984410433a0349df3d32ab9c188bd76c30ffdfcfdb7e05bc67c473949f6f8e0"
+      },
+      "requested": "^5.2.0",
+      "resolved": "5.6.1",
+      "status": "EXTRACTED dependency identity; behavior in consumer summary remains MANUAL / ASSUMED",
+      "warptoad_update_override": false
+    },
+    "research_contract": {
+      "boundary": "section 6.3",
+      "bytes": 19463,
+      "path": "docs/research-contract.md",
+      "sha256": "bfd25a0f75eeaa5d1a7f5ae9ab942283542d085c3cf0a082a07ea19d1b851050"
+    },
+    "resource_policy": {
+      "bytes": 2177,
+      "path": "metadata/d1/d1p-07-resource-policy.json",
+      "sha256": "d292323e8123c0f4bf38469c3bfeb7ba9a2733f709a0e5229be0c34913ffc885"
+    },
+    "solver": {
+      "architecture": "arm64",
+      "bytes": 412184,
+      "expected_sha256": "a083a7f56a3f61691583b699076322bbcbf6732decfb4f6dc41850dbcc3df027",
+      "path": "/Users/imranpollob/Coding/bc/BindCheck/tools/cvc5-1.4.2-gpl/bin/cvc5",
+      "sha256": "a083a7f56a3f61691583b699076322bbcbf6732decfb4f6dc41850dbcc3df027",
+      "version": "cvc5 1.4.2 git 282d5e0"
+    },
+    "specification": {
+      "bytes": 85657,
+      "controlling_section": "amended section 6",
+      "path": "/Users/imranpollob/Coding/bc/bindcheck-lane-b/docs/d1-paper/d1p-b01-design.md",
+      "sha256": "bc6527a9beab445471fce29c3dfe268e9e3834feec7b8760edc47b0b25075990"
+    }
+  },
+  "pinned_revision": "973e7d1e4b60d0d8a8ca299b0cabd9193b147ef8",
+  "policy_sha256": "4d22ba313582676fb22c799446faddf7ccfba32b354a96e7485450cfd3d461e8",
+  "preflight": {
+    "balanced_parentheses": true,
+    "classification": "non-primary",
+    "cvc5_arguments": [
+      "--lang=smt2",
+      "--parse-only"
+    ],
+    "required_before_solver_schedule": true
+  },
+  "sat_validation": {
+    "NONVAC-1": "SAT must pass V-EXEC",
+    "controls": "returned assignment evaluated against mutated manual summary and unchanged policy",
+    "primary": "amended section 6(b) V-EXEC"
+  },
+  "schedule": [
+    {
+      "drop_producer": true,
+      "expected": "SAT/G1",
+      "id": "C1",
+      "kind": "control",
+      "omega": {
+        "bytes": 18212689,
+        "path": "results/raw/D1P-14C/prepared/omega-c1.json",
+        "sha256": "fcd20bf7c76a5d981ae7ff372c3a8cfa15f85168aae5d8d5fd703caf396e6c6f"
+      },
+      "query": {
+        "bytes": 9988,
+        "path": "results/raw/D1P-14C/prepared/c1-conservation.smt2",
+        "sha256": "872d4bdd8d433a74b5ee0b167e14dd770d687acc892dd288b0850921733b271b"
+      },
+      "timeout_seconds": 60,
+      "transformation": {
+        "bytes": 2359,
+        "path": "results/raw/D1P-14C/prepared/c1-transformation.json",
+        "sha256": "0185e1246993eb68d8afb3bcebb19668ce9d3fdcc4a521a1dd44f98e7c3efe88"
+      }
+    },
+    {
+      "drop_producer": true,
+      "expected": "SAT/G3",
+      "id": "C2",
+      "kind": "control",
+      "omega": {
+        "bytes": 18212720,
+        "path": "results/raw/D1P-14C/prepared/omega-c2.json",
+        "sha256": "8d73d461e88b50f2aebb7ecbc707d68758610707dac967c6796af21084afb271"
+      },
+      "query": {
+        "bytes": 10056,
+        "path": "results/raw/D1P-14C/prepared/c2-beneficiary.smt2",
+        "sha256": "532c97acbd73c778d798f66bd0383bf75297dbd31fc02b1b8b9793aa482ff3f7"
+      },
+      "timeout_seconds": 60,
+      "transformation": {
+        "bytes": 2352,
+        "path": "results/raw/D1P-14C/prepared/c2-transformation.json",
+        "sha256": "2975678f5a5d65ba347b57cc28f5db99d2917ba02550ecc920a15518dd938587"
+      }
+    },
+    {
+      "drop_producer": true,
+      "expected": "SAT/G4",
+      "id": "C3",
+      "kind": "control",
+      "omega": {
+        "bytes": 18212710,
+        "path": "results/raw/D1P-14C/prepared/omega-c3.json",
+        "sha256": "1ffa035b4a52ae4e1a8006d417e310fafbf01d48d20e3e79bf9e041cf358ddf6"
+      },
+      "query": {
+        "bytes": 9964,
+        "path": "results/raw/D1P-14C/prepared/c3-extra-mint.smt2",
+        "sha256": "48a6df28f18f0788a7ef886df5e0d7826cf7c06a47586aad5805258c8524dba2"
+      },
+      "timeout_seconds": 60,
+      "transformation": {
+        "bytes": 2344,
+        "path": "results/raw/D1P-14C/prepared/c3-transformation.json",
+        "sha256": "d638a62ef6f5e9b6810430e1da8f71fe800c56b64228ae458cb44d1fd8f1a25f"
+      }
+    },
+    {
+      "drop_producer": true,
+      "expected": "SAT/G5",
+      "id": "C4",
+      "kind": "control",
+      "omega": {
+        "bytes": 18212722,
+        "path": "results/raw/D1P-14C/prepared/omega-c4.json",
+        "sha256": "5d5a6cfefe49126800693d5790a1181d1e8453aa4fc80e009162473f575809c9"
+      },
+      "query": {
+        "bytes": 9965,
+        "path": "results/raw/D1P-14C/prepared/c4-wrong-nullifier.smt2",
+        "sha256": "313c9c003e3812606dff5238c42a57fe36f456c83769df96ef65d1200f28eaf2"
+      },
+      "timeout_seconds": 60,
+      "transformation": {
+        "bytes": 2360,
+        "path": "results/raw/D1P-14C/prepared/c4-transformation.json",
+        "sha256": "a077f2370ea56983835ee2bf788c44c40261ea44e851d41f86cd39b3ad363bb1"
+      }
+    },
+    {
+      "drop_producer": true,
+      "expected": null,
+      "id": "Q1",
+      "kind": "primary",
+      "omega": {
+        "bytes": 18212595,
+        "path": "results/raw/D1P-14C/prepared/omega-auth1.json",
+        "sha256": "4d705b76936a914183b75dd243186fa4661d322c6f49a61c45c2721d8006c8b2"
+      },
+      "query": {
+        "bytes": 9915,
+        "path": "results/raw/D1P-14C/prepared/q1-auth1-r-dropped.smt2",
+        "sha256": "a188b4a155b41b92a2531d0ae7c92593baaaf373f64f61068c739c66d2a5fa2b"
+      },
+      "timeout_seconds": 300,
+      "transformation": {
+        "bytes": 2205,
+        "path": "results/raw/D1P-14C/prepared/q1-transformation.json",
+        "sha256": "6b879fa0a8177faae12ac9f9815c70e94e3f3d00c3413d80c5b98c3b2e20e53c"
+      }
+    },
+    {
+      "drop_producer": false,
+      "expected": null,
+      "id": "Q2",
+      "kind": "primary",
+      "omega": {
+        "bytes": 18212595,
+        "path": "results/raw/D1P-14C/prepared/omega-auth1.json",
+        "sha256": "4d705b76936a914183b75dd243186fa4661d322c6f49a61c45c2721d8006c8b2"
+      },
+      "query": {
+        "bytes": 22125017,
+        "path": "results/raw/D1P-14C/prepared/q2-auth1-monolithic.smt2",
+        "sha256": "7aa4935a6d3fb5c8cb6b7141bace0c80f9a16745db662ce8220c636f927c7701"
+      },
+      "timeout_seconds": 300,
+      "transformation": {
+        "bytes": 2193,
+        "path": "results/raw/D1P-14C/prepared/q2-transformation.json",
+        "sha256": "6edb3f90c6a58e7cb71d9d8d3d34b14e06ac4c7bac1f6b0fa32d8f560765ce4b"
+      }
+    },
+    {
+      "drop_producer": false,
+      "expected": null,
+      "id": "Q3",
+      "kind": "primary",
+      "omega": {
+        "bytes": 18212626,
+        "path": "results/raw/D1P-14C/prepared/omega-nonvac1.json",
+        "sha256": "a2c43bda445d8477d5edb60b7ffd75800f01f1a4ac24068e78bd440ccd73e080"
+      },
+      "query": {
+        "bytes": 22125006,
+        "path": "results/raw/D1P-14C/prepared/q3-nonvac1-monolithic.smt2",
+        "sha256": "922df98e7d6fd04fb24628462039199515257aab78c08bc3b6ee02ea617b141d"
+      },
+      "timeout_seconds": 300,
+      "transformation": {
+        "bytes": 2197,
+        "path": "results/raw/D1P-14C/prepared/q3-transformation.json",
+        "sha256": "a29be45a224b106537e84c508dc180249542c60df1349077cb9dd04183197c14"
+      }
+    }
+  ],
+  "schedule_order": [
+    "C1",
+    "C2",
+    "C3",
+    "C4",
+    "Q1",
+    "Q2",
+    "Q3"
+  ],
+  "schema": "bindcheck.d1p14c.frozen-manifest/v1",
+  "solver": {
+    "architecture": "arm64",
+    "bytes": 412184,
+    "expected_sha256": "a083a7f56a3f61691583b699076322bbcbf6732decfb4f6dc41850dbcc3df027",
+    "path": "/Users/imranpollob/Coding/bc/BindCheck/tools/cvc5-1.4.2-gpl/bin/cvc5",
+    "sha256": "a083a7f56a3f61691583b699076322bbcbf6732decfb4f6dc41850dbcc3df027",
+    "version": "cvc5 1.4.2 git 282d5e0"
+  },
+  "solver_arguments": [
+    "--lang=smt2",
+    "--ff-solver=split",
+    "--produce-models",
+    "--dump-models"
+  ]
+}

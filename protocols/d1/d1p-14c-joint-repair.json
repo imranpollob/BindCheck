@@ -1,0 +1,55 @@
+{
+  "schema": "bindcheck.d1p14c.protocol/v1",
+  "task": "D1P-14C",
+  "classification": "semantically validated repair and new frozen diagnostic",
+  "predecessor": {
+    "task": "D1P-14B",
+    "result": "three parser errors; no SAT or UNSAT observed",
+    "preservation": "all D1P-14B evidence remains immutable; original source inputs are copied and hash-recorded under D1P-14C"
+  },
+  "scope": {
+    "application": "WarpToad",
+    "revision": "973e7d1e4b60d0d8a8ca299b0cabd9193b147ef8",
+    "consumer_summary": "MANUAL / ASSUMED under research contract section 6.3",
+    "automatic_extraction_claim": false,
+    "auth_scope": "AUTH-1[G1-G5]",
+    "owned_local": true,
+    "fork": false,
+    "live_chain": false
+  },
+  "separation": {
+    "implementation": "successful transition, ordered mint occurrences, nullifier-write slots, balance credits and total-supply delta",
+    "policy": "unchanged G1-G5 predicates evaluated only after the implementation effects are emitted",
+    "rule": "effects are never constructed from the desired policy"
+  },
+  "preflight": {
+    "balanced_parentheses": "every generated query",
+    "parser": "pinned cvc5 --lang=smt2 --parse-only",
+    "classification": "recorded non-primary calls",
+    "failure": "stop before sensitivity or primary solves"
+  },
+  "schedule": [
+    {"id": "C1", "seconds": 60, "expected": "SAT/G1", "mutation": "full recipient amount plus positive fee"},
+    {"id": "C2", "seconds": 60, "expected": "SAT/G3", "mutation": "fee beneficiary changed to recipient with distinct addresses and positive fee"},
+    {"id": "C3", "seconds": 60, "expected": "SAT/G4", "mutation": "extra zero-value recipient mint occurrence"},
+    {"id": "C4", "seconds": 60, "expected": "SAT/G5", "mutation": "extra nullifier write at pi0+1"},
+    {"id": "Q1", "seconds": 300, "query": "AUTH-1 with R_v dropped"},
+    {"id": "Q2", "seconds": 300, "query": "AUTH-1 monolithic"},
+    {"id": "Q3", "seconds": 300, "query": "NONVAC-1 monolithic"}
+  ],
+  "execution": {
+    "attempts_per_scheduled_query": 1,
+    "controls_first": true,
+    "stop_on_control_failure": true,
+    "sequential": true,
+    "post_freeze_tuning": false,
+    "resource_policy": "D1P-07 50 ms sampled recursive libproc RSS; observed crossing above 4 GiB terminates the process group"
+  },
+  "sat_validation": {
+    "controls": "evaluate the returned public/environment assignment against the named mutated manual transition and unchanged policy",
+    "primary": "amended section 6(b) V-EXEC route",
+    "nonvac_sat_requires_vexec": true
+  },
+  "claim_boundary": "Passing establishes internal consistency and sensitivity of the manual model only; not Solidity equivalence, automatic discovery, an end-to-end vulnerability, or a D1 verdict.",
+  "d1_verdict": "UNKNOWN"
+}

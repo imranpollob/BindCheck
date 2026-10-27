@@ -1,0 +1,52 @@
+{
+  "schema": "bindcheck.d1p14d.protocol/v1",
+  "task": "D1P-14D",
+  "predecessor": {
+    "D1P-14C": "C1 SAT/validated; C2 timed out at 60 seconds; C3/C4/Q1/Q2/Q3 unrun",
+    "preservation": "D1P-14B/C evidence and frozen source inputs remain unchanged"
+  },
+  "fixture": {
+    "source": "D1P-14A FC-POS proof inputs, environment and owned-local admitted pre-state",
+    "requirements": [
+      "positive fee",
+      "distinct named relayer and recipient",
+      "fee arithmetic does not overflow",
+      "fee is within max_fee and amount"
+    ],
+    "classification": "fixed concrete encoder regression; not search or performance evidence"
+  },
+  "controls": {
+    "policy": "unchanged D1P-14C G1-G5",
+    "implementation_mutations": "unchanged D1P-14C C1-C4",
+    "positive": "mutated summary, fixed fixture, designated violation asserted; expect SAT",
+    "negative": "BASE summary, same fixed fixture, same designated violation asserted; expect UNSAT",
+    "order": [
+      "C1-positive", "C1-negative",
+      "C2-positive", "C2-negative",
+      "C3-positive", "C3-negative",
+      "C4-positive", "C4-negative"
+    ],
+    "seconds_each": 30,
+    "attempts_each": 1,
+    "stop_on_any_failure": true
+  },
+  "preflight": {
+    "scope": "all eight controls and unchanged Q1-Q3",
+    "checks": ["balanced parentheses", "pinned cvc5 --lang=smt2 --parse-only"],
+    "classification": "non-primary parser checks"
+  },
+  "diagnostics": {
+    "gate": "all parser checks and all eight polarity controls pass",
+    "queries": [
+      {"id": "Q1", "seconds": 300, "source": "byte-identical D1P-14C AUTH-1 R_v-dropped query"},
+      {"id": "Q2", "seconds": 300, "source": "byte-identical D1P-14C AUTH-1 monolithic query"},
+      {"id": "Q3", "seconds": 300, "source": "byte-identical D1P-14C NONVAC-1 monolithic query"}
+    ],
+    "attempts_each": 1,
+    "post_freeze_tuning": false,
+    "resource_policy": "D1P-07 50 ms recursive libproc RSS sampling with 4 GiB observed threshold"
+  },
+  "candidate_validation": "existing amended section 6(b) V-EXEC rules; NONVAC-1 SAT requires V-EXEC",
+  "claim_boundary": "Controls establish only fixed-input encoder regression polarity. They do not resolve the original symbolic C2 timeout, measure search capability, establish semantic equivalence or automatic extraction, or imply a vulnerability.",
+  "d1_verdict": "UNKNOWN"
+}

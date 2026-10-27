@@ -1,0 +1,382 @@
+{
+  "bounds": {
+    "attempts_per_query": 1,
+    "hard_address_space_cap": false,
+    "observed_rss_cutoff_bytes": 4294967296,
+    "rss_sample_interval_seconds": 0.05,
+    "sequential": true,
+    "solver_seconds_maximum": 900,
+    "timeout_seconds_each": 300,
+    "tuning_or_refinement_after_freeze": false
+  },
+  "canonical_serialization": "UTF-8 JSON, sorted keys, compact separators, ensure_ascii=false, allow_nan=false, no trailing LF",
+  "claims_excluded": [
+    "D1 verdict",
+    "consumer direction",
+    "hash completeness",
+    "collision resistance",
+    "knowledge soundness",
+    "performance result"
+  ],
+  "frozen_at_utc": "2026-10-27T06:07:10.902131+00:00",
+  "hash_complete_inputs": [
+    {
+      "bytes": 24504,
+      "path": "src/bindcheck_d1/joint_warptoad.py",
+      "sha256": "be74f98e3aa1fb40c9e4f514f0d866676001f45c3f37abf3f93f15afac24d93c"
+    },
+    {
+      "bytes": 36603,
+      "path": "scripts/d1p_14b_joint_encoder.py",
+      "sha256": "edb9b77c1237dcf6861790e272f0300a44dac03dbac1ff5277a8b57e2a0dd29e"
+    },
+    {
+      "bytes": 4509,
+      "path": "tests/d1/test_joint_warptoad.py",
+      "sha256": "788ae5b6c1ca40a56f5145beb830d262d80b08a1ad457e610a911856f8060ff1"
+    },
+    {
+      "bytes": 3788,
+      "path": "scripts/fixtures/d1p_14b_state_snapshot.ts",
+      "sha256": "81cb0c6f0a7f98a915700a5b7b3c7ebbc85ca95287dfb9a9d635ed1eefb6afeb"
+    },
+    {
+      "bytes": 670,
+      "path": "scripts/fixtures/D1P14BVectorVerifier.sol",
+      "sha256": "12820f839ca96f4ebb8a2235537336dd846e09475241f4ae859ad204712b6f52"
+    },
+    {
+      "bytes": 4524,
+      "path": "scripts/fixtures/d1p_14b_candidate_exec.ts",
+      "sha256": "2a3d37fdaadb2d55feacdfde14db123d75e29c29789a1543802def481e641f43"
+    },
+    {
+      "bytes": 1658,
+      "path": "protocols/d1/d1p-14b-joint.json",
+      "sha256": "19d12b0b4a3952a936b52fc7499bcb57276db9f927dfd0e200e9d52689458271"
+    },
+    {
+      "bytes": 85657,
+      "path": "/Users/imranpollob/Coding/bc/bindcheck-lane-b/docs/d1-paper/d1p-b01-design.md",
+      "sha256": "bc6527a9beab445471fce29c3dfe268e9e3834feec7b8760edc47b0b25075990"
+    },
+    {
+      "bytes": 2177,
+      "path": "metadata/d1/d1p-07-resource-policy.json",
+      "sha256": "d292323e8123c0f4bf38469c3bfeb7ba9a2733f709a0e5229be0c34913ffc885"
+    },
+    {
+      "bytes": 50723,
+      "path": "scripts/d1p_07_track_a.py",
+      "sha256": "cba540dcb8cd310c6d12a010c2833f79fdd09fe9ec17c900f5d5fc5b401dd6fe"
+    },
+    {
+      "bytes": 31415,
+      "path": "scripts/d1p_05_validate.py",
+      "sha256": "16cc0ae39e7ff3a01439b3c168e4bede93ab53b25bfc1d6b3d27efb3a8651d55"
+    },
+    {
+      "bytes": 412184,
+      "path": "/Users/imranpollob/Coding/bc/BindCheck/tools/cvc5-1.4.2-gpl/bin/cvc5",
+      "sha256": "a083a7f56a3f61691583b699076322bbcbf6732decfb4f6dc41850dbcc3df027"
+    },
+    {
+      "bytes": 42540384,
+      "path": "results/raw/D1P-13/tools/nargo-beta22/nargo",
+      "sha256": "37f7d55d9795af0da3b471db2306e0296fa34c528386a828ce556fc3ebbf6e7b"
+    },
+    {
+      "bytes": 2395703,
+      "path": "results/raw/D1P-14B/workspace/source/backend/circuits/withdraw/target/withdraw.json",
+      "sha256": "7190813f623967b79ba80a1635536fcc9c8524c1d1cb9f00696832f644b38327"
+    },
+    {
+      "bytes": 8609,
+      "path": "results/raw/D1P-14B/workspace/source/backend/contracts/core/WarpToadCore.sol",
+      "sha256": "323a1cf26c7449f67cf277ff0a46c31e12f725c555f9fa165d5a60011e122c39"
+    },
+    {
+      "bytes": 326448,
+      "path": "results/raw/D1P-14B/workspace/source/pnpm-lock.yaml",
+      "sha256": "d984410433a0349df3d32ab9c188bd76c30ffdfcfdb7e05bc67c473949f6f8e0"
+    },
+    {
+      "bytes": 10800,
+      "path": "results/raw/D1P-14B/workspace/source/node_modules/.pnpm/@openzeppelin+contracts@5.6.1/node_modules/@openzeppelin/contracts/token/ERC20/ERC20.sol",
+      "sha256": "50f34ae16a067a41c2c1091445d11d63788e54c717677cb6d6b0e4cdea2ad21d"
+    },
+    {
+      "bytes": 1890,
+      "path": "results/raw/D1P-14B/fixed-s0.json",
+      "sha256": "13366cd12442bfe4cb771498e3b96447433be42815f6a38b6873f9b99d6162dc"
+    },
+    {
+      "bytes": 9626,
+      "path": "results/raw/D1P-14B/lowering-validation.json",
+      "sha256": "4ce501668d6f86b181b61722cf9f24d1ae6e4c74893039f9c26703ac91794d60"
+    },
+    {
+      "bytes": 1300,
+      "path": "results/raw/D1P-14B/anchor-check.json",
+      "sha256": "f26dadf99c4c336928d5f25ee411901b75e2df3eabc7b10e270277d7b883e295"
+    },
+    {
+      "bytes": 18209978,
+      "path": "results/raw/D1P-14B/prepared/omega-auth1.json",
+      "sha256": "711cf62c8695c1a6fd22c43d0cc31fe62f9221f2fd0945c7032cd14ec6bb9996"
+    },
+    {
+      "bytes": 18210009,
+      "path": "results/raw/D1P-14B/prepared/omega-nonvac1.json",
+      "sha256": "4baa5d8de2de5003291e8a533bb20297c1d64f363f265f1fb216e8c27d69cdb1"
+    },
+    {
+      "bytes": 4453,
+      "path": "results/raw/D1P-14B/prepared/q1-auth1-r-dropped.smt2",
+      "sha256": "b4442a58911e6a447a18472dadce9e20218d72b2b1947d232019051ac9608529"
+    },
+    {
+      "bytes": 1629,
+      "path": "results/raw/D1P-14B/prepared/q1-transformation.json",
+      "sha256": "96124ef22577c308b6d13ff2fb877d24b4946182ba9f6fbe904f99165a6a046c"
+    },
+    {
+      "bytes": 22119555,
+      "path": "results/raw/D1P-14B/prepared/q2-auth1-monolithic.smt2",
+      "sha256": "bf260bcc7e998b054e69181beb5a8914ef1a3ae02b6d0d9bcd007e663be3c754"
+    },
+    {
+      "bytes": 1615,
+      "path": "results/raw/D1P-14B/prepared/q2-transformation.json",
+      "sha256": "be78bcbe0769b294056ff2576a7b7049f8f78e60b4c62a039bc98142095015d6"
+    },
+    {
+      "bytes": 22119640,
+      "path": "results/raw/D1P-14B/prepared/q3-nonvac1-monolithic.smt2",
+      "sha256": "955b71077c6c953e6d1880119625ef5fab295506dd7553ac2621e726210f52ce"
+    },
+    {
+      "bytes": 1619,
+      "path": "results/raw/D1P-14B/prepared/q3-transformation.json",
+      "sha256": "3a8854f57257d2d26ff27a3de048f6005aef6da472b54accd337eb4af3820746"
+    }
+  ],
+  "identities": {
+    "artifact": {
+      "bytes": 2395703,
+      "path": "results/raw/D1P-14B/workspace/source/backend/circuits/withdraw/target/withdraw.json",
+      "sha256": "7190813f623967b79ba80a1635536fcc9c8524c1d1cb9f00696832f644b38327"
+    },
+    "base_monitor": {
+      "bytes": 31415,
+      "path": "scripts/d1p_05_validate.py",
+      "sha256": "16cc0ae39e7ff3a01439b3c168e4bede93ab53b25bfc1d6b3d27efb3a8651d55"
+    },
+    "consumer": {
+      "bytes": 8609,
+      "format_lines": "114-140",
+      "mint_lines": "143-177",
+      "path": "results/raw/D1P-14B/workspace/source/backend/contracts/core/WarpToadCore.sol",
+      "sha256": "323a1cf26c7449f67cf277ff0a46c31e12f725c555f9fa165d5a60011e122c39"
+    },
+    "decoder": {
+      "bytes": 20528,
+      "path": "src/bindcheck_d1/frontends/acir_binary_beta22.py",
+      "sha256": "60260a59770d2d2f77f303349fb0145da699b18c5941fadf5bd8c105c005c99b"
+    },
+    "monitor_runner": {
+      "bytes": 50723,
+      "path": "scripts/d1p_07_track_a.py",
+      "sha256": "cba540dcb8cd310c6d12a010c2833f79fdd09fe9ec17c900f5d5fc5b401dd6fe"
+    },
+    "nargo": {
+      "bytes": 42540384,
+      "path": "results/raw/D1P-13/tools/nargo-beta22/nargo",
+      "sha256": "37f7d55d9795af0da3b471db2306e0296fa34c528386a828ce556fc3ebbf6e7b",
+      "version": "1.0.0-beta.22+c57152f91260ecdb9faad4efc20abb14b6d2ece7"
+    },
+    "openzeppelin": {
+      "contract_tree_update_definition_count": 1,
+      "erc20_source": {
+        "bytes": 10800,
+        "path": "results/raw/D1P-14B/workspace/source/node_modules/.pnpm/@openzeppelin+contracts@5.6.1/node_modules/@openzeppelin/contracts/token/ERC20/ERC20.sol",
+        "sha256": "50f34ae16a067a41c2c1091445d11d63788e54c717677cb6d6b0e4cdea2ad21d"
+      },
+      "lockfile": {
+        "bytes": 326448,
+        "path": "results/raw/D1P-14B/workspace/source/pnpm-lock.yaml",
+        "sha256": "d984410433a0349df3d32ab9c188bd76c30ffdfcfdb7e05bc67c473949f6f8e0"
+      },
+      "mint_lines": "ERC20.sol:214-218",
+      "override_search_note": "only the vendored backend/contracts/test/ERC206Dec.sol defines an unrelated _update; WarpToadCore/L1WarpToad do not override OpenZeppelin ERC20._update",
+      "requested": "^5.2.0",
+      "resolved": "5.6.1",
+      "status": "EXTRACTED",
+      "update_lines": "ERC20.sol:176-203",
+      "warptoad_update_override": false
+    },
+    "resource_policy": {
+      "bytes": 2177,
+      "path": "metadata/d1/d1p-07-resource-policy.json",
+      "sha256": "d292323e8123c0f4bf38469c3bfeb7ba9a2733f709a0e5229be0c34913ffc885"
+    },
+    "solver": {
+      "architecture": "arm64",
+      "bytes": 412184,
+      "expected_sha256": "a083a7f56a3f61691583b699076322bbcbf6732decfb4f6dc41850dbcc3df027",
+      "path": "/Users/imranpollob/Coding/bc/BindCheck/tools/cvc5-1.4.2-gpl/bin/cvc5",
+      "sha256": "a083a7f56a3f61691583b699076322bbcbf6732decfb4f6dc41850dbcc3df027",
+      "version": "cvc5 1.4.2 git 282d5e0"
+    },
+    "specification": {
+      "bytes": 85657,
+      "controlling_section": "amended section 6",
+      "path": "/Users/imranpollob/Coding/bc/bindcheck-lane-b/docs/d1-paper/d1p-b01-design.md",
+      "sha256": "bc6527a9beab445471fce29c3dfe268e9e3834feec7b8760edc47b0b25075990"
+    }
+  },
+  "omega": {
+    "AUTH-1": {
+      "bytes": 18209978,
+      "path": "results/raw/D1P-14B/prepared/omega-auth1.json",
+      "sha256": "711cf62c8695c1a6fd22c43d0cc31fe62f9221f2fd0945c7032cd14ec6bb9996"
+    },
+    "NONVAC-1": {
+      "bytes": 18210009,
+      "path": "results/raw/D1P-14B/prepared/omega-nonvac1.json",
+      "sha256": "4baa5d8de2de5003291e8a533bb20297c1d64f363f265f1fb216e8c27d69cdb1"
+    }
+  },
+  "pinned_revision": "973e7d1e4b60d0d8a8ca299b0cabd9193b147ef8",
+  "pre_solver_checks": {
+    "anchor": {
+      "bytes": 1300,
+      "path": "results/raw/D1P-14B/anchor-check.json",
+      "sha256": "f26dadf99c4c336928d5f25ee411901b75e2df3eabc7b10e270277d7b883e295"
+    },
+    "focused_tests": {
+      "argv": [
+        "/Users/imranpollob/.pyenv/shims/pytest",
+        "-q",
+        "tests/d1/test_joint_warptoad.py",
+        "tests/d1/test_acir_beta22.py"
+      ],
+      "cwd": "/Users/imranpollob/Coding/bc/bindcheck-d1-paper",
+      "exit_code": 0,
+      "label": "focused-tests-before-freeze-retry",
+      "schema": "bindcheck.d1p14b.command/v1",
+      "stderr": {
+        "bytes": 0,
+        "path": "command-records/focused-tests-before-freeze-retry.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 107,
+        "path": "command-records/focused-tests-before-freeze-retry.stdout",
+        "sha256": "58f720b4b7b4f28f1af9aabe4b80921772c469d2f50c24eccf269578bf034e8d"
+      },
+      "timed_out": false,
+      "timeout_seconds": 300,
+      "wall_seconds": 6.305135
+    },
+    "lowering": {
+      "bytes": 9626,
+      "path": "results/raw/D1P-14B/lowering-validation.json",
+      "sha256": "4ce501668d6f86b181b61722cf9f24d1ae6e4c74893039f9c26703ac91794d60"
+    }
+  },
+  "queries": [
+    {
+      "drop_producer": true,
+      "goal": "AUTH-1",
+      "name": "Q1",
+      "omega": {
+        "bytes": 18209978,
+        "path": "results/raw/D1P-14B/prepared/omega-auth1.json",
+        "sha256": "711cf62c8695c1a6fd22c43d0cc31fe62f9221f2fd0945c7032cd14ec6bb9996"
+      },
+      "query": {
+        "bytes": 4453,
+        "path": "results/raw/D1P-14B/prepared/q1-auth1-r-dropped.smt2",
+        "sha256": "b4442a58911e6a447a18472dadce9e20218d72b2b1947d232019051ac9608529"
+      },
+      "transformation": {
+        "bytes": 1629,
+        "path": "results/raw/D1P-14B/prepared/q1-transformation.json",
+        "sha256": "96124ef22577c308b6d13ff2fb877d24b4946182ba9f6fbe904f99165a6a046c"
+      }
+    },
+    {
+      "drop_producer": false,
+      "goal": "AUTH-1",
+      "name": "Q2",
+      "omega": {
+        "bytes": 18209978,
+        "path": "results/raw/D1P-14B/prepared/omega-auth1.json",
+        "sha256": "711cf62c8695c1a6fd22c43d0cc31fe62f9221f2fd0945c7032cd14ec6bb9996"
+      },
+      "query": {
+        "bytes": 22119555,
+        "path": "results/raw/D1P-14B/prepared/q2-auth1-monolithic.smt2",
+        "sha256": "bf260bcc7e998b054e69181beb5a8914ef1a3ae02b6d0d9bcd007e663be3c754"
+      },
+      "transformation": {
+        "bytes": 1615,
+        "path": "results/raw/D1P-14B/prepared/q2-transformation.json",
+        "sha256": "be78bcbe0769b294056ff2576a7b7049f8f78e60b4c62a039bc98142095015d6"
+      }
+    },
+    {
+      "drop_producer": false,
+      "goal": "NONVAC-1",
+      "name": "Q3",
+      "omega": {
+        "bytes": 18210009,
+        "path": "results/raw/D1P-14B/prepared/omega-nonvac1.json",
+        "sha256": "4baa5d8de2de5003291e8a533bb20297c1d64f363f265f1fb216e8c27d69cdb1"
+      },
+      "query": {
+        "bytes": 22119640,
+        "path": "results/raw/D1P-14B/prepared/q3-nonvac1-monolithic.smt2",
+        "sha256": "955b71077c6c953e6d1880119625ef5fab295506dd7553ac2621e726210f52ce"
+      },
+      "transformation": {
+        "bytes": 1619,
+        "path": "results/raw/D1P-14B/prepared/q3-transformation.json",
+        "sha256": "3a8854f57257d2d26ff27a3de048f6005aef6da472b54accd337eb4af3820746"
+      }
+    }
+  ],
+  "schedule": [
+    "Q1 AUTH-1 with R_v dropped",
+    "Q2 AUTH-1 monolithic",
+    "Q3 NONVAC-1 monolithic"
+  ],
+  "schema": "bindcheck.d1p14b.frozen-manifest/v1",
+  "solver": {
+    "architecture": "arm64",
+    "bytes": 412184,
+    "expected_sha256": "a083a7f56a3f61691583b699076322bbcbf6732decfb4f6dc41850dbcc3df027",
+    "path": "/Users/imranpollob/Coding/bc/BindCheck/tools/cvc5-1.4.2-gpl/bin/cvc5",
+    "sha256": "a083a7f56a3f61691583b699076322bbcbf6732decfb4f6dc41850dbcc3df027",
+    "version": "cvc5 1.4.2 git 282d5e0"
+  },
+  "solver_arguments": [
+    "--lang=smt2",
+    "--ff-solver=split",
+    "--produce-models",
+    "--dump-models"
+  ],
+  "specification": {
+    "bytes": 85657,
+    "path": "/Users/imranpollob/Coding/bc/bindcheck-lane-b/docs/d1-paper/d1p-b01-design.md",
+    "sha256": "bc6527a9beab445471fce29c3dfe268e9e3834feec7b8760edc47b0b25075990"
+  },
+  "validation": {
+    "consumer_timeout_seconds": 600,
+    "nargo_timeout_seconds": 600,
+    "route": "section 6(b): full ABI candidate -> pinned nargo execute -> fresh EDR S0 -> exact-vector verifier stub -> unchanged T_mint",
+    "sat_candidates_per_query_maximum": 1,
+    "sat_without_complete_validation": "UNKNOWN"
+  }
+}

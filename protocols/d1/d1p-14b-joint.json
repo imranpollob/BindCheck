@@ -1,0 +1,49 @@
+{
+  "schema": "bindcheck.d1p14b.protocol/v1",
+  "task": "D1P-14B",
+  "classification": "diagnostic first joint encoder",
+  "specification": {
+    "path": "/Users/imranpollob/Coding/bc/bindcheck-lane-b/docs/d1-paper/d1p-b01-design.md",
+    "section": "amended section 6"
+  },
+  "scope": {
+    "application": "WarpToad",
+    "revision": "973e7d1e4b60d0d8a8ca299b0cabd9193b147ef8",
+    "consumer": "WarpToadCore.mint",
+    "owned_local": true,
+    "fork": false,
+    "live_chain": false,
+    "named_relayer_only": true
+  },
+  "queries": [
+    "AUTH-1 with R_v dropped",
+    "AUTH-1 monolithic",
+    "NONVAC-1 monolithic"
+  ],
+  "execution": {
+    "solver": "pinned native arm64 cvc5 1.4.2 GPL/CoCoA",
+    "attempts_per_query": 1,
+    "seconds_per_query": 300,
+    "solver_seconds_maximum": 900,
+    "resource_policy": "D1P-07 sampled recursive libproc RSS at 50 ms; observed crossing above 4 GiB terminates the process group",
+    "sequential": true,
+    "post_freeze_tuning": false
+  },
+  "hash_layer": {
+    "poseidon2": "L0 havoc outputs",
+    "bn254_poseidon_arithmetic": "retain decoded AssertZero constraints",
+    "brillig": "witness-generation machinery; outputs free except downstream ACIR constraints",
+    "collision_resistance": false,
+    "ground_instances": false
+  },
+  "sat_validation": "amended section 6(b) only: full ABI assignment, pinned nargo execute, fresh EDR S0, exact-vector verifier stub, unchanged consumer",
+  "excluded": [
+    "solver campaign",
+    "query tuning or refinement",
+    "new proof generation",
+    "joint analyzer generalization",
+    "consumer-direction inference",
+    "D1 verdict"
+  ],
+  "d1_verdict": "UNKNOWN"
+}

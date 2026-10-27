@@ -190,6 +190,38 @@ The principal directories are `circuits/` and `contracts/` for the small fixture
   relayer. Exactly two bounded proof attempts ran; no solver, encoder, fork,
   live-chain action, performance claim, policy validation or security verdict
   follows. D1 remains UNKNOWN.
+- [D1P-14B](reports/D1P-14B.md) implements the first canonical WarpToad joint
+  `AUTH-1`/`NONVAC-1` diagnostic encoder and occurrence-preserving `T_mint`
+  lowering. The lowering matches the D1P-12R honest/replay cases and all
+  D1P-14A fee controls; OpenZeppelin is resolved exactly to 5.6.1, and the
+  D1P-12R real-proof anchor matches the modeled scope and DRAFT policy. The
+  hash-complete manifest froze all three required queries, but each one-shot
+  cvc5 process stopped on the same missing-parenthesis parse error before
+  satisfiability checking. The no-refinement rule leaves Q1, Q2 and Q3
+  `UNKNOWN`; no SAT validation, proof generation, consumer-direction result,
+  policy validation or D1 verdict follows.
+- [D1P-14C](reports/D1P-14C.md) preserves D1P-14B and repairs its SMT syntax,
+  makes the consumer transition/effects independent of the unchanged policy,
+  labels the summary `MANUAL / ASSUMED`, and derives G4/G5 from explicit mint
+  occurrences and nullifier writes. All seven frozen queries pass both
+  parenthesis and pinned-cvc5 parse preflights; 17 focused tests and 12
+  subtests pass. C1 returns a model-validated conservation SAT in 24.335629
+  seconds, but C2 times out at its single 60-second control slot. The required
+  stop rule leaves C3, C4 and Q1–Q3 unrun. This is an exact sensitivity-control
+  blocker, not Solidity equivalence, automatic discovery, a performance or
+  vulnerability result; AUTH-1, NONVAC-1 and D1 remain `UNKNOWN`.
+- [D1P-14D](reports/D1P-14D.md) preserves D1P-14B/C and replaces the symbolic
+  sensitivity gate with eight deterministic regressions derived from the
+  D1P-14A FC-POS fixture. All four existing implementation mutants are SAT for
+  their designated G1/G3/G4/G5 predicates; the BASE summary is UNSAT for each
+  corresponding predicate at identical fixed inputs. Twenty-one tests and
+  twelve subtests pass, and all eleven frozen inputs pass parser preflight.
+  The unlocked, byte-identical D1P-14C diagnostics remain `UNKNOWN`: Q1 and Q2
+  time out at 300 seconds, while Q3 ends in a root-process monitor error after
+  229.747027 seconds with no SAT/UNSAT output. No primary candidate, proof or
+  V-EXEC runs. These are fixed-input encoder regressions, not search,
+  performance, automatic-extraction, semantic-equivalence or vulnerability
+  evidence; AUTH-1, NONVAC-1 and D1 remain `UNKNOWN`.
 - T15–T19 locally reproduce the public Payy message-tail mechanism with real proofs and committed token-balance effects, then validate the repair and an honest control.
 - T20 maps those claims to pinned source and advisory evidence.
 - T21 is an in-sample, source-pattern prototype; it does not establish generalization.
@@ -221,7 +253,15 @@ source-to-bytecode/ABI/VK/verifier correspondence and checks every supported
 arithmetic/range constraint on the honest witness, while leaving 86 Poseidon2
 constraints uninterpreted. D1P-14A concretely exercises the nonzero fee cap,
 an unchanged-proof over-cap revert, and the zero-fee branch with real proofs
-and receipts. These are development artifact/component results, not general
+and receipts. D1P-14B then freezes the first joint AUTH-1/NONVAC-1 encoding,
+but a common SMT-LIB parenthesis defect makes all three one-shot processes
+parser errors. D1P-14C repairs and preflights a fresh freeze, then stops at the
+required sensitivity gate when C1 validates as SAT but C2 times out; C3, C4
+and all three primary queries remain unrun. D1P-14D replaces that gate with
+eight deterministic fixed-input polarity regressions, all of which pass, then
+runs the unchanged primaries: Q1/Q2 time out and Q3 has a monitor error, so all
+three diagnostics remain UNKNOWN.
+These are development artifact/component results, not general
 policy validation, cross-chain evidence or a security result. The exact N=8 forwarding artifact/key,
 full-producer propagation, joint query, proof, and accepted full settlement
 replay remain absent. Offline component checks are not joint verification.
