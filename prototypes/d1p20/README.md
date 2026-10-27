@@ -33,4 +33,3 @@ PYTHONPATH=src:prototypes/d1p20 python3 -m unittest \
 The extracted implementation relation does not derive G1–G5 or any other
 policy obligation. The callsite-to-role adapter remains a separately manifested
 manual policy interpretation.
-

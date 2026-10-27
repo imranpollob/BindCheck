@@ -194,4 +194,3 @@ The primary evidence is under `results/raw/D1P-20/`, with summary hash and
 accounting in `validation.json`. Extraction replaces the manual consumer
 summary only for the tested WarpToad mint fragment. Automatic obligation
 derivation remains open.
-

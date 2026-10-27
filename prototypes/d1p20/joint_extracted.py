@@ -665,4 +665,3 @@ def fixed_terminal_query(
         fixed.append(f"(assert {designated_goal})")
     fixed.append("(check-sat)")
     return query.replace(terminal, ("\n".join(fixed) + "\n").encode())
-
