@@ -1,6 +1,6 @@
 # D1P-C04 search-plan v0.2.0 validation report
 
-Recorded at `2026-10-27T19:15:38.164202Z`. The pinned local validator exited
+Freeze validation recorded at `2026-10-27T21:58:34.187992Z`. The pinned local validator exited
 `0`; no package installation was used. Network access was limited to
 metadata-only `git ls-remote` calls recorded in
 [`endpoint-pin-log-v0.2.0.json`](endpoint-pin-log-v0.2.0.json).
@@ -10,22 +10,26 @@ metadata-only `git ls-remote` calls recorded in
 - `search-plan-v0.2.0.json` validates against the ledger schema's
   `search_plan_envelope` and `search_plan` definitions.
 - Its canonical `search_plan` payload SHA-256 is
-  `f6bfa5980c071c87cb31d83859a220e0efb2b80a1dbf7f68315cd203a7f0a7b6`.
+  `4bc618d626e8b02fe1c8da583cebd4a33a64c762448672070609fe2cafc575d2`.
   The file SHA-256 is
-  `815b0b62aeaf188122b1f84f4ce602f814b11ee2873790bae7a340b2d6bffcad`.
+  `2bb517717bfe5ff0ab4c56321e938fb5e2472002609401347e244f984639edfa`.
 - The protocol hash in the plan and approval freeze assessment matches
   `protocol.md`:
-  `24358dddc1623fd84b0df5df6b76db37a1d0011dda2c83e5daf520f7d3009ed4`.
+  `fa06ef9abe7aeea1de6133d771856339834be5f1c3b0b6a202afa9b8a67459a9`.
 - Endpoint counts are 2 seeds, 13 backbone indexes, and 2 supplemental
   keyword-query endpoints, for 17 total.
-- All three numeric parameters are `PROPOSED`; therefore `design_frozen=false`
-  and `design_frozen_at=null`. Reservation and annotation completion remain
-  false. A synthetic attempt to mark a number approved with only one planner
-  review ID was rejected.
-- The complete Codex Astra 6 and Claude Opus 5.5 design-approval records remain
-  valid. The exact outstanding gate is their approval of the proposed values
-  100 results per endpoint, 1,200 active minutes total, and 3 consecutive
-  irrelevant pages.
+- All three numeric parameters are `APPROVED` by the two recorded search-plan
+  reviews. The 1,200-minute budget applies to all tiers; the 100-result cap and
+  three-consecutive-irrelevant-page stop apply only to supplemental keyword
+  endpoints. A synthetic one-review approval was rejected.
+- Frozen backbone indexes require complete traversal subject to exact access
+  failure and the total budget. Incomplete endpoints record their last
+  cursor/page and remaining coverage where known. Relevance uses the broad
+  inclusion scope, and stopping never establishes absence.
+- `design_frozen=true` at `2026-10-27T21:56:27Z`; the protocol and search-plan
+  hashes and both Codex Astra 6 and Claude Opus 5.5 approval records are
+  present. `missing_requirements` is empty. Reservation and annotation
+  completion remain false and null-timestamped.
 - `ledger.schema.json` and all three auxiliary schemas pass JSON Schema draft
   2020-12 meta-schema validation. All three valid fixtures were accepted and
   all three invalid fixtures were rejected for their intended reasons. Four
@@ -35,13 +39,15 @@ metadata-only `git ls-remote` calls recorded in
   tests passed. No candidate list, reservation draw, screen, or label was
   produced.
 
-Machine-readable evidence is in
-[`validation-results.json`](validation-results.json), SHA-256
-`0f4aceb8f75e5a0683f02db9d3bbf9d95e5a112575177264b8ae5bb2b068318a`.
+Machine-readable freeze evidence is in
+[`validation-results-freeze.json`](validation-results-freeze.json), SHA-256
+`d0c8761efe325b1750482937314da9a58eddc6893014968f6725fa2e17bdc4f6`.
+The earlier [`validation-results.json`](validation-results.json) remains as the
+pre-approval draft validation record.
 The ledger schema SHA-256 is
-`5470bd88d50c2d1b31126008fb3e639b5aaf846f9f5ecfc283369ce2e1d33f6f`;
+`42d62abc8d03b336e057af87680e35074a565f5828fcd4940dbba96d7fdac493`;
 the validator SHA-256 is
-`9a4d85717da86497dc3744725371dc1904405cae22c010f2c2194b5474e3c7f2`.
+`d8a34347c5c925dfaa5e22dea8d08af44e15099cd0ca51d5bfb3d2e9c605629e`.
 
 ## Custodian verification queue
 
@@ -66,7 +72,7 @@ finding text to an agent.
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 docs/taxonomy/.venv-validation/bin/python -B \
-  docs/taxonomy/validate_ledger.py --output validation-results.json
+  docs/taxonomy/validate_ledger.py --output validation-results-freeze.json
 PYTHONDONTWRITEBYTECODE=1 python3 -B \
   scripts/taxonomy/test_candidate_list.py
 PYTHONDONTWRITEBYTECODE=1 python3 -B \
