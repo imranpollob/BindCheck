@@ -11,7 +11,8 @@ could not be checked against the cited paper's full text are marked
 (revision 1, 23 October 2026), [Payy case study](../docs/payy-case-study.md),
 [T15](../reports/T15.md)–[T20](../reports/T20.md), [D1P-07](../reports/D1P-07.md),
 [D1P-09](../reports/D1P-09.md), [D1P-10](../reports/D1P-10.md),
-[D1P-11](../reports/D1P-11.md), and the
+[D1P-11](../reports/D1P-11.md), [D1P-12R](../reports/D1P-12R.md) (in the
+`d1-paper` worktree), and the
 [D1 reference proposal](../docs/d1/reference-proposal.md). If this draft
 disagrees with any of these, the source wins.
 
@@ -19,26 +20,51 @@ disagrees with any of these, the source wins.
 
 ---
 
-## Contribution: UNDECIDED
+## Target contribution: capability — automated discovery and validation of proof-to-execution mismatches; evidence pending
 
-The paper does not yet have a defensible contribution claim. Two framings
-remain open, and the evidence currently supports neither:
+Target framing (D1P-D03). The current
+[research contract](../docs/research-contract.md) revision 1 still frames
+the method around a measurable efficiency advantage. A prospective revision
+is drafted in [contract-revision-proposal.md](contract-revision-proposal.md)
+and is **not yet applied**. Until it is, the contract controls.
 
-| Candidate framing | Claim it would need | Current state |
+| Question | Claim it would need | Current state |
 | --- | --- | --- |
-| **Efficiency.** Consumer-directed selection and refinement solve more obligations, or solve them at lower total cost, than equal-information monolithic and CIVER-style modular baselines (RQ2). | A measured advantage on frozen controls under equal bounds, information, and solver portfolio. | **Not established.** On the only real N=8 target, every combined producer obligation is still `UNKNOWN` (D1P-07, D1P-10). Consumer shapes remove only 4–8 of 620 selected-cone operations (D1P-09). Historical synthetic refinement was 3–9% *slower* than monolithic solving (historical, see §VI-D). |
-| **Capability.** The joint producer/decoder/consumer analysis finds violations, or gives bounded guarantees, that direct contract tests with the same valid proofs and policy cannot (RQ4). | Confirmed findings or bounded guarantees that the baseline does not obtain, on held-out applications. | **Not established.** On Payy the hand-written checker and a direct Foundry assertion were functionally equivalent ([T14](../reports/T14.md) §4). No joint encoder exists for a real target. |
+| **Capability (target).** BindCheck *automatically discovers* candidate proof-to-execution mismatches and *validates* them end to end, a real proof accepted by the unchanged verifier and consumer producing an unauthorized effect (E4, [baselines.md](baselines.md) §4.2), where generic and same-policy baselines do not. | Discovery and E4 validation performed by the tool, not by hand; baseline comparison under the [preregistration](baselines.md); held-out families for transfer and generality. | **Evidence pending.** A manual-summary joint encoder exists; its main diagnostic queries remain unexecuted, and automatic consumer extraction is not established. The Payy E4 artifact (T18) was built by hand after the advisory. On Payy the hand-written checker and a direct Foundry assertion were functionally equivalent ([T14](../reports/T14.md) §4). **[TODO-EVIDENCE]** |
+| **Efficiency (secondary, untested).** Consumer-directed selection and refinement solve more obligations, or solve them at lower total cost, than equal-information monolithic and CIVER-style modular baselines (contract RQ2). | A measured advantage under equal bounds, information and solver portfolio. | **Untested as a method comparison.** The earlier efficiency-oriented results stay reported as limitations (§VI-A, §VI-B, §VI-D): all N=8 combined producer obligations are `UNKNOWN` (D1P-07, D1P-10), consumer shapes remove only 4–8 of 620 cone operations (D1P-09), and historical synthetic refinement was 3–9% slower than monolithic solving. |
 
-The contract's stop rule applies. A tie with a routine modular adapter,
-hand-supplied correspondence, or infeasible independent proving paths would
-undermine the contribution ([contract](../docs/research-contract.md) §11).
-**Pick one framing only after the evidence in §V exists.**
+**What is not novel by itself.** The permission/obligation/effect (`P`/`O`/
+`E`) terminology, authorization and coverage, and a formal transition model
+are **not contributions by themselves**. Integration failures, rich semantic
+specifications, modular summaries and selective unfolding are prior work
+(contract §1; §VII). The specific advance over prior work is
+**[TODO-EVIDENCE]**.
+
+**"Automatically derived" must be demonstrated.** No obligation in this
+draft is yet derived by the tool. The current WarpToad discriminating
+obligations, O1 (DOM-AZ) and O2 (SRC-EVM), are defined in
+[d1p-b02-discriminating.md](/Users/imranpollob/Coding/bc/bindcheck-lane-b/docs/d1-paper/d1p-b02-discriminating.md)
+§§1–2, which records them as planner-written and not automatically derived
+(its "Provenance" note and §6). *(Integration note: after integration this
+link becomes the repository-relative
+`../docs/d1-paper/d1p-b02-discriminating.md`.)* Any claim that
+BindCheck derives `P`, `O` or the relevant producer facts automatically
+requires an experiment where the tool does so from the artifacts, with
+manual inputs counted (contract §6). **[TODO-EVIDENCE]**
+
+**Exploratory vs. frozen evaluation.** The paper distinguishes exploratory
+development work, including the earlier efficiency results, from
+prospectively frozen evaluation, and reports each as such.
+
+The contract's stop rule still applies. A tie with a routine modular
+adapter, hand-supplied correspondence, or infeasible independent proving
+paths would undermine the contribution (contract §11).
 
 ---
 
 ## Abstract
 
-> **[PLACEHOLDER — do not write until the contribution is decided.]**
+> **[PLACEHOLDER — do not write until capability evidence exists.]**
 >
 > Fixed content: a valid proof establishes only the relation its circuit
 > encodes; the consuming contract may perform effects that relation does not
@@ -64,7 +90,7 @@ targeting that layer [1, §§6, 8].
 ### B. Motivating example: Payy's message tail
 
 We use a publicly disclosed defect in Payy's Noir/Solidity rollup
-(GHSA-fhxc-63vg-9gwr, CVE-2026-48100, published 10 June 2026) [2]. This is a
+(GitHub advisory GHSA-fhxc-63vg-9gwr, published 10 June 2026) [2]. This is a
 **known disclosure, not a new finding.** We rebuilt its mechanism locally,
 with real proofs, from public source at pinned commits. The earlier commit is
 `c4d2c902…` (no outer-tail assertion); the check-added commit is `dcd5d96e…`.
@@ -136,11 +162,15 @@ The committed effect was established only by the end-to-end replay (T18).
 
 ### D. Contributions
 
-**UNDECIDED** (see box above). The candidate contributions in the
-[contract](../docs/research-contract.md) §3 are goals, not completed claims:
-(1) a consumer-directed extraction and refinement method;
-(2) a justified implementation with an abstraction-preservation argument;
-(3) comparative evidence. **[TODO-EVIDENCE]** for all three.
+**Target: capability; evidence pending** (see box above). Candidate
+contributions, all goals rather than completed claims:
+(1) automated discovery of proof-to-execution mismatch candidates from the
+actual producer, decoder and consumer artifacts;
+(2) automated end-to-end validation of those candidates to E4;
+(3) comparative evidence against generic and same-policy baselines
+([baselines.md](baselines.md)), including where BindCheck does *not* help.
+Efficiency is a secondary, untested question. **[TODO-EVIDENCE]** for all
+three, and for the specific advance over prior work.
 
 ---
 
@@ -287,8 +317,8 @@ held-out row (contract §9).
 | --- | --- | --- | --- |
 | **C1. Problem recurs** | Pinned obligations of this class in independent application families, with primary provenance; no prevalence inference from a convenience sample (contract §2). | One known disclosed instance (Payy). D1P-11 screened four applications in four families and wrote one concrete joint obligation for each (Aztec excluded as intractable), but assigned no defect labels; all are `UNKNOWN`. | **[TODO-EVIDENCE]** |
 | **C2. Analysis is trustworthy** | Extraction fidelity against independent traces; abstraction-preservation argument; non-vacuity; real-proof validation of the central result. | Typed binding certificates and 11 exhaustive consumer predicates on the N=8 selected cone (D1P-09). Full relation, recursion, Poseidon, and Brillig are unsupported. No exact N=8 `agg_final` artifact. | **[TODO-EVIDENCE]** |
-| **C3. Consumer direction adds value** | Equal-information comparison against direct Foundry tests, a monolithic joint query, and a CIVER-style modular adaptation, with total cost charged. | No joint comparison exists. All producer-side N=8 obligations `UNKNOWN` (D1P-07, D1P-10). Consumer shapes remove 4–8 of 620 cone operations (D1P-09). | **[TODO-EVIDENCE]** |
-| **C4. Transfer** | Frozen mechanism applied to an independent held-out family with no new defect-specific rule. | Candidate targets ranked (WarpToad first); no artifact/proof correspondence validated (D1P-11 §4). | **[TODO-EVIDENCE]** |
+| **C3. Consumer direction adds value** | Equal-information comparison against direct Foundry tests, a monolithic joint query, and a CIVER-style modular adaptation, with total cost charged. | No joint comparison has been run. A manual-summary joint encoder exists; its main diagnostic queries remain unexecuted, and automatic consumer extraction is not established. All producer-side N=8 obligations `UNKNOWN` (D1P-07, D1P-10). Consumer shapes remove 4–8 of 620 cone operations (D1P-09). | **[TODO-EVIDENCE]** |
+| **C4. Transfer** | Frozen mechanism applied to an independent held-out family with no new defect-specific rule. | Candidate targets ranked (D1P-11 §4). WarpToad now has an executable proof-to-mint fixture (D1P-12R; §V-G), but WarpToad was screened and inspected during development, so it **cannot serve as held-out evidence**. No held-out family exists yet. | **[TODO-EVIDENCE]** |
 | **C5. Usability** | Specification size, authoring and correction time, adapter effort, analyst hours, false alarms. | Historical only: direct Payy mint property is about 90 lines of Solidity (87 non-comment), functionally equivalent to the checker's manual specification ([T14](../reports/T14.md) §4). | **[TODO-EVIDENCE]** |
 
 ### B. Table I — C1: Problem recurrence (development and held-out corpus)
@@ -331,9 +361,52 @@ identity, reachable-state constraints):
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | — | — | — | — | — | — | — | — | — |
 
+### G. Development fixtures (not D1 results)
+
+These fixtures are infrastructure for future controls. They are
+**development evidence, not D1 results**: no D1 method ran on them, and they
+fill none of Tables I–V. The D1 verdict stays `UNKNOWN`.
+
+**WarpToad executable fixture** ([D1P-12R](../reports/D1P-12R.md); the
+report is currently tracked in the `d1-paper` worktree, not on this lane, so
+the link resolves only after integration).
+WarpToad is a Noir/Solidity privacy bridge, pinned at revision
+`973e7d1e…`. The fixture ran on an owned, in-process Hardhat chain with no
+fork and no live-chain interaction:
+
+| Observation | Result | Source |
+| --- | --- | --- |
+| Artifact chain | The committed beta.22 `withdraw` artifact was **validated, not rebuilt from Noir source**. A locally generated verification key and Solidity verifier are byte-identical to the verifier committed at the pin. | D1P-12R §4 |
+| Proof acceptance | One real UltraHonk (`keccakZK`) proof (9,152 bytes) is accepted by bb.js and by the regenerated Solidity verifier. Its eleven public words match the compiled ABI order and the vector the unchanged consumer builds. | D1P-12R §§5–6 |
+| Consumer effect | The pinned, unchanged `WarpToadCore.mint` succeeds. Nullifier goes false→true. A named ordinary relayer (not the `address(1)` wildcard) receives the nonzero fee `fee_factor × (basefee + priority_fee)` = 260,069,110,130,330,852 units. The recipient receives the remainder, 4,739,930,889,869,669,148. The two deltas sum exactly to the 5×10¹⁸ amount, and total supply rises by exactly that amount. | D1P-12R §6 |
+| Replay | Resubmitting the identical proof and calldata reverts with `nullifier already exists`; the nullifier stays consumed. | D1P-12R §6 |
+| Field boundary | 22/22 probes (each of the 11 public positions set to the BN254 modulus and to modulus+1) revert with `ValueGeFieldOrder()`. The verifier rejects non-canonical words strictly; it does not reduce them. | D1P-12R §7 |
+
+Limits of this fixture:
+
+- **Fee cap: satisfied, not tested.** The computed fee (≈2.6×10¹⁷)
+  was well below `max_fee` (5×10¹⁸). No control exceeded the cap, so
+  enforcement of `fee ≤ max_fee` is **not yet tested**.
+- **Same-chain only.** Origin and destination roots are equal, so the
+  circuit's giga-root membership branch is bypassed. This is not a
+  cross-chain reachability result.
+- **No source rebuild.** Repository co-location, hashes and behavior are not
+  an independent source-to-artifact rebuild proof. A reproduced verifier
+  also does not identify any historically deployed bytecode.
+- **Not held out.** WarpToad was screened and inspected during development
+  (D1-02, D1P-11), so it cannot serve as transfer (C4) evidence.
+- **The canonicality result is a modeling obligation, not a finding.** A
+  joint model must treat an EVM `uint256`/`bytes32` public word as
+  admissible only when it is canonical in the proof field. It must never
+  reduce it modulo `p` silently.
+
 ---
 
 ## VI. Limitations
+
+Sections VI-A, VI-B and VI-D report results gathered under the earlier
+efficiency-oriented hypothesis (contract revision 1, RQ2). Under the
+capability framing they stay reported here, unchanged, as limitations.
 
 ### A. N=8 scalability: no producer obligation is resolved
 
@@ -478,7 +551,7 @@ Ethics Considerations"]. Draft content, mapped to the CFP's subsections:
 - **New tools.** If the paper presents a tool, the CFP asks how it could be
   misused, how to limit that, and how benefits were weighed against harms
   [8, "Ethics Considerations for Developing New Tools or Technologies"].
-  **[TODO]** write once the contribution is decided.
+  **[TODO]** write once the tool and its evidence exist.
 - **Human subjects.** None planned. **[TODO]** revisit if the usability
   study (C5) involves participants; the CFP then requires IRB approval or
   waiver details [8, "Ethical Considerations for Human Subjects Research"].
@@ -518,8 +591,8 @@ Deadlines & Decisions"]:
   repositories. The internal repository links in this draft (`../reports/…`)
   must be replaced by an anonymized artifact before submission.
 - **"Submitted papers should not include full CVE identifiers"** to preserve
-  anonymity. This draft names the Payy CVE and GHSA identifiers; the
-  submitted version must drop the full CVE identifier. **[TODO]** confirm
+  anonymity. The full CVE identifier has been removed from this draft; the
+  GHSA advisory identifier remains. **[TODO]** confirm
   with the PC chairs whether the GHSA link to a third-party advisory is
   acceptable.
 - Deadlines are 23:59:59 AoE. The second cycle has abstract registration on
@@ -531,20 +604,22 @@ Deadlines & Decisions"]:
 
 ## IX. Conclusion
 
-**[PLACEHOLDER — depends on the contribution decision and §V results.]**
+**[PLACEHOLDER — depends on the capability evidence in §V.]**
 
 ---
 
 ## Open items for authors
 
-1. Decide efficiency vs. capability only after Table III and Table IV have
-   data. If neither shows an advantage, report the failed gate
-   (contract §11).
+1. The capability framing is the D1P-D03 target. The integrator must apply the contract revision
+   ([contract-revision-proposal.md](contract-revision-proposal.md)) before
+   the draft relies on it. If the capability evidence does not appear,
+   report the failed gate (contract §11).
 2. A human author will supply full texts of CIVER (IEEE S&P 2024) and
    CCC-Check (IEEE S&P 2026); their rows stay **[TODO-VERIFY]** until then.
    Then apply the novelty note in §I-C.
 3. Venue rules are resolved from the CFP [8] in §VIII. Remaining items:
-   remove the full CVE identifier, anonymize repository links, and write
+   anonymize repository links, confirm the GHSA link with the PC chairs,
+   and write
    the AI and competing-interest disclosures.
 4. Have a human author independently inspect every citation and claim
    (contract §10). Retrieved texts and hashes are listed in
@@ -561,8 +636,9 @@ B. Livshits. "SoK: What Don't We Know? Understanding Security Vulnerabilities
 in SNARKs." USENIX Security 2024. Read: arXiv:2402.15293.
 <https://www.usenix.org/conference/usenixsecurity24/presentation/chaliasos>
 
-[2] Payy (polybase/payy). Security advisory GHSA-fhxc-63vg-9gwr /
-CVE-2026-48100, published 10 June 2026.
+[2] Payy (polybase/payy). Security advisory GHSA-fhxc-63vg-9gwr,
+published 10 June 2026. (Full CVE identifier omitted per the venue's
+anonymity rule [8]; it is recorded in [T20](../reports/T20.md).)
 <https://github.com/polybase/payy/security/advisories/GHSA-fhxc-63vg-9gwr>
 (retrieved via GitHub API in [T20](../reports/T20.md)).
 
