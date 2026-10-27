@@ -139,6 +139,7 @@ def main() -> None:
     parser.add_argument("--build-info", type=Path, required=True)
     parser.add_argument("--compiler-output", type=Path, required=True)
     parser.add_argument("--source", type=Path, required=True)
+    parser.add_argument("--output", type=Path)
     args = parser.parse_args()
     root = args.paper_root.resolve()
     paths = {
@@ -265,7 +266,11 @@ def main() -> None:
         "disagreements": disagreements,
         "all_checks_pass": not disagreements,
     }
-    print(json.dumps(report, indent=2, sort_keys=True))
+    encoded = json.dumps(report, indent=2, sort_keys=True) + "\n"
+    if args.output:
+        args.output.write_text(encoded)
+    else:
+        print(encoded, end="")
 
 
 if __name__ == "__main__":

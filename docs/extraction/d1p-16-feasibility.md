@@ -141,9 +141,11 @@ Two disagreements were found and are recorded in
 1. **Boundary placement.** `build_consumer_transition` directly checks
    `chain_id == 31337` and `aztec_address == 0` beside a Boolean
    `verifier_accepts`. The Solidity consumer has no such standalone guards; it
-   passes both words to the verifier. Route A therefore keeps those producer
-   constraints inside `R_verify`, as required by this task. This distinction is
-   not observable in the five pinned valid-proof executions.
+   constructs both verifier arguments and passes them to the verifier. Their
+   connection to producer witnesses belongs to the joint producer/verifier/
+   consumer binding relation; it is neither a recovered producer constraint nor
+   a standalone consumer guard. This distinction is not observable in the five
+   pinned valid-proof executions.
 2. **Exceptional-path precedence and tentative effects.** The manual model
    validates amount subtraction and both receivers, builds both occurrences,
    and only then checks one aggregate total-supply addition. The source performs

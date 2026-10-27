@@ -1,0 +1,68 @@
+{
+  "schema": "bindcheck.library-effect-models.v1",
+  "version": "1.0.0",
+  "scope": "shared_across_cases",
+  "case_specific_entries": false,
+  "manual_input_rule": "Adding or changing an entry for one application or expected result is a manual implementation input and must be reported; no such entry is present.",
+  "libraries": {
+    "openzeppelin-contracts@5.6.1": {
+      "source_prefix": "npm/@openzeppelin/contracts@5.6.1/",
+      "declarations": {
+        "npm/@openzeppelin/contracts@5.6.1/token/ERC20/ERC20.sol::ERC20::_mint(address,uint256)": {
+          "semantic": "erc20_mint",
+          "beneficiary_argument": 0,
+          "amount_argument": 1,
+          "inline_body": true
+        },
+        "npm/@openzeppelin/contracts@5.6.1/token/ERC20/ERC20.sol::ERC20::_burn(address,uint256)": {
+          "semantic": "erc20_burn",
+          "beneficiary_argument": 0,
+          "amount_argument": 1,
+          "inline_body": true
+        },
+        "npm/@openzeppelin/contracts@5.6.1/token/ERC20/ERC20.sol::ERC20::_transfer(address,address,uint256)": {
+          "semantic": "erc20_transfer",
+          "from_argument": 0,
+          "to_argument": 1,
+          "amount_argument": 2,
+          "inline_body": true
+        },
+        "npm/@openzeppelin/contracts@5.6.1/token/ERC20/ERC20.sol::ERC20::_update(address,address,uint256)": {
+          "semantic": "erc20_update",
+          "declared_effects": [
+            "storage:_balances",
+            "storage:_totalSupply",
+            "event:Transfer"
+          ],
+          "inline_body": true
+        }
+      },
+      "storage_declarations": {
+        "npm/@openzeppelin/contracts@5.6.1/token/ERC20/ERC20.sol::ERC20::_balances": {
+          "semantic": "erc20_balance_map",
+          "write_semantics": "functional_map_store"
+        },
+        "npm/@openzeppelin/contracts@5.6.1/token/ERC20/ERC20.sol::ERC20::_totalSupply": {
+          "semantic": "erc20_total_supply",
+          "write_semantics": "scalar_store"
+        }
+      },
+      "event_declarations": {
+        "npm/@openzeppelin/contracts@5.6.1/token/ERC20/IERC20.sol::IERC20::Transfer(address,address,uint256)": {
+          "semantic": "erc20_transfer_event",
+          "from_argument": 0,
+          "to_argument": 1,
+          "amount_argument": 2
+        }
+      }
+    }
+  },
+  "external_boundaries": {
+    "project/contracts/core/WarpToadCore.sol::IVerifier::verify(bytes,bytes32[])": {
+      "semantic": "producer_verifier_relation",
+      "proof_argument": 0,
+      "public_words_argument": 1,
+      "assumed_true": false
+    }
+  }
+}

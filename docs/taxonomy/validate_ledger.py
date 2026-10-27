@@ -79,7 +79,8 @@ def main():
     local_references_only(schema)
     Draft202012Validator.check_schema(schema)
     auxiliary_schema_results = []
-    for name in ["planner-approval.schema.json", "grouped-families.schema.json"]:
+    for name in ["planner-approval.schema.json", "grouped-families.schema.json",
+                 "candidate-list-input.schema.json"]:
         auxiliary_path = ROOT / name
         auxiliary = load(auxiliary_path)
         if validator_for(auxiliary) is not Draft202012Validator:
@@ -103,6 +104,51 @@ def main():
                                 "actual_valid": actual, "passed": True})
 
     validator = Draft202012Validator(schema, format_checker=checker)
+    search_plan_path = ROOT / "search-plan-v0.2.0.json"
+    search_plan_envelope = load(search_plan_path)
+    envelope_schema = copy.deepcopy(schema["$defs"]["search_plan_envelope"])
+    envelope_schema["$schema"] = schema["$schema"]
+    envelope_schema["$defs"] = schema["$defs"]
+    envelope_validator = Draft202012Validator(envelope_schema, format_checker=checker)
+    envelope_errors = list(envelope_validator.iter_errors(search_plan_envelope))
+    if envelope_errors:
+        raise RuntimeError("search-plan-v0.2.0.json is invalid against search_plan_envelope")
+    canonical_plan = json.dumps(
+        search_plan_envelope["search_plan"], sort_keys=True,
+        separators=(",", ":"), ensure_ascii=False
+    ).encode("utf-8")
+    canonical_plan_sha256 = hashlib.sha256(canonical_plan).hexdigest()
+    if canonical_plan_sha256 != search_plan_envelope["search_plan_sha256"]:
+        raise RuntimeError("Search-plan canonical SHA-256 mismatch")
+    if canonical_plan_sha256 != search_plan_envelope["protocol_states"]["search_plan_sha256"]:
+        raise RuntimeError("Search-plan protocol state uses a different SHA-256")
+    if sha256(ROOT / "protocol.md") != search_plan_envelope["search_plan"]["protocol_sha256"]:
+        raise RuntimeError("Search plan protocol SHA-256 does not match protocol.md")
+    endpoint_rows = search_plan_envelope["search_plan"]["source_endpoints"]
+    endpoint_ids = [endpoint["id"] for endpoint in endpoint_rows]
+    if len(endpoint_ids) != len(set(endpoint_ids)):
+        raise RuntimeError("Search plan repeats an endpoint ID")
+    endpoint_counts = {
+        tier: sum(endpoint["tier"] == tier for endpoint in endpoint_rows)
+        for tier in ["seed", "backbone_index", "supplemental_keyword_query"]
+    }
+    if endpoint_counts != {"seed": 2, "backbone_index": 13,
+                           "supplemental_keyword_query": 2}:
+        raise RuntimeError(f"Unexpected endpoint tier counts: {endpoint_counts}")
+    to_verify = [endpoint["id"] for endpoint in endpoint_rows
+                 if endpoint["verification_status"] == "to_verify_by_custodian"]
+    numeric_parameters = ["maximum_results_per_endpoint", "active_time_budget_minutes",
+                          "consecutive_irrelevant_pages_stop"]
+    if any(search_plan_envelope["search_plan"][name]["status"] != "PROPOSED"
+           for name in numeric_parameters):
+        raise RuntimeError("Every numeric search-plan parameter must remain PROPOSED")
+    one_approval = copy.deepcopy(search_plan_envelope)
+    one_approval["search_plan"]["maximum_results_per_endpoint"]["status"] = "APPROVED"
+    one_approval["search_plan"]["maximum_results_per_endpoint"]["approved_by_planner_review_ids"] = ["one-review-only"]
+    if not list(envelope_validator.iter_errors(one_approval)):
+        raise RuntimeError("Search-plan schema accepted a numeric approval with only one planner review")
+    if search_plan_envelope["protocol_states"]["design_frozen"]:
+        raise RuntimeError("Draft search plan must remain design_frozen=false")
     approval_schema_path = ROOT / "planner-approval.schema.json"
     approval_record_path = ROOT / "planner-approval-v0.2.0.json"
     approval_validator = Draft202012Validator(load(approval_schema_path),
@@ -110,12 +156,22 @@ def main():
     approval_record = load(approval_record_path)
     approval_errors = list(approval_validator.iter_errors(approval_record))
     if approval_errors:
-        raise RuntimeError("Pending planner-approval record is structurally invalid")
-    false_complete = copy.deepcopy(approval_record)
-    false_complete["record_status"] = "complete"
-    false_complete["identity_gap"] = None
-    if not list(approval_validator.iter_errors(false_complete)):
+        raise RuntimeError("Planner-approval record is structurally invalid")
+    if approval_record["record_status"] != "complete" or len(approval_record["reviewers"]) != 2:
+        raise RuntimeError("Planner approval must contain exactly two completed reviewer records")
+    incomplete_approval = copy.deepcopy(approval_record)
+    incomplete_approval["reviewers"] = incomplete_approval["reviewers"][:1]
+    if not list(approval_validator.iter_errors(incomplete_approval)):
         raise RuntimeError("Planner approval schema accepted complete without two reviewers")
+    freeze_assessment = approval_record["freeze_assessment"]
+    if freeze_assessment["protocol_sha256"] != sha256(ROOT / "protocol.md"):
+        raise RuntimeError("Freeze assessment protocol SHA-256 does not match protocol.md")
+    if freeze_assessment["search_plan_sha256"] != canonical_plan_sha256:
+        raise RuntimeError("Freeze assessment search-plan SHA-256 mismatch")
+    if (freeze_assessment["design_frozen"] or
+            freeze_assessment["design_frozen_at"] is not None or
+            not freeze_assessment["missing_requirements"]):
+        raise RuntimeError("Incomplete search-plan gate must remain explicitly unfrozen")
     manifest_path = ROOT / "fixtures/manifest.json"
     manifest = load(manifest_path)
     cases = manifest["cases"]
@@ -174,10 +230,20 @@ def main():
     source_level = copy.deepcopy(base)
     source_level["search_plan"]["source_endpoints"] = [{
         "id": "illustrative-source-index",
+        "tier": "backbone_index",
         "source_class": "audit_report_index",
         "source_role": "backbone_index",
+        "organization": "Synthetic fixture organization",
         "endpoint": "urn:illustrative:source-index",
+        "verification_status": "known_public_listing",
+        "hosting_kind": "web",
+        "snapshot_rule": "custodian_capture_immediately_after_freeze",
+        "snapshot_status": "capture_after_freeze",
         "revision_or_snapshot": None,
+        "snapshot_sha256": None,
+        "listing_format_risk": "names_only",
+        "candidate_list_handling": "agent_metadata_allowed",
+        "agent_access_rule": "metadata_only_no_finding_report_body_or_bug_description_views",
         "access_limitations": ["Synthetic structural control only."],
     }]
     endpoint_errors = list(validator.iter_errors(source_level))
@@ -212,7 +278,7 @@ def main():
 
     passed = all(result["passed"] for result in results)
     report = {
-        "task": "D1P-C03 taxonomy protocol v0.2.0 validation", "notice": manifest["notice"],
+        "task": "D1P-C04 taxonomy search-plan v0.2.0 validation", "notice": manifest["notice"],
         "recorded_at_utc": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
         "python": platform.python_version(), "platform": platform.platform(),
         "validator": "jsonschema.Draft202012Validator", "packages": pins,
@@ -224,8 +290,22 @@ def main():
             "file": approval_record_path.name,
             "sha256": sha256(approval_record_path),
             "record_status": approval_record["record_status"],
+            "reviewer_names": [reviewer["reviewer_name"]
+                               for reviewer in approval_record["reviewers"]],
             "valid": True,
             "complete_without_reviewers_rejected": True,
+            "freeze_assessment": freeze_assessment,
+        },
+        "search_plan": {
+            "file": search_plan_path.name,
+            "file_sha256": sha256(search_plan_path),
+            "canonical_payload_sha256": canonical_plan_sha256,
+            "schema_valid": True,
+            "design_frozen": False,
+            "endpoint_counts_by_tier": endpoint_counts,
+            "to_verify_by_custodian": to_verify,
+            "numeric_parameter_status": "PROPOSED",
+            "single_planner_numeric_approval_rejected": True,
         },
         "protocol_state_controls": state_controls,
         "v0_1_0_archive": {

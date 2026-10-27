@@ -509,7 +509,8 @@
         "patch",
         "policy",
         "artifact",
-        "repository_report"
+        "repository_report",
+        "supplemental_keyword_query"
       ]
     },
     "search_plan": {
@@ -522,8 +523,10 @@
         "publication_end",
         "date_basis",
         "languages",
+        "language_rationales",
         "sampling_frame",
         "claim_boundary",
+        "inclusion_boundary",
         "source_class_order",
         "seed_endpoint_ids",
         "source_endpoints",
@@ -531,10 +534,13 @@
         "mechanism_keyword_groups",
         "maximum_results_per_endpoint",
         "active_time_budget_minutes",
+        "consecutive_irrelevant_pages_stop",
         "pagination_policy",
         "stop_rule",
         "audit_report_completeness_rule",
-        "discovery_route_rule"
+        "discovery_route_rule",
+        "candidate_list_rule",
+        "content_access_rule"
       ],
       "properties": {
         "id": {
@@ -572,11 +578,36 @@
           "minItems": 0,
           "uniqueItems": true
         },
+        "language_rationales": {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "language",
+              "reason"
+            ],
+            "properties": {
+              "language": {
+                "type": "string",
+                "minLength": 1
+              },
+              "reason": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
         "sampling_frame": {
           "const": "proof_consuming_zk_systems_across_languages_chains_and_proof_stacks"
         },
         "claim_boundary": {
           "const": "these mechanisms recur across independent families in the sampled public disclosures"
+        },
+        "inclusion_boundary": {
+          "const": "evidence supports a disagreement between what the accepted proof relation establishes and what the proof-consuming system interprets as authorized or required; relevance is independent of BindCheck support"
         },
         "source_class_order": {
           "type": "array",
@@ -597,22 +628,38 @@
         },
         "source_endpoints": {
           "type": "array",
-          "minItems": 0,
           "items": {
             "type": "object",
             "additionalProperties": false,
             "required": [
               "id",
+              "tier",
               "source_class",
               "source_role",
+              "organization",
               "endpoint",
+              "verification_status",
+              "hosting_kind",
+              "snapshot_rule",
+              "snapshot_status",
               "revision_or_snapshot",
+              "snapshot_sha256",
+              "listing_format_risk",
+              "candidate_list_handling",
+              "agent_access_rule",
               "access_limitations"
             ],
             "properties": {
               "id": {
                 "type": "string",
                 "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
+              },
+              "tier": {
+                "enum": [
+                  "seed",
+                  "backbone_index",
+                  "supplemental_keyword_query"
+                ]
               },
               "source_class": {
                 "$ref": "#/$defs/source_class"
@@ -624,9 +671,48 @@
                   "supplemental"
                 ]
               },
-              "endpoint": {
+              "organization": {
                 "type": "string",
                 "minLength": 1
+              },
+              "endpoint": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "verification_status": {
+                "enum": [
+                  "known_public_listing",
+                  "to_verify_by_custodian"
+                ]
+              },
+              "hosting_kind": {
+                "enum": [
+                  "git",
+                  "web",
+                  "query"
+                ]
+              },
+              "snapshot_rule": {
+                "enum": [
+                  "git_ls_remote_head",
+                  "custodian_capture_immediately_after_freeze",
+                  "query_definition_no_content_snapshot"
+                ]
+              },
+              "snapshot_status": {
+                "enum": [
+                  "pinned_commit",
+                  "pin_at_freeze",
+                  "capture_after_freeze",
+                  "not_applicable"
+                ]
               },
               "revision_or_snapshot": {
                 "anyOf": [
@@ -639,6 +725,34 @@
                   }
                 ]
               },
+              "snapshot_sha256": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^[a-f0-9]{64}$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "listing_format_risk": {
+                "enum": [
+                  "names_only",
+                  "mixed_names_and_bug_descriptions",
+                  "unknown"
+                ]
+              },
+              "candidate_list_handling": {
+                "enum": [
+                  "agent_metadata_allowed",
+                  "human_sanitized_required",
+                  "custodian_classify_before_agent_access"
+                ]
+              },
+              "agent_access_rule": {
+                "const": "metadata_only_no_finding_report_body_or_bug_description_views"
+              },
               "access_limitations": {
                 "type": "array",
                 "items": {
@@ -648,8 +762,170 @@
                 "minItems": 0,
                 "uniqueItems": true
               }
-            }
-          }
+            },
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "hosting_kind": {
+                      "const": "git"
+                    }
+                  },
+                  "required": [
+                    "hosting_kind"
+                  ]
+                },
+                "then": {
+                  "properties": {
+                    "snapshot_rule": {
+                      "const": "git_ls_remote_head"
+                    },
+                    "snapshot_status": {
+                      "enum": [
+                        "pinned_commit",
+                        "pin_at_freeze"
+                      ]
+                    }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "snapshot_status": {
+                      "const": "pinned_commit"
+                    }
+                  },
+                  "required": [
+                    "snapshot_status"
+                  ]
+                },
+                "then": {
+                  "properties": {
+                    "revision_or_snapshot": {
+                      "type": "string",
+                      "pattern": "^[a-f0-9]{40}$"
+                    }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "hosting_kind": {
+                      "const": "web"
+                    }
+                  },
+                  "required": [
+                    "hosting_kind"
+                  ]
+                },
+                "then": {
+                  "properties": {
+                    "snapshot_rule": {
+                      "const": "custodian_capture_immediately_after_freeze"
+                    },
+                    "snapshot_status": {
+                      "const": "capture_after_freeze"
+                    },
+                    "revision_or_snapshot": {
+                      "type": "null"
+                    },
+                    "snapshot_sha256": {
+                      "type": "null"
+                    }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "hosting_kind": {
+                      "const": "query"
+                    }
+                  },
+                  "required": [
+                    "hosting_kind"
+                  ]
+                },
+                "then": {
+                  "properties": {
+                    "snapshot_rule": {
+                      "const": "query_definition_no_content_snapshot"
+                    },
+                    "snapshot_status": {
+                      "const": "not_applicable"
+                    },
+                    "revision_or_snapshot": {
+                      "type": "null"
+                    },
+                    "snapshot_sha256": {
+                      "type": "null"
+                    }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "verification_status": {
+                      "const": "known_public_listing"
+                    }
+                  },
+                  "required": [
+                    "verification_status"
+                  ]
+                },
+                "then": {
+                  "properties": {
+                    "endpoint": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "listing_format_risk": {
+                      "const": "mixed_names_and_bug_descriptions"
+                    }
+                  },
+                  "required": [
+                    "listing_format_risk"
+                  ]
+                },
+                "then": {
+                  "properties": {
+                    "candidate_list_handling": {
+                      "const": "human_sanitized_required"
+                    }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "listing_format_risk": {
+                      "const": "unknown"
+                    }
+                  },
+                  "required": [
+                    "listing_format_risk"
+                  ]
+                },
+                "then": {
+                  "properties": {
+                    "candidate_list_handling": {
+                      "const": "custodian_classify_before_agent_access"
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "minItems": 0
         },
         "traversal_steps_in_order": {
           "type": "array",
@@ -668,7 +944,8 @@
             "required": [
               "id",
               "terms",
-              "role"
+              "role",
+              "applies_to_endpoint_ids"
             ],
             "properties": {
               "id": {
@@ -686,22 +963,49 @@
               },
               "role": {
                 "const": "supplement_only"
+              },
+              "applies_to_endpoint_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
+                },
+                "minItems": 1,
+                "uniqueItems": true
               }
             }
           }
         },
         "maximum_results_per_endpoint": {
-          "type": "integer",
-          "minimum": 1
-        },
-        "active_time_budget_minutes": {
-          "anyOf": [
+          "allOf": [
             {
-              "type": "number",
-              "exclusiveMinimum": 0
+              "$ref": "#/$defs/numeric_parameter"
             },
             {
-              "type": "null"
+              "properties": {
+                "value": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              }
+            }
+          ]
+        },
+        "active_time_budget_minutes": {
+          "$ref": "#/$defs/numeric_parameter"
+        },
+        "consecutive_irrelevant_pages_stop": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/numeric_parameter"
+            },
+            {
+              "properties": {
+                "value": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              }
             }
           ]
         },
@@ -718,6 +1022,12 @@
         },
         "discovery_route_rule": {
           "const": "tag_seed_and_systematic_routes_before_deduplication_and_preserve_all_overlap_tags"
+        },
+        "candidate_list_rule": {
+          "const": "output_only_application_or_project_name_repository_url_and_endpoint_id; mixed-description listings require human sanitization"
+        },
+        "content_access_rule": {
+          "const": "planning_agents_must_not_open_or_read_findings_report_bodies_or_bug_descriptions"
         }
       }
     },
@@ -6695,6 +7005,8 @@
       "required": [
         "design_frozen",
         "design_frozen_at",
+        "protocol_sha256",
+        "search_plan_sha256",
         "reservation_completed",
         "reservation_completed_at",
         "annotation_round_completed",
@@ -6709,6 +7021,28 @@
             {
               "type": "string",
               "format": "date-time"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "protocol_sha256": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "search_plan_sha256": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
             },
             {
               "type": "null"
@@ -6761,6 +7095,14 @@
               "design_frozen_at": {
                 "type": "string",
                 "format": "date-time"
+              },
+              "protocol_sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "search_plan_sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
               }
             }
           },
@@ -7294,6 +7636,124 @@
           "minLength": 1
         }
       }
+    },
+    "numeric_parameter": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "value",
+        "unit",
+        "justification",
+        "approved_by_planner_review_ids"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "PROPOSED",
+            "APPROVED"
+          ]
+        },
+        "value": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "unit": {
+          "type": "string",
+          "minLength": 1
+        },
+        "justification": {
+          "type": "string",
+          "minLength": 1
+        },
+        "approved_by_planner_review_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "PROPOSED"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "approved_by_planner_review_ids": {
+                "maxItems": 0
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "APPROVED"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "approved_by_planner_review_ids": {
+                "minItems": 2
+              }
+            }
+          }
+        }
+      ]
+    },
+    "search_plan_envelope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "canonicalization",
+        "hash_scope",
+        "search_plan_sha256",
+        "protocol_states",
+        "remaining_freeze_step",
+        "search_plan"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "0.2.0"
+        },
+        "canonicalization": {
+          "const": "utf8-json-sort-keys-compact-v1"
+        },
+        "hash_scope": {
+          "const": "search_plan"
+        },
+        "search_plan_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "protocol_states": {
+          "$ref": "#/$defs/protocol_states"
+        },
+        "remaining_freeze_step": {
+          "type": "string",
+          "minLength": 1
+        },
+        "search_plan": {
+          "$ref": "#/$defs/search_plan"
+        }
+      }
     }
   },
   "allOf": [
@@ -7347,8 +7807,25 @@
                 "minItems": 1
               },
               "active_time_budget_minutes": {
-                "type": "number",
-                "exclusiveMinimum": 0
+                "properties": {
+                  "status": {
+                    "const": "APPROVED"
+                  }
+                }
+              },
+              "maximum_results_per_endpoint": {
+                "properties": {
+                  "status": {
+                    "const": "APPROVED"
+                  }
+                }
+              },
+              "consecutive_irrelevant_pages_stop": {
+                "properties": {
+                  "status": {
+                    "const": "APPROVED"
+                  }
+                }
               }
             }
           }

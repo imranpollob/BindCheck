@@ -35,3 +35,31 @@ python3 -m unittest -v prototypes/d1p16/test_d1p16.py
 
 The paths are intentionally pinned to the local read-only D1 paper worktree so
 the test cannot silently switch consumer/compiler artifacts.
+
+## D1P-18 hardening
+
+The same route-A prototype now fails closed. An unresolved declaration,
+unmodeled external call, unsupported member/index operation, unmodeled library
+call or storage/event effect, and every unsupported AST/operator form raises a
+located `UNSUPPORTED_<kind>` rejection. Only the exact verifier declaration in
+the model table may remain relational.
+
+`library_effect_models.v1.json` is the shared, versioned declaration model. Its
+keys combine source path, contract, signature, and pinned library version for
+ERC-20 mint, burn, transfer/update, balance/supply writes, and `Transfer`
+events. `case_specific_entries` is false; adding a WarpToad-specific entry would
+be manual input and is outside the automatic route.
+
+`source_mutation_tests.py` recompiles three changed `WarpToadCore.sol` sources
+with the archived standard-JSON compiler input and the pinned solc 0.8.29
+package, then runs the unchanged extractor. `semantic_controls.py` concretely
+checks checked arithmetic, sequential aliased storage stores, zero-value effect
+retention, and rollback, and emits the path-family/execution coverage matrix.
+The compiler transport helper `compile_standard_json.js` only avoids truncated
+CLI stdout; it invokes the same pinned compiler package and settings.
+
+Run both regression suites with:
+
+```sh
+python3 -m unittest -v prototypes/d1p16/test_d1p16.py prototypes/d1p16/test_d1p18.py
+```

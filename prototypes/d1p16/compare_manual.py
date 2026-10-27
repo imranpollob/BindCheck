@@ -20,6 +20,7 @@ def main() -> None:
     parser.add_argument("--build-info", type=Path, required=True)
     parser.add_argument("--compiler-output", type=Path, required=True)
     parser.add_argument("--source", type=Path, required=True)
+    parser.add_argument("--output", type=Path)
     args = parser.parse_args()
     paper = args.paper_root.resolve()
     sys.path.insert(0, str(paper / "src"))
@@ -114,7 +115,7 @@ def main() -> None:
             {
                 "kind": "producer/consumer boundary placement",
                 "manual": "chain_id==31337 and aztec_address==0 are checked beside verifier_accepts",
-                "extracted": "consumer has only R_verify(proof, eleven words); producer constraints remain inside R_verify",
+                "extracted": "chain ID and configuration are consumer-constructed verifier arguments; their connection to producer witnesses belongs to the joint binding relation, not to standalone consumer guards or recovered producer constraints",
                 "source_check_present": "chain_id != CHAIN_ID or aztec_address != AZTEC_WARPTOAD_ADDRESS" in manual_source,
                 "impact": "no disagreement on the five pinned executions; extracted factorization is the required relational boundary",
             },
@@ -129,7 +130,11 @@ def main() -> None:
         ],
         "comparison_errors": errors,
     }
-    print(json.dumps(report, indent=2, sort_keys=True))
+    encoded = json.dumps(report, indent=2, sort_keys=True) + "\n"
+    if args.output:
+        args.output.write_text(encoded)
+    else:
+        print(encoded, end="")
 
 
 if __name__ == "__main__":

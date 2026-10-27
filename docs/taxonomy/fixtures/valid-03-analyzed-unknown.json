@@ -19,12 +19,40 @@
     "source_endpoints": [],
     "traversal_steps_in_order": [],
     "mechanism_keyword_groups": [],
-    "maximum_results_per_endpoint": 100,
-    "active_time_budget_minutes": null,
+    "maximum_results_per_endpoint": {
+      "status": "PROPOSED",
+      "value": 100,
+      "unit": "results",
+      "justification": "Synthetic fixture only.",
+      "approved_by_planner_review_ids": []
+    },
+    "active_time_budget_minutes": {
+      "status": "PROPOSED",
+      "value": 60,
+      "unit": "minutes",
+      "justification": "Synthetic fixture only.",
+      "approved_by_planner_review_ids": []
+    },
     "pagination_policy": "AI-written illustrative fixture only; no retrieval or screening is represented.",
     "stop_rule": "AI-written illustrative fixture only; no retrieval or screening is represented.",
     "audit_report_completeness_rule": "screen_all_findings_in_any_selected_audit_report_used_for_percentages",
-    "discovery_route_rule": "tag_seed_and_systematic_routes_before_deduplication_and_preserve_all_overlap_tags"
+    "discovery_route_rule": "tag_seed_and_systematic_routes_before_deduplication_and_preserve_all_overlap_tags",
+    "language_rationales": [
+      {
+        "language": "English",
+        "reason": "Synthetic fixture only."
+      }
+    ],
+    "inclusion_boundary": "evidence supports a disagreement between what the accepted proof relation establishes and what the proof-consuming system interprets as authorized or required; relevance is independent of BindCheck support",
+    "consecutive_irrelevant_pages_stop": {
+      "status": "PROPOSED",
+      "value": 3,
+      "unit": "pages",
+      "justification": "Synthetic fixture only.",
+      "approved_by_planner_review_ids": []
+    },
+    "candidate_list_rule": "output_only_application_or_project_name_repository_url_and_endpoint_id; mixed-description listings require human sanitization",
+    "content_access_rule": "planning_agents_must_not_open_or_read_findings_report_bodies_or_bug_descriptions"
   },
   "actors": [
     {
@@ -634,6 +662,8 @@
   "protocol_states": {
     "design_frozen": false,
     "design_frozen_at": null,
+    "protocol_sha256": null,
+    "search_plan_sha256": null,
     "reservation_completed": false,
     "reservation_completed_at": null,
     "annotation_round_completed": false,

@@ -39,3 +39,19 @@ Synthetic unit tests do not run the CLI or persist a draw:
 PYTHONDONTWRITEBYTECODE=1 python3 -B \
   scripts/taxonomy/test_reserve_families.py
 ```
+
+## Metadata-only candidate list
+
+`candidate_list.py` consumes only custodian-classified JSON conforming to
+`docs/taxonomy/candidate-list-input.schema.json`. It does not fetch indexes.
+Its output contains exactly application/project name, repository URL, and
+endpoint ID. Inputs marked `mixed_names_and_bug_descriptions` or `unknown`, or
+containing fields such as `description`, `finding`, `title`, `severity`, or
+`impact`, are rejected. An endpoint marked `human_sanitized_required` in the
+search plan accepts only a custodian-attested sanitized name-only input.
+
+```sh
+python3 scripts/taxonomy/candidate_list.py \
+  custodian-name-only-input.json \
+  --output candidate-list.json
+```

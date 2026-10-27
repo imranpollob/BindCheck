@@ -287,12 +287,24 @@ Human-only empirical controls are limited to the short
 attestation, but no membership data. `annotation_round_completed` requires a
 completed round record; it is independent of the other two states. Never
 fabricate a human name, signature, timestamp, or attestation to satisfy schema
-validation. The task handoff states that two planners approved this design but
-does not name them. Accordingly, the
-[planner approval record](planner-approval-v0.2.0.json) preserves that
-assertion and stays `pending_reviewer_identity`; `design_frozen` stays false
-until the two actual AI-planner identities are supplied. It makes no human
-claim.
+validation. The [planner approval record](planner-approval-v0.2.0.json) names
+Codex Astra 6 and Claude Opus 5.5 as the two approving AI planners for D01–D06;
+it makes no human claim.
+
+Planner approval alone does not freeze empirical retrieval. D1P-C04 drafts a
+non-synthetic [search plan](search-plan-v0.2.0.json) fixing endpoint tiers and
+snapshot handling, seed IDs, English-language coverage, traversal order,
+supplemental keyword groups, pagination, and stopping rules. Its three numeric
+choices—results per endpoint, total active-time budget, and consecutive
+irrelevant-page stop count—remain `PROPOSED`. The exact remaining design-freeze
+step is planner approval of those values; until then, `design_frozen` is false
+and `design_frozen_at` is null.
+
+Store both protocol and search-plan hashes in `protocol_states`.
+`search_plan_sha256` is the SHA-256 of the canonical UTF-8 JSON `search_plan`
+payload (sorted keys, no insignificant whitespace), excluding its envelope so
+the digest is not self-referential. Reservation and annotation completion
+remain false.
 
 ## 7. Exposure accounting
 

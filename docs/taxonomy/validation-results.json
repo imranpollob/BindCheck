@@ -1,7 +1,7 @@
 {
-  "task": "D1P-C03 taxonomy protocol v0.2.0 validation",
+  "task": "D1P-C04 taxonomy search-plan v0.2.0 validation",
   "notice": "AI-written illustrative fixture only; no application, screening, annotation, or experiment is represented.",
-  "recorded_at_utc": "2026-10-27T07:53:03.305144Z",
+  "recorded_at_utc": "2026-10-27T19:15:38.164202Z",
   "python": "3.13.7",
   "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
   "validator": "jsonschema.Draft202012Validator",
@@ -17,28 +17,76 @@
   },
   "schema": {
     "file": "ledger.schema.json",
-    "sha256": "012ee5f97880418d7579886ae525d30a48aeb74f1c8f7def0c54a028cdd5d8b4",
+    "sha256": "5470bd88d50c2d1b31126008fb3e639b5aaf846f9f5ecfc283369ce2e1d33f6f",
     "version": "0.2.0",
     "meta_schema_valid": true
   },
   "auxiliary_schemas": [
     {
       "file": "planner-approval.schema.json",
-      "sha256": "05051c788ffde31055cd6540708610f2bfccd37f1bf88d6665929b53f586e0fd",
+      "sha256": "b02b858a4e7846cabd272e037b78902ef6d6e84aaa76f0fcba617a910e59d6a0",
       "meta_schema_valid": true
     },
     {
       "file": "grouped-families.schema.json",
       "sha256": "36733f16e890c9394a7133a5a14195c20598e394ae47312d0714d5ed6483955a",
       "meta_schema_valid": true
+    },
+    {
+      "file": "candidate-list-input.schema.json",
+      "sha256": "72b017ded9db157a9fd5b4f6c9cad2e99766b9e40abb4e9c04a7e57ba4b49d84",
+      "meta_schema_valid": true
     }
   ],
   "planner_approval_record": {
     "file": "planner-approval-v0.2.0.json",
-    "sha256": "1c4a74cb6233467b58bc666275387a5697cd072a46007418ebf45564abe0c9ba",
-    "record_status": "pending_reviewer_identity",
+    "sha256": "e95412214882cd2bce75d6f765f426d140485dd297ed689b98d91a45ceec23b1",
+    "record_status": "complete",
+    "reviewer_names": [
+      "Codex Astra 6",
+      "Claude Opus 5.5"
+    ],
     "valid": true,
-    "complete_without_reviewers_rejected": true
+    "complete_without_reviewers_rejected": true,
+    "freeze_assessment": {
+      "assessed_on": "2026-10-27",
+      "design_frozen": false,
+      "design_frozen_at": null,
+      "protocol_sha256": "24358dddc1623fd84b0df5df6b76db37a1d0011dda2c83e5daf520f7d3009ed4",
+      "search_plan_sha256": "f6bfa5980c071c87cb31d83859a220e0efb2b80a1dbf7f68315cd203a7f0a7b6",
+      "missing_requirements": [
+        "Two AI planners must approve the PROPOSED values 100 results per endpoint, 1200 active-time minutes total, and 3 consecutive irrelevant pages; then their review IDs must be recorded, the payload rehashed, and design_frozen set with an actual UTC timestamp."
+      ],
+      "reservation_completed": false,
+      "reservation_completed_at": null,
+      "annotation_round_completed": false,
+      "annotation_round_completed_at": null
+    }
+  },
+  "search_plan": {
+    "file": "search-plan-v0.2.0.json",
+    "file_sha256": "815b0b62aeaf188122b1f84f4ce602f814b11ee2873790bae7a340b2d6bffcad",
+    "canonical_payload_sha256": "f6bfa5980c071c87cb31d83859a220e0efb2b80a1dbf7f68315cd203a7f0a7b6",
+    "schema_valid": true,
+    "design_frozen": false,
+    "endpoint_counts_by_tier": {
+      "seed": 2,
+      "backbone_index": 13,
+      "supplemental_keyword_query": 2
+    },
+    "to_verify_by_custodian": [
+      "seed-snark-sok-bug-dataset",
+      "backbone-ottersec-audits",
+      "backbone-veridise-audits",
+      "backbone-zksecurity-audits",
+      "backbone-leastauthority-audits",
+      "backbone-cantina-portfolio",
+      "backbone-chainsecurity-audits",
+      "backbone-sherlock-contests",
+      "backbone-cantina-competitions"
+    ],
+    "numeric_parameter_status": "PROPOSED",
+    "single_planner_numeric_approval_rejected": true
   },
   "protocol_state_controls": [
     {
@@ -169,7 +217,7 @@
       }
     ]
   },
-  "runner_sha256": "431566daa49c4edcb2d472f4d886597ef363a4baa56b8ccb3d38f9b73b82159f",
+  "runner_sha256": "9a4d85717da86497dc3744725371dc1904405cae22c010f2c2194b5474e3c7f2",
   "requirements_sha256": "ad943e43ce86ccc2e4b59e7b92b2940b4791066968d8557915df8b0978badd08",
   "fixture_manifest_sha256": "3165d732229ced5eeea9fa6a7bfe05a591e585e6bb76020de83adba422f9061b",
   "format_assertions": [
@@ -205,7 +253,7 @@
   "fixtures": [
     {
       "file": "fixtures/valid-01-unassessed.json",
-      "sha256": "5eb93540f3fbeea6e68ac7ebbd98912a4d656caf60752e7ab56b9ad991af579e",
+      "sha256": "68e6b6e84b4ccd90909cbf9f5e54dfae9f595b1733075e37b49542486b6795a7",
       "description": "Unassessed candidate row; no result.",
       "expected_valid": true,
       "actual_valid": true,
@@ -216,7 +264,7 @@
     },
     {
       "file": "fixtures/valid-02-relevance-pending.json",
-      "sha256": "9a55077df1f9d32b29aaca354b2dc17f3fbce177ca8d94b540b6f602eaf72905",
+      "sha256": "f58926c0f188dd1cd207a9cc0b24b245b7934b806dd79ca37353d72498d26603",
       "description": "Illustrative screened row with unresolved relevance; the separate tool funnel remains unattempted.",
       "expected_valid": true,
       "actual_valid": true,
@@ -227,7 +275,7 @@
     },
     {
       "file": "fixtures/valid-03-analyzed-unknown.json",
-      "sha256": "10906dc701392bd833e592ba2daad53dfb9b39044edafda344d38d5987febb5f",
+      "sha256": "e8c4304269eea49da5070b61b2e0af0dbbffd4fd6e551505d4275288ce0ee9a9",
       "description": "Illustrative completed, inconclusive analysis; UNKNOWN is not validated.",
       "expected_valid": true,
       "actual_valid": true,
@@ -238,7 +286,7 @@
     },
     {
       "file": "fixtures/invalid-01-missing-source-ids.json",
-      "sha256": "186ba7d36452e33a3d45330b0f04c8ef2c3cd3f786cfa9eb7096b522f350311c",
+      "sha256": "736cee9021c42cabee241037f85361edea2fbab1d1dad45ab0836eae2ccafee4",
       "description": "Missing required source_ids on the finding row.",
       "expected_valid": false,
       "actual_valid": false,
@@ -259,7 +307,7 @@
     },
     {
       "file": "fixtures/invalid-02-skipped-screening.json",
-      "sha256": "87280501e42e939b125730b2fb295767aca8eeed6d7c4c3c2f8d7541f7840ecc",
+      "sha256": "1b26c44683020e3908904236362a1a6b02209bd7766d2b0691e4a6666e652b0d",
       "description": "Disclosure relevance is met while disclosure screening is not_attempted.",
       "expected_valid": false,
       "actual_valid": false,
@@ -280,7 +328,7 @@
     },
     {
       "file": "fixtures/invalid-03-unknown-validated.json",
-      "sha256": "b487b12f76577fa1219a31cade517985621e2bb8f13211e6b0ff0d50312443ee",
+      "sha256": "cc8428803d73f30d0c24e05360fa357cdf402c72c4046e8adeec8d58097fbcdd",
       "description": "UNKNOWN result falsely advances to validated.",
       "expected_valid": false,
       "actual_valid": false,

@@ -23,6 +23,17 @@ EXPECTED_SOURCE_SHA256 = "323a1cf26c7449f67cf277ff0a46c31e12f725c555f9fa165d5a60
 EXPECTED_SOLC = "0.8.29+commit.ab55807c"
 EXPECTED_OPT_RUNS = 1
 EXPECTED_EVM = "cancun"
+DEFAULT_MODEL_TABLE = Path(__file__).with_name("library_effect_models.v1.json")
+
+
+class UnsupportedConstruct(RuntimeError):
+    """Named fail-closed rejection with a source location."""
+
+    def __init__(self, kind: str, location: str, detail: str):
+        self.code = f"UNSUPPORTED_{kind.upper()}"
+        self.location = location
+        self.detail = detail
+        super().__init__(f"{self.code} at {location}: {detail}")
 
 
 def E(op: str, *args: Any) -> dict[str, Any]:
@@ -127,6 +138,8 @@ class ExecState:
     guards: list[dict[str, Any]] = field(default_factory=list)
     tentative_writes: list[dict[str, Any]] = field(default_factory=list)
     tentative_mints: list[dict[str, Any]] = field(default_factory=list)
+    tentative_burns: list[dict[str, Any]] = field(default_factory=list)
+    tentative_transfers: list[dict[str, Any]] = field(default_factory=list)
     tentative_events: list[dict[str, Any]] = field(default_factory=list)
     status: str = "active"
     reason: str | None = None
@@ -137,22 +150,79 @@ class ExecState:
 
 
 class Extractor:
-    def __init__(self, meta_path: Path, output_path: Path, source_path: Path):
+    def __init__(
+        self,
+        meta_path: Path,
+        output_path: Path,
+        source_path: Path,
+        model_path: Path = DEFAULT_MODEL_TABLE,
+        expected_source_sha256: str = EXPECTED_SOURCE_SHA256,
+    ):
         self.meta_path = meta_path.resolve()
         self.output_path = output_path.resolve()
         self.source_path = source_path.resolve()
+        self.model_path = model_path.resolve()
+        self.expected_source_sha256 = expected_source_sha256
         self.meta = json.loads(self.meta_path.read_text())
         self.output_wrapper = json.loads(self.output_path.read_text())
         self.output = self.output_wrapper["output"]
+        self.effect_models = json.loads(self.model_path.read_text())
         self.nodes: dict[int, dict[str, Any]] = {}
         self.source_names: dict[int, str] = {}
         self.source_text: dict[int, str] = {}
+        self.node_source: dict[int, str] = {}
+        self.node_contract: dict[int, str | None] = {}
+        self.call_stack: list[int] = []
+        self._load_effect_models()
         self._index_sources()
         self._validate_pins()
 
     @staticmethod
     def sha256(path: Path) -> str:
         return hashlib.sha256(path.read_bytes()).hexdigest()
+
+    def _load_effect_models(self) -> None:
+        if self.effect_models.get("schema") != "bindcheck.library-effect-models.v1":
+            raise ValueError("unsupported library effect-model schema")
+        if self.effect_models.get("case_specific_entries") is not False:
+            raise ValueError("case-specific library effect models are forbidden in the automatic route")
+        self.call_models: dict[str, dict[str, Any]] = {}
+        self.storage_models: dict[str, dict[str, Any]] = {}
+        self.event_models: dict[str, dict[str, Any]] = {}
+        self.library_prefixes: list[str] = []
+        for library in self.effect_models.get("libraries", {}).values():
+            self.library_prefixes.append(library["source_prefix"])
+            for key, model in library.get("declarations", {}).items():
+                self.call_models[key] = model
+            for key, model in library.get("storage_declarations", {}).items():
+                self.storage_models[key] = model
+            for key, model in library.get("event_declarations", {}).items():
+                self.event_models[key] = model
+        self.external_boundaries = self.effect_models.get("external_boundaries", {})
+
+    @staticmethod
+    def _parameter_type(parameter: dict[str, Any]) -> str:
+        return parameter.get("typeDescriptions", {}).get("typeString", "unknown")
+
+    def declaration_key(self, ref: int) -> str:
+        node = self.nodes.get(ref)
+        if node is None:
+            return f"unresolved#{ref}"
+        source = self.node_source.get(ref, "unknown-source")
+        contract = self.node_contract.get(ref) or "<free>"
+        name = node.get("name") or node.get("nodeType", f"decl#{ref}")
+        if node.get("nodeType") in {"FunctionDefinition", "EventDefinition", "ErrorDefinition"}:
+            params = node.get("parameters", {}).get("parameters", [])
+            signature = ",".join(self._parameter_type(param) for param in params)
+            return f"{source}::{contract}::{name}({signature})"
+        return f"{source}::{contract}::{name}"
+
+    def is_library_declaration(self, ref: int) -> bool:
+        source = self.node_source.get(ref, "")
+        return any(source.startswith(prefix) for prefix in self.library_prefixes)
+
+    def reject(self, kind: str, node: dict[str, Any], detail: str) -> UnsupportedConstruct:
+        return UnsupportedConstruct(kind, self.location(node), detail)
 
     def _index_sources(self) -> None:
         inputs = self.meta["input"]["sources"]
@@ -161,28 +231,36 @@ class Extractor:
             self.source_names[source_id] = name
             if name in inputs and "content" in inputs[name]:
                 self.source_text[source_id] = inputs[name]["content"]
-            self._walk_index(record["ast"])
+            self._walk_index(record["ast"], source_id, None)
 
-    def _walk_index(self, node: Any) -> None:
+    def _walk_index(self, node: Any, source_id: int, contract: str | None) -> None:
         if isinstance(node, dict):
+            if node.get("nodeType") == "ContractDefinition":
+                contract = node.get("name")
             if "id" in node and "nodeType" in node:
                 self.nodes[node["id"]] = node
+                self.node_source[node["id"]] = self.source_names[source_id]
+                self.node_contract[node["id"]] = contract
             for value in node.values():
-                self._walk_index(value)
+                self._walk_index(value, source_id, contract)
         elif isinstance(node, list):
             for value in node:
-                self._walk_index(value)
+                self._walk_index(value, source_id, contract)
 
     def _validate_pins(self) -> None:
         actual_source = self.sha256(self.source_path)
         settings = self.meta["input"]["settings"]
+        source_record = self.meta["input"]["sources"]["project/contracts/core/WarpToadCore.sol"]
+        embedded_source_sha256 = hashlib.sha256(source_record["content"].encode()).hexdigest()
         assertions = {
-            "source_sha256": actual_source == EXPECTED_SOURCE_SHA256,
+            "source_sha256": actual_source == self.expected_source_sha256,
+            "source_matches_build_input": actual_source == embedded_source_sha256,
             "solc": self.meta.get("solcLongVersion") == EXPECTED_SOLC,
             "optimizer_enabled": settings["optimizer"]["enabled"] is True,
             "optimizer_runs": settings["optimizer"]["runs"] == EXPECTED_OPT_RUNS,
             "evm_version": settings["evmVersion"] == EXPECTED_EVM,
             "compiler_output_id": self.meta["id"] == self.output_wrapper["id"],
+            "effect_model_version": self.effect_models.get("version") == "1.0.0",
         }
         failed = [name for name, passed in assertions.items() if not passed]
         if failed:
@@ -225,16 +303,20 @@ class Extractor:
                 return EvalResult(self.read_storage(state, name))
             if name in {"block", "msg"}:
                 return EvalResult(S(name))
-            return EvalResult(S(name))
+            raise self.reject("identifier", node, f"unresolved identifier {name!r}")
         if kind == "MemberAccess":
             base = self.eval_expr(node["expression"], state, checked)
             member = node["memberName"]
             if member == "length" and isinstance(base.value, list):
                 return EvalResult(C(len(base.value)), base.checks)
-            if render(base.value) in {"block", "msg"}:
+            if render(base.value) == "block" and member in {"basefee", "chainid"}:
                 return EvalResult(S(f"{render(base.value)}.{member}"), base.checks)
-            # Function members are handled by FunctionCall.
-            return EvalResult(E("member", base.value, member), base.checks)
+            if render(base.value) == "msg" and member == "sender":
+                return EvalResult(S("msg.sender"), base.checks)
+            raise self.reject(
+                "member_access", node,
+                f"no semantics for member {member!r} on {render(base.value)}",
+            )
         if kind == "IndexAccess":
             base_node = node["baseExpression"]
             index = self.eval_expr(node["indexExpression"], state, checked)
@@ -243,7 +325,7 @@ class Extractor:
                 if ref in state.env and isinstance(state.env[ref], list):
                     base = state.env[ref]
                     if not is_const(index.value):
-                        raise ValueError("symbolic memory-array index outside bounded loop")
+                        raise self.reject("symbolic_memory_index", node, "symbolic memory-array read")
                     return EvalResult(base[int(const_value(index.value))], index.checks)
                 decl = self.nodes.get(ref, {})
                 if decl.get("stateVariable"):
@@ -253,7 +335,10 @@ class Extractor:
             base = self.eval_expr(base_node, state, checked)
             if isinstance(base.value, list) and is_const(index.value):
                 return EvalResult(base.value[int(const_value(index.value))], base.checks + index.checks)
-            return EvalResult(E("index", base.value, index.value), base.checks + index.checks)
+            raise self.reject(
+                "index_access", node,
+                f"no semantics for index into {render(base.value)}",
+            )
         if kind == "TupleExpression":
             values, checks = [], []
             for component in node["components"]:
@@ -282,21 +367,23 @@ class Extractor:
                     check_op = {"+": "no_overflow_add", "-": "no_underflow_sub", "*": "no_overflow_mul"}[token]
                     checks.append(E(check_op, a, b))
                 return EvalResult(value, checks)
-            raise NotImplementedError(f"binary operator {token}")
+            raise self.reject("binary_operator", node, token)
         if kind == "UnaryOperation":
             sub = self.eval_expr(node["subExpression"], state, checked)
             if node["operator"] == "!":
                 return EvalResult(simplify("not", sub.value), sub.checks)
             if node["operator"] == "++":
                 return EvalResult(simplify("add", sub.value, C(1)), sub.checks)
-            raise NotImplementedError(f"unary operator {node['operator']}")
+            raise self.reject("unary_operator", node, node["operator"])
         if kind == "NewExpression":
-            return EvalResult(E("new_array"))
+            raise self.reject("new_expression", node, "standalone new expression")
         if kind == "ElementaryTypeNameExpression":
-            return EvalResult(S(node["typeName"]["name"]))
+            raise self.reject("type_expression", node, node["typeName"]["name"])
         if kind == "FunctionCall":
             call_kind = node.get("kind")
             if call_kind == "typeConversion":
+                if len(node.get("arguments", [])) != 1:
+                    raise self.reject("type_conversion_arity", node, "expected one argument")
                 conversion = node["expression"]
                 target = (
                     conversion.get("typeName", {}).get("name")
@@ -308,7 +395,7 @@ class Extractor:
             if node["expression"].get("nodeType") == "NewExpression":
                 size = self.eval_expr(node["arguments"][0], state, checked)
                 if not is_const(size.value):
-                    raise ValueError("symbolic memory allocation is out of scope")
+                    raise self.reject("symbolic_memory_allocation", node, "array size is symbolic")
                 return EvalResult([C(0) for _ in range(int(const_value(size.value)))], size.checks)
             callee_ref = node["expression"].get("referencedDeclaration")
             callee = self.nodes.get(callee_ref, {})
@@ -319,22 +406,37 @@ class Extractor:
                 if callee.get("stateMutability") in {"pure", "view"}:
                     value = self.eval_returning_function(callee, values, state)
                     return EvalResult(value, checks)
-            # External verifier boundary: retain target, proof, and all recovered words.
+                raise self.reject(
+                    "stateful_call_in_expression", node,
+                    f"{self.declaration_key(callee_ref)} is not pure/view",
+                )
+            # Only the declared verifier boundary may remain relational.
             if callee.get("nodeType") == "FunctionDefinition" and callee.get("visibility") == "external":
+                key = self.declaration_key(callee_ref)
+                boundary = self.external_boundaries.get(key)
+                if not boundary or boundary.get("semantic") != "producer_verifier_relation":
+                    raise self.reject("external_call", node, f"unmodeled external callee {key}")
                 target_node = node["expression"].get("expression")
                 target = self.eval_expr(target_node, state, checked).value if target_node else S("external")
                 flattened = []
                 for value in values:
                     flattened.extend(value if isinstance(value, list) else [value])
                 return EvalResult(E("relation", f"{callee.get('name')}@{render(target)}", *flattened), checks)
-            name = callee.get("name") or node["expression"].get("name", "call")
-            return EvalResult(E("call", name, *values), checks)
-        raise NotImplementedError(f"expression node {kind}")
+            if callee.get("nodeType") != "FunctionDefinition":
+                raise self.reject(
+                    "unresolved_callee", node,
+                    f"referenced declaration {callee_ref!r} is not a function",
+                )
+            raise self.reject("call_expression", node, self.declaration_key(callee_ref))
+        raise self.reject("expression_node", node, kind)
 
     def bind_params(self, function: dict[str, Any], args: list[Any], state: ExecState) -> None:
         params = function["parameters"]["parameters"]
         if len(params) != len(args):
-            raise ValueError(f"arity mismatch for {function.get('name')}")
+            raise self.reject(
+                "call_arity", function,
+                f"{function.get('name')} expects {len(params)} arguments, got {len(args)}",
+            )
         for param, value in zip(params, args):
             state.env[param["id"]] = value
 
@@ -343,7 +445,10 @@ class Extractor:
         self.bind_params(function, args, state)
         result = self.exec_pure_block(function["body"], state)
         if result is None:
-            raise ValueError(f"function {function.get('name')} produced no return")
+            raise self.reject(
+                "missing_return", function,
+                f"function {function.get('name')} produced no return",
+            )
         return result
 
     def exec_pure_block(self, block: dict[str, Any], state: ExecState, checked: bool = True) -> Any | None:
@@ -353,7 +458,7 @@ class Extractor:
                 initial = self.eval_expr(stmt["initialValue"], state, checked).value
                 declarations = [d for d in stmt["declarations"] if d is not None]
                 if len(declarations) != 1:
-                    raise NotImplementedError("tuple declaration")
+                    raise self.reject("tuple_declaration", stmt, "pure function tuple declaration")
                 state.env[declarations[0]["id"]] = initial
             elif kind == "ExpressionStatement":
                 self.exec_assignment(stmt["expression"], state, checked)
@@ -363,7 +468,7 @@ class Extractor:
                 while True:
                     cond = self.eval_expr(stmt["condition"], state, checked).value
                     if not is_const(cond):
-                        raise ValueError("non-concrete loop bound")
+                        raise self.reject("symbolic_loop_bound", stmt, "pure loop condition is symbolic")
                     if not const_value(cond):
                         break
                     result = self.exec_pure_block(stmt["body"], state, checked)
@@ -372,7 +477,7 @@ class Extractor:
                     self.exec_pure_statement(stmt["loopExpression"], state, checked)
                     iterations += 1
                     if iterations > 1024:
-                        raise ValueError("loop bound exceeded")
+                        raise self.reject("loop_bound", stmt, "more than 1024 iterations")
             elif kind == "Return":
                 return self.eval_expr(stmt["expression"], state, checked).value
             elif kind == "UncheckedBlock":
@@ -380,7 +485,7 @@ class Extractor:
                 if result is not None:
                     return result
             else:
-                raise NotImplementedError(f"pure statement {kind}")
+                raise self.reject("pure_statement", stmt, kind)
         return None
 
     def exec_pure_statement(self, stmt: dict[str, Any], state: ExecState, checked: bool) -> None:
@@ -397,11 +502,11 @@ class Extractor:
             else:
                 self.exec_assignment(expr, state, checked)
         else:
-            raise NotImplementedError(stmt["nodeType"])
+            raise self.reject("pure_statement", stmt, stmt["nodeType"])
 
     def exec_assignment(self, expr: dict[str, Any], state: ExecState, checked: bool) -> None:
         if expr["nodeType"] != "Assignment":
-            raise NotImplementedError(f"expected assignment, got {expr['nodeType']}")
+            raise self.reject("assignment_expression", expr, expr["nodeType"])
         lhs, op = expr["leftHandSide"], expr["operator"]
         rhs = self.eval_expr(expr["rightHandSide"], state, checked).value
         if lhs["nodeType"] == "Identifier":
@@ -409,10 +514,10 @@ class Extractor:
             old = state.env.get(ref)
             if old is None and self.nodes.get(ref, {}).get("stateVariable"):
                 old = self.read_storage(state, lhs["name"])
-                value = self.assignment_value(op, old, rhs, checked)
-                self.write_storage(state, lhs["name"], None, value, expr)
+                value = self.assignment_value(op, old, rhs, checked, expr)
+                self.write_storage(state, lhs["name"], None, value, expr, ref)
             else:
-                state.env[ref] = self.assignment_value(op, old, rhs, checked)
+                state.env[ref] = self.assignment_value(op, old, rhs, checked, expr)
             return
         if lhs["nodeType"] == "IndexAccess":
             base = lhs["baseExpression"]
@@ -420,20 +525,24 @@ class Extractor:
             ref = base.get("referencedDeclaration")
             if ref in state.env and isinstance(state.env[ref], list):
                 if not is_const(index):
-                    raise ValueError("symbolic memory write index")
+                    raise self.reject("symbolic_memory_index", lhs, "symbolic memory-array write")
                 state.env[ref][int(const_value(index))] = rhs
                 return
             if self.nodes.get(ref, {}).get("stateVariable"):
                 old = self.read_storage(state, base["name"], index)
-                value = self.assignment_value(op, old, rhs, checked)
-                self.write_storage(state, base["name"], index, value, expr)
+                value = self.assignment_value(op, old, rhs, checked, expr)
+                self.write_storage(state, base["name"], index, value, expr, ref)
                 return
-        raise NotImplementedError(f"assignment target {lhs['nodeType']}")
+        raise self.reject("assignment_target", lhs, lhs["nodeType"])
 
-    def assignment_value(self, op: str, old: Any, rhs: Any, checked: bool) -> Any:
+    def assignment_value(
+        self, op: str, old: Any, rhs: Any, checked: bool, node: dict[str, Any]
+    ) -> Any:
         if op == "=":
             return rhs
         mapping = {"+=": "add", "-=": "sub", "*=": "mul"}
+        if op not in mapping:
+            raise self.reject("assignment_operator", node, op)
         base = mapping[op]
         return simplify(base if checked else f"{base}_mod", old, rhs)
 
@@ -453,15 +562,46 @@ class Extractor:
             ref = base.get("referencedDeclaration")
             if ref in state.env and isinstance(state.env[ref], list):
                 old = state.env[ref][int(const_value(index))]
-            else:
+            elif self.nodes.get(ref, {}).get("stateVariable"):
                 old = self.read_storage(state, base["name"], index)
+            else:
+                raise self.reject("assignment_target", lhs, "unresolved indexed assignment")
         else:
-            return []
+            raise self.reject("assignment_target", lhs, lhs["nodeType"])
         rhs = self.eval_expr(expr["rightHandSide"], state, checked).value
-        check_op = {"+=": "no_overflow_add", "-=": "no_underflow_sub", "*=": "no_overflow_mul"}[op]
+        check_ops = {"+=": "no_overflow_add", "-=": "no_underflow_sub", "*=": "no_overflow_mul"}
+        if op not in check_ops:
+            raise self.reject("assignment_operator", expr, op)
+        check_op = check_ops[op]
         return [E(check_op, old, rhs)]
 
-    def write_storage(self, state: ExecState, base: str, index: Any | None, value: Any, node: dict[str, Any]) -> None:
+    def write_storage(
+        self,
+        state: ExecState,
+        base: str,
+        index: Any | None,
+        value: Any,
+        node: dict[str, Any],
+        declaration_ref: int,
+    ) -> None:
+        declaration_key = self.declaration_key(declaration_ref)
+        storage_model = self.storage_models.get(declaration_key)
+        if self.is_library_declaration(declaration_ref) and storage_model is None:
+            raise self.reject(
+                "library_storage_write", node,
+                f"no versioned storage model for {declaration_key}",
+            )
+        if storage_model is not None:
+            supported_storage = {
+                "erc20_balance_map": index is not None,
+                "erc20_total_supply": index is None,
+            }
+            semantic = storage_model.get("semantic")
+            if semantic not in supported_storage or not supported_storage[semantic]:
+                raise self.reject(
+                    "library_storage_model", node,
+                    f"unsupported or shape-mismatched storage semantic {semantic!r}",
+                )
         if index is None:
             state.storage[base] = value
         else:
@@ -472,6 +612,8 @@ class Extractor:
             "value": render(value),
             "value_ir": value,
             "location": self.location(node),
+            "declaration": declaration_key,
+            "effect_model": None if storage_model is None else storage_model["semantic"],
         }
         if index is not None:
             record["map_after"] = render(state.storage[base])
@@ -539,21 +681,66 @@ class Extractor:
         output: list[ExecState] = [s for s in checked_states if s.status != "active"]
         for active in [s for s in checked_states if s.status == "active"]:
             if callee.get("nodeType") != "FunctionDefinition":
-                output.append(active)
-                continue
+                raise self.reject(
+                    "unresolved_callee", call,
+                    f"referenced declaration {callee_ref!r} is not a function",
+                )
             if callee.get("visibility") == "external":
-                output.append(active)
-                continue
-            if callee.get("name") == "_mint":
-                active.tentative_mints.append({
-                    "beneficiary": args[0].value,
-                    "amount": args[1].value,
+                raise self.reject(
+                    "external_call_statement", call,
+                    f"external call {self.declaration_key(callee_ref)} is not a checked verifier expression",
+                )
+            if callee.get("visibility") not in {"internal", "private", "public"}:
+                raise self.reject(
+                    "call_visibility", call,
+                    f"{self.declaration_key(callee_ref)} visibility={callee.get('visibility')}",
+                )
+            key = self.declaration_key(callee_ref)
+            model = self.call_models.get(key)
+            if self.is_library_declaration(callee_ref) and model is None:
+                raise self.reject("library_call", call, f"no versioned declaration model for {key}")
+            if model is not None:
+                semantic = model["semantic"]
+                common = {
                     "location": self.location(call),
-                })
+                    "declaration": key,
+                    "effect_model": semantic,
+                }
+                if semantic == "erc20_mint":
+                    active.tentative_mints.append({
+                        **common,
+                        "beneficiary": args[model["beneficiary_argument"]].value,
+                        "amount": args[model["amount_argument"]].value,
+                    })
+                elif semantic == "erc20_burn":
+                    active.tentative_burns.append({
+                        **common,
+                        "beneficiary": args[model["beneficiary_argument"]].value,
+                        "amount": args[model["amount_argument"]].value,
+                    })
+                elif semantic == "erc20_transfer":
+                    active.tentative_transfers.append({
+                        **common,
+                        "from": args[model["from_argument"]].value,
+                        "to": args[model["to_argument"]].value,
+                        "amount": args[model["amount_argument"]].value,
+                    })
+                elif semantic != "erc20_update":
+                    raise self.reject("effect_model", call, f"unknown semantic {semantic!r}")
+                if model.get("inline_body") is not True:
+                    raise self.reject("effect_model", call, f"{key} does not permit body inlining")
+            if callee_ref in self.call_stack:
+                raise self.reject("recursive_call", call, key)
+            if not callee.get("body"):
+                raise self.reject("unimplemented_callee", call, key)
             saved_env = active.env
             active.env = copy.deepcopy(saved_env)
             self.bind_params(callee, [x.value for x in args], active)
-            called = self.exec_block([active], callee["body"], checked=True)
+            self.call_stack.append(callee_ref)
+            try:
+                called = self.exec_block([active], callee["body"], checked=True)
+            finally:
+                self.call_stack.pop()
             for result in called:
                 result.env = copy.deepcopy(saved_env)
             output += called
@@ -590,7 +777,7 @@ class Extractor:
                     # Re-evaluate on the branched state before writing.
                     self.exec_assignment(expr, active, checked)
                 return states
-            raise NotImplementedError(f"expression statement {expr['nodeType']}")
+            raise self.reject("expression_statement", expr, expr["nodeType"])
         if kind == "IfStatement":
             condition = self.eval_expr(stmt["condition"], state, checked)
             states = self.apply_checks([state], condition.checks, self.location(stmt))
@@ -623,14 +810,38 @@ class Extractor:
             return [state]
         if kind == "EmitStatement":
             call = stmt["eventCall"]
-            args = [self.eval_expr(a, state, checked).value for a in call["arguments"]]
-            state.tentative_events.append({
-                "event": call["expression"].get("name", "event"),
-                "arguments": [render(x) for x in args],
-                "location": self.location(stmt),
-            })
-            return [state]
-        raise NotImplementedError(f"statement node {kind}")
+            event_ref = call["expression"].get("referencedDeclaration")
+            event_declaration = self.nodes.get(event_ref, {})
+            if event_declaration.get("nodeType") != "EventDefinition":
+                raise self.reject(
+                    "unresolved_event", stmt,
+                    f"referenced declaration {event_ref!r} is not an event",
+                )
+            event_key = self.declaration_key(event_ref)
+            event_model = self.event_models.get(event_key)
+            if self.is_library_declaration(event_ref) and event_model is None:
+                raise self.reject(
+                    "library_event", stmt,
+                    f"no versioned event model for {event_key}",
+                )
+            if event_model is not None and event_model.get("semantic") != "erc20_transfer_event":
+                raise self.reject(
+                    "library_event_model", stmt,
+                    f"unsupported event semantic {event_model.get('semantic')!r}",
+                )
+            evaluated = [self.eval_expr(a, state, checked) for a in call["arguments"]]
+            checks = [check for item in evaluated for check in item.checks]
+            states = self.apply_checks([state], checks, self.location(stmt))
+            for active in [candidate for candidate in states if candidate.status == "active"]:
+                active.tentative_events.append({
+                    "event": call["expression"].get("name", "event"),
+                    "arguments": [render(item.value) for item in evaluated],
+                    "location": self.location(stmt),
+                    "declaration": event_key,
+                    "effect_model": None if event_model is None else event_model["semantic"],
+                })
+            return states
+        raise self.reject("statement_node", stmt, kind)
 
     def exec_block(self, states: list[ExecState], block: dict[str, Any], checked: bool) -> list[ExecState]:
         current = states
@@ -687,8 +898,36 @@ class Extractor:
                     "location": mint["location"],
                     "beneficiary_ir": mint["beneficiary"],
                     "amount_ir": mint["amount"],
+                    "declaration": mint["declaration"],
+                    "effect_model": mint["effect_model"],
                 }
                 for mint in state.tentative_mints
+            ]
+            enriched_burns = [
+                {
+                    "beneficiary": render(burn["beneficiary"]),
+                    "amount": render(burn["amount"]),
+                    "location": burn["location"],
+                    "beneficiary_ir": burn["beneficiary"],
+                    "amount_ir": burn["amount"],
+                    "declaration": burn["declaration"],
+                    "effect_model": burn["effect_model"],
+                }
+                for burn in state.tentative_burns
+            ]
+            enriched_transfers = [
+                {
+                    "from": render(transfer["from"]),
+                    "to": render(transfer["to"]),
+                    "amount": render(transfer["amount"]),
+                    "location": transfer["location"],
+                    "from_ir": transfer["from"],
+                    "to_ir": transfer["to"],
+                    "amount_ir": transfer["amount"],
+                    "declaration": transfer["declaration"],
+                    "effect_model": transfer["effect_model"],
+                }
+                for transfer in state.tentative_transfers
             ]
             return {
                 "id": f"p{index:02d}",
@@ -699,11 +938,15 @@ class Extractor:
                 "tentative": {
                     "storage_writes": state.tentative_writes,
                     "mints": enriched_mints,
+                    "burns": enriched_burns,
+                    "transfers": enriched_transfers,
                     "events": state.tentative_events,
                 },
                 "committed": {
                     "storage_writes": state.tentative_writes if committed else [],
                     "mints": enriched_mints if committed else [],
+                    "burns": enriched_burns if committed else [],
+                    "transfers": enriched_transfers if committed else [],
                     "events": state.tentative_events if committed else [],
                     "post_state_ir": state.storage if committed else {},
                 },
@@ -711,7 +954,7 @@ class Extractor:
             }
 
         return {
-            "schema": "bindcheck.d1p16.extracted-consumer-relation.v1",
+            "schema": "bindcheck.d1p18.extracted-consumer-relation.v2",
             "scope": "WarpToadCore.mint",
             "method": "solc AST bounded symbolic execution; internal-call inlining",
             "pins": {
@@ -725,9 +968,21 @@ class Extractor:
                 "optimizer": self.meta["input"]["settings"]["optimizer"],
                 "evm_version": self.meta["input"]["settings"]["evmVersion"],
                 "assertions": self.pin_assertions,
+                "library_effect_models": str(self.model_path),
+                "library_effect_models_sha256": self.sha256(self.model_path),
+                "library_effect_models_version": self.effect_models["version"],
+                "case_specific_effect_models": self.effect_models["case_specific_entries"],
             },
             "verifier_boundary": {
                 "kind": "uninterpreted producer relation; never assumed true",
+                "declaration": self.declaration_key(
+                    next(
+                        ref for ref, node in self.nodes.items()
+                        if node.get("nodeType") == "FunctionDefinition"
+                        and node.get("visibility") == "external"
+                        and self.declaration_key(ref) in self.external_boundaries
+                    )
+                ),
                 "expression": render(first),
                 "proof": render(first["args"][1]),
                 "public_words": [
@@ -748,6 +1003,9 @@ class Extractor:
                 "all_reverts_commit_nothing": all(
                     not path_record(i, s)["committed"]["storage_writes"]
                     and not path_record(i, s)["committed"]["mints"]
+                    and not path_record(i, s)["committed"]["burns"]
+                    and not path_record(i, s)["committed"]["transfers"]
+                    and not path_record(i, s)["committed"]["events"]
                     for i, s in enumerate(paths) if s.status == "revert"
                 ),
             },
@@ -759,10 +1017,18 @@ def main() -> None:
     parser.add_argument("--build-info", type=Path, required=True)
     parser.add_argument("--compiler-output", type=Path, required=True)
     parser.add_argument("--source", type=Path, required=True)
+    parser.add_argument("--effect-models", type=Path, default=DEFAULT_MODEL_TABLE)
+    parser.add_argument("--expected-source-sha256", default=EXPECTED_SOURCE_SHA256)
     parser.add_argument("--output", type=Path)
     parser.add_argument("--compact", action="store_true", help="omit evaluator IR and verbose map snapshots")
     args = parser.parse_args()
-    relation = Extractor(args.build_info, args.compiler_output, args.source).extract()
+    relation = Extractor(
+        args.build_info,
+        args.compiler_output,
+        args.source,
+        model_path=args.effect_models,
+        expected_source_sha256=args.expected_source_sha256,
+    ).extract()
     if args.compact:
         def compact(value: Any) -> Any:
             if isinstance(value, list):

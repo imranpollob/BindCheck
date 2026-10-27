@@ -4,7 +4,7 @@
   "title": "D1P-C03 AI-planner approval record",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema_version", "protocol_version", "record_status", "handoff_assertion", "identity_gap", "design_items", "reviewers"],
+  "required": ["schema_version", "protocol_version", "record_status", "handoff_assertion", "identity_gap", "design_items", "reviewers", "freeze_assessment"],
   "properties": {
     "schema_version": {"const": "0.2.0"},
     "protocol_version": {"const": "0.2.0"},
@@ -31,18 +31,45 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["reviewer_name", "reviewer_type", "provider", "model", "session_or_record_id", "reviewed_on", "decision", "design_item_ids"],
+        "required": ["reviewer_name", "reviewer_type", "provider", "platform", "model", "reasoning_effort", "session_or_record_id", "reviewed_on", "decision", "design_item_ids", "review_summary"],
         "properties": {
           "reviewer_name": {"type": "string", "minLength": 1},
           "reviewer_type": {"const": "ai_planner"},
           "provider": {"anyOf": [{"type": "string", "minLength": 1}, {"type": "null"}]},
+          "platform": {"type": "string", "minLength": 1},
           "model": {"anyOf": [{"type": "string", "minLength": 1}, {"type": "null"}]},
+          "reasoning_effort": {"const": "high"},
           "session_or_record_id": {"anyOf": [{"type": "string", "minLength": 1}, {"type": "null"}]},
           "reviewed_on": {"type": "string", "format": "date"},
           "decision": {"const": "approve"},
-          "design_item_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "pattern": "^D[0-9]{2}$"}}
+          "design_item_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "pattern": "^D[0-9]{2}$"}},
+          "review_summary": {"type": "string", "minLength": 1}
         }
       }
+    },
+    "freeze_assessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["assessed_on", "design_frozen", "design_frozen_at", "protocol_sha256", "search_plan_sha256", "missing_requirements", "reservation_completed", "reservation_completed_at", "annotation_round_completed", "annotation_round_completed_at"],
+      "properties": {
+        "assessed_on": {"type": "string", "format": "date"},
+        "design_frozen": {"type": "boolean"},
+        "design_frozen_at": {"anyOf": [{"type": "string", "format": "date-time"}, {"type": "null"}]},
+        "protocol_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "search_plan_sha256": {"anyOf": [{"type": "string", "pattern": "^[a-f0-9]{64}$"}, {"type": "null"}]},
+        "missing_requirements": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+        "reservation_completed": {"const": false},
+        "reservation_completed_at": {"type": "null"},
+        "annotation_round_completed": {"const": false},
+        "annotation_round_completed_at": {"type": "null"}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"design_frozen": {"const": true}}, "required": ["design_frozen"]},
+          "then": {"properties": {"design_frozen_at": {"type": "string", "format": "date-time"}, "search_plan_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}, "missing_requirements": {"maxItems": 0}}},
+          "else": {"properties": {"design_frozen_at": {"type": "null"}, "missing_requirements": {"minItems": 1}}}
+        }
+      ]
     }
   },
   "allOf": [
