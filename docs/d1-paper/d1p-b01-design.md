@@ -3,7 +3,7 @@
 Date: **26 October 2026**<br>
 Worktree: `/Users/imranpollob/Coding/bc/bindcheck-lane-b`, branch
 `lane-b-design`, HEAD `9fabd08` (no commit, push, merge or branch change)<br>
-Task status: **DESIGN REVISION 1 FOR REVIEW** (change log at the end)<br>
+Task status: **DESIGN REVISION 3 FOR REVIEW** (change log at the end)<br>
 Fee-split policy (Section 4): **DRAFT — NOT APPROVED**<br>
 Research verdict: **UNKNOWN**
 
@@ -17,7 +17,9 @@ It follows the [research contract](../research-contract.md) (Sections 4–8),
 the [D1P-03 protocol](d1p-03-protocol.md) (Track B evidence grades; its
 budgets are superseded), [D1P-04 protocol](d1p-04-protocol.md) §1 (current
 method, budget, validation and freeze rules), [D1P-07
-protocol](d1p-07-protocol.md) and its resource policy (sampled-RSS memory), [V2 joint semantics](../../protocols/d1/d1-03-joint-semantics-v2.md)
+protocol](d1p-07-protocol.md) and its resource policy (sampled-RSS memory), [D1P-12R](../../../bindcheck-d1-paper/reports/D1P-12R.md)
+(read-only; executable honest fixture) and [D1P-13](../../../bindcheck-d1-paper/reports/D1P-13.md) (read-only;
+beta.22 decoder and source/artifact MATCH), [V2 joint semantics](../../protocols/d1/d1-03-joint-semantics-v2.md)
 (exact occurrence matching), [D1P-08](d1p-08-feasibility.md) /
 [D1P-08 review](d1p-08-review.md) (consumer-success trace intersection and
 evidence categories), [D1P-09](d1p-09-feasibility.md) (conservative
@@ -30,8 +32,10 @@ propagation rules) and [D1P-11](../../reports/D1P-11.md) with its
 | --- | --- |
 | **SRC** | Confirmed in a hash-verified pinned file at the cited line |
 | **TS-ONLY** | Stated only by the TypeScript prover helper, not by the circuit or consumer |
-| **UNRETRIEVED** | Depends on a pinned-revision file outside the D1P-11 hash record (Section 0.2) |
-| **LANE-A** | Depends on the not-yet-built Lane A WarpToad fixture (artifact/key/verifier/proof and fork-free initialization; Section 6) |
+| **UNRETRIEVED** | Depends on a pinned-revision file outside the D1P-11 hash record and not yet inspected by D1P-12R or this design (Section 0.2) |
+| **D1P-12R** | Established by D1P-12R evidence (read-only; `reports/D1P-12R.md` SHA-256 `b71843e9…`) |
+| **B01-RO** | Read read-only by this revision from D1P-12R's pinned checkout or the local Nargo cache; hashes in the ignored `results/raw/D1P-B01/rev2-readonly-reads.json` |
+| **LANE-A** | Depends on a Lane A fixture item that D1P-12R has not resolved (Section 7) |
 | **ASSUMED** | An external or cryptographic assumption, never mechanically established here |
 | **DRAFT** | An unapproved policy proposal |
 
@@ -82,6 +86,15 @@ D1-02 also never fetched the hashing crate, so the project has no recorded
 evidence of how the circuit composes its hashes. The integrator or Lane A
 should add a hash-recorded fetch for it.
 
+**Revision 2 update.** D1P-12R has since inspected and hashed the actual
+hashing dependency, `nargo_hashing` (aliased as `hashing`), the constants
+crate, the READMEs, the committed artifact, the VK and the verifier. This
+revision cites them through D1P-12R and adds B01-RO reads of
+`withdraw/Nargo.toml`, the `merkle-trees` crate and poseidon v0.3.0 (commit
+`0880c371…`). Nothing new was fetched. Labels below were updated where those
+facts apply. The remaining UNRETRIEVED items are the LazyIMT/`PoseidonT3`
+libraries, `GigaBridge` and the root messengers.
+
 ## 1. Public-input provenance
 
 ### 1.1 Classification
@@ -109,7 +122,7 @@ Definitions:
 | 2 | `amount` (17) | Calldata | `_amount`, `Core.sol:145` | caller argument `:318`, `:351` | `!amount.lt(max_fee)` `:47`; input to `hash_commitment` `:65` | Mint amounts `:172`, `:175` |
 | 3 | `giga_root` (18) | Calldata, state-guarded | `_gigaRoot` `:146`; `gigaRootHistory` `:155` (written `:77`, `:189`) | `warpToadDestination.read.gigaRoot()` `:332` | Merkle root for `origin_local_root` only when `destination_local_root != origin_local_root` (`:56-62`) | Guard only |
 | 4 | `destination_local_root` (19) | Calldata, state-guarded | `_localRoot` `:147`; `localRootHistory` `:156` (written `:110`) | `read.cachedLocalRoot()` `:333` | Only the branch test `:56` | Guard only |
-| 5 | `aztec_warptoad_address` (20) | **Consumer-supplied: stored configuration** | `aztecWarptoadAddress` `Core.sol:49`, set once in `initialize` `:67-73`, used `:160` | origin contract's address `:240`, `:306` | Passed to `aztec_merkle_verify` `:71` on the `is_from_aztec` branch only; internal use UNRETRIEVED | None beyond the vector |
+| 5 | `aztec_warptoad_address` (20) | **Consumer-supplied: stored configuration** | `aztecWarptoadAddress` `Core.sol:49`, set once in `initialize` `:67-73`, used `:160` | origin contract's address `:240`, `:306` | Passed to `aztec_merkle_verify` `:71` on the `is_from_aztec` branch only, where it siloes the note hash `Poseidon2(3361878420, address, leaf)` (`nargo_hashing/src/lib.nr:56-62`, `:70`; D1P-12R) | None beyond the vector |
 | 6 | `fee_factor` (30) | Calldata | `_feeFactor` `:148` | caller argument `:319` | `fee_factor != 1` `:50` | Branch `:164`; fee formula `:165` |
 | 7 | `priority_fee` (31) | Calldata | `_priorityFee` `:149` | caller argument `:320` | `priority_fee != 0` `:53` | Fee formula `:165` |
 | 8 | `max_fee` (32) | Calldata | `_maxFee` `:150` | caller argument `:321` | `!amount.lt(max_fee)` `:47` | `require(_relayerFee <= _maxFee)` `:166` |
@@ -133,18 +146,20 @@ Counts:
   become `uint256(uint160(bytes20(addr)))`, left-padded with zeros (`:137`),
   matching the circuit comments at `main.nr:33-34` (SRC). Every address is
   below `2^160 < p`.
-- **Field canonicality (LANE-A).** Words 0, 2, 3, 4, 6, 7 and 8 are arbitrary
-  calldata `uint256` values, while the circuit sees elements of the BN254
-  scalar field `F_p`. Whether the generated keccakZK UltraHonk verifier
-  **rejects** a word `>= p` or **reduces** it modulo `p` is unknown until
-  Lane A pins the verifier. `D_v` must encode the verifier's actual map. If
-  it reduces, the consumer's `uint256` keys (`nullifiers[...]`, mint amounts)
-  and the circuit's field values can disagree. This is the
-  range/canonicality obligation in contract Section 5.5. It is a modeling
-  requirement, not a finding.
-- **Vector length (LANE-A).** Whether the generated verifier expects exactly
-  11 public inputs or appends proof-carried extra inputs internally must be
-  checked against the compiled ABI and verifier.
+- **Field canonicality (resolved, D1P-12R §7).** The generated verifier
+  **rejects** every application word `≥ P` before transcript absorption
+  (generated verifier lines 568–581). 22/22 probes (`P` and `P+1` at each of
+  the eleven positions, with the real honest proof) reverted with
+  `ValueGeFieldOrder()` (selector `0x20a33589`). `D_v` is therefore the
+  identity on `[0,P)`, and acceptance requires every word `< P`. The analyzer
+  must not reduce modulo `P`. Consumer `uint256` keys and the circuit's field
+  values cannot disagree on an accepted call. This discharges the
+  public-word part of the contract §5.5 canonicality obligation. It is a
+  modeling fact, not a finding.
+- **Vector length (resolved, D1P-12R §4.2).** The VK declares 19 verifier
+  public inputs, of which 8 are proof-carried pairing-point coordinates, so
+  `verify` takes exactly 11 caller words. The proof's words equal the ABI
+  order and `_formatPublicInputs` output.
 - **Atomicity (SRC).** The nullifier write (`:158`) precedes verification
   (`:161`), and any later `require` or checked-arithmetic failure reverts the
   whole call. Effects count only when the outer call returns, following V2.
@@ -162,10 +177,10 @@ Relations enforced by the circuit relation `R_v`:
 | C3 | `relayer_address != 0` | `:51` | — |
 | C4 | `recipient_address != 0` | `:52` | — |
 | C5 | `priority_fee != 0` | `:53` | — |
-| C6 | `destination_local_root == origin_local_root`, or `origin_local_root` is a leaf of `giga_root` | `:56-62` | **Merkle** (`evm_merkle_verify`, giga depth; UNRETRIEVED) |
-| C7 | `(commitment, n') = hash_commitment(nullifier_preimage, secret, chain_id, amount)` | `:65` | **Hash** (composition UNRETRIEVED; TS-ONLY: `pre = H(np, s, chain)`, `commitment = H(pre, amount)`, `n = H(np)`, `proving.ts:334-336`) |
+| C6 | `destination_local_root == origin_local_root`, or `origin_local_root` is a leaf of `giga_root` | `:56-62` | **Merkle** (`evm_merkle_verify`: 5-level BN254 Poseidon `hash_2` nodes; D1P-12R) |
+| C7 | `(commitment, n') = hash_commitment(nullifier_preimage, secret, chain_id, amount)` | `:65` | **Hash**: `n' = Poseidon₁(np)`, `pre = Poseidon₃(np, s, chain_id)`, `commitment = Poseidon₂(pre, amount)`, all BN254 Poseidon (`nargo_hashing/src/lib.nr:42-47`; D1P-12R) |
 | C8 | `n' == nullifier` | `:66` | **Hash-mediated** (through C7) |
-| C9 | `commitment` is a leaf of `origin_local_root`, in the Aztec tree (with `aztec_warptoad_address`) if `is_from_aztec`, else in the EVM tree | `:70-74` | **Merkle + hash** (Aztec siloing/unique-note hashing and the EVM node hash are UNRETRIEVED) |
+| C9 | `commitment` is a leaf of `origin_local_root`, in the Aztec tree (with `aztec_warptoad_address`) if `is_from_aztec`, else in the EVM tree | `:70-74` | **Merkle + hash**. EVM: 32-level `Poseidon₂` nodes. Aztec: siloed `Poseidon2(3361878420, addr, c)`, unique `Poseidon2(226850429, nonce, ·)`, 42-level `Poseidon2(2982624097, l, r)` nodes (`lib.nr:16-86`; D1P-12R). The leaf index is decomposed by `to_le_bits` into depth bits (`merkle-trees/src/merkle.nr:77`; B01-RO) |
 
 Relations enforced by the consumer:
 
@@ -185,7 +200,7 @@ Cryptographic and correspondence relations:
 | --- | --- | --- |
 | A-PS | **Knowledge** soundness of keccakZK UltraHonk for the pinned VK, which binds all 11 words | ASSUMED, key identity LANE-A. Soundness alone is not enough for Section 3.5. |
 | A-CR | Collision resistance of each hash instance | Enters only guarantee (b), whose obligations B1–B6 are open (Section 3.5) |
-| A-HC | Solidity `PoseidonT3` and the LazyIMT root equal the circuit's leaf/node hash and tree convention (depth, zero leaves) | ASSUMED, UNRETRIEVED + LANE-A |
+| A-HC | Solidity `PoseidonT3` and the LazyIMT root equal the circuit's leaf/node hash and tree convention (depth, zero leaves) | ASSUMED. One concrete agreement point was observed: the D1P-12R honest path opens to the consumer-stored root. The LazyIMT/`PoseidonT3` sources were not inspected |
 
 ### 2.2 Per-quantity dependency map
 
@@ -195,8 +210,8 @@ Cryptographic and correspondence relations:
 | **Recipient** | K4/K5 (word 10, low 160 bits), C4, K6 beneficiary, A-PS | **No** | `recipient_address` enters no hash. It is bound to the proof transcript, not to the source commitment. Whoever holds the witness `(np, s)` chooses it. |
 | **Relayer fee** (amount and beneficiary) | Words 6–9 via K4/K5, C1 (`max_fee <= amount`), C3, K6 (`block.basefee`, cap, wildcard), A-PS | **No** | The fee amount is **not** fixed by the proof. It depends on `block.basefee`, which the consumer supplies at execution, and is bounded only by `max_fee`. With `relayer_address == 1`, the beneficiary is `msg.sender` (`:168-170`). C2's source comment (`main.nr:49`) says it may only silence compiler warnings; C2 and C5 are not used as policy. |
 | **Chain ID** | K4 (`block.chainid`), C7 → C9 → C6 → K2/K1, A-CR | **Yes** | Chain ID enters only the commitment preimage, which on the burn side (`:92-97`) is the user-chosen `preCommitment`. |
-| **Nullifier** | K3, K4/K5 (word 0), C7/C8, A-CR, word canonicality (LANE-A) | **Yes** | K3 enforces single use per `uint256` word. Single use per **source commitment** also needs (a) commitment → `np` binding (A-CR on C7) and (b) a word → field map that is injective on accepted words (LANE-A). |
-| **Domain** (instance and asset) | Local branch: K2 (own history). Giga branch: C6 + K1 (giga leaves chosen by the provider; UNRETRIEVED). Aztec: K4 address + C9 (UNRETRIEVED) | **Yes** | No circuit relation names the destination contract or token. Domain binding of an EVM-origin commitment rests on which local roots the giga tree admits, which is a deployment invariant, not part of `R_v`. |
+| **Nullifier** | K3, K4/K5 (word 0), C7/C8, A-CR, word canonicality (resolved, D1P-12R §7) | **Yes** | K3 enforces single use per `uint256` word. Single use per **source commitment** also needs (i) commitment → `np` binding (A-CR on C7) and (ii) a word → field map that is injective on accepted words. (ii) is resolved: accepted words are canonical (D1P-12R §7). |
+| **Domain** (instance and asset) | Local branch: K2 (own history). Giga branch: C6 + K1 (giga leaves chosen by the provider; `GigaBridge` UNRETRIEVED). Aztec: K4 address + C9 siloing (D1P-12R) | **Yes** | No circuit relation names the destination contract or token. Domain binding of an EVM-origin commitment rests on which local roots the giga tree admits, which is a deployment invariant, not part of `R_v`. |
 
 `getFreeShit` (`Core.sol:199-201`) is an unrestricted public mint outside the
 proof-consuming path. Following D1-02, the model infers no global supply
@@ -208,11 +223,11 @@ guarantee and observes only the effects of `mint` and `burn` calls.
 
 | Instance | Where | Evidence |
 | --- | --- | --- |
-| `H_leaf^sol(pre, amt)` = `PoseidonT3.hash([pre, amt])` | `Core.sol:97` | SRC (library UNRETRIEVED) |
+| `H_leaf^sol(pre, amt)` = `PoseidonT3.hash([pre, amt])` | `Core.sol:97` | SRC (library UNRETRIEVED); its input reduction behavior is unknown |
 | `H_node^sol` (LazyIMT node hash) | `Core.sol:98`, `:180` | UNRETRIEVED |
-| `H_pre`, `H_leaf`, `H_null` inside `hash_commitment` | `main.nr:65` | UNRETRIEVED; TS-ONLY shape at `proving.ts:334-336` |
-| `H_node^evm` in `evm_merkle_verify` (local and giga trees) | `main.nr:61`, `:73` | UNRETRIEVED; TS uses `poseidon2` from `poseidon-lite` (`proving.ts:99`, `:152`) |
-| Aztec siloing, unique-note and note-tree hashes | `main.nr:71` | UNRETRIEVED; TS-ONLY at `proving.ts:229-231` |
+| `H_pre = Poseidon₃`, `H_leaf = Poseidon₂`, `H_null = Poseidon₁` (BN254 Poseidon, arithmetic `permute` in poseidon v0.3.0) | `main.nr:65`; `nargo_hashing/src/lib.nr:42-47` | D1P-12R; arithmetic form B01-RO |
+| `H_node^evm = Poseidon₂(l, r)` in `evm_merkle_verify` (32-level local, 5-level giga) | `main.nr:61`, `:73`; `lib.nr:24-26`, `:79-86` | D1P-12R |
+| Aztec siloing `Poseidon2(3361878420, ·, ·)`, unique-note `Poseidon2(226850429, ·, ·)`, 42-level nodes `Poseidon2(2982624097, l, r)` (black-box permutation) | `main.nr:71`; `lib.nr:16-22`, `:49-77` | D1P-12R; black-box form B01-RO |
 
 These are possibly distinct concrete functions. The Aztec tree uses
 different hashing from the EVM tree (comment at `main.nr:68`). Whether pairs
@@ -319,9 +334,9 @@ Turning (a′) into (b) requires these obligations. **All are open.**
 | --- | --- | --- |
 | B1 Extraction | Knowledge soundness of keccakZK UltraHonk for the pinned VK and compiled relation, in a stated model (Fiat–Shamir over Keccak in the random-oracle model; the commitment-scheme assumptions), with an extractor that outputs the **complete** ACIR witness, including every input of every hash region | Open; ASSUMED at most; key identity LANE-A |
 | B2 Multi-proof extraction | Violations over `Reach_L` (for example, single use) involve two or more accepted proofs, possibly chosen adaptively after the adversary sees other parties' public proofs. This needs simulation-extractability or multi-instance extraction with bounded loss. | Open |
-| B3 Term coverage | `T` must contain every hash application the violation depends on: each extracted witness's C7 applications (pre-commitment, leaf, nullifier) and every C9/C6 node; every consumer-side application (each burn leaf, K7, and every LazyIMT node of every admitted root, including zero subtrees); and the fixed-pre-state ground instances. It must also be shown that the collision exhibited by (a′) consists of values the reduction actually obtains from the extractor and the public history. | Open; the hashing crate and LazyIMT internals are UNRETRIEVED, so the term set cannot yet be enumerated |
+| B3 Term coverage | `T` must contain every hash application the violation depends on: each extracted witness's C7 applications (pre-commitment, leaf, nullifier) and every C9/C6 node; every consumer-side application (each burn leaf, K7, and every LazyIMT node of every admitted root, including zero subtrees); and the fixed-pre-state ground instances. It must also be shown that the collision exhibited by (a′) consists of values the reduction actually obtains from the extractor and the public history. | Open. Circuit-side applications are now enumerable at source level (D1P-12R): 3 for C7, 32 EVM nodes, 5 giga nodes, 2 siloing/unique plus 42 Aztec nodes. ACIR level: 86 `Poseidon2Permutation` opcodes decoded (D1P-13); BN254 Poseidon instances are arithmetic regions not yet delimited; LazyIMT internals are UNRETRIEVED |
 | B4 Instance identity | A collision between two symbols (for example, the circuit leaf hash and Solidity `PoseidonT3`) is a collision of one concrete function only if A-HC holds. If distinct symbols are used for one function, the coverage argument must merge them under A-HC. | Open; LANE-A |
-| B5 CR domain | CR is a statement over canonical field inputs. `uint256` inputs reduced modulo `p` give trivial non-canonical "collisions" (`x` versus `x+p`) that CR does not exclude. These are handled by `D_v` and canonicality (LANE-A), not by (b). | Open; LANE-A |
+| B5 CR domain | CR is a statement over canonical field inputs. `uint256` inputs reduced modulo `p` give trivial non-canonical "collisions" (`x` versus `x+p`) that CR does not exclude. For public words this is resolved: the verifier rejects words `≥ P` (D1P-12R §7). It remains open for Solidity `PoseidonT3` inputs (`preCommitment` at burn), whose reduction behavior is UNRETRIEVED. | Partly resolved |
 | B6 Reduction accounting | Advantage bound (extraction loss times the term-pair count), and the stated security level of each Poseidon instance and parameter set | Open |
 
 Reporting rules:
@@ -365,7 +380,7 @@ transferred between methods or used to continue abstract search.
 
 | Stage | Action | Failure outcome |
 | --- | --- | --- |
-| F1 Concrete model | `nargo execute` on the pinned compiled withdraw ACIR with the concretized witness and public words | `ACIR_REJECTED` → UNKNOWN; further refinement only within the remaining analysis budget |
+| F1 Concrete model | Pinned beta.22 `nargo execute` (D1P-13 binary `37f7d55d…`) on the candidate's full input assignment, with real Poseidon2 and all constraints; route V-EXEC of §6.6.1 | `ACIR_REJECTED` → UNKNOWN; further refinement only within the remaining analysis budget |
 | F2 Consumer replay | The unchanged consumer under fork-free owned initialization, with the concretized history, checking committed effects with an independent oracle. The verifier may be mocked only at this grade | `CONSUMER_MISMATCH` → UNKNOWN |
 | F3 Real proof | A keccakZK UltraHonk proof accepted by the pinned generated verifier, then `mint` on the unchanged consumer. This is a **later, separately frozen gate** with equal method treatment; no budget is created here | Absent → grade remains concrete-model or consumer-state |
 
@@ -388,7 +403,7 @@ Rules:
   every property result in that scope is UNKNOWN (`VACUOUS_NC`).
 - Reason codes, all UNKNOWN unless validated: `COLLISION_DEPENDENT`,
   `HASH_INCONSISTENT`, `ACIR_REJECTED`, `CONSUMER_MISMATCH`, `VACUOUS_NC`,
-  `CR_ARGUMENT_OPEN`, `HASH_UNRETRIEVED`, `CANONICALITY_UNRESOLVED`,
+  `CR_ARGUMENT_OPEN`, `HASH_UNRETRIEVED`, `FRONTEND_UNSUPPORTED`,
   `ORIGIN_UNSUPPORTED`, `SPECIFICATION_UNRESOLVED`, `SPLIT_UNSUPPORTED`.
 
 ## 4. Fee-split policy draft
@@ -417,6 +432,7 @@ used as policy.
 | `main.nr:20-22` (comment) | `aztec_warptoad_address` exists so that only WarpToad commitments, not other Aztec contracts', are accepted | Documentation comment (domain intent) |
 | `main.nr:33-34` | Addresses are Ethereum addresses left-padded with zeros | Documentation comment (encoding) |
 | D1P-11 ledger `documented_intended_policy` | README describes burn-to-mint, root membership, nullifier single use, destination chain binding and relayer compensation bounded by `max_fee` | Second-hand. README UNRETRIEVED; the status there is "no frozen, human-reviewed policy" |
+| D1P-12R §8.1 (root README 1–15; frontend README 19–22, 97–104; relay-service README 22–30, 102–121, 151–159) | A named relayer submits `mint`, and the request's relayer address must match its wallet. Configured fee bounds apply. The default testnet fee model is altruistic, and the contract fee logic "needs revisiting". The beneficiary-selection policy is not frozen | Second-hand through D1P-12R; supports F4's cap and F5's named relayer; it states no `max_fee ≤ amount` rule |
 
 No retrieved document states a wildcard relayer, a cross-asset rule, or
 whether a consumed nullifier obliges a full payout. These remain open
@@ -458,13 +474,13 @@ justified (planner position D2).
 | Id | Clause | Source |
 | --- | --- | --- |
 | F1 Identity / single use | Each `g` has a derived source id (§4.4) and matches exactly the permission with that id. Each id is matched by at most one `g` across `Reach_L`. Single use is per source occurrence, not per `uint256` nullifier word. | Contract §4.1; D1P-11 summary |
-| F2 Conservation | `x_R + x_F = a(p)`, with `x_F = 0` when there is no fee mint. Nothing else is minted by the call. | Contract §4.3 |
+| F2 Conservation | **F2a (within call):** `x_R + x_F = w.amount`, with `x_F = 0` when there is no fee mint; nothing else is minted by the call. **F2b (source):** `w.amount = a(p)`, which needs the §4.4 derivation | Contract §4.3 |
 | F3 Fee formula *(separate FEE-FORMULA property)* | If `ff ≠ 0`: `x_F = ff · (basefee(g) + pf)`, with `basefee` an admitted environment value. If `ff = 0`: `x_F = 0`. | `main.nr:24-28`, `:50` (comments only) |
-| F4 Fee cap | `0 ≤ x_F ≤ mf ≤ a(p)` | D1P-11 summary ("bounded by max_fee") |
+| F4 Fee cap | `0 ≤ x_F ≤ mf`. **`mf ≤ amount` is removed from the policy.** No retrieved or D1P-12R-cited documentation states it, and it is not implied by F2a plus the cap: those give only `x_F ≤ min(mf, amount)`. The circuit's `max_fee ≤ amount` (C1) remains an EXTRACTED implementation fact, not a policy clause | D1P-11 summary ("bounded by max_fee"); D1P-12R §8.1 ("configured fee bounds") |
 | F5 Beneficiaries | `r' = low160(r)` exactly; `ρ' = low160(ρ)` exactly. `ρ = 1` gives `SPECIFICATION_UNRESOLVED` (D1) | Contract §4.1; `main.nr:33-34` |
 | F6 Chain | For an honest-depositor permission, `block.chainid(g) = ch₀(p)` (ghost comparison; its security reading needs (b)) | D1P-11 summary ("destination chain binding") |
 | F7 Domain / asset | `g`'s instance and token equal `p`'s. For Aztec origin, `p` must come from the configured WarpToad Aztec contract. | `main.nr:20-22`; contract §4.1 |
-| F8 Statement linkage | `w`'s amount equals `a(p)`; `w`'s `(r, ρ, mf)` are the parameters checked in F4–F5 | Contract §4.1 |
+| F8 Statement linkage | The committed nullifier write key equals `w0`; `w`'s `(r, ρ, mf)` are the parameters checked in F4–F5. (Amount-to-source linkage is F2b.) | Contract §4.1 |
 | F9 Immediate payout *(proposed for WarpToad, D3)* | Each committed nullifier write creates one obligation `o ∈ O` (a separate list, not `O := P`), discharged only by the payout effects of the same transition satisfying F2, F4, F5 and F7 | Contract §4.2; proposed explicitly here, not inherited from Payy V2 |
 
 ### 4.4 Source-occurrence identity and matching
@@ -477,9 +493,9 @@ any other permission.
 | Step | Fact used | Grade |
 | --- | --- | --- |
 | D1 | The group's witness `(np, s, origin_root, is_from_aztec, ℓ', π)` | In the joint model: variables of `R_v` (proof-enforced relation). For a real proof: available only through extraction, B1 (ASSUMED, open) |
-| D2 | Local branch iff `destination_local_root == origin_root` and `¬is_from_aztec` | Proof-enforced (`main.nr:56`, `:70`). Giga or Aztec branch → `id = UNKNOWN (ORIGIN_UNSUPPORTED)`. Mapping a giga leaf to an origin instance would need `GigaBridge` provider indices (UNRETRIEVED, ASSUMED) |
-| D3 | `c = H_leaf(H_pre(np, s, chain_id), amount)` and `n = H_null(np)` | Proof-enforced (C7, C8). The composition is UNRETRIEVED; the shape is TS-ONLY |
-| D4 | `c` opens at position `ℓ'` along path `π` to `origin_root` | Proof-enforced (C9, EVM branch). That `ℓ'` is range-constrained to the tree depth's bits is UNRETRIEVED |
+| D2 | Local branch iff `destination_local_root == origin_root` and `¬is_from_aztec` | Proof-enforced (`main.nr:56`, `:70`). Giga or Aztec branch → `id = UNKNOWN (ORIGIN_UNSUPPORTED)`. Mapping a giga leaf to an origin instance would need `GigaBridge` provider indices (UNRETRIEVED; ASSUMED) |
+| D3 | `c = H_leaf(H_pre(np, s, chain_id), amount)` and `n = H_null(np)` | Proof-enforced (C7, C8). Composition per `nargo_hashing/src/lib.nr:42-47` (D1P-12R) |
+| D4 | `c` opens at position `ℓ'` along path `π` to `origin_root` | Proof-enforced (C9, EVM branch). `ℓ'` is decomposed by `to_le_bits` into 32 bits at source level (`merkle-trees/src/merkle.nr:77`; B01-RO); the decoded artifact has 107 `RANGE` constraints (D1P-13), but which of them bind `ℓ'` is not yet mapped |
 | D5 | `destination_local_root ∈ localRootHistory` of this instance | Consumer-checked (K2, `Core.sol:156`) |
 | D6 | The leaf sequence `(c_0, c_1, …)` of this instance | Consumer-recorded: each committed `burn` computes and inserts `c_j` at index `j` (`:97-98`, `:102-103`). In `Reach_L` mode it comes from the history's committed burns. In fixed-pre-state mode it is admitted-state data, ASSUMED until Lane A replays the burns (LANE-A). Equality of LazyIMT's internal leaf count with `lastLeafIndex`, and the absence of other insertion paths in the concrete subclass, are LANE-A |
 | D7 | `id(g) := (instance, ℓ')` iff `ℓ' < |leaves|` and `c = c_{ℓ'}`; otherwise `id(g) := ⊥` | Analysis check over D3–D6 |
@@ -495,8 +511,8 @@ Consequences:
 - The nullifier is **not** part of the identity. C8 ties `n` to the group's
   own `np` (proof-enforced). K3 ensures per-word single use
   (consumer-checked). F1 single use is per id, so two groups that derive the
-  same id with different nullifier words (through an `np` collision, or
-  non-canonical words, B5) violate F1.
+  same id with different nullifier words (through an `np` collision; non-canonical
+  aliasing is excluded by the verifier, D1P-12R §7) violate F1.
 - **Duplicate commitments (D5).** Two burns with an equal leaf at `ℓ₁ ≠ ℓ₂`
   are two permissions with distinct ids; occurrence identity is preserved.
   The prover's choice of `ℓ'` selects one of them. That choice is
@@ -512,17 +528,18 @@ argument survives only because the arithmetic sits outside the key. Moving
 arithmetic into compatibility requires re-review (V2 §3).
 
 Other unsupported or unresolved cases, each UNKNOWN: `ρ = address(1)` (D1);
-non-canonical words (LANE-A); an ERC-20 hook or override in the concrete
-token (LANE-A).
+an ERC-20 hook or override in the concrete token (LANE-A). Non-canonical words
+are inadmissible: the verifier reverts (D1P-12R §7).
 
 ### 4.5 Open decisions, with planner input (recorded, NOT approved)
 
 | Id | Question | Planner position (open) | Effect on this draft |
 | --- | --- | --- | --- |
 | D1 | Is `ρ = 1` a protocol-authorized "any relayer" permission with beneficiary `msg.sender`? | Unresolved. The first fixture uses a named relayer | `ρ = 1` → `SPECIFICATION_UNRESOLVED`. The first fixture exercises only named relayers |
-| D2 | Fee property strength | Propose cap + conservation (F2, F4) as the property. Keep exact-formula correctness separate until independently justified | AUTH uses F2/F4. F3 is the separate FEE-FORMULA property; a FEE-FORMULA result never changes an AUTH verdict |
+| D2 | Fee property strength | Propose cap + conservation (F2a, F4) as the property. Keep exact-formula correctness separate until independently justified | AUTH uses F2/F4. F3 is the separate FEE-FORMULA property; a FEE-FORMULA result never changes an AUTH verdict |
 | D3 | Does a consumed nullifier oblige full payout in the same transition? | Propose explicitly for WarpToad. Payy's V2 policy does not establish it | F9 proposed. COVERAGE is defined only through F9 and remains unapproved |
 | D4 | Can several instances or assets share a giga tree? | Requires deployment/protocol evidence. A one-instance fixture cannot establish cross-instance binding | A one-instance result reports F7 as **not established** for cross-instance or cross-asset binding, never as verified |
+| D6 | Beneficiary selection: may the commitment holder choose any recipient? (D1P-12R §8.1: not frozen by the documentation) | Not yet raised by the planners | F5 checks only that effects pay the **statement's** recipient. Who may choose `w10` remains open |
 | D5 | Duplicate commitments | Preserve occurrence identity | Implemented in §4.4. **Separately open:** do both deposits create payout obligations? If yes, a coverage notion triggered by deposits, which F9 is not, would be needed |
 
 Before any use, approve the controls: honest `ff = 0` and `ff ≠ 0`
@@ -530,16 +547,18 @@ withdrawals with a named relayer as legitimate controls; synthetic
 matcher-level regressions for each clause (fee above cap, sum not equal to
 `a`, wrong beneficiary, reused id, `⊥` id, duplicate-leaf occurrences,
 wildcard). Matcher regressions are component tests, never primary evidence.
+The fee-cap fixtures FC-NEG and FC-POS are specified in §6.7.
 
 ## 5. Consumer-direction hypothesis
 
 ### 5.1 Hypothesis
 
 > **H-CD.** For WarpToad AUTH, COVERAGE and NONVAC, compare the
-> consumer-directed method (CD) with each comparator under identical
-> semantics (the same `Φ[f]`, `α`, `NC` set, ground instances, policy
-> version, admitted state and bounds), the same partition treatment, and
-> equal budgets. CD uses consumer-fixed facts for exact-substitution
+> consumer-directed method (CD) with each comparator on the **same canonical
+> joint obligation** `Ω` (the `Φ[f]`, `α`, `NC` set, ground instances,
+> policy version, admitted state and bounds), with every arm's
+> transformation checked against `Ω` (§5.4 item 2), under the same partition
+> treatment and equal budgets. CD uses consumer-fixed facts for exact-substitution
 > propagation (D1P-09 rules) and to direct checked-summary refinement.
 > The hypothesis is that CD obtains strictly more **validated** resolved
 > obligations, or, on obligations that both arms resolve with the same
@@ -616,10 +635,10 @@ of every query hash are superseded):
   zero. A monitor or cleanup failure is an infrastructure failure that stops
   the campaign. A timeout, RSS cutoff, solver UNKNOWN, process error,
   malformed output or budget exhaustion is unresolved.
-- **Platform.** The D1P-07 policy is native-macOS-specific. D1P-04 required
-  primary timed comparisons on one frozen Linux environment. Which platform
-  is primary for WarpToad is a planner decision recorded in the freeze. A
-  Linux run needs an equivalent, separately validated memory policy.
+- **Platform.** The reference environment is this Mac, native macOS arm64,
+  as decided at D1P-06/D1P-07. This prospectively supersedes D1P-04's Linux
+  requirement for this design. The freeze records the exact host OS
+  version, architecture, solver binary hash and library inventory.
 - **Analysis budget** (template from D1P-04 Section 1.2, restated in the
   freeze): 300 analysis seconds per property slot per method. Fixed methods
   use one call. Modular and refinement methods use at most five internal
@@ -646,9 +665,24 @@ of every query hash are superseded):
    NONVAC in that scope); `UNSAT_CR_OPEN` (UNSAT only with `NC`, reported
    UNKNOWN per §3.5 and tallied separately, never merged); `UNRESOLVED`
    (everything else, including unvalidated abstract SAT).
-2. **Identical semantics.** Arms are compared only on obligations whose
-   formula, policy version, admitted state, bounds and partition treatment
-   are byte-identical across arms.
+2. **Identical semantics.** Arms are compared only on the **same canonical
+   joint obligation** `Ω` (hashed canonical serialization of `R̂_v`, `D_v`,
+   the consumer transition, admitted state, environment, policy version,
+   abstraction layer, `NC` set, bounds and partition treatment). Transformed
+   solver inputs necessarily differ by arm. **Each arm's transformation is
+   checked against `Ω`** before its result counts:
+   - **Slicing or omission:** a recorded certificate that the removed
+     constraints are only those the slicing rule permits. UNSAT then
+     transfers to `Ω`; SAT must be validated.
+   - **Propagation:** exact substitution with reconstruction equalities,
+     replayed by an independent audit (D1P-09).
+   - **Summaries:** a checked implication from `R̂_v`.
+   - **Partitions:** a coverage and exclusivity check (D1P-05 style).
+   - **Refinements:** ground instances (sound), or `NC` (tagged
+     `CR_CONDITIONAL_OPEN`).
+
+   Any SAT is mapped back to an `Ω` model before M3/F1/F2. A result whose
+   transformation check fails or is missing is UNRESOLVED for that arm.
 3. **Consistency.** A validated disagreement (`VALIDATED_VIOLATION` against
    `RESOLVED_UNSAT`) stops the comparison as a preservation conflict.
    Unresolved against resolved is not a contradiction.
@@ -661,15 +695,38 @@ of every query hash are superseded):
    arm are **excluded** from any speedup figure and reported as counts. The
    metric is charged analysis time; final-validation time is reported
    separately and never enters the speedup.
-6. **Repetition** (fixed before measurement): `R = 5` measurement
-   replicates per (arm, obligation) on identical frozen inputs, run in a
-   pre-recorded randomized interleaving. Replicates are measurements, not
-   retries: none is re-run after a failure. Final validation applies to
-   replicate 1's candidate only. An obligation is resolved for an arm only if
-   every replicate returns the same result class and replicate 1 validates.
-   Otherwise it is unresolved and reported as unstable.
+6. **Repetition scheduling** (fixed before measurement):
+   - **Run 1.** Every (arm, obligation) runs once, in the pre-recorded
+     interleaved order with the method-order rotation.
+   - **Replication.** Only (arm, obligation) pairs **resolved in run 1** get
+     `R − 1 = 4` further replicates, on identical frozen inputs, in a
+     pre-recorded randomized interleaving recorded before run 1. Pairs left
+     unresolved in run 1 (timeout, RSS cutoff, solver UNKNOWN, error,
+     failed transformation check or failed validation) are **not**
+     replicated. They are charged their full analysis allowance for
+     reporting and stay UNRESOLVED.
+   - **Later failures.** Replicates are measurements, not retries: none is
+     re-run. If a later replicate times out or otherwise fails to resolve,
+     the pair becomes **unstable**: it is reported, counted UNRESOLVED and
+     excluded from `B`.
+   - **SAT models.** A replicate that returns SAT has its model
+     fingerprinted by projection onto the obligation's observations: the
+     eleven words, `block.basefee`, `msg.sender`, branch, derived id, and
+     committed effects with beneficiaries and amounts. **Every distinct
+     fingerprint is validated** through M3, F1 and F2, not only replicate
+     1's. A SAT pair resolves as `VALIDATED_VIOLATION` only if all replicates
+     are SAT and every distinct model validates. If some distinct model
+     fails, the pair is UNRESOLVED for comparison. Every validated model is
+     still preserved as system-level evidence.
+   - **UNSAT.** All replicates must return UNSAT. Mixed SAT/UNSAT replicates
+     go to the item-3 conflict check if any SAT validates; otherwise the pair
+     is unstable.
+   - **Allowance (DRAFT deviation from D1P-04 §1.3, which allows one
+     candidate per slot).** Up to `R` distinct candidates per (arm, slot),
+     the same for every arm, each with one F1 and one F2 call. This needs
+     planner approval.
 7. **Aggregation** (fixed before measurement): per obligation, the median of
-   the `R` charged analysis times. Per comparator, the per-obligation ratio
+   the `R` charged analysis times (run 1 plus the replicates). Per comparator, the per-obligation ratio
    `CD/X` over `B`, summarized by geometric mean with `|B|`, minimum and
    maximum. A runtime advantage over X is claimed only if `|B| ≥ 3`, the
    geometric-mean ratio is `≤ 0.5`, and the ratio is `< 1` on at least
@@ -688,33 +745,331 @@ before measurement.
 
 Declared risks:
 
-- Under `α`, the residual WarpToad relation (limb comparison, non-zero
-  checks, muxes, and on the order of 80 UF applications across both
-  membership branches for the tree depths in the commented test at
-  `main.nr:95-107`, UNRETRIEVED as constants) may be easy for every arm. This
-  ceiling effect would leave `B` without discriminating power.
+- Under `α`, the residual WarpToad relation may be easy for every arm. It
+  consists of limb comparison, non-zero checks, muxes and 84 source-level
+  hash applications: 40 BN254 Poseidon (3 + 32 + 5) and 44 Poseidon2
+  (2 + 42), with depths 42/32/5 from `constants/src/lib.nr` (D1P-12R). This
+  ceiling effect would leave `B` without discriminating power. The first
+  obligation, AUTH-1 (§6), is anticipated to be consumer-determined and is
+  excluded from H-CD claims.
 - WarpToad is single-claim, not batched (D1P-11 scope note).
 - D1P-09 found only 4–8 of 620 operations removable, and D1P-10 was null.
 
 A null result is a valid outcome, not a reason to retune.
 
-## 6. Lane A dependency register
+## 6. First obligation: AUTH-1 paired with NONVAC-1
 
-Every item below is an assumption of this design until the Lane A fixture
-exists and is hash-recorded.
+Status: **implementation-ready specification for review**. It is not
+authorization to run; execution needs a frozen, hash-complete manifest. The
+policy clauses it checks are DRAFT (§4), so any result is scoped to the
+DRAFT policy. The immediate-payout coverage policy (D3/F9) is **not** part of
+this obligation and remains separate and unresolved.
 
-| Id | Dependency | Used by |
+### 6.1 Scope
+
+- **One** successful `mint` call, producing one effect group, on **one**
+  WarpToad instance, on the same chain, with a **named relayer**.
+- Fixed admitted pre-state `S₀`: the state immediately before the D1P-12R
+  honest mint. That is a fresh no-fork Hardhat EDR chain with ID 31337, the
+  deployed token/verifier/WarpToad/GigaBridge, the one-shot `initialize`,
+  one faucet/wrap, and one burn. It is reconstructed by re-running D1P-12R's
+  `prepare` stage and hash-recorded in the freeze. This is fixed-pre-state
+  mode, not a `Reach_L` claim.
+- **Scope restrictions**, which are reported with every result and are not
+  witness fixes:
+  - `low160(w9) ≠ 1`: the wildcard relayer is outside scope (D1).
+  - Calls with `w9 = 1` are UNKNOWN (`SPECIFICATION_UNRESOLVED`).
+  - Cross-instance and cross-asset binding is **not established** (D4).
+- **Branches.** AUTH-1 is stated over the consumer's effects and public words
+  only, so it covers every producer branch (local, giga, Aztec) without a
+  case split. Source binding (F1, F2b, F6, F7) is deliberately **excluded**
+  and deferred to AUTH-2, which needs the §4.4 derivation and guarantee (b).
+
+### 6.2 Canonical joint obligation
+
+`Ω_AUTH1 = ⟨R̂_v, D_v, T_mint, S₀, Env, Policy_AUTH1, Goal⟩`, serialized
+canonically and hashed. Every arm's solver input is a checked transformation
+of `Ω_AUTH1` (§5.4 item 2).
+
+| Component | Definition |
+| --- | --- |
+| `R̂_v` | The full decoded ACIR of the withdraw artifact, with the hash layer of §6.4 applied. **Not** a selected cone. The decoded program is the D1P-13 canonical program `934c21fe…a93f`, identical for the committed and the rebuilt artifact. |
+| `D_v` | Accepted iff all eleven words are `< P`, the BN254 scalar modulus `21888…5617`. The map is the identity on `[0,P)`. Words `≥ P` cause a verifier revert, so no effect (D1P-12R §7). Addresses are `uint256(uint160(addr))`. Decoded public witnesses 0–10 map one-for-one to words 0–10 (D1P-13 §5). |
+| `T_mint` | `WarpToadCore.mint` (`Core.sol:143-177`) with `_formatPublicInputs` (`:114-140`), the root and nullifier guards, the verifier boundary (§6.3), checked `uint256` arithmetic, the fee branch, the wildcard branch, the OpenZeppelin `_mint` to non-zero receivers, and atomic rollback |
+| `Env` | `block.chainid = 31337`. `block.basefee` is symbolic over all of `uint256`, admitted arbitrarily (it is not a proof input). `msg.sender` is a symbolic non-zero address. |
+| `Policy_AUTH1` | F2a (within-call conservation), F4 (cap only), F5 (named-relayer beneficiaries), the single-group rule and nullifier-write linkage, all over **mint occurrences** (§6.2.1) |
+| Goal (violation) | A successful call whose committed occurrences satisfy G1 ∨ G2 ∨ G3 ∨ G4 ∨ G5 (§6.2.2) |
+
+#### 6.2.1 Effect occurrences and aggregate balances
+
+- **Mint occurrence.** A mint occurrence `m = (role, beneficiary b, amount v,
+  ordinal)` is created by each `_mint` executed inside a successful outer
+  `mint` call.
+  - The role comes from the extracted call site: `FEE` at `Core.sol:171`;
+    `RECIPIENT` at `:172` or `:175`.
+  - The ordinal is the execution order.
+  - If the outer call reverts, the call has **no** occurrences.
+- **Aggregate balances.** These are a separate observation:
+  - `Δbal(a)` is each account's balance change over the call; `Δsupply` is
+    the total-supply change.
+  - They are used only as an oracle cross-check, never as occurrences. The
+    cross-check is that `Σ_{m: b(m)=a} v(m) = Δbal(a)` for every account `a`,
+    and `Σ_m v(m) = Δsupply`.
+- **Nullifier-write occurrence.** One per committed write
+  `nullifiers[k] := true`.
+- **`fee_factor = 0`.** The `else` branch (`:173-176`) executes exactly one
+  `RECIPIENT` occurrence and **no** `FEE` occurrence. `x_F` is defined as `0`
+  by absence; it is not a zero-valued occurrence.
+- **Recipient equal to relayer.** There are two occurrences (`FEE` and
+  `RECIPIENT`) with the same beneficiary, and one aggregate balance change
+  equal to their sum. Occurrence identity is preserved; the balance merges
+  them.
+- **Zero-value mints.** An executed `_mint(b, 0)` **is** an occurrence,
+  following V2 and D1P-04 §1.5.
+  - A zero `RECIPIENT` occurrence is reachable (for example, `fee = amount`,
+    or `amount = 0` on the `else` branch).
+  - A zero `FEE` occurrence is not expected, because C2 and C5 plus checked
+    arithmetic make the fee at least 2. This is anticipated, not assumed;
+    the encoding must not exclude it.
+  - G3 and G4 treat zero-value occurrences as **material for the policy
+    property**. A zero-value occurrence to a wrong beneficiary, or a surplus
+    zero-value occurrence, is a violation. It is reported as a policy
+    violation **without** demonstrated financial impact, separately from
+    value-moving violations.
+
+#### 6.2.2 Violation disjuncts over occurrences
+
+Let `M` be the call's mint occurrences, `M_R` and `M_F` the
+`RECIPIENT`/`FEE` subsets, and `x_R = Σ_{m∈M_R} v(m)`,
+`x_F = Σ_{m∈M_F} v(m)` (`x_F = 0` if `M_F = ∅`), computed in unbounded
+integers.
+
+- **G1** (F2a): `x_R + x_F ≠ w2`.
+- **G2** (F4): `x_F > w8`.
+- **G3** (F5): some `m ∈ M_R` has `b(m) ≠ low160(w10)`, or some `m ∈ M_F`
+  has `b(m) ≠ low160(w9)`.
+- **G4** (single group): `|M_R| > 1`, or `|M_F| > 1`, or the aggregate
+  cross-check fails (an unattributed balance or supply change in the call).
+  `|M_R| = 0` is **not** an AUTH-1 violation: authorization does not require
+  exercise (contract §4.1). It would belong to the unresolved coverage
+  policy (D3).
+- **G5** (linkage): the number of committed nullifier-write occurrences is
+  not 1, or the written key is not `w0`.
+
+**NONVAC-1** uses the same `Ω` components, with Goal replaced by: a
+successful call with at least one committed mint or nullifier-write
+occurrence.
+
+*Anticipated, not an observation:* AUTH-1 is expected to be UNSAT because of
+the consumer's own arithmetic and beneficiary handling. It is an end-to-end
+**pipeline and encoding-fidelity** obligation, **not** a method advantage.
+A consumer-only UNSAT on AUTH-1 (for example Q1 in §6.8) is pipeline
+correctness and must not be reported as evidence for H-CD.
+
+### 6.3 Facts: extracted, assumed, policy
+
+| Fact | Grade | Source |
 | --- | --- | --- |
-| LA-1 | Pinned compiler choice (README beta.19 vs `noir_js` 1.0.0-beta.22 / `aztec-nargo`), compiled withdraw ACIR/ABI, and the 11-word ABI order | §1.1, §2, §3.2 provenance, M4/F1 |
-| LA-2 | Hashing and constants crates (hash composition, tree depths, zero leaves, Aztec siloing) | §2.1 C6/C7/C9, §3.1, §3.2 precondition 3 |
-| LA-3 | VK and generated keccakZK verifier: word canonicality (reject vs reduce) and expected public-input length | §1.2, §2.2 nullifier, §4.4 |
-| LA-4 | Equality of Solidity `PoseidonT3`/LazyIMT with the circuit hash/tree (A-HC) via test vectors, labeled ASSUMED unless proved | §3.2, §3.5 (B4), §4.4 D8, M3 |
-| LA-5 | Reference hash implementations for M3 concretization and ground tree instances | §3.3 refinement and (a′), M3 |
-| LA-6 | Concrete `L1WarpToad` and token (resolved OpenZeppelin version, no `_update` override), `GigaBridge`/provider initialization, fork-free owned deployment, chain ID and base-fee model; LazyIMT leaf storage, its leaf count equal to `lastLeafIndex`, and no other insertion path | §2.1 K1/K6, §4.2, §4.4 D6, §5.1 |
-| LA-7 | One accepted honest proof and vector, and one honest `mint` replay with a named relayer (`ff = 0` and `ff ≠ 0` if feasible) | §3.6 non-vacuity, §4.5 controls, F3 |
-| LA-8 | A separately frozen, planner-approved real-proof gate (F3) with equal method treatment | §3.6 |
+| Eleven-word ABI order equals `main.nr:13-34`; 7 private parameters; decoded public witnesses `[0..10]` map one-for-one to words 0–10 | EXTRACTED | D1P-12R §4.2, §5; D1P-13 §5 |
+| Source/artifact correspondence: the pinned beta.22 rebuild gives identical bytecode, decoded program, ABI, VK and verifier; artifact JSON differs only in 7 `file_map` paths | EXTRACTED (**MATCH**) | D1P-13 §2 |
+| `D_v` canonicality: the verifier requires each word `< P` before transcript absorption | EXTRACTED (generated verifier lines 568–581) plus observation (22/22 `ValueGeFieldOrder`) | D1P-12R §7 |
+| 11 caller words (19 verifier public inputs minus 8 pairing-point coordinates) | EXTRACTED (VK constants) | D1P-12R §4.2 |
+| Producer constraints `R_v`: 25,073 constrained opcodes, all parsed and classified, none skipped | **EXTRACTED** by the beta.22 decoder (`acir_binary_beta22.py`) | D1P-13 §3–4 |
+| 24,860 `AssertZero` and 107 `RANGE` | EXTRACTED, with semantics supported; all 24,967 satisfied by the honest D1P-12R witness | D1P-13 §4 |
+| 86 `Poseidon2Permutation` | EXTRACTED (parsed), **semantically unevaluated** by the checker | D1P-13 §3–4 |
+| 20 `BrilligCall` (5 functions, 96 VM instructions) | EXTRACTED and classified as witness generation, **not** proof constraints | D1P-13 §3 |
+| Consumer transition `T_mint`, guards, arithmetic, rollback, occurrence roles | EXTRACTED from `WarpToadCore.sol` `323a1cf2…` by a new WarpToad consumer lowering (the D1P-08 lowering is Payy-specific) | §1–§2 |
+| OpenZeppelin `_mint`/`_update` behavior of the concrete token | ASSUMED standard until the lock-resolved version and the absence of overrides are recorded | LA-6 |
+| Verifier boundary: `verify` returns true only if the words are canonical and a witness of `R_v` exists for them | ASSUMED (proof-system **soundness** only; knowledge soundness is not needed for AUTH-1) | A-PS |
+| Admitted pre-state `S₀` | ASSUMED (fixed pre-state; reconstructed, hash-recorded) | D1P-12R §6 |
+| `block.chainid = 31337`, no fork | EXTRACTED from the fixture | D1P-12R §6 |
+| F2a, F4 (cap only), F5, G1–G5 | DRAFT policy | §4.3, §6.2 |
+| A-CR, A-HC, knowledge soundness, `NC` | **Not used** by AUTH-1/NONVAC-1 | — |
 
-## 7. Assumptions, limitations and exposure
+Proof-enforced facts that `R̂_v` carries but AUTH-1 does not rely on as
+policy are C1–C5. In particular, C1 (`max_fee ≤ amount`) is an implementation
+fact, not a policy clause (§4.3).
+
+### 6.4 Hash abstraction layer
+
+- **Where Poseidon2 occurs.** At source level, Poseidon2 is used only inside
+  `aztec_merkle_verify` (`nargo_hashing/src/lib.nr:16-22`, `:49-77`), through
+  three call sites:
+  - the siloed note hash;
+  - the unique note hash; and
+  - the 42 node hashes.
+
+  Each `Poseidon2::hash` of three inputs uses one permutation (poseidon
+  v0.3.0 `poseidon2.nr:58-115`). `calculate_root` evaluates the hasher in
+  **both** arms of the left/right `if` (`merkle-trees/src/merkle.nr:81-89`).
+  The count of 86 is therefore consistent with `2 + 2·42`, but that is an
+  **inference**: D1P-13 recorded no per-opcode call-site provenance, so the
+  exact attribution remains open. `Poseidon2::hash` is `#[no_predicates]`
+  (`poseidon2.nr:14-17`), so all 86 permutations are **unconditionally**
+  proof-enforced, including on EVM-origin executions. Only the membership
+  assertion depends on `is_from_aztec`.
+- **Poseidon2 abstraction: layer L0, havoc.** Each of the 86 opcodes'
+  outputs become fresh unconstrained field variables, with no functionality
+  axiom. This is sound under Claim (a) using relation symbols. It
+  over-approximates exactly the 86 constraints D1P-13 leaves unevaluated.
+- **BN254 Poseidon** (`hash_1/2/3` and EVM/giga node `hash_2`) is arithmetic
+  (`poseidon/mod.nr` `permute`) and lies inside the 24,860 supported
+  `AssertZero`s. It is **retained exactly**; no abstraction applies.
+- **Brillig.** The 20 `BrilligCall`s are not constraints. Their output
+  witnesses are free variables, constrained only by the supported ACIR.
+  Hint semantics are never trusted.
+- No ground instances and no `NC` are used. An UNSAT for AUTH-1 under this
+  layer is a guarantee (a) result, with no `CR_ARGUMENT_OPEN`. These choices
+  are frozen per obligation and are the same for every arm.
+
+### 6.5 Frontend semantics (beta.22): status from D1P-13
+
+| Element | Count | Needed for | Status / required treatment |
+| --- | ---: | --- | --- |
+| `AssertZero` | 24,860 | All relations, including the BN254 Poseidon rounds | **Supported** (exact field semantics; honest witness satisfies all) |
+| `RANGE` | 107 | `Field.lt` limbs (C1); `to_le_bits` index bits | **Supported** (`value < 2^bits`) |
+| `BrilligCall` | 20 | Hints for `!= 0`, `Field.lt`, bit decomposition | **Classified** as witness generation; outputs treated as free witnesses |
+| `Poseidon2Permutation` | 86 | Aztec-branch hashing (unconditional; §6.4) | **Parsed, unevaluated**. Havoc in the solver (L0); evaluated for real only by route V-EXEC in §6.6 |
+| `MemoryInit`/`MemoryOp`/constrained `Call` | 0 | — | Absent; the decoder fails closed if present |
+| Any other opcode or black box | 0 | — | Named unsupported reason → UNKNOWN |
+
+Predicated lowering appears inside `AssertZero` expressions (for example
+the `if` at `main.nr:56`, `:70`). It needs no separate opcode support, but
+the encoder must carry it exactly.
+
+### 6.6 Validation
+
+#### 6.6.1 SAT route V-EXEC: executable concrete-model validation
+
+Every SAT model from AUTH-1 or NONVAC-1 is validated by route V-EXEC. Route (b)
+**replaces** F1/F2 of §3.6 for this obligation.
+
+1. **Assemble** the candidate's full ABI input assignment: the eleven public
+   words, the seven private parameters including the Merkle-data structs,
+   `block.basefee`, `msg.sender`, and the call's calldata. Intermediate
+   witnesses are not taken from the model.
+2. **Execute** with the pinned beta.22 `nargo execute` (Apple arm64 binary
+   SHA-256 `37f7d55d…6e7b`, compiler identity
+   `1.0.0-beta.22+c57152f9…`, D1P-13) on the D1P-13 rebuilt package or
+   committed artifact (identical decoded program). This evaluates **real**
+   Poseidon2, BN254 Poseidon, Brillig and **all** constraints.
+   - Pass: exit 0, and the witness's public values `0..10` equal the
+     candidate's words.
+   - Fail (for example, because a havoc'd Poseidon2 value was not the real
+     one): the candidate is spurious (`ACIR_REJECTED`).
+3. **Execute the consumer.** On a fresh owned-local EDR chain from `S₀`,
+   with the candidate's base fee and sender, call the unchanged
+   `WarpToadCore.mint` on exactly those public words. Observe occurrences
+   and aggregate balances with an independent oracle and evaluate G1–G5 (or
+   the NONVAC goal).
+   - No real proof exists for a solver candidate, so the verifier is
+     replaced by an owned stub that returns true **only** for the validated
+     eleven-word vector.
+   - The result is labeled **concrete-model grade**. It is real-proof grade
+     only if a real proof is later generated and accepted under the
+     separate F3 gate.
+4. If any part of V-EXEC is unavailable or fails to run (tool, harness,
+   `S₀` reconstruction), the candidate remains **UNKNOWN**. It is never
+   discarded as spurious and never promoted.
+
+A sound UNSAT from the over-approximation (§6.4) is unaffected by route V-EXEC.
+
+#### 6.6.2 NONVAC
+
+- **Honest anchor.** The D1P-12R honest execution is the anchor once it is
+  checked against the exact AUTH-1 scope and DRAFT policy:
+  - `S₀` and chain 31337;
+  - canonical words;
+  - named relayer `0x7099…79c8 ≠ 1`;
+  - `ff ≠ 0` (an occurrence-level `FEE` mint exists);
+  - occurrences `RECIPIENT(0x90f7…b906, 4,739,930,889,869,669,148)` and
+    `FEE(0x7099…79c8, 260,069,110,130,330,852)`, summing to `w2 = 5×10¹⁸`;
+  - `x_F ≤ w8 = 5×10¹⁸`;
+  - one nullifier write with key `w0`; and
+  - aggregates matching (supply `+5×10¹⁸`).
+
+  It falsifies G1–G5, so it is a legitimate non-vacuity witness for the
+  scope. Its real proof `07467f3d…` gives it **real-proof grade**.
+- **Encoding-fidelity regression.** The concrete assignment of the D1P-13
+  honest witness (25,384 values) with `S₀`, base fee `166,900,426` and
+  sender `0x7099…79c8` must satisfy the encoded `R̂_v ∧ D_v ∧ T_mint` success
+  path. A mismatch is an encoder bug that blocks primary execution.
+- **Solver NONVAC model.** It **need not** match the honest values. It must
+  independently pass route V-EXEC; the anchor does not validate it.
+
+#### 6.6.3 State regressions and controls
+
+- The identical second call must be predicted to revert (`nullifier already
+  exists`).
+- Each of the 22 non-canonical probes must be predicted to revert (`D_v`).
+- The fee-cap controls (§6.7) must have both outcomes predicted.
+
+### 6.7 Fee-cap fixtures
+
+Both fixtures use a **valid** proof. Changing the proof-bound `max_fee` (or
+any public word) alone only tests proof rejection, and **does not count**.
+The only lever is `block.basefee`, an environment value. `fee_factor` and
+`priority_fee` are proof-bound.
+
+One new honest proof (LA-7 extension) with the D1P-12R parameters except
+`max_fee = 10^18 < amount = 5×10^18`, with `fee_factor = 974,405,002` and
+`priority_fee = 10^8`, serves both fixtures, in this order:
+
+| Fixture | Base fee `β` | Expected | Required evidence |
+| --- | --- | --- | --- |
+| **FC-NEG** (b) | `β ≥ 926,267,310` wei (fee `≥ 1,000,000,000,253,084,620 > max_fee`), and small enough that `ff·(β+pf)` does not overflow and the sender can pay gas | Revert `Error("_relayerFee is larger than _maxFee")` at `Core.sol:166`, **after** verifier acceptance | (1) a static `verify(proof, _formatPublicInputs(…))` with the same words returns true; (2) the revert reason is exactly the cap string, not `invalid proof`, `Panic(0x11)` or a root/nullifier guard; (3) after the call, the nullifier is unset and balances and supply are unchanged |
+| **FC-POS** (a) | `β ≤ 926,267,309` wei (for example the D1P-12R value `166,900,426`, giving fee `260,069,110,130,330,852 ≤ 10^18`) | Success with `x_F = ff·(β+pf) ≤ max_fee < amount` and `x_R + x_F = amount` | Receipt, balance deltas, supply delta and the nullifier set; it must satisfy NONVAC-1 and falsify every AUTH-1 disjunct |
+
+Running FC-NEG first and then FC-POS with the same proof shows that the only
+difference is the environment. The base-fee control mechanism (for example
+EDR's next-block base-fee setting) and the gas funding are LANE-A items to be
+recorded in the fixture. FC-NEG is a consumer-guard control: the revert
+means no committed effect, so it is **not** a violation.
+
+### 6.8 D1P-14B experiment bound (diagnostic)
+
+D1P-14B may run **exactly three** frozen diagnostic queries over
+`Ω_AUTH1`/`Ω_NONVAC1`:
+
+| Id | Query | Producer relation | Interpretation |
+| --- | --- | --- | --- |
+| Q1 | AUTH-1 with `R_v` dropped | None. The verifier boundary accepts any canonical words (`D_v` kept); this over-approximates `Ω_AUTH1` | UNSAT is **pipeline correctness only** (consumer-determined) and sound for `Ω_AUTH1`. SAT is a candidate for route V-EXEC |
+| Q2 | AUTH-1 monolithic | Full `R̂_v` (§6.4 layer) | UNSAT is AUTH-1 `RESOLVED_UNSAT` for the scope and DRAFT policy, if NONVAC-1 validates. SAT goes to route V-EXEC |
+| Q3 | NONVAC-1 monolithic | Full `R̂_v` (§6.4 layer) | SAT must pass route V-EXEC. UNSAT contradicts the honest anchor and is an encoding defect |
+
+Rules:
+
+- **Solver budget.** One attempt per query, at most 300 solver-seconds each,
+  and **at most 900 solver-seconds** in total. Run sequentially under the
+  D1P-07 sampled-RSS policy (4 GiB observed cutoff) on the reference Mac.
+- **Separately declared setup and validation.** These are excluded from the
+  900 seconds, each with one attempt and its own logged wall time:
+  - setup: decode, encode, the transformation checks of §5.4 item 2, and
+    query hashing, at most 1,800 s wall in total, with no solver call;
+  - validation: at most one candidate per query, each with one route V-EXEC
+    `nargo execute` (≤ 600 s) and one consumer execution (≤ 600 s);
+  - the encoding-fidelity regression of §6.6.2.
+- **No tuning or refinement** after any SAT, timeout or unresolved result:
+  no option change, no reformulation, no retry, no added constraint.
+  A timeout, RSS cutoff or solver UNKNOWN is UNKNOWN.
+- **Freeze.** The three query hashes, solver binary/options, encoder and
+  `Ω` hashes are frozen before the first call. Q1–Q3 are diagnostics. They
+  are **not** a method comparison and support **no** H-CD claim.
+
+## 7. Lane A dependency register (status after D1P-12R and D1P-13)
+
+| Id | Dependency | Status | Used by |
+| --- | --- | --- | --- |
+| LA-1 | Compiler, compiled withdraw ACIR/ABI, 11-word order | **Resolved for the committed artifact:** beta.22+c57152f, `withdraw.json` `0cfad465…`, 11 public + 7 private parameters, ABI order = `main.nr:13-34`, behavior-validated (D1P-12R §4–5). **Resolved (D1P-13):** source-to-artifact rebuild **MATCH** (bytecode, decoded program, ABI, VK, verifier), and a beta.22 decoder that classifies all 25,073 opcodes. **Open:** per-opcode call-site provenance | §1.1, §2, §6.2–6.5, F1 |
+| LA-2 | Hashing and constants crates | **Resolved at source level:** `nargo_hashing` `ec0ad211…` (aliased `hashing`), constants `5f5538be…`, depths 42/32/5, formulas and domain separators (D1P-12R §3); `merkle-trees` index bits and poseidon v0.3.0 forms (B01-RO). **Partly resolved (D1P-13):** 86 `Poseidon2Permutation` opcodes decoded. **Open:** their exact call-site attribution (86 = 2 + 2·42 is an inference) and BN254 Poseidon region delimitation | §2.1, §3.1, §4.4 D3–D4, §6.4 |
+| LA-3 | VK, generated verifier, canonicality, public-input length | **Resolved:** VK `563a018c…`; verifier `d9a822a5…` byte-identical to the committed one; 11 caller words; **rejects words ≥ P** (22/22 `ValueGeFieldOrder`) (D1P-12R §4.2, §7) | §1.2, §2.2, §4.4, §6.2–6.3 |
+| LA-4 | Solidity `PoseidonT3`/LazyIMT equal to the circuit hash/tree (A-HC) | **Open.** One concrete agreement point (the honest path opens to the consumer root); no test vectors; library sources not inspected | §3.5 B4, §4.4 D8, M3 |
+| LA-5 | Reference hash implementations for M3 and ground instances | **Open** | §3.3, M3 |
+| LA-6 | Concrete token/WarpToad/GigaBridge, fork-free deployment, chain ID, base-fee model, LazyIMT leaf layout | **Resolved for the single-instance same-chain fixture:** fresh EDR chain 31337, no fork; GigaBridge and adapter as in D1P-12R §6; `aztecWarptoadAddress = 0`; Solidity 0.8.29, runs 1, Cancun. **Open:** lock-resolved OpenZeppelin version and `_update` overrides; base-fee control mechanism (needed by §6.7); LazyIMT leaf count equal to `lastLeafIndex`; GigaBridge/cross-chain roots | §2.1 K1/K6, §4.4 D6, §6.1, §6.7 |
+| LA-7 | Honest accepted proof and mint | **Resolved for one case:** proof `07467f3d…` (9,152 bytes), named relayer, `ff ≠ 0`, `max_fee = amount`; mint deltas and duplicate-call rejection (D1P-12R §6). **Open:** an `ff = 0` case and the `max_fee < amount` proof for FC-NEG/FC-POS (§6.7) | §3.6, §6.6–6.7 |
+| LA-8 | Real-proof gate (F3) | **Open** (planner decision). One proof took about 13 s in D1P-12R, which was diagnostic, not a performance result | §3.6 |
+
+## 8. Assumptions, limitations and exposure
 
 - **Scope.** All facts are source-level at one pinned revision. Nothing is
   established about deployment correspondence. Fixed-pre-state analysis is a
@@ -726,8 +1081,10 @@ exists and is hash-recorded.
   treats (b) as discharged.
 - **Exposure.** The source warning at `main.nr:11-12` was read again. It is
   exposure, already recorded by D1-02/D1P-11, not investigated here. At this
-  revision `aztec_warptoad_address` is a public input, but whether
-  `aztec_merkle_verify` uses it is UNRETRIEVED.
+  revision the actual `nargo_hashing` dependency siloes the note hash with
+  the public `aztec_warptoad_address` (D1P-12R §3). The unused `hashing`
+  package still has a `contract_address` member. No claim is made about the
+  warning's status.
 - **Modeling obligations, not findings.** The canonicality class (§1.2) and
   the shared-giga-tree domain question (§2.2, D4) are obligations the model
   must be able to express. Neither is claimed reachable. Any later confirmed
@@ -737,38 +1094,41 @@ exists and is hash-recorded.
   every line citation and policy clause. They are not independent
   annotations.
 
-## 8. Handoff
+## 9. Handoff
 
-- **Objective/status.** WarpToad joint-model design, revision 1, delivered
-  for review. Policy DRAFT, not approved; planner positions D1–D5 are recorded
-  as open. Guarantee (b) is open. The six-arm design is prospective and not
-  authorization to run. Verdict UNKNOWN.
-- **Files changed.** This document only. Ignored evidence from the original
-  task: `results/raw/D1P-B01/source/**` (five verified files) and
-  `results/raw/D1P-B01/retrieval.json`; the revision added no evidence.
-  Not changed: `README.md`, `docs/project-status.md` (the integrator updates
-  them, per the task instruction), any other worktree, and the D1P-11 record.
-- **Commands.** Original task: five `curl -fsSL` fetches (exit 0) and one
-  inline Python SHA-256 comparison, all five equal. Revision: reads of the
-  D1P-04 and D1P-07 protocols and the D1P-07 resource policy, plus text
-  edits. No build, solver, proof or test run in either.
-- **Failed approaches / unexpected observations.** None failed. The hashing
-  crate was never fetched by D1-02 or D1P-11, so B3 term coverage cannot be
-  enumerated yet. D1P-04 requires Linux for primary timing, while D1P-07's
-  memory policy is macOS-specific; this is recorded as a planner decision
-  (§5.3).
-- **Recommended next task.** Run the Lane A correspondence gate (D1P-11
-  handoff), extended with a hash-recorded fetch of the hashing/constants
-  crates. Completion criterion: (a) a pinned ACIR/ABI, VK and generated
-  verifier linked to `main.nr` `ce4bf56b…`, with the verifier's canonicality
-  behavior recorded, one accepted honest proof and vector with a named
-  relayer, A-HC test vectors, and a confirmed LazyIMT leaf-index layout
-  (D6); or (b) one reproducible blocker. Policy D1–D5 and the §5.4 draft
-  numbers should be decided by human review before any query is frozen.
+- **Objective/status.** WarpToad joint-model design, revision 3. §6 now
+  carries the D1P-13 facts, the V-EXEC validation route, the occurrence
+  semantics and the D1P-14B diagnostic bound. Policy DRAFT; D1–D6 open;
+  guarantee (b) open; prospective, not authorization to run. Verdict
+  UNKNOWN. The companion discriminating-obligation proposal is
+  [`d1p-b02-discriminating.md`](d1p-b02-discriminating.md).
+- **Files changed.** This document and `d1p-b02-discriminating.md`. Ignored
+  evidence: `results/raw/D1P-B01/source/**` and `retrieval.json` (revision
+  0), `rev2-readonly-reads.json` (revision 2), and `rev3-readonly-reads.json`
+  (revision 3: D1P-13 report and semantic check, the older `hashing`
+  package, and the poseidon v0.3.0 sponge). Not changed: `README.md`,
+  `docs/project-status.md`, and any other worktree (read-only access only).
+- **Commands.** Revision 0: five `curl -fsSL` fetches and a SHA-256 check.
+  Revisions 1–3: report, protocol and source reads, read-only hashing, one
+  base-fee threshold calculation, and text edits. No build, solver, proof,
+  test, chain or network call.
+- **Unexpected observations.**
+  - D1P-13 counts 86 Poseidon2 permutations against 44 source-level
+    Poseidon2 calls. The difference is consistent with both `if` arms of
+    `calculate_root` being lowered, and with `#[no_predicates]`. This is an
+    inference; per-opcode provenance is open.
+  - All 86 are unconditional, including on EVM-origin executions.
+- **Recommended next task.** D1P-14B under §6.8. Completion criterion: the
+  three frozen queries run within 900 solver-seconds with no tuning;
+  Q1/Q2/Q3 results and any route V-EXEC validations are recorded; the
+  encoding-fidelity regression of §6.6.2 passes or is reported as a
+  blocker.
 
-## 9. Change log
+## 10. Change log
 
 | Date | Revision | Changes |
 | --- | --- | --- |
 | 2026-10-26 | 0 | Initial design. |
 | 2026-10-26 | 1 | (1) §4.4: source-occurrence identity is now derived by a fixed function `id(g)` from proof-enforced (C7–C9), consumer-checked (K2) and consumer-recorded (burn leaves) facts. Uniqueness (D8) is ASSUMED; a failed derivation fails closed as `⊥`. The nullifier was removed from the key, and depositor chain/nullifier intent became ASSUMED ghost data (§4.2). (2) §3.3–3.5: plain-UF preservation (a) and its logical corollary (a′) are separated from the computational argument (b), whose obligations B1–B6 (extraction, multi-proof extraction, term coverage, instance identity, CR domain, accounting) are listed as open; results relying on `NC` are UNKNOWN (`CR_ARGUMENT_OPEN`). (3) §3.6/§5.3: D1P-03 budgets and upfront hashing of every query were replaced with D1P-04 §1 rules and the D1P-07 sampled-RSS policy. Method-internal concretization (M1–M4) is charged to the method; final validation (F1–F2) has a separate, equal per-method allowance; adaptive queries are hashed before execution. Partitioning is a shared factor, and the arms were aligned with D1P-04's five methods plus CD-NOPROP. The guard-removal variant was moved out of the arms. (4) §5.4: a new decision rule over validated outcomes under identical semantics. Runtime is compared only on obligations both arms resolve, with unresolved obligations excluded, and repetition and aggregation are fixed before measurement. The design is stated as prospective. (5) §4.3/§4.5: planner inputs D1–D5 are recorded as open. F3 became the separate FEE-FORMULA property; F9 is proposed explicitly for WarpToad; the one-instance limit on F7 and the D5 occurrence rule are stated. |
+| 2026-10-26 | 2 | Incorporated D1P-12R (read-only). (1) §7: LA-1..LA-8 marked resolved or open. LA-3 is resolved: the verifier rejects words ≥ P (22/22 `ValueGeFieldOrder`); §1.2, §2.2, §3.5 B5 and §4.4 were updated accordingly. Hash, Merkle and depth facts were updated from `nargo_hashing`/constants/`merkle-trees`/poseidon v0.3.0 (D1P-12R and B01-RO). (2) §5.3: the reference platform is this Mac (D1P-06/07); the Linux requirement was removed. (3) §5.1, §5.4: "byte-identical formulas" was replaced by the same canonical joint obligation `Ω`, with every arm's transformation checked against it. (4) §4.3: `max_fee ≤ amount` was removed from policy (undocumented, not implied); C1 remains an extracted fact. F2 was split into F2a (within call) and F2b (source), and F8 was revised. (5) New §6: the first obligation is AUTH-1 paired with NONVAC-1 (cap plus within-call conservation, named relayer, single instance); D3 coverage stays separate and unresolved. (6) §5.4 item 6: a repetition scheduling rule (replicate only run-1-resolved pairs; timeouts handled; every distinct SAT model validated). (7) §6.7: FC-NEG/FC-POS fee-cap fixtures driven by `block.basefee` with one valid proof. (8) §6: the implementation specification (canonical obligation, extracted/assumed facts, hash layer, required beta.22 semantics, and the D1P-12R validation oracle). Also added D6 (beneficiary selection) and renumbered §6–§9 to §7–§10. |
+| 2026-10-27 | 3 | §6 amended with D1P-13 (read-only). (a) `R_v` is EXTRACTED (MATCH; 24,860 `AssertZero` + 107 `RANGE` checked; 86 Poseidon2 unevaluated; 20 Brillig witness-generation). The "blocker until D1P-13" entries were removed, and where Poseidon2 occurs was restated (Aztec branch only, unconditional through `#[no_predicates]`; 86 = 2 + 2·42 is an inference). (b) New executable SAT route V-EXEC (§6.6.1): pinned beta.22 `nargo execute` with real Poseidon2, then the unchanged consumer in the owned-local EVM, labeled concrete-model grade without a real proof; UNKNOWN if the route is unavailable. (c) NONVAC: the D1P-12R anchor was checked against the AUTH-1 scope and DRAFT policy; a solver NONVAC model must pass V-EXEC independently. (d) §6.2.1: mint occurrences versus aggregate balances; the `ff = 0`, recipient = relayer and zero-value cases; G1–G5 restated over occurrences (`|M_R| = 0` is not an AUTH-1 violation). (e) §6.8: the D1P-14B bound (Q1–Q3, one attempt, 300 s each, 900 s total, setup/validation declared separately, no tuning). LA-1/LA-2, §3.5 B3, §3.6 F1 and §4.4 D4 were updated accordingly. |
