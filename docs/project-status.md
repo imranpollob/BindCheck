@@ -76,8 +76,9 @@ flowchart TD
     d1p16 --> d1p18["D1P-18 fail-closed hardening [DONE]"]
     d1pint1 --> d1p15["D1P-15 O1 hash + injected gates [DONE]"]
     d1p15 --> d1p19["D1P-19 remaining B02 prerequisites [DONE]"]
-    d1p19 --> d1p20["D1P-20 remaining campaign inputs [NEXT]"]
-    d1p20 --> plannerReview["O1/O2 planner review + freeze [WAITING]"]
+    d1p19 --> d1p20["D1P-20 extracted consumer model [DONE]"]
+    d1p20 --> d1p21a["D1P-21A exact-state + M-DOM gates [DONE]"]
+    d1p21a --> plannerReview["O1/O2 planner review + remaining gates [NEXT]"]
     plannerReview --> capabilityGate["Automated discovery + E4 capability gate [WAITING]"]
     d1p10 --> d1p10result["Transformed-arm eligibility [UNKNOWN]"]
     d1p10result --> d1p10decision["Selected-cone backend reconsideration [WAITING]"]
@@ -129,10 +130,10 @@ flowchart TD
     classDef waiting fill:#D9D9D9,stroke:#B3B3B3
     classDef unknown fill:#FFE0C2,stroke:#FF9E42
 
-    class foundation,fixture,payy,sourceCheck,coneGate,nineCases,failureAnalysis,v3Rerun,generalGate,tracking,livingTree,d100,d101,d102,d103preflight,d103review,d103typed,d103boundary,d103guards,d103guardreview,d103concrete,d103replayreview,d103recovery,d1p00,d1p01,d1p01artifact,d1p02,d1p03,d1p04,d1p05,d1p04elig,d1p07,d1p08,d1p09,d1p10,d1p11,d1p12,warptoadRecovery,d1p12r,d1p13,d1p14a,d1p14b,d1p14c,d1p14d,d1p17,d1pint1,d1p16,d1p18,d1p15,d1p19 done
+    class foundation,fixture,payy,sourceCheck,coneGate,nineCases,failureAnalysis,v3Rerun,generalGate,tracking,livingTree,d100,d101,d102,d103preflight,d103review,d103typed,d103boundary,d103guards,d103guardreview,d103concrete,d103replayreview,d103recovery,d1p00,d1p01,d1p01artifact,d1p02,d1p03,d1p04,d1p05,d1p04elig,d1p07,d1p08,d1p09,d1p10,d1p11,d1p12,warptoadRecovery,d1p12r,d1p13,d1p14a,d1p14b,d1p14c,d1p14d,d1p17,d1pint1,d1p16,d1p18,d1p15,d1p19,d1p20,d1p21a done
     class analysis,d1,d1paper,d103,d103impl,d103consumer,d103effects active
-    class d103linkreview,d1p20 next
-    class evaluation,history,heldOut,baselines,manuscript,claims,artifacts,draft,transferCase,sensitivity,submit,t22,acirSummary,d104,d105,d106,d107,d108,d103symbolic,d1p09decision,d1p10decision,warptoadJoint,plannerReview,capabilityGate waiting
+    class d103linkreview,plannerReview next
+    class evaluation,history,heldOut,baselines,manuscript,claims,artifacts,draft,transferCase,sensitivity,submit,t22,acirSummary,d104,d105,d106,d107,d108,d103symbolic,d1p09decision,d1p10decision,warptoadJoint,capabilityGate waiting
     class contribution,primaryResult,generalResult,d103gate,d103recoveryresult,d1p06,d1p10result,d1p14bresult,d1p14cresult,d1p14dresult,d1p17result unknown
 ```
 
@@ -353,8 +354,20 @@ flowchart TD
     variant pairings/public layouts, and passes P6 term/function/domain checks.
     L0 is documented as 344 independent Poseidon2 havoc outputs; draft L1 adds
     only shared-function equality for equal inputs, never injectivity. The
-    O1/O2 protocol is not frozen and no solver ran. D1P-20 and planner review
-    are next; D1 remains UNKNOWN.
+    O1/O2 protocol is not frozen and no solver ran. D1 remains UNKNOWN.
+37. Done at the extracted-model component level:
+    [D1P-20](extraction/d1p-20-extracted-solver-model.md) replaces the manual
+    WarpToad consumer implementation summary for the tested mint fragment with
+    the D1P-18 AST relation. Five archived executions and eight deterministic
+    controls match, and the full/T-ARITH queries parse. Policy and role mapping
+    remain manual; zero primary queries and zero proofs run.
+38. Done for campaign gates 1 and 3: [D1P-21A](../reports/D1P-21A.md)
+    generates four new one-shot real proofs from exact `S_DOM`/`S_SRC` under
+    the pinned, M-DOM, and M-SRC pairings; all four verifier/mint/effect checks
+    pass. M-DOM's own ABI-derived 86-call L1 provenance, 77 exact BN254
+    regions, and exhaustive pinned delta are frozen. Privileged synthetic
+    `S_DOM` admission is not cross-chain evidence. No solver campaign,
+    performance, automatic-discovery, vulnerability, or D1 result follows.
 
 The end goal does not imply that submission is currently justified. Contract
 revision 2 retains authorization and coverage but makes automated discovery
@@ -377,9 +390,11 @@ solver. D1P-17 keeps only T-ARITH as a shared over-approximation, retires
 T-OVF with multiplication equivalence unresolved and no demonstrated benefit,
 and leaves Q3's termination cause unidentified. Merged Lane C D1P-16/18 work
 records 22/22 combined structural/control coverage, not 22 EVM executions.
-D1P-19 completes the bounded B02 P1/P3/P4/P6 prerequisites, but the campaign
-draft waits for D1P-20 and planner review and does not complete the capability
-gate. Neither screen, blocker,
+D1P-19 completes the bounded B02 P1/P3/P4/P6 prerequisites. D1P-20 supplies
+the extracted-consumer implementation model for the tested mint fragment,
+and D1P-21A passes exact-state non-vacuity plus independent M-DOM provenance.
+The campaign draft still awaits remaining-gate and planner review and does not
+complete the capability gate. Neither screen, blocker,
 development fixture nor component check is a method-evaluation,
 cross-chain, policy or security result. D1
 preparation and reporting closure are complete; three missing historical query
@@ -443,6 +458,8 @@ slots were executed.
 | 2026-10-27 | D1P-16/18 WarpToad consumer extraction and hardening | `[DONE]` bounded component / `[UNKNOWN]` capability and security | [Feasibility](extraction/d1p-16-feasibility.md) and [hardening](extraction/d1p-18-hardening.md): recover 22 pinned `WarpToadCore.mint` terminal families from the solc AST, fail closed on unsupported semantics or pin drift, and pass source-mutation plus edge controls. The accurate outcome is **22/22 combined structural/control coverage**, not 22 EVM executions: five archived executions select only `p02`, `p06`, `p18`, and `p21`. This one-entry-point result does not derive policy, establish general extraction, or satisfy the capability gate. |
 | 2026-10-27 | D1P-17 bounded consumer-arithmetic backend study | `[DONE]` bounded study / `[UNKNOWN]` full-producer results | [Report](../reports/D1P-17-consumer-backends.md), [monitor audit](../reports/D1P-17-monitor.md), [protocol](../protocols/d1/d1p-17-consumer-backends.json), and [freeze](../metadata/d1/d1p-17-primary-freeze.json): keep T-ARITH as a shared over-approximation; retire T-OVF because multiplication equivalence is unresolved and it demonstrated no benefit. T-ARITH Q1 resolves only an abstract producer-dropped diagnostic as UNSAT; its full-producer call and all T-OVF primaries remain UNKNOWN. Q3's termination cause remains unidentified. No performance, transformation-equivalence, consumer-direction, capability or security conclusion follows. |
 | 2026-10-27 | D1P-19 remaining B02 prerequisites | `[DONE]` prerequisites / `[UNKNOWN]` campaign and security | [Report](../reports/D1P-19.md), [protocol](../protocols/d1/d1p-19-prerequisites.json), and ignored evidence manifest: check locality/functionality for 77 exact compiler-lowered BN254 Poseidon regions; pass an **INJECTED** M-SRC real-proof mint and identical-proof pinned K2 rejection; freeze canonical `S_DOM`/`S_SRC`; record pinned/M-DOM/M-SRC artifact, key, verifier, witness and public-layout provenance; and pass P6 term/function/domain checks. L0 has 344 independent Poseidon2 havoc outputs; draft L1 adds shared functional equality only, never injectivity. No solver ran. The O1/O2 protocol remains unfrozen pending D1P-20 and planner review; D1 remains `[UNKNOWN]`. |
+| 2026-10-27 | D1P-20 extracted consumer model | `[DONE]` component / `[UNKNOWN]` campaign and security | [Model record](extraction/d1p-20-extracted-solver-model.md): replace the manual implementation summary for the tested `WarpToadCore.mint` fragment with the D1P-18 extracted relation while retaining G1–G5 and role mapping as separate manual policy inputs. Full/T-ARITH queries parse; five archived executions and all eight D1P-14D deterministic controls match. Zero primary solver calls and zero proofs run. This does not establish automatic obligation discovery, E4 validation, performance or security. |
+| 2026-10-27 | D1P-21A exact-state non-vacuity and M-DOM provenance | `[DONE]` gates 1 and 3 / `[UNKNOWN]` campaign and security | [Report](../reports/D1P-21A.md) and ignored evidence manifest: generate exactly one new real proof for each of pinned + `S_DOM`, **INJECTED** M-DOM + `S_DOM`, pinned + `S_SRC`, and **INJECTED** M-SRC + `S_SRC`; all four correct artifact/VK/verifier pairings accept and actual mints commit the expected `5e18` recipient/supply and nullifier effects. Independently derive M-DOM private contract witness 59, classify all 86 L1 Poseidon2 calls, check all 77 exact BN254 regions, and freeze an exhaustive pinned delta. Synthetic `S_DOM` admission is privileged. No satisfiability solver campaign, cross-chain reachability, performance, automatic discovery, vulnerability or D1 verdict follows. |
 
 ## Update rule
 

@@ -4,10 +4,10 @@ BindCheck investigates whether the guarantees of an accepted zero-knowledge proo
 
 The current integration checkout is the linked worktree
 `/Users/imranpollob/Coding/bc/bindcheck-d1-paper` on `d1-paper`, currently at
-the integrated `main`/`d1-paper` revision
-`b2366b5262cf8ce51521f2c21141aa5a54313b2a` plus the uncommitted D1P-19
-prerequisite evidence. This state includes D1P-17 and the merged Lane C
-taxonomy/extraction work as well as the committed D1P-15 evidence. The linked
+integrated revision `4897d6814ab1eb8adf1bae6526b5ac4436b8dd10` plus the
+uncommitted D1P-21A gate evidence. This state includes D1P-19, the integrated
+D1P-20 extracted consumer model, D1P-17, and the merged Lane C taxonomy and
+extraction work. The linked
 worktree was originally established from `chatgpt-codex` revision
 `cce1a966eb84e8e9819c6f658ca4ce07fd670036`.
 [D1P-00](reports/D1P-00.md) records the branch/worktree baseline and the
@@ -30,6 +30,26 @@ The principal directories are `circuits/` and `contracts/` for the small fixture
 
 ## Current status
 
+- [D1P-21A](reports/D1P-21A.md) passes campaign gates 1 and 3 without a
+  solver campaign. Four new one-shot 9,152-byte proofs execute exact-state
+  honest transitions for pinned + `S_DOM`, **INJECTED** M-DOM + `S_DOM`,
+  pinned + `S_SRC`, and **INJECTED** M-SRC + `S_SRC` under each variant's
+  correct artifact/VK/verifier/consumer pairing. All four verifiers accept,
+  mints succeed, nullifiers are consumed, and recipient/supply deltas are
+  `5e18` with zero relayer mint. M-DOM is independently decoded: its own ABI
+  derives private contract witness 59, all 86 L1 Poseidon2 calls and 77 exact
+  BN254 regions pass provenance/locality checks, and an exhaustive decoded
+  delta from pinned is frozen. `S_DOM` admission is privileged/synthetic; no
+  cross-chain, policy, solver-campaign, performance, vulnerability, automatic-
+  discovery, or D1 verdict follows. D1 remains UNKNOWN.
+- [D1P-20](docs/extraction/d1p-20-extracted-solver-model.md) replaces the
+  manual consumer summary with the D1P-18 extracted `WarpToadCore.mint`
+  relation for the tested fragment while retaining G1–G5 and role mapping as
+  separate manual policy inputs. The full and T-ARITH queries parse, five
+  archived executions and all eight D1P-14D controls match, and no primary
+  solver query or proof runs. This is an extracted implementation-model
+  component, not automatic obligation discovery, E4 validation, performance,
+  or a security result.
 - [D1P-19](reports/D1P-19.md) completes the remaining bounded B02
   prerequisites without a solver campaign. An artifact-specific P1 extractor
   checks locality and straight-line functionality for all 77 compiled BN254
@@ -39,7 +59,9 @@ The principal directories are `circuits/` and `contracts/` for the small fixture
   fails the pinned K2 local-root guard with no state change. Hash-recorded
   `S_DOM`/`S_SRC`, complete pinned/M-DOM/M-SRC provenance, and the P6
   term/function/domain audit pass. The future O1/O2 protocol and L1 functional
-  Poseidon2 layer remain draft and unfrozen pending D1P-20 and planner review.
+  Poseidon2 layer remain draft and unfrozen; D1P-20 and D1P-21A subsequently
+  supply the extracted-consumer component and exact-state gates, but campaign
+  freezing still requires separate review.
   No security, cross-chain, performance, automatic-discovery or D1 verdict
   follows; D1 remains UNKNOWN.
 - [D1P-17](reports/D1P-17-consumer-backends.md) closes the bounded consumer-
@@ -323,6 +345,12 @@ demonstrated benefit; its Q3 termination cause remains unidentified. The
 merged Lane C extractor records 22/22 combined structural/control coverage,
 not 22 EVM executions. D1P-19 completes the bounded B02 P1/P3/P4/P6
 prerequisites and drafts—but does not freeze or run—the future O1/O2 campaign.
+D1P-20 replaces the manual consumer implementation summary for the tested
+mint fragment with the extracted relation while leaving policy manual and
+running no primary campaign. D1P-21A then passes exact-state non-vacuity for
+four pinned/injected pairings and independently inventories M-DOM's 86 L1
+Poseidon2 calls and 77 exact BN254 regions. The controls use real proofs but
+do not freeze or run O1/O2.
 These are development artifact/component results, not general
 policy validation, cross-chain evidence or a security result. The exact N=8 forwarding artifact/key,
 full-producer propagation, joint query, proof, and accepted full settlement
@@ -352,9 +380,10 @@ The principal directories are `circuits/` and `contracts/` for the small fixture
 ## Checking this checkout
 
 The D1P-10 complete unittest checkpoint used Python 3.13.7 and PyCryptodome
-3.23.0 (189/189 passing). D1P-19's targeted beta.22/D1P-15/D1P-19 pytest run
-used Python 3.14.7 and passed 18 tests plus 12 subtests; those artifact-specific
-tests require the ignored evidence workspaces. The small upstream Noir test-source
+3.23.0 (189/189 passing). D1P-21A uses Python 3.13.9: its focused set passes
+11 tests, and the complete D1 suite passes 231 tests plus 312 subtests. The
+artifact-specific D1P-15/19/21A tests require the ignored evidence workspaces.
+The small upstream Noir test-source
 excerpts, provenance and MIT notice
 are included under `tests/d1/fixtures/`; unit controls need no compiler download,
 proof, solver, generated artifact or historical raw log. To set up and run them:

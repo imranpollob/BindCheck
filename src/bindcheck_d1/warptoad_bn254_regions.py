@@ -1,6 +1,8 @@
-"""Checked BN254 Poseidon region extraction for the pinned WarpToad artifact.
+"""Checked BN254 Poseidon region extraction for beta.22 WarpToad artifacts.
 
-This is a deliberately artifact-specific P1 checker.  It uses beta.22 debug
+The default is the frozen pinned artifact; callers may provide a separately
+frozen variant identity and debug-line layout.  This is a deliberately
+artifact-specific P1 checker.  It uses beta.22 debug
 locations to propose regions and then checks the proposal against decoded ACIR:
 
 * every equation in a permutation core has one fresh, linearly-defined target;
@@ -53,7 +55,11 @@ def _target(expression: dict) -> int:
     return candidates[0]
 
 
-def _debug_region_key(artifact: dict, debug: dict, opcode_index: int):
+def _debug_region_key(
+    artifact: dict, debug: dict, opcode_index: int,
+    direct_lines: tuple[int, int, int] = (43, 44, 45),
+    merkle_withdraw_lines: tuple[int, int] = (61, 73),
+):
     stack = _call_stack(artifact, debug, opcode_index)
     if not any("/poseidon/bn254/" in frame["path"] for frame in stack):
         return None
@@ -69,7 +75,7 @@ def _debug_region_key(artifact: dict, debug: dict, opcode_index: int):
         ]
         if len(merkle) != 1 or len(withdraw) != 1:
             raise ValueError("ambiguous BN254 Merkle debug stack")
-        if merkle[0]["line"] not in (84, 88) or withdraw[0]["line"] not in (61, 73):
+        if merkle[0]["line"] not in (84, 88) or withdraw[0]["line"] not in merkle_withdraw_lines:
             raise ValueError("unexpected BN254 Merkle debug location")
         return ("merkle", merkle[0]["line"], withdraw[0]["line"])
     direct = [
@@ -77,17 +83,23 @@ def _debug_region_key(artifact: dict, debug: dict, opcode_index: int):
         if frame["path"].endswith("/nargo_hashing/src/lib.nr")
         and "poseidon::bn254::hash_" in frame["snippet"]
     ]
-    if len(direct) != 1 or direct[0]["line"] not in (43, 44, 45):
+    if len(direct) != 1 or direct[0]["line"] not in direct_lines:
         raise ValueError("unexpected direct BN254 debug location")
     return ("direct", direct[0]["line"])
 
 
-def _contiguous_debug_regions(artifact: dict, debug: dict, opcodes: list[dict]) -> list[dict]:
+def _contiguous_debug_regions(
+    artifact: dict, debug: dict, opcodes: list[dict],
+    direct_lines: tuple[int, int, int] = (43, 44, 45),
+    merkle_withdraw_lines: tuple[int, int] = (61, 73),
+) -> list[dict]:
     result: list[dict] = []
     start = None
     active_key = None
     for index in range(len(opcodes) + 1):
-        key = _debug_region_key(artifact, debug, index) if index < len(opcodes) else None
+        key = _debug_region_key(
+            artifact, debug, index, direct_lines, merkle_withdraw_lines,
+        ) if index < len(opcodes) else None
         if key != active_key:
             if active_key is not None:
                 result.append({"debug_start": start, "debug_end": index - 1, "debug_key": active_key})
@@ -104,28 +116,47 @@ def _expression_record(expression: dict) -> dict:
     }
 
 
-def extract_bn254_regions(artifact_path: str | Path) -> dict:
-    """Extract and check all 77 BN254 Poseidon regions in the pinned artifact."""
+def extract_bn254_regions(
+    artifact_path: str | Path,
+    *,
+    expected_artifact_sha256: str = EXPECTED_PINNED_ARTIFACT_SHA256,
+    region_id_prefix: str = "BN254-R",
+    variant: str = "pinned",
+    direct_lines: tuple[int, int, int] = (43, 44, 45),
+    merkle_withdraw_lines: tuple[int, int] = (61, 73),
+) -> dict:
+    """Extract and check all 77 BN254 Poseidon regions in a beta.22 variant.
+
+    The default remains the frozen pinned-artifact check used by D1P-19.  A
+    caller may supply a separately frozen artifact identity for a variant;
+    all witness definitions and boundaries are then recovered from that
+    artifact's own decoded opcodes rather than copied from pinned evidence.
+    """
     artifact_path = Path(artifact_path)
     artifact_bytes = artifact_path.read_bytes()
     artifact_sha256 = hashlib.sha256(artifact_bytes).hexdigest()
-    if artifact_sha256 != EXPECTED_PINNED_ARTIFACT_SHA256:
-        raise ValueError(f"unexpected pinned artifact hash {artifact_sha256}")
+    if artifact_sha256 != expected_artifact_sha256:
+        raise ValueError(
+            f"unexpected {variant} artifact hash {artifact_sha256}; "
+            f"expected {expected_artifact_sha256}"
+        )
     artifact = json.loads(artifact_bytes)
     decoded = decode(artifact_path)
     opcodes = decoded["functions"][0]["opcodes"]
     debug = _debug_info(artifact)
-    proposed = _contiguous_debug_regions(artifact, debug, opcodes)
+    proposed = _contiguous_debug_regions(
+        artifact, debug, opcodes, direct_lines, merkle_withdraw_lines,
+    )
     if len(proposed) != 77:
         raise ValueError(f"expected 77 debug regions, observed {len(proposed)}")
 
     expected_keys = (
-        [("merkle", side, 61) for _level in range(5) for side in (84, 88)]
-        + [("direct", 43), ("direct", 44), ("direct", 45)]
-        + [("merkle", side, 73) for _level in range(32) for side in (84, 88)]
+        [("merkle", side, merkle_withdraw_lines[0]) for _level in range(5) for side in (84, 88)]
+        + [("direct", direct_lines[0]), ("direct", direct_lines[1]), ("direct", direct_lines[2])]
+        + [("merkle", side, merkle_withdraw_lines[1]) for _level in range(32) for side in (84, 88)]
     )
     if [row["debug_key"] for row in proposed] != expected_keys:
-        raise ValueError("BN254 debug-region order differs from the pinned construction")
+        raise ValueError(f"BN254 debug-region order differs from the expected {variant} construction")
 
     all_references: dict[int, set[int]] = defaultdict(set)
     for opcode in opcodes:
@@ -162,11 +193,11 @@ def extract_bn254_regions(artifact_path: str | Path) -> dict:
         core_indices = list(range(core_start, row["debug_end"] + 1))
         if kind == "merkle" and len(core_indices) != 317:
             raise ValueError("BN254 hash2 core does not contain 317 equations")
-        if row["debug_key"] == ("direct", 43) and len(core_indices) != 329:
+        if row["debug_key"] == ("direct", direct_lines[0]) and len(core_indices) != 329:
             raise ValueError("BN254 hash1 core does not contain 329 equations")
-        if row["debug_key"] == ("direct", 44) and len(core_indices) != 344:
+        if row["debug_key"] == ("direct", direct_lines[1]) and len(core_indices) != 344:
             raise ValueError("BN254 hash3 core does not contain 344 equations")
-        if row["debug_key"] == ("direct", 45) and len(core_indices) != 317:
+        if row["debug_key"] == ("direct", direct_lines[2]) and len(core_indices) != 317:
             raise ValueError("BN254 commitment hash2 core does not contain 317 equations")
 
         output_link = None
@@ -181,10 +212,10 @@ def extract_bn254_regions(artifact_path: str | Path) -> dict:
                 output_link = right["debug_end"] + 2
             else:
                 output_link = row["debug_end"] + 4
-        elif row["debug_key"] == ("direct", 43):
+        elif row["debug_key"] == ("direct", direct_lines[0]):
             output_link = 4294
-        elif row["debug_key"] == ("direct", 44):
-            consumer = opcodes[direct_by_line[45]["debug_start"]]
+        elif row["debug_key"] == ("direct", direct_lines[1]):
+            consumer = opcodes[direct_by_line[direct_lines[2]]["debug_start"]]
             if consumer["opcode_index"] != 3977:
                 raise ValueError("hash3 output is no longer fused into hash2 opcode 3977")
             virtual_output = {
@@ -259,10 +290,10 @@ def extract_bn254_regions(artifact_path: str | Path) -> dict:
             raise ValueError(f"BN254 internal witnesses escape region: {escapes}")
 
         construction = (
-            "giga_merkle_hash2" if kind == "merkle" and row["debug_key"][2] == 61 else
+            "giga_merkle_hash2" if kind == "merkle" and row["debug_key"][2] == merkle_withdraw_lines[0] else
             "evm_merkle_hash2" if kind == "merkle" else
-            "nullifier_hash1" if row["debug_key"] == ("direct", 43) else
-            "precommitment_hash3" if row["debug_key"] == ("direct", 44) else
+            "nullifier_hash1" if row["debug_key"] == ("direct", direct_lines[0]) else
+            "precommitment_hash3" if row["debug_key"] == ("direct", direct_lines[1]) else
             "commitment_hash2"
         )
         orientation = None if kind != "merkle" else ("left" if row["debug_key"][1] == 84 else "right")
@@ -271,7 +302,7 @@ def extract_bn254_regions(artifact_path: str | Path) -> dict:
             earlier = [item for item in regions if item["construction"] == construction]
             level = len(earlier) // 2
         regions.append({
-            "region_id": f"BN254-R{ordinal:02d}",
+            "region_id": f"{region_id_prefix}{ordinal:02d}",
             "construction": construction,
             "merkle_level": level,
             "orientation_candidate": orientation,
@@ -299,6 +330,7 @@ def extract_bn254_regions(artifact_path: str | Path) -> dict:
     return {
         "schema": "bindcheck.d1p19.bn254-region-extraction/v1",
         "classification": "checked artifact-specific extraction; no BN254 abstraction applied",
+        **({} if variant == "pinned" else {"variant": variant}),
         "artifact": {
             "path": str(artifact_path.resolve()),
             "sha256": artifact_sha256,
