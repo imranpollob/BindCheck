@@ -1,0 +1,66 @@
+{
+  "schema": "bindcheck.d1p17.protocol/v1",
+  "task": "D1P-17",
+  "classification": "bounded development study",
+  "diagnosis": "The current consumer-only encoding times out; nonlinear fee arithmetic is a suspected bottleneck.",
+  "monitor": {
+    "audit": "Distinguish root-process disappearance, monitor access failure, and confirmed process exit; -9 alone does not attribute cause.",
+    "harmless_tests": [
+      "normal exit",
+      "timeout",
+      "memory cutoff",
+      "child spawn",
+      "early root exit"
+    ]
+  },
+  "backend_options": {
+    "mutually_exclusive": true,
+    "available_to_all_later_method_arms": true,
+    "T-ARITH": "Replace the fee value with a fresh uint256 while retaining branch structure and every applicable successful-path guard.",
+    "T-OVF": "Replace zero-extension unsigned-overflow checks with native cvc5 bvuaddo/bvumulo predicates."
+  },
+  "overflow_equivalence": {
+    "width": 256,
+    "maximum_general_symbolic_calls": 2,
+    "calls": ["addition", "multiplication"],
+    "seconds_each": 60,
+    "unresolved_disposition": "equivalence unresolved"
+  },
+  "controls": {
+    "source": "all eight D1P-14D fixed-input polarity controls",
+    "per_backend": 8,
+    "total": 16,
+    "seconds_each": 30,
+    "required": "same SAT/UNSAT polarity",
+    "stop_on_failure": true,
+    "classification": "regression tests, not proof"
+  },
+  "primary": {
+    "freeze_before_execution": true,
+    "attempts_each": 1,
+    "seconds_each": 300,
+    "maximum_solver_seconds": 1500,
+    "combined_transformation": false,
+    "post_freeze_tuning": false,
+    "schedule": [
+      "T-ARITH Q1",
+      "T-ARITH Q2",
+      "T-OVF Q1",
+      "T-OVF Q2",
+      "T-OVF Q3"
+    ],
+    "heavy_job_gate": "no concurrent nargo, solver, or build job on the Mac",
+    "load_average": "record before and after every attempt"
+  },
+  "sat_validation": "Any SAT, including NONVAC SAT, is only a candidate and must be checked against original fee arithmetic, the full producer relation, and consumer execution.",
+  "claim_scope": "Both transformations are backend options available identically to all later method arms. Neither demonstrates a consumer-direction advantage.",
+  "historical_disposition": "D1P-14D Q3 remains UNKNOWN",
+  "forbidden": [
+    "claiming multiplication caused the timeout",
+    "claiming other WarpToad/O1 queries will fail",
+    "combined transformations",
+    "post-freeze tuning",
+    "editing prior D1P-14 evidence",
+    "editing README.md or docs/project-status.md"
+  ]
+}

@@ -203,7 +203,7 @@ def _bv(value: int) -> str:
 
 def encode_concrete_control(
     artifact: Path, *, identities: dict[str, Any], fixture: dict[str, Any],
-    control_id: str, polarity: str,
+    control_id: str, polarity: str, backend_option: str = "BASE",
 ) -> tuple[bytes, dict[str, Any], dict[str, Any]]:
     """Generate one fixed-input positive or negative designated-goal query."""
     if control_id not in CONTROL_VARIANTS or polarity not in {"positive", "negative"}:
@@ -215,7 +215,9 @@ def encode_concrete_control(
         implementation_variant=selected_variant,
         control_id=control_id if polarity == "positive" else None,
     )
-    base, base_certificate = encode_query(omega, drop_producer=True)
+    base, base_certificate = encode_query(
+        omega, drop_producer=True, backend_option=backend_option,
+    )
     terminal = b"(assert (or G1 G2 G3 G4 G5))\n(check-sat)\n"
     if base.count(terminal) != 1:
         raise ValueError("unexpected D1P-14C terminal goal shape")
@@ -236,6 +238,7 @@ def encode_concrete_control(
         "schema": "bindcheck.d1p14d.control-transformation/v1",
         "control": control_id, "polarity": polarity, "target": target,
         "implementation_variant": selected_variant,
+        "backend_option": backend_option,
         "policy_sha256": canonical_sha256(omega["policy"]),
         "fixture_sha256": canonical_sha256(fixture),
         "fixed_public_equalities": 11, "fixed_environment_equalities": 1,
