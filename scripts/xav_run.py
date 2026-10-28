@@ -206,12 +206,15 @@ def stage_build(mid, out):
 
 
 def run_one(mid, warning, honest_toml, out, row, stop_after="E4"):
+    # Payy rows never take the WarpToad nargo/bb/EDR route: a shape plan that
+    # looks WarpToad-compatible (e.g. R-POLARITY replay) would otherwise run
+    # WarpToad artifacts against a Payy warning and misgrade it.
+    if mid.startswith("PY-"):
+        run_payy(mid, warning, out, row)
+        return
     plan = plan_for(warning, mid)
     row["stages"]["plan"] = {"kind": plan.kind, "words": plan.word_updates, "notes": plan.notes}
     if plan.kind == "unsupported":
-        if mid.startswith("PY-"):
-            run_payy(mid, warning, out, row)
-            return
         row["stages"]["blocked"] = plan.blocked_reason
         row["manual_steps"] = ["build 2-proof aggregator witness harness"]
         return

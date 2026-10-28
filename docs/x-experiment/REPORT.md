@@ -71,9 +71,21 @@ E4 on the mutant); automating it is not done here.
 | Gate | State | Evidence level |
 |---|---|---|
 | (a) automated discovery | Partial candidate route shown | abstract candidate (below E2) |
-| (b) automated E4 validation | Not done (manual E4 exists, D1P-19) | — |
+| (b) automated E4 validation | Done on development mutants (X-AV v1+v1.1, below) | E4 fresh, zero manual steps (WarpToad); E2 mock-scoped (Payy) |
 | (c) baselines | Not run; X1 gives one preregistered expectation | E1-scope probe, synthetic |
 | (d) held-out transfer | Blocked on human custodian draw | — |
+
+Follow-up lane work after X1/X2 (own docs, same worktree/rules):
+deliverables are [BENCHMARK](BENCHMARK.md) (30 compiling mutants),
+[AUTO-VALIDATE](AUTO-VALIDATE.md) v1 (20/20 D1P-31: 7 fresh E4 zero
+manual steps, 1 E4-preserved, 5 E3-contained, 7 Payy E1) and v1.1
+(53/53 D1P-34: 8 E4 + 1 E4-preserved + 4 E3 on WarpToad incl. new WT-S06;
+6 E2 mock-verifier-scoped on Payy S01–S04 with unauthorized effects on
+state; 2 executed-and-contained; 32 E1 owing Rust-stack inner proofs).
+Gate (b) is met on exposed development mutants only — no held-out claim,
+D1 verdict stays UNKNOWN. A cross-contamination misgrade (Payy rows run
+down the WarpToad path, bogus E3s) was caught in audit and corrected
+before reporting; see AUTO-VALIDATE Limits.
 
 Manual inputs in X2, counted: admitted-state values, environment chain
 id, the shared effect-model table inside the extracted relation. No
