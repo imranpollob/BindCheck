@@ -129,3 +129,20 @@ rule for met-relevant rows, uncertainty array); ledger now validates with
 scripts/taxonomy_v1_corpus.py; ledger docs/taxonomy/v1-corpus-ledger.json;
 table docs/taxonomy/v1-corpus.md. jsonschema 4.26.0 + rfc3339-validator
 0.1.4 installed via pip (pinned public packages).
+
+## 2026-10-28 — X-AV: automatic validation warning-to-E4
+
+Built witness_synth_v1.py (rule-dispatched plans) + xav TS harness
+(synth/prove/replay) + xav_run.py driver: 20/20 D1P-31 warnings run.
+13/13 WarpToad detections reach E3+: 7 rows E4 with zero manual steps
+(C01 double-mint, C04 fabricated-origin, S01 unadmitted-root, S02,
+S03/S09 replays), C03 E4-preserved (fresh E3 + byte-identical M-DOM
+correspondence, 2 counted manual steps), C02/C07/C08 E3-contained
+(decoded consumer reverts: fee-cap, dataless verifier reject, OZ
+ERC20InvalidReceiver). 7 Payy rows E1 (2-proof harness missing).
+Debugging trail: stale mutant dir (pinned-circuit false runs) fixed by
+regenerate+completeness gate; regex section-eater fixed; verifier/library
+linking (0x-prefix + FQN artifacts + ZKTranscriptLib/RelationsLib);
+balance reads moved to the consumer ERC20; S_SRC burn seeding reproduces
+the honest root (T3==H2 confirmed); C07 attacker burn admits its tree.
+Full run ~8 min proving total at nice-19, serial, under load 30-50.
