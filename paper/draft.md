@@ -2,31 +2,36 @@
 
 *(Working title; frozen at abstract registration.)*
 
-**Draft status:** D1P-P02 revision, 28 October 2026, on repository base
-`ba571ff` (fast-forwarded from `d1-paper`; includes D1P-30, D1P-22 and the
-Lane X mutation benchmark). Target format is IEEE S&P (13 pages of text plus
-up to 5 pages of references and appendices). This revision rewrites §V to
-describe the implemented BindCheck v1 rules, fills the development-case rows
-from [D1P-30](../reports/D1P-30.md), and fills the case-study baseline rows
-from [D1P-22](../docs/baselines/d1p-22-results.md). No experiment was run for
-this draft. Cells that depend on work not yet done are marked
-**[PENDING D1P-31]** (BindCheck on the mutation benchmark),
-**[PENDING D1P-32]** (baselines on the benchmark), **[PENDING D1P-33]**
-(held-out scan) or **[PENDING TAXONOMY-V1]** (taxonomy v1 corpus). Claims
-about cited work that could not be checked against a primary source stay
-**[TODO-VERIFY]**. Earlier drafts (D1P-D01/D03, D1P-P01) are in Git history.
+**Draft status:** D1P-P03 revision, 28 October 2026, on repository base
+`9e9e71f` (`d1-paper`; includes D1P-30, D1P-22, D1P-31, contract revision 3,
+the taxonomy v1 corpus and the held-out reservation commitment). Target
+format is IEEE S&P (13 pages of text plus up to 5 pages of references and
+appendices). This revision fills the benchmark rows of RQ1 and RQ2 from
+[D1P-31](../reports/D1P-31.md). It fills the taxonomy tables from the
+[v1 corpus](../docs/taxonomy/v1-corpus.md) as AI-assisted extraction pending
+human labels. It also describes the held-out mini-draw recorded in the
+[reservation commitment](../docs/taxonomy/reservation-commitment-2026-10-28.json).
+No experiment was run for this draft. Cells that depend on work not yet done
+are marked **[PENDING D1P-32]** (baselines on the benchmark),
+**[PENDING D1P-33]** (held-out scan), **[PENDING D1P-34]** (generic consumer
+loaders) or **[PENDING AUTO-VALIDATION]** (automatic witness construction
+and the validation results that depend on it). Claims about cited work that
+could not be checked against a primary source stay **[TODO-VERIFY]**. Earlier
+drafts (D1P-D01/D03, D1P-P01, D1P-P02) are in Git history.
 
 **Controlling sources, in order.** [Research contract](../docs/research-contract.md)
-revision 2 (revision 3, which adds the taxonomy and actionable diagnostics as
-contributions, is being applied in D1P-31); [README](../README.md); the
-immutable reports [T15](../reports/T15.md)–[T22](../reports/T22.md),
+revision 3 (28 October 2026; revision 2 archived as
+[`research-contract-2026-10-27.md`](../docs/history/research-contract-2026-10-27.md),
+and earlier experiments keep the revision under which they were run);
+[README](../README.md); the immutable reports
+[T15](../reports/T15.md)–[T22](../reports/T22.md),
 [D1P-12R](../reports/D1P-12R.md), [D1P-13](../reports/D1P-13.md),
 [D1P-14A](../reports/D1P-14A.md)–[D1P-14D](../reports/D1P-14D.md),
 [D1P-15](../reports/D1P-15.md),
 [D1P-17](../reports/D1P-17-consumer-backends.md),
 [D1P-19](../reports/D1P-19.md), [D1P-21A](../reports/D1P-21A.md),
-[D1P-30](../reports/D1P-30.md); the baseline record
-[D1P-22](../docs/baselines/d1p-22-results.md); the extraction records
+[D1P-30](../reports/D1P-30.md), [D1P-31](../reports/D1P-31.md); the baseline
+record [D1P-22](../docs/baselines/d1p-22-results.md); the extraction records
 [D1P-16](../docs/extraction/d1p-16-feasibility.md),
 [D1P-18](../docs/extraction/d1p-18-hardening.md),
 [D1P-20](../docs/extraction/d1p-20-extracted-solver-model.md),
@@ -34,26 +39,29 @@ immutable reports [T15](../reports/T15.md)–[T22](../reports/T22.md),
 [mutation benchmark](../docs/x-experiment/BENCHMARK.md)
 ([package](../benchmarks/binding-mutants/)); the
 [B02 obligations](../docs/d1-paper/d1p-b02-discriminating.md); the
-[taxonomy protocol v0.2.0](../docs/taxonomy/protocol.md); and the
-[baseline preregistration](baselines.md). If this draft disagrees with any of
-them, the source wins.
+[taxonomy protocol v0.2.0](../docs/taxonomy/protocol.md), the
+[v1 corpus](../docs/taxonomy/v1-corpus.md) and the
+[reservation commitment](../docs/taxonomy/reservation-commitment-2026-10-28.json);
+and the [baseline preregistration](baselines.md). If this draft disagrees with
+any of them, the source wins.
 
-**Research verdict at drafting time:** `UNKNOWN`. D1P-30 ran BindCheck v1 on
-five development targets. The capability gate (contract §11) remains open:
-there is no held-out result, the same-policy baseline arms were not
-instantiated, and the validator does not construct witnesses for an
-arbitrary warning (D1P-30 §7; D1P-22).
+**Research verdict at drafting time:** `UNKNOWN`. The capability gate
+(contract §11) remains open. There is no held-out result, the same-policy
+baseline arms were not instantiated, and the validator does not construct
+witnesses for an arbitrary warning (D1P-30 §7; D1P-22; D1P-31 §7).
 
 ### Task map
 
-| Tag | Scope | Status at `ba571ff` | Paper locations |
+| Tag | Scope | Status at `9e9e71f` | Paper locations |
 | --- | --- | --- | --- |
 | **D1P-30** | BindCheck v1 analyzer and validator; five development case runs | Done | §V, §VI, RQ1/RQ2 case rows |
-| **D1P-31** | BindCheck v1 on the 30-mutant benchmark | Pending | RQ1/RQ2 benchmark rows |
+| **D1P-31** | BindCheck v1 on the 30-mutant benchmark; contract revision 3; reservation commitment | Done | RQ1/RQ2 benchmark rows, §IV-D |
 | **D1P-22** | Pinned baselines on the five case targets | Done | RQ3 case table |
 | **D1P-32** | Baselines on the 30-mutant benchmark | Pending | RQ3 benchmark table |
-| **D1P-33** | Held-out scan | Pending | RQ4 |
-| **TAXONOMY-V1** | Taxonomy v1 corpus, `docs/taxonomy/v1-corpus.md` (Lane X) | Pending; file not present at `ba571ff` | §IV-D, RQ5 |
+| **D1P-33** | Held-out scan of the reserved mini-draw | Pending | RQ4 |
+| **D1P-34** | Generic consumer loaders, replacing the fitted source profile and location patterns | Pending | §V-C, §VI, §IX |
+| **AUTO-VALIDATION** | Automatic witness construction for warnings without a registered route, and its validation results | Pending (no task ID assigned) | §V-H, RQ2 |
+| **Taxonomy v1 corpus** | Seed-only AI-assisted extraction (Lane X) | Done as extraction; human labels pending | §IV-D, RQ5 |
 
 Discrepancies found while drafting are listed under *Open items for authors*
 at the end.
@@ -84,16 +92,19 @@ taxonomy of binding failures and in three case studies: a publicly disclosed
 Payy rollup defect (historical) and two injected WarpToad bridge variants, a
 producer-side domain-binding removal (M-DOM) and a consumer-side root-guard
 removal (M-SRC). On five development targets, v1 warns at the expected
-public word on all three known-positive targets and on neither of two
-honest or repaired controls. All three positive targets reach end-to-end
-validation with real proofs and committed local effects: freshly for the
-two injected variants, and from preserved evidence for Payy. Pinned
-circuit-only and contract-only tools ran on the same five targets in their
-default configurations. None described a mismatch. Two named a defect
-location without explaining it. All of these are development results on cases
-known before the rules were written. On a 30-mutant benchmark,
-[PENDING D1P-31]; baselines on the benchmark, [PENDING D1P-32]; on held-out
-families, [PENDING D1P-33]; in the taxonomy corpus, [PENDING TAXONOMY-V1].
+public word on all three known-positive targets and on neither of two honest
+or repaired controls. All three positive targets reach end-to-end validation
+with real proofs and committed local effects. On a 30-mutant development
+benchmark over the same two applications, v1 detects the named mutation in
+13/30 mutants. Of the other 17, 16 fall outside its supported scope and 1 is
+a supported miss, so it detects 13/14 within scope. Every detection names the
+broken word, guard or effect. Pinned circuit-only and contract-only tools in
+their default configurations described no mismatch on the five case targets.
+An AI-assisted seed extraction for the taxonomy screened 27 public
+disclosures and included 19 from 15 families, with human labels pending. All
+results are development results on applications known before the rules were
+written. Held-out results on a small, disclosed reserved frame are
+[PENDING D1P-33].
 
 ---
 
@@ -206,32 +217,36 @@ within the supported scope.
 
 ### D. Contributions
 
-The following are the paper's contributions. Each item states the evidence
-that exists now and the evidence still pending.
+The following are the paper's contributions, as listed in research contract
+revision 3 (§3). Each item states the evidence that exists now and the
+evidence still pending.
 
 1. **A taxonomy of proof-to-execution binding failures** (§IV). It has three
    independent dimensions: cause, consequence and attacker role. It is tied
    to the authorization/coverage semantics of the research contract, and the
    annotation protocol separates disclosure counts from tool support.
-   *Exists:* codebook and protocol v0.2.0 with a frozen search plan.
-   *Pending:* the corpus and its label statistics **[PENDING TAXONOMY-V1]**.
-2. **Cross-layer analysis by generic rules** (§V). Proof-enforced uses of
-   each public input in the compiled circuit are joined to the consumer's
+   *Exists:* codebook and protocol v0.2.0, and a seed-only v1 corpus (one
+   endpoint; 27 findings screened, 19 included from 15 families). Its cause
+   labels are AI-suggested and its relevance decisions AI-made. *Pending:*
+   human labels, consequence and role labels, agreement statistics, and the
+   remaining endpoints.
+2. **Actionable cross-layer diagnostics** (§V-F, §V-G). Proof-enforced uses
+   of each public input in the compiled circuit are joined to the consumer's
    guards, effects and replay accounting. Four rules apply, each stated once
-   without application identifiers. *Exists:* the v1 implementation. On five
-   development targets it warns at the expected public word on all three
-   positives and on neither control (D1P-30 §§1, 4). *Pending:* the 30-mutant
-   benchmark **[PENDING D1P-31]** and held-out transfer
-   **[PENDING D1P-33]**.
-3. **Actionable diagnostics with real-proof validation** (§V-G, §V-H). Each
-   warning is a versioned JSON record with location, rule, explanation,
-   evidence and a suggested fix. A validator takes warnings to E4 through
-   registered real-proof routes, counting every manual input. *Exists:*
-   three positive mismatches reach E4: fresh real proofs for M-DOM and M-SRC,
-   and an automatic audit of the preserved Payy chain (D1P-30 §5).
-   *Pending:* automatic witness construction for warnings that have no
-   registered route (not implemented), and validation on the benchmark
-   **[PENDING D1P-31]**.
+   without application identifiers. Each warning is a versioned JSON record
+   with location, rule, explanation, evidence and a suggested fix.
+   *Exists:* on five development targets, warnings on 3/3 positives and 0/2
+   controls (D1P-30). On the 30-mutant benchmark, 13/30 detected overall and
+   13/14 within supported scope, each at the broken word, guard or effect
+   (D1P-31). *Pending:* generic consumer loaders **[PENDING D1P-34]** and
+   held-out transfer **[PENDING D1P-33]**.
+3. **Real-proof validation** (§V-H). A validator takes warnings to E4
+   through registered real-proof routes and counts every manual input.
+   *Exists:* the three case-study mismatches reach E4 (two fresh, one
+   preserved; D1P-30). Two benchmark mutants that coincide with M-DOM and
+   M-SRC reach preserved E4 (D1P-31). *Pending:* automatic witness
+   construction for warnings without a route. The 36 other benchmark warnings
+   stop at E1 **[PENDING AUTO-VALIDATION]**.
 4. **Validated case studies** (§II, §VII). One historical case (Payy, with a
    locally reproduced end-to-end effect and a repair validated for one
    witness) and two injected cases (WarpToad M-DOM and M-SRC, each with a
@@ -261,7 +276,9 @@ We use three evidence classes throughout and never merge them.
   are development data.
 - **Held-out:** families reserved before development screening and analyzed
   only after the rules were frozen (RQ4). Only held-out results can support
-  transfer or generality claims (contract §9). No held-out result exists yet.
+  transfer or generality claims (contract §9). A reservation over a small
+  frame of eight candidate groups has been committed (§IV-D). No held-out
+  result exists yet.
 
 All executions are owned-local. Synthetic admitted pre-states are labeled as
 such and carry no cross-chain reachability claim.
@@ -533,8 +550,10 @@ Empty never means absent.
 The v1 rules (§V-F) target the causes that a word-level analysis of one
 producer–consumer pair can observe. They do not cover the others, and the
 taxonomy keeps those visible as tool limitations rather than dropping them.
-Coverage below is by design. Measured coverage on the benchmark is RQ1
-**[PENDING D1P-31]**.
+Coverage below is by design. Measured coverage on the 30-mutant benchmark
+(RQ1, Table 3) matches it. Mutants that remove a use or a guard are detected.
+Mutants that leave a binding present but wrong, such as order, dependency
+strength or admitted-map identity, are unsupported.
 
 | Cause | v1 rule coverage |
 | --- | --- |
@@ -547,44 +566,64 @@ Coverage below is by design. Measured coverage on the benchmark is RQ1
 
 ### D. Empirical method (protocol v0.2.0)
 
-The sampling frame is public disclosures about proof-consuming ZK systems
-from 1 January 2018 to 27 October 2026. Discovery starts from source indexes,
-not application names. There are 17 frozen endpoints: two seed collections
-(SNARK SoK dataset, 0xPARC zk-bug-tracker), 13 backbone indexes (audit-firm
-listings, contest platforms, GitHub Security Advisories) and two
-supplemental keyword endpoints. Their traversal order, pagination, stopping
-rules and a 1,200-minute active budget are fixed in the search plan. If any
-percentage from an audit report is reported, every finding in that report is
-screened. Families are lineage components. Forks and ports stay in their
-family.
+**Frozen design.** The sampling frame is public disclosures about
+proof-consuming ZK systems from 1 January 2018 to 27 October 2026. Discovery
+starts from source indexes, not application names. There are 17 frozen
+endpoints: two seed collections (SNARK SoK dataset, 0xPARC zk-bug-tracker),
+13 backbone indexes (audit-firm listings, contest platforms, GitHub Security
+Advisories) and two supplemental keyword endpoints. Their traversal order,
+pagination, stopping rules and a 1,200-minute active budget are fixed in the
+search plan. Families are lineage components. Forks and ports stay in their
+family. Two human annotators label 16 fresh packets independently after one
+unscored calibration round of four packets, and a third human adjudicates. AI systems are
+never raters or tie-breakers. Agreement is reported per label, with
+denominators, intervals and `null` where it is undefined. The disclosure
+funnel and the tool funnel are reported separately and never combined into
+one attrition rate.
 
-A human custodian reserves half of the newly eligible, unexposed family
-groups in each stratum by a private draw outside every agent session. Only a
-salted commitment is stored in the repository. Reserved families feed the
-held-out scan (RQ4) and are never screened during development. Payy,
-WarpToad, 0xbow Privacy Pools and the Aztec epoch rollup are exposed
-development families and are never eligible for reservation.
+**What exists: a seed-only, AI-assisted extraction.** The
+[v1 corpus](../docs/taxonomy/v1-corpus.md) covers one of the two seed
+endpoints, the 0xPARC zk-bug-tracker at commit `56a99667…`. An AI agent
+screened all 27 listed in-the-wild entries. It included 19 and excluded 8,
+with none unresolved, and suggested one cause label per included finding.
+The machine-readable ledger is schema-valid. Every label is recorded as
+`ASSUMED` with an empty `human_label` field. No annotation round has run. The
+SoK dataset was not reached: it has no standalone endpoint an agent could
+use under the task's constraints, and a custodian still has to identify one.
+The remaining 15 endpoints were not traversed.
 
-Two human annotators label 16 fresh packets independently after one unscored
-calibration round of four packets. A third human adjudicates. AI systems are
-never raters or tie-breakers. Agreement is reported per label (Cohen's kappa
-or Krippendorff's alpha), with denominators, intervals and `null` where it
-is undefined. The disclosure funnel (`candidate → screened →
-include/exclude/unresolved`) and the tool funnel (`available → supported →
-analyzed → validated`) are reported separately and never combined into one
-attrition rate.
+**Deviation from the frozen plan.** The plan's access rule for agents is
+metadata-only, with custodian sanitization. The corpus task instead read the
+seed listing bodies (linked issues, commits, papers and reports were not
+opened). All 23 families touched are logged as exposed in the ledger and can
+never be held out. The metadata-only flow is still owed before any
+annotation round.
 
-**Status.** The design and search plan are frozen. RQ5 results will come
-from the taxonomy v1 corpus (`docs/taxonomy/v1-corpus.md`, Lane X), which is
-not in the repository at `ba571ff`. When it lands, the corpus record must
-state whether it completes the reservation and two-annotator procedure above
-or uses a different method. This section will then follow that record. All
-results are **[PENDING TAXONOMY-V1]**. Families reserved here feed the
-held-out scan **[PENDING D1P-33]**.
+**Held-out mini-draw (a disclosed smaller frame).** The frozen plan reserves
+half of the newly eligible, unexposed family groups in each stratum, drawn
+from the full index traversal. What exists is smaller. An AI planner
+prepared a metadata-only list of eight candidate GitHub projects that pair a
+Noir circuit with a Solidity/EVM consumer, from search-result names and URLs
+only, without opening any repository. The custodian checked that none
+appears in the 0xPARC tracker. The repository owner, acting as human
+custodian, then performed the draw in a plain terminal outside every agent
+session (stratum `noir-evm:eligible`, ceiling rounding per stratum). Only a
+salted commitment is in the repository (SHA-256 `514ad719…`; definition
+`SHA256(nonce ‖ canonical selection manifest)`). The opening is held
+privately and is not disclosed to any agent before the D1P-33 scan. The
+commitment file does not state how many groups were reserved. Under the
+protocol's half-per-stratum rule with ceiling rounding, eight candidates
+imply four. The commitment shows only that a later opening is consistent
+with it. It shows neither randomness nor timing. The custodian's attestation
+is recorded as reported in the planner session, and the custodian's
+signature has not yet been added. Payy, WarpToad, 0xbow Privacy Pools, the
+Aztec epoch rollup and all 23 corpus families are exposed and ineligible.
 
-**Claim limit.** The strongest permitted statement is that these mechanisms
-recur across independent families in the sampled public disclosures. We
-make no prevalence, incidence or audit-quality inference.
+**Claim limit.** The strongest permitted statement, once human labels exist,
+is that these mechanisms recur across independent families in the sampled
+public disclosures. We make no prevalence, incidence or audit-quality
+inference. Before human labeling, the corpus supports no claim beyond its
+own existence and its screening counts (§VII-G).
 
 ---
 
@@ -777,7 +816,13 @@ calldata outside the verifier arguments. Missing single-use accounting on an
 effect path whose replay key the profile does not recognize. On Payy, the
 burn path has no registration or single-use record (T17 §3). v1 does not
 report this, because the mint path's `.spent` idiom satisfies the source
-profile.
+profile. The converse also fails. In source mode, replay accounting counts
+as *applicable* only if the `.spent == false` guard is found. Removing that
+guard (benchmark mutant PY-S02) therefore suppresses R-POLARITY instead of
+triggering it, even though the remaining `.spent = true` write is
+recognizable. This is v1's one supported miss (D1P-31 §4.3). In relation
+mode, applicability follows from the replay-key role, and the WarpToad
+mutants that drop the check or the write are detected (WT-S03, WT-S09).
 
 ### G. Actionable diagnostics
 
@@ -863,8 +908,8 @@ query in our development history timed out or ended without an answer
 complete in 28.82 s (M-DOM, two proofs) and 98.99 s (M-SRC, one proof)
 (D1P-30 §5). These times are operational observations, not benchmarks.
 
-**Future route synthesis (not implemented).** The natural next step is one
-generic witness template per rule. For R-BIND, vary only the unused words
+**Future route synthesis (not implemented) [PENDING AUTO-VALIDATION].** The
+natural next step is one generic witness template per rule. For R-BIND, vary only the unused words
 and solve the consumer path condition over them alone. For R-ANCHOR, build a
 private structure under the extracted construction and set the root to its
 root. For R-POLARITY, resubmit an accepted occurrence. We describe these
@@ -922,9 +967,12 @@ Noir versions. Checked relations exist for two consumer sources (pinned
 WarpToad and M-SRC), and the source profile is fitted to `RollupV1.sol`
 (§V-C). Any other consumer falls back to the source profile, which will
 recognize few or none of its idioms. Validation needs a registered route for
-each target identity. These limits govern D1P-31: consumer mutants have new
-hashes and no checked relations, and the Payy mutants are full-size
-1,000-message artifacts that v1 has not yet analyzed (§VII-B).
+each target identity. In D1P-31, each WarpToad consumer mutant got its own
+relation from the unchanged D1P-18 extractor, recorded as a counted input
+(8 of 9 succeeded, and WT-S04 failed closed). Payy mutants used the source
+profile, and 8 of 12 were unsupported. Generic consumer loaders, which would
+replace the fitted profile and the WarpToad location pattern, are
+**[PENDING D1P-34]**.
 
 ---
 
@@ -932,30 +980,33 @@ hashes and no checked relations, and the Payy mutants are full-size
 
 ### A. Research questions
 
-| Paper RQ | Question | Contract RQ (rev. 2) | Case studies | Mutation benchmark |
+| Paper RQ | Question | Contract RQ (rev. 3) | Case studies | Mutation benchmark |
 | --- | --- | --- | --- | --- |
-| **RQ1 Detection** | Do the generic rules warn at the correct public word and consumer location, without case-specific input? | RQ1 (fidelity), RQ2 (discovery) | D1P-30 (done) | D1P-31 |
-| **RQ2 Warning quality and validation** | Are warnings localized and actionable? How many reach E4, at what cost, and with how many manual inputs? | RQ3 (validation) | D1P-30 (done) | D1P-31 |
+| **RQ1 Detection** | Do the generic rules warn at the correct public word and consumer location, without case-specific input? | RQ1 (fidelity), RQ2 (discovery) | D1P-30 (done) | D1P-31 (done) |
+| **RQ2 Warning quality and validation** | Are warnings localized and actionable? How many reach E4, at what cost, and with how many manual inputs? | RQ3 (validation) | D1P-30 (done) | D1P-31 (done); automatic witness construction pending |
 | **RQ3 Baselines** | What do circuit-only and contract-only tools report on the same targets, in default and same-policy arms? | RQ4 (comparative) | D1P-22 (done) | D1P-32 |
 | **RQ4 Held-out** | With rules frozen, what does BindCheck report on reserved families, and do any reports validate? | RQ4 (transfer) | — | D1P-33 |
-| **RQ5 Taxonomy** | Which causes, consequences and roles recur across independent families in sampled disclosures, and how reliably can people label them? | — (descriptive) | — | TAXONOMY-V1 |
+| **RQ5 Taxonomy** | Which causes, consequences and roles recur across independent families in sampled disclosures, and how reliably can people label them? | — (descriptive; contract §3 item 1) | — | v1 corpus (AI-assisted; human labels pending) |
 
 Contract RQ5 (efficiency) is not a paper RQ. Its null results are in
-Appendix A, as the contract requires. Contract revision 3 (D1P-31) may
-renumber the contract RQs. This table will be re-checked against it.
+Appendix A, as the contract requires. Revision 3 added the taxonomy and
+actionable diagnostics as candidate contributions without renumbering the
+RQs.
 
 ### B. Subjects and protocol
 
 **Development cases (five targets).**
 
 - Payy earlier `c4d2c902…` (historical, faulty) and check-added `dcd5d96e…`
-  (repaired for one witness). D1P-30 analyzed bounded **N=8** `agg_agg`
-  builds derived from the pinned sources (T22 scratch instances, artifact
-  hashes `f50f6bb8…` and `e7b5731c…`) against the unchanged consumer
-  `RollupV1.sol` (`7062065c…`). The preserved E4 chain (T15/T16/T18) uses
-  the original 1,000-message configuration. The validation route links the
-  N=8 warning to that full-size chain, and the link is a counted manual
-  input. v1 has not been run on the full-size Payy artifacts.
+  (repaired for one witness). D1P-30 and the D1P-31 reruns analyzed bounded
+  **N=8** `agg_agg` builds derived from the pinned sources (T22 scratch
+  instances, artifact hashes `f50f6bb8…` and `e7b5731c…`) against the
+  unchanged consumer `RollupV1.sol` (`7062065c…`). The preserved E4 chain
+  (T15/T16/T18) uses the original 1,000-message configuration. The
+  validation route links the N=8 warning to that full-size chain, and the
+  link is a counted manual input. The unmutated full-size earlier artifact
+  has not itself been analyzed. The full-size Payy *mutants* in D1P-31 do
+  show the same tail warning at `messages[1]..messages[999]` (§VII-C).
 - WarpToad pinned `973e7d1e…`: an honest development fixture, not a proven
   negative.
 - WarpToad M-DOM and M-SRC (injected), each paired with its own artifact,
@@ -973,44 +1024,50 @@ predicted effect (`manifest.json`, `mutants/<ID>.md`). Predicted effects are
 WT-C03 reuses M-DOM (D1P-15) and WT-S01 reuses M-SRC (D1P-19). Cheap
 reachability was checked only for WarpToad circuit mutants, by running
 `nargo execute` on the honest path. WT-C01, C02, C04, C05, C08 and C09 pass.
-WT-C06 and C07 fail with `Cannot satisfy constraint`, as designed, because
-those mutants break the honest path. WT-C03 was skipped by design. Payy
-circuit mutants and all consumer mutants were checked by compilation and
-diff audit only. Four candidate classes were excluded with reasons
-(BENCHMARK.md §6): a private-recipient circuit that breaks the 11-word
-interface, two policy-neutral assertion removals, Brillig mutants (no
-Brillig on either binding path), and `agg_final` forwarder mutants
-(deferred, since misorder is already covered at both ends).
+WT-C06 and C07 fail with `Cannot satisfy constraint`, as designed. WT-C03 was
+skipped by design. Payy circuit mutants and all consumer mutants were
+checked by compilation and diff audit only. Four candidate classes were
+excluded with reasons (BENCHMARK.md §6). The Payy mutants are full-size
+1,000-message builds of the *earlier, faulty* revision. The benchmark is
+development data, and both families are exposed and can never be held out.
+Its operators were chosen with knowledge of the case mechanisms, so it
+measures coverage of operator classes, not discovery.
 
-The benchmark is development data. Both families are exposed and can never
-be held out. Its operators were chosen with knowledge of the case
-mechanisms, so it measures coverage of operator classes, not discovery.
+**Benchmark protocol (D1P-31 §§1, 3).** The v1 rule bytes were hashed and
+frozen before the run and are byte-identical to D1P-30 (`static_analyzer_v1.py`
+`67a320b2…`). Ground-truth records were not given to BindCheck and were read
+only during post-run adjudication. Each WarpToad consumer mutant was
+extracted independently by the unchanged D1P-18 extractor into a
+source-hash-pinned relation. Eight succeeded. WT-S04 failed closed with
+`no verifier boundary recovered` and is unsupported. Payy targets use the
+source profile. A relation path is one counted analysis input: 17 of 30
+mutant runs use one and 13 use none. Scoring followed these rules.
 
-**Benchmark scoring rules (to be frozen in the D1P-31 protocol before any
-benchmark result is inspected).**
-
-1. A mutant counts as detected only if a warning names the mutant's own
-   broken binding (word, guard or effect). Any other warning on that target
-   does not count.
-2. The Payy baseline is the *earlier, faulty* revision. Every Payy mutant
-   therefore inherits the message-tail defect. Warnings at the tail words
-   are inherited and are not detections of a Payy mutant.
-3. WT-C03 and WT-S01 overlap M-DOM and M-SRC. Totals are reported with and
-   without them.
-4. Consumer mutants have new source hashes and no checked relation. D1P-31
-   must either extract a relation for each one (counted per mutant) or
-   report source-profile results labeled as such. The Payy mutants are
-   full-size artifacts that v1 has not yet analyzed.
-5. Because predicted effects are unexecuted, a warning on a mutant is E1
-   against predicted ground truth. Higher levels require a validation route.
+1. A mutant is **detected** only if a warning names its own broken binding
+   (word, guard, effect or replay obligation). The benchmark records do not
+   give literal line numbers, so location is scored at that semantic
+   boundary, not as recovery of the edited line.
+2. A mutant is **unsupported** when its broken binding is outside what v1
+   models. A **miss** is a supported mutant without a correct warning.
+   Unsupported mutants are never counted as misses or successes.
+3. Warnings that do not concern the mutant's named binding are
+   **unrelated**. On Payy every unrelated warning is the inherited
+   message-tail pair, a valid report of the faulty base revision, so these
+   are not counted as semantic false positives.
+4. WT-C03 and WT-S01 coincide with M-DOM and M-SRC. Totals are given with
+   and without them.
+5. Validation of all 38 warnings was scheduled by operator class before
+   launch. The two validation adapters were registered only after static
+   results were complete and are counted manual associations.
 
 **Policy.** v1 takes no explicit `σ` (§V-D). Its roles are inferred. Any
 same-policy baseline receives the reviewed `σ` of
 [baselines.md](baselines.md). For WarpToad, `σ` is DRAFT where the
 documentation leaves beneficiary policy open (D1P-12R §8.1).
 
-**Scoring loci** (from [baselines.md](baselines.md) §4.3, extended to the
-variants; used for scoring only and never as tool input):
+**Scoring loci for the case targets** (from [baselines.md](baselines.md)
+§4.3, extended to the variants; used for scoring only and never as tool
+input):
 
 - Payy producer: `agg_agg` outer `messages` words at indices ≥
   `messages_index`, or absence of a tail-zero constraint. Payy consumer:
@@ -1024,6 +1081,7 @@ variants; used for scoring only and never as tool input):
 **Accounting.** Manual inputs are counted separately for analysis (relation
 selection) and validation (route association, historical witness content).
 Static runtime, proof time and peak memory are reported separately.
+Analyst time was not instrumented in D1P-30 or D1P-31.
 
 ### C. RQ1 — Detection
 
@@ -1051,38 +1109,73 @@ estimate (D1P-30 §1). The Payy rows come from N=8 builds. On Payy's consumer
 side, v1 points to the message dispatch but does not report the missing burn
 registration that makes the tail exploitable.
 
-*Table 3: Detection on the mutation benchmark, by operator. The first four
-data columns come from the Lane X build (BENCHMARK.md §3–4); the rest are
-pending.*
+*Table 3: Detection on the mutation benchmark, by operator (D1P-31 §§4.2–4.3;
+compile and reachability from BENCHMARK.md §§3–4). D = detected, M = missed,
+U = unsupported. Related and unrelated count warning objects.*
 
-| Operator | Mutants | Side | Compiles | Reachability check (Lane X) | Warning at mutant locus (rule) | Highest level | Missed | Unsupported | Unresolved |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| leave-public-unconstrained | WT-C01, WT-C02, PY-C02, PY-C06 | Circuit | 4/4 | WT honest path passes (2/2); PY compile + diff | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] |
-| replace-public-with-private | WT-C03 (M-DOM shape) | Circuit | 1/1 | Skipped; reuses D1P-15 E4 | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] |
-| remove-guard (circuit) | WT-C04, WT-C08, PY-C01, PY-C03 | Circuit | 4/4 | WT honest path passes (2/2); PY compile + diff | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] |
-| swap-checks | WT-C05; WT-S05 | Circuit; consumer | 2/2 | C05 honest path passes; S05 compile + diff | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] |
-| unbind-amount | WT-C06 | Circuit | 1/1 | Honest path fails (by design) | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] |
-| unbind-domain | WT-C07 | Circuit | 1/1 | Honest path fails (by design) | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] |
-| misorder-words | WT-C09, PY-C07; WT-S08 | Circuit; consumer | 3/3 | C09 honest path passes; others compile + diff | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] |
-| unbind-commitment | PY-C04 | Circuit | 1/1 | Compile + diff | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] |
-| remove-config-check | PY-C05 | Circuit | 1/1 | Compile + diff | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] |
-| remove-guard (consumer) | WT-S01 (M-SRC), WT-S02, PY-S01 | Consumer | 3/3 | Compile + diff; WT-S01 reuses D1P-19 E4 | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] |
-| drop-accounting | WT-S03 | Consumer | 1/1 | Compile + diff | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] |
-| drop-write | WT-S09 | Consumer | 1/1 | Compile + diff | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] |
-| drop-single-use | PY-S02 | Consumer | 1/1 | Compile + diff | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] |
-| remove-gate (verifier call) | WT-S04 | Consumer | 1/1 | Compile + diff | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] |
-| unbind-fee | WT-S06 | Consumer | 1/1 | Compile + diff | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] |
-| misdirect-beneficiary | WT-S07 | Consumer | 1/1 | Compile + diff | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] |
-| misbind-word | PY-S03 | Consumer | 1/1 | Compile + diff | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] |
-| activate-dead-path | PY-S04 | Consumer | 1/1 | Compile + diff | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] |
-| offset | PY-S05 | Consumer | 1/1 | Compile + diff | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] |
-| **Total** | 30 (16 circuit, 14 consumer) | — | 30/30 | 6 pass, 2 fail by design, 1 skipped, 21 compile + diff only | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] |
-| **Total excluding WT-C03, WT-S01** | 28 | — | 28/28 | — | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] |
+| Operator | Mutants | Side | Reachability check (Lane X) | Result | Warnings at the broken binding | Related / unrelated W | Highest validation |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| leave-public-unconstrained | WT-C01, WT-C02, PY-C02, PY-C06 | Circuit | WT honest path passes; PY compile + diff | 4 D | R-BIND `nullifier`; R-BIND `max_fee`; R-BIND `messages[0..999]` + R-EFFECT `RollupV1.sol:397`; R-BIND `new_root` | 5 / 2 | E1 |
+| replace-public-with-private | WT-C03 (= M-DOM) | Circuit | Skipped; reuses D1P-15 | 1 D | R-BIND `aztec_warptoad_address` | 1 / 0 | E4, preserved |
+| remove-guard (circuit) | WT-C04, WT-C08, PY-C01, PY-C03 | Circuit | WT honest path passes; PY compile + diff | 2 D, 2 U | WT-C04: R-BIND `giga_root`, `destination_local_root`; WT-C08: R-BIND `recipient_address` + R-EFFECT `WarpToadCore.sol:171` | 4 / 4 | E1 |
+| swap-checks | WT-C05; WT-S05 | Circuit; consumer | C05 passes; S05 compile + diff | 2 U | — | 0 / 0 | — |
+| unbind-amount | WT-C06 | Circuit | Fails by design | 1 U | — | 0 / 0 | — |
+| unbind-domain | WT-C07 | Circuit | Fails by design | 1 D | R-BIND `chain_id` | 1 / 0 | E1 |
+| misorder-words | WT-C09, PY-C07; WT-S08 | Circuit; consumer | C09 passes; others compile + diff | 3 U | — | 0 / 2 | — |
+| unbind-commitment | PY-C04 | Circuit | Compile + diff | 1 D | R-BIND `commit_hash` | 1 / 2 | E1 |
+| remove-config-check | PY-C05 | Circuit | Compile + diff | 1 U | — | 0 / 2 | — |
+| remove-guard (consumer) | WT-S01 (= M-SRC), WT-S02, PY-S01 | Consumer | Compile + diff; WT-S01 reuses D1P-19 | 2 D, 1 U | R-ANCHOR local root (`WarpToadCore.sol:161`); R-ANCHOR giga root (`:161`) | 2 / 2 | E4 preserved (WT-S01); E1 (WT-S02) |
+| drop-accounting | WT-S03 | Consumer | Compile + diff | 1 D | R-POLARITY `WarpToadCore.sol:160` | 1 / 0 | E1 |
+| drop-write | WT-S09 | Consumer | Compile + diff | 1 D | R-POLARITY `WarpToadCore.sol:161` | 1 / 0 | E1 |
+| drop-single-use | PY-S02 | Consumer | Compile + diff | **1 M** | none (expected R-POLARITY) | 0 / 2 | — |
+| remove-gate (verifier call) | WT-S04 | Consumer | Compile + diff | 1 U (extractor rejects absent verifier boundary) | — | 0 / 0 | — |
+| unbind-fee | WT-S06 | Consumer | Compile + diff | 1 U | — | 0 / 0 | — |
+| misdirect-beneficiary | WT-S07 | Consumer | Compile + diff | 1 U | — | 0 / 0 | — |
+| misbind-word | PY-S03 | Consumer | Compile + diff | 1 U | — | 0 / 2 | — |
+| activate-dead-path | PY-S04 | Consumer | Compile + diff | 1 U | — | 0 / 2 | — |
+| offset | PY-S05 | Consumer | Compile + diff | 1 U | — | 0 / 2 | — |
+| **Total** | 30 (16 circuit, 14 consumer) | — | 6 pass, 2 fail by design, 1 skipped, 21 compile + diff only | **13 D, 1 M, 16 U** | 13/13 at the semantic location | 16 / 22 | 2 E4 (preserved), 36 E1 |
+| **Excluding WT-C03, WT-S01** | 28 | — | — | 11 D, 1 M, 16 U | 11/11 | 14 / 22 | 36 E1 |
 
-Unsupported mutants are reported as unsupported, never as misses. An
-honest-breaking mutant (WT-C06, WT-C07) is reported, not dropped.
+*Table 3a: Benchmark summary by application (D1P-31 §4.1).*
 
-**Answer to RQ1 (benchmark).** [PENDING D1P-31]
+| Application | Mutants | Detected | Missed | Unsupported | Detected / all | Detected / supported | Related / unrelated W | Static wall sum |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| WarpToad | 18 | 10 | 0 | 8 | 10/18 | 10/10 | 12 / 0 | 14.508 s |
+| Payy | 12 | 3 | 1 | 8 | 3/12 | 3/4 | 4 / 22 | 11.245 s |
+| **Total** | **30** | **13** | **1** | **16** | **13/30 (43.3%)** | **13/14 (92.9%)** | **16 / 22** | **25.753 s** |
+
+The median mutant runtime was 0.806 s (range 0.688–1.215 s), a native-Mac
+development observation (D1P-31 §4.1). The headline figure is 13/30. The
+13/14 figure holds only within v1's supported scope. The 16 unsupported
+mutants are reported as unsupported, not as misses.
+
+**Answer to RQ1 (benchmark).** Across the 30 mutants, v1 detected the named
+mutation in 13. Sixteen were outside its supported scope and one supported
+mutant was missed, which gives 13/14 within scope. Every detection named the
+broken word, guard, effect or replay obligation (13/13 at the semantic
+location). Coverage follows the rules' design closely:
+- unused public inputs (WT-C01, C02, C03, C04, C07, C08; PY-C02, C04, C06) →
+  R-BIND, with R-EFFECT where the word is an effect field;
+- removed root guards (WT-S01, S02) → R-ANCHOR;
+- removed nullifier accounting (WT-S03, S09) → R-POLARITY.
+
+The unsupported set is not homogeneous (D1P-31 §4.3). It covers:
+- how strongly a hash or Merkle construction depends on its inputs (WT-C05,
+  C06);
+- word role and order identity (WT-C09, WT-S08, PY-C07);
+- which admitted map a root is checked against (WT-S05);
+- unmodeled fee and beneficiary policy (WT-S06, S07);
+- an absent verifier boundary (WT-S04);
+- recursive padding, root and key semantics (PY-C01, C03, C05);
+- Payy record admission, offset and activation (PY-S01, S03, S04, S05).
+
+Most of these are bindings that exist but are wrong, which occurrence
+counting cannot see (§V-F, §IX). The one miss, PY-S02, is analyzed with the
+burn-registration limitation in §V-F. Payy accounts for 8 of the 16
+unsupported mutants and for the miss. This reflects the source profile's
+narrow semantics as much as the rules. These are development results on
+exposed applications. They are not held-out transfer.
 
 ### D. RQ2 — Warning quality and validation
 
@@ -1113,10 +1206,10 @@ the route record.
 
 *Table 5: Warning-quality summary.*
 
-| Scope | Warnings | Distinct mismatches | At scoring locus | Warnings on controls | Reached E4 (mismatches) | Fresh / preserved | `NO_VALIDATION_ROUTE` | Non-target warnings (false alarm / real out-of-scope / new candidate) |
+| Scope | Warnings | Distinct mismatches / detections | At scoring locus | Warnings on controls | Reached E4 | Fresh / preserved | Stopped at E1 (no route) | Non-target warnings |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Development cases | 4 | 3 | 4/4 | 0 (0/2 controls) | 3/3 | 2 / 1 | 0 | 0 / 0 / 0 |
-| Benchmark | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] | n/a (no controls in benchmark) | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] |
+| Development cases | 4 | 3 | 4/4 | 0 (0/2 controls) | 3/3 mismatches | 2 / 1 | 0 | 0 |
+| Benchmark | 38 | 13 detected mutants (16 related warnings) | 13/13 detections (semantic location) | n/a (no controls in benchmark; five D1P-30 targets rerun, 0/2 controls warned) | 2 mutants (WT-C03, WT-S01) | 0 / 2 | 36 | 22 unrelated, all the inherited Payy tail pair; 0 adjudicated semantic false warnings |
 
 We report counts, not precision. The two controls are not proven
 negatives, so a false-alarm rate over them would be ill-defined (contract
@@ -1136,7 +1229,7 @@ through responsible disclosure before it supports any claim.
 Historical reference point: the hand-written Payy mint property was about 90
 lines of Solidity (87 non-comment) and functionally equivalent to the earlier
 checker's manual specification (T14 §4). Analyst time was not instrumented
-in D1P-30. D1P-31 should record it.
+in D1P-30 or D1P-31.
 
 **Answer to RQ2 (cases).** Every warning on the development cases names the
 public word and the side to repair. R-EFFECT and R-ANCHOR also name a
@@ -1149,7 +1242,24 @@ are actionable in the narrow sense that the suggested fix names the missing
 binding or guard. They do not explain the mechanism. For example, the M-DOM
 warning does not mention the private witness that replaced word 5 (§V-G).
 
-**Answer to RQ2 (benchmark).** [PENDING D1P-31]
+**Answer to RQ2 (benchmark).** The 38 benchmark warnings were each passed
+once to `bindcheck validate`, in 5.459 s of CLI wall time in total. Two
+reached preserved E4. WT-C03's artifact has decoded bytecode, ABI and
+compiler version identical to the proved M-DOM artifact. WT-S01's executable
+source equals M-SRC's after comments and whitespace are removed. Each of
+those routes counts two manual inputs. The other 36 warnings have no
+registered route and stop at E1. No proof job ran. These E1 outcomes are a
+limitation of the validation routes, not evidence that the warnings are
+infeasible (D1P-31 §6). Automatic witness construction for such warnings,
+and the validation results it would produce, are
+**[PENDING AUTO-VALIDATION]**.
+
+The unrelated-warning count shows why counting warning objects is
+misleading on this benchmark. All 22 unrelated warnings are the inherited
+Payy tail pair, R-BIND at `messages[1]..messages[999]` and R-EFFECT at
+`RollupV1.sol:397`, on 11 of the 12 Payy mutants. They are correct reports
+of the faulty base revision. Separating them is part of the scoring
+protocol, not a correction after the fact.
 
 ### E. RQ3 — Comparison with circuit-only and contract-only baselines
 
@@ -1217,7 +1327,7 @@ and it states no mismatch ([Lane X report §2, X1](../docs/x-experiment/REPORT.m
 | Mythril | G | n/a | [PENDING D1P-32] | n/a | [PENDING D1P-32] | [PENDING D1P-32] | [PENDING D1P-32] |
 | Foundry / Echidna | G / S | n/a | [PENDING D1P-32] | n/a | [PENDING D1P-32] | [PENDING D1P-32] | [PENDING D1P-32] |
 | Other preregistered tools | G / S | [PENDING D1P-32] | [PENDING D1P-32] | [PENDING D1P-32] | [PENDING D1P-32] | [PENDING D1P-32] | [PENDING D1P-32] |
-| **BindCheck v1** | — | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] | [PENDING D1P-31] |
+| **BindCheck v1** (D1P-31) | — | 6 / 0 / 0 / 3 / 0 | 4 / 0 / 0 / 5 / 0 | 3 / 0 / 0 / 4 / 0 | 0 / 0 / 1 / 4 / 0 | 13 / 0 / 1 / 16 / 0 | 11 / 0 / 1 / 16 / 0 |
 
 One observation constrains how D1P-32 must score the Noir compiler. The
 build logs (`manifest.json`, `compile_log_tail`) already contain
@@ -1231,29 +1341,37 @@ warnings are E1 unless they describe the mismatch.
 
 ### F. RQ4 — Held-out scan
 
-**Protocol.** The rules, role inference, decoders, consumer extractors and
-validator are hashed and frozen before the first held-out artifact is
-opened. v1's source profile is fitted to a development consumer (§V-C).
-Freezing it as is will likely make many held-out consumers fall back to an
-empty profile, and the funnel will report that. Held-out families come from
-the private reservation (§IV-D) or from an equivalent frozen inventory. Every
-attempted build and every exclusion is reported. No rule changes after the
-scan begins. A post-hoc correction is reported as such, and the affected
-family stops counting as held out (contract §§9, 11). Any confirmed finding
-is disclosed to its maintainers before it supports a claim, and is
-anonymized in the submission.
+**Frame.** RQ4 uses the mini-draw of §IV-D: eight candidate Noir/EVM project
+groups listed from names and URLs only, of which the custodian reserved a
+subset privately. Under the protocol's rounding this is four groups, but the
+commitment does not state the number. This is a disclosed, smaller frame than
+the frozen v0.2.0 plan, which calls for full index traversal. We report it as
+such. Any transfer claim from RQ4 is bounded by eight candidates drawn from
+one search, not a sample of the ecosystem.
+
+**Protocol.** The rules, role inference, decoders, consumer loaders and
+validator are hashed and frozen before the custodian opens the reservation
+to the scan. If D1P-34's generic consumer loaders land before then, they are
+part of the frozen tool. Otherwise v1's fitted source profile is frozen as
+is, and held-out consumers will likely fall back to an empty profile. The
+funnel will report that. Every attempted build and every exclusion is
+reported. No rule changes after the scan begins. A post-hoc correction is
+reported as such, and the affected family stops counting as held out
+(contract §§9, 11). Any confirmed finding is disclosed to its maintainers
+before it supports a claim, and is anonymized in the submission.
 
 *Table 9: Held-out funnel and results.*
 
-| Family (anonymized) | Reserved before development? | Prior exposure (log) | Producer / consumer stack | Artifacts available | Supported | Consumer model (relation / profile) | Warnings (R-BIND / R-EFFECT / R-ANCHOR / R-POLARITY) | Adjudication | Highest level | Rule changes (must be 0) | Disclosure status |
+| Family (anonymized) | Reserved (commitment opened) | Prior exposure (log) | Producer / consumer stack | Artifacts available | Supported | Consumer model (relation / profile / generic loader) | Warnings (R-BIND / R-EFFECT / R-ANCHOR / R-POLARITY) | Adjudication | Highest level | Rule changes (must be 0) | Disclosure status |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | [PENDING D1P-33] | [PENDING D1P-33] | [PENDING D1P-33] | [PENDING D1P-33] | [PENDING D1P-33] | [PENDING D1P-33] | [PENDING D1P-33] | [PENDING D1P-33] | [PENDING D1P-33] | [PENDING D1P-33] | [PENDING D1P-33] | [PENDING D1P-33] |
 
 *Table 10: Held-out funnel totals.*
 
-| Stage | Families | Applications | Notes |
+| Stage | Groups | Applications | Notes |
 | --- | --- | --- | --- |
-| Reserved / frozen inventory | [PENDING D1P-33] | [PENDING D1P-33] | [PENDING D1P-33] |
+| Candidate frame (names/URLs only) | 8 | — | Stratum `noir-evm:eligible`; AI-prepared list; none in the 0xPARC tracker |
+| Reserved (custodian draw) | [PENDING D1P-33] (4 implied by protocol rounding) | [PENDING D1P-33] | Commitment `514ad719…` |
 | Artifacts available | [PENDING D1P-33] | [PENDING D1P-33] | [PENDING D1P-33] |
 | Supported (Noir beta.14/beta.22 + Solidity) | [PENDING D1P-33] | [PENDING D1P-33] | [PENDING D1P-33] |
 | Analyzed to completion | [PENDING D1P-33] | [PENDING D1P-33] | [PENDING D1P-33] |
@@ -1261,77 +1379,121 @@ anonymized in the submission.
 | Validated (E4) | [PENDING D1P-33] | [PENDING D1P-33] | [PENDING D1P-33] |
 
 Stages are monotone. An unsupported family explains attrition and is never
-counted as a miss or as safe.
+counted as a miss or as safe. v1 accepts exactly two Noir versions, so a
+reserved project on another compiler version will be unsupported without a
+frontend change. Making that change after opening the reservation would end
+the project's held-out status.
 
 **Answer to RQ4.** [PENDING D1P-33]
 
 ### G. RQ5 — Taxonomy
 
-The corpus for RQ5 is the taxonomy v1 corpus
-(`docs/taxonomy/v1-corpus.md`, Lane X). That file is not in the repository at
-`ba571ff`. The tables below follow protocol v0.2.0. If the corpus uses a
-different procedure, the tables will follow the corpus record and the
-difference will be stated.
+**Status: AI-assisted extraction, pending human labels.** Every number below
+comes from the seed-only v1 corpus (§IV-D). Relevance decisions were made by
+an AI agent, and every cause label is AI-suggested, recorded as `ASSUMED`,
+with the `human_label` field empty. These are not annotation data. Under
+contract §10 they cannot support a frequency or recurrence claim until human
+annotators label the findings and agreement is measured.
 
-*Table 11: Disclosure funnel (human annotation only).*
+*Table 11: Disclosure funnel (v1 corpus; AI screening, one seed endpoint).*
 
 | Stage | Count | Unit |
 | --- | --- | --- |
-| Raw retrieval hits | [PENDING TAXONOMY-V1] | hits |
-| Unique source documents | [PENDING TAXONOMY-V1] | documents |
-| Candidate findings (before deduplication) | [PENDING TAXONOMY-V1] | findings |
-| Canonical findings | [PENDING TAXONOMY-V1] | findings |
-| Included / excluded / unresolved | [PENDING TAXONOMY-V1] | findings |
-| Families represented (included) | [PENDING TAXONOMY-V1] | families |
-| Unresolved duplicate matches | [PENDING TAXONOMY-V1] | pairs |
+| Endpoints traversed | 1 of 17 (0xPARC zk-bug-tracker, commit `56a99667…`) | endpoints |
+| Raw retrieval hits | 27 | entries |
+| Unique source records | 1 | documents |
+| Candidate findings (before deduplication) | 27 | findings |
+| Canonical findings (duplicates) | 27 (0) | findings |
+| Included / excluded / unresolved (AI screening) | 19 / 8 / 0 | findings |
+| Families touched (all logged as exposed) | 23 | families |
+| Families represented among included findings | 15 | families |
 
-*Table 12: Label frequencies over included canonical findings, by family.*
+The eight exclusions and their recorded reasons are: a pure circuit-library
+gap with no evidenced consumer; a verifier soundness break and a
+trusted-setup compromise (both out of scope by contract §5.4); two
+proof-protocol or proof-system soundness flaws; a privacy leak with no
+execution effect; a library availability bug; and a consumer concurrency bug
+with no proof/consumer disagreement.
 
-| Label | Present (findings) | Present (families) | Uncertain | Absent | Example family (anonymized) |
-| --- | --- | --- | --- | --- | --- |
-| `C_RELATION_GAP` … `C_OTHER_BINDING` | [PENDING TAXONOMY-V1] | [PENDING TAXONOMY-V1] | [PENDING TAXONOMY-V1] | [PENDING TAXONOMY-V1] | [PENDING TAXONOMY-V1] |
-| `K_AUTHORIZATION` … `K_OTHER_EFFECT` | [PENDING TAXONOMY-V1] | [PENDING TAXONOMY-V1] | [PENDING TAXONOMY-V1] | [PENDING TAXONOMY-V1] | [PENDING TAXONOMY-V1] |
-| `A_PUBLIC_CALLER` … `A_OTHER_ROLE` | [PENDING TAXONOMY-V1] | [PENDING TAXONOMY-V1] | [PENDING TAXONOMY-V1] | [PENDING TAXONOMY-V1] | [PENDING TAXONOMY-V1] |
+*Table 12: AI-suggested cause labels over the 19 included findings (one
+label per finding; human labels pending).*
 
-(One row per label in the final table.)
+| Cause | Findings | Families | Example (corpus ID) | Human label |
+| --- | --- | --- | --- | --- |
+| `C_REPRESENTATION` | 7 | 7 | CF-01, out-of-range moves accepted (Dark Forest) | pending |
+| `C_RELATION_GAP` | 5 | 5 | CF-03, range-check outputs never constrained (circom-pairing) | pending |
+| `C_ACTIVATION_EXTENT` | 3 | 3 | CF-10, votes applied to wrong keys (MACI) | pending |
+| `C_OCCURRENCE_ACCOUNTING` | 2 | 2 | CF-06, one note yields many nullifiers (Aztec 2.0) | pending |
+| `C_CONTEXT_IDENTITY` | 1 | 1 | CF-22, context aliasing (Polygon zkEVM) | pending |
+| `C_FIELD_MAPPING` | 1 | 1 | CF-21, unconstrained path bit (Polygon zkEVM) | pending |
+| `C_VERIFICATION_CONFIG`, `C_DISCHARGE_TRANSFORMATION`, `C_OTHER_BINDING` | 0 | 0 | — | pending |
+| Consequence (`K_*`) and attacker-role (`A_*`) labels | not extracted | — | — | pending |
 
-*Table 13: Inter-annotator agreement (two human annotators).*
+The protocol records each label as present, absent or uncertain, and
+findings may carry several. The corpus has one suggested primary cause per
+finding and no consequence or role labels. Table 12 is therefore not the
+protocol's label-frequency table. Some inclusions need human review against
+the inclusion rule of §IV-A, which excludes pure circuit bugs unless the two
+sides disagree. Examples are zkEVM opcode-circuit gaps (CF-15, CF-16, CF-20)
+and a circuit-library range check (CF-03).
+
+*Table 13: Inter-annotator agreement.*
 
 | Field / label | Comparable n | Positives / negatives | Raw agreement | Coefficient (κ or α) | 95% interval | Missing / null |
 | --- | --- | --- | --- | --- | --- | --- |
-| Relevance (include / exclude / unresolved) | [PENDING TAXONOMY-V1] | [PENDING TAXONOMY-V1] | [PENDING TAXONOMY-V1] | [PENDING TAXONOMY-V1] | [PENDING TAXONOMY-V1] | [PENDING TAXONOMY-V1] |
-| Each cause, consequence and role label | [PENDING TAXONOMY-V1] | [PENDING TAXONOMY-V1] | [PENDING TAXONOMY-V1] | [PENDING TAXONOMY-V1] | [PENDING TAXONOMY-V1] | [PENDING TAXONOMY-V1] |
+| All fields | — | — | — | — | — | No annotation round has run (ledger `annotation_rounds` empty); pending human labels |
 
 *Table 14: Tool funnel for included findings (separate denominator).*
 
 | Stage | Findings | Families | Main attrition reasons |
 | --- | --- | --- | --- |
-| Artifacts available | [PENDING TAXONOMY-V1] | [PENDING TAXONOMY-V1] | [PENDING TAXONOMY-V1] |
-| Supported by BindCheck v1 | [PENDING TAXONOMY-V1] | [PENDING TAXONOMY-V1] | [PENDING TAXONOMY-V1] |
-| Cause covered by a v1 rule (§IV-C) | [PENDING TAXONOMY-V1] | [PENDING TAXONOMY-V1] | [PENDING TAXONOMY-V1] |
+| Artifacts available | 0 (not attempted) | 0 | Tool funnel not run for the v1 corpus |
+| Supported by BindCheck v1 | 0 (not attempted) | 0 | No corpus application lists a Noir producer (10 of 23 list Circom). None would pass v1's Noir beta.14/beta.22 gate |
+| Cause covered by a v1 rule (§IV-C) | not assessed | — | — |
 
-**Answer to RQ5.** [PENDING TAXONOMY-V1]
+The second row's attrition reason comes from the ledger's `producer_stack`
+fields. It is an expectation, not a measurement. The same observation is why
+the held-out frame (§VII-F) was drawn from Noir/EVM projects rather than
+from the corpus.
+
+**Answer to RQ5.** No answer is supported yet. In the seed extraction the
+AI suggestions used no `C_OTHER_BINDING` label and were dominated by
+representation and relation-gap mechanisms. Relation gaps are the cause that
+v1's R-BIND targets, but none of the corpus systems is analyzable by v1.
+These are observations about AI suggestions, not findings. Whether these mechanisms *recur across independent families*, and
+how reliably people label them, awaits human labels, the remaining
+endpoints, and the agreement study.
 
 ### H. Threats to validity
 
 **Development bias.** The rules were designed after the three case studies
 were known. Payy's defect, advisory and end-to-end artifact predate the
 rules. WarpToad was screened and inspected in D1-02, D1P-11 and later tasks.
-RQ1 and RQ2 therefore show capability *on these cases* only (contract §9).
-Transfer rests on RQ4 alone.
+The benchmark mutates the same two applications. RQ1 and RQ2 therefore show
+capability *on these applications* only (contract §9). Transfer rests on
+RQ4 alone.
 
 **Fitted heuristics.** Role inference relies on name fragments, and the
 source profile matches identifiers that occur in Payy's consumer (§V-C,
-§V-D). The Payy result shows that the profile works on the consumer it was
-written for, and nothing more.
+§V-D). The Payy results show that the profile works on the consumer it was
+written for. Even there, 8 of 12 Payy mutants were unsupported and one was
+missed. Generic loaders are **[PENDING D1P-34]**.
 
-**Artifact scale.** The Payy static rows use N=8 builds, while the Payy E4
+**Artifact scale.** The Payy case rows use N=8 builds, while the Payy E4
 chain uses the full-size configuration. The validation route links them by
-a counted manual association, not by re-analysis.
+a counted manual association, not by re-analysis. The full-size Payy
+mutants show the tail warning at `messages[1]..messages[999]`, consistent
+with the N=8 result. The unmutated full-size artifact has not been analyzed.
 
-**Validation provenance.** Every E4 in this paper reuses a witness
+**Use counting.** R-BIND counts witness-valued black-box inputs and
+arithmetic terms only (§V-B). A detection shows that a word has zero such
+uses. A non-detection may hide a weak or wrong binding, which is the main
+reason for the 16 unsupported mutants.
+
+**Validation provenance.** Every E4 in this paper replays a witness
 construction that people designed before D1P-30. The validator automates
-execution and auditing, not discovery of the witness.
+execution and auditing, not discovery of the witness. Of 38 benchmark
+warnings, 36 stop at E1 for lack of a route.
 
 **Injected cases and benchmark.** M-DOM and M-SRC are injected. M-DOM is
 grounded in an unused in-tree package and a developer warning, M-SRC in
@@ -1344,15 +1506,25 @@ unexecuted. Its Payy mutants sit on the faulty revision.
 admission (`S_DOM`). Neither variant demonstrates cross-chain reachability.
 
 **Baselines.** The same-policy arms were not instantiated (§VII-E). The
-comparison is between BindCheck and default tool configurations.
+comparison is between BindCheck and default tool configurations. Baselines on
+the benchmark are **[PENDING D1P-32]**.
+
+**Held-out frame.** The reserved frame has eight candidates from one
+AI-prepared search. Its commitment shows consistency, not randomness or
+timing, and the custodian's signature is not yet added (§IV-D).
+
+**Taxonomy.** The corpus covers one seed endpoint. Its relevance decisions
+and labels are AI-made, and its extraction deviated from the metadata-only
+access rule (§IV-D).
 
 **Negatives.** No fixture is a proven negative control. We report adjudicated
 counts, not false-positive rates.
 
-**AI involvement.** AI agents implemented code, ran D1P-22 and D1P-30,
-built the benchmark, wrote the B02 obligations and drafted this text
-(§X-B). AI output is not independent annotation (contract §10). Taxonomy
-labels come only from human annotators.
+**AI involvement.** AI agents implemented code, ran D1P-22, D1P-30 and
+D1P-31, built the benchmark, extracted the taxonomy seed corpus, prepared
+the held-out candidate list, wrote the B02 obligations and drafted this text
+(§X-B). AI output is not independent annotation (contract §10). Final
+taxonomy labels come only from human annotators.
 
 ---
 
@@ -1471,26 +1643,39 @@ baselines in D1P-22.
 ## IX. Limitations
 
 **Fragment.** v1 accepts Noir `1.0.0-beta.14` and `1.0.0-beta.22` artifacts
-only. Consumer facts come from a checked relation for two WarpToad consumer
-sources, or from a source profile fitted to Payy's `RollupV1.sol`. The
-route-A extractor supports one entry point's reachable constructs with
-OpenZeppelin 5.6.1 effects, standard atomic ERC-20 behavior, and no proxies,
-delegate calls, inline assembly or reentrancy. Unsupported inputs stop with
-a named reason. That keeps results honest but bounds applicability. RQ4's
-funnel measures how much.
+only. Consumer facts come from a checked relation produced by the route-A
+extractor, or from a source profile fitted to Payy's `RollupV1.sol`. The
+extractor supports one entry point's reachable constructs with OpenZeppelin
+5.6.1 effects, standard atomic ERC-20 behavior, and no proxies, delegate
+calls, inline assembly or reentrancy. Unsupported inputs stop with a named
+reason. That keeps results honest but bounds applicability. On the benchmark,
+16 of 30 mutants were unsupported (§VII-C). RQ4's funnel will measure the
+same on held-out projects.
 
-**Occurrence is not binding.** R-BIND treats one proof-enforced occurrence as
-sufficient. It misses a public input that is used but bound to the wrong
+**Use counting is not binding.** R-BIND treats one proof-enforced occurrence
+as sufficient. It misses a public input that is used but bound to the wrong
 value, used only on an inactive branch, or absorbed by a weak construction.
-It can warn on deliberately unconstrained metadata. As implemented, it also
-misses uses through dynamic memory and through black-box outputs (§V-B), so
-a word used only that way would draw a spurious warning.
+It can warn on deliberately unconstrained metadata. As implemented, it counts
+witnesses in `AssertZero` terms and witness-valued black-box *inputs* only.
+Black-box outputs, memory-block operations and Brillig calls are not counted
+(§V-B), so a word used only that way would draw a spurious warning. These are
+the main reasons the benchmark's swap, order, dependency-strength and
+record-semantics mutants are unsupported.
 
-**Name-based roles.** Roots, replay keys and effect words are inferred from
-name fragments and idioms (§V-D). A root named otherwise is not checked by
-R-ANCHOR. A transition-output root named `old_*` would be wrongly required to
-be must-be-in. Replay accounting on one path can satisfy R-POLARITY while
-another effect path has none, as on Payy's burn path.
+**Name-based roles and a fitted profile.** Roots, replay keys and effect
+words are inferred from name fragments and idioms (§V-D). The source
+profile's idioms are identifiers from Payy's consumer, and the relation-mode
+location pattern matches WarpToad's verifier call (§V-C, §V-F). A root named
+otherwise is not checked by R-ANCHOR. A transition-output root named `old_*`
+would be wrongly required to be must-be-in. Generic loaders are
+**[PENDING D1P-34]**.
+
+**Missing burn registration and replay applicability.** On Payy, v1 flags
+the unbound tail words and the effect dispatch, but it does not report that
+burns lack registration and single-use accounting. The `.spent` idiom on the
+mint path satisfies R-POLARITY. Conversely, removing the `.spent == false`
+guard makes replay accounting look inapplicable, which is why PY-S02 is
+missed (§V-F).
 
 **Hash semantics.** Poseidon2 is modeled at most as a functional
 uninterpreted tuple function (equal inputs give equal outputs), with no
@@ -1499,23 +1684,39 @@ hash semantics at all. Validation uses real hashes. Any conditional
 no-collision argument (B02 §3) is outside this paper's results.
 
 **Conditional binding.** v1 has no activation-condition reasoning. Payy's
-tail is caught in the N=8 builds because the tail words have no occurrences
-there. A variant that constrains tail words under a witness-controlled
-predicate would be counted as used. Earlier ACIR and SMT work on this
-pattern produced an analyzer false positive from unsound probe
+tail is caught because the tail words have no occurrences in either the N=8
+builds or the full-size mutants. A variant that constrains tail words under a
+witness-controlled predicate would be counted as used. Earlier ACIR and SMT
+work on this pattern produced an analyzer false positive from unsound probe
 specialization (later repaired) and general queries that did not finish
 (T22, T22-v3, T22-v4).
 
-**Scale.** The Payy static rows use N=8 builds. Payy's real proofs and
-consumer replays use the original 1,000-message configuration. These
-evidence grades are kept separate.
+**Scaled Payy build.** The Payy case rows use N=8 builds. Payy's real proofs
+and consumer replays use the original 1,000-message configuration. The link
+between them is a counted manual association. The unmutated full-size
+artifact has not been analyzed, although the full-size mutants show the same
+tail warning.
 
-**Validation is route-bound.** E4 requires a registered route whose fixture
-constructs the witness. Every route used here reuses a construction designed
-before D1P-30. Validation covers one consumer call from a fixed admitted
-pre-state (or, for Payy, a replay rejection in a second call).
-Multi-transaction histories, front-running and observation of honest proofs
-are out of scope (B02 §3.1).
+**Validation replays existing witnesses.** E4 requires a registered route
+whose fixture constructs the witness. Every route used here replays a
+construction designed before D1P-30. On the benchmark, 36 of 38 warnings stop
+at E1 for lack of a route. Automatic witness construction is
+**[PENDING AUTO-VALIDATION]**. Validation covers one consumer call from a
+fixed admitted pre-state (or, for Payy, a replay rejection in a second
+call). Multi-transaction histories, front-running and observation of honest
+proofs are out of scope (B02 §3.1).
+
+**Same-policy arm not instantiated.** No policy wrapper, custom detector or
+G1–G5 harness existed for the baselines, and none was written after seeing
+the outcomes (D1P-22). The comparison therefore covers default tool
+configurations only. It cannot show that a same-policy contract-only
+baseline would miss these cases. Baselines on the benchmark are
+**[PENDING D1P-32]**.
+
+**Small held-out frame; AI-assisted taxonomy.** The reserved frame has eight
+candidates from one AI-prepared search, smaller than the frozen plan. The
+taxonomy corpus covers one seed endpoint, and its relevance decisions and
+labels are AI-made, pending human labels (§IV-D).
 
 **No safety claims.** BindCheck never returns `VERIFIED_WITHIN_SCOPE` from
 rule silence. Absence of warnings is E0 within the supported scope.
@@ -1523,9 +1724,9 @@ rule silence. Absence of warnings is E0 within the supported scope.
 **Not novel by itself.** Integration-layer failures [1], rich circuit
 specifications [3, 4] and computation–constraint consistency [5] are prior
 work. Unused-variable lint already flags some unused public inputs
-(D1P-22). Our claim is limited to joining both sides into rules that state
-the cross-component reason, and validating them, to the extent that RQ1–RQ4
-support it.
+(D1P-22; benchmark compile logs). Our claim is limited to joining both sides
+into rules that state the cross-component reason, and validating them, to
+the extent that RQ1–RQ4 support it.
 
 ---
 
@@ -1564,8 +1765,12 @@ Venue requirements are from the IEEE S&P 2027 call for papers [8], retrieved
 
 AI agents wrote code, task reports, the B02 obligations, screening notes and
 draft text. AI use is therefore integral to the methodology and is
-described explicitly, as the CFP requires [8]. AI systems are excluded from
-taxonomy annotation and adjudication. Authors inspect every claim, citation,
+described explicitly, as the CFP requires [8]. An AI agent screened the
+taxonomy seed corpus and suggested its cause labels. Those suggestions are
+recorded as `ASSUMED` and are not annotation. AI systems are excluded from
+final taxonomy labeling and adjudication. An AI planner also prepared the
+held-out candidate list from names and URLs only. A human custodian
+performed the draw outside every agent session. Authors inspect every claim, citation,
 label and result. **[TODO]** Write the disclosure from the preserved task
 prompts and reports.
 
@@ -1595,13 +1800,17 @@ replay keys and effect words on the consumer side with their admission
 polarity, and applies four generic rules. A validator replays registered
 real-proof routes. On five development targets, v1 warned on the
 producer-side defects in historical Payy and injected M-DOM, and on the
-consumer-side defect in injected M-SRC, at the expected public words. It
-emitted no warning on the two controls. All three positive mismatches
-reached end-to-end validation. On the same targets, pinned circuit-only and
-contract-only tools in default configurations described no mismatch. These
-are development results. On the mutation benchmark, [PENDING D1P-31] and
-[PENDING D1P-32]. On held-out families, [PENDING D1P-33]. In public
-disclosures, [PENDING TAXONOMY-V1].
+consumer-side defect in injected M-SRC, at the expected public words, and on
+neither control. All three positive mismatches reached end-to-end
+validation. On 30 mutants of the same two applications, v1 detected 13: all
+of them where a use or guard was removed, and each at the broken binding.
+Sixteen mutants left a binding present but wrong and are outside its
+supported scope, and one was missed. Pinned circuit-only and contract-only
+tools in default configurations described no mismatch on the case targets.
+These are development results. Baselines on the benchmark
+[PENDING D1P-32], generic consumer loaders [PENDING D1P-34], automatic
+witness construction [PENDING AUTO-VALIDATION], held-out results on the
+disclosed mini-draw [PENDING D1P-33], and human taxonomy labels remain.
 
 ---
 
@@ -1648,53 +1857,55 @@ None of these timeouts is evidence of safety.
 | M-DOM independent producer provenance | D1P-21A §4 | Mechanically checked |
 | Consumer extraction, 22 families, fail-closed | D1P-16; D1P-18 | Mechanically checked on fragment |
 | M-SRC extraction removes exactly K2 | D1P-21B §3 | Mechanically checked |
-| v1 rules and warnings on five development targets | D1P-30 §§3–4; `results/raw/D1P-30/analyses/` (ignored) | Tool output (E1), development |
+| v1 rules and warnings on five development targets | D1P-30 §§3–4; rerun in D1P-31 §5 | Tool output (E1), development |
 | Fresh E4 on M-DOM and M-SRC through registered routes | D1P-30 §§5.1–5.2; validation index | Locally reproduced (injected), tool-driven route |
 | Preserved E4 audit for Payy | D1P-30 §5.3 | Automatic audit of preserved evidence |
-| Payy static rows use N=8 builds | D1P-30 §2 hashes; T22 §§2–3; analysis paths | Checked against the D1P-30 analysis outputs |
+| Payy case rows use N=8 builds | D1P-30 §2 hashes; T22; D1P-30 analysis outputs | Checked against the analysis outputs |
 | Baselines on the case targets | D1P-22 record; `results/raw/D1P-22/` (ignored) | Tool output, scored under the preregistered plan |
 | 30 mutants compile; reachability checks | BENCHMARK.md §§3–4; `manifest.json` | Build observation (development) |
-| Taxonomy design and search plan frozen | protocol v0.2.0; search plan | Design only |
-| Benchmark detection, benchmark baselines, held-out, taxonomy corpus | — | [PENDING D1P-31/32/33, TAXONOMY-V1] |
+| Benchmark: 13/30 detected, 16 unsupported, 1 miss; 38 warnings (16 related, 22 inherited) | D1P-31 §§1, 4 | Tool output (E1) with post-run adjudication, development |
+| Benchmark validation: 2 preserved E4, 36 E1 | D1P-31 §6 | Automatic audit of preserved evidence; no new proof |
+| Contract revision 3 | D1P-31 §2; contract change log | Controlling document |
+| Taxonomy seed corpus (27 screened, 19 included, 15 families) | v1-corpus.md; v1-corpus-ledger.json | AI-assisted extraction; human labels pending |
+| Held-out mini-draw commitment (8 candidates) | reservation-commitment-2026-10-28.json | Custodian-reported; signature pending |
+| Benchmark baselines, generic loaders, auto-validation, held-out scan, human labels | — | [PENDING D1P-32/34/33, AUTO-VALIDATION] |
 
 ---
 
 ## Open items for authors
 
-1. **Payy artifact scale.** D1P-30's Payy static rows analyze the N=8
-   `agg_agg` builds from T22 (`build/T22/scratch/…`), while the E4 chain they
-   are linked to uses the full-size 1,000-message artifacts. The D1P-30 report
-   gives the hashes but not this fact. Either run v1 on the full-size
-   artifacts (D1P-31 needs that for the Payy mutants anyway) or keep the
-   caveat as written in §VII-B.
-2. **Fitted identifiers.** D1P-30 §1 says the rule engine contains no Payy or
-   WarpToad identifier. That holds for the rule functions. The source
-   profile's idioms (`verifyMessages`, `verifyMint`/`verifyBurn`,
-   `verifyRootHash(oldRoot)`, `.spent`) match `RollupV1.sol`, and the
-   relation-mode location pattern matches WarpToad's `withdrawVerifier`.
-   The paper says this in §V-C/F and §IX. Decide whether to generalize the
-   profile before D1P-33 freezes the rules.
-3. **Occurrence counting.** D1P-30 §3 says Poseidon and recursive black boxes
-   contribute "checked input/output occurrences". The code counts
-   witness-valued black-box *inputs* only. Outputs, memory-block operations
-   and Brillig calls are not counted. The paper describes the code (§V-B).
-   Either fix the code or append a correction note. Do not edit the
+1. **Payy artifact scale.** The Payy case rows analyze the N=8 `agg_agg`
+   builds from T22, while the E4 chain uses the full-size artifacts. D1P-31's
+   full-size mutants show the same tail warning, but the unmutated full-size
+   earlier and check-added artifacts have not been analyzed. A one-command
+   rerun on those two artifacts would close the gap.
+2. **Fitted identifiers.** The source profile's idioms and the relation-mode
+   location pattern are drawn from the development consumers (§V-C, §V-F).
+   D1P-34 should replace them before D1P-33 freezes the tool.
+3. **Occurrence counting.** D1P-30 §3 says black boxes contribute
+   "input/output occurrences". The code counts inputs only. Either fix the
+   code before the D1P-33 freeze or append a correction note. Do not edit the
    immutable report.
-4. **Taxonomy v1 corpus.** `docs/taxonomy/v1-corpus.md` does not exist at
-   `ba571ff`. §IV-D and RQ5 assume the protocol v0.2.0 procedure until the
-   corpus states its own.
-5. **D1P-31 protocol.** Freeze the scoring rules of §VII-B, which cover
-   inherited Payy tail warnings, the WT-C03/WT-S01 overlap, relations for
-   consumer mutants, and analyst-time recording, before inspecting any
-   benchmark result.
-6. **Contract revision 3.** When D1P-31 lands, re-check §I-D and the RQ
-   mapping against it.
-7. **Citations.** CIVER and CCC-Check full texts remain unread. The CCC-Check
-   ePrint PDF refused automated retrieval. Supply copies and resolve each
-   **[TODO-VERIFY]**. Mythril and Foundry are cited as software, because we
-   found no canonical paper for either.
-8. Draw Figure 1. Replace repository links with an anonymized artifact.
-9. Have a human author inspect every claim and citation (contract §10).
+4. **Replay applicability (PY-S02).** Source-mode R-POLARITY is gated on
+   finding the guard it checks for. Decide whether D1P-34 makes applicability
+   follow the write or the replay-key role, as relation mode already does.
+5. **Taxonomy.**
+   - The metadata-only access rule was not followed for the seed endpoint.
+     The custodian-sanitized flow is owed before any annotation round.
+   - Decide whether human annotators see the AI-suggested labels. Showing
+     them risks anchoring; the protocol does not say.
+   - Several AI inclusions need checking against the pure-circuit exclusion
+     (§VII-G).
+6. **Reservation.** Add the custodian's signature to the commitment record.
+   Record the number of reserved groups privately, so that the opening can
+   be checked against it.
+7. **Same-policy baselines.** Preregister and build the σ wrappers or
+   harnesses before D1P-32, or state that the benchmark comparison is
+   default-arm only.
+8. **Citations.** CIVER and CCC-Check full texts remain unread. Supply
+   copies and resolve each **[TODO-VERIFY]**.
+9. Draw Figure 1. Replace repository links with an anonymized artifact.
+10. Have a human author inspect every claim and citation (contract §10).
 
 ---
 
