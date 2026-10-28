@@ -1,0 +1,125 @@
+{
+  "schema": "bindcheck.validation-index.v1",
+  "scope": "D1P-31 manually registered, content-addressed benchmark adapters. These routes are validation inputs, not static-rule changes. Both reuse preserved D1P-30 proof executions only after the D1P-31 correspondence record passes.",
+  "routes": [
+    {
+      "id": "xbm-wt-c03-preserved-m-dom-e4",
+      "match": {
+        "artifact_sha256": "4775cd32a2bb30d32e04874fa45c1feb24e929e9d9454824f9feb5bd5b484845",
+        "consumer_sha256": "323a1cf26c7449f67cf277ff0a46c31e12f725c555f9fa165d5a60011e122c39",
+        "rule": "R-BIND"
+      },
+      "classification": "preserved D1P-30 M-DOM E4 after bytecode/ABI correspondence",
+      "fresh_execution": false,
+      "manual_steps": 2,
+      "manual_inputs": [
+        "content-addressed association with the existing M-DOM fixture",
+        "D1P-31 equality audit of compiled ACIR bytecode, ABI, and Noir version"
+      ],
+      "scope_note": "The benchmark artifact differs from D1P-15 only in nonsemantic artifact metadata: decoded ACIR bytecode, ABI, and compiler version are equal. This reuses preserved D1P-30 evidence and is not a fresh D1P-31 proof.",
+      "stages": [
+        {
+          "name": "artifact_correspondence",
+          "evidence_level": "E1",
+          "mode": "fresh-static-audit",
+          "explanation": "The benchmark WT-C03 artifact and the previously proved M-DOM artifact have identical compiled relation bytes and ABI.",
+          "checks": [
+            {"path": "results/raw/D1P-31/validation-correspondence.json", "json_path": "wt_c03.bytecode_equal", "equals": true},
+            {"path": "results/raw/D1P-31/validation-correspondence.json", "json_path": "wt_c03.abi_equal", "equals": true},
+            {"path": "results/raw/D1P-31/validation-correspondence.json", "json_path": "wt_c03.noir_version_equal", "equals": true}
+          ]
+        },
+        {
+          "name": "concrete_witness_and_execute",
+          "evidence_level": "E2",
+          "mode": "preserved",
+          "explanation": "The preserved foreign-contract note witness satisfies the identical M-DOM relation.",
+          "checks": [
+            {"path": "results/raw/D1P-30/validation/m-dom/execution.json", "json_path": "cases.foreign.relationshipToConfiguredAddress", "equals": "distinct"},
+            {"path": "results/raw/D1P-30/validation/m-dom/execution.json", "json_path": "cases.foreign.mutationExecution.witnessSolved", "equals": true}
+          ]
+        },
+        {
+          "name": "real_proof",
+          "evidence_level": "E3",
+          "mode": "preserved",
+          "explanation": "The real proof verified in bb.js and the generated Solidity verifier for the identical relation/key pairing.",
+          "checks": [
+            {"path": "results/raw/D1P-30/validation/m-dom/foreign-proof.json", "json_path": "jsVerified", "equals": true},
+            {"path": "results/raw/D1P-30/validation/m-dom/foreign-proof.json", "json_path": "generatedVerifierAccepted", "equals": true}
+          ]
+        },
+        {
+          "name": "consumer_replay",
+          "evidence_level": "E4",
+          "mode": "preserved",
+          "explanation": "The unchanged pinned consumer accepted the proof, wrote the nullifier, and minted the state-checked amount.",
+          "checks": [
+            {"path": "results/raw/D1P-30/validation/m-dom/execution.json", "json_path": "cases.foreign.mint.receipt.status", "equals": "success"},
+            {"path": "results/raw/D1P-30/validation/m-dom/execution.json", "json_path": "cases.foreign.mint.effects.nullifierWritten", "equals": true},
+            {"path": "results/raw/D1P-30/validation/m-dom/execution.json", "json_path": "cases.foreign.pinnedExecution.outcome", "equals": "rejected"}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "xbm-wt-s01-preserved-m-src-e4",
+      "match": {
+        "artifact_sha256": "7190813f623967b79ba80a1635536fcc9c8524c1d1cb9f00696832f644b38327",
+        "consumer_sha256": "39ff35459c24b3d86677b84f8039a447e59898fd54724088cab2cca0baa33189",
+        "rule": "R-ANCHOR"
+      },
+      "classification": "preserved D1P-30 M-SRC E4 after comment-only source correspondence",
+      "fresh_execution": false,
+      "manual_steps": 2,
+      "manual_inputs": [
+        "content-addressed association with the existing M-SRC fixture",
+        "D1P-31 comment-only source-difference audit"
+      ],
+      "scope_note": "WT-S01 and D1P-19 M-SRC differ only in a Solidity line comment and final newline. Solidity executable tokens are equal. This reuses preserved D1P-30 evidence and is not a fresh D1P-31 proof.",
+      "stages": [
+        {
+          "name": "source_correspondence",
+          "evidence_level": "E1",
+          "mode": "fresh-static-audit",
+          "explanation": "Removing Solidity line comments and whitespace yields equal executable source.",
+          "checks": [
+            {"path": "results/raw/D1P-31/validation-correspondence.json", "json_path": "wt_s01.executable_source_equal", "equals": true},
+            {"path": "results/raw/D1P-31/validation-correspondence.json", "json_path": "wt_s01.diff_is_comment_and_eof_only", "equals": true}
+          ]
+        },
+        {
+          "name": "concrete_witness_and_execute",
+          "evidence_level": "E2",
+          "mode": "preserved",
+          "explanation": "The preserved private-root witness solves the pinned producer while the local root is not admitted.",
+          "checks": [
+            {"path": "results/raw/D1P-30/validation/m-src/execution.json", "json_path": "attackGate.fixedPreState.privateRootAdmitted", "equals": false},
+            {"path": "results/raw/D1P-30/validation/m-src/execution.json", "json_path": "attackGate.witnessSolved", "equals": true}
+          ]
+        },
+        {
+          "name": "real_proof",
+          "evidence_level": "E3",
+          "mode": "preserved",
+          "explanation": "The real proof verified in bb.js and the generated pinned Solidity verifier.",
+          "checks": [
+            {"path": "results/raw/D1P-30/validation/m-src/attack-proof.json", "json_path": "jsVerified", "equals": true},
+            {"path": "results/raw/D1P-30/validation/m-src/attack-proof.json", "json_path": "generatedVerifierAccepted", "equals": true}
+          ]
+        },
+        {
+          "name": "consumer_replay",
+          "evidence_level": "E4",
+          "mode": "preserved",
+          "explanation": "The executable-equivalent M-SRC consumer accepted, wrote the nullifier, and minted the state-checked amount.",
+          "checks": [
+            {"path": "results/raw/D1P-30/validation/m-src/execution.json", "json_path": "attackGate.receipt.status", "equals": "success"},
+            {"path": "results/raw/D1P-30/validation/m-src/execution.json", "json_path": "attackGate.effects.nullifierWritten", "equals": true},
+            {"path": "results/raw/D1P-30/validation/m-src/execution.json", "json_path": "attackGate.effects.recipientDelta", "equals": "3000000000000000000"}
+          ]
+        }
+      ]
+    }
+  ]
+}

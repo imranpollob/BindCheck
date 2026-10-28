@@ -1,16 +1,18 @@
 # BindCheck research contract
 
-**Status:** D1 research contract revision 2; INVESTIGATE FURTHER
-**Revised:** 27 October 2026; revision 1 frozen 23 October 2026; original contract frozen 20 October 2026
+**Status:** D1 research contract revision 3; INVESTIGATE FURTHER
+**Revised:** 28 October 2026; revision 2 frozen 27 October 2026; revision 1 frozen 23 October 2026; original contract frozen 20 October 2026
 **Scope:** Automated discovery and end-to-end validation of proof-to-execution mismatches
 
-This document controls prospective D1 work. [Revision 1](history/research-contract-2026-10-23.md) and the [original contract](history/research-contract-2026-10-20.md) remain the interpretation boundaries for experiments run under them. Changes follow the dated change-control entry below; no historical experiment or verdict is retroactively relabeled. The [D1 brief](d1/brief.md), [roadmap](d1/roadmap.md), and versioned [reference proposal](d1/reference-proposal.md) explain the implementation plan.
+This document controls prospective D1 work. [Revision 2](history/research-contract-2026-10-27.md), [revision 1](history/research-contract-2026-10-23.md), and the [original contract](history/research-contract-2026-10-20.md) remain the interpretation boundaries for experiments run under them. Changes follow the dated change-control entry below; no historical experiment or verdict is retroactively relabeled. The [D1 brief](d1/brief.md), [roadmap](d1/roadmap.md), and versioned [reference proposal](d1/reference-proposal.md) explain the implementation plan.
 
 ## 1. Paper thesis
 
 A zero-knowledge verifier establishes only the relation encoded by its circuit and verification configuration. A consuming contract may interpret the accepted public values differently, perform effects that were not authorized, or omit effects required by the accepted state transition.
 
 BindCheck D1 investigates whether a tool can **automatically discover** proof-to-execution mismatches from the actual producer constraints, public-input decoding and consumer effects, and **automatically validate** them end to end. End-to-end validation means a real proof, accepted by the unchanged verifier and consumer from an admitted or reachable state, producing a committed effect that the reviewed policy does not authorize, or omitting a required one.
+
+BindCheck analyzes the circuit–consumer boundary and produces actionable warnings when authenticated proof outputs do not adequately bind the effects the consumer performs.
 
 The possible novelty lies in that discovery-and-validation capability, demonstrated against generic and same-policy baselines. Integration failures, rich semantic specifications, modular summaries, selective unfolding, and the authorization/coverage (`P`/`O`/`E`) terminology and a formal transition model are prior work or framing, **not contributions by themselves** (CIVER, Coda, CCC-Check, the SNARK SoK). The specific advance over prior work must be demonstrated, not asserted. A new ACIR adapter, known-case reproduction, or more solver tuning alone does not establish a contribution.
 
@@ -32,10 +34,12 @@ If the available cases cannot support a prevalence study, RQ1 remains a model-ex
 
 These are goals, not completed claims.
 
-1. **Capability.** Automated discovery of proof-to-execution mismatch candidates and automated end-to-end validation to E4, with the specific advance over prior work demonstrated.
-2. **Justified implementation.** A precisely supported boundary model, extraction provenance, an abstraction-preservation argument, and explicit unresolved results. Authorization and coverage terminology alone is not a novelty claim.
-3. **Comparative evidence.** Generic/default and same-policy baselines, development and held-out cases, ablations, and total analyst/proving/solver cost. These results do not yet exist.
-4. **Efficiency.** A measured advantage, if one is found. Revision 1's null and negative results are reported regardless.
+1. **Taxonomy.** A taxonomy of proof-to-execution binding failures, grounded in the boundary model and evaluated across supported cases.
+2. **Actionable diagnostics.** Actionable cross-layer diagnostics that localize an inadequately bound proof output, explain the affected consumer effect, and suggest a repair.
+3. **Capability.** Automated discovery of proof-to-execution mismatch candidates and automated end-to-end validation to E4, with the specific advance over prior work demonstrated.
+4. **Justified implementation.** A precisely supported boundary model, extraction provenance, an abstraction-preservation argument, and explicit unresolved results. Authorization and coverage terminology alone is not a novelty claim.
+5. **Comparative evidence.** Generic/default and same-policy baselines, development and held-out cases, ablations, and total analyst/proving/solver cost. These results do not yet exist.
+6. **Efficiency.** A measured advantage, if one is found. Revision 1's null and negative results are reported regardless.
 
 ## 4. System model
 
@@ -252,3 +256,4 @@ The initial ten-researcher-day budget is a feasibility decision budget, not a co
 | --- | --- | --- |
 | 2026-10-23 | D1 revision 1, authorized by the user's request to start D1-00. Focus the method and RQs on consumer-directed extraction/refinement; specify the initial fragment, evidence grades, preservation obligations, baselines, and bounded decision gates. Replace an open-ended next encoding repair with T22 reporting closure plus independent intake. | Authorization and coverage definitions, threat-model restrictions, and three verdicts are retained. Original contract bytes are preserved in `docs/history/research-contract-2026-10-20.md`. No old report or result is changed; no rerun is required to preserve its original meaning. Earlier experiments cannot count as validation of the new D1 method; fresh separately versioned evaluation is required for that claim. |
 | 2026-10-27 | Revision 2, authorized by the planner decision recorded in D1P-D03. Move the target contribution from a measurable efficiency advantage to capability: automated discovery and end-to-end validation of proof-to-execution mismatches. Demote the old RQ2 to secondary RQ5. Add the E0–E4 evidence ladder, two-arm baselines and development-case scope rules. | No result is relabeled. D1P-07, D1P-09, D1P-10, D1-01/T22 and the historical synthetic-branch results keep their original meaning as evidence on the revision-1 efficiency hypothesis (now RQ5). No rerun is required. These results cannot be cited as capability evidence. Revision-1 bytes are archived under `docs/history/research-contract-2026-10-23.md` before editing. |
+| 2026-10-28 | Revision 3, authorized by D1P-31. Add a taxonomy of proof-to-execution binding failures and actionable cross-layer diagnostics to the candidate contributions, and state the core BindCheck boundary-analysis claim prospectively. | No earlier result is relabeled or rerun. Revision-2 bytes are preserved byte-identically in `docs/history/research-contract-2026-10-27.md`; earlier experiments retain the contract and interpretation under which they were run. |

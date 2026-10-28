@@ -1,0 +1,18 @@
+{
+  "schema": "bindcheck.taxonomy.reservation-commitment/v1",
+  "protocol_version": "0.2.0",
+  "frame": "held-out mini-draw: Noir circuit + Solidity/EVM consumer projects, names and URLs only",
+  "candidate_groups": 8,
+  "stratum": "noir-evm:eligible",
+  "rounding": "ceil_per_stratum",
+  "commitment_sha256": "514ad719dd720ffe49e584e1e7b02da2573075e674a989209942ef67aeccc57b",
+  "commitment_definition": "SHA256(nonce_bytes || canonical_selection_manifest_bytes)",
+  "draw_performed_by": "repository owner acting as human reservation custodian",
+  "draw_environment": "plain macOS Terminal outside every agent session, scripts/taxonomy/reserve_families.py",
+  "opening_location": "private, outside every Git worktree; not disclosed to any agent before the D1P-33 scan",
+  "screening_before_draw": "custodian searched the 0xPARC zk-bug-tracker for every candidate name; none appeared",
+  "candidate_list_preparation": "AI planner prepared a metadata-only name/URL list from search-result snippets; no candidate repository was opened",
+  "attestation_status": "reported by the custodian in the planner session on 2026-10-28; custodian signature not yet added",
+  "deviation_from_full_protocol": "smaller frame than the frozen v0.2.0 search plan (eight GitHub candidates instead of full index traversal); disclosed as a limitation",
+  "limitation": "the commitment shows consistency with a later opening, not randomness or timing"
+}

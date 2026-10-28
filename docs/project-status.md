@@ -80,7 +80,8 @@ flowchart TD
     d1p20 --> d1p21a["D1P-21A exact-state + M-DOM gates [DONE]"]
     d1p21a --> d1p21b["D1P-21B variant extraction gate [DONE]"]
     d1p21b --> d1p30["D1P-30 BindCheck v1 development tool [DONE]"]
-    d1p30 --> plannerReview["Capability baselines + held-out review [NEXT]"]
+    d1p30 --> d1p31["D1P-31 30-mutant development benchmark [DONE]"]
+    d1p31 --> plannerReview["Capability baselines + held-out review [NEXT]"]
     d1paper --> lanex["Lane-X exploratory (X1/X2) and mutation benchmark [DONE]"]
     plannerReview --> capabilityGate["Automated discovery + E4 capability gate [WAITING]"]
     d1p10 --> d1p10result["Transformed-arm eligibility [UNKNOWN]"]
@@ -133,7 +134,7 @@ flowchart TD
     classDef waiting fill:#D9D9D9,stroke:#B3B3B3
     classDef unknown fill:#FFE0C2,stroke:#FF9E42
 
-    class foundation,fixture,payy,sourceCheck,coneGate,nineCases,failureAnalysis,v3Rerun,generalGate,tracking,livingTree,d100,d101,d102,d103preflight,d103review,d103typed,d103boundary,d103guards,d103guardreview,d103concrete,d103replayreview,d103recovery,d1p00,d1p01,d1p01artifact,d1p02,d1p03,d1p04,d1p05,d1p04elig,d1p07,d1p08,d1p09,d1p10,d1p11,d1p12,warptoadRecovery,d1p12r,d1p13,d1p14a,d1p14b,d1p14c,d1p14d,d1p17,d1pint1,d1p16,d1p18,d1p15,d1p19,d1p20,d1p21a,lanex done
+    class foundation,fixture,payy,sourceCheck,coneGate,nineCases,failureAnalysis,v3Rerun,generalGate,tracking,livingTree,d100,d101,d102,d103preflight,d103review,d103typed,d103boundary,d103guards,d103guardreview,d103concrete,d103replayreview,d103recovery,d1p00,d1p01,d1p01artifact,d1p02,d1p03,d1p04,d1p05,d1p04elig,d1p07,d1p08,d1p09,d1p10,d1p11,d1p12,warptoadRecovery,d1p12r,d1p13,d1p14a,d1p14b,d1p14c,d1p14d,d1p17,d1pint1,d1p16,d1p18,d1p15,d1p19,d1p20,d1p21a,d1p21b,d1p30,d1p31,lanex done
     class analysis,d1,d1paper,d103,d103impl,d103consumer,d103effects active
     class d103linkreview,plannerReview next
     class evaluation,history,heldOut,baselines,manuscript,claims,artifacts,draft,transferCase,sensitivity,submit,t22,acirSummary,d104,d105,d106,d107,d108,d103symbolic,d1p09decision,d1p10decision,warptoadJoint,capabilityGate waiting
@@ -384,10 +385,21 @@ flowchart TD
     preserved Payy E4 chain. Manual adapters are counted. Baseline comparison,
     held-out transfer, automatic witness synthesis, and the capability gate
     remain open; D1 remains UNKNOWN.
+41. Done as a bounded development benchmark: [D1P-31](../reports/D1P-31.md)
+    freezes the D1P-30 rule bytes, analyzes all 30 mutants and five prior
+    targets, and detects 13 mutants while reporting 16 unsupported and one
+    supported miss. Twenty-two warning objects are inherited Payy tail
+    findings and are kept separate as unrelated. All 38 mutant warnings enter
+    validation in class order; WT-C03 and WT-S01 reuse correspondence-checked
+    preserved E4, while 36 remain E1. No new proof or solver runs. Contract
+    revision 3 is prospective and archives revision 2 byte-identically. The
+    exposed benchmark does not establish held-out transfer, capability, or a
+    D1 verdict.
 
 The end goal does not imply that submission is currently justified. Contract
-revision 2 retains authorization and coverage but makes automated discovery
-and E4 end-to-end validation the primary prospective capability target;
+revision 3 retains authorization and coverage, adds taxonomy and actionable
+cross-layer diagnostics as prospective contributions, and keeps automated
+discovery and E4 end-to-end validation the primary prospective capability target;
 efficiency is secondary RQ5. The required two-arm baselines and frozen
 held-out-family transfer have not been completed. Unresolved
 T22 results remain UNKNOWN. D1P-09 adds an offline selected-cone transformation
@@ -409,9 +421,11 @@ records 22/22 combined structural/control coverage, not 22 EVM executions.
 D1P-19 completes the bounded B02 P1/P3/P4/P6 prerequisites. D1P-20 supplies
 the extracted-consumer implementation model for the tested mint fragment,
 and D1P-21A passes exact-state non-vacuity plus independent M-DOM provenance.
-D1P-21B supplies variant-specific state-bound extraction, and D1P-30 supplies
+D1P-21B supplies variant-specific state-bound extraction, D1P-30 supplies
 the first working development analyzer/validator with two fresh and one
-preserved E4 chains. Baseline comparison and held-out transfer remain open, so
+preserved E4 chains, and D1P-31 measures 13 detections, 16 unsupported targets,
+one supported miss, and 22 unrelated inherited warnings on the exposed
+30-mutant benchmark. Baseline comparison and held-out transfer remain open, so
 the campaign still does not complete the capability gate. Neither screen, blocker,
 development fixture nor component check is a method-evaluation,
 cross-chain, policy or security result. D1
@@ -482,6 +496,8 @@ slots were executed.
 | 2026-10-27 | D1P-21A exact-state non-vacuity and M-DOM provenance | `[DONE]` gates 1 and 3 / `[UNKNOWN]` campaign and security | [Report](../reports/D1P-21A.md) and ignored evidence manifest: generate exactly one new real proof for each of pinned + `S_DOM`, **INJECTED** M-DOM + `S_DOM`, pinned + `S_SRC`, and **INJECTED** M-SRC + `S_SRC`; all four correct artifact/VK/verifier pairings accept and actual mints commit the expected `5e18` recipient/supply and nullifier effects. Independently derive M-DOM private contract witness 59, classify all 86 L1 Poseidon2 calls, check all 77 exact BN254 regions, and freeze an exhaustive pinned delta. Synthetic `S_DOM` admission is privileged. No satisfiability solver campaign, cross-chain reachability, performance, automatic discovery, vulnerability or D1 verdict follows. |
 | 2026-10-27 | D1P-21B variant-general extracted consumer model | `[DONE]` campaign gate 2 component / `[UNKNOWN]` capability and security | [Model record](extraction/d1p-21b-variant-extraction.md): extract pinned and M-SRC relations from each variant's own compiled Solidity artifacts, bind `S_DOM` from admitted state, and validate against prior executions and controls. Policy/role inputs remain manual; no solver, new proof, automatic obligation discovery, E4 result, performance or security claim follows. |
 | 2026-10-28 | D1P-30 BindCheck v1 development analyzer and validator | `[DONE]` bounded tool / `[UNKNOWN]` capability and security | [Report](../reports/D1P-30.md), [validation index](../protocols/d1/d1p-30-validation-index.json), runner and ignored manifest: implement JSON/readable static R-BIND, R-ANCHOR, R-EFFECT and polarity checks with no application identifiers in the rule engine. Pinned WarpToad and Payy check-added produce no warning; injected M-DOM/M-SRC and Payy earlier produce the expected warnings. Both WarpToad warnings reach fresh E4 with real proofs and state-checked effects; Payy audits its preserved exact E4 chain. The bounded negative controls have 0/2 false warnings. Manual routes are counted; no baselines, held-out transfer, solver, live chain or D1 verdict. |
+| 2026-10-28 | Research contract revision 3 | `[DONE]` prospective contract change | [Canonical contract](research-contract.md) and byte-identical [revision-2 archive](history/research-contract-2026-10-27.md): add the taxonomy of proof-to-execution binding failures and actionable cross-layer diagnostics as prospective contributions and state the approved boundary-analysis core claim. No earlier result is relabeled or rerun; all prior interpretation boundaries remain intact. |
+| 2026-10-28 | D1P-31 BindCheck v1 binding-mutant benchmark | `[DONE]` development evaluation / `[UNKNOWN]` capability and security | [Report](../reports/D1P-31.md), frozen tool hashes, 35 analysis outputs, post-run adjudication and validation ledger: analyze 30/30 mutants plus 5/5 prior targets with no rule change. Detect 13/30, report 16 unsupported and one supported miss; all 13 detections match the named semantic ground-truth location. Separate 22 inherited Payy tail warnings as unrelated. Attempt all 38 mutant warnings in operator-class order: two correspondence-checked variants reuse preserved E4 with two manual inputs each and 36 remain E1. Zero new proofs/proving seconds, solver calls, baseline arms, held-out transfer, live-chain actions, or D1 verdict. |
 
 ## Update rule
 

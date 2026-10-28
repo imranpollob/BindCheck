@@ -1,12 +1,13 @@
 # BindCheck
 
-BindCheck investigates whether the guarantees of an accepted zero-knowledge proof justify the effects a blockchain application executes. Under D1 research contract revision 2, the prospective target is **automated discovery and end-to-end validation of proof-to-execution mismatches** from producer constraints, public-input decoding, and consumer effects. Consumer-directed selection and refinement remain a secondary efficiency question (RQ5), not an established advantage. D1P-30 supplies bounded development-case E4 validations, but the overall capability claim, comparative baselines, and held-out transfer have not been established.
+BindCheck investigates whether the guarantees of an accepted zero-knowledge proof justify the effects a blockchain application executes. Under D1 research contract revision 3, the prospective target includes a **taxonomy of proof-to-execution binding failures** and **actionable cross-layer diagnostics**, alongside automated discovery and end-to-end validation from producer constraints, public-input decoding, and consumer effects. Consumer-directed selection and refinement remain a secondary efficiency question (RQ5), not an established advantage. D1P-30 supplies bounded development-case E4 validations and D1P-31 supplies a 30-mutant development benchmark, but comparative baselines, held-out transfer, and the overall capability claim have not been established.
 
 The current integration checkout is the linked worktree
 `/Users/imranpollob/Coding/bc/bindcheck-d1-paper` on `d1-paper`, currently at
-integrated revision `e64adfaed7f3d4136d824ec188c5212cd6dc4080` plus the
-uncommitted D1P-30 tool and evidence. This state includes D1P-21A/B, D1P-20,
-D1P-19, D1P-17, and the merged Lane C taxonomy and extraction work. The linked
+integrated revision `ba571ffb8a218ffc6205753d69cd128331163deb` plus the
+uncommitted D1P-31 evaluation and contract revision. This state includes the
+integrated D1P-30 tool, mutation benchmark, D1P-22 baselines, D1P-21A/B,
+D1P-20, D1P-19, D1P-17, and the merged Lane C taxonomy/extraction work. The linked
 worktree was originally established from `chatgpt-codex` revision
 `cce1a966eb84e8e9819c6f658ca4ce07fd670036`.
 [D1P-00](reports/D1P-00.md) records the branch/worktree baseline and the
@@ -21,6 +22,12 @@ Start with the [research contract](docs/research-contract.md). It is authoritati
 
 [D1P-INT1](paper/contract-revision-proposal.md) applies the approved capability-framing revision prospectively on 27 October 2026. It adds automated-discovery and automated-validation research questions, the E0–E4 evidence ladder, generic/default plus same-policy baseline arms, and a four-part capability gate. [Revision 1](docs/history/research-contract-2026-10-23.md) is preserved byte-for-byte. No earlier result is relabeled or rerun; D1P-07, D1P-09, D1P-10, D1-01/T22 and the historical synthetic results remain evidence about the former efficiency hypothesis, now secondary RQ5, and do not count as capability evidence.
 
+D1P-31 applies research contract revision 3 prospectively on 28 October 2026.
+It adds the taxonomy and actionable-diagnostics candidate contributions and
+the approved core boundary-analysis claim. [Revision 2](docs/history/research-contract-2026-10-27.md)
+is preserved byte-for-byte. No prior report, evidence grade, or verdict is
+relabeled or rerun.
+
 For a shareable introduction to the project and completed work, use the [research and work summary](docs/research-and-work-summary.md), dated 22 October 2026. It separates demonstrated results and open research claims at that historical checkpoint; the D1 roadmap now controls the next task.
 
 The [research guide](BindCheck_Research_Guide.md) and [16 October progress update](2026-10-16-research-update.md) are historical planning and progress records. They remain useful context, but their evidence status and schedules may have been superseded.
@@ -29,6 +36,17 @@ The principal directories are `circuits/` and `contracts/` for the small fixture
 
 ## Current status
 
+- [D1P-31](reports/D1P-31.md) evaluates frozen BindCheck v1 on all 30
+  development binding mutants plus the five D1P-30 targets. It detects the
+  named mutation in 13/30, records 16/30 as unsupported, and has one supported
+  miss (PY-S02); the supported subset is 13/14. All 13 detections localize the
+  named semantic boundary. Twenty-two warning objects are unrelated inherited
+  Payy tail findings, not mutant detections or false positives. All 38 mutant
+  warnings are passed to validation in operator-class order: comment/metadata-
+  equivalent WT-C03 and WT-S01 reuse preserved E4 with two counted manual
+  inputs each, while 36 remain E1 for lack of a route. Zero new proofs and zero
+  proving seconds run. The benchmark is exposed development data, so held-out
+  transfer, the capability gate, and the D1 verdict remain UNKNOWN.
 - [D1P-30](reports/D1P-30.md) delivers the first working `bindcheck analyze`
   / `bindcheck validate` CLI. Generic ACIR/consumer-role rules emit no warning
   on pinned WarpToad or Payy check-added, emit R-BIND on **INJECTED** M-DOM,
@@ -373,7 +391,7 @@ full-producer propagation, joint query, proof, and accepted full settlement
 replay remain absent. Offline component checks are not joint verification.
 The two principal properties remain authorization and coverage.
 
-Prospective work is governed by contract revision 2's capability gate:
+Prospective work is governed by contract revision 3's capability gate:
 automated artifact-derived discovery with manual inputs counted, automated E4
 validation on a development case, both baseline arms, and transfer to a frozen
 held-out family without a new defect-specific rule. None of those four gate
