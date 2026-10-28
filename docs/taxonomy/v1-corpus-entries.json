@@ -1,0 +1,191 @@
+[
+ {
+  "id": "CF-01",
+  "anchor": "dark-forest-1",
+  "one_line": "RangeProof accepted out-of-range moves: LessThan inputs never bit-constrained.",
+  "decision": "include",
+  "ai_label": "AI-SUGGESTED mechanism C_REPRESENTATION; failure locus: circuit. LessThan bit-width precondition unconstrained; fix constrains both inputs to bits."
+ },
+ {
+  "id": "CF-02",
+  "anchor": "bigint-1",
+  "one_line": "BigMod remainder unconstrained to n bits: library-level circuit gap, no evidenced consumer.",
+  "decision": "exclude",
+  "ai_label": null
+ },
+ {
+  "id": "CF-03",
+  "anchor": "circom-pairing-1",
+  "one_line": "Range-check outputs computed but never constrained: out-of-range pubkeys verify.",
+  "decision": "include",
+  "ai_label": "AI-SUGGESTED mechanism C_RELATION_GAP; failure locus: circuit. Comparison outputs unconstrained; fix constrains each output to 1."
+ },
+ {
+  "id": "CF-04",
+  "anchor": "semaphore-1",
+  "one_line": "Consumer accepted uint256 group ids the field-bound verifier always rejects: availability break.",
+  "decision": "include",
+  "ai_label": "AI-SUGGESTED mechanism C_REPRESENTATION; failure locus: consumer. Canonicality/range admission missing at group creation; fix requires groupId < SNARK_SCALAR_FIELD."
+ },
+ {
+  "id": "CF-05",
+  "anchor": "zk-kit-1",
+  "one_line": "Tree init admitted above-field zero leaves that later inclusion proofs cannot use.",
+  "decision": "include",
+  "ai_label": "AI-SUGGESTED mechanism C_REPRESENTATION; failure locus: consumer. Zero-leaf admission missing range check; fix requires zero < SNARK_SCALAR_FIELD."
+ },
+ {
+  "id": "CF-06",
+  "anchor": "aztec-1",
+  "one_line": "Unconstrained 32-bit index assumption let one note mint many nullifiers: double spend.",
+  "decision": "include",
+  "ai_label": "AI-SUGGESTED mechanism C_OCCURRENCE_ACCOUNTING; failure locus: boundary. Nullifier multiplicity lost via missing bit-length check on the note index."
+ },
+ {
+  "id": "CF-07",
+  "anchor": "aztec-2",
+  "one_line": "Verifier accepted forged proofs via inconsistent point-at-infinity handling.",
+  "decision": "exclude",
+  "ai_label": null
+ },
+ {
+  "id": "CF-08",
+  "anchor": "stealthdrop-1",
+  "one_line": "Signature-malleability gave many valid nullifiers per claim: repeated airdrop claims.",
+  "decision": "include",
+  "ai_label": "AI-SUGGESTED mechanism C_OCCURRENCE_ACCOUNTING; failure locus: boundary. Nullifier derivation not deterministic in the claim; fix constrains signature generation with the private key in-circuit."
+ },
+ {
+  "id": "CF-09",
+  "anchor": "zkdrops-1",
+  "one_line": "EVM/field width gap: x and x%p both accepted as fresh nullifiers.",
+  "decision": "include",
+  "ai_label": "AI-SUGGESTED mechanism C_REPRESENTATION; failure locus: boundary. Canonicality admission missing consumer-side; fix requires nullifier < SNARK_FIELD."
+ },
+ {
+  "id": "CF-10",
+  "anchor": "maci-1",
+  "one_line": "Coordinator applied votes to wrong keys to mark them invalid: censored tally proved.",
+  "decision": "include",
+  "ai_label": "AI-SUGGESTED mechanism C_ACTIVATION_EXTENT; failure locus: circuit. Vote-to-key binding missing before invalid-marking; fix constrains leaf index to message stateIndex first."
+ },
+ {
+  "id": "CF-11",
+  "anchor": "bulletproofs-1",
+  "one_line": "Paper's Fiat-Shamir omitted the commitment: forged range proofs.",
+  "decision": "exclude",
+  "ai_label": null
+ },
+ {
+  "id": "CF-12",
+  "anchor": "plonk-1",
+  "one_line": "Implementations hashed too few public inputs: proof forgery to varying extent.",
+  "decision": "exclude",
+  "ai_label": null
+ },
+ {
+  "id": "CF-13",
+  "anchor": "zcash-1",
+  "one_line": "Extra setup parameters leaked toxic waste: counterfeit proofs possible.",
+  "decision": "exclude",
+  "ai_label": null
+ },
+ {
+  "id": "CF-14",
+  "anchor": "mimc-1",
+  "one_line": "Assignment instead of constraint let attackers set the hash output: faked merkle roots paid out.",
+  "decision": "include",
+  "ai_label": "AI-SUGGESTED mechanism C_RELATION_GAP; failure locus: boundary. Hash output assigned, not constrained; fix changes = to <==."
+ },
+ {
+  "id": "CF-15",
+  "anchor": "pse-zkevm-1",
+  "one_line": "Missing k*n+r<2^256 bound let provers prove false remainders: wrong state updates verified.",
+  "decision": "include",
+  "ai_label": "AI-SUGGESTED mechanism C_REPRESENTATION; failure locus: circuit. Range bound on the quotient-overflow term missing; fix constrains k*n+r below 2^256."
+ },
+ {
+  "id": "CF-16",
+  "anchor": "pse-zkevm-2",
+  "one_line": "Shift-byte shf0 not bound to shift's first byte: false shift proofs verified.",
+  "decision": "include",
+  "ai_label": "AI-SUGGESTED mechanism C_RELATION_GAP; failure locus: circuit. Auxiliary byte unconstrained; fix adds shf0 == shift.le_bytes[0]."
+ },
+ {
+  "id": "CF-17",
+  "anchor": "dusk-1",
+  "one_line": "Proofs leaked witness material: privacy failure with no execution effect.",
+  "decision": "exclude",
+  "ai_label": null
+ },
+ {
+  "id": "CF-18",
+  "anchor": "nightfall-1",
+  "one_line": "Same EVM/field width gap as CF-09 in a private-transfer system: n and n+p both spend.",
+  "decision": "include",
+  "ai_label": "AI-SUGGESTED mechanism C_REPRESENTATION; failure locus: boundary. Consumer-side range check missing; fix requires inputs < zokratesPrime."
+ },
+ {
+  "id": "CF-19",
+  "anchor": "summa-1",
+  "one_line": "Solvency gate compared against a prover-settable cell: false solvency proved.",
+  "decision": "include",
+  "ai_label": "AI-SUGGESTED mechanism C_RELATION_GAP; failure locus: circuit. Gate output taken from assignable advice; fix compares against constant 1."
+ },
+ {
+  "id": "CF-20",
+  "anchor": "polygon-zkevm-1",
+  "one_line": "Remainder never bounded below divisor: B=E/A-1, C=(E%A)+A verifies.",
+  "decision": "include",
+  "ai_label": "AI-SUGGESTED mechanism C_REPRESENTATION; failure locus: circuit. Remainder-vs-divisor bound missing (C<E checked instead of C<A); fix swaps the comparison."
+ },
+ {
+  "id": "CF-21",
+  "anchor": "hexens-polygonzkevm-1",
+  "one_line": "Unconstrained path bit let attackers bind arbitrary values to faked keys.",
+  "decision": "include",
+  "ai_label": "AI-SUGGESTED mechanism C_FIELD_MAPPING; failure locus: boundary. Path-bit binary constraint missing; ROM treats any nonzero as 1; fix adds the binary constraint."
+ },
+ {
+  "id": "CF-22",
+  "anchor": "hexens-polygonzkevm-2",
+  "one_line": "CTX set to 0 aliased global/tx variables: sequencer paid oldStateRoot-sized gas.",
+  "decision": "include",
+  "ai_label": "AI-SUGGESTED mechanism C_CONTEXT_IDENTITY; failure locus: boundary. Call-context identity collapsed to 0; fix saves originCTX before the jump."
+ },
+ {
+  "id": "CF-23",
+  "anchor": "hexens-polygonzkevm-3",
+  "one_line": "Unconstrained jump flag allowed arbitrary zkPC: SSTORE gadget set balances.",
+  "decision": "include",
+  "ai_label": "AI-SUGGESTED mechanism C_ACTIVATION_EXTENT; failure locus: circuit. Jump-condition flag not constrained to {0,1}; fix adds isNeg*(1-isNeg)=0."
+ },
+ {
+  "id": "CF-24",
+  "anchor": "zendoo-polynomial-1",
+  "one_line": "Untrimmed zero coefficients broke degree assumptions: panics/DoS, no proof effect.",
+  "decision": "exclude",
+  "ai_label": null
+ },
+ {
+  "id": "CF-25",
+  "anchor": "aleo-encryption-1",
+  "one_line": "input_hash not binding on input across caller/callee: same id, different inputs.",
+  "decision": "include",
+  "ai_label": "AI-SUGGESTED mechanism C_RELATION_GAP; failure locus: boundary. Commitment dependency (tvk binding) omitted; fix uses committing encryption with tcm public."
+ },
+ {
+  "id": "CF-26",
+  "anchor": "light-protocol-1",
+  "one_line": "Same-signer concurrent tree updates interleaved: unpaid merge, no proof disagreement.",
+  "decision": "exclude",
+  "ai_label": null
+ },
+ {
+  "id": "CF-27",
+  "anchor": "zkemail-1",
+  "one_line": "^ anchor re-triggerable by 0xff bytes in mail: victim address extracted from subject as from.",
+  "decision": "include",
+  "ai_label": "AI-SUGGESTED mechanism C_ACTIVATION_EXTENT; failure locus: boundary. Start-of-string activation re-triggerable mid-input; fix range-checks inputs below 255."
+ }
+]

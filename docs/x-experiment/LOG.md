@@ -113,3 +113,19 @@ real-proof precedent). Compiler lint bonus: beta.22 names the freed
 public word for C01/C02/C08. Full table in BENCHMARK.md §3 and
 manifest.json observed fields. Build ran under load ~42 (parallel lane
 heavy jobs; recorded in logs/load.txt).
+
+## 2026-10-28 — X-CORPUS: taxonomy corpus v1 (seed endpoints only)
+
+Cloned 0xPARC zk-bug-tracker at the pinned commit (remote HEAD equaled
+56a99667...; README sha256 31a39587...); screened all 27 Bugs-in-the-Wild
+entries against the protocol s2 inclusion boundary: 19 include, 8 exclude,
+0 unresolved. SoK dataset has no standalone agent-reachable endpoint
+under tonight's source constraint (corpus = paper + 107 audit reports,
+both out of scope); recorded unresolved, custodian identification owed.
+No audit-firm report or other source opened; linked issues/commits/papers
+untouched. Schema needed 3 fix rounds (const-only access rules, in_window
+rule for met-relevant rows, uncertainty array); ledger now validates with
+0 errors. All 23 families logged as exposed (never held-out). Builder:
+scripts/taxonomy_v1_corpus.py; ledger docs/taxonomy/v1-corpus-ledger.json;
+table docs/taxonomy/v1-corpus.md. jsonschema 4.26.0 + rfc3339-validator
+0.1.4 installed via pip (pinned public packages).
