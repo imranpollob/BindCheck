@@ -76,7 +76,7 @@ def select_warning(path_selector: str) -> tuple[Path, dict[str, Any]]:
         raw_path, wanted = path_selector, None
     path = Path(raw_path)
     document = json.loads(path.read_text())
-    if document.get("schema") == "bindcheck.static-analysis.v1":
+    if document.get("schema") in {"bindcheck.static-analysis.v1", "bindcheck.static-analysis.v1.1"}:
         warnings = document["warnings"]
         if wanted:
             matches = [warning for warning in warnings if warning["id"] == wanted]

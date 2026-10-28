@@ -1,4 +1,4 @@
-"""Command-line entry point for BindCheck v1."""
+"""Command-line entry point for BindCheck v1.1."""
 
 from __future__ import annotations
 
@@ -52,7 +52,7 @@ def parser() -> argparse.ArgumentParser:
     analyze_parser.add_argument("producer_artifact", type=Path)
     analyze_parser.add_argument("consumer_source", type=Path)
     analyze_parser.add_argument("--consumer-ir", type=Path,
-                                help="checked extracted consumer relation (optional)")
+                                help="checked compiler-AST consumer relation (or content-indexed relation)")
     analyze_parser.add_argument("--consumer-index", type=Path, default=DEFAULT_CONSUMER_INDEX,
                                 help="content-addressed checked-relation index")
     analyze_parser.add_argument("--label")

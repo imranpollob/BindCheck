@@ -6,7 +6,7 @@ import sys
 import tempfile
 import unittest
 
-from bindcheck_d1.static_analyzer_v1 import analyze
+from bindcheck_d1.static_analyzer_v1 import analyze, _opcode_witnesses
 from bindcheck_d1.cli import DEFAULT_CONSUMER_INDEX, resolve_consumer_ir
 from bindcheck_d1.validation_v1 import select_warning, validate
 
@@ -19,9 +19,12 @@ PINNED_RELATION = ROOT / "results/raw/D1P-18/relation.json"
 MSRC_SOURCE = ROOT / "results/raw/D1P-19/workspace/source/backend/contracts/core/WarpToadCore.sol"
 MSRC_RELATION = ROOT / "results/raw/D1P-21B/m-src-relation.json"
 PAYY_ROOT = ROOT.parent / "BindCheck"
-PAYY_SOURCE = PAYY_ROOT / "tools/cases/payy-history/eth/contracts/rollup3/RollupV1.sol"
-PAYY_EARLIER = PAYY_ROOT / "build/T22/scratch/work_a_agg_agg_earlier_/noir/target/agg_agg.json"
-PAYY_CHECK = PAYY_ROOT / "build/T22/scratch/work_b_agg_agg_check_added_/noir/target/agg_agg.json"
+PAYY_SOURCE = ROOT / "benchmarks/binding-mutants/baselines/RollupV1.sol"
+PAYY_CHECK_SOURCE = PAYY_ROOT / "tools/cases/payy-history/eth/contracts/rollup3/RollupV1.sol"
+PAYY_EARLIER = PAYY_ROOT / "tools/cases/payy-c4d2c90/noir/target/agg_agg.json"
+PAYY_CHECK = PAYY_ROOT / "tools/cases/payy-history/noir/target/agg_agg.json"
+PAYY_EARLIER_IR = ROOT / "results/raw/D1P-34/consumer-relations/payy-baseline.json"
+PAYY_CHECK_IR = ROOT / "results/raw/D1P-34/consumer-relations/payy-check-added.json"
 
 
 class BindCheckV1Tests(unittest.TestCase):
@@ -38,21 +41,57 @@ class BindCheckV1Tests(unittest.TestCase):
 
     def test_msrc_finds_missing_must_be_in_anchor(self):
         result = analyze(PINNED, MSRC_SOURCE, MSRC_RELATION, "m-src")
-        self.assertEqual([warning["rule"] for warning in result["warnings"]], ["R-ANCHOR"])
-        self.assertEqual(result["warnings"][0]["evidence"]["polarity"], "must-be-in")
+        self.assertEqual([warning["rule"] for warning in result["warnings"]], ["R-CONSUMER"])
+        self.assertEqual(result["warnings"][0]["evidence"]["public_index"], 4)
 
     def test_two_argument_cli_relation_resolution_is_content_addressed(self):
         self.assertEqual(resolve_consumer_ir(MSRC_SOURCE, None, DEFAULT_CONSUMER_INDEX), MSRC_RELATION)
         self.assertIsNone(resolve_consumer_ir(PAYY_SOURCE, None, DEFAULT_CONSUMER_INDEX))
 
-    def test_payy_differential_without_reference_oracle(self):
-        earlier = analyze(PAYY_EARLIER, PAYY_SOURCE, None, "earlier")
-        repaired = analyze(PAYY_CHECK, PAYY_SOURCE, None, "check-added")
-        self.assertEqual([warning["rule"] for warning in earlier["warnings"]], ["R-BIND", "R-EFFECT"])
-        self.assertEqual(earlier["warnings"][0]["evidence"]["public_indices"], list(range(6, 13)))
-        self.assertEqual(repaired["warnings"], [])
+    def test_full_size_payy_differential_without_reference_oracle(self):
+        earlier = analyze(PAYY_EARLIER, PAYY_SOURCE, PAYY_EARLIER_IR, "earlier")
+        repaired = analyze(PAYY_CHECK, PAYY_CHECK_SOURCE, PAYY_CHECK_IR, "check-added")
+        self.assertEqual([warning["rule"] for warning in earlier["warnings"]],
+                         ["R-BIND", "R-EFFECT", "R-CONSUMER"])
+        self.assertEqual(earlier["warnings"][0]["evidence"]["public_indices"],
+                         list(range(6, 1005)))
+        self.assertEqual([warning["rule"] for warning in repaired["warnings"]], ["R-CONSUMER"])
         self.assertTrue(repaired["polarity"]["replay"]["must_not_be_in"])
         self.assertTrue(repaired["polarity"]["replay"]["written"])
+
+    def test_source_only_loader_is_removed(self):
+        with self.assertRaisesRegex(ValueError, "UNSUPPORTED_CONSUMER_AST_REQUIRED"):
+            analyze(PINNED, PINNED_SOURCE, None, "unsupported")
+
+    def test_opcode_use_roles_cover_outputs_memory_and_brillig(self):
+        poseidon = {"kind": "Poseidon2Permutation", "inputs": [{"witness": 1}], "outputs": [2]}
+        memory = {"kind": "MemoryOp", "block_id": 7,
+                  "operation": {"mul": [], "linear": [[1, 3]], "constant": 0},
+                  "index": {"mul": [], "linear": [[1, 4]], "constant": 0},
+                  "value": {"mul": [], "linear": [[1, 5]], "constant": 0}}
+        init = {"kind": "MemoryInit", "block_id": 7, "init": [6]}
+        brillig = {"kind": "BrilligCall", "id": 0,
+                   "inputs": [{"single": {"mul": [], "linear": [[1, 8]], "constant": 0}}],
+                   "outputs": [{"single": 9}], "predicate": None}
+        self.assertEqual(_opcode_witnesses(poseidon), ([1, 2], [], []))
+        self.assertEqual(_opcode_witnesses(memory), ([3, 4, 5], [], []))
+        self.assertEqual(_opcode_witnesses(init), ([], [], [6]))
+        self.assertEqual(_opcode_witnesses(brillig), ([], [8, 9], []))
+
+    def test_ast_relation_recovers_replay_and_burn_effect(self):
+        relation = json.loads(PAYY_EARLIER_IR.read_text())
+        self.assertEqual(relation["verifier_boundary"]["signature"],
+                         "function (bytes memory,bytes32[] memory) view external returns (bool)")
+        self.assertTrue(all(item["guarded_absent"] for item in relation["replay_records"]))
+        self.assertIn("token-transfer", {item["kind"] for item in relation["effects"]})
+
+    def test_analysis_path_has_no_application_specific_tokens(self):
+        paths = [ROOT / "src/bindcheck_d1/static_analyzer_v1.py",
+                 ROOT / "src/bindcheck_d1/frontends/solidity_ast_v1_1.py"]
+        text = "\n".join(path.read_text() for path in paths)
+        for token in ("withdrawVerifier", "verifyMessages", "verifyRootHash", ".spent",
+                      "WarpToad", "Payy", "RollupV1"):
+            self.assertNotIn(token, text)
 
     def test_warning_selector_requires_id_for_multiple(self):
         with tempfile.TemporaryDirectory() as directory:

@@ -1,4 +1,4 @@
-"""BindCheck v1 cross-layer static analyzer.
+"""BindCheck v1.1 cross-layer static analyzer.
 
 The rule engine is deliberately application-neutral.  It joins flattened
 producer ABI leaves and ACIR witness use with either an extracted consumer
@@ -21,7 +21,7 @@ from typing import Any
 from .frontends import acir_binary_beta22, acir_binary_v1
 
 
-SCHEMA = "bindcheck.static-analysis.v1"
+SCHEMA = "bindcheck.static-analysis.v1.1"
 
 
 def sha256(path: Path) -> str:
@@ -41,17 +41,53 @@ def _expression_witnesses(expr: dict[str, Any]) -> list[int]:
     return result
 
 
-def _nested_witnesses(value: Any) -> list[int]:
+def _nested_witnesses(value: Any, parent: str | None = None) -> list[int]:
+    """Decode witness-bearing fields without mistaking metadata for witnesses."""
     result: list[int] = []
     if isinstance(value, dict):
         if set(value) == {"witness"}:
             result.append(value["witness"])
-        for child in value.values():
-            result.extend(_nested_witnesses(child))
+            return result
+        if "mul" in value and "linear" in value and "constant" in value:
+            return _expression_witnesses(value)
+        for key, child in value.items():
+            if key not in {"opcode_index", "byte_range", "block_id", "id", "num_bits",
+                           "proof_type", "block_type", "call_data_id"}:
+                result.extend(_nested_witnesses(child, key))
     elif isinstance(value, list):
         for child in value:
-            result.extend(_nested_witnesses(child))
+            if isinstance(child, int) and not isinstance(child, bool) and parent in {
+                "outputs", "output", "init", "array", "simple", "single", "memory_array"
+            }:
+                result.append(child)
+            else:
+                result.extend(_nested_witnesses(child, parent))
+    elif isinstance(value, int) and not isinstance(value, bool) and parent in {
+        "outputs", "output", "init", "array", "simple", "single", "memory_array", "index", "value"
+    }:
+        result.append(value)
     return result
+
+
+def _opcode_witnesses(opcode: dict[str, Any]) -> tuple[list[int], list[int], list[int]]:
+    """Return (proof-enforced, witness-generation, memory-definition) uses."""
+    kind = opcode["kind"]
+    if kind == "AssertZero":
+        return _expression_witnesses(opcode["expression"]), [], []
+    if kind == "BrilligCall":
+        # ACIR constrains downstream uses of Brillig outputs, but the call is a
+        # witness generator.  Inventory both inputs and outputs without using
+        # the call itself to discharge a public-input binding obligation.
+        values = []
+        for key in ("inputs", "outputs", "predicate"):
+            values.extend(_nested_witnesses(opcode.get(key), key))
+        return [], values, []
+    if kind == "MemoryInit":
+        # Defining a memory cell is not, alone, a constraint on that value.
+        # MemoryOp address/value expressions are counted below when the block
+        # is actually used.
+        return [], [], list(opcode.get("init", []))
+    return _nested_witnesses(opcode), [], []
 
 
 def _leaf_bindings(abi: dict[str, Any], bindings: dict[str, list[int]]) -> list[dict[str, Any]]:
@@ -92,17 +128,32 @@ def load_producer(path: Path) -> dict[str, Any]:
     circuit = decoded["functions"][0]
     bindings = decoder.abi_bindings(decoded["abi"], circuit)
     occurrences: Counter[int] = Counter()
+    witness_generation_occurrences: Counter[int] = Counter()
+    memory_definition_occurrences: Counter[int] = Counter()
     locations: dict[int, list[str]] = {}
+    witness_generation_locations: dict[int, list[str]] = {}
+    memory_definition_locations: dict[int, list[str]] = {}
     kinds: Counter[str] = Counter()
     for ordinal, opcode in enumerate(circuit["opcodes"]):
         kind = opcode["kind"]
         kinds[kind] += 1
-        witnesses = (_expression_witnesses(opcode["expression"])
-                     if kind == "AssertZero" else _nested_witnesses(opcode))
+        witnesses, witness_generation, memory_definitions = _opcode_witnesses(opcode)
         for witness in witnesses:
             occurrences[witness] += 1
             if len(locations.setdefault(witness, [])) < 8:
                 locations[witness].append(f"opcode[{opcode.get('opcode_index', ordinal)}]/{kind}")
+        for witness in witness_generation:
+            witness_generation_occurrences[witness] += 1
+            if len(witness_generation_locations.setdefault(witness, [])) < 8:
+                witness_generation_locations[witness].append(
+                    f"opcode[{opcode.get('opcode_index', ordinal)}]/{kind}"
+                )
+        for witness in memory_definitions:
+            memory_definition_occurrences[witness] += 1
+            if len(memory_definition_locations.setdefault(witness, [])) < 8:
+                memory_definition_locations[witness].append(
+                    f"opcode[{opcode.get('opcode_index', ordinal)}]/{kind}"
+                )
 
     leaves = _leaf_bindings(decoded["abi"], bindings)
     public_leaves = []
@@ -112,6 +163,14 @@ def load_producer(path: Path) -> dict[str, Any]:
             "public_index": public_index,
             "occurrence_count": occurrences[leaf["witness"]],
             "occurrence_locations": locations.get(leaf["witness"], []),
+            "witness_generation_occurrence_count": witness_generation_occurrences[leaf["witness"]],
+            "witness_generation_occurrence_locations": witness_generation_locations.get(
+                leaf["witness"], []
+            ),
+            "memory_definition_occurrence_count": memory_definition_occurrences[leaf["witness"]],
+            "memory_definition_occurrence_locations": memory_definition_locations.get(
+                leaf["witness"], []
+            ),
         })
         public_leaves.append(leaf)
     return {
@@ -121,17 +180,14 @@ def load_producer(path: Path) -> dict[str, Any]:
         "decoder": decoder_name,
         "opcode_count": len(circuit["opcodes"]),
         "opcode_counts": dict(sorted(kinds.items())),
+        "occurrence_policy": {
+            "proof_enforced": "assertions, black boxes (inputs and outputs), memory-op address/value expressions, and constrained calls",
+            "witness_generation_only": "Brillig call inputs, outputs, and predicates",
+            "definition_only": "MemoryInit cell definitions; not counted as proof-enforced use without a MemoryOp",
+        },
         "public_leaves": public_leaves,
         "public_witnesses": circuit["public_parameters"],
     }
-
-
-def _line_for(source: Path, pattern: str) -> int | None:
-    regex = re.compile(pattern)
-    for number, line in enumerate(source.read_text().splitlines(), 1):
-        if regex.search(line):
-            return number
-    return None
 
 
 def _symbols(value: Any) -> set[str]:
@@ -147,8 +203,95 @@ def _symbols(value: Any) -> set[str]:
     return result
 
 
+def _source_class(symbol: str) -> str:
+    if symbol.startswith("calldata."):
+        return "calldata"
+    if symbol.startswith(("block.", "msg.", "tx.")):
+        return "environment"
+    return "consumer-supplied"
+
+
+def _const_bool(value: Any) -> bool | None:
+    if isinstance(value, dict) and value.get("op") == "const":
+        args = value.get("args", [])
+        if len(args) == 1 and isinstance(args[0], bool):
+            return args[0]
+    return None
+
+
+def _selects(value: Any) -> list[tuple[str, frozenset[str]]]:
+    result: list[tuple[str, frozenset[str]]] = []
+    if isinstance(value, dict):
+        if value.get("op") == "select" and len(value.get("args", [])) >= 2:
+            base, key = value["args"][:2]
+            if isinstance(base, dict) and base.get("op") == "storage" and base.get("args"):
+                result.append((str(base["args"][0]), frozenset(_symbols(key))))
+        for child in value.values():
+            result.extend(_selects(child))
+    elif isinstance(value, list):
+        for child in value:
+            result.extend(_selects(child))
+    return result
+
+
+def _false_selects(value: Any) -> list[tuple[str, frozenset[str]]]:
+    result: list[tuple[str, frozenset[str]]] = []
+    if isinstance(value, dict):
+        op = value.get("op")
+        args = value.get("args", [])
+        if op in {"eq", "neq"} and len(args) == 2:
+            false_side = _const_bool(args[0]) is False or _const_bool(args[1]) is False
+            true_side = _const_bool(args[0]) is True or _const_bool(args[1]) is True
+            select_side = args[1] if _const_bool(args[0]) is not None else args[0]
+            if (op == "eq" and false_side) or (op == "neq" and true_side):
+                result.extend(_selects(select_side))
+        if op == "not" and args:
+            result.extend(_selects(args[0]))
+        for child in value.values():
+            result.extend(_false_selects(child))
+    elif isinstance(value, list):
+        for child in value:
+            result.extend(_false_selects(child))
+    return result
+
+
 def load_relation_consumer(source: Path, relation_path: Path, public_count: int) -> dict[str, Any]:
     relation = json.loads(relation_path.read_text())
+    expected_source = relation.get("source_sha256")
+    if expected_source is not None and expected_source != sha256(source):
+        raise ValueError("CONSUMER_RELATION_SOURCE_HASH_MISMATCH")
+    if relation.get("schema") == "bindcheck.consumer-ast.v1.1":
+        words = relation["public_words"]
+        if len(words) != public_count:
+            raise ValueError(
+                f"consumer/producer public-width mismatch: consumer {len(words)}, producer {public_count}"
+            )
+        replay_records = relation.get("replay_records", [])
+        replay = {
+            "applicable": bool(replay_records),
+            "must_not_be_in": bool(replay_records) and all(
+                item.get("guarded_absent", False) for item in replay_records
+            ),
+            "written": bool(replay_records),
+            "evidence": [item["write"].get("location") for item in replay_records],
+        }
+        return {
+            "kind": "compiler-ast-relation",
+            "source": str(source.resolve()), "source_sha256": sha256(source),
+            "relation": str(relation_path.resolve()), "relation_sha256": sha256(relation_path),
+            "relation_schema": relation["schema"], "scope": relation.get("scope"),
+            "verifier_location": relation["verifier_boundary"]["location"],
+            "public_words": words,
+            "anchor_words": relation.get("anchor_words", []),
+            "consumer_unused_indices": [item["index"] for item in words
+                                         if not item.get("consumer_used", False)
+                                         and item.get("source_class") == "calldata"],
+            "effect_word_indices": relation.get("effect_word_indices", []),
+            "effects": relation.get("effects", []),
+            "replay": replay,
+            "limitations": relation.get("limitations", []),
+        }
+
     boundary = relation["verifier_boundary"]
     words = boundary["public_words"]
     if len(words) != public_count:
@@ -166,39 +309,63 @@ def load_relation_consumer(source: Path, relation_path: Path, public_count: int)
                 effects.append(record)
                 effect_origins.update(_symbols(effect))
 
-    anchor_words = []
-    for word, producer_hint in zip(words, range(public_count)):
-        origin = word["origin"]
-        if "root" not in origin.lower():
-            continue
-        positive = all(any(
-            origin in guard and "select(pre." in guard and not guard.startswith("not(")
-            for guard in path["guards"]
-        ) for path in success)
-        anchor_words.append({
-            "public_index": producer_hint,
-            "origin": origin,
-            "must_be_in": positive,
-            "evidence": sorted({guard for path in success for guard in path["guards"] if origin in guard}),
-        })
+    # All classification below is structural. Storage declaration identity and
+    # data dependencies are compared exactly; identifier spelling has no role.
+    guard_symbols = set()
+    admitted: dict[int, list[str]] = {}
+    absent_pairs: set[tuple[str, frozenset[str]]] = set()
+    for path in success:
+        for guard, guard_ir in zip(path.get("guards", []), path.get("guards_ir", [])):
+            if isinstance(guard_ir, dict) and guard_ir.get("op") == "relation":
+                # The verifier boundary authenticates the array; it is not an
+                # independent consumer use of the words within that array.
+                continue
+            symbols = _symbols(guard_ir)
+            guard_symbols.update(symbols)
+            for pair in _selects(guard_ir):
+                for word in words:
+                    word_symbols = _symbols(word.get("expression_ir", {})) or {word["origin"]}
+                    if word_symbols.intersection(pair[1]):
+                        admitted.setdefault(word["index"], []).append(guard)
+            absent_pairs.update(_false_selects(guard_ir))
 
-    nullifier_words = [word for word in words if "nullifier" in word["origin"].lower()]
-    replay = {"applicable": bool(nullifier_words), "must_not_be_in": False, "written": False, "evidence": []}
-    for word in nullifier_words:
-        origin = word["origin"]
-        replay["must_not_be_in"] = all(any(
-            origin in guard and "select(pre." in guard and ("== false" in guard or "not(select" in guard)
-            for guard in path["guards"]
-        ) for path in success)
-        writes = [write for path in success for write in path["committed"].get("storage_writes", [])
-                  if origin in str(write.get("key", ""))]
-        replay["written"] = bool(writes)
-        replay["evidence"] = [write.get("location") for write in writes]
+    anchor_words = [{
+        "public_index": index, "origin": words[index]["origin"], "must_be_in": True,
+        "evidence": sorted(evidence),
+    } for index, evidence in sorted(admitted.items())]
+
+    write_pairs: set[tuple[str, frozenset[str]]] = set()
+    write_evidence = []
+    for path in success:
+        for write in path["committed"].get("storage_writes", []):
+            if _const_bool(write.get("value_ir")) is not True or not write.get("key"):
+                continue
+            pair = (str(write.get("slot")), frozenset(_symbols(write.get("map_after_ir", {}))
+                                                    & _symbols({"op": "symbol", "args": [write["key"]]})))
+            if not pair[1]:
+                pair = (str(write.get("slot")), frozenset({str(write["key"])}))
+            write_pairs.add(pair)
+            write_evidence.append(write.get("location"))
+    replay_pairs = write_pairs | absent_pairs
+    replay = {
+        "applicable": bool(replay_pairs),
+        "must_not_be_in": bool(replay_pairs) and replay_pairs.issubset(absent_pairs),
+        "written": bool(replay_pairs) and replay_pairs.issubset(write_pairs),
+        "evidence": sorted(item for item in write_evidence if item),
+    }
 
     effect_word_indices = sorted({
         word["index"] for word in words
         if word["origin"] in effect_origins
     })
+    consumer_symbols = guard_symbols | effect_origins
+    normalized_words = []
+    for word in words:
+        item = dict(word)
+        symbols = _symbols(word.get("expression_ir", {})) or {word["origin"]}
+        item["source_classes"] = sorted({_source_class(symbol) for symbol in symbols})
+        item["consumer_used"] = bool(symbols.intersection(consumer_symbols))
+        normalized_words.append(item)
     return {
         "kind": "extracted-relation",
         "source": str(source.resolve()),
@@ -207,79 +374,16 @@ def load_relation_consumer(source: Path, relation_path: Path, public_count: int)
         "relation_sha256": sha256(relation_path),
         "relation_schema": relation.get("schema"),
         "scope": relation.get("scope"),
-        "verifier_location": f"{source.name}:{_line_for(source, r'withdrawVerifier.*\.verify') or '?'}",
-        "public_words": words,
+        "verifier_location": boundary.get("location", f"{source.name}:?"),
+        "public_words": normalized_words,
         "anchor_words": anchor_words,
+        "consumer_unused_indices": [word["index"] for word in normalized_words
+                                     if not word["consumer_used"]
+                                     and "calldata" in word["source_classes"]],
         "effect_word_indices": effect_word_indices,
         "effects": effects,
         "replay": replay,
-        "limitations": [],
-    }
-
-
-def load_source_consumer(source: Path, public_leaves: list[dict[str, Any]]) -> dict[str, Any]:
-    """Conservative source-only profile for array-oriented Solidity verifiers.
-
-    This scanner identifies behavior from syntax and ABI names.  It does not
-    pretend to be a Solidity semantic extractor; unsupported shapes are
-    reported rather than guessed.
-    """
-    text = source.read_text()
-    messages = [leaf for leaf in public_leaves if re.fullmatch(r"messages\[\d+\]", leaf["path"])]
-    has_message_dispatch = bool(re.search(r"function\s+verifyMessages\b", text))
-    has_effect = bool(re.search(r"function\s+verify(?:Mint|Burn)\b", text))
-    effect_indices = [leaf["public_index"] for leaf in messages] if has_message_dispatch and has_effect else []
-    # Source-only mode has no semantic producer roles.  Restrict the anchor
-    # candidate to names whose direction is explicit; e.g. ``new_root`` is a
-    # transition output, not a pre-state membership obligation.
-    roots = [leaf for leaf in public_leaves
-             if "root" in leaf["path"].lower()
-             and any(role in leaf["path"].lower() for role in ("old", "current", "previous"))]
-    anchor_words = []
-    for leaf in roots:
-        name = leaf["path"].split(".")[-1]
-        variants = {name, re.sub(r"_([a-z])", lambda m: m.group(1).upper(), name)}
-        matched = any(re.search(rf"\b{re.escape(candidate)}\b\s*==\s*\b\w*[Rr]oot\w*", text)
-                      or re.search(rf"\b\w*[Rr]oot\w*\s*==\s*\b{re.escape(candidate)}\b", text)
-                      for candidate in variants)
-        # A local alias is common (bytes32 oldRoot = publicInputs[0]).
-        if name == "old_root" and re.search(r"verifyRootHash\s*\(\s*oldRoot\s*\)", text):
-            matched = True
-        anchor_words.append({
-            "public_index": leaf["public_index"], "origin": leaf["path"],
-            "must_be_in": matched,
-            "evidence": [f"{source.name}:{_line_for(source, r'function\s+verifyRootHash') or '?'}"] if matched else [],
-        })
-
-    verifier_line = (_line_for(source, r"\.verifier\.verify\s*\(")
-                     or _line_for(source, r"\.verify\s*\("))
-    limitations = []
-    if not messages:
-        limitations.append("SOURCE_PROFILE_NO_PUBLIC_MESSAGE_ARRAY")
-    if not has_message_dispatch:
-        limitations.append("SOURCE_PROFILE_NO_MESSAGE_DISPATCH")
-    replay_applicable = bool(re.search(r"\.spent\s*==\s*false", text))
-    replay_written = bool(re.search(r"\.spent\s*=\s*true", text))
-    return {
-        "kind": "conservative-source-profile",
-        "source": str(source.resolve()),
-        "source_sha256": sha256(source),
-        "relation": None,
-        "scope": "source-detected verifier call and committed message effects",
-        "verifier_location": f"{source.name}:{verifier_line or '?'}",
-        "public_words": [{"index": leaf["public_index"], "origin": leaf["path"]} for leaf in public_leaves],
-        "anchor_words": anchor_words,
-        "effect_word_indices": effect_indices,
-        "effects": ([{"kind": "message-dispatched mint/burn", "location": f"{source.name}:"
-                      f"{_line_for(source, r'function\s+verifyMessages') or '?'}"}]
-                    if effect_indices else []),
-        "replay": {
-            "applicable": replay_applicable,
-            "must_not_be_in": replay_applicable,
-            "written": replay_written,
-            "evidence": [f"{source.name}:{_line_for(source, r'\.spent\s*=\s*true') or '?'}"] if replay_written else [],
-        },
-        "limitations": limitations + ["SOURCE_PROFILE_IS_NOT_FULL_SOLIDITY_SEMANTICS"],
+        "limitations": ["RELATION_FRONTEND_IS_NOT_SOLIDITY_SEMANTIC_EQUIVALENCE"],
     }
 
 
@@ -303,8 +407,9 @@ def analyze(artifact_path: Path, source_path: Path, relation_path: Path | None =
             label: str | None = None) -> dict[str, Any]:
     started = time.monotonic()
     producer = load_producer(artifact_path)
-    consumer = (load_relation_consumer(source_path, relation_path, len(producer["public_leaves"]))
-                if relation_path else load_source_consumer(source_path, producer["public_leaves"]))
+    if relation_path is None:
+        raise ValueError("UNSUPPORTED_CONSUMER_AST_REQUIRED")
+    consumer = load_relation_consumer(source_path, relation_path, len(producer["public_leaves"]))
     warnings: list[dict[str, Any]] = []
 
     def warning(rule: str, location: str, explanation: str, suggested_fix: str,
@@ -345,6 +450,21 @@ def analyze(artifact_path: Path, source_path: Path, relation_path: Path | None =
             "those bound public inputs.",
             {"public_indices": vulnerable_effect, "paths": [leaf["path"] for leaf in effect_leaves],
              "effect_kinds": sorted({effect["kind"] for effect in consumer["effects"]})},
+        )
+
+    for index in consumer.get("consumer_unused_indices", []):
+        leaf = producer["public_leaves"][index]
+        warning(
+            "R-CONSUMER",
+            consumer["verifier_location"],
+            f"Verifier public word {index} ({leaf['path']}) is constructed at the boundary but has no "
+            "guard, committed-state, or modeled effect dependency in the extracted consumer relation.",
+            "Consume the authenticated word in the corresponding state admission, replay, or effect "
+            "operation, and regenerate the checked consumer relation.",
+            {"public_index": index, "path": leaf["path"], "consumer_origin":
+             consumer["public_words"][index].get("origin"), "source_classes":
+             consumer["public_words"][index].get("source_classes",
+                                                  [consumer["public_words"][index].get("source_class")])},
         )
 
     for anchor in consumer["anchor_words"]:
@@ -394,12 +514,12 @@ def analyze(artifact_path: Path, source_path: Path, relation_path: Path | None =
             "R-ANCHOR": "producer roots/anchors have must-be-in consumer state checks",
             "R-EFFECT": "effect amount/beneficiary/message words are producer-bound public inputs",
             "R-POLARITY": "anchors are must-be-in; replay keys are must-not-be-in and written on success",
+            "R-CONSUMER": "each verifier public word reaches a guard, committed state, or modeled effect",
         },
         "polarity": {"anchors": consumer["anchor_words"], "replay": replay},
         "warnings": warnings,
         "warning_count": len(warnings),
-        "manual_inputs": ([{"kind": "checked_consumer_relation", "path": consumer["relation"]}]
-                          if consumer["relation"] else []),
+        "manual_inputs": [{"kind": "checked_consumer_relation", "path": consumer["relation"]}],
         "limitations": consumer["limitations"] + [
             "ACIR occurrence establishes syntactic proof-enforced use, not cryptographic injectivity or intent",
             "Brillig is inventoried as witness-generation machinery; it does not by itself discharge a binding",
@@ -410,7 +530,7 @@ def analyze(artifact_path: Path, source_path: Path, relation_path: Path | None =
 
 
 def readable(result: dict[str, Any]) -> str:
-    lines = [f"BindCheck v1: {result['target']}",
+    lines = [f"BindCheck v1.1: {result['target']}",
              f"  producer: {result['producer']['sha256']} ({result['producer']['decoder']})",
              f"  consumer: {result['consumer']['source_sha256']} ({result['consumer']['kind']})",
              f"  warnings: {result['warning_count']}  runtime: {result['runtime_seconds']:.3f}s"]

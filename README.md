@@ -4,10 +4,11 @@ BindCheck investigates whether the guarantees of an accepted zero-knowledge proo
 
 The current integration checkout is the linked worktree
 `/Users/imranpollob/Coding/bc/bindcheck-d1-paper` on `d1-paper`, currently at
-integrated revision `ba571ffb8a218ffc6205753d69cd128331163deb` plus the
-uncommitted D1P-31 evaluation and contract revision. This state includes the
-integrated D1P-30 tool, mutation benchmark, D1P-22 baselines, D1P-21A/B,
-D1P-20, D1P-19, D1P-17, and the merged Lane C taxonomy/extraction work. The linked
+integrated revision `9e9e71f3b646078ae13a63a8266643ac162df694` plus the
+uncommitted, hash-frozen D1P-34 BindCheck v1.1 work. This state includes the
+integrated D1P-31 evaluation/contract revision, D1P-30 tool, mutation benchmark,
+D1P-22 baselines, D1P-21A/B, D1P-20, D1P-19, D1P-17, and the merged Lane C
+taxonomy/extraction work. The linked
 worktree was originally established from `chatgpt-codex` revision
 `cce1a966eb84e8e9819c6f658ca4ce07fd670036`.
 [D1P-00](reports/D1P-00.md) records the branch/worktree baseline and the
@@ -36,6 +37,21 @@ The principal directories are `circuits/` and `contracts/` for the small fixture
 
 ## Current status
 
+- [D1P-34](reports/D1P-34.md) freezes application-neutral BindCheck v1.1 at
+  base commit `9e9e71f3...` plus exact file hashes (no commit was permitted).
+  The name/regex Solidity profile is removed: analysis now requires a
+  source-hash-checked compiler-AST relation, recognizes the verifier by its
+  proof-bytes/public-array interface, propagates word sources, guards, storage
+  identities, replay writes, and shared signature-based effects, and fails
+  closed without AST facts. Black-box outputs and memory-operation expressions
+  now count as proof-enforced uses; Brillig is inventoried separately and
+  `MemoryInit` remains definition-only. Full-size 1,005-leaf Payy artifacts
+  replace N=8 in the five-target rerun and generic effects recover burn token
+  calls. On the unchanged 30 mutants v1.1 records **16 detected, 14 unsupported,
+  0 misses**, with 20 related and 33 unrelated warning objects; 0 are confirmed
+  false. The unchanged validation index yields one preserved E4 and 52 E1.
+  All data are exposed development data; no held-out transfer, capability,
+  performance, vulnerability, security, or D1 verdict follows.
 - [D1P-31](reports/D1P-31.md) evaluates frozen BindCheck v1 on all 30
   development binding mutants plus the five D1P-30 targets. It detects the
   named mutation in 13/30, records 16/30 as unsupported, and has one supported
