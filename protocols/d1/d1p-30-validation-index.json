@@ -1,0 +1,307 @@
+{
+  "schema": "bindcheck.validation-index.v1",
+  "scope": "Manually registered, content-addressed validation adapters; registration is counted as a manual input and is not part of the generic warning rules.",
+  "routes": [
+    {
+      "id": "m-dom-fresh-vexec",
+      "match": {
+        "artifact_sha256": "db1a0a17b2717cce2fe9a9a01e114632634fcf43f0f813d062dfa9c660aa7f2f",
+        "consumer_sha256": "323a1cf26c7449f67cf277ff0a46c31e12f725c555f9fa165d5a60011e122c39",
+        "rule": "R-BIND"
+      },
+      "classification": "fresh D1P-30 owned-local injected-variant V-EXEC",
+      "fresh_execution": true,
+      "manual_steps": 1,
+      "manual_inputs": [
+        "content-addressed association with the existing mechanism-derived foreign-contract-note fixture"
+      ],
+      "scope_note": "Injected M-DOM only. The fixture uses NoirJS execute (the pinned project's supported ACVM route), then bb.js proof generation, generated-verifier acceptance, and unchanged-consumer state checks. It makes no live-chain or arbitrary-attacker claim.",
+      "failed_routes": [
+        {
+          "route": "first fresh fixture launch",
+          "status": "FAIL",
+          "reason": "D1P-30 output directory was absent after the first proof was generated; evidence write failed with ENOENT. The corrective run only created that directory."
+        },
+        {
+          "route": "nargo execute CLI",
+          "status": "NOT_APPLICABLE",
+          "reason": "The concrete fixture is constructed in TypeScript and has no complete Prover.toml; the supported equivalent is NoirJS execute over the same compiled artifact."
+        }
+      ],
+      "prepare": {
+        "sentinel": "results/raw/D1P-30/validation/m-dom/execution.json",
+        "outputs": [
+          "results/raw/D1P-30/validation/m-dom/execution.json",
+          "results/raw/D1P-30/validation/m-dom/honest-proof.json",
+          "results/raw/D1P-30/validation/m-dom/foreign-proof.json"
+        ],
+        "cwd": "results/raw/D1P-15/workspace/source/backend",
+        "timeout_seconds": 1800,
+        "argv": [
+          "./node_modules/.bin/hardhat", "test", "--network", "edr", "--no-compile", "test/d1p15.fixture.ts"
+        ],
+        "env": {
+          "D1P15_RESULT": "results/raw/D1P-30/validation/m-dom/execution.json",
+          "D1P15_HONEST_PROOF": "results/raw/D1P-30/validation/m-dom/honest-proof.json",
+          "D1P15_FOREIGN_PROOF": "results/raw/D1P-30/validation/m-dom/foreign-proof.json",
+          "D1P15_PINNED_ARTIFACT": "results/raw/D1P-13/workspace/source/backend/circuits/withdraw/target/withdraw.json",
+          "D1P15_MUTATION_ARTIFACT": "results/raw/D1P-15/artifacts/m-dom-withdraw.json"
+        }
+      },
+      "stages": [
+        {
+          "name": "concrete_witness",
+          "evidence_level": "E2",
+          "mode": "fresh",
+          "explanation": "A distinct foreign note-contract case and admitted owned-local roots were constructed.",
+          "checks": [
+            {"path": "results/raw/D1P-30/validation/m-dom/execution.json", "json_path": "cases.foreign.relationshipToConfiguredAddress", "equals": "distinct"}
+          ]
+        },
+        {
+          "name": "noir_execute",
+          "evidence_level": "E2",
+          "mode": "fresh-alternative-to-nargo-cli",
+          "explanation": "NoirJS executed the concrete witness against the compiled M-DOM artifact without weakening constraints.",
+          "checks": [
+            {"path": "results/raw/D1P-30/validation/m-dom/execution.json", "json_path": "cases.foreign.mutationExecution.witnessSolved", "equals": true}
+          ]
+        },
+        {
+          "name": "real_proof",
+          "evidence_level": "E3",
+          "mode": "fresh",
+          "explanation": "bb.js generated and verified a real proof and the generated Solidity verifier accepted it.",
+          "checks": [
+            {"path": "results/raw/D1P-30/validation/m-dom/foreign-proof.json", "json_path": "jsVerified", "equals": true},
+            {"path": "results/raw/D1P-30/validation/m-dom/foreign-proof.json", "json_path": "generatedVerifierAccepted", "equals": true}
+          ]
+        },
+        {
+          "name": "consumer_replay",
+          "evidence_level": "E4",
+          "mode": "fresh",
+          "explanation": "The unchanged local consumer accepted the foreign-note proof, wrote the nullifier, minted the state-checked amount, and the pinned producer rejected the same foreign witness.",
+          "checks": [
+            {"path": "results/raw/D1P-30/validation/m-dom/execution.json", "json_path": "cases.foreign.mint.receipt.status", "equals": "success"},
+            {"path": "results/raw/D1P-30/validation/m-dom/execution.json", "json_path": "cases.foreign.mint.effects.nullifierWritten", "equals": true},
+            {"path": "results/raw/D1P-30/validation/m-dom/execution.json", "json_path": "cases.foreign.mint.effects.recipientDelta", "equals": "5000000000000000000"},
+            {"path": "results/raw/D1P-30/validation/m-dom/execution.json", "json_path": "cases.foreign.pinnedExecution.outcome", "equals": "rejected"}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "m-src-fresh-vexec",
+      "match": {
+        "artifact_sha256": "7190813f623967b79ba80a1635536fcc9c8524c1d1cb9f00696832f644b38327",
+        "consumer_sha256": "64ec0efd0df934afc46f06be76764b74b97b9ac554e1bd72add7ce0a630373e3",
+        "rule": "R-ANCHOR"
+      },
+      "classification": "fresh D1P-30 owned-local injected-consumer V-EXEC",
+      "fresh_execution": true,
+      "manual_steps": 1,
+      "manual_inputs": [
+        "content-addressed association with the existing private-root same-root fixture"
+      ],
+      "scope_note": "Injected M-SRC only. The private root is deliberately not admitted, the giga root is admitted, and cross-chain reachability is not claimed.",
+      "failed_routes": [
+        {
+          "route": "nargo execute CLI",
+          "status": "NOT_APPLICABLE",
+          "reason": "The dynamic private Merkle witness is constructed in TypeScript; the supported exact route is NoirJS execute over the pinned compiled artifact."
+        }
+      ],
+      "prepare": {
+        "sentinel": "results/raw/D1P-30/validation/m-src/execution.json",
+        "outputs": [
+          "results/raw/D1P-30/validation/m-src/execution.json",
+          "results/raw/D1P-30/validation/m-src/attack-proof.json"
+        ],
+        "cwd": "results/raw/D1P-19/workspace/source/backend",
+        "timeout_seconds": 1800,
+        "argv": [
+          "./node_modules/.bin/hardhat", "test", "--network", "edr", "--no-compile", "test/d1p19-msrc.fixture.ts"
+        ],
+        "env": {
+          "D1P19_MSRC_RESULT": "results/raw/D1P-30/validation/m-src/execution.json",
+          "D1P19_ATTACK_PROOF": "results/raw/D1P-30/validation/m-src/attack-proof.json",
+          "D1P19_D1P12R_PROOF": "results/raw/D1P-12R/honest-proof.json",
+          "D1P19_PINNED_ARTIFACT": "results/raw/D1P-13/workspace/source/backend/circuits/withdraw/target/withdraw.json"
+        }
+      },
+      "stages": [
+        {
+          "name": "concrete_witness",
+          "evidence_level": "E2",
+          "mode": "fresh",
+          "explanation": "A private-root witness was constructed while only the giga root was admitted on the local consumer.",
+          "checks": [
+            {"path": "results/raw/D1P-30/validation/m-src/execution.json", "json_path": "attackGate.fixedPreState.gigaRootAdmitted", "equals": true},
+            {"path": "results/raw/D1P-30/validation/m-src/execution.json", "json_path": "attackGate.fixedPreState.privateRootAdmitted", "equals": false}
+          ]
+        },
+        {
+          "name": "noir_execute",
+          "evidence_level": "E2",
+          "mode": "fresh-alternative-to-nargo-cli",
+          "explanation": "NoirJS executed the concrete private-root witness against the pinned artifact.",
+          "checks": [
+            {"path": "results/raw/D1P-30/validation/m-src/execution.json", "json_path": "attackGate.witnessSolved", "equals": true}
+          ]
+        },
+        {
+          "name": "real_proof",
+          "evidence_level": "E3",
+          "mode": "fresh",
+          "explanation": "bb.js generated and verified a real proof and the pinned generated verifier accepted it.",
+          "checks": [
+            {"path": "results/raw/D1P-30/validation/m-src/attack-proof.json", "json_path": "jsVerified", "equals": true},
+            {"path": "results/raw/D1P-30/validation/m-src/attack-proof.json", "json_path": "generatedVerifierAccepted", "equals": true}
+          ]
+        },
+        {
+          "name": "consumer_replay",
+          "evidence_level": "E4",
+          "mode": "fresh",
+          "explanation": "The M-SRC consumer accepted, wrote the nullifier, and minted the state-checked amount from a non-admitted private root.",
+          "checks": [
+            {"path": "results/raw/D1P-30/validation/m-src/execution.json", "json_path": "attackGate.receipt.status", "equals": "success"},
+            {"path": "results/raw/D1P-30/validation/m-src/execution.json", "json_path": "attackGate.effects.nullifierWritten", "equals": true},
+            {"path": "results/raw/D1P-30/validation/m-src/execution.json", "json_path": "attackGate.effects.recipientDelta", "equals": "3000000000000000000"}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "payy-earlier-preserved-e4-r-bind",
+      "match": {
+        "artifact_sha256": "f50f6bb809326bf29c003e0986fb2564f3c04d3555c11870df3c74ddbc769297",
+        "consumer_sha256": "7062065cc95f447fea8bb28242d51c836c3cf9e39f1625180ecf9c240a5ffd8f",
+        "rule": "R-BIND"
+      },
+      "classification": "automatic audit of preserved T15/T16/T18 exact pipeline",
+      "fresh_execution": false,
+      "manual_steps": 2,
+      "manual_inputs": [
+        "content-addressed route association to the preserved earlier-revision fixture",
+        "historically authored synthetic tail record (kind, note kind, amount, hash, beneficiary)"
+      ],
+      "scope_note": "E4 is reused preserved evidence, not a new D1P-30 proof run. The exact T18 unchanged consumer used the T16 real proof and state-checked token balances. Owned prover and validator identities are required.",
+      "failed_routes": [
+        {
+          "route": "nargo execute CLI",
+          "status": "UNAVAILABLE",
+          "reason": "No complete standalone Prover.toml exists for the recursive private inputs; the accepted alternative is the pinned Rust/ACVM harness used by the project."
+        }
+      ],
+      "stages": [
+        {
+          "name": "concrete_witness",
+          "evidence_level": "E2",
+          "mode": "preserved",
+          "explanation": "The earlier-revision synthetic tail witness and differential later-revision rejection are preserved.",
+          "checks": [
+            {"path": "../BindCheck/results/raw/T15/90_summary.json", "json_path": "A_c4d2c90.candidate.witness_satisfied_and_proof_generated", "equals": true},
+            {"path": "../BindCheck/results/raw/T15/90_summary.json", "json_path": "B_dcd5d96.candidate.witness_satisfied_and_proof_generated", "equals": false}
+          ]
+        },
+        {
+          "name": "native_acvm_execute",
+          "evidence_level": "E2",
+          "mode": "preserved-alternative-to-nargo-cli",
+          "explanation": "The pinned Rust harness executed the actual recursive circuit witness and reached proof generation.",
+          "checks": [
+            {"path": "../BindCheck/results/raw/T15/30_run_c4d2c90.json", "json_path": "exit", "equals": 0}
+          ]
+        },
+        {
+          "name": "real_proof",
+          "evidence_level": "E3",
+          "mode": "preserved",
+          "explanation": "The synthetic record propagated through agg_final and the exact committed key verified the real proof.",
+          "checks": [
+            {"path": "../BindCheck/results/raw/T16/40_summary.json", "json_path": "candidate.witness_satisfied_and_proof_generated", "equals": true},
+            {"path": "../BindCheck/results/raw/T16/40_summary.json", "json_path": "candidate.independent_native_verify.exit", "equals": 0}
+          ]
+        },
+        {
+          "name": "consumer_replay",
+          "evidence_level": "E4",
+          "mode": "preserved",
+          "explanation": "The exact earlier consumer accepted the proof, transferred seven tokens to the decoded beneficiary, and rejected a second transaction without state change.",
+          "checks": [
+            {"path": "../BindCheck/results/raw/T18/90_summary.json", "json_path": "forge_exit", "equals": 0},
+            {"path": "../BindCheck/results/raw/T18/90_summary.json", "json_path": "cases.2_candidate_funded_burn_executes.post_tokenBalances.burnAddr", "equals": "7"},
+            {"path": "../BindCheck/results/raw/T18/90_summary.json", "json_path": "cases.4_candidate_resubmission_reverts.status", "equals": "reverted"}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "payy-earlier-preserved-e4-r-effect",
+      "match": {
+        "artifact_sha256": "f50f6bb809326bf29c003e0986fb2564f3c04d3555c11870df3c74ddbc769297",
+        "consumer_sha256": "7062065cc95f447fea8bb28242d51c836c3cf9e39f1625180ecf9c240a5ffd8f",
+        "rule": "R-EFFECT"
+      },
+      "classification": "automatic audit of preserved T15/T16/T18 exact pipeline",
+      "fresh_execution": false,
+      "manual_steps": 2,
+      "manual_inputs": [
+        "content-addressed route association to the preserved earlier-revision fixture",
+        "historically authored synthetic tail record (kind, note kind, amount, hash, beneficiary)"
+      ],
+      "scope_note": "Same concrete mismatch as the R-BIND warning, reused once rather than claimed as an independent proof. E4 is preserved evidence, not a new D1P-30 execution.",
+      "failed_routes": [
+        {
+          "route": "nargo execute CLI",
+          "status": "UNAVAILABLE",
+          "reason": "No complete standalone Prover.toml exists for the recursive private inputs; the accepted alternative is the pinned Rust/ACVM harness used by the project."
+        }
+      ],
+      "stages": [
+        {
+          "name": "concrete_witness",
+          "evidence_level": "E2",
+          "mode": "preserved",
+          "explanation": "The earlier-revision synthetic tail witness and differential later-revision rejection are preserved.",
+          "checks": [
+            {"path": "../BindCheck/results/raw/T15/90_summary.json", "json_path": "A_c4d2c90.candidate.witness_satisfied_and_proof_generated", "equals": true},
+            {"path": "../BindCheck/results/raw/T15/90_summary.json", "json_path": "B_dcd5d96.candidate.witness_satisfied_and_proof_generated", "equals": false}
+          ]
+        },
+        {
+          "name": "native_acvm_execute",
+          "evidence_level": "E2",
+          "mode": "preserved-alternative-to-nargo-cli",
+          "explanation": "The pinned Rust harness executed the actual recursive circuit witness and reached proof generation.",
+          "checks": [
+            {"path": "../BindCheck/results/raw/T15/30_run_c4d2c90.json", "json_path": "exit", "equals": 0}
+          ]
+        },
+        {
+          "name": "real_proof",
+          "evidence_level": "E3",
+          "mode": "preserved",
+          "explanation": "The synthetic record propagated through agg_final and the exact committed key verified the real proof.",
+          "checks": [
+            {"path": "../BindCheck/results/raw/T16/40_summary.json", "json_path": "candidate.witness_satisfied_and_proof_generated", "equals": true},
+            {"path": "../BindCheck/results/raw/T16/40_summary.json", "json_path": "candidate.independent_native_verify.exit", "equals": 0}
+          ]
+        },
+        {
+          "name": "consumer_replay",
+          "evidence_level": "E4",
+          "mode": "preserved",
+          "explanation": "The exact earlier consumer accepted the proof and the effect words committed a seven-token transfer to the decoded beneficiary.",
+          "checks": [
+            {"path": "../BindCheck/results/raw/T18/90_summary.json", "json_path": "forge_exit", "equals": 0},
+            {"path": "../BindCheck/results/raw/T18/90_summary.json", "json_path": "cases.2_candidate_funded_burn_executes.burnedEvent.success", "equals": true},
+            {"path": "../BindCheck/results/raw/T18/90_summary.json", "json_path": "cases.2_candidate_funded_burn_executes.post_tokenBalances.burnAddr", "equals": "7"}
+          ]
+        }
+      ]
+    }
+  ]
+}

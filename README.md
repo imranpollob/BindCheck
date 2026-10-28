@@ -1,13 +1,12 @@
 # BindCheck
 
-BindCheck investigates whether the guarantees of an accepted zero-knowledge proof justify the effects a blockchain application executes. Under D1 research contract revision 2, the prospective target is **automated discovery and end-to-end validation of proof-to-execution mismatches** from producer constraints, public-input decoding, and consumer effects. Consumer-directed selection and refinement remain a secondary efficiency question (RQ5), not an established advantage. The capability claim, comparative baselines, held-out transfer, and E4 validation have not been established.
+BindCheck investigates whether the guarantees of an accepted zero-knowledge proof justify the effects a blockchain application executes. Under D1 research contract revision 2, the prospective target is **automated discovery and end-to-end validation of proof-to-execution mismatches** from producer constraints, public-input decoding, and consumer effects. Consumer-directed selection and refinement remain a secondary efficiency question (RQ5), not an established advantage. D1P-30 supplies bounded development-case E4 validations, but the overall capability claim, comparative baselines, and held-out transfer have not been established.
 
 The current integration checkout is the linked worktree
 `/Users/imranpollob/Coding/bc/bindcheck-d1-paper` on `d1-paper`, currently at
-integrated revision `4897d6814ab1eb8adf1bae6526b5ac4436b8dd10` plus the
-uncommitted D1P-21A gate evidence. This state includes D1P-19, the integrated
-D1P-20 extracted consumer model, D1P-17, and the merged Lane C taxonomy and
-extraction work. The linked
+integrated revision `e64adfaed7f3d4136d824ec188c5212cd6dc4080` plus the
+uncommitted D1P-30 tool and evidence. This state includes D1P-21A/B, D1P-20,
+D1P-19, D1P-17, and the merged Lane C taxonomy and extraction work. The linked
 worktree was originally established from `chatgpt-codex` revision
 `cce1a966eb84e8e9819c6f658ca4ce07fd670036`.
 [D1P-00](reports/D1P-00.md) records the branch/worktree baseline and the
@@ -30,6 +29,23 @@ The principal directories are `circuits/` and `contracts/` for the small fixture
 
 ## Current status
 
+- [D1P-30](reports/D1P-30.md) delivers the first working `bindcheck analyze`
+  / `bindcheck validate` CLI. Generic ACIR/consumer-role rules emit no warning
+  on pinned WarpToad or Payy check-added, emit R-BIND on **INJECTED** M-DOM,
+  R-ANCHOR on **INJECTED** M-SRC, and grouped R-BIND/R-EFFECT warnings on
+  Payy earlier. The two WarpToad warnings reach fresh owned-local E4 with new
+  real proofs and state-checked effects; Payy automatically audits its exact
+  preserved T15/T16/T18 E4 chain. The two negative controls have 0/2 false
+  warnings in this bounded scope. Validation adapters and consumer relation
+  paths are counted manual inputs; no baseline arms or held-out transfer ran,
+  so the capability gate and D1 verdict remain UNKNOWN.
+- [D1P-21B](docs/extraction/d1p-21b-variant-extraction.md) completes campaign
+  gate 2 for the bounded WarpToad fragment. It derives pinned and M-SRC
+  consumer relations from their own solc artifacts, binds `S_DOM` from the
+  admitted state instead of a fixture constant, validates the extracted
+  paths against prior executions/controls, and keeps policy/role inputs
+  separate and manual. This is variant-specific extraction, not the D1P-30
+  obligation discovery or a security result.
 - [D1P-21A](reports/D1P-21A.md) passes campaign gates 1 and 3 without a
   solver campaign. Four new one-shot 9,152-byte proofs execute exact-state
   honest transitions for pinned + `S_DOM`, **INJECTED** M-DOM + `S_DOM`,

@@ -78,7 +78,9 @@ flowchart TD
     d1p15 --> d1p19["D1P-19 remaining B02 prerequisites [DONE]"]
     d1p19 --> d1p20["D1P-20 extracted consumer model [DONE]"]
     d1p20 --> d1p21a["D1P-21A exact-state + M-DOM gates [DONE]"]
-    d1p21a --> plannerReview["O1/O2 planner review + remaining gates [NEXT]"]
+    d1p21a --> d1p21b["D1P-21B variant extraction gate [DONE]"]
+    d1p21b --> d1p30["D1P-30 BindCheck v1 development tool [DONE]"]
+    d1p30 --> plannerReview["Capability baselines + held-out review [NEXT]"]
     plannerReview --> capabilityGate["Automated discovery + E4 capability gate [WAITING]"]
     d1p10 --> d1p10result["Transformed-arm eligibility [UNKNOWN]"]
     d1p10result --> d1p10decision["Selected-cone backend reconsideration [WAITING]"]
@@ -368,6 +370,19 @@ flowchart TD
     regions, and exhaustive pinned delta are frozen. Privileged synthetic
     `S_DOM` admission is not cross-chain evidence. No solver campaign,
     performance, automatic-discovery, vulnerability, or D1 result follows.
+39. Done for campaign gate 2 at the bounded component level:
+    [D1P-21B](extraction/d1p-21b-variant-extraction.md) derives variant-specific
+    pinned and M-SRC consumer relations from their own compiled solc inputs,
+    binds `S_DOM` state rather than a fixture constant, and matches prior
+    concrete executions and controls. Policy and role mapping remain manual.
+40. Done as a first development tool: [D1P-30](../reports/D1P-30.md) adds
+    `bindcheck analyze` and `bindcheck validate`, emits the expected generic
+    R-BIND/R-ANCHOR/R-EFFECT warnings across pinned/M-DOM/M-SRC and Payy
+    earlier/check-added, has 0/2 false warnings on the bounded negative
+    controls, reaches fresh E4 on both injected WarpToad cases, and audits the
+    preserved Payy E4 chain. Manual adapters are counted. Baseline comparison,
+    held-out transfer, automatic witness synthesis, and the capability gate
+    remain open; D1 remains UNKNOWN.
 
 The end goal does not imply that submission is currently justified. Contract
 revision 2 retains authorization and coverage but makes automated discovery
@@ -393,8 +408,10 @@ records 22/22 combined structural/control coverage, not 22 EVM executions.
 D1P-19 completes the bounded B02 P1/P3/P4/P6 prerequisites. D1P-20 supplies
 the extracted-consumer implementation model for the tested mint fragment,
 and D1P-21A passes exact-state non-vacuity plus independent M-DOM provenance.
-The campaign draft still awaits remaining-gate and planner review and does not
-complete the capability gate. Neither screen, blocker,
+D1P-21B supplies variant-specific state-bound extraction, and D1P-30 supplies
+the first working development analyzer/validator with two fresh and one
+preserved E4 chains. Baseline comparison and held-out transfer remain open, so
+the campaign still does not complete the capability gate. Neither screen, blocker,
 development fixture nor component check is a method-evaluation,
 cross-chain, policy or security result. D1
 preparation and reporting closure are complete; three missing historical query
@@ -460,6 +477,8 @@ slots were executed.
 | 2026-10-27 | D1P-19 remaining B02 prerequisites | `[DONE]` prerequisites / `[UNKNOWN]` campaign and security | [Report](../reports/D1P-19.md), [protocol](../protocols/d1/d1p-19-prerequisites.json), and ignored evidence manifest: check locality/functionality for 77 exact compiler-lowered BN254 Poseidon regions; pass an **INJECTED** M-SRC real-proof mint and identical-proof pinned K2 rejection; freeze canonical `S_DOM`/`S_SRC`; record pinned/M-DOM/M-SRC artifact, key, verifier, witness and public-layout provenance; and pass P6 term/function/domain checks. L0 has 344 independent Poseidon2 havoc outputs; draft L1 adds shared functional equality only, never injectivity. No solver ran. The O1/O2 protocol remains unfrozen pending D1P-20 and planner review; D1 remains `[UNKNOWN]`. |
 | 2026-10-27 | D1P-20 extracted consumer model | `[DONE]` component / `[UNKNOWN]` campaign and security | [Model record](extraction/d1p-20-extracted-solver-model.md): replace the manual implementation summary for the tested `WarpToadCore.mint` fragment with the D1P-18 extracted relation while retaining G1–G5 and role mapping as separate manual policy inputs. Full/T-ARITH queries parse; five archived executions and all eight D1P-14D deterministic controls match. Zero primary solver calls and zero proofs run. This does not establish automatic obligation discovery, E4 validation, performance or security. |
 | 2026-10-27 | D1P-21A exact-state non-vacuity and M-DOM provenance | `[DONE]` gates 1 and 3 / `[UNKNOWN]` campaign and security | [Report](../reports/D1P-21A.md) and ignored evidence manifest: generate exactly one new real proof for each of pinned + `S_DOM`, **INJECTED** M-DOM + `S_DOM`, pinned + `S_SRC`, and **INJECTED** M-SRC + `S_SRC`; all four correct artifact/VK/verifier pairings accept and actual mints commit the expected `5e18` recipient/supply and nullifier effects. Independently derive M-DOM private contract witness 59, classify all 86 L1 Poseidon2 calls, check all 77 exact BN254 regions, and freeze an exhaustive pinned delta. Synthetic `S_DOM` admission is privileged. No satisfiability solver campaign, cross-chain reachability, performance, automatic discovery, vulnerability or D1 verdict follows. |
+| 2026-10-27 | D1P-21B variant-general extracted consumer model | `[DONE]` campaign gate 2 component / `[UNKNOWN]` capability and security | [Model record](extraction/d1p-21b-variant-extraction.md): extract pinned and M-SRC relations from each variant's own compiled Solidity artifacts, bind `S_DOM` from admitted state, and validate against prior executions and controls. Policy/role inputs remain manual; no solver, new proof, automatic obligation discovery, E4 result, performance or security claim follows. |
+| 2026-10-28 | D1P-30 BindCheck v1 development analyzer and validator | `[DONE]` bounded tool / `[UNKNOWN]` capability and security | [Report](../reports/D1P-30.md), [validation index](../protocols/d1/d1p-30-validation-index.json), runner and ignored manifest: implement JSON/readable static R-BIND, R-ANCHOR, R-EFFECT and polarity checks with no application identifiers in the rule engine. Pinned WarpToad and Payy check-added produce no warning; injected M-DOM/M-SRC and Payy earlier produce the expected warnings. Both WarpToad warnings reach fresh E4 with real proofs and state-checked effects; Payy audits its preserved exact E4 chain. The bounded negative controls have 0/2 false warnings. Manual routes are counted; no baselines, held-out transfer, solver, live chain or D1 verdict. |
 
 ## Update rule
 

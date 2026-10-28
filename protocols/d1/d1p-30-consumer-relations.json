@@ -1,0 +1,16 @@
+{
+  "schema": "bindcheck.consumer-relation-index.v1",
+  "scope": "Content-addressed manual inputs for checked relations; not consulted by the rule engine and counted in analysis output.",
+  "relations": [
+    {
+      "consumer_sha256": "323a1cf26c7449f67cf277ff0a46c31e12f725c555f9fa165d5a60011e122c39",
+      "relation": "results/raw/D1P-18/relation.json",
+      "relation_sha256": "301ce67b6148bd889082f67b7c484cac55a52981d540917c21ac67f421293fd7"
+    },
+    {
+      "consumer_sha256": "64ec0efd0df934afc46f06be76764b74b97b9ac554e1bd72add7ce0a630373e3",
+      "relation": "results/raw/D1P-21B/m-src-relation.json",
+      "relation_sha256": "91929f0953313f05d67f3539edf8e7ef69cf51c423a83dfe941af1eb8cdce969"
+    }
+  ]
+}
