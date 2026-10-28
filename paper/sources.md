@@ -30,3 +30,22 @@ committed. All retrievals happened on **26 October 2026**.
 | [3] | CIVER (IEEE S&P 2024) | Web search found no open full text. Only the abstract, the SoK's description and the tool README were used. A human author will supply the full text. |
 | [5] | CCC-Check (IEEE S&P 2026) | `https://eprint.iacr.org/2025/2120.pdf` returned HTTP 403 (curl and WebFetch). Abstract only, from the ePrint landing page. A human author will supply the full text. |
 | [4] alt. | Coda arXiv/ePrint copies | `https://eprint.iacr.org/2023/547.pdf` returned HTTP 403; `https://arxiv.org/pdf/2304.07648` returned HTTP 404. The author-hosted copy above was used instead. |
+
+## D1P-P01 additions (28 October 2026)
+
+The full-prose rewrite of [draft.md](draft.md) adds references [9]–[13] for
+the preregistered baseline tools in [baselines.md](baselines.md). **None was
+retrieved**; bibliographic details come from author knowledge and the tool
+pins in baselines.md, and stay **[TODO-VERIFY]** until a human author checks
+them against the primary source.
+
+| Draft ref | Work | Status |
+| --- | --- | --- |
+| [9] | Picus / QED², PLDI 2023 | Not retrieved; authors, venue and title to verify |
+| [10] | Slither, WETSEB 2019 | Not retrieved; to verify |
+| [11] | Mythril v0.24.8 repository | Citation form to verify |
+| [12] | Echidna, ISSTA 2020 tool demo | Not retrieved; to verify |
+| [13] | Foundry v1.8.6 repository | Citation form to verify |
+
+Former ref [7] (the internal D1 reference proposal) has been removed from the
+reference list because it is not a citable primary source.
