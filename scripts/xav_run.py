@@ -39,11 +39,12 @@ LOAD_LIMIT = 30.0  # do not start a proof above this 1-min load
 IGNORE_LOAD = False
 
 
-def sh(argv, cwd, timeout, log, extra_env=None):
+def sh(argv, cwd, timeout, log, extra_env=None, stdin_text=None):
     env = os.environ.copy()
     env.update(extra_env or {})
     t0 = time.monotonic()
-    p = subprocess.run(argv, cwd=cwd, env=env, capture_output=True, text=True, timeout=timeout)
+    p = subprocess.run(argv, cwd=cwd, env=env, capture_output=True, text=True, timeout=timeout,
+                       input=stdin_text)
     wall = time.monotonic() - t0
     log.write_text(f"$ {' '.join(map(str, argv))}\nexit={p.returncode} wall={wall:.1f}s\n"
                    f"--- stdout ---\n{p.stdout[-3000:]}\n--- stderr ---\n{p.stderr[-3000:]}")
@@ -111,6 +112,7 @@ def main():
     ap.add_argument("--ignore-load", action="store_true",
                     help="prove even above LOAD_LIMIT (still serial + nice -n 19)")
     args = ap.parse_args()
+    args.out = args.out.resolve()
     spec = json.loads(args.warnings.read_text())
     honest_toml = Path(spec["honest_toml"]).read_text()
     only = set(args.only.split(",")) if args.only else None
@@ -207,6 +209,9 @@ def run_one(mid, warning, honest_toml, out, row, stop_after="E4"):
     plan = plan_for(warning, mid)
     row["stages"]["plan"] = {"kind": plan.kind, "words": plan.word_updates, "notes": plan.notes}
     if plan.kind == "unsupported":
+        if mid.startswith("PY-"):
+            run_payy(mid, warning, out, row)
+            return
         row["stages"]["blocked"] = plan.blocked_reason
         row["manual_steps"] = ["build 2-proof aggregator witness harness"]
         return
@@ -270,13 +275,208 @@ def run_one(mid, warning, honest_toml, out, row, stop_after="E4"):
     if stop_after == "E3":
         return
     # --- E4 ---
-    if mid == "WT-C03":
+    if plan.kind == "aztec-branch":
         # Aztec-branch consumer effect is preserved D1P-15 evidence; check
         # correspondence of this fresh build to the proved artifact.
         prove_correspondence_c03(b, out, row)
         return
-    run_replay(mid, b, out, row, plan, proof_hex, honest_toml,
+    run_replay(mid, b, out, row, plan, proof_hex, honest_toml, warning,
                twice=(plan.kind == "replay"))
+
+
+def stage_payy_build(mid, out, rollup_src=None):
+    """Compile mutant (or pinned, for control) consumer + mocks with pinned solc."""
+    b = out / "payy-build" / mid
+    if rollup_src is None and (b / "artifacts.json").exists():
+        return b  # cached: same mutant consumer already compiled
+    if b.exists():
+        shutil.rmtree(b)
+    (b / "contracts/rollup3").mkdir(parents=True)
+    (b / "contracts/noir").mkdir(parents=True)
+    (b / "contracts/mocks").mkdir(parents=True)
+    (b / "stubs/proxy/utils").mkdir(parents=True)
+    (b / "stubs/access").mkdir(parents=True)
+    mutdir = out / "mutants"
+    base = PAYY_REF / "eth/contracts"
+    src = rollup_src or (mutdir / mid / "RollupV1.sol")
+    if not isinstance(src, Path) or not src.exists():
+        src = base / "rollup3/RollupV1.sol"
+    shutil.copy(src, b / "contracts/rollup3/RollupV1.sol")
+    for f in ("noir/IVerifier.sol",):
+        shutil.copy(base / f, b / "contracts" / f)
+    shutil.copy(ROOT / "benchmarks/binding-mutants/baselines/payy-IUSDC.sol", b / "contracts/IUSDC.sol")
+    shutil.copy(ROOT / "scripts/xav/XAVProxy.sol", b / "contracts/XAVProxy.sol")
+    shutil.copy(base / "mocks/MockUSDC.sol", b / "contracts/mocks/MockUSDC.sol")
+    shutil.copy(base / "mocks/MockVerifier.sol", b / "contracts/mocks/MockVerifier.sol")
+    shutil.copy(ROOT / "benchmarks/binding-mutants/_stubs/payy/proxy/utils/Initializable.sol",
+                b / "stubs/proxy/utils/Initializable.sol")
+    shutil.copy(ROOT / "benchmarks/binding-mutants/_stubs/payy/access/OwnableUpgradeable.sol",
+                b / "stubs/access/OwnableUpgradeable.sol")
+    # OZ sources are COPIED dereferenced: solc allow-paths cannot traverse the
+    # reference tree's nested pnpm symlinks. tsx/viem use the node_modules symlink.
+    oz_dst = b / "oz" / "@openzeppelin" / "contracts"
+    oz_dst.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copytree(REF_NM / "@openzeppelin/contracts", oz_dst, symlinks=False,
+                    ignore_dangling_symlinks=True)
+    return b
+
+
+def payy_compile(b, logs, tag):
+    """Compile via pinned solc CLI (offline) into combined-json; return {name: (abi, bin)}."""
+    oz_src = REF_NM  # WarpToad backend OZ 5.x sources reused (same major as Payy 5.0.1)
+    inp = {
+        "language": "Solidity",
+        "sources": {str(p.relative_to(b)): {"content": p.read_text()} for p in
+                    list((b / "contracts").rglob("*.sol")) + list((b / "stubs").rglob("*.sol"))},
+        "settings": {"optimizer": {"enabled": True, "runs": 200}, "viaIR": True,
+                     "outputSelection": {"*": {"*": ["abi", "evm.bytecode.object"]}},
+                     "remappings": ["@openzeppelin/=oz/@openzeppelin/",
+                                    "@openzeppelin/contracts-upgradeable/=stubs/"]},
+    }
+    (b / "input.json").write_text(json.dumps(inp))
+    nm_real = os.path.realpath(b / "node_modules")
+    p, _ = sh([str(PAYY_SOLC), "--standard-json", "--base-path", str(b),
+               "--allow-paths", f"{b},{nm_real},{oz_src},{PAYY_REF}/eth/contracts"],
+              cwd=b, timeout=900, log=logs / f"{tag}-solc.log",
+              stdin_text=(b / "input.json").read_text())
+    out_json = json.loads(p.stdout)
+    if p.returncode != 0 or "errors" in out_json and any(e.get("severity") == "error" for e in out_json["errors"]):
+        raise RuntimeError("payy solc failed: " + json.dumps(out_json.get("errors", p.stderr))[:500])
+    arts = {}
+    for src, contracts in out_json["contracts"].items():
+        for name, c in contracts.items():
+            arts[name] = {"abi": c["abi"], "bytecode": "0x" + c["evm"]["bytecode"]["object"]}
+    return arts
+
+
+def run_payy(mid, warning, out, row, rollup_src=None):
+    """Mock-verifier-scoped consumer replay (E2 max; verifier changed by design)."""
+    import socket
+    logs = out / "logs"
+    t0 = time.monotonic()
+    b = stage_payy_build(mid if rollup_src is None else f"{mid}-control", out,
+                         rollup_src=rollup_src)
+    cached = rollup_src is None and (b / "artifacts.json").exists()
+    if not cached:
+        # node_modules symlink for tsx/viem resolution
+        if not (b / "node_modules").exists():
+            (b / "node_modules").symlink_to(REF_NM, target_is_directory=True)
+        shutil.copy(ROOT / "scripts/xav/payy_replay.ts", b / "payy_replay.ts")
+    try:
+        arts = json.loads((b / "artifacts.json").read_text()) if cached \
+            else payy_compile(b, logs, f"{mid}-{warning['id']}")
+    except RuntimeError as exc:
+        row["stages"]["payy_compile"] = f"FAIL: {exc}"[:200]
+        return
+    row["stages"]["payy_compile"] = "PASS (cached)" if cached else "PASS"
+    for name in ("RollupV1", "MockUSDC", "MockVerifier", "XAVProxy"):
+        if name not in arts or arts[name]["bytecode"] == "0x":
+            row["stages"]["payy_compile"] = f"FAIL: {name} empty"
+            return
+    if rollup_src is None:
+        (b / "artifacts.json").write_text(json.dumps(arts))
+    experiments = payy_experiments(mid, warning)
+    if not experiments:
+        row["stages"]["blocked"] = "no mock-verifier experiment for this shape"
+        row["manual_steps"] = ["real inner-proof vector (Rust stack)"]
+        return
+    # anvil on a fixed high port
+    port = 18549
+    anv = subprocess.Popen(["anvil", "--port", str(port), "--silent"],
+                           stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    try:
+        for _ in range(100):
+            try:
+                socket.create_connection(("127.0.0.1", port), timeout=0.5).close()
+                break
+            except OSError:
+                time.sleep(0.2)
+        for exp in experiments:
+            plan_doc = {"label": f"{mid}-{exp['name']}",
+                        "consumer": arts["RollupV1"], "mockUsdc": arts["MockUSDC"],
+                        "mockVerifier": arts["MockVerifier"], "proxy": arts["XAVProxy"],
+                        "noteKind": PAYY_NOTE_KIND,
+                        "vkHash": PAYY_VK_HASH, "messagesLen": exp["messages_len"],
+                        "validatorKey": PAYY_VALIDATOR_KEY, **exp["plan"]}
+            (b / "payy-plan.json").write_text(json.dumps(plan_doc))
+            p, wall = sh(["npx", "--no-install", "tsx", "payy_replay.ts"], cwd=b, timeout=600,
+                         log=logs / f"{mid}-{warning['id']}-{exp['name']}.log",
+                         extra_env={"XAV_PAYY_PLAN": str((b / "payy-plan.json").resolve()),
+                                    "XAV_PAYY_REPORT": str((b / f"payy-report-{exp['name']}.json").resolve()),
+                                    "XAV_ANVIL_URL": f"http://127.0.0.1:{port}"})
+            row["times"][f"payy_{exp['name']}_s"] = round(wall, 1)
+            if p.returncode != 0:
+                row["stages"][f"payy_{exp['name']}"] = "FAIL: harness"
+                continue
+            rep = json.loads((b / f"payy-report-{exp['name']}.json").read_text())
+            verdict = exp["judge"](rep)
+            row["stages"][f"payy_{exp['name']}"] = verdict
+            if verdict.startswith("PASS"):
+                row["E"] = "E2 (mock-verifier-scoped)"
+    finally:
+        anv.terminate()
+    row["times"]["total_wall_s"] = round(row["times"].get("total_wall_s", 0) + (time.monotonic() - t0), 1)
+    if row["E"] == "E1":
+        row["manual_steps"] = ["real inner-proof vector (Rust stack) for anything above E2"]
+
+
+def payy_experiments(mid, warning):
+    """Return mock-verifier experiments for consumer-shaped Payy warnings."""
+    H = "0x" + "ab" * 32
+    V = "0x" + "0" * 60 + "03e8"  # 1000 as bytes32 (Payy mints carry bytes32 values)
+    R_ADDR = "0x90f79bf6eb2c4f870365e785982e1f101e93b906"  # anvil account 3
+    R = "0x" + "0" * 24 + R_ADDR[2:]  # bytes32-left-padded recipient word
+    N1, N2, C0 = "0x" + "aa" * 32, "0x" + "bb" * 32, "0x" + "00" * 32
+    mint_words = ["0x" + "00" * 31 + "02", PAYY_NOTE_KIND, V, H]
+    burn_words = ["0x" + "00" * 31 + "03", PAYY_NOTE_KIND, V, H, R]
+    S = lambda h, o, n, words: {"settle": {"height": h, "oldRoot": o, "newRoot": n,
+                                           "commitHash": C0, "otherHash": PAYY_OTHER_HASH, "words": words}}
+    loc, rule = warning.get("location", ""), warning["rule"]
+    out = []
+    is_mint_shape = (rule == "R-EFFECT" and loc in ("RollupV1.sol:842", "RollupV1.sol:850")) or \
+                    (rule == "R-POLARITY" and loc == "RollupV1.sol:357")
+    # Mint-shape experiments run for every mutant carrying such a warning: the mock
+    # verifier stands in for "the circuit emitted attacker messages". For consumer
+    # mutants (PY-S01/S02) that is the whole defect; for circuit mutants (PY-C02)
+    # it shows the consumer-path effect contingent on the circuit defect.
+    if mid in ("PY-S01", "PY-C02") and is_mint_shape:
+        out.append({"name": "settle-unregistered", "messages_len": 4,
+                    "plan": {"actions": [S(1, PAYY_EMPTY_ROOT, N1, mint_words)],
+                             "watchHashes": [H], "watchBalances": []},
+                    "judge": lambda rep: "PASS: unregistered mint settled" if _settle_ok(rep, 0)
+                    else f"no effect: {rep.get('revert_0', rep.get('steps'))}"[:160]})
+    if mid in ("PY-S02", "PY-C02") and is_mint_shape:
+        out.append({"name": "settle-twice", "messages_len": 4,
+                    "plan": {"actions": [{"register": {"hash": H, "value": V}},
+                                         S(1, PAYY_EMPTY_ROOT, N1, mint_words),
+                                         S(2, N1, N2, mint_words)],
+                             "watchHashes": [H], "watchBalances": []},
+                    "judge": lambda rep: "PASS: registered mint settled twice" if _settle_ok(rep, 1) and _settle_ok(rep, 2)
+                    else f"no effect: {json.dumps(rep.get('steps'))}"[:160]})
+    if mid in ("PY-S03",) and rule == "R-EFFECT":
+        out.append({"name": "settle-burn", "messages_len": 5,
+                    "plan": {"actions": [{"fund_rollup": {"value": V}},
+                                         S(1, PAYY_EMPTY_ROOT, N1, burn_words)],
+                             "watchHashes": [], "watchBalances": [R_ADDR, "0x" + PAYY_NOTE_KIND[-40:]]},
+                    "judge": lambda rep: "PASS: burn payout misdirected (see balances)" if _settle_ok(rep, 1)
+                    else "no effect"})
+    if mid in ("PY-S04",) and rule == "R-EFFECT":
+        k4 = ["0x" + "00" * 31 + "04", PAYY_NOTE_KIND, V, H, R]
+        out.append({"name": "settle-kind4", "messages_len": 5,
+                    "plan": {"actions": [{"fund_rollup": {"value": V}},
+                                         S(1, PAYY_EMPTY_ROOT, N1, k4)],
+                             "watchHashes": [], "watchBalances": [R_ADDR]},
+                    "judge": lambda rep: "PASS: dead kind-4 settled as burn" if _settle_ok(rep, 1)
+                    else "no effect"})
+    return out
+
+
+def _settle_ok(rep, idx):
+    for s in rep.get("steps", []):
+        for k, v in s.items():
+            if k.startswith(f"{idx}_settle") and v == "success":
+                return True
+    return False
 
 
 def prove_correspondence_c03(b, out, row):
@@ -319,6 +519,14 @@ def prove_witness(b, log_path, row, time_key, tag):
     return (b / tag / "proof").read_bytes().hex()
 
 
+PAYY_REF = Path("/Users/imranpollob/Coding/bc/BindCheck/tools/cases/payy-c4d2c90")
+PAYY_SOLC = Path("/Users/imranpollob/.svm/0.8.20/solc-0.8.20")
+PAYY_NOTE_KIND = "0x1111111111111111111111111111111111111111111111111111111111111111"
+PAYY_VK_HASH = "0x2222222222222222222222222222222222222222222222222222222222222222"
+PAYY_VALIDATOR_KEY = "0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d"
+PAYY_OTHER_HASH = "0x3333333333333333333333333333333333333333333333333333333333333333"
+PAYY_EMPTY_ROOT = "0x0577b5b4aa3eaba75b2a919d5d7c63b7258aa507d38e346bf2ff1d48790379ff"
+
 S_SRC_BURNS = None
 
 
@@ -330,6 +538,11 @@ def src_burns():
         S_SRC_BURNS = [{"preCommitment": x["preCommitment"], "amount": x["amount"]}
                        for x in states["S_SRC"]["burns"]]
     return S_SRC_BURNS
+
+
+def _plan_word(plan):
+    words = list((plan.word_updates or {}).keys())
+    return words[0] if len(words) == 1 else None
 
 
 def mint_calldata(b, plan, kind):
@@ -356,7 +569,7 @@ def mint_calldata(b, plan, kind):
             "relayer": addr(fee["relayer_address"]), "recipient": addr(fee["recipient_address"])}
 
 
-def run_replay(mid, b, out, row, plan, proof_hex, honest_toml, twice):
+def run_replay(mid, b, out, row, plan, proof_hex, honest_toml, warning, twice):
     logs = out / "logs"
     verifier_sol = (b / "proof/verifier.sol").read_text()
     (b / "contracts/verifier/HonkVerifier.sol").write_text(verifier_sol)
@@ -366,9 +579,9 @@ def run_replay(mid, b, out, row, plan, proof_hex, honest_toml, twice):
     mints = [{**mint, "proofHex": "0x" + proof_hex}]
     if twice and plan.kind == "replay":
         mints.append({**mint, "proofHex": "0x" + proof_hex})
-    if mid == "WT-C01":
-        # Second honest proof on the mutant circuit: the real note must
-        # still spend after the attacker nullifier was recorded.
+    # Shape: nullifier-word BIND plans prove the real note still spends
+    # after the attacker nullifier was recorded (double-spend shape).
+    if plan.kind == "bind-word" and _plan_word(plan) == "nullifier":
         if execute_witness(b, honest_toml, logs / f"{mid}-execute-honest.log", row, "execute_honest_s"):
             h2 = prove_witness(b, logs / f"{mid}-prove-honest.log", row, "prove_honest_s", "proof-honest")
             if h2 is not None:
@@ -384,12 +597,16 @@ def run_replay(mid, b, out, row, plan, proof_hex, honest_toml, twice):
         else:
             row["stages"]["honest_second_proof"] = "FAIL: honest witness rejected by mutant"
     burns = src_burns()
-    if mid == "WT-C07":
+    if plan.kind == "anchor-tree" and (plan.node_plan or {}).get("burn_attacker_note"):
         # Admit the attacker's own tree: burn the attacker note on-chain so
-        # the chain root equals the witness root (K2 passes; chain word stays 1).
+        # the chain root equals the witness root (admission passes; the
+        # defective word stays attacker-chosen).
         spec = json.loads((b / "anchor.json").read_text())
         burns = [{"preCommitment": spec["attacker_pre_commitment"],
                   "amount": spec["attacker_amount"]}]
+    elif plan.kind == "anchor-tree" and (warning["rule"] == "R-CONSUMER"):
+        # Admission itself removed: nothing to seed; giga comes from the mock.
+        burns = []
     plan_doc = {"label": mid, "mints": mints, "mint": mints[0], "proofHex": mints[0]["proofHex"],
                 "gigaRoot": giga, "aztecAddress": aztec_addr,
                 "burns": burns, "mintTwice": False}
@@ -419,10 +636,16 @@ def run_replay(mid, b, out, row, plan, proof_hex, honest_toml, twice):
     mints = [s for s in report.get("steps", []) if any(k.startswith("mint_") for k in s)]
     successes = sum(1 for s in mints if isinstance(list(s.values())[0], dict)
                     and list(s.values())[0].get("status") in ("0x1", "success"))
-    # Expected successes: double-spend shapes need 2, single mints 1,
-    # contained shapes (C02/C07/C08) expect 0 with a decoded revert.
-    need = {"WT-C01": 2, "WT-S03": 2, "WT-S09": 2}.get(mid, 1)
-    if mid in ("WT-C02", "WT-C07", "WT-C08"):
+    # Expected successes, all by shape: replay kinds and nullifier-word
+    # BIND plans need 2 (double-spend); reject/revert shapes expect 0.
+    # R-BIND max_fee is contained (consumer re-checks); R-CONSUMER max_fee
+    # is the defect itself (over-charge expected to succeed).
+    need = 2 if (plan.kind == "replay" or row["stages"].get("honest_second_proof") == "PASS"
+                 or _plan_word(plan) == "nullifier") else 1
+    contained_shape = (plan.kind == "bind-word" and _plan_word(plan) in ("chain_id", "recipient_address"))
+    contained_shape = contained_shape or (warning["rule"] == "R-BIND" and _plan_word(plan) == "max_fee")
+    contained_shape = contained_shape or (warning["rule"] == "R-EFFECT")
+    if contained_shape:
         row["stages"]["E4_effect"] = (
             "contained as predicted" if successes == 0
             else f"UNEXPECTED success ({successes}); see report")
