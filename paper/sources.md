@@ -49,3 +49,28 @@ them against the primary source.
 
 Former ref [7] (the internal D1 reference proposal) has been removed from the
 reference list because it is not a citable primary source.
+
+## D1P-P02 verification (28 October 2026)
+
+References [9]–[13] were checked against primary registries, and [14] was
+added. Bibliographic metadata came from DOI content negotiation
+(`curl -L -H "Accept: application/vnd.citationstyles.csl+json"
+https://doi.org/<doi>`), which returns the publisher's Crossref record.
+Software releases came from the GitHub REST API (`gh api
+repos/<owner>/<repo>/releases/tags/<tag>`). Tool behavior claims came from
+the repository READMEs (WebFetch). dblp returned HTTP 429 and an Anubis
+block, so it was not used. The ACM DL returned HTTP 403.
+
+| Draft ref | Work | Source checked | Result |
+| --- | --- | --- | --- |
+| [9] | Picus, PLDI 2023 | doi.org → 10.1145/3591282; github.com/Veridise/Picus README | Verified: 10 authors (Pailoor … Dillig), PACMPL 7(PLDI), pp. 1510–1532, 2023. README: uniqueness property, inputs `.circom`/`.r1cs`/`.sr1cs`. Full text not read. Whether its property covers unread public inputs stays **[TODO-VERIFY]** |
+| [10] | Slither, WETSEB 2019 | doi.org → 10.1109/WETSEB.2019.00008 | Verified: Feist, Grieco, Groce; pp. 8–15; May 2019 |
+| [11] | Mythril v0.24.8 | GitHub API | Verified: tag v0.24.8 published 2024-03-27; repository now `ConsenSysDiligence/mythril`. Cited as software; no canonical paper found |
+| [12] | Echidna, ISSTA 2020 | doi.org → 10.1145/3395363.3404366 | Verified: Grieco, Song, Cygan, Feist, Groce; pp. 557–560 |
+| [13] | Foundry v1.8.6 | GitHub API | Verified: tag v1.8.6 published 2026-10-21. Cited as software |
+| [14] | Circomspect | GitHub API | Verified: `trailofbits/circomspect`, "A static analyzer and linter for the Circom zero-knowledge DSL". Version not pinned; tool not run |
+| [3] | CIVER README | github.com/costa-group/circom_civer | Verified: weak safety, tags, pre/postconditions; Circom only; R1CS/PLONK/ACIR listed as forthcoming. Full text still not retrieved |
+| [5] | CCC-Check README | github.com/ArmanKolozyan/CCC-Check | Verified: analysis via CirC IR; Circom end-to-end script; README cites IEEE S&P 2026. ePrint PDF again returned HTTP 403 (curl with a browser user agent). Full text still not retrieved |
+
+The Noir-compiler claim in the related-work section is now a measured
+result (D1P-22), not a citation.
