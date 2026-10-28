@@ -94,14 +94,33 @@ lane provers. D1 verdict: UNKNOWN (development mutants, exposed apps).
 | PY-C01/C03/C04/C05/C06/C07, PY-S05 | all R-BIND/R-EFFECT/R-CONSUMER (23 rows) | E1 | compile-only | real inner-proof vector (Rust stack) |
 | PY-S01/S02 | W001 R-BIND, W003 R-CONSUMER (4 rows) | E1 | compile-only | real inner-proof vector (Rust stack) |
 | PY-S03/S04 | W001 R-BIND, W003 R-CONSUMER (4 rows) | E1 | compile-only | real inner-proof vector (Rust stack) |
-| PY-C02 | W001 R-BIND circuit | E1 | n/a | real inner-proof vector (Rust stack); bounded probe closed |
-| PY-C02 | W002 R-EFFECT :850 | E1 (contained) | replay ~1 | 0; pinned consumer rejects attacker messages (matches control) |
-| PY-C02 | W004 R-POLARITY :357 | E1 (contained) | replay ~1 | 0; pinned consumer rejects attacker messages (matches control) |
+| PY-C02 | W001 R-BIND circuit | E3 | harness 88.4 wall; active 17.3 prove+verify | 0; attacker mint @0-3 proves+verifies under mutant VK (indep. bb exit 0; tamper exit 1); pinned rejects at :74 export assert |
+| PY-C02 | W002 R-EFFECT :850 | E3 | same proof artifact | 0 circuit-side; consumer effect mock-contained (pinned reverts); E4 real-verifier replay owed |
 | PY-C02 | W003 R-CONSUMER :357 commit_hash | E1 | n/a | by-design offchain (Celestia) commitment; no experiment |
 
-Counts: 53 rows — E4: 8, E4-preserved: 1, E3: 4, E2 (mock-verifier-scoped):
-6, E1: 34 (of which 2 executed-and-contained). All WarpToad E-levels with
-zero manual steps except the counted WT-C03 association (2 steps).
+Counts: 53 rows — E4: 8, E4-preserved: 1, E3: 6, E2 (mock-verifier-scoped):
+6, E1: 32. All E-levels with zero manual steps except the counted WT-C03
+association (2 steps). E4 (real-verifier consumer replay) remains future
+work for all Payy rows.
+
+TC02 real-proof vector (evidence `results/raw/TC02/`, ignored; script
+`payy-harness/tc02_tail.rs` tracked): mutant checkout = pristine c4d2c90
+copy + PY-C02 `main.nr` (diff: exactly the `:74` export assert removed);
+pinned nargo beta.14 compile; `bb write_vk` ultra_honk (CRS generated
+locally, no network); mutant fixtures swapped; cold cargo build 489 s
+(1.91.0, `--locked` accepted); harness proves real utxo→agg_utxo→agg_agg
+chain then control / tail-burn@4-8 / active-attacker-mint@0-3. Mutant:
+all three prove + natively verify (active public inputs carry the
+attacker hash exactly; independent `bb verify` exit 0 "Proof verified
+successfully"; 1-bit tamper → `Sumcheck failed` exit 1). Pristine pinned
+contrast (second cold build 590 s): control/tail verify, active candidate
+rejected at ACVM witness generation, 0.0 s, `Assertion failed: proof
+message must be exported`, `main.nr:74:24` — the removed line. Incident:
+first active hash `0xabab..ab` exceeded the BN254 modulus and ACVM
+reduced it mod p (diagnosed from public inputs, fixed to low-byte
+pattern, re-ran). Disk-full incident: two cargo targets filled the disk;
+deleted both regenerable dirs (mutant evidence already captured),
+rebuilt pinned with 9.1 G free.
 
 ## Toolchain pins
 

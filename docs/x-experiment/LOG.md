@@ -190,3 +190,20 @@ to run_payy first, re-ran S01/S02 (`v11-fix/`), spliced 8 corrected rows
 into `v11/results.json` with identity checks. Bogus E3s never committed.
 Per-mutant compile cache added (14 compiles for ~40 Payy rows).
 AUTO-VALIDATE.md carries the v1.1 table; v1 table preserved as history.
+
+## 2026-10-28 — TC02: PY-C02 real-proof vector (E3)
+
+Reused the lane's T15 apparatus. Mutant checkout (c4d2c90 + PY-C02
+one-assert removal) compiled with pinned nargo, VK via pinned bb (local
+CRS), cold cargo build 489 s exit 0. New tracked harness
+payy-harness/tc02_tail.rs adds an active-slot candidate (attacker mint
+@0-3) beside T15's control + tail-burn@4-8. Mutant: all three prove +
+natively verify; active public inputs carry the attacker hash exactly;
+independent bb verify exit 0; 1-bit tamper exits 1. Pristine pinned
+contrast (second cold build 590 s): control/tail verify, active rejected
+at witness generation (`proof message must be exported`, main.nr:74:24 —
+the removed line). PY-C02 W001/W002 re-graded E1→E3 (zero manual steps);
+W003 stays E1 (by-design offchain). Incidents: field-modulus overflow of
+first attacker hash (diagnosed, fixed, re-ran); disk-full from two cargo
+targets (deleted regenerable dirs, rebuilt with 9.1 G free). Evidence
+reports/TC02.md; raw under results/raw/TC02/ (ignored).
