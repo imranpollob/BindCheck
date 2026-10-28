@@ -89,3 +89,27 @@ not E2 (no producer relation) and not a verdict. Concretization for
 this candidate shape already exists manually (D1P-19 attacker tree,
 real proof, E4 on the injected mutant); automating that step is the
 remaining gate-(b) work, not done here.
+
+## 2026-10-28 — X-BM: 30-mutant binding benchmark
+
+Goal: compiling, ground-truthed proof-to-execution binding mutants of
+WarpToad (18) and Payy (12), circuit + consumer. Package
+benchmarks/binding-mutants/; raw builds under results/raw/X-BM/.
+
+Routes and fixes: pinned nargo beta.22/beta.14 compile in <1 s per
+mutant (git dep cache at ~/nargo intact). WarpToad consumer compiles via
+svm solc 0.8.29 with three vendored-equivalent dep packages copied at
+build time (symlink + remap attempts failed on sandbox path rules).
+Payy consumer needed solc 0.8.20 --via-ir --optimize-runs 200 (mirrors
+pinned hardhat config) plus two thin upgradeable stubs (pinned API
+subset, marked never-deploy); real OZ 5.x sources vendored at build
+time. No third-party deps committed. A relative-OUT build.sh run failed
+on log redirects; absolute OUT required (guard added).
+
+Observed: 30/30 compile. Honest nargo execute passes for 6/9 WT-C
+(C01, C02, C04, C05, C08, C09); C06/C07 fail as predicted
+(honest-breaking by design); C03 skipped by design (reuses D1P-15
+real-proof precedent). Compiler lint bonus: beta.22 names the freed
+public word for C01/C02/C08. Full table in BENCHMARK.md §3 and
+manifest.json observed fields. Build ran under load ~42 (parallel lane
+heavy jobs; recorded in logs/load.txt).
