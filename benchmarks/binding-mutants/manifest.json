@@ -1,0 +1,503 @@
+{
+ "schema": "bindcheck.xbm.manifest/v1",
+ "count": 30,
+ "toolchain": {
+  "nargo_beta22": "1.0.0-beta.22+c57152f91260ecdb9faad4efc20abb14b6d2ece7",
+  "nargo_beta14": "1.0.0-beta.14+60ccd48e18ad8ce50d5ecda9baf813b712145051",
+  "solc_warptoad": "0.8.29+commit.ab55807c",
+  "solc_payy": "0.8.20",
+  "cvc5": "not run in this benchmark"
+ },
+ "baselines": {
+  "warptoad_app_revision": "973e7d1e4b60d0d8a8ca299b0cabd9193b147ef8",
+  "payy_app_revision": "c4d2c902 (earlier, vulnerable)",
+  "exposure": "both applications already exposed in-repo; development use only, never held-out"
+ },
+ "mutants": {
+  "WT-C01": {
+   "operator": "leave-public-unconstrained",
+   "binding_broken": "nullifier",
+   "expected_effect": "arbitrary-nullifier mint; real note unspent",
+   "readme": "mutants/WT-C01.md",
+   "files": {
+    "warptoad-withdraw-main.nr": "17a668d5406c79367ac32cee72a15f7ee8c248d05ff199d414029e3f81b32914",
+    "warptoad-withdraw-Nargo.toml": "466b325e71d02e22a9caef5b6a2ff86043315a234098949f76ba8687960c180a",
+    "warptoad-nargo-hashing-lib.nr": "ec0ad211ff92580652244a7b6871db8874222e3928c8b25934ef8ac2882871d3"
+   },
+   "observed": {
+    "compile_exit": "0",
+    "execute_exit": "0",
+    "artifact_sha256": "52bd760d4499e368ac1864e05765d38c976e66d73d3f85445516aa525fadb88f"
+   },
+   "compile_log_tail": "warning: unused variable nullifier\n   \u250c\u2500 src/main.nr:15:5\n   \u2502\n15 \u2502     nullifier: pub Field,\n   \u2502     --------- unused variable\n   \u2502\n\n"
+  },
+  "WT-C02": {
+   "operator": "leave-public-unconstrained",
+   "binding_broken": "max_fee",
+   "expected_effect": "fee-cap policy bypass at proof level",
+   "readme": "mutants/WT-C02.md",
+   "files": {
+    "warptoad-withdraw-main.nr": "a8c38e0a9928175bd762511120df7e437a0a944122299784371724bbcbbe3dc9",
+    "warptoad-withdraw-Nargo.toml": "466b325e71d02e22a9caef5b6a2ff86043315a234098949f76ba8687960c180a",
+    "warptoad-nargo-hashing-lib.nr": "ec0ad211ff92580652244a7b6871db8874222e3928c8b25934ef8ac2882871d3"
+   },
+   "observed": {
+    "compile_exit": "0",
+    "execute_exit": "0",
+    "artifact_sha256": "5104fb52ea8a0fad5e16e36992264f482906518c6acca8d4fb8661f571676dd1"
+   },
+   "compile_log_tail": "warning: unused variable max_fee\n   \u250c\u2500 src/main.nr:32:5\n   \u2502\n32 \u2502     max_fee: pub Field,\n   \u2502     ------- unused variable\n   \u2502\n\n"
+  },
+  "WT-C03": {
+   "operator": "replace-public-with-private",
+   "binding_broken": "aztec_silo",
+   "expected_effect": "foreign-contract note verifies (O1 shape; M-DOM reuse)",
+   "readme": "mutants/WT-C03.md",
+   "files": {
+    "warptoad-withdraw-main.nr": "c7260909ad6c7e7388138321e5ae90b2c7f1b800bdf5325db00213017ed4575f",
+    "warptoad-withdraw-Nargo.toml": "466b325e71d02e22a9caef5b6a2ff86043315a234098949f76ba8687960c180a",
+    "warptoad-nargo-hashing-lib.nr": "de96d8c121f3a50387244a4e8373dff20e584de81d65f950560706bf3a4c0488"
+   },
+   "observed": {
+    "compile_exit": "0",
+    "execute_exit": "null",
+    "artifact_sha256": "4775cd32a2bb30d32e04874fa45c1feb24e929e9d9454824f9feb5bd5b484845"
+   },
+   "compile_log_tail": "warning: unused variable aztec_warptoad_address\n   \u250c\u2500 src/main.nr:20:5\n   \u2502\n20 \u2502     aztec_warptoad_address: pub Field, //<- this is here to prevent the circuit from allowing commitments from other aztec contracts. \n   \u2502     ---------------------- unused variable\n   \u2502\n\n"
+  },
+  "WT-C04": {
+   "operator": "remove-guard",
+   "binding_broken": "origin_root",
+   "expected_effect": "fabricated origin root verifies off-branch",
+   "readme": "mutants/WT-C04.md",
+   "files": {
+    "warptoad-withdraw-main.nr": "668b27d2bbc64a310ed44f436cf09d3523430b3eefcc20cda9c15407f6ca0d96",
+    "warptoad-withdraw-Nargo.toml": "466b325e71d02e22a9caef5b6a2ff86043315a234098949f76ba8687960c180a",
+    "warptoad-nargo-hashing-lib.nr": "ec0ad211ff92580652244a7b6871db8874222e3928c8b25934ef8ac2882871d3"
+   },
+   "observed": {
+    "compile_exit": "0",
+    "execute_exit": "0",
+    "artifact_sha256": "49f95dfe93a6b31663f2b689fe7ce1a31bdcc97259aea644f5cbddbd5943b22b"
+   },
+   "compile_log_tail": "warning: unused variable giga_root\n   \u250c\u2500 src/main.nr:18:5\n   \u2502\n18 \u2502     giga_root: pub Field,\n   \u2502     --------- unused variable\n   \u2502\n\nwarning: unused variable giga_merkle_data\n   \u250c\u2500 src/main.nr:43:5\n   \u2502\n43 \u2502     giga_merkle_data: Evm_merkle_data<GIGA_TREE_DEPTH>,\n   \u2502     ---------------- unused variable\n   \u2502\n\n"
+  },
+  "WT-C05": {
+   "operator": "swap-checks",
+   "binding_broken": "origin/destination roots",
+   "expected_effect": "destination proved, origin free; honest path intact",
+   "readme": "mutants/WT-C05.md",
+   "files": {
+    "warptoad-withdraw-main.nr": "88fb46b0415145da7c584aa3214816aa95a1d656ad4168aec096be1feed4cdbb",
+    "warptoad-withdraw-Nargo.toml": "466b325e71d02e22a9caef5b6a2ff86043315a234098949f76ba8687960c180a",
+    "warptoad-nargo-hashing-lib.nr": "ec0ad211ff92580652244a7b6871db8874222e3928c8b25934ef8ac2882871d3"
+   },
+   "observed": {
+    "compile_exit": "0",
+    "execute_exit": "0",
+    "artifact_sha256": "3b18779c9ea912620ed50cb55458d19a99197b2d7621eeea4bb366486a67816d"
+   },
+   "compile_log_tail": ""
+  },
+  "WT-C06": {
+   "operator": "unbind-amount",
+   "binding_broken": "amount",
+   "expected_effect": "fixed commitment authorizes any amount (honest-breaking)",
+   "readme": "mutants/WT-C06.md",
+   "files": {
+    "warptoad-withdraw-main.nr": "1b02f48011a2c2200bff97d7735aba6ef65af3a1560b261d179fe4b20118da5e",
+    "warptoad-withdraw-Nargo.toml": "466b325e71d02e22a9caef5b6a2ff86043315a234098949f76ba8687960c180a",
+    "warptoad-nargo-hashing-lib.nr": "ec0ad211ff92580652244a7b6871db8874222e3928c8b25934ef8ac2882871d3"
+   },
+   "observed": {
+    "compile_exit": "0",
+    "execute_exit": "1",
+    "artifact_sha256": "b143b5618952a22f40beccf1e1eab853701356821d136379fadbaa5d44f70fb8"
+   },
+   "compile_log_tail": ""
+  },
+  "WT-C07": {
+   "operator": "unbind-domain",
+   "binding_broken": "chain_id",
+   "expected_effect": "cross-chain replay shape (honest-breaking)",
+   "readme": "mutants/WT-C07.md",
+   "files": {
+    "warptoad-withdraw-main.nr": "685e35a6c5c5ff3f99a2eff9485799b3f5a279c274b56a9ee0ebba65e85014e7",
+    "warptoad-withdraw-Nargo.toml": "466b325e71d02e22a9caef5b6a2ff86043315a234098949f76ba8687960c180a",
+    "warptoad-nargo-hashing-lib.nr": "ec0ad211ff92580652244a7b6871db8874222e3928c8b25934ef8ac2882871d3"
+   },
+   "observed": {
+    "compile_exit": "0",
+    "execute_exit": "1",
+    "artifact_sha256": "2f3ce85eda68cd49a5714df165cf73808075551324bea2e07ddb0d2a76bc740a"
+   },
+   "compile_log_tail": "warning: unused variable chain_id\n   \u250c\u2500 src/main.nr:16:5\n   \u2502\n16 \u2502     chain_id: pub Field,\n   \u2502     -------- unused variable\n   \u2502\n\n"
+  },
+  "WT-C08": {
+   "operator": "remove-guard",
+   "binding_broken": "recipient!=0",
+   "expected_effect": "zero-address mint verifies at circuit level",
+   "readme": "mutants/WT-C08.md",
+   "files": {
+    "warptoad-withdraw-main.nr": "32feff906fe8a6e9b7a0c132fec4a00cba91058185a7cfe891f45ed7e323bb3d",
+    "warptoad-withdraw-Nargo.toml": "466b325e71d02e22a9caef5b6a2ff86043315a234098949f76ba8687960c180a",
+    "warptoad-nargo-hashing-lib.nr": "ec0ad211ff92580652244a7b6871db8874222e3928c8b25934ef8ac2882871d3"
+   },
+   "observed": {
+    "compile_exit": "0",
+    "execute_exit": "0",
+    "artifact_sha256": "90485f5320eba0d68b196bd66615527a7c5f7a9e23c6ce18c4104ab1ec8e2637"
+   },
+   "compile_log_tail": "warning: unused variable recipient_address\n   \u250c\u2500 src/main.nr:34:5\n   \u2502\n34 \u2502     recipient_address: pub Field,                   // eth address left padded zeros\n   \u2502     ----------------- unused variable\n   \u2502\n\n"
+  },
+  "WT-C09": {
+   "operator": "misorder-words",
+   "binding_broken": "amount/max_fee",
+   "expected_effect": "ABI/decoder misalignment",
+   "readme": "mutants/WT-C09.md",
+   "files": {
+    "warptoad-withdraw-main.nr": "6d1896917f57c21d112bb63591e58f24110d11e359eaf82f4bb0a24383bd4c7a",
+    "warptoad-withdraw-Nargo.toml": "466b325e71d02e22a9caef5b6a2ff86043315a234098949f76ba8687960c180a",
+    "warptoad-nargo-hashing-lib.nr": "ec0ad211ff92580652244a7b6871db8874222e3928c8b25934ef8ac2882871d3"
+   },
+   "observed": {
+    "compile_exit": "0",
+    "execute_exit": "0",
+    "artifact_sha256": "c7ae10d1852d9e2dc7baf78cee4dc57d07a9916c2faf6a56585825e6f3662288"
+   },
+   "compile_log_tail": ""
+  },
+  "WT-S01": {
+   "operator": "remove-guard",
+   "binding_broken": "K2 local root",
+   "expected_effect": "unadmitted-tree mint succeeds (O2 shape; M-SRC reuse)",
+   "readme": "mutants/WT-S01.md",
+   "files": {
+    "WarpToadCore.sol": "39ff35459c24b3d86677b84f8039a447e59898fd54724088cab2cca0baa33189"
+   },
+   "observed": {
+    "compile_exit": "0",
+    "execute_exit": "null",
+    "artifact_sha256": "null"
+   },
+   "compile_log_tail": "Compiler run successful. Artifact(s) can be found in directory \"/Users/imranpollob/Coding/bc/bindcheck-lane-x/results/raw/X-BM/build/WT-S01/out\".\n"
+  },
+  "WT-S02": {
+   "operator": "remove-guard",
+   "binding_broken": "K1 giga root",
+   "expected_effect": "arbitrary giga root passes consumer",
+   "readme": "mutants/WT-S02.md",
+   "files": {
+    "WarpToadCore.sol": "9a7bd98c56bf674b747099bd497952fe7aa37e54676c3082968adcb43486248c"
+   },
+   "observed": {
+    "compile_exit": "0",
+    "execute_exit": "null",
+    "artifact_sha256": "null"
+   },
+   "compile_log_tail": "Compiler run successful. Artifact(s) can be found in directory \"/Users/imranpollob/Coding/bc/bindcheck-lane-x/results/raw/X-BM/build/WT-S02/out\".\n"
+  },
+  "WT-S03": {
+   "operator": "drop-accounting",
+   "binding_broken": "nullifier check+write",
+   "expected_effect": "unbounded replay, no spend recorded",
+   "readme": "mutants/WT-S03.md",
+   "files": {
+    "WarpToadCore.sol": "bf5113233f28e4bb063b44c36d8b892b595b2be2c49f1d898155ef377f0c380c"
+   },
+   "observed": {
+    "compile_exit": "0",
+    "execute_exit": "null",
+    "artifact_sha256": "null"
+   },
+   "compile_log_tail": "Compiler run successful. Artifact(s) can be found in directory \"/Users/imranpollob/Coding/bc/bindcheck-lane-x/results/raw/X-BM/build/WT-S03/out\".\n"
+  },
+  "WT-S04": {
+   "operator": "remove-gate",
+   "binding_broken": "verifier call",
+   "expected_effect": "open mint without proof (positive control)",
+   "readme": "mutants/WT-S04.md",
+   "files": {
+    "WarpToadCore.sol": "8a39f37b9d8d07ce5df5fedcd38807c360334861d2dd498546834ad45b36a465"
+   },
+   "observed": {
+    "compile_exit": "0",
+    "execute_exit": "null",
+    "artifact_sha256": "null"
+   },
+   "compile_log_tail": "Warning: Unused function parameter. Remove or comment out the variable name to silence this warning.\n   --> contracts/core/WarpToadCore.sol:153:9:\n    |\n153 |         bytes memory _poof\n    |         ^^^^^^^^^^^^^^^^^^\n\nWarning: Unused local variable.\n   --> contracts/core/WarpToadCore.sol:160:9:\n    |\n160 |         bytes32[] memory _publicInputs = _formatPublicInputs(_nullifier,  ...\n    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n"
+  },
+  "WT-S05": {
+   "operator": "swap-checks",
+   "binding_broken": "giga/local histories",
+   "expected_effect": "honest mints revert; wrong-set bypass",
+   "readme": "mutants/WT-S05.md",
+   "files": {
+    "WarpToadCore.sol": "968df349e8827528feef23cf8063aa23a3e7a526d4e01853e79cbb3206693725"
+   },
+   "observed": {
+    "compile_exit": "0",
+    "execute_exit": "null",
+    "artifact_sha256": "null"
+   },
+   "compile_log_tail": "Compiler run successful. Artifact(s) can be found in directory \"/Users/imranpollob/Coding/bc/bindcheck-lane-x/results/raw/X-BM/build/WT-S05/out\".\n"
+  },
+  "WT-S06": {
+   "operator": "unbind-fee",
+   "binding_broken": "maxFee cap",
+   "expected_effect": "relayer over-fee above stated maximum",
+   "readme": "mutants/WT-S06.md",
+   "files": {
+    "WarpToadCore.sol": "d32561056b0bc7320a75303fc4928bc046945841cc083a0344fe66f6305b2855"
+   },
+   "observed": {
+    "compile_exit": "0",
+    "execute_exit": "null",
+    "artifact_sha256": "null"
+   },
+   "compile_log_tail": "Compiler run successful. Artifact(s) can be found in directory \"/Users/imranpollob/Coding/bc/bindcheck-lane-x/results/raw/X-BM/build/WT-S06/out\".\n"
+  },
+  "WT-S07": {
+   "operator": "misdirect-beneficiary",
+   "binding_broken": "recipient share",
+   "expected_effect": "principal paid to relayer",
+   "readme": "mutants/WT-S07.md",
+   "files": {
+    "WarpToadCore.sol": "27b871233e7aeab94baeb856c4bf906634a65ed8c8253824c6f56a2808302bf1"
+   },
+   "observed": {
+    "compile_exit": "0",
+    "execute_exit": "null",
+    "artifact_sha256": "null"
+   },
+   "compile_log_tail": "Compiler run successful. Artifact(s) can be found in directory \"/Users/imranpollob/Coding/bc/bindcheck-lane-x/results/raw/X-BM/build/WT-S07/out\".\n"
+  },
+  "WT-S08": {
+   "operator": "misorder-words",
+   "binding_broken": "amount/maxFee encoding",
+   "expected_effect": "verifier sees swapped value",
+   "readme": "mutants/WT-S08.md",
+   "files": {
+    "WarpToadCore.sol": "2ac52ef0621786439948369039e3b6c026ec457c843693d546f2498abb3dcb20"
+   },
+   "observed": {
+    "compile_exit": "0",
+    "execute_exit": "null",
+    "artifact_sha256": "null"
+   },
+   "compile_log_tail": "Compiler run successful. Artifact(s) can be found in directory \"/Users/imranpollob/Coding/bc/bindcheck-lane-x/results/raw/X-BM/build/WT-S08/out\".\n"
+  },
+  "WT-S09": {
+   "operator": "drop-write",
+   "binding_broken": "nullifier write",
+   "expected_effect": "replay despite live check (cf S03)",
+   "readme": "mutants/WT-S09.md",
+   "files": {
+    "WarpToadCore.sol": "ba3d77c8e26eb9dadea9137336cfdb0d99d641633cc8a2955c1f868cafb1f23e"
+   },
+   "observed": {
+    "compile_exit": "0",
+    "execute_exit": "null",
+    "artifact_sha256": "null"
+   },
+   "compile_log_tail": "Compiler run successful. Artifact(s) can be found in directory \"/Users/imranpollob/Coding/bc/bindcheck-lane-x/results/raw/X-BM/build/WT-S09/out\".\n"
+  },
+  "PY-C01": {
+   "operator": "remove-guard",
+   "binding_broken": "padding gaps",
+   "expected_effect": "sparse trailing records provable",
+   "readme": "mutants/PY-C01.md",
+   "files": {
+    "payy-agg-agg-main.nr": "a7df91f549d5c938f63ae7c2dcf8abe79d848048858d70e8bbeac122cc20d11d",
+    "payy-agg-agg-Nargo.toml": "b7ca356dcc3d0122131a862dc9f1d32e3c056b2e748daab78226cc2b904995bd"
+   },
+   "observed": {
+    "compile_exit": "0",
+    "execute_exit": "null",
+    "artifact_sha256": "210aedd5d4ee5dc5ee46ce7dfd25c6cb347475525ddab7c19e92b05100158e40"
+   },
+   "compile_log_tail": ""
+  },
+  "PY-C02": {
+   "operator": "leave-public-unconstrained",
+   "binding_broken": "messages[..]",
+   "expected_effect": "arbitrary public messages verify",
+   "readme": "mutants/PY-C02.md",
+   "files": {
+    "payy-agg-agg-main.nr": "0107fe7d48684856238b176a12669fa7c2f3ce5d52776dd4999c19136314170d",
+    "payy-agg-agg-Nargo.toml": "b7ca356dcc3d0122131a862dc9f1d32e3c056b2e748daab78226cc2b904995bd"
+   },
+   "observed": {
+    "compile_exit": "0",
+    "execute_exit": "null",
+    "artifact_sha256": "da07b30dbc9b2f8cccf3397697c9c7f754308c423431074483eca5f042bef05d"
+   },
+   "compile_log_tail": "warning: unused variable messages\n   \u250c\u2500 src/main.nr:21:5\n   \u2502\n21 \u2502     messages: pub [Field; 1000],\n   \u2502     -------- unused variable\n   \u2502\n\n"
+  },
+  "PY-C03": {
+   "operator": "remove-guard",
+   "binding_broken": "root chaining",
+   "expected_effect": "disjoint histories aggregate",
+   "readme": "mutants/PY-C03.md",
+   "files": {
+    "payy-agg-agg-main.nr": "1f36733179ba7b76b850bc4c7aa74e1562ca960a00e7a3d8eba293d0461c1e1f",
+    "payy-agg-agg-Nargo.toml": "b7ca356dcc3d0122131a862dc9f1d32e3c056b2e748daab78226cc2b904995bd"
+   },
+   "observed": {
+    "compile_exit": "0",
+    "execute_exit": "null",
+    "artifact_sha256": "4dc86e10eb9bd69fbf49209c959ab44be9db86486b8a6d1e2a371419f3b41bb0"
+   },
+   "compile_log_tail": ""
+  },
+  "PY-C04": {
+   "operator": "unbind-commitment",
+   "binding_broken": "commit_hash",
+   "expected_effect": "aggregate floats free of inner commits",
+   "readme": "mutants/PY-C04.md",
+   "files": {
+    "payy-agg-agg-main.nr": "e9857770655e8b48071c3b2efa4cc8ae5e859973ddc1be0fd28a5c053e616af8",
+    "payy-agg-agg-Nargo.toml": "b7ca356dcc3d0122131a862dc9f1d32e3c056b2e748daab78226cc2b904995bd"
+   },
+   "observed": {
+    "compile_exit": "0",
+    "execute_exit": "null",
+    "artifact_sha256": "47900ded2ac3026ffed8bf07000ccffffacd958737de995df7bd727edee45c4b"
+   },
+   "compile_log_tail": "warning: unused variable commit_hash\n   \u250c\u2500 src/main.nr:20:5\n   \u2502\n20 \u2502     commit_hash: pub Field,\n   \u2502     ----------- unused variable\n   \u2502\n\nwarning: unused import poseidon2\n  \u250c\u2500 src/main.nr:2:15\n  \u2502\n2 \u2502 use poseidon::poseidon2;\n  \u2502               --------- unused import\n  \u2502\n\n"
+  },
+  "PY-C05": {
+   "operator": "remove-config-check",
+   "binding_broken": "VK allowlist",
+   "expected_effect": "unlisted keys aggregate",
+   "readme": "mutants/PY-C05.md",
+   "files": {
+    "payy-agg-agg-main.nr": "325b07a0f2e2b12b63ce638b48787b1d0ae661e63759a33c651f6b3b3f12a93e",
+    "payy-agg-agg-Nargo.toml": "b7ca356dcc3d0122131a862dc9f1d32e3c056b2e748daab78226cc2b904995bd"
+   },
+   "observed": {
+    "compile_exit": "0",
+    "execute_exit": "null",
+    "artifact_sha256": "f92695e017ea5ac09bf615bc1313f3613e07e178b53976494e675b48182b61df"
+   },
+   "compile_log_tail": "warning: unused variable is_valid_proof\n   \u250c\u2500 src/main.nr:31:13\n   \u2502\n31 \u2502         let is_valid_proof = (verification_key_hash[0] == proof.verification_key_hash) | (verification_key_hash[1] == proof.verification_key_hash);\n   \u2502             -------------- unused variable\n   \u2502\n\n"
+  },
+  "PY-C06": {
+   "operator": "leave-public-unconstrained",
+   "binding_broken": "new_root",
+   "expected_effect": "arbitrary claimed resulting state",
+   "readme": "mutants/PY-C06.md",
+   "files": {
+    "payy-agg-agg-main.nr": "5cf0b35908f4e38311cd9c35458a11ec5ab1575f8d8a8f98b98b4ebad1d17c81",
+    "payy-agg-agg-Nargo.toml": "b7ca356dcc3d0122131a862dc9f1d32e3c056b2e748daab78226cc2b904995bd"
+   },
+   "observed": {
+    "compile_exit": "0",
+    "execute_exit": "null",
+    "artifact_sha256": "991a913da5eb7bfeebb953ee0997be5b93e77655dfe16700f2374cba08bfc486"
+   },
+   "compile_log_tail": "warning: unused variable new_root\n   \u250c\u2500 src/main.nr:19:5\n   \u2502\n19 \u2502     new_root: pub Field,\n   \u2502     -------- unused variable\n   \u2502\n\n"
+  },
+  "PY-C07": {
+   "operator": "misorder-words",
+   "binding_broken": "old/new root",
+   "expected_effect": "roots interpreted swapped downstream",
+   "readme": "mutants/PY-C07.md",
+   "files": {
+    "payy-agg-agg-main.nr": "e8e9cc4b56c629bca5816cf30f36426f46ce50cf498250cf7fb554548450f2fe",
+    "payy-agg-agg-Nargo.toml": "b7ca356dcc3d0122131a862dc9f1d32e3c056b2e748daab78226cc2b904995bd"
+   },
+   "observed": {
+    "compile_exit": "0",
+    "execute_exit": "null",
+    "artifact_sha256": "d0f4428fd7e24a397a7e8ed82ab5da034d260b9672067231f4a89aa0d456fb92"
+   },
+   "compile_log_tail": ""
+  },
+  "PY-S01": {
+   "operator": "remove-guard",
+   "binding_broken": "mint registration",
+   "expected_effect": "unregistered mints settle",
+   "readme": "mutants/PY-S01.md",
+   "files": {
+    "RollupV1.sol": "45f71abde8cea8eb5519a210462ec35f8df2522e2e3d7b172be1bdeb0568848a",
+    "payy-IVerifier.sol": "b58d87acf3da2b26ecb42bbd754f1dbc04f29a24c05572492351456717a94ecb",
+    "payy-IUSDC.sol": "c97aa666dd8319b32f07f81f866da3aae8b21f27630f86a9ad4e19cc84f6fad1"
+   },
+   "observed": {
+    "compile_exit": "0",
+    "execute_exit": "null",
+    "artifact_sha256": "null"
+   },
+   "compile_log_tail": "Compiler run successful. Artifact(s) can be found in directory \"/Users/imranpollob/Coding/bc/bindcheck-lane-x/results/raw/X-BM/build/PY-S01/out\".\n"
+  },
+  "PY-S02": {
+   "operator": "drop-single-use",
+   "binding_broken": "mint spent flag",
+   "expected_effect": "registered mint settles twice",
+   "readme": "mutants/PY-S02.md",
+   "files": {
+    "RollupV1.sol": "78efde6ccce2707f41f34a0ef0277b5ea8014fe8c1e171cf5a253c22267c9ef9",
+    "payy-IVerifier.sol": "b58d87acf3da2b26ecb42bbd754f1dbc04f29a24c05572492351456717a94ecb",
+    "payy-IUSDC.sol": "c97aa666dd8319b32f07f81f866da3aae8b21f27630f86a9ad4e19cc84f6fad1"
+   },
+   "observed": {
+    "compile_exit": "0",
+    "execute_exit": "null",
+    "artifact_sha256": "null"
+   },
+   "compile_log_tail": "Compiler run successful. Artifact(s) can be found in directory \"/Users/imranpollob/Coding/bc/bindcheck-lane-x/results/raw/X-BM/build/PY-S02/out\".\n"
+  },
+  "PY-S03": {
+   "operator": "misbind-word",
+   "binding_broken": "burn recipient",
+   "expected_effect": "payout to note-kind-derived address",
+   "readme": "mutants/PY-S03.md",
+   "files": {
+    "RollupV1.sol": "02fe4e570e1fa325d22815360ebfb6f99ac438d4ced430854496dcc6c6df9afd",
+    "payy-IVerifier.sol": "b58d87acf3da2b26ecb42bbd754f1dbc04f29a24c05572492351456717a94ecb",
+    "payy-IUSDC.sol": "c97aa666dd8319b32f07f81f866da3aae8b21f27630f86a9ad4e19cc84f6fad1"
+   },
+   "observed": {
+    "compile_exit": "0",
+    "execute_exit": "null",
+    "artifact_sha256": "null"
+   },
+   "compile_log_tail": "Compiler run successful. Artifact(s) can be found in directory \"/Users/imranpollob/Coding/bc/bindcheck-lane-x/results/raw/X-BM/build/PY-S03/out\".\n"
+  },
+  "PY-S04": {
+   "operator": "activate-dead-path",
+   "binding_broken": "kind 4",
+   "expected_effect": "swap records settle as burns, stride misaligned",
+   "readme": "mutants/PY-S04.md",
+   "files": {
+    "RollupV1.sol": "6fe88c24f21fe9d05b09c1f3858d8626ce6bbea88ea45a652a878bfde1509bb5",
+    "payy-IVerifier.sol": "b58d87acf3da2b26ecb42bbd754f1dbc04f29a24c05572492351456717a94ecb",
+    "payy-IUSDC.sol": "c97aa666dd8319b32f07f81f866da3aae8b21f27630f86a9ad4e19cc84f6fad1"
+   },
+   "observed": {
+    "compile_exit": "0",
+    "execute_exit": "null",
+    "artifact_sha256": "null"
+   },
+   "compile_log_tail": "Compiler run successful. Artifact(s) can be found in directory \"/Users/imranpollob/Coding/bc/bindcheck-lane-x/results/raw/X-BM/build/PY-S04/out\".\n"
+  },
+  "PY-S05": {
+   "operator": "offset",
+   "binding_broken": "header skip",
+   "expected_effect": "header words parsed as records",
+   "readme": "mutants/PY-S05.md",
+   "files": {
+    "RollupV1.sol": "6f4b8d86152eeb46da8f418bfc23aa7e535b59575ffb0ab98d9f323cc2067133",
+    "payy-IVerifier.sol": "b58d87acf3da2b26ecb42bbd754f1dbc04f29a24c05572492351456717a94ecb",
+    "payy-IUSDC.sol": "c97aa666dd8319b32f07f81f866da3aae8b21f27630f86a9ad4e19cc84f6fad1"
+   },
+   "observed": {
+    "compile_exit": "0",
+    "execute_exit": "null",
+    "artifact_sha256": "null"
+   },
+   "compile_log_tail": "Compiler run successful. Artifact(s) can be found in directory \"/Users/imranpollob/Coding/bc/bindcheck-lane-x/results/raw/X-BM/build/PY-S05/out\".\n"
+  }
+ }
+}
