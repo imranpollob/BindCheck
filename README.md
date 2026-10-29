@@ -1,12 +1,13 @@
 # BindCheck
 
-BindCheck investigates whether the guarantees of an accepted zero-knowledge proof justify the effects a blockchain application executes. Under D1 research contract revision 3, the prospective target includes a **taxonomy of proof-to-execution binding failures** and **actionable cross-layer diagnostics**, alongside automated discovery and end-to-end validation from producer constraints, public-input decoding, and consumer effects. Consumer-directed selection and refinement remain a secondary efficiency question (RQ5), not an established advantage. D1P-30 supplies bounded development-case E4 validations and D1P-31 supplies a 30-mutant development benchmark, but comparative baselines, held-out transfer, and the overall capability claim have not been established.
+BindCheck investigates whether the guarantees of an accepted zero-knowledge proof justify the effects a blockchain application executes. Under D1 research contract revision 3, the prospective target includes a **taxonomy of proof-to-execution binding failures** and **actionable cross-layer diagnostics**, alongside automated discovery and end-to-end validation from producer constraints, public-input decoding, and consumer effects. Consumer-directed selection and refinement remain a secondary efficiency question (RQ5), not an established advantage. D1P-30 supplies bounded development-case E4 validations and D1P-31 supplies a 30-mutant development benchmark, but comparative baselines, supported held-out transfer, and the overall capability claim have not been established.
 
 The current integration checkout is the linked worktree
 `/Users/imranpollob/Coding/bc/bindcheck-d1-paper` on `d1-paper`, currently at
-integrated revision `9e9e71f3b646078ae13a63a8266643ac162df694` plus the
-uncommitted, hash-frozen D1P-34 BindCheck v1.1 work. This state includes the
-integrated D1P-31 evaluation/contract revision, D1P-30 tool, mutation benchmark,
+integrated revision `4382ee61817c9249778193f222693bb10a4f34df`
+(`bindcheck-v1.1`) plus the uncommitted D1P-33 held-out evidence/report. This
+state includes the integrated D1P-34 application-neutral v1.1 freeze, D1P-31
+evaluation/contract revision, D1P-30 tool, mutation benchmark,
 D1P-22 baselines, D1P-21A/B, D1P-20, D1P-19, D1P-17, and the merged Lane C
 taxonomy/extraction work. The linked
 worktree was originally established from `chatgpt-codex` revision
@@ -37,8 +38,22 @@ The principal directories are `circuits/` and `contracts/` for the small fixture
 
 ## Current status
 
+- [D1P-33](reports/D1P-33.md) runs the first custodian-reserved held-out scan
+  with frozen BindCheck v1.1 at exact commit `4382ee6...` / tag
+  `bindcheck-v1.1`. All four projects are pinned and built locally: NullProof,
+  privacy-preserving-IP-NFT, zkt-research, and ZKPassport's `outer_count_4`
+  route. The one allowed analysis per project fails closed: beta.19, beta.3,
+  and beta.21 are unsupported compiler identities, while beta.22 ZKPassport
+  stops on named `RecursiveAggregation`. Thus the run records **0 supported,
+  4 unsupported, 0 warnings, and 0 validations**; unsupported is not a miss or
+  safety evidence. All 60 protected `src/`/`protocols/` files remain
+  byte-identical to the tag. No tool/rule/effect-table change, maintainer
+  contact, public disclosure, fork/live chain, capability conclusion,
+  security finding, or D1 verdict follows.
 - [D1P-34](reports/D1P-34.md) freezes application-neutral BindCheck v1.1 at
   base commit `9e9e71f3...` plus exact file hashes (no commit was permitted).
+  That frozen tree is now recorded prospectively at commit `4382ee6...` and
+  tag `bindcheck-v1.1`; the D1P-34 evidence itself is unchanged.
   The name/regex Solidity profile is removed: analysis now requires a
   source-hash-checked compiler-AST relation, recognizes the verifier by its
   proof-bytes/public-array interface, propagates word sources, guards, storage

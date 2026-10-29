@@ -82,7 +82,8 @@ flowchart TD
     d1p21b --> d1p30["D1P-30 BindCheck v1 development tool [DONE]"]
     d1p30 --> d1p31["D1P-31 30-mutant development benchmark [DONE]"]
     d1p31 --> d1p34["D1P-34 application-neutral v1.1 [DONE]"]
-    d1p34 --> plannerReview["Capability baselines + held-out review [NEXT]"]
+    d1p34 --> d1p33["D1P-33 frozen held-out scan [DONE]"]
+    d1p33 --> plannerReview["Capability baselines + supported transfer review [NEXT]"]
     d1paper --> lanex["Lane-X exploratory (X1/X2) and mutation benchmark [DONE]"]
     plannerReview --> capabilityGate["Automated discovery + E4 capability gate [WAITING]"]
     d1p10 --> d1p10result["Transformed-arm eligibility [UNKNOWN]"]
@@ -120,7 +121,7 @@ flowchart TD
     d108 -.-> evaluation
 
     evaluation --> history["Historical cases [WAITING]"]
-    evaluation --> heldOut["Held-out families [WAITING]"]
+    evaluation --> heldOut["Held-out support + transfer [WAITING]"]
     evaluation --> baselines["Equal-info baselines [WAITING]"]
 
     manuscript --> claims["Claims and limits [WAITING]"]
@@ -135,7 +136,7 @@ flowchart TD
     classDef waiting fill:#D9D9D9,stroke:#B3B3B3
     classDef unknown fill:#FFE0C2,stroke:#FF9E42
 
-    class foundation,fixture,payy,sourceCheck,coneGate,nineCases,failureAnalysis,v3Rerun,generalGate,tracking,livingTree,d100,d101,d102,d103preflight,d103review,d103typed,d103boundary,d103guards,d103guardreview,d103concrete,d103replayreview,d103recovery,d1p00,d1p01,d1p01artifact,d1p02,d1p03,d1p04,d1p05,d1p04elig,d1p07,d1p08,d1p09,d1p10,d1p11,d1p12,warptoadRecovery,d1p12r,d1p13,d1p14a,d1p14b,d1p14c,d1p14d,d1p17,d1pint1,d1p16,d1p18,d1p15,d1p19,d1p20,d1p21a,d1p21b,d1p30,d1p31,d1p34,lanex done
+    class foundation,fixture,payy,sourceCheck,coneGate,nineCases,failureAnalysis,v3Rerun,generalGate,tracking,livingTree,d100,d101,d102,d103preflight,d103review,d103typed,d103boundary,d103guards,d103guardreview,d103concrete,d103replayreview,d103recovery,d1p00,d1p01,d1p01artifact,d1p02,d1p03,d1p04,d1p05,d1p04elig,d1p07,d1p08,d1p09,d1p10,d1p11,d1p12,warptoadRecovery,d1p12r,d1p13,d1p14a,d1p14b,d1p14c,d1p14d,d1p17,d1pint1,d1p16,d1p18,d1p15,d1p19,d1p20,d1p21a,d1p21b,d1p30,d1p31,d1p34,d1p33,lanex done
     class analysis,d1,d1paper,d103,d103impl,d103consumer,d103effects active
     class d103linkreview,plannerReview next
     class evaluation,history,heldOut,baselines,manuscript,claims,artifacts,draft,transferCase,sensitivity,submit,t22,acirSummary,d104,d105,d106,d107,d108,d103symbolic,d1p09decision,d1p10decision,warptoadJoint,capabilityGate waiting
@@ -517,6 +518,7 @@ slots were executed.
 | 2026-10-28 | Research contract revision 3 | `[DONE]` prospective contract change | [Canonical contract](research-contract.md) and byte-identical [revision-2 archive](history/research-contract-2026-10-27.md): add the taxonomy of proof-to-execution binding failures and actionable cross-layer diagnostics as prospective contributions and state the approved boundary-analysis core claim. No earlier result is relabeled or rerun; all prior interpretation boundaries remain intact. |
 | 2026-10-28 | D1P-31 BindCheck v1 binding-mutant benchmark | `[DONE]` development evaluation / `[UNKNOWN]` capability and security | [Report](../reports/D1P-31.md), frozen tool hashes, 35 analysis outputs, post-run adjudication and validation ledger: analyze 30/30 mutants plus 5/5 prior targets with no rule change. Detect 13/30, report 16 unsupported and one supported miss; all 13 detections match the named semantic ground-truth location. Separate 22 inherited Payy tail warnings as unrelated. Attempt all 38 mutant warnings in operator-class order: two correspondence-checked variants reuse preserved E4 with two manual inputs each and 36 remain E1. Zero new proofs/proving seconds, solver calls, baseline arms, held-out transfer, live-chain actions, or D1 verdict. |
 | 2026-10-28 | D1P-34 application-neutral BindCheck v1.1 | `[DONE]` development tool/evaluation / `[UNKNOWN]` capability and security | [Report](../reports/D1P-34.md) and ignored freeze/evidence manifests: remove the name/regex source profile and require source-hash-checked compiler-AST facts; recognize the verifier by proof-bytes/public-array interface and lower generic guards, declaration-identity storage/replay, and shared signature effects, including Payy burn calls. Correct black-box-output, MemoryOp, Brillig and MemoryInit accounting. Run full-size Payy plus the unchanged 30-mutant/5-target evaluation: 16 detected, 14 unsupported, 0 misses; 20 related and 33 unrelated warning objects, 0 confirmed false. One preserved E4 route and 52 E1. Base commit `9e9e71f3...` plus hashes identifies v1.1 because no commit was permitted. No held-out project, solver, new proof, fork/live chain, capability, security, or D1 verdict. |
+| 2026-10-29 | D1P-33 frozen v1.1 held-out scan | `[DONE]` scan / `[UNKNOWN]` supported transfer, capability and security | [Report](../reports/D1P-33.md), [manifest](../results/raw/D1P-33/manifest.json), and protected-file record: pin and locally build all four custodian-reserved projects, then run exact commit `4382ee6...` / tag `bindcheck-v1.1` once per project. NullProof beta.19, privacy-preserving-IP-NFT beta.3 and zkt-research beta.21 fail closed as unsupported compiler identities; ZKPassport beta.22 fails closed on named `RecursiveAggregation`. The outcome is 0 supported, 4 unsupported, 0 warnings and 0 validations; unsupported is not a miss or safety evidence. All 60 frozen `src/`/`protocols/` files equal the tag. No rule/tool/effect-table change, maintainer contact, disclosure, fork/live chain, finding, capability claim, security conclusion or D1 verdict. |
 
 ## Update rule
 
