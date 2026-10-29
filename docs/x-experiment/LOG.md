@@ -146,3 +146,64 @@ linking (0x-prefix + FQN artifacts + ZKTranscriptLib/RelationsLib);
 balance reads moved to the consumer ERC20; S_SRC burn seeding reproduces
 the honest root (T3==H2 confirmed); C07 attacker burn admits its tree.
 Full run ~8 min proving total at nice-19, serial, under load 30-50.
+
+## 2026-10-28 — X-AV v1.1: shape plans + Payy mock-verifier harness
+
+FF-merged main (bda5265); v1.1 frozen files untouched. Reworked
+witness_synth_v1.plan_for to dispatch purely by warning shape
+(rule+location+evidence path spelling): R-CONSUMER local-root→anchor-tree,
+giga_root→fabricated giga bind-word, nullifier→replay, max_fee→bind 0x0.
+Built scripts/xav/payy_replay.ts + XAVProxy.sol + driver run_payy:
+pinned solc 0.8.20 standard-json (content-embedded; OZ copied dereferenced
+after symlinked-pnpm allow-paths failure), anvil :18549, ERC1967-style
+proxy (impl disables initializers), ECDSA validator sigs over the raw
+getSignatureMessageHash (no eth prefix). Debugging trail: truncated anvil
+keys (derived exact via cast wallet private-key, test mnemonic);
+bytes32 value/kind/recipient alignment; viem signMessage→sign({hash});
+parseSignature for {r,s,v}; action-dict shape mismatch. Negative controls
+on pinned consumer: unregistered mint→"Mint value invalid"; double
+settle→2nd "Mint already spent". Mutant results: PY-S01 unregistered mint
+settled; PY-S02 settled twice; PY-S03 burn paid noteKind-derived address
+(1000) not recipient (0); PY-S04 dead kind-4 settled, recipient +1000 —
+all E2 (mock-verifier-scoped), never E4. PY-C02 bounded circuit probe:
+mutant needs valid inner proofs at verify_proof_with_type (type 7);
+pinned Prover.toml is agg_final-shaped (no agg_agg vectors); bb-3.0.0
+bundle lacks proof_as_fields/vk_as_fields; Rust xtask stack out of scope
+for tonight → circuit rows stay E1 with documented manual step; C02
+consumer-shape rows executed, contained by pinned consumer (reverts match
+controls). Full 53-warning v1.1 run launched serial nice-19, no competing
+lane provers, load ~8 at start.
+
+## 2026-10-28 — X-AV v1.1 run complete (53/53)
+
+Driver exit 0. WarpToad 13/15 E3+ with zero manual steps (C03 association
+excepted, 2 counted steps): 8 E4 (incl. new WT-S06 max_fee bind-word),
+4 E3, 1 E4-preserved; shape dispatch handles renamed R-CONSUMER rows and
+WT-S06 generically. Payy: 6 rows E2 (mock-verifier-scoped) — S01
+unregistered settle, S02 double settle, S03 burn misdirection (recipient
+0, noteKind-addr 1000), S04 kind-4 activation; 2 C02 rows
+executed-and-contained (pinned consumer reverts match controls); 32 rows
+E1 (Rust-stack inner proofs owed). Incident: first pass graded PY-S01/S02
+W004 as E3 via the WarpToad replay path (shape plan looked compatible;
+artifacts were WarpToad's). Caught in audit, fixed by routing all PY-*
+to run_payy first, re-ran S01/S02 (`v11-fix/`), spliced 8 corrected rows
+into `v11/results.json` with identity checks. Bogus E3s never committed.
+Per-mutant compile cache added (14 compiles for ~40 Payy rows).
+AUTO-VALIDATE.md carries the v1.1 table; v1 table preserved as history.
+
+## 2026-10-28 — TC02: PY-C02 real-proof vector (E3)
+
+Reused the lane's T15 apparatus. Mutant checkout (c4d2c90 + PY-C02
+one-assert removal) compiled with pinned nargo, VK via pinned bb (local
+CRS), cold cargo build 489 s exit 0. New tracked harness
+payy-harness/tc02_tail.rs adds an active-slot candidate (attacker mint
+@0-3) beside T15's control + tail-burn@4-8. Mutant: all three prove +
+natively verify; active public inputs carry the attacker hash exactly;
+independent bb verify exit 0; 1-bit tamper exits 1. Pristine pinned
+contrast (second cold build 590 s): control/tail verify, active rejected
+at witness generation (`proof message must be exported`, main.nr:74:24 —
+the removed line). PY-C02 W001/W002 re-graded E1→E3 (zero manual steps);
+W003 stays E1 (by-design offchain). Incidents: field-modulus overflow of
+first attacker hash (diagnosed, fixed, re-ran); disk-full from two cargo
+targets (deleted regenerable dirs, rebuilt with 9.1 G free). Evidence
+reports/TC02.md; raw under results/raw/TC02/ (ignored).

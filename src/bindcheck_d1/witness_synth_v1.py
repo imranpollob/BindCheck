@@ -49,75 +49,83 @@ class SynthPlan:
     notes: list[str] = field(default_factory=list)
 
 
-def plan_for(warning: dict[str, Any], target: str) -> SynthPlan:
-    """Map a D1P-31 warning object to a synthesis plan. Pure function."""
+def plan_for(warning: dict[str, Any], target: str = "") -> SynthPlan:
+    """Map a warning object to a synthesis plan by SHAPE (rule + location +
+    evidence path), never by mutant name. Pure function. ``target`` is kept
+    only as a label for logs, not for dispatch."""
     wid = warning.get("id", "?")
     rule = warning["rule"]
     loc = warning.get("location", "")
-    if target.startswith("PY-"):
-        return SynthPlan(wid, rule, loc, "unsupported",
-                         blocked_reason="Payy aggregator needs a 2-proof witness harness (missing)",
-                         notes=["tail warnings are valid reports of the known baseline defect, not new detections"])
+    ev = warning.get("evidence", {}) or {}
+    # v1.1 R-CONSUMER evidence carries the consumer word path + public index.
+    cpath = ev.get("path", "") or ""
     m = re.search(r"abi\.(\w+)", loc)
     word = m.group(1) if m else None
+    cword = re.search(r"(\w+)$", cpath).group(1) if cpath else None
 
-    if target == "WT-C04":
-        # Two warnings, one plan: fabricated origin root carrying the
-        # commitment (attacker tree), honest admitted destination. The
-        # else branch runs; the mutant skips origin giga-membership.
+    def unsupported(reason, notes=()):
+        return SynthPlan(wid, rule, loc, "unsupported", blocked_reason=reason,
+                         notes=list(notes))
+
+    # ---- circuit words (WarpToad producer) ----
+    if rule == "R-BIND" and word in ("giga_root", "destination_local_root"):
+        # Fabricated origin carrying the commitment; honest admitted
+        # destination. Covers both words with one plan.
         return SynthPlan(wid, rule, loc, "anchor-tree", {},
                          node_plan={"dest_override": "honest"},
                          differential_negative="pinned rejects: origin not in giga tree",
                          notes=["covers abi.giga_root + abi.destination_local_root jointly"])
-    if target == "WT-C06":
-        # Commitment binds amount=0 in the mutant: rebuild the tree over it.
-        return SynthPlan(wid, rule, loc, "anchor-tree",
-                         {"amount": "0x8AC7230489E80000"},
-                         node_plan={"amount_override": "0x0"},
-                         differential_negative="pinned binds the real amount",
-                         notes=["attacker tree over the mutant commitment rule"])
-    if target == "WT-C07":
+    if rule == "R-BIND" and word == "aztec_warptoad_address":
+        return SynthPlan(wid, rule, loc, "aztec-branch", {},
+                         differential_negative="pinned Aztec branch binds word 5 (D1P-15 foreign negative)",
+                         notes=["honest witness is EVM-path; Aztec witness built by node plan"])
+    if rule == "R-BIND" and word == "chain_id":
+        # Commitment binds chain 0 in the defective circuit: rebuild the
+        # tree over it while the public word reads attacker-chosen.
         return SynthPlan(wid, rule, loc, "anchor-tree",
                          {"chain_id": ATTACKER["chain_id"]},
-                         node_plan={"chain_override": "0x0"},
+                         node_plan={"chain_override": "0x0", "burn_attacker_note": True},
                          differential_negative="pinned binds the real chain id",
-                         notes=["attacker tree over the mutant commitment rule"])
-
+                         notes=["attacker tree over the defective commitment rule",
+                                "attacker note burned on-chain to pass admission"]) 
     if rule == "R-BIND" and word in ATTACKER:
-        notes = []
-        if word == "aztec_warptoad_address":
-            return SynthPlan(wid, rule, loc, "aztec-branch", {},
-                             differential_negative="pinned Aztec branch binds word 5 (D1P-15 foreign negative)",
-                             notes=["honest witness is EVM-path; Aztec witness built by node plan"])
         return SynthPlan(wid, rule, loc, "bind-word", {word: ATTACKER[word]},
-                         differential_negative=f"pinned constrains {word}",
-                         notes=notes)
-    if rule == "R-EFFECT":
-        # WT-C08: recipient word unbound; attacker sets zero recipient.
+                         differential_negative=f"pinned constrains {word}")
+    # ---- consumer-shaped warnings ----
+    if rule == "R-CONSUMER" and cword in ("destination_local_root", "local_root", "localRoot"):
+        return SynthPlan(wid, rule, loc, "anchor-tree", {},
+                         differential_negative="pinned admission rejects the unadmitted root",
+                         notes=["attacker EVM tree; same-root shortcut skips in-circuit giga membership"])
+    if rule == "R-CONSUMER" and cword in ("giga_root", "gigaRoot"):
+        return SynthPlan(wid, rule, loc, "bind-word", {"giga_root": "0x1234"},
+                         differential_negative="pinned admission rejects the unadmitted giga root",
+                         notes=["local root stays honest/admitted"])
+    if rule == "R-CONSUMER" and cword in ("nullifier",):
+        return SynthPlan(wid, rule, loc, "replay", {},
+                         differential_negative="pinned second mint reverts (nullifier spent)",
+                         notes=["witness is the honest one; exploit is the second submission"])
+    if rule == "R-CONSUMER" and cword in ("max_fee", "maxFee"):
+        # Fee-cap admission removed: prove with max_fee=0 (circuit allows
+        # amount >= 0), then mint while the formula fee exceeds it.
+        return SynthPlan(wid, rule, loc, "bind-word", {"max_fee": "0x0"},
+                         differential_negative="pinned fee-cap check reverts",
+                         notes=["E4 expects relayer over-charge above the stated max"])
+    if rule == "R-POLARITY":
+        return SynthPlan(wid, rule, loc, "replay", {},
+                         differential_negative="pinned second submission reverts (single-use)",
+                         notes=["witness is the honest one; exploit is the second submission"])
+    if rule == "R-EFFECT" and "WarpToadCore" in loc:
         return SynthPlan(wid, rule, loc, "bind-word",
                          {"recipient_address": ATTACKER["recipient_address"]},
                          differential_negative="pinned asserts recipient != 0",
                          notes=["consumer ERC20 is expected to revert on mint(0); "
                                 "E4 stage records the revert, E3 carries the proof"])
-    if rule == "R-ANCHOR":
-        if target == "WT-S02":
-            # K1 (giga) removed, K2 kept: admitted local root, fabricated
-            # giga root. Same-root path leaves the giga word unused in-circuit.
-            return SynthPlan(wid, rule, loc, "bind-word",
-                             {"giga_root": "0x1234"},
-                             differential_negative="pinned K1 rejects the unadmitted giga root",
-                             notes=["local root stays honest/admitted; K2 passes"])
-        return SynthPlan(wid, rule, loc, "anchor-tree", {},
-                         differential_negative="pinned K1/K2 rejects the unadmitted root",
-                         notes=["attacker EVM tree built by node plan; "
-                                "same-root shortcut skips in-circuit giga membership"])
-    if rule == "R-POLARITY":
-        return SynthPlan(wid, rule, loc, "replay", {},
-                         differential_negative="pinned second mint reverts (nullifier spent)",
-                         notes=["witness is the honest one; exploit is the second submission"])
-    return SynthPlan(wid, rule, loc, "unsupported",
-                     blocked_reason=f"no synthesis route for rule {rule} at {loc!r}",
-                     notes=["Payy aggregator witnesses need a 2-proof harness (missing)"])
+    # ---- Payy shapes (consumer replay route; circuit needs inner proofs) ----
+    if "RollupV1" in loc or "agg_agg" in loc:
+        return unsupported("Payy route depends on warning sub-shape; see driver",
+                           ["consumer replay route handles mint/replay shapes",
+                            "circuit shapes need real inner proofs (Rust stack)"])
+    return unsupported(f"no synthesis route for rule {rule} at {loc!r}")
 
 
 HONEST_TOML_NOTE = "# Generated from an existing frozen fixture by scripts/d1p15_prepare.py."
