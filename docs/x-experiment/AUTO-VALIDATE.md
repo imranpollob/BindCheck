@@ -94,14 +94,17 @@ lane provers. D1 verdict: UNKNOWN (development mutants, exposed apps).
 | PY-C01/C03/C04/C05/C06/C07, PY-S05 | all R-BIND/R-EFFECT/R-CONSUMER (23 rows) | E1 | compile-only | real inner-proof vector (Rust stack) |
 | PY-S01/S02 | W001 R-BIND, W003 R-CONSUMER (4 rows) | E1 | compile-only | real inner-proof vector (Rust stack) |
 | PY-S03/S04 | W001 R-BIND, W003 R-CONSUMER (4 rows) | E1 | compile-only | real inner-proof vector (Rust stack) |
-| PY-C02 | W001 R-BIND circuit | E3 | harness 88.4 wall; active 17.3 prove+verify | 0; attacker mint @0-3 proves+verifies under mutant VK (indep. bb exit 0; tamper exit 1); pinned rejects at :74 export assert |
-| PY-C02 | W002 R-EFFECT :850 | E3 | same proof artifact | 0 circuit-side; consumer effect mock-contained (pinned reverts); E4 real-verifier replay owed |
+| PY-C02 | W001 R-BIND circuit | E4 | replay 10.0 (+ agg_final prove ~15, solc 3.5) | 0; forged burn words proved through mutant agg_agg→agg_final chain, verified onchain, acted on by consumer (see W002) |
+| PY-C02 | W002 R-EFFECT :850 | E4 | replay 10.0 | 0; real mutant verifier + pinned consumer on anvil: block settles, forged kind-3 burn pays 7 MockUSDC to 0xdead (0→7), rollup 100→93; pinned-keyed verifier rejects same block (`SumcheckFailed()`); zero mock components on proof path |
 | PY-C02 | W003 R-CONSUMER :357 commit_hash | E1 | n/a | by-design offchain (Celestia) commitment; no experiment |
 
-Counts: 53 rows — E4: 8, E4-preserved: 1, E3: 6, E2 (mock-verifier-scoped):
-6, E1: 32. All E-levels with zero manual steps except the counted WT-C03
-association (2 steps). E4 (real-verifier consumer replay) remains future
-work for all Payy rows.
+Counts: 53 rows — E4: 10, E4-preserved: 1, E3: 4, E2 (mock-verifier-scoped):
+6, E1: 32 (23 circuit rows for other mutants + 4 S01/S02 mint shapes + 4
+S03/S04 shapes + C02 W003 by-design commit_hash). All E-levels with zero
+manual steps except the counted WT-C03 association (2 steps). One
+honesty note: the TE04 replay ran at default priority (oversight; load
+~5.6, serial, no competing lane provers); the bb re-prove was repeated
+under `nice -n 19` and verifies with identical public inputs.
 
 TC02 real-proof vector (evidence `results/raw/TC02/`, ignored; script
 `payy-harness/tc02_tail.rs` tracked): mutant checkout = pristine c4d2c90
@@ -121,6 +124,26 @@ reduced it mod p (diagnosed from public inputs, fixed to low-byte
 pattern, re-ran). Disk-full incident: two cargo targets filled the disk;
 deleted both regenerable dirs (mutant evidence already captured),
 rebuilt pinned with 9.1 G free.
+
+TE04 E4, zero mock components on the proof path (scripts
+`te04_part1.sh` + `te04_part2.py` + `scripts/xav/te04_replay.ts`;
+evidence `results/raw/TE04/`, ignored; inputs under `build/TE04/`,
+ignored): mutant-keyed agg_final (constant set to the mutant agg_agg VK
+hash; flags `--scheme ultra_honk --oracle_hash keccak` per the repo's
+generator) proves the TC02 tail-candidate inputs; native verify exit 0.
+`bb write_solidity_verifier` for mutant and pinned keys (solc 0.8.29
+runs=1 legacy: runs=200 output exceeds EIP-170; consumer stack stays on
+pinned solc 0.8.20; `HonkVerifier` implements `IVerifier` directly;
+`ZKTranscriptLib` deployed and linked). Anvil replay: MockUSDC (synthetic
+asset), both verifiers, pinned RollupV1 behind XAVProxy, synthetic
+validator key in `initialize`, honest mint registered (100). Mutant block
+settles (height 1): mint spent, forged kind-3 burn pays 7 to 0xdead
+(0→7), rollup 100→93. Same block under the pinned-keyed verifier reverts
+inside the verifier: `SumcheckFailed()` (`0x9fc3a218`). Debugging trail:
+TOML hex must be quoted (nargo parses bare `0x` as i64); `bb prove`
+needs `-k` (own key); witness file is `target/agg_final.gz`; proof
+bytes→fields is plain 32-byte chunking (`bytes_to_elements`); verifier
+needs the proof note-kind as the consumer's kind (registered token).
 
 ## Toolchain pins
 
@@ -150,12 +173,20 @@ The two exceptions count manual associations explicitly:
 
 ## Limits
 
-- Payy v1.1 (40 warnings): 6 rows E2 (mock-verifier-scoped) with
-  unauthorized effects on state; 2 rows executed-and-contained by the
-  pinned consumer; 32 rows E1 pending real inner-proof vectors (Rust
-  xtask/t15 stack: cold build + t09/t10 prerequisites, out of scope
-  tonight). The mock stands in for proof acceptance, which is orthogonal
-  to the demonstrated consumer defects; no Payy row claims E4.
+- Payy v1.1 (40 warnings): 2 rows E4 (PY-C02, real verifier + pinned
+  consumer, forged-burn drain demonstrated, pinned contrast
+  `SumcheckFailed`); 6 rows E2 (mock-verifier-scoped) with unauthorized
+  effects on state; 32 rows E1 (23 circuit rows owing Rust-stack inner
+  proofs, 8 S01/S02/S03/S04 non-mint shapes, C02 W003 by-design offchain
+  commit_hash). The mock stands in for proof acceptance, which is
+  orthogonal to the demonstrated consumer defects.
+- The validation harness is per-application, not generic: WarpToad rows
+  use nargo/bb.js UltraHonk + Hardhat-EDR plans dispatched by warning
+  shape; Payy consumer rows use the solc/anvil mock-verifier harness;
+  Payy circuit rows use the Rust-stack real-proof route (TC02/TE04).
+  Porting to a new application means writing a new consumer/circuit
+  adapter, not flipping a switch; the E-level ladder and evidence rules
+  are the reusable part.
 - Cross-contamination incident (caught before reporting): shape dispatch
   initially sent PY-S01/S02 R-POLARITY rows down the WarpToad replay path
   and graded them E3 off WarpToad artifacts. Fixed by routing all PY-*

@@ -82,10 +82,11 @@ manual steps, 1 E4-preserved, 5 E3-contained, 7 Payy E1) and v1.1
 (53/53 D1P-34: 8 E4 + 1 E4-preserved + 4 E3 on WarpToad incl. new WT-S06;
 6 E2 mock-verifier-scoped on Payy S01–S04 with unauthorized effects on
 state; 32 E1) and TC02 ([TC02](../reports/TC02.md): PY-C02 W001/W002
-E1→E3 via real Rust-stack proofs — attacker active-slot mint proves +
-natively verifies under the mutant VK with independent `bb verify` exit
-0 and a 1-bit tamper failure, while pristine pinned rejects at the
-removed `:74` export assertion; 30 E1 remain).
+E1→E3 via real Rust-stack proofs) and TE04 (W001/W002 E3→E4: mutant-keyed
+agg_final proof verified onchain by the real bb verifier against the
+pinned consumer — forged burn drains 7 to 0xdead, pinned-keyed verifier
+rejects the same block with `SumcheckFailed()`; zero mock components on
+the proof path; 30 E1 remain).
 Gate (b) is met on exposed development mutants only — no held-out claim,
 D1 verdict stays UNKNOWN. A cross-contamination misgrade (Payy rows run
 down the WarpToad path, bogus E3s) was caught in audit and corrected
