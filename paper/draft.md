@@ -2,22 +2,21 @@
 
 *(Working title; frozen at abstract registration.)*
 
-**Draft status:** D1P-P03 revision, 28 October 2026, on repository base
-`9e9e71f` (`d1-paper`; includes D1P-30, D1P-22, D1P-31, contract revision 3,
-the taxonomy v1 corpus and the held-out reservation commitment). Target
-format is IEEE S&P (13 pages of text plus up to 5 pages of references and
-appendices). This revision fills the benchmark rows of RQ1 and RQ2 from
-[D1P-31](../reports/D1P-31.md). It fills the taxonomy tables from the
-[v1 corpus](../docs/taxonomy/v1-corpus.md) as AI-assisted extraction pending
-human labels. It also describes the held-out mini-draw recorded in the
-[reservation commitment](../docs/taxonomy/reservation-commitment-2026-10-28.json).
-No experiment was run for this draft. Cells that depend on work not yet done
-are marked **[PENDING D1P-32]** (baselines on the benchmark),
-**[PENDING D1P-33]** (held-out scan), **[PENDING D1P-34]** (generic consumer
-loaders) or **[PENDING AUTO-VALIDATION]** (automatic witness construction
-and the validation results that depend on it). Claims about cited work that
-could not be checked against a primary source stay **[TODO-VERIFY]**. Earlier
-drafts (D1P-D01/D03, D1P-P01, D1P-P02) are in Git history.
+**Draft status:** D1P-P04 revision, 28 October 2026, on repository base
+`bda5265` (`main`). The base includes D1P-34, D1P-32, the Lane X
+automatic-validation pipeline, and everything in D1P-P03. Target format is
+IEEE S&P (13 pages of text plus up to 5 pages of references and appendices).
+This revision makes **BindCheck v1.1** ([D1P-34](../reports/D1P-34.md)) the
+tool of record and replaces every v1 benchmark number with v1.1's. It fills
+the benchmark baseline rows from
+[D1P-32](../docs/baselines/d1p-32-benchmark.md) and the automatic-validation
+results from [AUTO-VALIDATE](../docs/x-experiment/AUTO-VALIDATE.md). Those
+validation results were measured on v1 warnings. No experiment was run for
+this draft. Cells that depend on work not yet done are marked
+**[PENDING D1P-33]** (held-out scan) or **[PENDING V1.1-RERUN]** (automatic
+validation rerun on v1.1 warnings). Claims about cited work that could not be
+checked against a primary source stay **[TODO-VERIFY]**. Earlier drafts
+(D1P-D01/D03, D1P-P01–P03) are in Git history.
 
 **Controlling sources, in order.** [Research contract](../docs/research-contract.md)
 revision 3 (28 October 2026; revision 2 archived as
@@ -30,14 +29,17 @@ and earlier experiments keep the revision under which they were run);
 [D1P-15](../reports/D1P-15.md),
 [D1P-17](../reports/D1P-17-consumer-backends.md),
 [D1P-19](../reports/D1P-19.md), [D1P-21A](../reports/D1P-21A.md),
-[D1P-30](../reports/D1P-30.md), [D1P-31](../reports/D1P-31.md); the baseline
-record [D1P-22](../docs/baselines/d1p-22-results.md); the extraction records
+[D1P-30](../reports/D1P-30.md), [D1P-31](../reports/D1P-31.md),
+[D1P-34](../reports/D1P-34.md); the baseline records
+[D1P-22](../docs/baselines/d1p-22-results.md) and
+[D1P-32](../docs/baselines/d1p-32-benchmark.md); the extraction records
 [D1P-16](../docs/extraction/d1p-16-feasibility.md),
 [D1P-18](../docs/extraction/d1p-18-hardening.md),
 [D1P-20](../docs/extraction/d1p-20-extracted-solver-model.md),
 [D1P-21B](../docs/extraction/d1p-21b-variant-extraction.md); the
 [mutation benchmark](../docs/x-experiment/BENCHMARK.md)
-([package](../benchmarks/binding-mutants/)); the
+([package](../benchmarks/binding-mutants/)) and
+[automatic-validation record](../docs/x-experiment/AUTO-VALIDATE.md); the
 [B02 obligations](../docs/d1-paper/d1p-b02-discriminating.md); the
 [taxonomy protocol v0.2.0](../docs/taxonomy/protocol.md), the
 [v1 corpus](../docs/taxonomy/v1-corpus.md) and the
@@ -46,21 +48,22 @@ and the [baseline preregistration](baselines.md). If this draft disagrees with
 any of them, the source wins.
 
 **Research verdict at drafting time:** `UNKNOWN`. The capability gate
-(contract §11) remains open. There is no held-out result, the same-policy
-baseline arms were not instantiated, and the validator does not construct
-witnesses for an arbitrary warning (D1P-30 §7; D1P-22; D1P-31 §7).
+(contract §11) remains open. There is no held-out result. Automatic
+validation has been measured only on v1 warnings and only on WarpToad. The
+same-policy baseline exists only for WarpToad, as a handwritten harness with
+a stub verifier (D1P-32; AUTO-VALIDATE).
 
 ### Task map
 
-| Tag | Scope | Status at `9e9e71f` | Paper locations |
+| Tag | Scope | Status at `bda5265` | Paper locations |
 | --- | --- | --- | --- |
-| **D1P-30** | BindCheck v1 analyzer and validator; five development case runs | Done | §V, §VI, RQ1/RQ2 case rows |
-| **D1P-31** | BindCheck v1 on the 30-mutant benchmark; contract revision 3; reservation commitment | Done | RQ1/RQ2 benchmark rows, §IV-D |
+| **D1P-30** | BindCheck v1 analyzer and validator; five development case runs; real-proof routes for the case mismatches | Done; v1 superseded as tool of record | §II-C, RQ2 case validation |
+| **D1P-31** | v1 on the 30-mutant benchmark; contract revision 3; reservation commitment | Done; v1 numbers kept as history only | §VII-C (one line), §IV-D |
+| **D1P-34** | BindCheck v1.1: application-neutral consumer lowering, corrected use accounting, full-size Payy; reruns the five targets and the 30 mutants | Done | §V, §VI, RQ1, RQ2 |
 | **D1P-22** | Pinned baselines on the five case targets | Done | RQ3 case table |
-| **D1P-32** | Baselines on the 30-mutant benchmark | Pending | RQ3 benchmark table |
+| **D1P-32** | Baselines on the 30 mutants, including a Foundry same-policy harness for WarpToad and a sequential Mythril retry | Done | RQ3 benchmark table |
+| **AUTO-VALIDATE** (Lane X) | Warning → synthesized witness → E2/E3/E4 pipeline, run on the 20 v1 warnings of the D1P-31 detected mutants | Done on v1 warnings; **v1.1 rerun pending** | §V-H, RQ2 |
 | **D1P-33** | Held-out scan of the reserved mini-draw | Pending | RQ4 |
-| **D1P-34** | Generic consumer loaders, replacing the fitted source profile and location patterns | Pending | §V-C, §VI, §IX |
-| **AUTO-VALIDATION** | Automatic witness construction for warnings without a registered route, and its validation results | Pending (no task ID assigned) | §V-H, RQ2 |
 | **Taxonomy v1 corpus** | Seed-only AI-assisted extraction (Lane X) | Done as extraction; human labels pending | §IV-D, RQ5 |
 
 Discrepancies found while drafting are listed under *Open items for authors*
@@ -78,33 +81,34 @@ depends on whether every public value the consumer relies on is actually
 constrained by the circuit, and whether every value the circuit trusts is
 actually checked by the consumer against its own state. We call violations of
 this agreement *proof-to-execution binding failures*. BindCheck analyzes the
-circuit–consumer boundary of Noir/ACIR producers and Solidity consumers. Its
-v1 analyzer decodes the compiled circuit, counts the proof-enforced uses of
-every public input, joins them to a model of the consumer, and applies four
-generic rules: R-BIND (a public input that no proof-enforced constraint
-uses), R-EFFECT (such an input feeds a consumer effect), R-ANCHOR (a root the
-circuit proves against lacks a *must-be-in* check against consumer state) and
-R-POLARITY (a replay key lacks a *must-not-be-in* check or its write on
-success). Each warning carries a location, an explanation, evidence and a
-suggested fix. A separate validator replays registered real-proof routes and
-reports the highest evidence level reached. We ground the design in a
+circuit–consumer boundary of Noir/ACIR producers and Solidity consumers. It
+decodes the compiled circuit and counts the proof-enforced uses of every
+public input. It lowers the consumer's compiler AST, recognizes the verifier
+call by its interface type rather than by any name, and follows each public
+word to guards, storage writes and token effects. Four rules join the two
+sides. R-BIND reports a public input that no proof-enforced constraint uses,
+and R-EFFECT reports such an input that feeds a consumer effect. R-CONSUMER
+reports an authenticated word that reaches no consumer guard, state or
+effect. R-POLARITY reports replay accounting that lacks a *must-not-be-in*
+check or the matching write on success. Each warning carries a location, an
+explanation, evidence and a suggested fix. A separate validator reports the
+highest evidence level reached with real proofs. We ground the design in a
 taxonomy of binding failures and in three case studies: a publicly disclosed
-Payy rollup defect (historical) and two injected WarpToad bridge variants, a
-producer-side domain-binding removal (M-DOM) and a consumer-side root-guard
-removal (M-SRC). On five development targets, v1 warns at the expected
-public word on all three known-positive targets and on neither of two honest
-or repaired controls. All three positive targets reach end-to-end validation
-with real proofs and committed local effects. On a 30-mutant development
-benchmark over the same two applications, v1 detects the named mutation in
-13/30 mutants. Of the other 17, 16 fall outside its supported scope and 1 is
-a supported miss, so it detects 13/14 within scope. Every detection names the
-broken word, guard or effect. Pinned circuit-only and contract-only tools in
-their default configurations described no mismatch on the five case targets.
-An AI-assisted seed extraction for the taxonomy screened 27 public
-disclosures and included 19 from 15 families, with human labels pending. All
-results are development results on applications known before the rules were
-written. Held-out results on a small, disclosed reserved frame are
-[PENDING D1P-33].
+Payy rollup defect (historical) and two injected WarpToad bridge variants,
+M-DOM (producer side) and M-SRC (consumer side). On a 30-mutant development
+benchmark over the same two applications, BindCheck v1.1 detects the named
+mutation in 16 of 30 mutants. The other 14 fall outside its supported scope,
+and there are no misses. A handwritten same-policy Foundry harness detects
+more of the WarpToad consumer mutants (8/9 against 5/9). It needs a
+per-application policy, however, reaches none of the 16 circuit mutants, and
+misses one consumer mutant that BindCheck catches. Compiler and Solidity
+lint localizes some mutants without describing a mismatch. An automatic
+validation pipeline, measured on the earlier v1 warnings, reached E4 with no
+manual steps on 7 of 20 warnings, all on WarpToad. An AI-assisted seed
+extraction for the taxonomy screened 27 public disclosures and included 19
+from 15 families, with human labels pending. All results are development
+results on applications known before the rules were written. Held-out
+results on a small, disclosed reserved frame are [PENDING D1P-33].
 
 ---
 
@@ -177,14 +181,17 @@ identity. These are our arguments for analyzing the pair, and they are
 claims about what information a tool needs. Whether existing tools miss these
 cases is measured, not assumed. On the five case targets, no pinned baseline
 in its default configuration described the mismatch (D1P-22; §VII-E). On the
-benchmark the comparison is **[PENDING D1P-32]**.
+benchmark, a handwritten same-policy fuzz harness finds more WarpToad
+consumer mutants than BindCheck does (D1P-32). Our claim is therefore
+complementarity, not dominance.
 
 ### C. BindCheck
 
-BindCheck v1 is a command-line tool with two commands (D1P-30 §1):
+BindCheck v1.1 is a command-line tool with two commands (D1P-34; the CLI is
+unchanged from v1):
 
 ```text
-bindcheck analyze <producer artifact> <consumer source>
+bindcheck analyze <producer artifact> <consumer source> --consumer-ir <checked relation>
 bindcheck validate <warning>
 ```
 
@@ -192,23 +199,29 @@ bindcheck validate <warning>
 
 1. **Producer facts.** It decodes the compiled Noir artifact (ACIR and ABI),
    flattens the ABI into scalar public inputs, and counts how often each
-   public witness occurs in proof-enforced opcodes.
-2. **Consumer facts.** It obtains a consumer model in one of two ways. If the
-   consumer source matches a hash-pinned entry, it uses a previously checked
-   relation extracted from the Solidity AST. Otherwise it uses a
-   conservative source profile. From the model it infers which public inputs
-   are roots, replay keys and effect fields, and whether each root and
-   replay key has the required *admission polarity*: must-be-in for roots,
-   must-not-be-in plus a write on success for replay keys.
-3. **Rules.** Four application-neutral rules, R-BIND, R-EFFECT, R-ANCHOR and
-   R-POLARITY, join the two sides and emit warnings. Each warning carries a
-   location, an explanation, evidence and a suggested fix.
+   public witness occurs in proof-enforced opcodes. Brillig calls, which
+   only compute witnesses, are inventoried separately and never count.
+2. **Consumer facts.** It reads a checked consumer relation whose recorded
+   source hash must equal the consumer's. For Payy, an application-neutral
+   frontend builds that relation from the solc compiler AST. It finds the
+   verifier call by its declared type (proof bytes plus a public `bytes32[]`,
+   returning `bool` or reverting), follows the public array through internal
+   calls, and records which words reach guards, storage writes and standard
+   token calls. For WarpToad, the relations are the earlier route-A
+   extractions, now interpreted by the same structural identities. Without a
+   checked relation the analysis stops with
+   `UNSUPPORTED_CONSUMER_AST_REQUIRED`.
+3. **Rules.** R-BIND, R-EFFECT, R-CONSUMER and R-POLARITY join the two
+   sides and emit warnings. None of them names a contract, function, field
+   or application (D1P-34 §2). Each warning carries a location, an
+   explanation, evidence and a suggested fix.
 
 `validate` looks up a registered validation route for the warning's exact
 target identity (artifact hash, consumer hash, rule). It runs or audits that
-route's staged evidence and reports the highest level reached. Witness
-construction comes from the route's registered fixture. The validator does
-not yet synthesize a witness from an arbitrary warning (§V-H).
+route's staged evidence and reports the highest level reached. A separate
+Lane X pipeline builds attacker witnesses from a frozen honest witness for
+WarpToad warnings and drives them through execution, proving and replay
+(§V-H). It was measured on v1 warnings.
 
 A warning is evidence level E1. A validated warning reaches E4, the
 contract's *end-to-end validated mismatch* (§III-F). The absence of a
@@ -231,35 +244,38 @@ evidence still pending.
    human labels, consequence and role labels, agreement statistics, and the
    remaining endpoints.
 2. **Actionable cross-layer diagnostics** (§V-F, §V-G). Proof-enforced uses
-   of each public input in the compiled circuit are joined to the consumer's
-   guards, effects and replay accounting. Four rules apply, each stated once
-   without application identifiers. Each warning is a versioned JSON record
-   with location, rule, explanation, evidence and a suggested fix.
-   *Exists:* on five development targets, warnings on 3/3 positives and 0/2
-   controls (D1P-30). On the 30-mutant benchmark, 13/30 detected overall and
-   13/14 within supported scope, each at the broken word, guard or effect
-   (D1P-31). *Pending:* generic consumer loaders **[PENDING D1P-34]** and
-   held-out transfer **[PENDING D1P-33]**.
-3. **Real-proof validation** (§V-H). A validator takes warnings to E4
-   through registered real-proof routes and counts every manual input.
-   *Exists:* the three case-study mismatches reach E4 (two fresh, one
-   preserved; D1P-30). Two benchmark mutants that coincide with M-DOM and
-   M-SRC reach preserved E4 (D1P-31). *Pending:* automatic witness
-   construction for warnings without a route. The 36 other benchmark warnings
-   stop at E1 **[PENDING AUTO-VALIDATION]**.
+   of each public input in the compiled circuit are joined to a structural
+   lowering of the consumer's guards, state writes and token effects. Four
+   rules apply, each stated once without application identifiers. Each
+   warning is a versioned JSON record with location, rule, explanation,
+   evidence and a suggested fix. *Exists:* on five development targets,
+   warnings at the expected word on 3/3 positives, no warning on pinned
+   WarpToad, and one unadjudicated consumer-side warning on the repaired
+   Payy control (D1P-34 §4). On the 30-mutant benchmark, 16/30 detected,
+   14 unsupported, 0 missed, each detection at the named semantic boundary
+   (D1P-34 §5). *Pending:* held-out transfer **[PENDING D1P-33]**.
+3. **Real-proof validation** (§V-H). Warnings are taken toward E4 with real
+   proofs and committed local effects, and every manual input is counted.
+   *Exists:* the three case-study mismatches reached E4 in D1P-30 (two
+   fresh, one preserved). The Lane X pipeline, run on the 20 v1 warnings of
+   the D1P-31 detected mutants, reached fresh E4 with no manual steps on 7,
+   preserved E4 on 1, and E3 on 4, all on WarpToad. The 8 Payy warnings
+   stayed at E1. *Pending:* the same pipeline on v1.1's warnings
+   **[PENDING V1.1-RERUN]**, and a Payy witness harness.
 4. **Validated case studies** (§II, §VII). One historical case (Payy, with a
    locally reproduced end-to-end effect and a repair validated for one
    witness) and two injected cases (WarpToad M-DOM and M-SRC, each with a
    real-proof differential against the pinned build and exact-state honest
-   controls). *Exists:* this ground truth, BindCheck's detection and
-   validation on all three (D1P-30), and a pinned baseline comparison on the
-   same targets (D1P-22).
+   controls). *Exists:* this ground truth, BindCheck's detection on all
+   three (D1P-34), real-proof validation of the v1 warnings on them
+   (D1P-30), and baseline comparisons on the same targets (D1P-22, D1P-32).
 
 Consistent with contract §1, we do not claim as new: integration failures as
 a category, the permission/obligation/effect terminology, rich semantic
 specifications, or modular summaries. The specific advance over prior work
 is the cross-layer rule set and its validation. On current evidence it is
-demonstrated only on development cases. Transfer depends on RQ4.
+demonstrated only on development cases, and a handwritten same-policy
+harness outperforms it on one subset (§VII-E). Transfer depends on RQ4.
 
 ### E. Scope of the evidence
 
@@ -394,9 +410,10 @@ admitted-state designs behind them (O1/O2, `S_DOM`, `S_SRC`) were written by
 the planners. They do not count as automatically derived (contract §2,
 RQ2; B02 §6). The original hand-built differentials are therefore ground
 truth, not tool results. D1P-30 later reran the same fixtures as BindCheck
-validation routes and generated fresh proofs (§V-H). That E4 is credited to
-the validator only on the condition stated there: the fixture's witness
-construction is pre-existing and counted as a manual input.
+validation routes for v1's warnings and generated fresh proofs (§V-H). That
+E4 is credited to the validator only on the condition stated there: the
+fixture's witness construction is pre-existing and counted as a manual
+input.
 
 ### D. What the cases ask of a tool
 
@@ -475,12 +492,12 @@ transformations and admitted states. The specification must not state that a
 value is constrained, that a binding holds, the expected verdict, or the
 missing relation (contract §6.3). BindCheck's rules consume only extracted
 facts and roles. Any manual implementation summary is marked `ASSUMED`,
-counted and excluded from automatic-recovery claims. BindCheck v1 takes no
-explicit `σ`. It infers root, replay-key and effect roles from consumer
-origins, ABI names and committed-effect records (§V-D). This inference
-stands in for analyst-supplied roles and is itself a limitation (§IX). The
-checked consumer relations that v1 selects are prior extraction outputs, and
-their use is counted as a manual input (§V-C).
+counted and excluded from automatic-recovery claims. BindCheck v1.1 takes
+no explicit `σ` and assigns no semantic roles. Its rules use structural
+facts only: source class, guard, state and effect use, and replay pairs
+(§V-D). The price is that a warning cannot say which role a word was meant
+to play (§IX). Each checked consumer relation is counted as one manual
+analysis input (§V-C).
 
 ### F. Verdicts and evidence ladder
 
@@ -547,21 +564,22 @@ Empty never means absent.
 
 ### C. From taxonomy to rules
 
-The v1 rules (§V-F) target the causes that a word-level analysis of one
+The v1.1 rules (§V-F) target the causes that a word-level analysis of one
 producer–consumer pair can observe. They do not cover the others, and the
 taxonomy keeps those visible as tool limitations rather than dropping them.
 Coverage below is by design. Measured coverage on the 30-mutant benchmark
-(RQ1, Table 3) matches it. Mutants that remove a use or a guard are detected.
-Mutants that leave a binding present but wrong, such as order, dependency
-strength or admitted-map identity, are unsupported.
+(RQ1, Table 3) matches it. Mutants that remove a use, a guard or one half of
+a replay pair are detected. Mutants that leave a binding present but wrong,
+such as order, dependency strength or admitted-map identity, are
+unsupported.
 
-| Cause | v1 rule coverage |
+| Cause | v1.1 rule coverage |
 | --- | --- |
-| `C_RELATION_GAP` | R-BIND when the needed public input has no proof-enforced occurrence; R-EFFECT when that input is also an effect word. A dependency that is present but wrong is not detected |
-| `C_ACTIVATION_EXTENT` | Only when the extent leaves words with zero occurrences, as in the Payy N=8 builds. v1 has no activation-condition reasoning. A word constrained under some condition counts as used |
-| `C_CONTEXT_IDENTITY` | R-BIND when the context word is unused (M-DOM); R-ANCHOR when a root lacks a must-be-in guard (M-SRC). A context word bound to the wrong value is not detected |
-| `C_OCCURRENCE_ACCOUNTING` | R-POLARITY, for replay keys recognized by name or idiom. Missing accounting on another effect path is not detected (Payy burns) |
-| `C_FIELD_MAPPING` | Partial: relation mode rejects a producer/consumer width mismatch with a named reason. Misorder at equal width is not detected |
+| `C_RELATION_GAP` | R-BIND when the needed public input has no proof-enforced occurrence; R-EFFECT when that input also reaches an effect. A dependency that is present but wrong is not detected |
+| `C_ACTIVATION_EXTENT` | Only when the extent leaves words with no proof-enforced occurrence, as in full-size Payy. v1.1 has no activation-condition reasoning. A word constrained under some condition counts as used |
+| `C_CONTEXT_IDENTITY` | R-BIND when the context word is unused in the circuit (M-DOM); R-CONSUMER when an authenticated calldata word reaches no consumer guard, state or effect (M-SRC). A context word bound to the wrong value, or checked against the wrong map, is not detected |
+| `C_OCCURRENCE_ACCOUNTING` | R-POLARITY when a replay record exists but its must-not-be-in guard or its write is missing; R-CONSUMER when the key reaches nothing. An effect path with no replay record at all is not reported |
+| `C_FIELD_MAPPING` | Partial: a producer/consumer width mismatch stops with a named reason. Misorder at equal width is not detected |
 | `C_REPRESENTATION`, `C_VERIFICATION_CONFIG`, `C_DISCHARGE_TRANSFORMATION` | Not covered; reported as unsupported in the tool funnel |
 
 ### D. Empirical method (protocol v0.2.0)
@@ -629,35 +647,41 @@ own existence and its screening counts (§VII-G).
 
 ## V. Design
 
-This section describes BindCheck v1 as implemented in
-[`static_analyzer_v1.py`](../src/bindcheck_d1/static_analyzer_v1.py) and
-[`validation_v1.py`](../src/bindcheck_d1/validation_v1.py) (D1P-30). Where
-the implementation is narrower than the concept it serves, we say so.
+This section describes BindCheck v1.1 as implemented in
+[`static_analyzer_v1.py`](../src/bindcheck_d1/static_analyzer_v1.py)
+(result schema `bindcheck.static-analysis.v1.1`), the compiler-AST frontend
+[`solidity_ast_v1_1.py`](../src/bindcheck_d1/frontends/solidity_ast_v1_1.py),
+the shared effect table
+[`bindcheck-v1.1-effect-models.json`](../protocols/d1/bindcheck-v1.1-effect-models.json)
+and [`validation_v1.py`](../src/bindcheck_d1/validation_v1.py) (D1P-34). The
+tool was frozen by file hash on base `9e9e71f`. The bytes committed at
+`4382ee6` match the freeze manifest. Where the implementation is narrower
+than the concept it serves, we say so. v1 (D1P-30) differed in three
+places: a name- and regex-based Solidity profile, an occurrence count that
+missed some proof-enforced uses, and a root-specific anchor rule. We note
+the differences where they matter.
 
 ### A. Overview
 
 ```
- Noir artifact (ABI + ACIR) ──► producer frontend ──► public inputs + proof-enforced occurrence counts
+ Noir artifact (ABI + ACIR) ──► producer frontend ──► public leaves; proof-enforced / witness-generation / definition-only counts
                                                                        │
- consumer source ──► relation index (SHA-256) ──hit──► checked relation (D1P-18 / D1P-21B) ──┐
-                                             └─miss──► conservative source profile ──────────┤
+ consumer source ──► solc AST ──► v1.1 AST lowering ───────────────┐
+                 └─► route-A extraction (D1P-18 / D1P-21B / D1P-31) ┴─► checked relation (source hash must match)
                                                                        ▼
-                                   role inference: roots, replay keys, effect words + admission polarity
+                 per word: source class, guard use, state or effect use, admitted lookups, replay records
                                                                        │
-                                            rules R-BIND / R-EFFECT / R-ANCHOR / R-POLARITY
+                              rules R-BIND / R-EFFECT / R-CONSUMER / R-POLARITY
                                                                        │
-                                                 warnings (E1; JSON and readable text)
+                                          warnings (E1; JSON and readable text)
                                                                        │
- validation index (artifact hash, consumer hash, rule) ──► registered route ──► staged evidence checks
-                                                                       │
-                              highest level E1–E4, or NO_VALIDATION_ROUTE / PREPARATION_FAILED
+     validation index ──► registered route ──► staged checks;  Lane X pipeline ──► synthesized witness ──► E2 / E3 / E4
 ```
 
 *Figure 1 (to be drawn).* Each target is analyzed alone. No result from a
-reference version, revision diff or paired variant is an analyzer input
-(D1P-30 §1). The relation index and the validation index are orchestration
-data. The rule engine never sees them, and every use of either is counted
-as a manual input.
+reference version, revision diff or paired variant is an analyzer input. The
+checked relation is one counted analysis input. The validation index and the
+Lane X pipeline are orchestration outside the rule engine.
 
 ### B. Producer frontend
 
@@ -670,24 +694,27 @@ serialization form raises a named `Unsupported` reason (D1P-13 §3).
 **Public inputs.** The ABI is flattened into scalar leaves in declaration
 order. Arrays are indexed (`messages[3]`) and structs are dotted. Each public
 leaf gets its public index and its witness index from the ABI bindings.
-WarpToad's artifacts have 11 public leaves. The Payy artifacts analyzed in
-D1P-30 have 13.
+WarpToad's artifacts have 11 public leaves. The full-size Payy artifacts have
+1,005 (D1P-34 §4).
 
-**Proof-enforced occurrence.** For each public witness, the frontend counts
-its occurrences in the decoded opcodes of the main circuit and records up to
-eight opcode locations. An occurrence is either a witness in a linear or
-multiplication term of an `AssertZero` opcode, or a witness-valued input of
-a black-box call (for example `RANGE`, `Poseidon2Permutation` or a recursive
-verification). Brillig calls are not counted. They compute witnesses but
-constrain nothing, so a Brillig input never discharges a binding. As
-implemented, black-box *outputs* and memory-block operations are also not
-counted, because the decoders represent those witnesses differently. A
-public input used only through dynamic memory, or only as a black-box
-output, therefore has occurrence count zero.
+**Occurrence roles.** v1.1 sorts every witness occurrence into one of three
+roles (D1P-34 §3).
+
+| Role | What is counted | Discharges R-BIND? |
+| --- | --- | --- |
+| Proof-enforced use | Witnesses in linear or multiplication terms of `AssertZero`; black-box inputs *and outputs*; address and value expressions of memory operations; constrained calls | Yes |
+| Witness generation | Brillig inputs, outputs and predicates | No. Inventoried separately |
+| Definition only | `MemoryInit` cells | No. Initialization without a memory operation is not a use |
+
+This corrects v1, which missed black-box outputs, Brillig outputs and
+memory-operation expressions because its decoders stored those witnesses as
+bare integers. On the full-size earlier Payy artifact, `messages[1]` through
+`messages[999]` have no proof-enforced use, and each appears once as a memory
+definition. The full-size check-added artifact has no unused public leaf.
 
 **What an occurrence means.** An occurrence shows syntactic use in a
 proof-enforced constraint. It does not show injectivity, cryptographic
-intent, full semantic dependence or policy correctness (D1P-30 §3). A word
+intent, full semantic dependence or policy correctness (D1P-34 §7). A word
 that appears in a used hash is counted as used even if the construction is
 weak. A word constrained only on one branch is counted as used on every
 branch. A deliberately unconstrained metadata word would be warned about.
@@ -697,63 +724,91 @@ construction provenance for all 86 permutation opcodes (D1P-15 §3), checked
 extraction of 77 BN254 Poseidon regions (D1P-19 §3), and an independent
 provenance run on M-DOM. That run shows that the silo hash absorbs private
 witness 59 where the pinned circuit uses public word 5 (D1P-21A §4). These
-extractors accept only frozen artifact identities, and v1 rules do not use
+extractors accept only frozen artifact identities, and the rules do not use
 them. They explain the M-DOM warning after the fact. The warning itself is
-derived from occurrence counts alone (D1P-30 §4.2).
+derived from occurrence counts alone.
 
 ### C. Consumer model
 
-The CLI takes two positional arguments. It first hashes the consumer source
-and looks it up in a hash-pinned
-[consumer-relation index](../protocols/d1/d1p-30-consumer-relations.json).
-A hit selects a checked relation. A miss selects the conservative source
-profile.
+v1.1 accepts a consumer only through a checked relation whose recorded
+source hash equals the hash of the consumer source. A mismatch stops with
+`CONSUMER_RELATION_SOURCE_HASH_MISMATCH`, and a missing relation with
+`UNSUPPORTED_CONSUMER_AST_REQUIRED`. v1's source profile, with its
+Payy-derived idioms, is gone. Two relation forms exist.
 
-**Checked relation (WarpToad).** The relation is the output of the
-route-A solc-AST extractor: D1P-18 for the pinned consumer, and D1P-21B for
-M-SRC. The extractor follows the actual function bodies and referenced
-declarations and emits every terminal path family with its ordered guards,
-terminal status, committed effects and storage writes (D1P-16, D1P-18). The
-verifier is an explicit relation whose arguments carry their origins
-(calldata parameter, storage read, environment read) and is never assumed
-true. Library effects come from a shared, versioned OpenZeppelin 5.6.1 table
-that declares `case_specific_entries=false` (D1P-18). On the pinned
-`WarpToadCore.mint`, the relation has 22 path families (3 success, 19
-revert). On M-SRC it has 21. Exactly the `isValidLocalRoot` revert family
-and its positive guard disappear (D1P-21B §3). v1 requires the relation's
-verifier-argument count to equal the producer's public-leaf count and
-rejects the pair otherwise. The selected relation path is recorded as one
-manual input.
+**Compiler-AST relation (new in v1.1; all seven Payy consumers).** The
+evaluation driver runs `solc --combined-json ast` (solc 0.8.20 for Payy) and
+passes the AST to the frontend, which proceeds structurally (D1P-34 §2).
 
-**Conservative source profile (Payy).** Without a relation, v1 scans the
-Solidity source for a small set of idioms and reports the limitation
-`SOURCE_PROFILE_IS_NOT_FULL_SOLIDITY_SEMANTICS` in every result. It
-recognizes:
-- message-array public inputs (`messages[i]`), treated as effect-decoded
-  when the source defines a `verifyMessages` function together with a
-  `verifyMint` or `verifyBurn` function;
-- an old-root membership check, matched by an equality between the root
-  parameter and a `*Root*` identifier, or by a call `verifyRootHash(oldRoot)`;
-- replay accounting, matched by `.spent == false` and `.spent = true`;
-- the verifier call site, for locating warnings.
+1. *Verifier boundary.* Exactly one call must resolve to a declaration with
+   two parameters, `bytes` and `bytes32[]`, returning `bool` or nothing. Any
+   other count stops with `SOLIDITY_VERIFIER_BOUNDARY_COUNT`. The public
+   array argument must be a direct identifier.
+2. *Propagation.* The array is followed through internal calls by
+   declaration ID. A constant index maps to one word. A loop-carried index is
+   widened to the tail of the array from its known lower bound.
+3. *Source class.* Each word is classed as calldata, environment or
+   consumer-supplied state or configuration.
+4. *Guards.* `require` and `assert` arguments, and branch and loop
+   conditions, become guard records. Each lists the words it depends on and
+   the storage lookups it reads, identified by declaration-ID path and by the
+   public words in the key.
+5. *Effects.* An assignment to state becomes a storage-write effect. A call
+   whose function type matches the shared table becomes a token effect with
+   fixed amount and beneficiary positions: `function (address,uint256)` is a
+   transfer, and `function (address,address,uint256)` a transfer-from. The
+   match covers Payy's low-level `abi.encodeCall(IERC20.transfer, …)` burn
+   payout.
+6. *Replay records.* A write of boolean `true` is paired with any guard that
+   compares a storage lookup with `false` when the declaration path and key
+   words agree.
+7. *Width mapping.* If the producer has more public leaves than the direct
+   array, the difference is taken as a prefix outside the array. The direct
+   width is derived from the largest public ABI array and the array-header
+   lower bound seen in the AST. For Payy, 1,005 producer leaves face a
+   1,003-word array, giving a two-word recursive-verifier selector prefix.
+   Old state, new state, the commitment and the 1,000 message words then
+   land at producer indices 2, 3, 4 and 5–1004 (D1P-34 §2).
 
-Each of these idioms occurs in Payy's `RollupV1.sol`, the only consumer the
-profile has been run on. The rule engine names no application, but this
-profile is fitted to the development consumer. It gives no evidence of
-generality, and we treat it as development scaffolding rather than a
-contribution (§IX).
+Statement kinds outside the supported subset are named in the relation's
+limitations (for example `AST_RECURSIVE_INTERNAL_CALL`) and evaluated
+conservatively for dependencies. Every AST relation also carries three
+standing limitations: loop-index widening, no Solidity semantic
+equivalence, and the derived selector prefix.
 
-### D. Role inference
+**Route-A relation (WarpToad).** WarpToad targets still use relations from
+the route-A solc-AST extractor: D1P-18 for the pinned consumer (shared by the
+nine circuit mutants, pinned and M-DOM), D1P-21B for M-SRC, and D1P-31's
+per-mutant extractions for the consumer mutants. WT-S04 has no relation,
+because the extractor failed closed when the verifier call was removed. The
+extractor follows actual function bodies and emits every terminal path
+family with ordered guards, committed effects and storage writes, against a
+shared OpenZeppelin 5.6.1 table with `case_specific_entries=false` (D1P-16,
+D1P-18). v1.1 reads these relations with the same structural identities as
+AST relations. The verifier relation is excluded as a consumer use, storage
+selects are keyed by slot and key symbols, and replay is paired by those
+keys. v1's name tests for `root` and `nullifier` and its verifier-line
+pattern were removed. The extractor itself was developed on WarpToad's
+`mint` fragment. v1.1 changes how its output is read, not how it was built.
 
-v1 takes no explicit policy `σ`. It infers three roles from the consumer
-model and the ABI. These inferences stand in for the analyst-supplied roles
-of contract §6.2, and they are heuristics over names and idioms.
+### D. Word classification
 
-| Role | Checked-relation mode | Source-profile mode |
-| --- | --- | --- |
-| **Root (anchor)** | A verifier argument whose consumer origin contains `root` (WarpToad: `calldata._gigaRoot`, `calldata._localRoot`) | A public leaf whose ABI path contains `root` and one of `old`, `current` or `previous`. This excludes transition outputs such as `new_root` |
-| **Replay key** | A verifier argument whose consumer origin contains `nullifier` | Present when the `.spent == false` idiom occurs |
-| **Effect word** | A verifier argument whose origin symbol appears in a committed mint, burn or transfer on a success path (WarpToad: public indices 2, 6, 7, 9, 10) | Every `messages[i]` leaf, if the message-dispatch idiom is present (Payy: public indices 5–12) |
+v1.1 takes no explicit policy `σ` and assigns no semantic role (root,
+nullifier, amount) to any word. For each verifier word it records structural
+facts only.
+
+| Fact | Meaning |
+| --- | --- |
+| Source class | Calldata, environment (`block.*`, `msg.*`, `tx.*`) or consumer-supplied state/configuration |
+| Consumer use | The word reaches some guard or some effect, excluding the verifier call itself |
+| Admitted | The word reaches a storage lookup inside a guard |
+| Effect word | The word reaches a storage write or a token effect |
+| Replay record | A `true` write paired, by declaration path and key, with a guard comparing the same lookup to `false` |
+
+Only calldata words are required to have a consumer use. A
+consumer-supplied configuration word, such as WarpToad's word 5 (the
+configured Aztec address), or an environment word such as `block.chainid`,
+is not required to appear anywhere beyond the verifier call.
 
 ### E. Admission polarity
 
@@ -762,158 +817,194 @@ directions. We call this *admission polarity*. It is unrelated to the
 positive and negative solver controls that earlier reports also call
 "polarity" (D1P-14D).
 
-- **Must-be-in (roots).** On every successful path, some guard checks that
-  the root is present in consumer pre-state. In relation mode this is a
-  guard that mentions the word's origin, reads pre-state storage (a
-  `select(pre.…)` term) and is not negated. In source mode it is one of the
-  matched old-root idioms.
-- **Must-not-be-in plus write (replay keys).** On every successful path, a
-  negated pre-state membership guard on the key (`== false` or
-  `not(select(pre.…))`), *and* a committed storage write keyed by the same
-  origin on success. This is a two-transaction obligation: the check stops a
-  second use only because the first use wrote the key. v1 checks both
-  halves syntactically in one transition and makes no claim about histories.
+- **Must-be-in.** v1.1 records a word as admitted when it reaches a storage
+  lookup inside a guard. It does not check the direction of that lookup, and
+  it no longer singles out roots by name. A root that is checked against the
+  wrong map, or with the wrong sign, is therefore still admitted (§V-F).
+- **Must-not-be-in plus write (replay).** A replay record needs a guard that
+  compares a storage lookup with `false` *and* a `true` write to the same
+  declaration path and key on success. In route-A relations, replay applies
+  if any such write or guard exists, and it is satisfied only if every one
+  has both halves. In AST relations, replay applies only when a `true` write
+  exists, so a guard left without its write does not make replay
+  applicable. The check is still syntactic and within one transition. It
+  makes no claim about histories.
 
 ### F. Rules
 
-*Table 1: BindCheck v1 rules (D1P-30 §3; `static_analyzer_v1.py`).*
+*Table 1: BindCheck v1.1 rules (D1P-34 §2; `static_analyzer_v1.py`).*
 
 | Rule | Producer fact | Consumer fact | Fires when | Reported location | Suggested fix (abridged from the tool) |
 | --- | --- | --- | --- | --- | --- |
-| **R-BIND** | Public leaf with occurrence count 0 | Every public leaf is taken to be a consumer-constructed verifier argument | Any public leaf is unused. Adjacent unused leaves of one array form one warning | `artifact:abi.<leaf>` or `<first>..<last>` | Constrain every exposed verifier argument in the producer, or remove it from the consumer-visible effect surface. Rebuild artifact, key and verifier together |
-| **R-EFFECT** | Same as R-BIND | Effect words (§V-D) | Some unused leaf is an effect word. One warning lists all such leaves | First committed effect location, else the verifier call | Bind every effect-decoded public word in the producer. Derive consumer effects only from bound public inputs |
-| **R-ANCHOR** | — | A root without must-be-in on every success path | Once per such root | Verifier call site | Require the root to be admitted by the appropriate on-chain history or current-state mapping before accepting the proof |
-| **R-POLARITY** | — | A replay key without a must-not-be-in guard or without a write on success | Replay accounting is recognized and either half is missing | Verifier call site | Check that the replay key is absent before verification, and write the same key atomically on success |
+| **R-BIND** | Public leaf with no proof-enforced occurrence | Every public leaf is a verifier argument (width check) | Any such leaf. Adjacent unused leaves of one array form one warning | `artifact:abi.<leaf>` or `<first>..<last>` | Constrain every exposed verifier argument in the producer, or remove it from the consumer-visible effect surface. Rebuild artifact, key and verifier together |
+| **R-EFFECT** | Same as R-BIND | Effect words (§V-D) | Some unused leaf is an effect word. One warning lists all such leaves and the effect kinds | First modeled effect in the relation, else the verifier boundary | Bind every effect-decoded public word in the producer. Derive consumer effects only from bound public inputs |
+| **R-CONSUMER** | — | A calldata word with no guard, state or modeled-effect dependency | Once per such word | Verifier boundary | Consume the authenticated word in the corresponding state admission, replay or effect operation, and regenerate the checked relation |
+| **R-POLARITY** | — | An applicable replay record whose must-not-be-in guard or `true` write is missing | Once per target | Verifier boundary | Check that the replay key is absent before verification, and write the same key atomically on success |
 
-**R-BIND** checks the producer half of the boundary: every word the consumer
-passes to the verifier must constrain something. v1 does not consult the
-consumer to decide whether a word is passed. In relation mode the width
-check guarantees that every public leaf is a verifier argument. In source
-mode this is assumed. **R-EFFECT** is the consumer-relevant subset of
-R-BIND: it reports where an unbound word becomes an effect. On Payy, R-BIND
-and R-EFFECT describe one mismatch, and we count it once (§VII-C).
-**R-ANCHOR** checks the consumer half: a word the circuit proves against must
-be one the consumer has admitted. **R-POLARITY** checks single-use
-accounting for recognized replay keys.
+**R-BIND** and **R-EFFECT** check the producer half: every word the consumer
+passes to the verifier must constrain something, and R-EFFECT reports where
+an unbound word becomes an effect. On Payy, R-BIND and R-EFFECT describe one
+mismatch, and we count it once. **R-CONSUMER** checks the consumer half from
+the other direction: an authenticated calldata word that the consumer uses
+for nothing beyond the verifier call. It does not infer which guard, state
+update or effect was intended (D1P-34 §7). **R-POLARITY** checks single-use
+accounting where a replay record exists.
 
-**What the rules do not use.** No rule function contains a WarpToad, Payy,
-mutation or contract identifier (D1P-30 §1). Role inference uses generic
-name fragments (`root`, `nullifier`, `old`). The source profile uses the
-idioms listed in §V-C. In relation mode, the verifier call line is found by a
-pattern that matches WarpToad's `withdrawVerifier` call. That pattern only
-sets the location string of R-ANCHOR and R-POLARITY warnings. The B02
-obligations O1/O2, the admitted-state designs `S_DOM`/`S_SRC`, and any
+**R-ANCHOR.** v1's root-specific rule is still in the code and the result
+schema. Under v1.1, however, both loaders record an anchor only after
+finding a guarded storage lookup on it. Every recorded anchor therefore
+already satisfies must-be-in, and R-ANCHOR cannot fire. This is our reading
+of the code; D1P-34 states only that the rule identity changed. A removed
+root guard now surfaces as R-CONSUMER on that word, because the word then
+reaches nothing (M-SRC; WT-S01, WT-S02).
+
+**What the rules do not use.** No analyzer or frontend function names a
+contract, application, verifier function, guard function or storage field.
+A regression test scans both files for the identifiers that v1 used and
+passes (D1P-34 §2). The effect table matches function types, not names. The
+B02 obligations O1/O2, the admitted-state designs `S_DOM`/`S_SRC`, and any
 comparison with the pinned or earlier revision are not inputs. The M-DOM
-warning comes from M-DOM's artifact alone. The analyzer does not compare
-M-DOM with pinned WarpToad (D1P-30 §4.2).
+warning comes from M-DOM's artifact alone.
 
-**What the rules cannot see.** A public input that is used but bound to the
-wrong value (for example, hashed under the wrong domain). A word whose
-binding depends on a witness-controlled extent but which occurs in some
-constraint. A root that is checked against the wrong history. A misordered
-argument vector of the correct width. An effect field that comes from
-calldata outside the verifier arguments. Missing single-use accounting on an
-effect path whose replay key the profile does not recognize. On Payy, the
-burn path has no registration or single-use record (T17 §3). v1 does not
-report this, because the mint path's `.spent` idiom satisfies the source
-profile. The converse also fails. In source mode, replay accounting counts
-as *applicable* only if the `.spent == false` guard is found. Removing that
-guard (benchmark mutant PY-S02) therefore suppresses R-POLARITY instead of
-triggering it, even though the remaining `.spent = true` write is
-recognizable. This is v1's one supported miss (D1P-31 §4.3). In relation
-mode, applicability follows from the replay-key role, and the WarpToad
-mutants that drop the check or the write are detected (WT-S03, WT-S09).
+**What the rules cannot see.**
+
+- A public input that is used but bound to the wrong value, for example
+  hashed under the wrong domain.
+- A word whose binding depends on a witness-controlled extent but which
+  occurs in some constraint.
+- A word checked against the wrong map or in the wrong direction.
+- A misordered argument vector of the correct width.
+- A fee cap, amount or beneficiary that reaches an effect but obeys the
+  wrong policy.
+- Missing single-use accounting on an effect path that writes no replay
+  record at all. On Payy, v1.1 now recovers the burn transfers as effects
+  and links them to the unbound tail words through R-EFFECT. No rule states
+  separately that burns lack registration.
+
+These gaps account for the 14 unsupported benchmark mutants (§VII-C).
 
 ### G. Actionable diagnostics
 
-`analyze` writes a versioned JSON result (`bindcheck.static-analysis.v1`) and
-readable text. Each warning records:
+`analyze` writes a versioned JSON result (`bindcheck.static-analysis.v1.1`)
+and readable text. Each warning records:
 
 - `id`, `rule`, `severity` (always `warning`) and `confidence` (always
-  `high` in v1);
-- `location`: the ABI leaf for R-BIND, the effect site for R-EFFECT, or the
-  verifier call site for R-ANCHOR and R-POLARITY;
-- `explanation`: a sentence naming the leaf, the consumer origin and the
+  `high`);
+- `location`, given per rule as in Table 1;
+- `explanation`: a sentence naming the leaf, its consumer origin and the
   missing fact;
 - `suggested_fix`: the repair text of Table 1;
-- `evidence`: public indices, witness indices and occurrence counts, or the
-  root's guard evidence and polarity, or the replay guard and write flags;
+- `evidence`: public indices, witness indices and occurrence counts; or the
+  word's consumer origin and source classes (R-CONSUMER); or the replay guard
+  and write flags (R-POLARITY);
 - `target_identity`: the artifact hash, consumer hash and rule. The
   validator keys on this identity.
 
-The enclosing result also records the producer facts (decoder, opcode counts
-by kind, every public leaf with its occurrence count and locations), the
-consumer model kind and scope, inferred roots and replay keys with their
-polarity evidence, manual inputs, limitations and runtime. For example, on
-M-DOM:
+The enclosing result also records the producer facts and the occurrence
+policy. These include the opcode counts by kind, and every public leaf with
+its proof-enforced, witness-generation and memory-definition counts and
+locations. It also records the consumer relation's kind, scope and
+limitations, admitted words, replay records, manual inputs and runtime. Two
+examples:
 
 ```text
 W001 R-BIND at m-dom-withdraw.json:abi.aztec_warptoad_address
   Consumer-constructed verifier argument(s) aztec_warptoad_address have no
   occurrence in the decoded proof-enforced ACIR. ...
-  Fix: Constrain every exposed verifier argument in the producer, ...
+W003 R-CONSUMER at RollupV1.sol:357            (Payy earlier, full size)
+  Verifier public word 4 (commit_hash) is constructed at the boundary but has
+  no guard, committed-state, or modeled effect dependency ...
 ```
 
-v1 does not map producer locations back to Noir source spans, and it does
-not cross-reference a producer-side warning with the consumer guard that
-supplies the word. A developer reading the M-DOM warning learns *which* word
-is free and that the consumer passes it. Learning *why* the domain binding
-moved to a private witness requires the provenance facts of §V-B.
+**Localization weaknesses observed in the D1P-34 outputs.**
+
+- WarpToad route-A relations carry no source line for the verifier call, and
+  v1.1 removed v1's pattern that found it. WarpToad R-CONSUMER and
+  R-POLARITY warnings therefore print `WarpToadCore.sol:?`. They name the
+  word, for example `destination_local_root`, but not a line.
+- R-EFFECT reports the first modeled effect in relation order, which need
+  not depend on the unbound word. On full-size Payy earlier this is
+  `RollupV1.sol:850`, a validator-set index write with no public-word
+  dependency. The burn transfers that consume the tail words, at lines 511
+  and 521–522, appear only as effect kinds in the evidence.
+- v1.1 maps no producer location back to a Noir source span. It does not
+  cross-reference a producer-side warning with the consumer code that
+  supplies the word.
 
 ### H. Validation
 
-`bindcheck validate <result>#<warning>` selects routes from a
-[validation index](../protocols/d1/d1p-30-validation-index.json) whose
-`match` equals the warning's target identity (artifact hash, consumer hash,
-rule). More than one match is an error. No match returns status
-`NO_VALIDATION_ROUTE` at E1.
+**Registered routes.** `bindcheck validate <result>#<warning>` selects routes
+from a validation index whose `match` equals the warning's target identity.
+More than one match is an error. No match returns `NO_VALIDATION_ROUTE` at
+E1. A route has an optional preparation command that runs the route's
+fixture in a clean namespace (a sentinel file makes it audit existing
+evidence instead), a record of failed earlier attempts with reasons, and
+staged checks. Each stage has an evidence level, a mode (`fresh` or
+`preserved`) and file-existence, SHA-256 or JSON-predicate checks. The
+result is the highest level whose stage passed, together with manual steps
+and inputs. The D1P-30 routes for M-DOM, M-SRC and Payy each have four
+stages: concrete witness, circuit execution, real proof, and
+unchanged-consumer replay with state checks. Their witnesses come from
+fixtures written before D1P-30 (D1P-15, D1P-19, T15/T16/T18), and each
+route association is a counted manual input.
 
-A route has three parts.
+Routes are keyed by rule. v1.1's rule identities therefore matter. The
+M-DOM warning keeps the identity of its D1P-30 route. The M-SRC and WT-S01
+warnings changed from R-ANCHOR to R-CONSUMER, and the full-size Payy
+artifacts differ from the N=8 builds the D1P-30 route was keyed to. Under
+the unchanged D1P-31 index, only WT-C03's preserved route still matches
+(D1P-34 §5.1). No association was added after the run.
 
-- **Preparation (optional).** A command, working directory, environment and
-  timeout that run the route's fixture in a clean namespace. A sentinel file
-  makes the route audit existing evidence instead of generating another proof.
-- **Failed-route record.** Earlier attempts, kept with their reasons. For
-  example, the first fresh M-DOM run generated a proof and then failed with
-  `ENOENT` because its output directory did not exist. A literal
-  `nargo execute` route is marked not applicable where no complete
-  `Prover.toml` exists.
-- **Stages.** Each stage has an evidence level and a mode (`fresh`,
-  `preserved`, or an alternative execution route). Each check verifies that a
-  file exists, its SHA-256, or a JSON predicate.
+**Automatic pipeline (Lane X).** The automatic-validation pipeline
+([AUTO-VALIDATE](../docs/x-experiment/AUTO-VALIDATE.md)) maps a warning's
+rule and location to a synthesis plan in a data table
+([`witness_synth_v1.py`](../src/bindcheck_d1/witness_synth_v1.py)). It then
+builds an attacker `Prover.toml` from the frozen honest WarpToad witness and
+runs three stages:
 
-The result is the highest level whose stage passed, together with the
-route's classification, fresh-or-preserved mode, manual steps and manual
-inputs. The three routes used in D1P-30 each have the same four stages:
-concrete witness (E2), circuit execution (E2; NoirJS or the pinned Rust ACVM
-harness), real proof (E3), and unchanged-consumer replay with state checks
-(E4).
+- E2: `nargo execute` on the mutant;
+- E3: bb.js UltraHonk (`keccakZK`) proving and verification with the
+  mutant's own key;
+- E4: deployment of the mutant's verifier and consumer on Hardhat EDR,
+  replay, and a check of the effect on state.
 
-**What is and is not automatic.** The validator automates running a
-registered route and auditing its evidence. Witness construction is the
-route fixture's job. For the WarpToad routes, the fixtures are the
-mechanism-derived foreign-note fixture (D1P-15) and the private-root
-same-root fixture (D1P-19), both written by people before D1P-30. For Payy,
-the route audits the preserved T15/T16/T18 chain, whose synthetic tail record
-was authored historically. Associating a warning with its route is a counted
-manual input (one step for each WarpToad route, two for Payy). BindCheck
-does not yet turn an arbitrary warning into a witness. A warning without a
-route stops at E1.
+There are four plan kinds:
+
+- single-word surgery for R-BIND and R-EFFECT;
+- a fresh attacker Merkle tree on the same-root branch for unadmitted roots;
+- an Aztec-branch note for the domain word;
+- an honest double submission for replay.
+
+Before any synthesis, a self-test recomputes the honest commitment,
+nullifier and root from the frozen witness and stops on any mismatch.
+
+The pipeline has no manual steps at run time, but it is not generic witness
+synthesis.
+
+- Its hash code covers WarpToad's same-root EVM and Aztec paths only.
+- Its attacker values are keyed by WarpToad ABI word names.
+- Its plan table has branches for four specific benchmark targets: WT-C04,
+  WT-C06, WT-C07 and WT-S02.
+- It was written in the same AI-assisted lane that built the benchmark,
+  with the ground truth available.
+- It cannot construct Payy witnesses, because the aggregator needs a
+  two-proof witness harness.
+- It was run on the D1P-31 (v1) warnings, under v1 rule names. Its run on
+  v1.1's warnings is **[PENDING V1.1-RERUN]**.
+
+During development a stale mutant directory caused pinned circuits to be
+"validated". The run now regenerates each mutant and checks it for
+completeness first, and the incident is kept as negative-control evidence:
+the pinned circuit rejects the attacker words at E2.
 
 **Why concrete execution.** Validation executes the real compiled circuit,
 produces real proofs, and replays them on an owned local chain. It does not
 issue a whole-relation SMT query. Every whole-relation and full-producer
 query in our development history timed out or ended without an answer
-(D1P-07, D1P-10, D1P-14D, D1P-17; Appendix A). The fresh WarpToad routes
-complete in 28.82 s (M-DOM, two proofs) and 98.99 s (M-SRC, one proof)
-(D1P-30 §5). These times are operational observations, not benchmarks.
-
-**Future route synthesis (not implemented) [PENDING AUTO-VALIDATION].** The
-natural next step is one generic witness template per rule. For R-BIND, vary only the unused words
-and solve the consumer path condition over them alone. For R-ANCHOR, build a
-private structure under the extracted construction and set the root to its
-root. For R-POLARITY, resubmit an accepted occurrence. We describe these
-templates only to state the gap. No result in this paper uses them.
+(D1P-07, D1P-10, D1P-14D, D1P-17; Appendix A). The fresh D1P-30 routes
+complete in 28.82 s (M-DOM, two proofs) and 98.99 s (M-SRC, one proof). The
+pipeline's fresh rows take 36–57 s each under machine load 30–50. These
+times are operational observations, not benchmarks.
 
 ### I. What a result means
 
@@ -922,7 +1013,8 @@ relative to the route's admitted state and the effect it checks, and is
 labeled with both. No rule result is ever `VERIFIED_WITHIN_SCOPE`. Silence
 on a supported input is reported as "no warning in the supported static
 scope", which is E0. It is not evidence of safety. An unsupported compiler
-version, decoder form or consumer-width mismatch stops the analysis with a
+version or decoder form, a missing or mismatched consumer relation, an
+unrecovered verifier boundary or a width mismatch stops the analysis with a
 named reason. The bounded formal target of contract §7 concerns the joint
 transition model. This paper proves no preservation theorem.
 
@@ -930,49 +1022,55 @@ transition model. This paper proves no preservation theorem.
 
 ## VI. Implementation
 
-BindCheck v1 is written in Python. The proving and chain fixtures that the
-validation routes run are written in TypeScript and Rust. The table lists
-the components and the evidence that validates each one on the development
+BindCheck v1.1 is written in Python. The validation fixtures and the Lane X
+pipeline use TypeScript, JavaScript and Rust. The table lists the
+components and the evidence that validates each one on the development
 fragment.
 
 | Component | Location | Validation evidence |
 | --- | --- | --- |
-| CLI (`analyze`, `validate`) | [`bin/bindcheck`](../bin/bindcheck) | Five-target runner, all expected rule sets (D1P-30 §6) |
-| Static analyzer and rules | [`static_analyzer_v1.py`](../src/bindcheck_d1/static_analyzer_v1.py) | 7/7 focused tests; 3/3 positives warned, 0/2 controls warned (D1P-30 §§4, 6) |
-| Validator | [`validation_v1.py`](../src/bindcheck_d1/validation_v1.py); [validation index](../protocols/d1/d1p-30-validation-index.json) | Four warning objects audited to E4: two fresh (WarpToad), two views of one preserved Payy chain (D1P-30 §5) |
-| Consumer-relation index | [`d1p-30-consumer-relations.json`](../protocols/d1/d1p-30-consumer-relations.json) | Hash-pinned; selects D1P-18/D1P-21B relations |
-| ACIR decoder, Noir beta.14 (Payy) | `src/bindcheck_d1/frontends/acir_binary_v1.py`, `acir_bindings_v1.py` | Typed recursion/frame bindings (D1-03) |
+| CLI (`analyze`, `validate`) | [`bin/bindcheck`](../bin/bindcheck), `cli.py` | Five-target and 30-mutant evaluation driver (`scripts/d1p_34_evaluate.py`; D1P-34 §6) |
+| Static analyzer and rules | [`static_analyzer_v1.py`](../src/bindcheck_d1/static_analyzer_v1.py) (SHA-256 `7f367dfb…`) | 11/11 focused v1.1 tests; scoped suite of 242 tests and 312 subtests passes (D1P-34 §6) |
+| Compiler-AST consumer frontend | [`solidity_ast_v1_1.py`](../src/bindcheck_d1/frontends/solidity_ast_v1_1.py) (`e74076f3…`) | Seven Payy relations (baseline, check-added, PY-S01–S05); identifier-absence regression test |
+| Shared effect table | [`bindcheck-v1.1-effect-models.json`](../protocols/d1/bindcheck-v1.1-effect-models.json) | Two function-type entries; recovers Payy's burn transfers (D1P-34 §2) |
+| Validator | [`validation_v1.py`](../src/bindcheck_d1/validation_v1.py); D1P-30 and D1P-31 validation indices | Case mismatches to E4 in D1P-30; 1 preserved E4 among 53 v1.1 benchmark warnings (D1P-34 §5.1) |
+| Automatic validation pipeline (Lane X) | `witness_synth_v1.py`, `scripts/xav/`, `scripts/xav_run.py` | 20 v1 warnings: 7 fresh E4, 1 preserved E4, 4 E3, 8 E1 (AUTO-VALIDATE) |
+| ACIR decoder, Noir beta.14 (Payy) | `frontends/acir_binary_v1.py`, `acir_bindings_v1.py` | Typed recursion/frame bindings (D1-03) |
 | ACIR decoder and semantic checker, Noir beta.22 | `frontends/acir_binary_beta22.py`, `acir_semantics_beta22.py` | Exact rebuild match; 24,967/24,967 supported constraints on the honest witness; two predeclared mutation controls (D1P-13) |
-| Consumer extractor (route A) and shared library models | `prototypes/d1p16/extract_relation.py`, `library_effect_models.v1.json` | 22 families; 5/5 executions; three source-mutation and four edge-control classes (D1P-16, D1P-18); 18 preserved extraction tests rerun in D1P-30 |
-| Variant-general relation serializer | `prototypes/d1p20/`, `prototypes/d1p21b/` | Pinned 22/19/3 and M-SRC 21/18/3; 8/8 polarity controls; state/environment binding (D1P-20, D1P-21B) |
-| Poseidon2 provenance and BN254 regions (not rule inputs) | `warptoad_poseidon_provenance.py`, `warptoad_variant_provenance.py`, `warptoad_bn254_regions.py`, `warptoad_p6.py` | 86/86 opcodes attributed (D1P-15); 77 regions, 24,448 core equations (D1P-19); independent M-DOM run (D1P-21A) |
+| Route-A consumer extractor and library models | `prototypes/d1p16/extract_relation.py`, `library_effect_models.v1.json` | 22 families; 5/5 executions; three source-mutation and four edge-control classes (D1P-16, D1P-18) |
+| Variant-general relation serializer | `prototypes/d1p20/`, `prototypes/d1p21b/` | Pinned 22/19/3 and M-SRC 21/18/3; 8/8 polarity controls (D1P-20, D1P-21B) |
+| Poseidon2 provenance and BN254 regions (not rule inputs) | `warptoad_poseidon_provenance.py`, `warptoad_variant_provenance.py`, `warptoad_bn254_regions.py`, `warptoad_p6.py` | 86/86 opcodes attributed (D1P-15); 77 regions (D1P-19); independent M-DOM run (D1P-21A) |
 | Real-proof and chain fixtures used by routes | D1P-15 Hardhat fixture; D1P-19 fixture; T15/T16/T18 harnesses | One-shot proof ledgers; on-state effect checks |
 
 **Toolchains (pinned).** Payy: Noir `1.0.0-beta.14+60ccd48e…`, bb 3.0.0,
-solc 0.8.20, Forge 1.4.1. WarpToad: Noir `1.0.0-beta.22+c57152f9…`, bb.js
-5.0.0 UltraHonk `keccakZK`, solc 0.8.29 (optimizer, 1 run, Cancun), Hardhat
-3.3.0 EDR. All chains are fresh in-process instances with no fork.
+solc 0.8.20 (also used for the AST relations), Forge 1.4.1. WarpToad: Noir
+`1.0.0-beta.22+c57152f9…`, bb.js 5.0.0 UltraHonk `keccakZK`, solc 0.8.29
+(optimizer, 1 run, Cancun), Hardhat 3.3.0 EDR. All chains are fresh
+in-process instances with no fork.
 
-**Tests and runs.** The focused v1 suite passes 7/7 tests, and 18 preserved
-D1P-16/18/21B extraction tests also pass (D1P-30 §6). Once proof evidence
-exists, the five-target runner completes all five analyses and four warning
-audits in 4.661 s. Static analysis takes 1.476–1.565 s per WarpToad target
-and 0.031–0.035 s per Payy target. These are native-Mac development
-observations, not performance results (D1P-30 §1). The complete earlier D1
-suite passes 231 tests and 312 subtests (Python 3.13.9; D1P-21A §5). The
-artifact-specific tests need the ignored evidence workspaces.
+**Tests and runs.** The focused v1.1 suite passes 11/11 tests. The scoped
+repository suite (`pytest -q tests`) passes 242 tests and 312 subtests in
+224.50 s. An unscoped `pytest -q` failed during collection with 83 errors in
+preserved third-party CirC scripts under `results/raw/D1P-22`. No BindCheck
+test failed (D1P-34 §6). Static analysis takes a median 2.12 s per target
+(range 1.65–2.91 s over the 34 completed analyses in the ignored run
+ledger). The 30 mutants take 62.405 s in total: 38.552 s for WarpToad and
+23.853 s for Payy. These are native-Mac development observations, not
+performance results.
 
-**Generality limits of the current implementation.** v1 accepts exactly two
-Noir versions. Checked relations exist for two consumer sources (pinned
-WarpToad and M-SRC), and the source profile is fitted to `RollupV1.sol`
-(§V-C). Any other consumer falls back to the source profile, which will
-recognize few or none of its idioms. Validation needs a registered route for
-each target identity. In D1P-31, each WarpToad consumer mutant got its own
-relation from the unchanged D1P-18 extractor, recorded as a counted input
-(8 of 9 succeeded, and WT-S04 failed closed). Payy mutants used the source
-profile, and 8 of 12 were unsupported. Generic consumer loaders, which would
-replace the fitted profile and the WarpToad location pattern, are
-**[PENDING D1P-34]**.
+**Generality limits of the current implementation.**
+
+- v1.1 accepts exactly two Noir versions.
+- The AST frontend has been run on one consumer family (Payy, seven
+  sources) under one solc version, and supports a bounded statement and
+  expression subset.
+- WarpToad still uses route-A relations, and no AST relation was built for
+  any WarpToad consumer.
+- Validation needs a registered route for each target identity, and the
+  automatic pipeline covers WarpToad only.
+
+A held-out consumer will go through the AST frontend, which has so far seen
+one application.
 
 ---
 
@@ -982,10 +1080,10 @@ replace the fitted profile and the WarpToad location pattern, are
 
 | Paper RQ | Question | Contract RQ (rev. 3) | Case studies | Mutation benchmark |
 | --- | --- | --- | --- | --- |
-| **RQ1 Detection** | Do the generic rules warn at the correct public word and consumer location, without case-specific input? | RQ1 (fidelity), RQ2 (discovery) | D1P-30 (done) | D1P-31 (done) |
-| **RQ2 Warning quality and validation** | Are warnings localized and actionable? How many reach E4, at what cost, and with how many manual inputs? | RQ3 (validation) | D1P-30 (done) | D1P-31 (done); automatic witness construction pending |
-| **RQ3 Baselines** | What do circuit-only and contract-only tools report on the same targets, in default and same-policy arms? | RQ4 (comparative) | D1P-22 (done) | D1P-32 |
-| **RQ4 Held-out** | With rules frozen, what does BindCheck report on reserved families, and do any reports validate? | RQ4 (transfer) | — | D1P-33 |
+| **RQ1 Detection** | Do the generic rules warn at the correct public word and consumer location, without case-specific input? | RQ1 (fidelity), RQ2 (discovery) | D1P-34 (v1.1 rerun of the D1P-30 targets) | D1P-34 |
+| **RQ2 Warning quality and validation** | Are warnings localized and actionable? How many reach E4, at what cost, and with how many manual inputs? | RQ3 (validation) | D1P-30 routes; D1P-34 | D1P-34 index audit; AUTO-VALIDATE on v1 warnings (v1.1 rerun pending) |
+| **RQ3 Baselines** | What do circuit-only and contract-only tools report on the same targets, in default and same-policy arms? | RQ4 (comparative) | D1P-22; D1P-32 harness on WarpToad targets | D1P-32 |
+| **RQ4 Held-out** | With the tool frozen, what does BindCheck report on reserved families, and do any reports validate? | RQ4 (transfer) | — | D1P-33 |
 | **RQ5 Taxonomy** | Which causes, consequences and roles recur across independent families in sampled disclosures, and how reliably can people label them? | — (descriptive; contract §3 item 1) | — | v1 corpus (AI-assisted; human labels pending) |
 
 Contract RQ5 (efficiency) is not a paper RQ. Its null results are in
@@ -998,15 +1096,14 @@ RQs.
 **Development cases (five targets).**
 
 - Payy earlier `c4d2c902…` (historical, faulty) and check-added `dcd5d96e…`
-  (repaired for one witness). D1P-30 and the D1P-31 reruns analyzed bounded
-  **N=8** `agg_agg` builds derived from the pinned sources (T22 scratch
-  instances, artifact hashes `f50f6bb8…` and `e7b5731c…`) against the
-  unchanged consumer `RollupV1.sol` (`7062065c…`). The preserved E4 chain
-  (T15/T16/T18) uses the original 1,000-message configuration. The
-  validation route links the N=8 warning to that full-size chain, and the
-  link is a counted manual input. The unmutated full-size earlier artifact
-  has not itself been analyzed. The full-size Payy *mutants* in D1P-31 do
-  show the same tail warning at `messages[1]..messages[999]` (§VII-C).
+  (repaired for one witness). v1.1 analyzes the full-size 1,000-message
+  `agg_agg` artifacts: `83b75a4a…` (1,624,682 bytes) and `866b1800…`
+  (1,702,898 bytes), each with 1,005 public leaves. The consumer
+  `RollupV1.sol` (`7062065c…`) is byte-identical at both commits, and each
+  revision gets its own AST relation (D1P-34 §4). The preserved E4 chain
+  (T15/T16/T18) also uses the 1,000-message configuration. T15 does not
+  record whether its artifact is byte-identical to `83b75a4a…`. D1P-30's
+  v1 rows used N=8 builds and are not relabeled.
 - WarpToad pinned `973e7d1e…`: an honest development fixture, not a proven
   negative.
 - WarpToad M-DOM and M-SRC (injected), each paired with its own artifact,
@@ -1019,51 +1116,57 @@ to vendored pinned sources of the two development applications: WarpToad
 (18 mutants: 9 circuit, 9 consumer) and Payy (12 mutants: 7 circuit, 5
 consumer). All 30 compile under the pinned toolchains. Each mutant has a
 ground-truth record giving the operator, the binding it breaks, and the
-predicted effect (`manifest.json`, `mutants/<ID>.md`). Predicted effects are
-**unexecuted**, except for the two mutants that reuse frozen evidence:
-WT-C03 reuses M-DOM (D1P-15) and WT-S01 reuses M-SRC (D1P-19). Cheap
-reachability was checked only for WarpToad circuit mutants, by running
-`nargo execute` on the honest path. WT-C01, C02, C04, C05, C08 and C09 pass.
-WT-C06 and C07 fail with `Cannot satisfy constraint`, as designed. WT-C03 was
-skipped by design. Payy circuit mutants and all consumer mutants were
-checked by compilation and diff audit only. Four candidate classes were
-excluded with reasons (BENCHMARK.md §6). The Payy mutants are full-size
-1,000-message builds of the *earlier, faulty* revision. The benchmark is
-development data, and both families are exposed and can never be held out.
-Its operators were chosen with knowledge of the case mechanisms, so it
-measures coverage of operator classes, not discovery.
+predicted effect (`manifest.json`, `mutants/<ID>.md`). Cheap reachability
+was checked only for WarpToad circuit mutants, by running `nargo execute` on
+the honest path. WT-C01, C02, C04, C05, C08 and C09 pass. WT-C06 and C07
+fail with `Cannot satisfy constraint`, as designed, and WT-C03 was skipped
+by design. Payy circuit mutants and all consumer mutants were checked by
+compilation and diff audit only. Four candidate classes were excluded with
+reasons (BENCHMARK.md §6). The Payy mutants are full-size 1,000-message
+builds of the *earlier, faulty* revision. The benchmark is development data,
+and both families are exposed and can never be held out. Its operators were
+chosen with knowledge of the case mechanisms, so it measures coverage of
+operator classes, not discovery.
 
-**Benchmark protocol (D1P-31 §§1, 3).** The v1 rule bytes were hashed and
-frozen before the run and are byte-identical to D1P-30 (`static_analyzer_v1.py`
-`67a320b2…`). Ground-truth records were not given to BindCheck and were read
-only during post-run adjudication. Each WarpToad consumer mutant was
-extracted independently by the unchanged D1P-18 extractor into a
-source-hash-pinned relation. Eight succeeded. WT-S04 failed closed with
-`no verifier boundary recovered` and is unsupported. Payy targets use the
-source profile. A relation path is one counted analysis input: 17 of 30
-mutant runs use one and 13 use none. Scoring followed these rules.
+**Benchmark protocol (D1P-34 §§5–6).** The mutants and ground truth are
+unchanged from D1P-31. The v1.1 tool files were hashed into a freeze
+manifest before the evaluation, and no rule or loader changed afterwards.
+Ground-truth records were not given to BindCheck. They were read only by the
+post-run adjudication script. Consumer relations:
+- the nine WarpToad circuit mutants share the pinned D1P-18 relation;
+- the WarpToad consumer mutants use D1P-31's per-mutant route-A
+  extractions, except WT-S04, which has none and is unsupported;
+- the Payy mutants use v1.1 AST relations, one baseline relation for the
+  seven circuit mutants and one per consumer mutant.
+
+Each analyzed mutant has one counted relation input (29 of 30). Scoring
+followed these rules.
 
 1. A mutant is **detected** only if a warning names its own broken binding
    (word, guard, effect or replay obligation). The benchmark records do not
    give literal line numbers, so location is scored at that semantic
    boundary, not as recovery of the edited line.
-2. A mutant is **unsupported** when its broken binding is outside what v1
-   models. A **miss** is a supported mutant without a correct warning.
-   Unsupported mutants are never counted as misses or successes.
+2. A mutant is **unsupported** when its intended semantic role, ordering,
+   hash dependency, beneficiary policy or record format is not available
+   from the target-alone IR. A **miss** is a supported mutant without a
+   correct warning. Unsupported mutants are never counted as misses or
+   successes. Thirteen of the 14 unsupported mutants were analyzed to
+   completion without a related warning. Only WT-S04 stopped (§VII-E
+   rescores them on the baselines' scale).
 3. Warnings that do not concern the mutant's named binding are
-   **unrelated**. On Payy every unrelated warning is the inherited
-   message-tail pair, a valid report of the faulty base revision, so these
-   are not counted as semantic false positives.
+   **unrelated**. All are on Payy and are inherited from its faulty baseline
+   (§VII-C).
 4. WT-C03 and WT-S01 coincide with M-DOM and M-SRC. Totals are given with
    and without them.
-5. Validation of all 38 warnings was scheduled by operator class before
-   launch. The two validation adapters were registered only after static
-   results were complete and are counted manual associations.
+5. All 53 warnings were passed once through the unchanged D1P-31 validation
+   index. No association was added after the run.
 
-**Policy.** v1 takes no explicit `σ` (§V-D). Its roles are inferred. Any
-same-policy baseline receives the reviewed `σ` of
-[baselines.md](baselines.md). For WarpToad, `σ` is DRAFT where the
-documentation leaves beneficiary policy open (D1P-12R §8.1).
+**Policy.** v1.1 takes no explicit `σ` (§V-D). Any same-policy baseline
+receives the reviewed `σ` of [baselines.md](baselines.md). For WarpToad,
+`σ` is DRAFT where the documentation leaves beneficiary policy open
+(D1P-12R §8.1). D1P-32's Foundry property covers mint amount and
+beneficiary, admitted roots, verifier gating, single-use nullifiers and
+rollback, but not a maximum-fee ceiling.
 
 **Scoring loci for the case targets** (from [baselines.md](baselines.md)
 §4.3, extended to the variants; used for scoring only and never as tool
@@ -1081,113 +1184,148 @@ input):
 **Accounting.** Manual inputs are counted separately for analysis (relation
 selection) and validation (route association, historical witness content).
 Static runtime, proof time and peak memory are reported separately.
-Analyst time was not instrumented in D1P-30 or D1P-31.
+BindCheck analyst time was not instrumented in D1P-30, D1P-31 or D1P-34.
+D1P-32 records the effort for the Foundry harness.
 
 ### C. RQ1 — Detection
 
-*Table 2: Detection on the five development targets (D1P-30 §§1, 4, 5).*
+*Table 2: v1.1 detection on the five development targets (D1P-34 §4;
+analysis outputs). Validation evidence comes from D1P-30 (v1 warnings) and
+is discussed in §VII-D.*
 
-| Case | Class | Pins (artifact / consumer) | Consumer model | Rule(s) fired | Public word(s) | At scoring locus? | Highest level | Static runtime | Manual inputs (analysis + validation) | Reported verdict |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Payy earlier | Historical, faulty (N=8 build) | `f50f6bb8…` / `7062065c…` | Source profile | R-BIND, R-EFFECT | `messages[1]..messages[7]` (public 6–12); `messages[0]` occurs twice | Producer: yes. Consumer: R-EFFECT at the dispatch function (`RollupV1.sol:397`), not at `verifyBurn`. Missing burn registration not reported | E4, preserved (T15/T16/T18, full-size chain) | 0.035 s | 0 + 2 | `UNKNOWN` |
-| Payy check-added | Historical, repaired (one witness; N=8 build) | `e7b5731c…` / `7062065c…` | Source profile | none | all eight message words used (`messages[0]` three times, others once) | n/a (control) | — | 0.031 s | 0 + 0 | `UNKNOWN` |
-| WarpToad pinned | Honest fixture (not proven negative) | `7190813f…` / `323a1cf2…` | Checked relation (D1P-18) | none | all 11 words used; both roots must-be-in; nullifier must-not-be-in and written | n/a (control) | — | 1.534 s | 1 + 0 | `UNKNOWN` |
-| WarpToad M-DOM | Injected, producer | `db1a0a17…` / `323a1cf2…` | Checked relation (D1P-18) | R-BIND | word 5 `aztec_warptoad_address` (occurrence 0) | Yes | E4, fresh (injected variant) | 1.565 s | 1 + 1 | `UNKNOWN` |
-| WarpToad M-SRC | Injected, consumer | `7190813f…` / `64ec0efd…` | Checked relation (D1P-21B) | R-ANCHOR | word 4 `destination_local_root` (origin `calldata._localRoot`; no must-be-in guard) | Yes | E4, fresh (injected variant) | 1.476 s | 1 + 1 | `UNKNOWN` |
+| Case | Class | Pins (artifact / consumer) | Consumer relation | Rule(s) fired | Public word(s) and evidence | At scoring locus? | Static runtime | Analysis manual inputs | Reported verdict |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Payy earlier | Historical, faulty (full size) | `83b75a4a…` / `7062065c…` | AST (v1.1) | R-BIND, R-EFFECT, R-CONSUMER | R-BIND `messages[1]..messages[999]` (public 6–1004; no proof-enforced use, one memory definition each). R-EFFECT on the same words, effect kinds storage write, token transfer and transfer-from. R-CONSUMER on `commit_hash` (public 4) | Producer: yes. Consumer: the burn transfers appear only as effect kinds; the R-EFFECT location (`RollupV1.sol:850`) is not the payout. R-CONSUMER concerns another word (unadjudicated) | 2.06 s | 1 | `UNKNOWN` |
+| Payy check-added | Historical, repaired (one witness; full size) | `866b1800…` / `7062065c…` | AST (v1.1) | R-CONSUMER | No unused public leaf. R-CONSUMER on `commit_hash` (public 4) at `RollupV1.sol:357` | Control, with one unadjudicated consumer-side warning | 2.16 s | 1 | `UNKNOWN` |
+| WarpToad pinned | Honest fixture (not proven negative) | `7190813f…` / `323a1cf2…` | Route A (D1P-18) | none | All 11 words used; every calldata word reaches a guard or effect; replay record complete | n/a (control) | 2.13 s | 1 | `UNKNOWN` |
+| WarpToad M-DOM | Injected, producer | `db1a0a17…` / `323a1cf2…` | Route A (D1P-18) | R-BIND | Word 5 `aztec_warptoad_address` (no proof-enforced use) | Yes | 2.46 s | 1 | `UNKNOWN` |
+| WarpToad M-SRC | Injected, consumer | `7190813f…` / `64ec0efd…` | Route A (D1P-21B) | R-CONSUMER | Word 4 `destination_local_root` (calldata; no guard, state or effect dependency). Printed location `WarpToadCore.sol:?` | Word: yes. Line: not given | 2.25 s | 1 | `UNKNOWN` |
 
-The reported verdict is the D1 verdict recorded by D1P-30. E4 on an injected
-variant is evidence about that variant, not about pinned WarpToad.
+The reported verdict is the D1 verdict. Detection on an injected variant is
+evidence about that variant, not about pinned WarpToad.
 
-**Answer to RQ1 (cases).** On the five development targets, v1 warned on all
-three known-positive targets at the scoring words and on neither control
-(0/2 controls with a warning). Each target was analyzed alone, with no
-revision diff. The producer-side defects (Payy, M-DOM) are found by R-BIND,
-and the consumer-side defect (M-SRC) by R-ANCHOR. No single-sided rule
-covers all three. These results are in-sample. The rules were written after
-all three mechanisms were known. Two controls do not support a precision
-estimate (D1P-30 §1). The Payy rows come from N=8 builds. On Payy's consumer
-side, v1 points to the message dispatch but does not report the missing burn
-registration that makes the tail exploitable.
+**The `commit_hash` warning.** On both Payy revisions, public word 4 reaches
+only the verifier call. Its consumer check, `verifyCommitHash`, has an empty
+body, and the source comments it as a "Placeholder for asserting the commit
+hash is stored on Celestia" (`RollupV1.sol:381–382`). The warning is
+independent of the message tail and of the repair. D1P-34 §4 calls it
+actionable in the modeled scope but labels it neither a vulnerability nor a
+false positive. We count it neither as a detection of the Payy case nor as a
+false alarm, and its adjudication is open.
 
-*Table 3: Detection on the mutation benchmark, by operator (D1P-31 §§4.2–4.3;
-compile and reachability from BENCHMARK.md §§3–4). D = detected, M = missed,
-U = unsupported. Related and unrelated count warning objects.*
+**Answer to RQ1 (cases).** On the five development targets, v1.1 warned at
+the scoring word on all three known positives: Payy through R-BIND and
+R-EFFECT, M-DOM through R-BIND, and M-SRC through R-CONSUMER. It emitted no
+warning on pinned WarpToad. On the repaired Payy control, it emitted only
+the `commit_hash` R-CONSUMER warning described above, so one of two controls
+carries a warning. Each target was analyzed alone, with no revision diff.
+No single-sided rule covers all three positives: the producer-side defects
+need R-BIND and the consumer-side one needs R-CONSUMER. These results are
+in-sample, because the rules were written after all three mechanisms were
+known. Two controls do not support a precision estimate. v1 (D1P-30) gave
+the same outcome on the three positives, with R-ANCHOR on M-SRC and N=8
+Payy builds.
 
-| Operator | Mutants | Side | Reachability check (Lane X) | Result | Warnings at the broken binding | Related / unrelated W | Highest validation |
+*Table 3: v1.1 detection on the mutation benchmark, by operator (D1P-34
+§§5.3–5.4; compile and reachability from BENCHMARK.md §§3–4). D = detected,
+M = missed, U = unsupported. Related and unrelated count warning objects.
+Validation is the unchanged D1P-31 index.*
+
+| Operator | Mutants | Side | Reachability check (Lane X) | Result | Warnings at the broken binding | Related / unrelated W | Index validation |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| leave-public-unconstrained | WT-C01, WT-C02, PY-C02, PY-C06 | Circuit | WT honest path passes; PY compile + diff | 4 D | R-BIND `nullifier`; R-BIND `max_fee`; R-BIND `messages[0..999]` + R-EFFECT `RollupV1.sol:397`; R-BIND `new_root` | 5 / 2 | E1 |
+| leave-public-unconstrained | WT-C01, WT-C02, PY-C02, PY-C06 | Circuit | WT honest path passes; PY compile + diff | 4 D | R-BIND `nullifier`; R-BIND `max_fee`; R-BIND `messages[0]..messages[999]` + R-EFFECT; R-BIND `new_root` + R-EFFECT | 6 / 3 | E1 |
 | replace-public-with-private | WT-C03 (= M-DOM) | Circuit | Skipped; reuses D1P-15 | 1 D | R-BIND `aztec_warptoad_address` | 1 / 0 | E4, preserved |
-| remove-guard (circuit) | WT-C04, WT-C08, PY-C01, PY-C03 | Circuit | WT honest path passes; PY compile + diff | 2 D, 2 U | WT-C04: R-BIND `giga_root`, `destination_local_root`; WT-C08: R-BIND `recipient_address` + R-EFFECT `WarpToadCore.sol:171` | 4 / 4 | E1 |
+| remove-guard (circuit) | WT-C04, WT-C08, PY-C01, PY-C03 | Circuit | WT honest path passes; PY compile + diff | 2 D, 2 U | WT-C04: R-BIND `giga_root`, `destination_local_root`; WT-C08: R-BIND `recipient_address` + R-EFFECT `WarpToadCore.sol:171` | 4 / 6 | E1 |
 | swap-checks | WT-C05; WT-S05 | Circuit; consumer | C05 passes; S05 compile + diff | 2 U | — | 0 / 0 | — |
 | unbind-amount | WT-C06 | Circuit | Fails by design | 1 U | — | 0 / 0 | — |
 | unbind-domain | WT-C07 | Circuit | Fails by design | 1 D | R-BIND `chain_id` | 1 / 0 | E1 |
-| misorder-words | WT-C09, PY-C07; WT-S08 | Circuit; consumer | C09 passes; others compile + diff | 3 U | — | 0 / 2 | — |
-| unbind-commitment | PY-C04 | Circuit | Compile + diff | 1 D | R-BIND `commit_hash` | 1 / 2 | E1 |
-| remove-config-check | PY-C05 | Circuit | Compile + diff | 1 U | — | 0 / 2 | — |
-| remove-guard (consumer) | WT-S01 (= M-SRC), WT-S02, PY-S01 | Consumer | Compile + diff; WT-S01 reuses D1P-19 | 2 D, 1 U | R-ANCHOR local root (`WarpToadCore.sol:161`); R-ANCHOR giga root (`:161`) | 2 / 2 | E4 preserved (WT-S01); E1 (WT-S02) |
-| drop-accounting | WT-S03 | Consumer | Compile + diff | 1 D | R-POLARITY `WarpToadCore.sol:160` | 1 / 0 | E1 |
-| drop-write | WT-S09 | Consumer | Compile + diff | 1 D | R-POLARITY `WarpToadCore.sol:161` | 1 / 0 | E1 |
-| drop-single-use | PY-S02 | Consumer | Compile + diff | **1 M** | none (expected R-POLARITY) | 0 / 2 | — |
-| remove-gate (verifier call) | WT-S04 | Consumer | Compile + diff | 1 U (extractor rejects absent verifier boundary) | — | 0 / 0 | — |
-| unbind-fee | WT-S06 | Consumer | Compile + diff | 1 U | — | 0 / 0 | — |
+| misorder-words | WT-C09, PY-C07; WT-S08 | Circuit; consumer | C09 passes; others compile + diff | 3 U | — | 0 / 3 | — |
+| unbind-commitment | PY-C04 | Circuit | Compile + diff | 1 D | R-BIND `commit_hash` | 1 / 3 | E1 |
+| remove-config-check | PY-C05 | Circuit | Compile + diff | 1 U | — | 0 / 3 | — |
+| remove-guard (consumer) | WT-S01 (= M-SRC), WT-S02, PY-S01 | Consumer | Compile + diff; WT-S01 reuses D1P-19 | 3 D | R-CONSUMER `destination_local_root`; R-CONSUMER `giga_root`; R-POLARITY at `RollupV1.sol:357` (guard missing, write present) | 3 / 3 | E1 (WT-S01's preserved route is keyed to R-ANCHOR) |
+| drop-accounting | WT-S03 | Consumer | Compile + diff | 1 D | R-CONSUMER `nullifier` | 1 / 0 | E1 |
+| drop-write | WT-S09 | Consumer | Compile + diff | 1 D | R-POLARITY (guard present, write missing) | 1 / 0 | E1 |
+| drop-single-use | PY-S02 | Consumer | Compile + diff | 1 D | R-POLARITY at `RollupV1.sol:357` (guard missing, write present) | 1 / 3 | E1 |
+| remove-gate (verifier call) | WT-S04 | Consumer | Compile + diff | 1 U (route-A extractor finds no verifier boundary) | — | 0 / 0 | — |
+| unbind-fee | WT-S06 | Consumer | Compile + diff | 1 D | R-CONSUMER `max_fee` | 1 / 0 | E1 |
 | misdirect-beneficiary | WT-S07 | Consumer | Compile + diff | 1 U | — | 0 / 0 | — |
-| misbind-word | PY-S03 | Consumer | Compile + diff | 1 U | — | 0 / 2 | — |
-| activate-dead-path | PY-S04 | Consumer | Compile + diff | 1 U | — | 0 / 2 | — |
-| offset | PY-S05 | Consumer | Compile + diff | 1 U | — | 0 / 2 | — |
-| **Total** | 30 (16 circuit, 14 consumer) | — | 6 pass, 2 fail by design, 1 skipped, 21 compile + diff only | **13 D, 1 M, 16 U** | 13/13 at the semantic location | 16 / 22 | 2 E4 (preserved), 36 E1 |
-| **Excluding WT-C03, WT-S01** | 28 | — | — | 11 D, 1 M, 16 U | 11/11 | 14 / 22 | 36 E1 |
+| misbind-word | PY-S03 | Consumer | Compile + diff | 1 U | — | 0 / 3 | — |
+| activate-dead-path | PY-S04 | Consumer | Compile + diff | 1 U | — | 0 / 3 | — |
+| offset | PY-S05 | Consumer | Compile + diff | 1 U | — | 0 / 3 | — |
+| **Total** | 30 (16 circuit, 14 consumer) | — | 6 pass, 2 fail by design, 1 skipped, 21 compile + diff only | **16 D, 0 M, 14 U** | 16/16 at the semantic boundary | **20 / 33** | 1 E4 (preserved), 52 E1 |
+| **Excluding WT-C03, WT-S01** | 28 | — | — | 14 D, 0 M, 14 U | 14/14 | 18 / 33 | 51 E1 |
 
-*Table 3a: Benchmark summary by application (D1P-31 §4.1).*
+*Table 3a: Benchmark summary by application (D1P-34 §5.2).*
 
-| Application | Mutants | Detected | Missed | Unsupported | Detected / all | Detected / supported | Related / unrelated W | Static wall sum |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| WarpToad | 18 | 10 | 0 | 8 | 10/18 | 10/10 | 12 / 0 | 14.508 s |
-| Payy | 12 | 3 | 1 | 8 | 3/12 | 3/4 | 4 / 22 | 11.245 s |
-| **Total** | **30** | **13** | **1** | **16** | **13/30 (43.3%)** | **13/14 (92.9%)** | **16 / 22** | **25.753 s** |
+| Application | Mutants | Detected | Missed | Unsupported | Detected / all | Related / unrelated W | Static wall sum |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| WarpToad | 18 | 11 | 0 | 7 | 11/18 | 13 / 0 | 38.552 s |
+| Payy | 12 | 5 | 0 | 7 | 5/12 | 7 / 33 | 23.853 s |
+| **Total** | **30** | **16** | **0** | **14** | **16/30 (53.3%)** | **20 / 33** | **62.405 s** |
 
-The median mutant runtime was 0.806 s (range 0.688–1.215 s), a native-Mac
-development observation (D1P-31 §4.1). The headline figure is 13/30. The
-13/14 figure holds only within v1's supported scope. The 16 unsupported
-mutants are reported as unsupported, not as misses.
+The headline figure is 16/30, over all targets. With no misses, a
+within-scope ratio would be 16/16 by construction. We do not report it as a
+capability estimate (D1P-34 §1). The 14 unsupported mutants are reported as
+unsupported, never as misses or as safe.
 
-**Answer to RQ1 (benchmark).** Across the 30 mutants, v1 detected the named
-mutation in 13. Sixteen were outside its supported scope and one supported
-mutant was missed, which gives 13/14 within scope. Every detection named the
-broken word, guard, effect or replay obligation (13/13 at the semantic
-location). Coverage follows the rules' design closely:
-- unused public inputs (WT-C01, C02, C03, C04, C07, C08; PY-C02, C04, C06) →
-  R-BIND, with R-EFFECT where the word is an effect field;
-- removed root guards (WT-S01, S02) → R-ANCHOR;
-- removed nullifier accounting (WT-S03, S09) → R-POLARITY.
+*History.* Frozen v1 scored 13 detected, 16 unsupported and 1 miss (PY-S02)
+on the same 30 mutants (D1P-31). v1.1 was developed after those results were
+known (§VII-H).
 
-The unsupported set is not homogeneous (D1P-31 §4.3). It covers:
+**Answer to RQ1 (benchmark).** Across the 30 mutants, v1.1 detected the
+named mutation in 16, found 14 outside its supported scope, and missed none.
+Every detection named the broken word, guard, effect or replay obligation.
+Coverage follows the rules' design:
+- unused public inputs (WT-C01, C02, C03, C04, C07, C08; PY-C02, C04,
+  C06) → R-BIND, with R-EFFECT where the word reaches an effect;
+- calldata words left with no consumer use (removed root guards WT-S01 and
+  S02, dropped nullifier accounting WT-S03, unbound fee WT-S06) →
+  R-CONSUMER;
+- broken replay pairs (dropped write WT-S09; removed guard PY-S01 and
+  PY-S02) → R-POLARITY.
+
+The unsupported set is not homogeneous (D1P-34 §5.4). It covers:
 - how strongly a hash or Merkle construction depends on its inputs (WT-C05,
   C06);
 - word role and order identity (WT-C09, WT-S08, PY-C07);
 - which admitted map a root is checked against (WT-S05);
-- unmodeled fee and beneficiary policy (WT-S06, S07);
+- beneficiary policy (WT-S07);
 - an absent verifier boundary (WT-S04);
 - recursive padding, root and key semantics (PY-C01, C03, C05);
-- Payy record admission, offset and activation (PY-S01, S03, S04, S05).
+- Payy record format, offset and activation (PY-S03, S04, S05).
 
-Most of these are bindings that exist but are wrong, which occurrence
-counting cannot see (§V-F, §IX). The one miss, PY-S02, is analyzed with the
-burn-registration limitation in §V-F. Payy accounts for 8 of the 16
-unsupported mutants and for the miss. This reflects the source profile's
-narrow semantics as much as the rules. These are development results on
-exposed applications. They are not held-out transfer.
+Almost all of these are bindings that exist but are wrong, which neither
+occurrence counting nor "some consumer use" can see (§V-F). WT-S06 is
+detected only because the mutant leaves `max_fee` with no use at all. A fee
+check against the wrong cap would not be detected. These are development
+results on exposed applications. They are not held-out transfer.
+
+**Unrelated warnings.** All 33 unrelated warnings are on Payy, and they are
+not false positives. The Payy mutants are built on the earlier, faulty
+revision, which intentionally keeps the message-tail defect. Its consumer
+also leaves `commit_hash` without a guard, state write or modeled effect.
+Each Payy mutant therefore inherits up to three baseline warnings: R-BIND on
+the tail, R-EFFECT, and R-CONSUMER on `commit_hash`. These are unrelated
+unless the mutant's own binding coincides with them, which happens in
+PY-C02 (the tail and R-EFFECT) and PY-C06 (R-EFFECT). Ten mutants carry
+three unrelated warnings each, PY-C06 carries two and PY-C02 one. No warning was
+adjudicated a confirmed semantic false warning. A warning-object precision
+figure is meaningless without this inheritance, so we do not report one.
 
 ### D. RQ2 — Warning quality and validation
 
-*Table 4: Per-warning record for the development cases (D1P-30 §§4–5;
-validation index).*
+*Table 4: Per-warning record for the development cases (v1.1 warnings,
+D1P-34 §4; validation evidence from D1P-30 §5 for v1's warnings on the
+same mismatches).*
 
-| Warning | Case | Rule | Location (as emitted) | Evidence | Suggested fix (repair side) | Adjudication | Validation outcome | Route mode, proofs, time | Manual steps (validation) |
+| Warning | Case | Rule | Location (as emitted) | Evidence | Suggested fix (repair side) | Adjudication | Validation of the mismatch | Route mode, proofs, time | Manual steps (validation) |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| W001 | Payy earlier | R-BIND | `agg_agg.json:abi.messages[1]..messages[7]` | public 6–12; witnesses' occurrence count 0 | Producer: constrain exposed arguments | Target | E4 | Preserved T15/T16/T18; no new proof | 2 |
-| W002 | Payy earlier | R-EFFECT | `RollupV1.sol:397` (message dispatch) | same words; effect kind: message-dispatched mint/burn | Producer binding; consumer derives effects only from bound words | Target (same mismatch as W001) | E4 (same chain, not counted separately) | Preserved; no new proof | 2 |
-| W001 | M-DOM | R-BIND | `m-dom-withdraw.json:abi.aztec_warptoad_address` | public 5; witness occurrence count 0 | Producer: constrain exposed arguments | Target | E4 | Fresh; 2 real proofs (honest, foreign note); 28.82 s; peak RSS 737 MB | 1 |
-| W001 | M-SRC | R-ANCHOR | `WarpToadCore.sol:161` (verifier call) | public 4; polarity must-be-in; no matching guard | Consumer: admit the root before accepting the proof | Target | E4 | Fresh; 1 real proof; 98.99 s; peak RSS 490 MB | 1 |
+| W001 | Payy earlier | R-BIND | `agg_agg.json:abi.messages[1]..messages[999]` | public 6–1004; no proof-enforced use | Producer: constrain exposed arguments | Target | E4 on the preserved full-size chain, credited in D1P-30 to the v1 warning on the N=8 build; the v1.1 identity has no route | Preserved T15/T16/T18; no new proof | 2 (D1P-30) |
+| W002 | Payy earlier | R-EFFECT | `RollupV1.sol:850` (first modeled effect, not the payout) | same words; effect kinds storage write, token transfer, transfer-from | Producer binding; consumer derives effects only from bound words | Target (same mismatch as W001) | As W001 | As W001 | — |
+| W003 | Payy earlier | R-CONSUMER | `RollupV1.sol:357` (verifier call) | public 4 `commit_hash`; calldata; no guard, state or effect | Consumer: consume the word | Not the case target; open | E1 (no route) | — | — |
+| W001 | Payy check-added | R-CONSUMER | `RollupV1.sol:357` | as above | as above | Control warning; open | E1 (no route) | — | — |
+| W001 | M-DOM | R-BIND | `m-dom-withdraw.json:abi.aztec_warptoad_address` | public 5; no proof-enforced use | Producer: constrain exposed arguments | Target | E4 in D1P-30. The v1.1 warning has the same target identity, but the route was not rerun | Fresh; 2 real proofs (honest, foreign note); 28.82 s; peak RSS 737 MB | 1 |
+| W001 | M-SRC | R-CONSUMER | `WarpToadCore.sol:?` | public 4 `destination_local_root`; calldata; no guard, state or effect | Consumer: consume the word in a state admission, replay or effect (generic text; the role is not named) | Target | E4 in D1P-30 for the v1 R-ANCHOR warning on the same word. The v1.1 identity has no route | Fresh; 1 real proof; 98.99 s; peak RSS 490 MB | 1 |
 
 The fresh M-DOM route generated a note siloed under a contract distinct from
 the configured address. NoirJS executed the M-DOM artifact, and bb.js and
@@ -1204,79 +1342,113 @@ changes and a reverting second submission (D1P-30 §5). A first M-DOM launch
 failed with `ENOENT` after generating a proof. The failure is preserved in
 the route record.
 
-*Table 5: Warning-quality summary.*
+*Table 5: Warning-quality and validation summary.*
 
-| Scope | Warnings | Distinct mismatches / detections | At scoring locus | Warnings on controls | Reached E4 | Fresh / preserved | Stopped at E1 (no route) | Non-target warnings |
+| Scope | Warnings | Related / other | At semantic location | Warnings on controls | E4 fresh / preserved | E3 | E1 | Manual validation steps |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Development cases | 4 | 3 | 4/4 | 0 (0/2 controls) | 3/3 mismatches | 2 / 1 | 0 | 0 |
-| Benchmark | 38 | 13 detected mutants (16 related warnings) | 13/13 detections (semantic location) | n/a (no controls in benchmark; five D1P-30 targets rerun, 0/2 controls warned) | 2 mutants (WT-C03, WT-S01) | 0 / 2 | 36 | 22 unrelated, all the inherited Payy tail pair; 0 adjudicated semantic false warnings |
+| Development cases, v1.1 (D1P-34 §4) | 6 | 4 target / 2 `commit_hash` (open) | 4/4 target warnings name the scoring word; M-SRC prints no line; Payy R-EFFECT points to an unrelated write | 1 of 2 (Payy check-added) | Mismatches: 2 / 1, via v1 warnings (D1P-30); v1.1 warnings not rerun | — | — | 1–2 per route (D1P-30) |
+| Benchmark, v1.1, unchanged D1P-31 index (D1P-34 §5) | 53 | 20 / 33 inherited | 16/16 detections | n/a | 0 / 1 (WT-C03) | 0 | 52 | 2 (WT-C03) |
+| Benchmark, Lane X pipeline on the v1 warnings of the D1P-31 detected mutants (AUTO-VALIDATE) **[PENDING V1.1-RERUN]** | 20 | 16 / 4 inherited | — | n/a | 7 / 1 | 4 (consumer contained the effect) | 8 (all Payy) | 0 on the 11 fresh rows; 2 on WT-C03 |
 
-We report counts, not precision. The two controls are not proven
-negatives, so a false-alarm rate over them would be ill-defined (contract
-§9). A new candidate would go through the same validation and, if confirmed,
-through responsible disclosure before it supports any claim.
+*Table 5a: Automatic validation of v1 warnings (AUTO-VALIDATE; results
+ledger in ignored `results/raw/X-AV/`). Measured on v1 warnings; the v1.1
+rerun is **[PENDING V1.1-RERUN]**. Times were observed under machine load
+30–50 and are cost observations.*
+
+| Mutant | v1 warning | v1.1 rule on this mutant | Level | Time | Manual steps | Outcome |
+| --- | --- | --- | --- | --- | --- | --- |
+| WT-C01 | R-BIND `nullifier` | R-BIND | E4 | 56.8 s | 0 | Second mint from an honest second proof |
+| WT-C02 | R-BIND `max_fee` | R-BIND | E3 | 37.4 s | 0 | Proof accepted; consumer reverts at the fee cap (contained) |
+| WT-C03 | R-BIND `aztec_warptoad_address` | R-BIND | E4, preserved (E3 fresh) | 21.5 s | 2 | Byte-identical to the M-DOM artifact; D1P-15 foreign-note chain associated |
+| WT-C04 | R-BIND `giga_root`; R-BIND `destination_local_root` | R-BIND ×2 | E4; E4 | 36.3 s; 35.9 s | 0; 0 | Mint from a fabricated origin root (target-specific plan) |
+| WT-C07 | R-BIND `chain_id` | R-BIND | E3 | 40.0 s | 0 | Dataless verifier revert with all prior gates passing; contained on the same chain; cross-chain impact argued, not executed; out-of-gas not excluded (target-specific plan) |
+| WT-C08 | R-BIND `recipient_address`; R-EFFECT `:171` | R-BIND, R-EFFECT | E3; E3 | 41.2 s; 42.6 s | 0; 0 | OpenZeppelin `ERC20InvalidReceiver` on mint to zero (contained) |
+| WT-S01 | R-ANCHOR `:161` | R-CONSUMER | E4 | 45.2 s | 0 | Mint over an unadmitted local root |
+| WT-S02 | R-ANCHOR `:161` | R-CONSUMER | E4 | 43.2 s | 0 | Mock provider admits the plan's giga root by construction; shows that K1 is absent, not a real-bridge bypass (target-specific plan) |
+| WT-S03 | R-POLARITY `:160` | R-CONSUMER | E4 | 38.8 s | 0 | Replay of an honest proof |
+| WT-S09 | R-POLARITY `:161` | R-POLARITY | E4 | 38.6 s | 0 | Replay of an honest proof |
+| PY-C02, C04, C06 | 8 warnings (R-BIND, R-EFFECT) | R-BIND, R-EFFECT, R-CONSUMER | E1 | — | blocked | Needs a two-proof aggregator witness harness |
+
+The pipeline has not run on v1.1's new detections (WT-S06, PY-S01, PY-S02)
+or on its `commit_hash` warnings. AUTO-VALIDATE's summary text reports
+"5 E3-contained" and "7 Payy" warnings, while its own row table and
+`results.json` list 4 E3 rows and 8 Payy rows. We report the rows (Open
+item 4).
 
 *Table 6: Manual inputs and analyst effort on the development cases.*
 
-| Case | Analysis manual inputs | Validation manual inputs | Explicit `σ` | Witness construction | Analyst time | Same-policy Foundry property (D1P-22) |
-| --- | --- | --- | --- | --- | --- | --- |
-| Payy earlier | 0 | 2 (route association; historically authored tail record) | None (roles inferred) | Preserved T15 harness | Not recorded in D1P-30 | No earlier-revision honest-only harness (R) |
-| Payy check-added | 0 | 0 (no warning) | None | — | Not recorded | Existing honest property wrapper: 7/7 tests pass (control) |
-| WarpToad pinned | 1 (checked relation) | 0 (no warning) | None | — | Not recorded | No harness (R) |
-| M-DOM | 1 (checked relation) | 1 (route association) | None | D1P-15 fixture (pre-existing) | Not recorded | No harness (R) |
-| M-SRC | 1 (checked relation) | 1 (route association) | None | D1P-19 fixture (pre-existing) | Not recorded | No harness (R) |
+| Case | Analysis manual inputs (v1.1) | Validation manual inputs (D1P-30) | Explicit `σ` | Witness construction | Same-policy Foundry property (D1P-22; D1P-32) |
+| --- | --- | --- | --- | --- | --- |
+| Payy earlier | 1 (AST relation) | 2 (route association; historically authored tail record) | None | Preserved T15 harness | No earlier-revision harness (R) |
+| Payy check-added | 1 (AST relation) | 0 (no target warning) | None | — | Honest wrapper: 7/7 tests pass (control) |
+| WarpToad pinned | 1 (route-A relation) | 0 (no warning) | None | — | D1P-32 harness: all seven invariants pass (control) |
+| M-DOM | 1 (route-A relation) | 1 (route association) | None | D1P-15 fixture (pre-existing) | D1P-32 harness: all invariants pass (M) |
+| M-SRC | 1 (route-A relation) | 1 (route association) | None | D1P-19 fixture (pre-existing) | D1P-32 harness: `invariant_roots_are_admitted` fails (D, E1 under a stub verifier) |
 
 Historical reference point: the hand-written Payy mint property was about 90
 lines of Solidity (87 non-comment) and functionally equivalent to the earlier
-checker's manual specification (T14 §4). Analyst time was not instrumented
-in D1P-30 or D1P-31.
+checker's manual specification (T14 §4). The D1P-32 WarpToad harness is 156
+nonblank, non-comment lines plus 18 lines of configuration.
 
-**Answer to RQ2 (cases).** Every warning on the development cases names the
-public word and the side to repair. R-EFFECT and R-ANCHOR also name a
-consumer source line. All three positive mismatches reached E4. Two reached
-it with fresh real proofs and committed local effects on the injected
-variants. Payy reached it through an automatic audit of the preserved
-historical chain. Each validation needed one or two manual route inputs, and
-each witness came from a fixture written before D1P-30. The diagnostics
-are actionable in the narrow sense that the suggested fix names the missing
-binding or guard. They do not explain the mechanism. For example, the M-DOM
-warning does not mention the private witness that replaced word 5 (§V-G).
+**Answer to RQ2 (cases).** Every v1.1 warning on the development cases names
+the public word and the side to repair. The producer-side warnings name the
+ABI leaf. The consumer-side warnings name the word, but on WarpToad they
+give no source line, and on Payy the R-EFFECT location is an unrelated write
+(§V-G). All three positive mismatches reached E4 in D1P-30, through v1
+warnings, with fresh real proofs on the injected variants and an automatic
+audit of the preserved Payy chain. The M-DOM v1.1 warning has the same
+target identity as its validated v1 warning. The M-SRC and Payy identities
+changed, and their v1.1 warnings have not been revalidated. Each D1P-30
+validation needed one or two manual route inputs, and each witness came from
+a fixture written before D1P-30. The diagnostics are actionable in the
+narrow sense that the suggested fix names the missing binding, guard or
+use. They do not explain the mechanism.
 
-**Answer to RQ2 (benchmark).** The 38 benchmark warnings were each passed
-once to `bindcheck validate`, in 5.459 s of CLI wall time in total. Two
-reached preserved E4. WT-C03's artifact has decoded bytecode, ABI and
-compiler version identical to the proved M-DOM artifact. WT-S01's executable
-source equals M-SRC's after comments and whitespace are removed. Each of
-those routes counts two manual inputs. The other 36 warnings have no
-registered route and stop at E1. No proof job ran. These E1 outcomes are a
-limitation of the validation routes, not evidence that the warnings are
-infeasible (D1P-31 §6). Automatic witness construction for such warnings,
-and the validation results it would produce, are
-**[PENDING AUTO-VALIDATION]**.
+**Answer to RQ2 (benchmark).** Under the unchanged D1P-31 index, 1 of the 53
+v1.1 warnings reached E4: WT-C03, preserved, with two manual inputs. The
+other 52 stop at E1. The drop from v1's two is a routing effect: WT-S01's
+route is keyed to the old R-ANCHOR identity (D1P-34 §5.1). On the 20 v1
+warnings of the D1P-31 detected mutants, the Lane X pipeline produced:
+- 7 fresh E4 results with no manual steps;
+- 1 preserved E4 (WT-C03);
+- 4 E3 results, where the mutant's verifier accepted a real proof but the
+  consumer reverted;
+- 8 Payy warnings left at E1.
 
-The unrelated-warning count shows why counting warning objects is
-misleading on this benchmark. All 22 unrelated warnings are the inherited
-Payy tail pair, R-BIND at `messages[1]..messages[999]` and R-EFFECT at
-`RollupV1.sol:397`, on 11 of the 12 Payy mutants. They are correct reports
-of the faulty base revision. Separating them is part of the scoring
-protocol, not a correction after the fact.
+Every one of the 12 WarpToad warnings reached at least E3. The four E3 rows
+are informative negatives. The circuit-side binding is broken and a forged
+proof verifies, but an independent consumer check contains the effect: the
+fee cap, the ERC-20 receiver check, or a verifier revert under
+`block.chainid`. Three of the seven fresh E4 rows (WT-C04 twice, WT-S02),
+and WT-C07's E3, used target-specific plan branches. The pipeline is
+WarpToad-specific and was written with the ground truth available (§V-H).
+These results show that the warnings on these mutants can be driven to real
+proofs and effects without manual steps. They do not show general automatic
+witness construction, and they were measured on v1 warnings
+**[PENDING V1.1-RERUN]**.
 
 ### E. RQ3 — Comparison with circuit-only and contract-only baselines
 
 Versions, arms, budgets and setup are preregistered in
-[baselines.md](baselines.md). D1P-22 froze run limits and scoring in a plan
-file before analyzing any target. It ran the pinned tools on the five case
-targets and scored each cell as follows: **D**, the report describes the
-proof-to-execution mismatch; **E1**, a warning names the defect locus or
-variable but does not describe the mismatch; **M**, an applicable completed
-run gave no such warning; **U**, unsupported (the tool cannot accept the
-target or has no policy interface); **R**, unresolved (the run could not
-complete, or a required harness or property was absent). On a control,
-`M (control)` means no binding signal and `E1 (control)` means
-nondiscriminating lint (D1P-22, "Scoring").
+[baselines.md](baselines.md). D1P-22 (case targets) and D1P-32 (benchmark)
+froze run limits and scoring before analyzing any target. Each cell is
+scored as follows:
+- **D**: the report describes the seeded defect or the proof-to-execution
+  mismatch;
+- **E1**: a warning names the defect locus or variable but does not
+  describe the mismatch (D1P-32 calls this "detected-E1-lint");
+- **M**: an applicable completed run gave no such warning;
+- **U**: unsupported (the tool cannot accept the input or has no policy
+  interface);
+- **R**: unresolved (timeout, failure before analysis, or a missing
+  required harness), never treated as safe.
 
-*Table 7: Baseline outcomes on the case targets (D1P-22). G = generic or
-default arm; S = same-policy arm.*
+On a control, `M (control)` means no binding signal and `E1 (control)` means
+nondiscriminating lint.
+
+*Table 7: Baseline outcomes on the case targets (D1P-22; D1P-32 for the
+WarpToad same-policy harness and the sequential Mythril retry). G = generic
+or default arm; S = same-policy arm.*
 
 | Baseline | Arm | Payy earlier (+) | Payy check-added (control) | WarpToad pinned (control) | M-DOM (+) | M-SRC (+) | Note |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -1286,58 +1458,113 @@ default arm; S = same-policy arm.*
 | Picus | G / S | U | U | U | U | U | Installed; native inputs are `.circom`, iden3 `.r1cs`, gnark `.sr1cs`, not ACIR |
 | Slither | G | **E1** | **E1 (control)** | M (control) | M | **E1** | `reentrancy-no-eth` names `verifyBurn`; naming lint names `_localRoot`, and the same style warning appears on the pinned control |
 | Slither | S | U | U | U | U | U | No custom policy detector existed |
-| Mythril | G / S | R | R (control) | R (control) | R | R | Three runs hit the 1,800 s cap; one startup race; one exit `-11`. No frozen assertion wrapper |
-| Foundry | G | R | R (control) | R (control) | R | R | No G1–G5 harness exists for either application |
-| Foundry | S | R | M (control) | R (control) | R | R | Existing honest Payy property wrapper: 7/7 pass on the repaired revision only |
-| Echidna | G / S | R | R (control) | R (control) | R | R | No G1–G5 harness; the Payy wrapper failed on an unsupported cheatcode |
+| Mythril | G / S | R | R (control) | R (control) | R | R | Sequential retry with isolated state: Payy earlier killed at 1,810 s; WarpToad pinned `SIGSEGV` at 30 s; the others hit the 1,800 s cap with generic warnings only |
+| Foundry | G | R | R (control) | R (control) | R | R | No G1–G5 harness for the case targets in D1P-22 |
+| Foundry | S | R | M (control) | M (control) | M | **D** | Payy: honest wrapper, 7/7 pass on the repaired revision only. WarpToad: D1P-32 harness with a relational stub verifier; M-SRC fails root admission (E1 counterexample, not E4) |
+| Echidna | G / S | R | R (control) | R (control) | R | R | Payy wrapper failed on an unsupported cheatcode; WarpToad runs stopped before fuzzing on an unlinked library (D1P-32) |
 | SmartAxe | G | U | U | R (control) | R | R | Payy is not a bridge pair. The official artifact was blocked by a WAF challenge |
 | SmartAxe | S | U | U | U | U | U | No user-property interface |
-| Circomspect, CIVER | — | not run | not run | not run | not run | not run | Circom-only natively (READMEs); not in D1P-22 |
-| Joint SMT (monolithic, goal-cone) | — | not run | not run | not run | not run | not run | Not in D1P-22; earlier attempts in Appendix A |
-| **BindCheck v1** (archived D1P-30) | — | **D** | M (control) | M (control) | **D** | **D** | Context row, not rerun in D1P-22 |
+| Circomspect, CIVER | — | not run | not run | not run | not run | not run | Circom-only natively (READMEs) |
+| Joint SMT (monolithic, goal-cone) | — | not run | not run | not run | not run | not run | Earlier attempts in Appendix A |
+| **BindCheck v1.1** (D1P-34) | — | **D** | Warning (control; R-CONSUMER `commit_hash`, open) | M (control) | **D** | **D** | Context row; not run by the baseline lanes |
 
-**Answer to RQ3 (cases).** No baseline emitted a warning that described a
-proof-to-execution mismatch on any case target. Two generic checks localized
-a known positive without explaining it. Slither named Payy's `verifyBurn`.
-The beta.22 Noir compiler named M-DOM's unused `aztec_warptoad_address`.
-Slither's mention of M-SRC's `_localRoot` also appears on the pinned control,
-so it does not discriminate. BindCheck is the only tool in the comparison
-whose diagnostics state the cross-component reason on all three positives
-(D1P-22).
+**Answer to RQ3 (cases).** No default-arm baseline described the mismatch on
+any case target. Two generic checks localized a known positive without
+explaining it. Slither named Payy's `verifyBurn`, and the beta.22 Noir
+compiler named M-DOM's unused `aztec_warptoad_address`. Slither's mention of
+M-SRC's `_localRoot` also appears on the pinned control, so it does not
+discriminate. The D1P-32 same-policy harness detects M-SRC as a
+root-admission violation and passes M-DOM. M-DOM's defect lives in the
+circuit, and the harness replaces the circuit with a stub that accepts the
+expected public words. BindCheck is the only tool in the comparison whose
+diagnostics state a cross-component reason on all three positives.
 
-We state the limits plainly. Most same-policy cells are U or R because no
-policy wrapper, custom detector or G1–G5 harness existed. None was written
-after seeing the outcomes, which keeps the comparison clean but leaves it
-incomplete. This table therefore does not show that a same-policy
-contract-only baseline would miss these cases. It shows that none was
-instantiated, so capability-gate part (c) remains open. Mythril's cells are
-unresolved, not misses. Circuit-only tools other than the Noir compiler
-could not ingest ACIR. That is a frontend limitation, not an algorithmic
-miss. The Noir compiler's E1 on M-DOM agrees with the Lane X probe on
-synthetic stand-ins: the unused-variable lint is the only built-in signal,
-and it states no mismatch ([Lane X report §2, X1](../docs/x-experiment/REPORT.md)).
-
-*Table 8: Baseline outcomes on the mutation benchmark (counts of D / E1 / M
-/ U / R).*
+*Table 8: Baseline outcomes on the mutation benchmark (D1P-32 per-mutant
+classifications, grouped by application and side; counts per outcome).*
 
 | Baseline | Arm | WarpToad circuit (9) | WarpToad consumer (9) | Payy circuit (7) | Payy consumer (5) | Total (30) | Excluding WT-C03, WT-S01 (28) |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| Pinned Noir checks | G | [PENDING D1P-32] | n/a | [PENDING D1P-32] | n/a | [PENDING D1P-32] | [PENDING D1P-32] |
-| Slither | G | n/a | [PENDING D1P-32] | n/a | [PENDING D1P-32] | [PENDING D1P-32] | [PENDING D1P-32] |
-| Mythril | G | n/a | [PENDING D1P-32] | n/a | [PENDING D1P-32] | [PENDING D1P-32] | [PENDING D1P-32] |
-| Foundry / Echidna | G / S | n/a | [PENDING D1P-32] | n/a | [PENDING D1P-32] | [PENDING D1P-32] | [PENDING D1P-32] |
-| Other preregistered tools | G / S | [PENDING D1P-32] | [PENDING D1P-32] | [PENDING D1P-32] | [PENDING D1P-32] | [PENDING D1P-32] | [PENDING D1P-32] |
-| **BindCheck v1** (D1P-31) | — | 6 / 0 / 0 / 3 / 0 | 4 / 0 / 0 / 5 / 0 | 3 / 0 / 0 / 4 / 0 | 0 / 0 / 1 / 4 / 0 | 13 / 0 / 1 / 16 / 0 | 11 / 0 / 1 / 16 / 0 |
+| Pinned Noir checks | G | E1 6 · M 3 | U 9 | E1 4 · M 3 | U 5 | E1 10 · M 6 · U 14 | E1 9 · M 6 · U 13 |
+| Pinned Noir checks | S | U 9 | U 9 | U 7 | U 5 | U 30 | U 28 |
+| Slither 0.11.6 | G | U 9 | E1 9 | U 7 | E1 4 · M 1 | E1 13 · M 1 · U 16 | E1 12 · M 1 · U 15 |
+| Slither 0.11.6 | S | U 9 | U 9 | U 7 | U 5 | U 30 | U 28 |
+| Mythril 0.24.8 | G / S | U 9 | R 9 | U 7 | R 5 | U 16 · R 14 | U 15 · R 13 |
+| Foundry 1.8.6, G1/G2/G4/G5 | G | R 9 | D 3 · M 6 | R 7 | R 5 | D 3 · M 6 · R 21 | D 3 · M 5 · R 20 |
+| Foundry 1.8.6, handwritten policy | S | R 9 | **D 8 · M 1** | R 7 | R 5 | D 8 · M 1 · R 21 | D 7 · M 1 · R 20 |
+| Echidna 2.3.3 | G / S | R 9 | R 9 | R 7 | R 5 | R 30 | R 28 |
+| CCC-Check; Picus | G | U 9 | U 9 | U 7 | U 5 | U 30 | U 28 |
+| SmartAxe | G | U 9 | R 9 | U 7 | U 5 | U 21 · R 9 | U 20 · R 8 |
+| **BindCheck v1.1**, own adjudication (D1P-34) | — | D 6 · U 3 | **D 5 · U 4** | D 3 · U 4 | D 2 · U 3 | **D 16 · U 14** | D 14 · U 14 |
+| **BindCheck v1.1**, rescored on the baseline scale | — | D 6 · M 3 | D 5 · M 3 · U 1 | D 3 · M 4 | D 2 · M 3 | D 16 · M 13 · U 1 | D 14 · M 13 · U 1 |
 
-One observation constrains how D1P-32 must score the Noir compiler. The
-build logs (`manifest.json`, `compile_log_tail`) already contain
-unused-variable warnings on WT-C01, C02, C03, C04, C07 and C08, and on
-PY-C02, C04, C05 and C06. Some name the freed public input (for example
-`nullifier`, `max_fee`, `aztec_warptoad_address`, `new_root`). PY-C05's
-warning names a local variable, not an input. Under the D1P-22 scale, such
-warnings are E1 unless they describe the mismatch.
+The two scales differ on purpose, so we show both. On the baselines' scale,
+U means the tool cannot accept the input, and a completed applicable run
+without a detection is M. BindCheck's own adjudication marks a completed run
+as unsupported when the mutant's broken binding lies outside its model. The
+last row applies the baselines' scale to BindCheck. Its 13 completed runs
+without a related warning become M, and only WT-S04, where no verifier
+boundary was found, stays U. No per-mutant outcome changes between the two
+rows.
 
-**Answer to RQ3 (benchmark).** [PENDING D1P-32]
+**The policy harness is stronger on WarpToad consumer mutants.** On the nine
+WarpToad consumer mutants, the handwritten Foundry same-policy harness
+detects eight (S01, S02, S03, S04, S05, S07, S08, S09). BindCheck detects
+five (S01, S02, S03, S06, S09). The harness finds the swapped checks, the
+misordered words and the misdirected beneficiary, which BindCheck cannot
+model. It also finds the removed verifier gate, on which BindCheck's
+extractor fails closed. The harness misses WT-S06, the unbound fee, because
+its frozen property has no maximum-fee ceiling. Its cost and limits:
+- 156 nonblank lines of shared Solidity, 18 lines of configuration, and
+  about 0.16 h of authoring;
+- WarpToad's policy encoded by hand, AI-authored, with no human inspection
+  recorded;
+- a relational stub verifier that checks the eleven expected public words,
+  so its counterexamples are E1 property violations, not real-proof
+  executions;
+- no harness for Payy or for any circuit mutant, so those 21 cells are
+  unresolved.
+
+**BindCheck is complementary, not dominant.**
+- *No per-application policy.* The same rules and loaders run on both
+  applications.
+- *Circuit-side coverage.* BindCheck detects 9 of the 16 circuit mutants.
+  No Solidity baseline and no fuzzing arm reaches any of them: every cell
+  is U or R. The policy harness cannot reach them by construction, because
+  its stub replaces the circuit.
+- *WT-S06.* BindCheck catches the fee mutant that the policy harness
+  misses.
+
+Where someone has written the policy, a same-policy harness is the better
+tool for consumer-side mutants of this kind.
+
+**Lint is localized E1, never a mismatch description.** Noir earned 10 E1
+cells by naming an unused value at the mutant locus (WT-C01, C02, C03, C04,
+C07, C08; PY-C02, C04, C05, C06). Slither earned 13 through naming, boolean,
+reentrancy or uninitialized-state reports that name the seeded variable or
+function (every WarpToad consumer mutant and PY-S02–S05). Some of these
+warnings do not discriminate. None relates producer enforcement to a
+consumer effect (D1P-32). The generic Foundry invariants detect three
+mutants: the two nullifier-accounting mutants and the removed gate. The G4
+supply invariant never fired.
+
+**Failures are reported as failures.** Every Mythril run on the 14 consumer
+mutants is unresolved at the 1,800 s cap. The sequential, isolated retry on
+the case targets ended in an outer kill (Payy earlier), a `SIGSEGV` at
+30.22 s (WarpToad pinned), or the internal cap with only generic warnings.
+No Mythril output localized a seeded binding. All nine Echidna 2.3.3
+attempts stopped before fuzzing. Its combined-JSON loader rejected the
+unlinked `LazyIMT` library, and the first full-source attempt rejected
+`GigaBridge`. These runs are unresolved, not misses. CCC-Check, Picus and
+SmartAxe keep their D1P-22 dispositions, and no adapter was introduced.
+
+**Answer to RQ3 (benchmark).** No generic circuit-only or contract-only tool
+described a proof-to-execution mismatch on any mutant. Their signals are
+localized lint (Noir 10, Slither 13) or unresolved runs (Mythril, Echidna).
+A handwritten same-policy fuzz harness detects more WarpToad consumer
+mutants than BindCheck (8/9 against 5/9), and BindCheck catches the one it
+misses. BindCheck alone covers circuit-side mutants (9/16) and needs no
+per-application policy. All of this is development evidence on exposed
+families.
 
 ### F. RQ4 — Held-out scan
 
@@ -1349,20 +1576,23 @@ the frozen v0.2.0 plan, which calls for full index traversal. We report it as
 such. Any transfer claim from RQ4 is bounded by eight candidates drawn from
 one search, not a sample of the ecosystem.
 
-**Protocol.** The rules, role inference, decoders, consumer loaders and
-validator are hashed and frozen before the custodian opens the reservation
-to the scan. If D1P-34's generic consumer loaders land before then, they are
-part of the frozen tool. Otherwise v1's fitted source profile is frozen as
-is, and held-out consumers will likely fall back to an empty profile. The
-funnel will report that. Every attempted build and every exclusion is
-reported. No rule changes after the scan begins. A post-hoc correction is
+**Protocol.** The rules, decoders, AST frontend, effect table and validator
+are hashed and frozen before the custodian opens the reservation to the
+scan. The D1P-34 freeze manifest is the current candidate. Any fix to Open
+items 1–2 creates a new version that must be frozen and rerun on the
+development targets first. A held-out consumer is accepted only through an
+AST relation built by the frozen frontend. A consumer outside its subset, or
+one without exactly one verifier boundary, stops with a named reason and is
+counted as unsupported. If the Lane X pipeline is used, its plan table must
+be frozen as well, and its WarpToad-specific plans will not apply. Every
+attempted build and every exclusion is reported. No rule changes after the scan begins. A post-hoc correction is
 reported as such, and the affected family stops counting as held out
 (contract §§9, 11). Any confirmed finding is disclosed to its maintainers
 before it supports a claim, and is anonymized in the submission.
 
 *Table 9: Held-out funnel and results.*
 
-| Family (anonymized) | Reserved (commitment opened) | Prior exposure (log) | Producer / consumer stack | Artifacts available | Supported | Consumer model (relation / profile / generic loader) | Warnings (R-BIND / R-EFFECT / R-ANCHOR / R-POLARITY) | Adjudication | Highest level | Rule changes (must be 0) | Disclosure status |
+| Family (anonymized) | Reserved (commitment opened) | Prior exposure (log) | Producer / consumer stack | Artifacts available | Supported | Consumer relation (AST / unsupported reason) | Warnings (R-BIND / R-EFFECT / R-CONSUMER / R-POLARITY) | Adjudication | Highest level | Rule changes (must be 0) | Disclosure status |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | [PENDING D1P-33] | [PENDING D1P-33] | [PENDING D1P-33] | [PENDING D1P-33] | [PENDING D1P-33] | [PENDING D1P-33] | [PENDING D1P-33] | [PENDING D1P-33] | [PENDING D1P-33] | [PENDING D1P-33] | [PENDING D1P-33] | [PENDING D1P-33] |
 
@@ -1373,13 +1603,13 @@ before it supports a claim, and is anonymized in the submission.
 | Candidate frame (names/URLs only) | 8 | — | Stratum `noir-evm:eligible`; AI-prepared list; none in the 0xPARC tracker |
 | Reserved (custodian draw) | [PENDING D1P-33] (4 implied by protocol rounding) | [PENDING D1P-33] | Commitment `514ad719…` |
 | Artifacts available | [PENDING D1P-33] | [PENDING D1P-33] | [PENDING D1P-33] |
-| Supported (Noir beta.14/beta.22 + Solidity) | [PENDING D1P-33] | [PENDING D1P-33] | [PENDING D1P-33] |
+| Supported (Noir beta.14/beta.22 + Solidity with a v1.1 AST relation) | [PENDING D1P-33] | [PENDING D1P-33] | [PENDING D1P-33] |
 | Analyzed to completion | [PENDING D1P-33] | [PENDING D1P-33] | [PENDING D1P-33] |
 | With ≥1 warning | [PENDING D1P-33] | [PENDING D1P-33] | [PENDING D1P-33] |
 | Validated (E4) | [PENDING D1P-33] | [PENDING D1P-33] | [PENDING D1P-33] |
 
 Stages are monotone. An unsupported family explains attrition and is never
-counted as a miss or as safe. v1 accepts exactly two Noir versions, so a
+counted as a miss or as safe. v1.1 accepts exactly two Noir versions, so a
 reserved project on another compiler version will be unsupported without a
 frontend change. Making that change after opening the reservation would end
 the project's held-out status.
@@ -1448,8 +1678,8 @@ and a circuit-library range check (CF-03).
 | Stage | Findings | Families | Main attrition reasons |
 | --- | --- | --- | --- |
 | Artifacts available | 0 (not attempted) | 0 | Tool funnel not run for the v1 corpus |
-| Supported by BindCheck v1 | 0 (not attempted) | 0 | No corpus application lists a Noir producer (10 of 23 list Circom). None would pass v1's Noir beta.14/beta.22 gate |
-| Cause covered by a v1 rule (§IV-C) | not assessed | — | — |
+| Supported by BindCheck v1.1 | 0 (not attempted) | 0 | No corpus application lists a Noir producer (10 of 23 list Circom). None would pass v1.1's Noir beta.14/beta.22 gate |
+| Cause covered by a v1.1 rule (§IV-C) | not assessed | — | — |
 
 The second row's attrition reason comes from the ledger's `producer_stack`
 fields. It is an expectation, not a measurement. The same observation is why
@@ -1459,10 +1689,11 @@ from the corpus.
 **Answer to RQ5.** No answer is supported yet. In the seed extraction the
 AI suggestions used no `C_OTHER_BINDING` label and were dominated by
 representation and relation-gap mechanisms. Relation gaps are the cause that
-v1's R-BIND targets, but none of the corpus systems is analyzable by v1.
-These are observations about AI suggestions, not findings. Whether these mechanisms *recur across independent families*, and
-how reliably people label them, awaits human labels, the remaining
-endpoints, and the agreement study.
+R-BIND targets, but none of the corpus systems is analyzable by v1.1. These
+are observations about AI suggestions, not findings. Whether these
+mechanisms *recur across independent families*, and how reliably people
+label them, awaits human labels, the remaining endpoints, and the agreement
+study.
 
 ### H. Threats to validity
 
@@ -1473,41 +1704,50 @@ The benchmark mutates the same two applications. RQ1 and RQ2 therefore show
 capability *on these applications* only (contract §9). Transfer rests on
 RQ4 alone.
 
-**Fitted heuristics.** Role inference relies on name fragments, and the
-source profile matches identifiers that occur in Payy's consumer (§V-C,
-§V-D). The Payy results show that the profile works on the consumer it was
-written for. Even there, 8 of 12 Payy mutants were unsupported and one was
-missed. Generic loaders are **[PENDING D1P-34]**.
+**v1.1 was revised after seeing the benchmark.** D1P-34 kept the 30 mutants
+and their ground truth unchanged and froze the tool by hash before
+rerunning them. However, it was developed after D1P-31's per-mutant results
+were known, including the PY-S02 miss and the unsupported Payy mutants. The
+improvement from 13 to 16 detections is therefore in-sample. It shows that
+the revised design covers those mutants, not that it would have found them
+blind.
 
-**Artifact scale.** The Payy case rows use N=8 builds, while the Payy E4
-chain uses the full-size configuration. The validation route links them by
-a counted manual association, not by re-analysis. The full-size Payy
-mutants show the tail warning at `messages[1]..messages[999]`, consistent
-with the N=8 result. The unmutated full-size artifact has not been analyzed.
+**Structural loaders, narrow exposure.** v1.1 removes the name- and
+regex-based consumer profile. Its AST frontend, however, has been run on one
+consumer family (Payy). The WarpToad relations come from a route-A
+extractor developed on WarpToad's `mint` fragment. How the frontend behaves
+on an unseen consumer is untested until RQ4.
 
-**Use counting.** R-BIND counts witness-valued black-box inputs and
-arithmetic terms only (§V-B). A detection shows that a word has zero such
-uses. A non-detection may hide a weak or wrong binding, which is the main
-reason for the 16 unsupported mutants.
+**Occurrence is not correct binding.** R-BIND treats one proof-enforced
+occurrence as sufficient, and R-CONSUMER treats one guard, state or effect
+use as sufficient. A detection shows that a word has no such use. A
+non-detection may hide a weak or wrong binding, which is the main reason for
+the 14 unsupported mutants.
 
-**Validation provenance.** Every E4 in this paper replays a witness
-construction that people designed before D1P-30. The validator automates
-execution and auditing, not discovery of the witness. Of 38 benchmark
-warnings, 36 stop at E1 for lack of a route.
+**Validation provenance.** Every D1P-30 E4 replays a witness construction
+that people designed before D1P-30. The Lane X pipeline needs no manual
+steps at run time. It is WarpToad-specific, however, has plan branches for
+four specific mutants, and was written by the same AI-assisted lane as the
+benchmark, with the ground truth available. It was measured on v1 warnings.
 
 **Injected cases and benchmark.** M-DOM and M-SRC are injected. M-DOM is
 grounded in an unused in-tree package and a developer warning, M-SRC in
 documented reliance. Neither indicates a defect in pinned WarpToad. The
 benchmark was built in parallel with D1P-30 by an AI-assisted lane. Its
 operators share mechanisms with the cases. Its predicted effects are mostly
-unexecuted. Its Payy mutants sit on the faulty revision.
+unexecuted outside the pipeline's WarpToad rows. Its Payy mutants sit on the
+faulty revision.
 
 **Admitted state.** The M-DOM differential uses privileged synthetic root
-admission (`S_DOM`). Neither variant demonstrates cross-chain reachability.
+admission (`S_DOM`). The pipeline's WT-S02 run uses a mock provider that
+admits the plan's giga root by construction. Neither variant demonstrates
+cross-chain reachability.
 
-**Baselines.** The same-policy arms were not instantiated (§VII-E). The
-comparison is between BindCheck and default tool configurations. Baselines on
-the benchmark are **[PENDING D1P-32]**.
+**Baselines.** The only same-policy harness covers WarpToad. It was
+AI-authored, with no human inspection recorded, and uses a stub verifier.
+No Payy or circuit-mutant harness was written after the results were seen,
+so those cells stay unresolved (D1P-32). BindCheck's own scale and the
+baselines' scale differ, so Table 8 shows BindCheck under both.
 
 **Held-out frame.** The reserved frame has eight candidates from one
 AI-prepared search. Its commitment shows consistency, not randomness or
@@ -1520,11 +1760,17 @@ access rule (§IV-D).
 **Negatives.** No fixture is a proven negative control. We report adjudicated
 counts, not false-positive rates.
 
-**AI involvement.** AI agents implemented code, ran D1P-22, D1P-30 and
-D1P-31, built the benchmark, extracted the taxonomy seed corpus, prepared
-the held-out candidate list, wrote the B02 obligations and drafted this text
-(§X-B). AI output is not independent annotation (contract §10). Final
-taxonomy labels come only from human annotators.
+**AI involvement.** AI agents did all of the following:
+- implemented the code;
+- ran D1P-22, D1P-30, D1P-31, D1P-32 and D1P-34;
+- built the benchmark, the automatic-validation pipeline and the Foundry
+  policy harness;
+- extracted the taxonomy seed corpus and prepared the held-out candidate
+  list;
+- wrote the B02 obligations and drafted this text (§X-B).
+
+AI output is not independent annotation (contract §10). Final taxonomy
+labels come only from human annotators.
 
 ---
 
@@ -1558,7 +1804,9 @@ These tools reason about a circuit relation in isolation.
   on M-DOM was a generic unused-variable warning on
   `aztec_warptoad_address`. The compiler was silent on pinned WarpToad and
   M-SRC. At beta.14 it emitted only an unrelated unused-import warning on
-  both Payy revisions (D1P-22). Lane X's synthetic probe found the same
+  both Payy revisions (D1P-22). On the benchmark it named an unused value at
+  the mutant locus on 10 of 30 mutants, as E1 lint (D1P-32). Lane X's
+  synthetic probe found the same
   pattern. The under-constrained Brillig check fires on its own control,
   but public inputs are outside its scope ([Lane X report §2, X1](../docs/x-experiment/REPORT.md)). *Measured, not cited.*
 - **Circomspect** [14] is a static analyzer and linter for Circom. It does
@@ -1611,13 +1859,17 @@ These tools treat the verifier as an opaque call.
 
 None of them models the circuit relation, so none can tell which verifier
 arguments are bound. On the case targets, Slither's only relevant output
-was lint at a defect location, and Mythril did not complete (D1P-22). In a
-same-policy arm, a fuzzer could check `σ`, but it needs a valid proof for
-every input it explores. Seeded only with honest proofs (baselines §3.1), it
-cannot produce a proof of a forged statement. In our own Payy work, the
-consumer-side test exercised the forged effect only because we supplied a
-hand-built forged proof (T18). The same-policy arms were not instantiated in
-D1P-22, so this reasoning remains untested.
+was lint at a defect location, and Mythril did not complete (D1P-22, D1P-32).
+In a same-policy arm, a fuzzer could check `σ`, but it needs a valid proof
+for every input it explores. Seeded only with honest proofs (baselines
+§3.1), it cannot produce a proof of a forged statement. In our own Payy
+work, the consumer-side test exercised the forged effect only because we
+supplied a hand-built forged proof (T18). D1P-32's WarpToad harness avoids
+this obstacle by replacing the verifier with a relational stub that accepts
+any call carrying the expected public words. With that stub it detected 8 of
+9 consumer mutants. The same stub removes the circuit from the analysis, so
+the harness cannot reach circuit-side mutants, and its counterexamples are
+E1 rather than real-proof executions (§VII-E).
 
 **SmartAxe** [6] analyzes cross-chain bridge bytecode. Its semantic-integrity
 check reports withdrawal state with *no* data-flow dependency on deposit
@@ -1642,76 +1894,86 @@ baselines in D1P-22.
 
 ## IX. Limitations
 
-**Fragment.** v1 accepts Noir `1.0.0-beta.14` and `1.0.0-beta.22` artifacts
-only. Consumer facts come from a checked relation produced by the route-A
-extractor, or from a source profile fitted to Payy's `RollupV1.sol`. The
+**Fragment.** v1.1 accepts Noir `1.0.0-beta.14` and `1.0.0-beta.22`
+artifacts only. Consumer facts come from a checked relation: a v1.1 AST
+relation, or a route-A relation for WarpToad. The AST frontend supports a
+bounded statement and expression subset, one verifier boundary per
+consumer, and standard token calls matched by function type. The route-A
 extractor supports one entry point's reachable constructs with OpenZeppelin
-5.6.1 effects, standard atomic ERC-20 behavior, and no proxies, delegate
-calls, inline assembly or reentrancy. Unsupported inputs stop with a named
-reason. That keeps results honest but bounds applicability. On the benchmark,
-16 of 30 mutants were unsupported (§VII-C). RQ4's funnel will measure the
-same on held-out projects.
+5.6.1 effects. Neither handles proxies, delegate calls, inline assembly or
+reentrancy, and both assume standard atomic ERC-20 behavior. Unsupported
+inputs stop with a named reason. That keeps results honest but bounds
+applicability. On the benchmark, 14 of 30 mutants were unsupported
+(§VII-C). RQ4's funnel will measure the same on held-out projects.
 
-**Use counting is not binding.** R-BIND treats one proof-enforced occurrence
-as sufficient. It misses a public input that is used but bound to the wrong
-value, used only on an inactive branch, or absorbed by a weak construction.
-It can warn on deliberately unconstrained metadata. As implemented, it counts
-witnesses in `AssertZero` terms and witness-valued black-box *inputs* only.
-Black-box outputs, memory-block operations and Brillig calls are not counted
-(§V-B), so a word used only that way would draw a spurious warning. These are
-the main reasons the benchmark's swap, order, dependency-strength and
-record-semantics mutants are unsupported.
+**Occurrence is not correct binding.** R-BIND treats one proof-enforced
+occurrence as sufficient. It misses a public input that is used but bound
+to the wrong value, used only on an inactive branch, or absorbed by a weak
+construction. It can warn on deliberately unconstrained metadata.
+Similarly, R-CONSUMER is satisfied by any guard, state or effect use, and
+admission is recorded without checking the direction of the storage lookup
+(§V-E). A root checked against the wrong map or with the wrong sign is
+therefore not reported.
 
-**Name-based roles and a fitted profile.** Roots, replay keys and effect
-words are inferred from name fragments and idioms (§V-D). The source
-profile's idioms are identifiers from Payy's consumer, and the relation-mode
-location pattern matches WarpToad's verifier call (§V-C, §V-F). A root named
-otherwise is not checked by R-ANCHOR. A transition-output root named `old_*`
-would be wrongly required to be must-be-in. Generic loaders are
-**[PENDING D1P-34]**.
+**R-CONSUMER does not infer intended role.** R-CONSUMER reports that an
+authenticated calldata word reaches no guard, state or modeled effect. It
+does not say whether the word should have been a root to admit, a key to
+spend or an amount to transfer, and its suggested fix is generic (D1P-34
+§7). Consumer-supplied configuration and environment words are exempt, so a
+missing use of such a word is not reported. v1's root-specific R-ANCHOR
+remains in the code but cannot fire under v1.1's loaders (§V-F).
 
-**Missing burn registration and replay applicability.** On Payy, v1 flags
-the unbound tail words and the effect dispatch, but it does not report that
-burns lack registration and single-use accounting. The `.spent` idiom on the
-mint path satisfies R-POLARITY. Conversely, removing the `.spent == false`
-guard makes replay accounting look inapplicable, which is why PY-S02 is
-missed (§V-F).
+**Loop widening.** The AST frontend widens a loop-carried index to the whole
+tail of the public array from its known lower bound. This is a conservative
+dependency slice, not exact Solidity path equivalence (D1P-34 §2). On Payy,
+every message word is treated as reaching every effect inside the message
+loop. That over-approximation can mask an unused word in such a loop, since
+the word counts as used, and it blurs which effect depends on which word.
+
+**Selector-prefix inference.** When the producer has more public leaves
+than the verifier's direct array, the frontend infers a prefix width from
+the largest public ABI array and the array-header bound seen in the AST. For
+Payy, this gives the two-word recursive-verifier selector prefix and places
+every word correctly (D1P-34 §2). The inference is a width check. It is not
+a proof of the recursive verifier's semantics, and it assumes that the
+direct array consists of a header followed by the largest public array.
+
+**Localization.** WarpToad consumer-side warnings carry no source line
+(`WarpToadCore.sol:?`), because route-A relations do not record the
+verifier call's line. R-EFFECT reports the first modeled effect, which on
+Payy is an unrelated write (§V-G). Producer warnings are not mapped to Noir
+source spans.
 
 **Hash semantics.** Poseidon2 is modeled at most as a functional
 uninterpreted tuple function (equal inputs give equal outputs), with no
-injectivity or collision resistance (D1P-19 §2.2). v1 does not reason about
-hash semantics at all. Validation uses real hashes. Any conditional
+injectivity or collision resistance (D1P-19 §2.2). v1.1 does not reason
+about hash semantics at all. Validation uses real hashes. Any conditional
 no-collision argument (B02 §3) is outside this paper's results.
 
-**Conditional binding.** v1 has no activation-condition reasoning. Payy's
-tail is caught because the tail words have no occurrences in either the N=8
-builds or the full-size mutants. A variant that constrains tail words under a
+**Conditional binding.** v1.1 has no activation-condition reasoning. Payy's
+tail is caught because the tail words have no proof-enforced occurrence in
+the full-size earlier artifact. A variant that constrains tail words under a
 witness-controlled predicate would be counted as used. Earlier ACIR and SMT
 work on this pattern produced an analyzer false positive from unsound probe
 specialization (later repaired) and general queries that did not finish
 (T22, T22-v3, T22-v4).
 
-**Scaled Payy build.** The Payy case rows use N=8 builds. Payy's real proofs
-and consumer replays use the original 1,000-message configuration. The link
-between them is a counted manual association. The unmutated full-size
-artifact has not been analyzed, although the full-size mutants show the same
-tail warning.
+**Validation coverage.** D1P-30's E4 results replay witness constructions
+designed before D1P-30. The Lane X pipeline removes manual steps for 11
+WarpToad warnings. It is WarpToad-specific, however, has target-specific
+plan branches, cannot build Payy witnesses, and has not been rerun on v1.1's
+warnings **[PENDING V1.1-RERUN]**. Under the registered index, 52 of 53
+v1.1 benchmark warnings stop at E1. Validation covers one consumer call from
+a fixed admitted pre-state, or a replay in a second call. Multi-transaction
+histories, front-running and observation of honest proofs are out of scope
+(B02 §3.1).
 
-**Validation replays existing witnesses.** E4 requires a registered route
-whose fixture constructs the witness. Every route used here replays a
-construction designed before D1P-30. On the benchmark, 36 of 38 warnings stop
-at E1 for lack of a route. Automatic witness construction is
-**[PENDING AUTO-VALIDATION]**. Validation covers one consumer call from a
-fixed admitted pre-state (or, for Payy, a replay rejection in a second
-call). Multi-transaction histories, front-running and observation of honest
-proofs are out of scope (B02 §3.1).
-
-**Same-policy arm not instantiated.** No policy wrapper, custom detector or
-G1–G5 harness existed for the baselines, and none was written after seeing
-the outcomes (D1P-22). The comparison therefore covers default tool
-configurations only. It cannot show that a same-policy contract-only
-baseline would miss these cases. Baselines on the benchmark are
-**[PENDING D1P-32]**.
+**Same-policy arm for WarpToad only.** D1P-32's same-policy Foundry harness
+covers WarpToad's consumer and case targets. It is handwritten,
+AI-authored, uses a stub verifier, and yields E1 counterexamples. No
+same-policy harness exists for Payy or for circuit mutants. Those cells are
+unresolved, so the comparison cannot show how a same-policy baseline would
+do there.
 
 **Small held-out frame; AI-assisted taxonomy.** The reserved frame has eight
 candidates from one AI-prepared search, smaller than the frozen plan. The
@@ -1723,10 +1985,11 @@ rule silence. Absence of warnings is E0 within the supported scope.
 
 **Not novel by itself.** Integration-layer failures [1], rich circuit
 specifications [3, 4] and computation–constraint consistency [5] are prior
-work. Unused-variable lint already flags some unused public inputs
-(D1P-22; benchmark compile logs). Our claim is limited to joining both sides
-into rules that state the cross-component reason, and validating them, to
-the extent that RQ1–RQ4 support it.
+work. Unused-variable lint already flags some unused public inputs (D1P-22,
+D1P-32). A handwritten policy harness catches more consumer-side mutants on
+WarpToad (D1P-32). Our claim is limited to joining both sides into rules
+that state the cross-component reason without a per-application policy,
+and validating them, to the extent that RQ1–RQ4 support it.
 
 ---
 
@@ -1751,10 +2014,13 @@ Venue requirements are from the IEEE S&P 2027 call for papers [8], retrieved
 - **New tool.** BindCheck's validation routes produce working forged proofs
   against local deployments. Misuse risk: an attacker could use validated
   warnings against live systems. Mitigations: validation runs only on
-  owned-local chains with fresh deployments. v1 replays only registered
-  routes and does not synthesize attack witnesses. The planned artifact omits automation for
-  live-network submission **[TODO: authors confirm]**. Held-out findings are
-  released only after disclosure. The benefit is that developers can find and fix
+  owned-local chains with fresh deployments. The Lane X pipeline does
+  synthesize attack witnesses and forged proofs, but only for the WarpToad
+  same-root and Aztec paths of our development mutants, and only against
+  fresh local deployments. The planned artifact omits automation for
+  live-network submission **[TODO: authors confirm]**, and whether to
+  release the pipeline at all is **[TODO: authors decide]**. Held-out
+  findings are released only after disclosure. The benefit is that developers can find and fix
   binding failures before deployment, the same capability attackers already
   apply by hand.
 - **Human subjects.** The taxonomy study uses public disclosures, and its
@@ -1770,8 +2036,10 @@ taxonomy seed corpus and suggested its cause labels. Those suggestions are
 recorded as `ASSUMED` and are not annotation. AI systems are excluded from
 final taxonomy labeling and adjudication. An AI planner also prepared the
 held-out candidate list from names and URLs only. A human custodian
-performed the draw outside every agent session. Authors inspect every claim, citation,
-label and result. **[TODO]** Write the disclosure from the preserved task
+performed the draw outside every agent session. AI agents also wrote
+BindCheck v1.1 (D1P-34), the automatic-validation pipeline and the D1P-32
+Foundry policy harness. D1P-32 records no human inspection of that harness.
+Authors inspect every claim, citation, label and result. **[TODO]** Write the disclosure from the preserved task
 prompts and reports.
 
 ### C. Competing interests
@@ -1794,23 +2062,25 @@ abstract registration 10 November 2026, submission 17 November 2026
 
 Proof-to-execution binding failures arise when the words a consumer relies
 on and the words a circuit constrains disagree. They are properties of the
-pair, not of either component. BindCheck v1 makes part of this agreement
-checkable. It counts proof-enforced uses of each public input, infers roots,
-replay keys and effect words on the consumer side with their admission
-polarity, and applies four generic rules. A validator replays registered
-real-proof routes. On five development targets, v1 warned on the
-producer-side defects in historical Payy and injected M-DOM, and on the
-consumer-side defect in injected M-SRC, at the expected public words, and on
-neither control. All three positive mismatches reached end-to-end
-validation. On 30 mutants of the same two applications, v1 detected 13: all
-of them where a use or guard was removed, and each at the broken binding.
-Sixteen mutants left a binding present but wrong and are outside its
-supported scope, and one was missed. Pinned circuit-only and contract-only
-tools in default configurations described no mismatch on the case targets.
-These are development results. Baselines on the benchmark
-[PENDING D1P-32], generic consumer loaders [PENDING D1P-34], automatic
-witness construction [PENDING AUTO-VALIDATION], held-out results on the
-disclosed mini-draw [PENDING D1P-33], and human taxonomy labels remain.
+pair, not of either component. BindCheck v1.1 makes part of this agreement
+checkable without application identifiers. It counts proof-enforced uses of
+each public input. It lowers the consumer's compiler AST from the verifier's
+interface type to guards, state writes and token effects. It then applies
+four generic rules. On five development targets, v1.1 warned at the
+expected public word on the producer-side defects in historical Payy and
+injected M-DOM, and on the consumer-side defect in injected M-SRC. It
+emitted no warning on pinned WarpToad and one open consumer-side warning on
+the repaired Payy control. All three mismatches reached end-to-end
+validation in D1P-30. On 30 mutants of the same two applications, v1.1
+detected 16, with 14 outside its supported scope and no misses. Each
+detection named the broken binding. A handwritten same-policy harness does
+better on WarpToad consumer mutants (8/9 against 5/9). BindCheck covers the
+circuit-side mutants that no Solidity baseline reaches, needs no
+per-application policy, and catches the one consumer mutant the harness
+misses. An automatic pipeline drove 7 of 20 v1 warnings to fresh E4 with no
+manual steps, on WarpToad only. These are development results. The
+pipeline rerun on v1.1 warnings [PENDING V1.1-RERUN], held-out results on
+the disclosed mini-draw [PENDING D1P-33], and human taxonomy labels remain.
 
 ---
 
@@ -1855,57 +2125,75 @@ None of these timeouts is evidence of safety.
 | M-SRC mint over unadmitted root; pinned reverts at K2 | D1P-19 §4 | Locally reproduced (injected) |
 | Exact-state honest controls, four pairings | D1P-21A §3 | Locally reproduced |
 | M-DOM independent producer provenance | D1P-21A §4 | Mechanically checked |
-| Consumer extraction, 22 families, fail-closed | D1P-16; D1P-18 | Mechanically checked on fragment |
+| Route-A consumer extraction, 22 families, fail-closed | D1P-16; D1P-18 | Mechanically checked on fragment |
 | M-SRC extraction removes exactly K2 | D1P-21B §3 | Mechanically checked |
-| v1 rules and warnings on five development targets | D1P-30 §§3–4; rerun in D1P-31 §5 | Tool output (E1), development |
-| Fresh E4 on M-DOM and M-SRC through registered routes | D1P-30 §§5.1–5.2; validation index | Locally reproduced (injected), tool-driven route |
-| Preserved E4 audit for Payy | D1P-30 §5.3 | Automatic audit of preserved evidence |
-| Payy case rows use N=8 builds | D1P-30 §2 hashes; T22; D1P-30 analysis outputs | Checked against the analysis outputs |
-| Baselines on the case targets | D1P-22 record; `results/raw/D1P-22/` (ignored) | Tool output, scored under the preregistered plan |
+| v1.1 design: AST lowering, structural identities, no application identifiers | D1P-34 §2; `solidity_ast_v1_1.py`; identifier-absence test | Implementation, frozen by hash; committed bytes match the manifest |
+| Corrected occurrence roles; full-size Payy leaves | D1P-34 §3 | Tool output |
+| v1.1 warnings on the five development targets | D1P-34 §4; ignored analysis outputs | Tool output (E1), development |
+| Fresh E4 on M-DOM and M-SRC through registered routes (v1 warnings) | D1P-30 §§5.1–5.2; validation index | Locally reproduced (injected), tool-driven route |
+| Preserved E4 audit for Payy (v1 warning, N=8 build) | D1P-30 §5.3 | Automatic audit of preserved evidence |
+| Benchmark: 16/30 detected, 14 unsupported, 0 missed; 53 warnings (20 related, 33 inherited) | D1P-34 §§1, 5 | Tool output (E1) with post-run adjudication, development |
+| Benchmark index validation: 1 preserved E4, 52 E1 | D1P-34 §5.1 | Automatic audit of preserved evidence; no new proof |
+| Automatic validation of 20 v1 warnings: 7 fresh E4, 1 preserved E4, 4 E3, 8 E1 | AUTO-VALIDATE; ignored `results/raw/X-AV/results.json` | Locally reproduced (injected), pipeline-driven; WarpToad only; v1 warnings |
+| Benchmark baselines, including the Foundry same-policy harness and the Mythril retry | D1P-32; ignored `results/raw/D1P-32/` | Tool output, scored under the frozen plan |
+| Baselines on the case targets | D1P-22 record; ignored `results/raw/D1P-22/` | Tool output, scored under the preregistered plan |
+| v1 history: 13/30, 16 unsupported, 1 miss | D1P-31 §§1, 4 | Tool output, superseded |
 | 30 mutants compile; reachability checks | BENCHMARK.md §§3–4; `manifest.json` | Build observation (development) |
-| Benchmark: 13/30 detected, 16 unsupported, 1 miss; 38 warnings (16 related, 22 inherited) | D1P-31 §§1, 4 | Tool output (E1) with post-run adjudication, development |
-| Benchmark validation: 2 preserved E4, 36 E1 | D1P-31 §6 | Automatic audit of preserved evidence; no new proof |
 | Contract revision 3 | D1P-31 §2; contract change log | Controlling document |
 | Taxonomy seed corpus (27 screened, 19 included, 15 families) | v1-corpus.md; v1-corpus-ledger.json | AI-assisted extraction; human labels pending |
 | Held-out mini-draw commitment (8 candidates) | reservation-commitment-2026-10-28.json | Custodian-reported; signature pending |
-| Benchmark baselines, generic loaders, auto-validation, held-out scan, human labels | — | [PENDING D1P-32/34/33, AUTO-VALIDATION] |
+| Pipeline rerun on v1.1 warnings, held-out scan, human labels | — | [PENDING V1.1-RERUN, D1P-33] |
 
 ---
 
 ## Open items for authors
 
-1. **Payy artifact scale.** The Payy case rows analyze the N=8 `agg_agg`
-   builds from T22, while the E4 chain uses the full-size artifacts. D1P-31's
-   full-size mutants show the same tail warning, but the unmutated full-size
-   earlier and check-added artifacts have not been analyzed. A one-command
-   rerun on those two artifacts would close the gap.
-2. **Fitted identifiers.** The source profile's idioms and the relation-mode
-   location pattern are drawn from the development consumers (§V-C, §V-F).
-   D1P-34 should replace them before D1P-33 freezes the tool.
-3. **Occurrence counting.** D1P-30 §3 says black boxes contribute
-   "input/output occurrences". The code counts inputs only. Either fix the
-   code before the D1P-33 freeze or append a correction note. Do not edit the
-   immutable report.
-4. **Replay applicability (PY-S02).** Source-mode R-POLARITY is gated on
-   finding the guard it checks for. Decide whether D1P-34 makes applicability
-   follow the write or the replay-key role, as relation mode already does.
-5. **Taxonomy.**
+1. **R-ANCHOR is unreachable under v1.1.** Both loaders record an anchor
+   only after finding a guarded storage lookup, so `must_be_in` is always
+   true (§V-F; our code reading). Either remove R-ANCHOR from the code and
+   the result schema, or make admission direction-sensitive. Decide before
+   the D1P-33 freeze.
+2. **Lost source lines.** WarpToad R-CONSUMER and R-POLARITY warnings print
+   `WarpToadCore.sol:?`, and Payy R-EFFECT points to `RollupV1.sol:850`, a
+   write with no public-word dependency (§V-G). D1P-34 does not mention
+   either. Fixing them changes the tool, so it must happen before the D1P-33
+   freeze and be followed by a rerun.
+3. **Validation identities.** The M-SRC, WT-S01, WT-S02, WT-S03 and Payy
+   v1.1 warnings no longer match their v1 routes (rule or artifact hash
+   changed). Rerun the Lane X pipeline on v1.1 warnings, including WT-S06,
+   PY-S01 and PY-S02. Record whether the full-size artifact `83b75a4a…` is
+   the one T15 proved with.
+4. **AUTO-VALIDATE count mismatch.** Its summary text and the project-status
+   row say "5 E3-contained" and "7 Payy" warnings. Its row table and
+   `results.json` list 4 E3 rows (WT-C02, WT-C07, WT-C08 ×2) and 8 Payy rows
+   (PY-C02 ×2, PY-C04 ×3, PY-C06 ×3). This draft reports the rows. Correct
+   the summary or explain the difference.
+5. **Pipeline generality.** The plan table has branches keyed to WT-C04,
+   WT-C06, WT-C07 and WT-S02, plus WarpToad-specific hash code and attacker
+   values. Either describe it permanently as development scaffolding, as
+   this draft does, or replace the target branches with rule-level plans
+   before any held-out use.
+6. **The `commit_hash` warning.** Adjudicate R-CONSUMER on Payy's
+   `commit_hash` (empty `verifyCommitHash` placeholder). It decides whether
+   the repaired control carries an actionable warning or a modeled-scope
+   artifact.
+7. **Taxonomy.**
    - The metadata-only access rule was not followed for the seed endpoint.
      The custodian-sanitized flow is owed before any annotation round.
    - Decide whether human annotators see the AI-suggested labels. Showing
      them risks anchoring; the protocol does not say.
    - Several AI inclusions need checking against the pure-circuit exclusion
      (§VII-G).
-6. **Reservation.** Add the custodian's signature to the commitment record.
+8. **Reservation.** Add the custodian's signature to the commitment record.
    Record the number of reserved groups privately, so that the opening can
    be checked against it.
-7. **Same-policy baselines.** Preregister and build the σ wrappers or
-   harnesses before D1P-32, or state that the benchmark comparison is
-   default-arm only.
-8. **Citations.** CIVER and CCC-Check full texts remain unread. Supply
-   copies and resolve each **[TODO-VERIFY]**.
-9. Draw Figure 1. Replace repository links with an anonymized artifact.
-10. Have a human author inspect every claim and citation (contract §10).
+9. **Policy harness review.** The Foundry same-policy harness has no recorded
+   human inspection. A human should review it before the comparison is
+   published.
+10. **Citations.** CIVER and CCC-Check full texts remain unread. Supply
+    copies and resolve each **[TODO-VERIFY]**.
+11. Draw Figure 1. Replace repository links with an anonymized artifact.
+12. Have a human author inspect every claim and citation (contract §10).
 
 ---
 
