@@ -7,6 +7,12 @@ removed, but kept the AI-written one-line summaries. AI suggestions:
 inter-annotator agreement**. There is one human annotator, and AI output is
 not independent annotation.
 
+**Annotation status: human annotation (single annotator).** The author made
+every include decision and every cause label and reviewed them all. An AI
+assistant was used only to help understand the source bug descriptions. It
+did not see the AI-suggested labels and did not choose labels. The paper must
+disclose this assistance.
+
 ## Results
 
 | Measure | Agreement | Cohen's κ |
