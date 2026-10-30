@@ -207,3 +207,23 @@ W003 stays E1 (by-design offchain). Incidents: field-modulus overflow of
 first attacker hash (diagnosed, fixed, re-ran); disk-full from two cargo
 targets (deleted regenerable dirs, rebuilt with 9.1 G free). Evidence
 reports/TC02.md; raw under results/raw/TC02/ (ignored).
+
+## 2026-10-29 — TE04: E4 for PY-C02 W002, zero mock components
+
+Mutant-keyed agg_final (constant = mutant agg_agg VK hash, keccak oracle
+per repo generator) proves the TC02 tail-candidate inputs; native verify
+exit 0. bb Solidity verifiers for mutant + pinned keys (solc 0.8.29
+runs=1 legacy — runs=200 exceeds EIP-170; consumer stays on pinned
+0.8.20; HonkVerifier already implements IVerifier; ZKTranscriptLib
+deployed via cast and linked by patching linkReferences). Anvil replay
+(replay wall 10.0 s, load ~5.6, serial; priority oversight recorded in
+AUTO-VALIDATE, nice re-prove confirms): MockUSDC, both verifiers, pinned
+RollupV1 behind XAVProxy, synthetic validator key at initialize, honest
+mint registered (100). Mutant block settles: height 1, mint spent,
+forged burn pays 7 to 0xdead (0→7), rollup 100→93. Same block under the
+pinned verifier reverts as `SumcheckFailed()` (0x9fc3a218). W001/W002 →
+E4, zero manual steps. Debugging trail: quote TOML hex; bb prove needs
+-k; witness is target/agg_final.gz; proof→fields is 32B chunking; use
+the proof's note-kind as consumer kind. Evidence results/raw/TE04/
+(ignored); scripts te04_part1.sh, te04_part2.py, xav/te04_replay.ts
+tracked. Disk stayed ≥8 GB free throughout.
