@@ -299,9 +299,68 @@ def validation_table(ignore_load: bool) -> None:
     print(f"PASS: {OUT / 'validation-table.md'}")
 
 
+def ledger_table() -> None:
+    """Corrected validation + repair table (ledger; RQ2 corrected claim).
+
+    Does not rerun provers. Grades the preserved (or freshly reproduced)
+    v1.1 driver rows with the tracked core, and asserts the TE05/REPAIR
+    evidence files the corrected grades depend on.
+    """
+    sys.path.insert(0, str(ROOT / "src"))
+    from bindcheck_d1 import xav_core
+    results = json.loads((RAW / "X-AV/v11/results.json").read_text())
+    graded = xav_core.check_ledger(results)
+    evidence = [
+        RAW / "X-AV/v11/results.json",
+        ROOT / "build/TE05/proof-final/proof",
+        ROOT / "build/TE05/e4/te05-report.json",
+        RAW / "REPAIR/repair-report.json",
+        RAW / "REPAIR/s02-corrected/report-mutant-accepts.json",
+        RAW / "REPAIR/s02-corrected/report-pinned-reverts.json",
+    ]
+    missing = [str(p) for p in evidence if not p.exists()]
+    if missing:
+        raise AssertionError(f"ledger evidence missing: {missing}")
+    te05 = json.loads((ROOT / "build/TE05/e4/te05-report.json").read_text())
+    if te05["state"].get("blockHeight") != "0":
+        raise AssertionError(f"TE05 must show zero state change: {te05['state']}")
+    reverts = {k: v for k, v in te05.items() if k.startswith("revert")}
+    if len(reverts) < 2:
+        raise AssertionError(f"TE05 must record both submits reverting: {reverts}")
+    repair = json.loads((RAW / "REPAIR/repair-report.json").read_text())
+    verdicts = {(r["mutant"]): r.get("verdict") for r in repair["rows"]}
+    bad = {m: v for m, v in verdicts.items() if not (
+        str(v).startswith("REPAIR-OK") or str(v).startswith("REPAIR-UNEXPECTED"))}
+    if bad:
+        raise AssertionError(f"repair rows without recorded verdict: {bad}")
+    lines = [
+        "# Reproduced corrected validation + repair table", "",
+        "Raw driver grades are adjudicated by the tracked ledger core",
+        "(`src/bindcheck_d1/xav_core.py`; E1+mock replaces the",
+        "non-contract E2 label; PY-C02 corrected by TE05; WT-S02 by the",
+        "corrected honest-seeded experiment).", "",
+        "| ledger grade | warning rows |",
+        "|---|---:|",
+    ]
+    for level in ("E4", "E4-preserved", "E3", "E1+mock", "E1"):
+        if graded["counts"].get(level):
+            lines.append(f"| {level} | {graded['counts'][level]} |")
+    lines += [
+        "",
+        "Repairs: every WarpToad repair is pinned-byte-identical with the",
+        "attack blocked and honest behavior succeeding (WT-C02 documents a",
+        "warning-quality flag instead); PY-C02 repaired == pinned bytes",
+        "with TE05 containment; the structural commit_hash warning remains",
+        "by design. Held-out transfer (RQ4) has no reproduce command: it",
+        "requires the custodian reservation (D1P-33/D1P-36 frozen runs).",
+    ]
+    write(OUT / "ledger-table.md", "\n".join(lines) + "\n")
+    print(f"PASS: {OUT / 'ledger-table.md'} {graded['counts']}")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("claim", choices=("benchmark-table", "baseline-table", "validation-table", "all"))
+    parser.add_argument("claim", choices=("benchmark-table", "baseline-table", "validation-table", "ledger", "all"))
     parser.add_argument("--ignore-load", action="store_true",
                         help="allow serialized proving above X-AV's load threshold")
     args = parser.parse_args()
@@ -311,6 +370,8 @@ def main() -> int:
         baseline_table()
     if args.claim in {"validation-table", "all"}:
         validation_table(args.ignore_load)
+    if args.claim in {"ledger", "all"}:
+        ledger_table()
     return 0
 
 
