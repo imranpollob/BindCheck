@@ -31,9 +31,21 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "src"))
 from bindcheck_d1.witness_synth_v1 import plan_for, apply_bind_word, toml_get  # noqa: E402
 
-NARGO22 = Path("/Users/imranpollob/Coding/bc/bindcheck-d1-paper/results/raw/D1P-13/tools/nargo-beta22/nargo")
-PIN_SRC = Path("/Users/imranpollob/Coding/bc/bindcheck-d1-paper/results/raw/D1P-19/workspace/pinned-source/backend")
-REF_NM = Path("/Users/imranpollob/Coding/bc/bindcheck-d1-paper/results/raw/D1P-19/workspace/source/backend/node_modules")
+NARGO22 = Path(os.environ.get(
+    "BINDCHECK_NARGO_22", ROOT / "results/raw/artifact-tools/bin/nargo-beta22"
+))
+PIN_SRC = Path(os.environ.get(
+    "BINDCHECK_WARPTOAD_BACKEND",
+    ROOT / "results/raw/D1P-19/workspace/pinned-source/backend",
+))
+REF_NM = Path(os.environ.get(
+    "BINDCHECK_WARPTOAD_NODE_MODULES",
+    ROOT / "results/raw/D1P-19/workspace/source/backend/node_modules",
+))
+REF_BUILDINFO = Path(os.environ.get(
+    "BINDCHECK_WARPTOAD_BUILDINFO",
+    REF_NM.parent / "artifacts/build-info",
+))
 
 LOAD_LIMIT = 30.0  # do not start a proof above this 1-min load
 IGNORE_LOAD = False
@@ -484,7 +496,10 @@ def _settle_ok(rep, idx):
 
 def prove_correspondence_c03(b, out, row):
     import hashlib as _hl
-    pref = Path("/Users/imranpollob/Coding/bc/bindcheck-d1-paper/results/raw/D1P-15/artifacts/m-dom-withdraw.json")
+    pref = Path(os.environ.get(
+        "BINDCHECK_MDOM_ARTIFACT",
+        ROOT / "results/raw/D1P-15/artifacts/m-dom-withdraw.json",
+    ))
     art = json.loads((b / "circuits/withdraw/target/withdraw.json").read_text())
     proved = json.loads(pref.read_text())
     same_bytecode = art.get("bytecode") == proved.get("bytecode")
@@ -522,8 +537,12 @@ def prove_witness(b, log_path, row, time_key, tag):
     return (b / tag / "proof").read_bytes().hex()
 
 
-PAYY_REF = Path("/Users/imranpollob/Coding/bc/BindCheck/tools/cases/payy-c4d2c90")
-PAYY_SOLC = Path("/Users/imranpollob/.svm/0.8.20/solc-0.8.20")
+PAYY_REF = Path(os.environ.get(
+    "BINDCHECK_PAYY_EARLIER", ROOT / "tools/cases/payy-c4d2c90"
+))
+PAYY_SOLC = Path(os.environ.get(
+    "BINDCHECK_SOLC_0_8_20", ROOT / "results/raw/artifact-tools/bin/solc-0.8.20"
+))
 PAYY_NOTE_KIND = "0x1111111111111111111111111111111111111111111111111111111111111111"
 PAYY_VK_HASH = "0x2222222222222222222222222222222222222222222222222222222222222222"
 PAYY_VALIDATOR_KEY = "0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d"
@@ -536,8 +555,10 @@ S_SRC_BURNS = None
 def src_burns():
     global S_SRC_BURNS
     if S_SRC_BURNS is None:
-        states = json.loads(Path(
-            "/Users/imranpollob/Coding/bc/bindcheck-d1-paper/results/raw/D1P-19/canonical-states.json").read_text())
+        states = json.loads(Path(os.environ.get(
+            "BINDCHECK_CANONICAL_STATES",
+            ROOT / "results/raw/D1P-19/canonical-states.json",
+        )).read_text())
         S_SRC_BURNS = [{"preCommitment": x["preCommitment"], "amount": x["amount"]}
                        for x in states["S_SRC"]["burns"]]
     return S_SRC_BURNS
@@ -625,7 +646,7 @@ def run_replay(mid, b, out, row, plan, proof_hex, honest_toml, warning, twice):
                  log=logs / f"{mid}-replay.log",
                  extra_env={"XAV_PLAN": str((out / "build" / mid / "plan.json").resolve()),
                             "XAV_REPORT": str((out / "build" / mid / "report.json").resolve()),
-                            "XAV_REF_BUILDINFO": str(REF_NM.parent / "artifacts/build-info")})
+                            "XAV_REF_BUILDINFO": str(REF_BUILDINFO)})
     row["times"]["replay_s"] = round(wall, 1)
     if p.returncode == 2:
         row["stages"]["E4_harness"] = "FAIL: harness error"

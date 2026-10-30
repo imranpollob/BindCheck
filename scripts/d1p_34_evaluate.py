@@ -6,6 +6,7 @@ from __future__ import annotations
 from datetime import datetime, timezone
 import hashlib
 import json
+import os
 from pathlib import Path
 import shutil
 import subprocess
@@ -28,8 +29,13 @@ IRS = RAW / "consumer-relations"
 ANALYSES = RAW / "analyses"
 XBM = ROOT / "results/raw/X-BM"
 BENCH = ROOT / "benchmarks/binding-mutants"
-SIBLING = ROOT.parent / "BindCheck"
-SOLC = Path("/Users/imranpollob/.svm/0.8.20/solc-0.8.20")
+SIBLING = Path(os.environ.get("BINDCHECK_PAYY_ROOT", ROOT)).resolve()
+if not (SIBLING / "tools/cases").is_dir():
+    SIBLING = ROOT.parent / "BindCheck"
+SOLC = Path(os.environ.get(
+    "BINDCHECK_SOLC_0_8_20",
+    ROOT / "results/raw/artifact-tools/bin/solc-0.8.20",
+))
 SKELETON = XBM / "build/PY-S01"
 PAYY_ARTIFACT = SIBLING / "tools/cases/payy-c4d2c90/noir/target/agg_agg.json"
 PAYY_CHECK_ARTIFACT = SIBLING / "tools/cases/payy-history/noir/target/agg_agg.json"
