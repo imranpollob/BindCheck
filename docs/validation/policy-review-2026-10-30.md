@@ -36,6 +36,30 @@ mutant and repaired circuits, each with its own matching proof and key.
 | WT-C02, WT-C07, WT-C08 | No completed unauthorized effect. For C08, an owner-chosen nonzero recipient may be permitted. |
 | PY-S01–S04 | Unfunded mint, duplicate settlement, wrong payout destination, invalid message kind violate the corresponding rules, but evidence uses mock proof acceptance. For S03, exclude Payy's legitimate substitute-recipient mechanism. |
 
+## Payy control warning — R-CONSUMER on `commitHash`
+
+Target: the check-added (repaired) Payy artifact with the pinned consumer
+`RollupV1.sol` at `c4d2c902`. `verifyRollup` (lines 314–371) passes public
+input 2 (`commitHash`) only to `verifyCommitHash` (lines 381–382), an empty
+placeholder commented "asserting the commit hash is stored on Celestia".
+Validator signatures cover `newRoot`, `height` and `otherHashFromBlockHash`,
+not `commitHash`. The proof verifier still receives `commitHash` as a public
+input.
+
+**Author label: Out of scope (data availability).** The missing on-chain
+publication check is confirmed. No unauthorized committed effect is
+established. Any state-reconstruction or withdrawal disruption depends on
+off-chain availability guarantees that the contract alone does not determine.
+
+Not recorded as "true positive, low": being out of scope does not imply low
+severity, and "Placeholder" shows unfinished enforcement, not an accepted
+design choice.
+
+Paper and triage use: count this as a structurally accurate warning outside
+the threat model. It is not a false positive and not a confirmed defect. It
+illustrates that R-CONSUMER reports missing use without knowing the
+application's policy.
+
 ## Scope corrections
 
 - WarpToad's pinned development contract has a public minting faucet; the
