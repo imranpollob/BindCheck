@@ -2,21 +2,24 @@
 
 *(Working title; frozen at abstract registration.)*
 
-**Draft status:** D1P-P04 revision, 28 October 2026, on repository base
-`bda5265` (`main`). The base includes D1P-34, D1P-32, the Lane X
-automatic-validation pipeline, and everything in D1P-P03. Target format is
-IEEE S&P (13 pages of text plus up to 5 pages of references and appendices).
-This revision makes **BindCheck v1.1** ([D1P-34](../reports/D1P-34.md)) the
-tool of record and replaces every v1 benchmark number with v1.1's. It fills
-the benchmark baseline rows from
-[D1P-32](../docs/baselines/d1p-32-benchmark.md) and the automatic-validation
-results from [AUTO-VALIDATE](../docs/x-experiment/AUTO-VALIDATE.md). Those
-validation results were measured on v1 warnings. No experiment was run for
-this draft. Cells that depend on work not yet done are marked
-**[PENDING D1P-33]** (held-out scan) or **[PENDING V1.1-RERUN]** (automatic
-validation rerun on v1.1 warnings). Claims about cited work that could not be
-checked against a primary source stay **[TODO-VERIFY]**. Earlier drafts
-(D1P-D01/D03, D1P-P01–P03) are in Git history.
+**Draft status:** D1P-P05 revision, 29 October 2026, on repository base
+`d981c64` (`main`). The base adds three things to everything in D1P-P04:
+the D1P-33 held-out scan, the automatic-validation run on v1.1 warnings,
+and TC02. Target format is IEEE S&P (13 pages of text plus up to 5 pages of
+references and appendices). This revision:
+- reports the held-out scan ([D1P-33](../reports/D1P-33.md));
+- replaces the v1 validation results with the v1.1 run
+  ([AUTO-VALIDATE](../docs/x-experiment/AUTO-VALIDATE.md);
+  [TC02](../reports/TC02.md));
+- records two threats: the unreachable R-ANCHOR rule and the placeholder
+  behind the Payy control warning.
+
+No experiment was run for this draft. Cells that depend on work not yet
+done are marked **[PENDING D1P-35]** (version-only BindCheck v1.2) or
+**[PENDING D1P-36]** (rescan of the reserved projects plus four unseen,
+non-reserved projects). Claims about cited work that could not be checked
+against a primary source stay **[TODO-VERIFY]**. Earlier drafts
+(D1P-D01/D03, D1P-P01–P04) are in Git history.
 
 **Controlling sources, in order.** [Research contract](../docs/research-contract.md)
 revision 3 (28 October 2026; revision 2 archived as
@@ -30,7 +33,8 @@ and earlier experiments keep the revision under which they were run);
 [D1P-17](../reports/D1P-17-consumer-backends.md),
 [D1P-19](../reports/D1P-19.md), [D1P-21A](../reports/D1P-21A.md),
 [D1P-30](../reports/D1P-30.md), [D1P-31](../reports/D1P-31.md),
-[D1P-34](../reports/D1P-34.md); the baseline records
+[D1P-34](../reports/D1P-34.md), [D1P-33](../reports/D1P-33.md),
+[TC02](../reports/TC02.md); the baseline records
 [D1P-22](../docs/baselines/d1p-22-results.md) and
 [D1P-32](../docs/baselines/d1p-32-benchmark.md); the extraction records
 [D1P-16](../docs/extraction/d1p-16-feasibility.md),
@@ -48,10 +52,10 @@ and the [baseline preregistration](baselines.md). If this draft disagrees with
 any of them, the source wins.
 
 **Research verdict at drafting time:** `UNKNOWN`. The capability gate
-(contract §11) remains open. There is no held-out result. Automatic
-validation has been measured only on v1 warnings and only on WarpToad. The
-same-policy baseline exists only for WarpToad, as a handwritten harness with
-a stub verifier (D1P-32; AUTO-VALIDATE).
+(contract §11) remains open. The held-out scan produced no supported
+analysis (D1P-33), so there is no transfer result. No Payy warning has
+reached E4. The same-policy baseline exists only for WarpToad, as a
+handwritten harness with a stub verifier (D1P-32).
 
 ### Task map
 
@@ -62,9 +66,12 @@ a stub verifier (D1P-32; AUTO-VALIDATE).
 | **D1P-34** | BindCheck v1.1: application-neutral consumer lowering, corrected use accounting, full-size Payy; reruns the five targets and the 30 mutants | Done | §V, §VI, RQ1, RQ2 |
 | **D1P-22** | Pinned baselines on the five case targets | Done | RQ3 case table |
 | **D1P-32** | Baselines on the 30 mutants, including a Foundry same-policy harness for WarpToad and a sequential Mythril retry | Done | RQ3 benchmark table |
-| **AUTO-VALIDATE** (Lane X) | Warning → synthesized witness → E2/E3/E4 pipeline, run on the 20 v1 warnings of the D1P-31 detected mutants | Done on v1 warnings; **v1.1 rerun pending** | §V-H, RQ2 |
-| **D1P-33** | Held-out scan of the reserved mini-draw | Pending | RQ4 |
-| **Taxonomy v1 corpus** | Seed-only AI-assisted extraction (Lane X) | Done as extraction; human labels pending | §IV-D, RQ5 |
+| **AUTO-VALIDATE** (Lane X) | Per-application validation harnesses run on all 53 v1.1 benchmark warnings (earlier on 20 v1 warnings) | Done | §V-H, RQ2 |
+| **TC02** (Lane X) | Real Payy aggregation proof for PY-C02 (Rust stack) | Done | RQ2 |
+| **D1P-33** | Frozen v1.1 scan of the four reserved projects | Done: 4/4 unsupported, 0 warnings | RQ4 |
+| **D1P-35** | BindCheck v1.2: version-only producer-decoder change (no rule change) | Pending | RQ4 |
+| **D1P-36** | v1.2 rescan of the four reserved projects plus four unseen, non-reserved projects | Pending | RQ4 |
+| **Taxonomy v1 corpus** | Seed-only AI-assisted extraction (Lane X); blind labeling sheet prepared | Done as extraction; human labels pending | §IV-D, RQ5 |
 
 Discrepancies found while drafting are listed under *Open items for authors*
 at the end.
@@ -101,14 +108,19 @@ mutation in 16 of 30 mutants. The other 14 fall outside its supported scope,
 and there are no misses. A handwritten same-policy Foundry harness detects
 more of the WarpToad consumer mutants (8/9 against 5/9). It needs a
 per-application policy, however, reaches none of the 16 circuit mutants, and
-misses one consumer mutant that BindCheck catches. Compiler and Solidity
-lint localizes some mutants without describing a mismatch. An automatic
-validation pipeline, measured on the earlier v1 warnings, reached E4 with no
-manual steps on 7 of 20 warnings, all on WarpToad. An AI-assisted seed
+misses one consumer mutant that BindCheck catches. Compiler and Solidity lint localizes some mutants without describing a
+mismatch. Per-application validation harnesses took the 53 benchmark
+warnings as far as they could with real proofs and local replays. Nine
+reached E4, all on WarpToad and all but one without manual steps. Six
+reached E3, six Payy warnings produced unauthorized effects under a mock
+verifier, and 32 remain at E1. An AI-assisted seed
 extraction for the taxonomy screened 27 public disclosures and included 19
-from 15 families, with human labels pending. All results are development
-results on applications known before the rules were written. Held-out
-results on a small, disclosed reserved frame are [PENDING D1P-33].
+from 15 families, with human labels pending. On the four projects reserved for a held-out test, the frozen tool
+produced no analysis. Three use Noir versions it does not decode and one
+uses recursive aggregation, so all four are unsupported and no warning was
+emitted. Held-out transfer therefore remains untested, and all detection
+results are development results on applications known before the rules
+were written.
 
 ---
 
@@ -218,10 +230,10 @@ bindcheck validate <warning>
 
 `validate` looks up a registered validation route for the warning's exact
 target identity (artifact hash, consumer hash, rule). It runs or audits that
-route's staged evidence and reports the highest level reached. A separate
-Lane X pipeline builds attacker witnesses from a frozen honest witness for
-WarpToad warnings and drives them through execution, proving and replay
-(§V-H). It was measured on v1 warnings.
+route's staged evidence and reports the highest level reached. Separate
+Lane X harnesses build attacker witnesses and drive them through
+execution, proving and replay (§V-H). The validation harnesses are written
+per application; the analyzer is not.
 
 A warning is evidence level E1. A validated warning reaches E4, the
 contract's *end-to-end validated mismatch* (§III-F). The absence of a
@@ -253,15 +265,21 @@ evidence still pending.
    WarpToad, and one unadjudicated consumer-side warning on the repaired
    Payy control (D1P-34 §4). On the 30-mutant benchmark, 16/30 detected,
    14 unsupported, 0 missed, each detection at the named semantic boundary
-   (D1P-34 §5). *Pending:* held-out transfer **[PENDING D1P-33]**.
+   (D1P-34 §5). *Held-out:* the frozen tool supported none of the four
+   reserved projects (D1P-33), so transfer is untested. *Pending:* a
+   version-only rescan **[PENDING D1P-35, D1P-36]**.
 3. **Real-proof validation** (§V-H). Warnings are taken toward E4 with real
    proofs and committed local effects, and every manual input is counted.
    *Exists:* the three case-study mismatches reached E4 in D1P-30 (two
-   fresh, one preserved). The Lane X pipeline, run on the 20 v1 warnings of
-   the D1P-31 detected mutants, reached fresh E4 with no manual steps on 7,
-   preserved E4 on 1, and E3 on 4, all on WarpToad. The 8 Payy warnings
-   stayed at E1. *Pending:* the same pipeline on v1.1's warnings
-   **[PENDING V1.1-RERUN]**, and a Payy witness harness.
+   fresh, one preserved). The per-application harnesses produced the
+   following on the 53 v1.1 benchmark warnings:
+   - fresh E4 on 8 and preserved E4 on 1, all on WarpToad;
+   - E3 on 6, including a real Payy aggregation proof (TC02);
+   - a consumer effect under a mock verifier on 6 Payy warnings;
+   - E1 on the other 32.
+
+   *Pending:* E4 for any Payy warning, which needs a real-verifier
+   replay.
 4. **Validated case studies** (§II, §VII). One historical case (Payy, with a
    locally reproduced end-to-end effect and a repair validated for one
    witness) and two injected cases (WarpToad M-DOM and M-SRC, each with a
@@ -275,7 +293,8 @@ a category, the permission/obligation/effect terminology, rich semantic
 specifications, or modular summaries. The specific advance over prior work
 is the cross-layer rule set and its validation. On current evidence it is
 demonstrated only on development cases, and a handwritten same-policy
-harness outperforms it on one subset (§VII-E). Transfer depends on RQ4.
+harness outperforms it on one subset (§VII-E). Transfer depends on RQ4,
+whose first scan supported no reserved project.
 
 ### E. Scope of the evidence
 
@@ -293,8 +312,9 @@ We use three evidence classes throughout and never merge them.
 - **Held-out:** families reserved before development screening and analyzed
   only after the rules were frozen (RQ4). Only held-out results can support
   transfer or generality claims (contract §9). A reservation over a small
-  frame of eight candidate groups has been committed (§IV-D). No held-out
-  result exists yet.
+  frame of eight candidate groups was committed, and its four reserved
+  projects were scanned (§IV-D). The scan produced no supported analysis
+  (§VII-F).
 
 All executions are owned-local. Synthetic admitted pre-states are labeled as
 such and carry no cross-chain reachability claim.
@@ -627,11 +647,11 @@ appears in the 0xPARC tracker. The repository owner, acting as human
 custodian, then performed the draw in a plain terminal outside every agent
 session (stratum `noir-evm:eligible`, ceiling rounding per stratum). Only a
 salted commitment is in the repository (SHA-256 `514ad719…`; definition
-`SHA256(nonce ‖ canonical selection manifest)`). The opening is held
-privately and is not disclosed to any agent before the D1P-33 scan. The
-commitment file does not state how many groups were reserved. Under the
-protocol's half-per-stratum rule with ceiling rounding, eight candidates
-imply four. The commitment shows only that a later opening is consistent
+`SHA256(nonce ‖ canonical selection manifest)`). The opening was held
+privately until the D1P-33 scan. The commitment file does not state how
+many groups were reserved. D1P-33 scanned four reserved projects, which
+matches the protocol's half-per-stratum rule with ceiling rounding. D1P-33
+does not record a check of the opening against the commitment hash. The commitment shows only that a later opening is consistent
 with it. It shows neither randomness nor timing. The custodian's attestation
 is recorded as reported in the planner session, and the custodian's
 signature has not yet been added. Payy, WarpToad, 0xbow Privacy Pools, the
@@ -675,13 +695,13 @@ the differences where they matter.
                                                                        │
                                           warnings (E1; JSON and readable text)
                                                                        │
-     validation index ──► registered route ──► staged checks;  Lane X pipeline ──► synthesized witness ──► E2 / E3 / E4
+     validation index ──► registered route ──► staged checks;  Lane X harness ──► synthesized witness ──► E2 / E3 / E4
 ```
 
 *Figure 1 (to be drawn).* Each target is analyzed alone. No result from a
 reference version, revision diff or paired variant is an analyzer input. The
 checked relation is one counted analysis input. The validation index and the
-Lane X pipeline are orchestration outside the rule engine.
+Lane X validation harnesses are orchestration outside the rule engine.
 
 ### B. Producer frontend
 
@@ -856,7 +876,10 @@ finding a guarded storage lookup on it. Every recorded anchor therefore
 already satisfies must-be-in, and R-ANCHOR cannot fire. This is our reading
 of the code; D1P-34 states only that the rule identity changed. A removed
 root guard now surfaces as R-CONSUMER on that word, because the word then
-reaches nothing (M-SRC; WT-S01, WT-S02).
+reaches nothing (M-SRC; WT-S01, WT-S02). We defer the fix until after the
+transfer test. The planned v1.2 is a version-only change, and R-ANCHOR stays
+unreachable in it. Changing a rule between the first held-out attempt and
+the rescan would mix rule tuning into the held-out result (contract §9).
 
 **What the rules do not use.** No analyzer or frontend function names a
 contract, application, verifier function, guard function or storage field.
@@ -955,47 +978,59 @@ artifacts differ from the N=8 builds the D1P-30 route was keyed to. Under
 the unchanged D1P-31 index, only WT-C03's preserved route still matches
 (D1P-34 §5.1). No association was added after the run.
 
-**Automatic pipeline (Lane X).** The automatic-validation pipeline
-([AUTO-VALIDATE](../docs/x-experiment/AUTO-VALIDATE.md)) maps a warning's
-rule and location to a synthesis plan in a data table
-([`witness_synth_v1.py`](../src/bindcheck_d1/witness_synth_v1.py)). It then
-builds an attacker `Prover.toml` from the frozen honest WarpToad witness and
-runs three stages:
+**Per-application validation harnesses (Lane X).** *Validation is written
+per application. The analyzer is not.* The analyzer applies the same rules
+to any supported pair. The harnesses that turn its warnings into evidence
+are built for each application
+([AUTO-VALIDATE](../docs/x-experiment/AUTO-VALIDATE.md);
+[TC02](../reports/TC02.md)). There are three.
 
-- E2: `nargo execute` on the mutant;
-- E3: bb.js UltraHonk (`keccakZK`) proving and verification with the
-  mutant's own key;
-- E4: deployment of the mutant's verifier and consumer on Hardhat EDR,
-  replay, and a check of the effect on state.
+- **WarpToad harness.** It maps a warning's shape (rule, location and the
+  word named in its evidence) to a synthesis plan in a data table
+  ([`witness_synth_v1.py`](../src/bindcheck_d1/witness_synth_v1.py)). The
+  plans are:
+  - single-word surgery, for R-BIND, R-EFFECT and an R-CONSUMER fee word;
+  - a fresh attacker Merkle tree on the same-root branch, for an
+    unadmitted local root;
+  - a fabricated giga root;
+  - an Aztec-branch note, for the domain word;
+  - an honest double submission, for a replay key.
 
-There are four plan kinds:
+  From the frozen honest witness it builds an attacker `Prover.toml`, then
+  runs three stages. E2 is `nargo execute` on the mutant. E3 is bb.js
+  UltraHonk (`keccakZK`) proving and verification with the mutant's own
+  key. E4 deploys the mutant's verifier and consumer on Hardhat EDR,
+  replays, and checks the effect on state. A self-test first recomputes
+  the honest commitment, nullifier and root from the frozen witness. For
+  v1.1, the v1 table's branches keyed to specific mutants were replaced by
+  shape dispatch. The word names it matches (`giga_root`,
+  `destination_local_root`, `nullifier`, `max_fee`) and its hash code are
+  still WarpToad's.
+- **Payy consumer harness.** It deploys the pinned or mutant `RollupV1`
+  behind an ERC1967-style proxy on anvil (solc 0.8.20), signs blocks with
+  ECDSA validator keys, and replays them. A mock verifier stands in for
+  proof acceptance, following the project's own test pattern. On the pinned
+  consumer, negative controls reject an unregistered mint (`Mint value
+  invalid`) and a second settlement (`Mint already spent`). The lane grades
+  these rows "E2, mock-verifier-scoped" and never E4. They execute the real
+  consumer but check no producer assignment. They therefore show a consumer
+  effect, not the contract's E2, which requires an assignment that
+  satisfies the compiled producer relation (§III-F).
+- **Payy circuit harness (TC02).** A Rust harness modeled on T15 proves a
+  real `utxo → agg_utxo → agg_agg` chain on the PY-C02 mutant. It then
+  attempts an attacker mint record in the active message slots, which no
+  inner proof stands behind. It is a bounded probe, run on one mutant.
 
-- single-word surgery for R-BIND and R-EFFECT;
-- a fresh attacker Merkle tree on the same-root branch for unadmitted roots;
-- an Aztec-branch note for the domain word;
-- an honest double submission for replay.
-
-Before any synthesis, a self-test recomputes the honest commitment,
-nullifier and root from the frozen witness and stops on any mismatch.
-
-The pipeline has no manual steps at run time, but it is not generic witness
-synthesis.
-
-- Its hash code covers WarpToad's same-root EVM and Aztec paths only.
-- Its attacker values are keyed by WarpToad ABI word names.
-- Its plan table has branches for four specific benchmark targets: WT-C04,
-  WT-C06, WT-C07 and WT-S02.
-- It was written in the same AI-assisted lane that built the benchmark,
-  with the ground truth available.
-- It cannot construct Payy witnesses, because the aggregator needs a
-  two-proof witness harness.
-- It was run on the D1P-31 (v1) warnings, under v1 rule names. Its run on
-  v1.1's warnings is **[PENDING V1.1-RERUN]**.
-
-During development a stale mutant directory caused pinned circuits to be
-"validated". The run now regenerates each mutant and checks it for
-completeness first, and the incident is kept as negative-control evidence:
-the pinned circuit rejects the attacker words at E2.
+The harnesses were written by the AI-assisted lane that built the
+benchmark, with the ground truth available. The v1.1 plans were revised
+after the v1.1 warnings were known. Two incidents are preserved:
+- In the v1 run, a stale mutant directory caused pinned circuits to be
+  "validated". Every run now regenerates the mutant and checks it for
+  completeness first.
+- In the v1.1 run, shape dispatch first sent two Payy R-POLARITY warnings
+  down the WarpToad replay path and graded them E3 on WarpToad artifacts.
+  An audit caught this before reporting. The Payy rows were rerouted and
+  regraded as E2, and the bogus E3 results were never committed.
 
 **Why concrete execution.** Validation executes the real compiled circuit,
 produces real proofs, and replays them on an owned local chain. It does not
@@ -1003,8 +1038,9 @@ issue a whole-relation SMT query. Every whole-relation and full-producer
 query in our development history timed out or ended without an answer
 (D1P-07, D1P-10, D1P-14D, D1P-17; Appendix A). The fresh D1P-30 routes
 complete in 28.82 s (M-DOM, two proofs) and 98.99 s (M-SRC, one proof). The
-pipeline's fresh rows take 36–57 s each under machine load 30–50. These
-times are operational observations, not benchmarks.
+v1.1 WarpToad harness rows take 17–26 s each, at a machine load of about
+8.5. TC02 needed a 489 s cold build and an 88.4 s harness run. These times
+are operational observations, not benchmarks.
 
 ### I. What a result means
 
@@ -1023,7 +1059,7 @@ transition model. This paper proves no preservation theorem.
 ## VI. Implementation
 
 BindCheck v1.1 is written in Python. The validation fixtures and the Lane X
-pipeline use TypeScript, JavaScript and Rust. The table lists the
+harnesses use TypeScript, JavaScript and Rust. The table lists the
 components and the evidence that validates each one on the development
 fragment.
 
@@ -1034,7 +1070,7 @@ fragment.
 | Compiler-AST consumer frontend | [`solidity_ast_v1_1.py`](../src/bindcheck_d1/frontends/solidity_ast_v1_1.py) (`e74076f3…`) | Seven Payy relations (baseline, check-added, PY-S01–S05); identifier-absence regression test |
 | Shared effect table | [`bindcheck-v1.1-effect-models.json`](../protocols/d1/bindcheck-v1.1-effect-models.json) | Two function-type entries; recovers Payy's burn transfers (D1P-34 §2) |
 | Validator | [`validation_v1.py`](../src/bindcheck_d1/validation_v1.py); D1P-30 and D1P-31 validation indices | Case mismatches to E4 in D1P-30; 1 preserved E4 among 53 v1.1 benchmark warnings (D1P-34 §5.1) |
-| Automatic validation pipeline (Lane X) | `witness_synth_v1.py`, `scripts/xav/`, `scripts/xav_run.py` | 20 v1 warnings: 7 fresh E4, 1 preserved E4, 4 E3, 8 E1 (AUTO-VALIDATE) |
+| Per-application validation harnesses (Lane X) | WarpToad: `witness_synth_v1.py`, `scripts/xav/`; Payy: `scripts/xav/payy_replay.ts`, `XAVProxy.sol`, `payy-harness/tc02_tail.rs`; driver `scripts/xav_run.py` | 53 v1.1 warnings: 8 E4, 1 preserved E4, 6 E3, 6 mock-verifier E2, 32 E1 (AUTO-VALIDATE; TC02) |
 | ACIR decoder, Noir beta.14 (Payy) | `frontends/acir_binary_v1.py`, `acir_bindings_v1.py` | Typed recursion/frame bindings (D1-03) |
 | ACIR decoder and semantic checker, Noir beta.22 | `frontends/acir_binary_beta22.py`, `acir_semantics_beta22.py` | Exact rebuild match; 24,967/24,967 supported constraints on the honest witness; two predeclared mutation controls (D1P-13) |
 | Route-A consumer extractor and library models | `prototypes/d1p16/extract_relation.py`, `library_effect_models.v1.json` | 22 families; 5/5 executions; three source-mutation and four edge-control classes (D1P-16, D1P-18) |
@@ -1066,10 +1102,12 @@ performance results.
   expression subset.
 - WarpToad still uses route-A relations, and no AST relation was built for
   any WarpToad consumer.
-- Validation needs a registered route for each target identity, and the
-  automatic pipeline covers WarpToad only.
+- Validation needs a registered route for each target identity, or a
+  validation harness written for the application.
 
-A held-out consumer will go through the AST frontend, which has so far seen
+D1P-33 never reached the AST frontend, because all four reserved projects
+stopped at the producer frontend (§VII-F). A held-out consumer will go
+through the AST frontend, which has so far seen
 one application.
 
 ---
@@ -1081,9 +1119,9 @@ one application.
 | Paper RQ | Question | Contract RQ (rev. 3) | Case studies | Mutation benchmark |
 | --- | --- | --- | --- | --- |
 | **RQ1 Detection** | Do the generic rules warn at the correct public word and consumer location, without case-specific input? | RQ1 (fidelity), RQ2 (discovery) | D1P-34 (v1.1 rerun of the D1P-30 targets) | D1P-34 |
-| **RQ2 Warning quality and validation** | Are warnings localized and actionable? How many reach E4, at what cost, and with how many manual inputs? | RQ3 (validation) | D1P-30 routes; D1P-34 | D1P-34 index audit; AUTO-VALIDATE on v1 warnings (v1.1 rerun pending) |
+| **RQ2 Warning quality and validation** | Are warnings localized and actionable? How many reach E4, at what cost, and with how many manual inputs? | RQ3 (validation) | D1P-30 routes; D1P-34 | D1P-34 index audit; AUTO-VALIDATE (v1.1); TC02 |
 | **RQ3 Baselines** | What do circuit-only and contract-only tools report on the same targets, in default and same-policy arms? | RQ4 (comparative) | D1P-22; D1P-32 harness on WarpToad targets | D1P-32 |
-| **RQ4 Held-out** | With the tool frozen, what does BindCheck report on reserved families, and do any reports validate? | RQ4 (transfer) | — | D1P-33 |
+| **RQ4 Held-out** | With the tool frozen, what does BindCheck report on reserved families, and do any reports validate? | RQ4 (transfer) | — | D1P-33 (done: 4/4 unsupported); D1P-35/36 pending |
 | **RQ5 Taxonomy** | Which causes, consequences and roles recur across independent families in sampled disclosures, and how reliably can people label them? | — (descriptive; contract §3 item 1) | — | v1 corpus (AI-assisted; human labels pending) |
 
 Contract RQ5 (efficiency) is not a paper RQ. Its null results are in
@@ -1204,14 +1242,18 @@ is discussed in §VII-D.*
 The reported verdict is the D1 verdict. Detection on an injected variant is
 evidence about that variant, not about pinned WarpToad.
 
-**The `commit_hash` warning.** On both Payy revisions, public word 4 reaches
-only the verifier call. Its consumer check, `verifyCommitHash`, has an empty
-body, and the source comments it as a "Placeholder for asserting the commit
-hash is stored on Celestia" (`RollupV1.sol:381–382`). The warning is
-independent of the message tail and of the repair. D1P-34 §4 calls it
-actionable in the modeled scope but labels it neither a vulnerability nor a
-false positive. We count it neither as a detection of the Payy case nor as a
-false alarm, and its adjudication is open.
+**The `commit_hash` warning.** On both Payy revisions, public word 4
+reaches only the verifier call. Its consumer check, `verifyCommitHash`, has
+an empty body, and the source comments it as a "Placeholder for asserting
+the commit hash is stored on Celestia" (`RollupV1.sol:381–382`). The warning
+is therefore a true structural observation: the authenticated word reaches
+no on-chain guard, state or effect. Whether that is a defect depends on the
+off-chain data-availability check that the placeholder anticipates. TC02
+treats it as off-chain by design, and D1P-34 §4 labels it neither a
+vulnerability nor a false positive. The warning is independent of the
+message tail and of the repair. We report it as a true structural
+observation pending adjudication. It counts neither as a detection of the
+Payy case nor as a false alarm.
 
 **Answer to RQ1 (cases).** On the five development targets, v1.1 warned at
 the scoring word on all three known positives: Payy through R-BIND and
@@ -1322,10 +1364,10 @@ same mismatches).*
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | W001 | Payy earlier | R-BIND | `agg_agg.json:abi.messages[1]..messages[999]` | public 6–1004; no proof-enforced use | Producer: constrain exposed arguments | Target | E4 on the preserved full-size chain, credited in D1P-30 to the v1 warning on the N=8 build; the v1.1 identity has no route | Preserved T15/T16/T18; no new proof | 2 (D1P-30) |
 | W002 | Payy earlier | R-EFFECT | `RollupV1.sol:850` (first modeled effect, not the payout) | same words; effect kinds storage write, token transfer, transfer-from | Producer binding; consumer derives effects only from bound words | Target (same mismatch as W001) | As W001 | As W001 | — |
-| W003 | Payy earlier | R-CONSUMER | `RollupV1.sol:357` (verifier call) | public 4 `commit_hash`; calldata; no guard, state or effect | Consumer: consume the word | Not the case target; open | E1 (no route) | — | — |
-| W001 | Payy check-added | R-CONSUMER | `RollupV1.sol:357` | as above | as above | Control warning; open | E1 (no route) | — | — |
-| W001 | M-DOM | R-BIND | `m-dom-withdraw.json:abi.aztec_warptoad_address` | public 5; no proof-enforced use | Producer: constrain exposed arguments | Target | E4 in D1P-30. The v1.1 warning has the same target identity, but the route was not rerun | Fresh; 2 real proofs (honest, foreign note); 28.82 s; peak RSS 737 MB | 1 |
-| W001 | M-SRC | R-CONSUMER | `WarpToadCore.sol:?` | public 4 `destination_local_root`; calldata; no guard, state or effect | Consumer: consume the word in a state admission, replay or effect (generic text; the role is not named) | Target | E4 in D1P-30 for the v1 R-ANCHOR warning on the same word. The v1.1 identity has no route | Fresh; 1 real proof; 98.99 s; peak RSS 490 MB | 1 |
+| W003 | Payy earlier | R-CONSUMER | `RollupV1.sol:357` (verifier call) | public 4 `commit_hash`; calldata; no guard, state or effect | Consumer: consume the word | Not the case target; true structural observation, pending adjudication | E1 (no route) | — | — |
+| W001 | Payy check-added | R-CONSUMER | `RollupV1.sol:357` | as above | as above | Control warning; true structural observation, pending adjudication | E1 (no route) | — | — |
+| W001 | M-DOM | R-BIND | `m-dom-withdraw.json:abi.aztec_warptoad_address` | public 5; no proof-enforced use | Producer: constrain exposed arguments | Target | E4 in D1P-30. The v1.1 warning has the same target identity, but the route was not rerun. The coinciding mutant WT-C03 reached fresh E3 and preserved E4 under the WarpToad harness | Fresh; 2 real proofs (honest, foreign note); 28.82 s; peak RSS 737 MB | 1 |
+| W001 | M-SRC | R-CONSUMER | `WarpToadCore.sol:?` | public 4 `destination_local_root`; calldata; no guard, state or effect | Consumer: consume the word in a state admission, replay or effect (generic text; the role is not named) | Target | E4 in D1P-30 for the v1 R-ANCHOR warning on the same word. The coinciding mutant WT-S01 reached fresh E4 with the v1.1 R-CONSUMER warning under the WarpToad harness | Fresh; 1 real proof; 98.99 s; peak RSS 490 MB | 1 |
 
 The fresh M-DOM route generated a note siloed under a contract distinct from
 the configured address. NoirJS executed the M-DOM artifact, and bb.js and
@@ -1344,36 +1386,45 @@ the route record.
 
 *Table 5: Warning-quality and validation summary.*
 
-| Scope | Warnings | Related / other | At semantic location | Warnings on controls | E4 fresh / preserved | E3 | E1 | Manual validation steps |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Development cases, v1.1 (D1P-34 §4) | 6 | 4 target / 2 `commit_hash` (open) | 4/4 target warnings name the scoring word; M-SRC prints no line; Payy R-EFFECT points to an unrelated write | 1 of 2 (Payy check-added) | Mismatches: 2 / 1, via v1 warnings (D1P-30); v1.1 warnings not rerun | — | — | 1–2 per route (D1P-30) |
-| Benchmark, v1.1, unchanged D1P-31 index (D1P-34 §5) | 53 | 20 / 33 inherited | 16/16 detections | n/a | 0 / 1 (WT-C03) | 0 | 52 | 2 (WT-C03) |
-| Benchmark, Lane X pipeline on the v1 warnings of the D1P-31 detected mutants (AUTO-VALIDATE) **[PENDING V1.1-RERUN]** | 20 | 16 / 4 inherited | — | n/a | 7 / 1 | 4 (consumer contained the effect) | 8 (all Payy) | 0 on the 11 fresh rows; 2 on WT-C03 |
+| Scope | Warnings | Related / other | At semantic location | Warnings on controls | E4 fresh / preserved | E3 | E2 (mock verifier) | E1 | Manual validation steps |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Development cases, v1.1 (D1P-34 §4) | 6 | 4 target / 2 `commit_hash` (pending adjudication) | 4/4 target warnings name the scoring word; M-SRC prints no line; Payy R-EFFECT points to an unrelated write | 1 of 2 (Payy check-added) | Mismatches: 2 / 1, via v1 warnings (D1P-30) | — | — | — | 1–2 per route (D1P-30) |
+| Benchmark, v1.1, unchanged D1P-31 index (D1P-34 §5) | 53 | 20 / 33 inherited | 16/16 detections | n/a | 0 / 1 (WT-C03) | 0 | 0 | 52 | 2 (WT-C03) |
+| Benchmark, v1.1, per-application harnesses (AUTO-VALIDATE; TC02) | 53 | 20 / 33 inherited | — | n/a | 8 / 1 | 6 | 6 | 32 | 0, except 2 on WT-C03 |
 
-*Table 5a: Automatic validation of v1 warnings (AUTO-VALIDATE; results
-ledger in ignored `results/raw/X-AV/`). Measured on v1 warnings; the v1.1
-rerun is **[PENDING V1.1-RERUN]**. Times were observed under machine load
-30–50 and are cost observations.*
+*Table 5a: Validation of the v1.1 benchmark warnings by the per-application
+harnesses (AUTO-VALIDATE v1.1 table; TC02; results ledgers in ignored
+`results/raw/X-AV/v11/` and `results/raw/TC02/`). WarpToad times were
+observed at a machine load of about 8.5 and are cost observations.*
 
-| Mutant | v1 warning | v1.1 rule on this mutant | Level | Time | Manual steps | Outcome |
-| --- | --- | --- | --- | --- | --- | --- |
-| WT-C01 | R-BIND `nullifier` | R-BIND | E4 | 56.8 s | 0 | Second mint from an honest second proof |
-| WT-C02 | R-BIND `max_fee` | R-BIND | E3 | 37.4 s | 0 | Proof accepted; consumer reverts at the fee cap (contained) |
-| WT-C03 | R-BIND `aztec_warptoad_address` | R-BIND | E4, preserved (E3 fresh) | 21.5 s | 2 | Byte-identical to the M-DOM artifact; D1P-15 foreign-note chain associated |
-| WT-C04 | R-BIND `giga_root`; R-BIND `destination_local_root` | R-BIND ×2 | E4; E4 | 36.3 s; 35.9 s | 0; 0 | Mint from a fabricated origin root (target-specific plan) |
-| WT-C07 | R-BIND `chain_id` | R-BIND | E3 | 40.0 s | 0 | Dataless verifier revert with all prior gates passing; contained on the same chain; cross-chain impact argued, not executed; out-of-gas not excluded (target-specific plan) |
-| WT-C08 | R-BIND `recipient_address`; R-EFFECT `:171` | R-BIND, R-EFFECT | E3; E3 | 41.2 s; 42.6 s | 0; 0 | OpenZeppelin `ERC20InvalidReceiver` on mint to zero (contained) |
-| WT-S01 | R-ANCHOR `:161` | R-CONSUMER | E4 | 45.2 s | 0 | Mint over an unadmitted local root |
-| WT-S02 | R-ANCHOR `:161` | R-CONSUMER | E4 | 43.2 s | 0 | Mock provider admits the plan's giga root by construction; shows that K1 is absent, not a real-bridge bypass (target-specific plan) |
-| WT-S03 | R-POLARITY `:160` | R-CONSUMER | E4 | 38.8 s | 0 | Replay of an honest proof |
-| WT-S09 | R-POLARITY `:161` | R-POLARITY | E4 | 38.6 s | 0 | Replay of an honest proof |
-| PY-C02, C04, C06 | 8 warnings (R-BIND, R-EFFECT) | R-BIND, R-EFFECT, R-CONSUMER | E1 | — | blocked | Needs a two-proof aggregator witness harness |
+| Mutant | v1.1 warning | Level | Time | Manual steps | Outcome |
+| --- | --- | --- | --- | --- | --- |
+| WT-C01 | R-BIND `nullifier` | E4 | 26.2 s | 0 | Second mint from an honest second proof |
+| WT-C02 | R-BIND `max_fee` | E3 | 18.0 s | 0 | Proof accepted; consumer reverts at the fee cap (contained) |
+| WT-C03 | R-BIND `aztec_warptoad_address` | E4, preserved (E3 fresh) | 11.7 s | 2 | Byte-identical to the M-DOM artifact; D1P-15 foreign-note chain associated |
+| WT-C04 | R-BIND `giga_root`; R-BIND `destination_local_root` | E4; E4 | 17.3 s; 18.1 s | 0; 0 | Mint from a fabricated origin root |
+| WT-C07 | R-BIND `chain_id` | E3 | 18.7 s | 0 | Dataless verifier revert with all prior gates passing; contained on the same chain; cross-chain impact argued, not executed; out-of-gas not excluded |
+| WT-C08 | R-BIND `recipient_address`; R-EFFECT `:171` | E3; E3 | 19.4 s; 20.7 s | 0; 0 | OpenZeppelin `ERC20InvalidReceiver` on mint to zero (contained) |
+| WT-S01 | R-CONSUMER `destination_local_root` | E4 | 18.7 s | 0 | Mint over an unadmitted local root |
+| WT-S02 | R-CONSUMER `giga_root` | E4 | 19.1 s | 0 | Mock giga provider admits the fabricated root by construction; shows that K1 is absent, not a real-bridge bypass |
+| WT-S03 | R-CONSUMER `nullifier` | E4 | 19.4 s | 0 | Replay of an honest proof |
+| WT-S06 | R-CONSUMER `max_fee` | E4 | 19.3 s | 0 | Proof with `max_fee = 0` mints and pays the relayer about `0.24e18`, above the stated maximum (new in v1.1) |
+| WT-S09 | R-POLARITY | E4 | 19.9 s | 0 | Replay of an honest proof |
+| PY-C02 | R-BIND `messages[0]..messages[999]` | E3 | 17.3 s prove and verify (88.4 s harness) | 0 | Attacker mint record in slots 0–3 proves and verifies under the mutant's key; independent `bb verify` exits 0; a 1-bit tamper fails; the pristine circuit rejects it at the removed `main.nr:74` assertion (TC02) |
+| PY-C02 | R-EFFECT `:850` | E3 | same proof | 0 | Same proof. The pinned consumer contained the effect in the mock-verifier replay; real-verifier E4 is owed |
+| PY-S01 | R-EFFECT `:842`; R-POLARITY `:357` | E2, mock verifier; E2, mock verifier | 1.5 s; 0.9 s replay | 0 | Unregistered mint settled |
+| PY-S02 | R-EFFECT `:850`; R-POLARITY `:357` | E2, mock verifier; E2, mock verifier | 1.1 s; 1.1 s replay | 0 | Registered mint settled twice |
+| PY-S03 | R-EFFECT `:851` | E2, mock verifier | 1.0 s replay | 0 | Burn paid a `noteKind`-derived address; the recipient received nothing |
+| PY-S04 | R-EFFECT `:853` | E2, mock verifier | 1.0 s replay | 0 | Dead kind-4 record settled as a burn; recipient +1000 |
+| PY-C01, C03–C07, PY-S01–S05 (other rows) | 31 R-BIND, R-EFFECT and R-CONSUMER warnings | E1 | — | — | No real inner-proof vector for these mutants |
+| PY-C02 | R-CONSUMER `commit_hash` | E1 | — | — | Off-chain placeholder check; no experiment |
 
-The pipeline has not run on v1.1's new detections (WT-S06, PY-S01, PY-S02)
-or on its `commit_hash` warnings. AUTO-VALIDATE's summary text reports
-"5 E3-contained" and "7 Payy" warnings, while its own row table and
-`results.json` list 4 E3 rows and 8 Payy rows. We report the rows (Open
-item 4).
+The counts are 8 E4, 1 preserved E4, 6 E3, 6 mock-verifier E2 and 32 E1,
+over all 53 warnings. Of the 32 E1 warnings, 31 are Payy rows waiting for
+real inner-proof vectors, and one is the `commit_hash` warning on PY-C02.
+The other Payy R-EFFECT locations (`:842`–`:853`) are again first-effect
+positions in each mutant's relation (§V-G). The earlier run on the 20 v1
+warnings (7 fresh E4, 1 preserved, 4 E3, 8 E1) is history.
 
 *Table 6: Manual inputs and analyst effort on the development cases.*
 
@@ -1398,7 +1449,9 @@ give no source line, and on Payy the R-EFFECT location is an unrelated write
 warnings, with fresh real proofs on the injected variants and an automatic
 audit of the preserved Payy chain. The M-DOM v1.1 warning has the same
 target identity as its validated v1 warning. The M-SRC and Payy identities
-changed, and their v1.1 warnings have not been revalidated. Each D1P-30
+changed. The benchmark mutants that coincide with M-DOM and M-SRC (WT-C03,
+WT-S01) were validated with their v1.1 warnings by the WarpToad harness. The
+v1.1 Payy case warnings have not been revalidated. Each D1P-30
 validation needed one or two manual route inputs, and each witness came from
 a fixture written before D1P-30. The diagnostics are actionable in the
 narrow sense that the suggested fix names the missing binding, guard or
@@ -1406,26 +1459,28 @@ use. They do not explain the mechanism.
 
 **Answer to RQ2 (benchmark).** Under the unchanged D1P-31 index, 1 of the 53
 v1.1 warnings reached E4: WT-C03, preserved, with two manual inputs. The
-other 52 stop at E1. The drop from v1's two is a routing effect: WT-S01's
-route is keyed to the old R-ANCHOR identity (D1P-34 §5.1). On the 20 v1
-warnings of the D1P-31 detected mutants, the Lane X pipeline produced:
-- 7 fresh E4 results with no manual steps;
-- 1 preserved E4 (WT-C03);
-- 4 E3 results, where the mutant's verifier accepted a real proof but the
-  consumer reverted;
-- 8 Payy warnings left at E1.
+drop from v1's two is a routing effect, because WT-S01's route is keyed to
+the old R-ANCHOR identity (D1P-34 §5.1). With the per-application harnesses,
+the picture changes:
+- **WarpToad: every one of the 13 warnings reached at least E3.** Eight
+  reached fresh E4 with no manual steps, including the new WT-S06 fee
+  detection. One reached preserved E4. Four stopped at E3: the forged proof
+  verifies, but an independent consumer check (the fee cap, the ERC-20
+  receiver check, or a verifier revert under `block.chainid`) contains the
+  effect. These are informative negatives: the circuit-side binding is
+  broken, yet the consumer blocks the effect.
+- **Payy: no warning reached E4.** TC02 took PY-C02's circuit warning to E3
+  with a real aggregation proof. Six consumer-mutant warnings produced
+  unauthorized effects on state under a mock verifier: an unregistered
+  mint, a double settlement, a misdirected burn and a dead record kind.
+  These are consumer executions, not contract-level E2 (§V-H). The other 31
+  Payy rows and the `commit_hash` warning stay at E1.
 
-Every one of the 12 WarpToad warnings reached at least E3. The four E3 rows
-are informative negatives. The circuit-side binding is broken and a forged
-proof verifies, but an independent consumer check contains the effect: the
-fee cap, the ERC-20 receiver check, or a verifier revert under
-`block.chainid`. Three of the seven fresh E4 rows (WT-C04 twice, WT-S02),
-and WT-C07's E3, used target-specific plan branches. The pipeline is
-WarpToad-specific and was written with the ground truth available (§V-H).
-These results show that the warnings on these mutants can be driven to real
-proofs and effects without manual steps. They do not show general automatic
-witness construction, and they were measured on v1 warnings
-**[PENDING V1.1-RERUN]**.
+All E-levels except WT-C03's were reached without manual steps at run time.
+The harnesses, however, are per application and were written with the
+benchmark's ground truth available. They show that these warnings can be
+driven to real proofs and effects. They do not show witness construction
+for an application without a harness.
 
 ### E. RQ3 — Comparison with circuit-only and contract-only baselines
 
@@ -1466,7 +1521,7 @@ or default arm; S = same-policy arm.*
 | SmartAxe | S | U | U | U | U | U | No user-property interface |
 | Circomspect, CIVER | — | not run | not run | not run | not run | not run | Circom-only natively (READMEs) |
 | Joint SMT (monolithic, goal-cone) | — | not run | not run | not run | not run | not run | Earlier attempts in Appendix A |
-| **BindCheck v1.1** (D1P-34) | — | **D** | Warning (control; R-CONSUMER `commit_hash`, open) | M (control) | **D** | **D** | Context row; not run by the baseline lanes |
+| **BindCheck v1.1** (D1P-34) | — | **D** | Warning (control; R-CONSUMER `commit_hash`, true structural observation pending adjudication) | M (control) | **D** | **D** | Context row; not run by the baseline lanes |
 
 **Answer to RQ3 (cases).** No default-arm baseline described the mismatch on
 any case target. Two generic checks localized a known positive without
@@ -1569,56 +1624,105 @@ families.
 ### F. RQ4 — Held-out scan
 
 **Frame.** RQ4 uses the mini-draw of §IV-D: eight candidate Noir/EVM project
-groups listed from names and URLs only, of which the custodian reserved a
-subset privately. Under the protocol's rounding this is four groups, but the
-commitment does not state the number. This is a disclosed, smaller frame than
-the frozen v0.2.0 plan, which calls for full index traversal. We report it as
-such. Any transfer claim from RQ4 is bounded by eight candidates drawn from
-one search, not a sample of the ecosystem.
+groups listed from names and URLs only. The custodian reserved four of them.
+This is a disclosed, smaller frame than the frozen v0.2.0 plan, which calls
+for full index traversal, and we report it as such. Any transfer claim from
+RQ4 is bounded by four projects drawn from one search, not a sample of the
+ecosystem.
 
-**Protocol.** The rules, decoders, AST frontend, effect table and validator
-are hashed and frozen before the custodian opens the reservation to the
-scan. The D1P-34 freeze manifest is the current candidate. Any fix to Open
-items 1–2 creates a new version that must be frozen and rerun on the
-development targets first. A held-out consumer is accepted only through an
-AST relation built by the frozen frontend. A consumer outside its subset, or
-one without exactly one verifier boundary, stops with a named reason and is
-counted as unsupported. If the Lane X pipeline is used, its plan table must
-be frozen as well, and its WarpToad-specific plans will not apply. Every
-attempted build and every exclusion is reported. No rule changes after the scan begins. A post-hoc correction is
-reported as such, and the affected family stops counting as held out
-(contract §§9, 11). Any confirmed finding is disclosed to its maintainers
-before it supports a claim, and is anonymized in the submission.
+**Protocol (D1P-33).** The tool was frozen at exact commit `4382ee6…`, tag
+`bindcheck-v1.1`. Each reserved project was handled as follows:
+- it was pinned to a full commit, with recursive submodules recorded;
+- it was built locally with the project's own toolchain pins where they
+  exist;
+- it was analyzed with exactly one frozen `bindcheck analyze` invocation.
 
-*Table 9: Held-out funnel and results.*
+After the run, all 60 tracked files under `src/` and `protocols/`,
+including the effect table, were byte-identical to the tag. The focused
+suite passed 11/11, after a preserved first attempt that failed to import
+because `PYTHONPATH` was unset. No rule, decoder, frontend, protocol or
+effect model changed. No maintainer was contacted, and no live-chain action
+took place (D1P-33 §§1–3).
 
-| Family (anonymized) | Reserved (commitment opened) | Prior exposure (log) | Producer / consumer stack | Artifacts available | Supported | Consumer relation (AST / unsupported reason) | Warnings (R-BIND / R-EFFECT / R-CONSUMER / R-POLARITY) | Adjudication | Highest level | Rule changes (must be 0) | Disclosure status |
+*Table 9: Held-out results with frozen v1.1 (D1P-33 §§1, 4). Project names
+are given because no finding exists; whether to keep them in the submission
+is Open item 11.*
+
+| Project (pinned commit) | Reserved | Prior exposure | Producer / consumer stack | Local build | Supported by v1.1 | Consumer relation | Warnings | Adjudication | Highest level | Rule changes | Disclosure status |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| [PENDING D1P-33] | [PENDING D1P-33] | [PENDING D1P-33] | [PENDING D1P-33] | [PENDING D1P-33] | [PENDING D1P-33] | [PENDING D1P-33] | [PENDING D1P-33] | [PENDING D1P-33] | [PENDING D1P-33] | [PENDING D1P-33] | [PENDING D1P-33] |
+| NullProof (`79156bc9…`) | Yes | Name and URL only | Noir `1.0.0-beta.19` / Solidity 0.8.33 (`ComplianceGate`) | Circuit and contracts compile | No: `unsupported Noir compiler` (beta.19) | Not reached | 0 | n/a | — | 0 | Nothing to disclose |
+| privacy-preserving-IP-NFT (`6ed03661…`) | Yes | Name and URL only | Noir `1.0.0-beta.3`, a fallback evidenced by adjacent Noir JS dependencies (the project declares only `>=0.31.0`) / Solidity 0.8.30 (no project pin) | Circuit compiles with the beta.3 fallback; contracts compile with tests and scripts skipped | No: `unsupported Noir compiler` (beta.3) | Not reached | 0 | n/a | — | 0 | Nothing to disclose |
+| zkt-research (`166b3c30…`) | Yes | Name and URL only | Noir `1.0.0-beta.21` / Solidity 0.8.31 (`ZKTCore`) | Circuit and contracts compile. The rebuilt artifact differs from the committed one, and the checked-in `HonkVerifier.sol` is a stub that returns false | No: `unsupported Noir compiler` (beta.21) | Not reached | 0 | n/a | — | 0 | Nothing to disclose |
+| ZKPassport circuits (`818e7a7e…`, `outer_count_4`) | Yes | Name and URL only | Noir `1.0.0-beta.22` / Solidity 0.8.30 (`SubVerifier`) | Circuit and contracts compile | No: `RecursiveAggregation` | Not reached | 0 | n/a | — | 0 | Nothing to disclose |
 
-*Table 10: Held-out funnel totals.*
+*Table 10: Held-out funnel totals (D1P-33).*
 
-| Stage | Groups | Applications | Notes |
-| --- | --- | --- | --- |
-| Candidate frame (names/URLs only) | 8 | — | Stratum `noir-evm:eligible`; AI-prepared list; none in the 0xPARC tracker |
-| Reserved (custodian draw) | [PENDING D1P-33] (4 implied by protocol rounding) | [PENDING D1P-33] | Commitment `514ad719…` |
-| Artifacts available | [PENDING D1P-33] | [PENDING D1P-33] | [PENDING D1P-33] |
-| Supported (Noir beta.14/beta.22 + Solidity with a v1.1 AST relation) | [PENDING D1P-33] | [PENDING D1P-33] | [PENDING D1P-33] |
-| Analyzed to completion | [PENDING D1P-33] | [PENDING D1P-33] | [PENDING D1P-33] |
-| With ≥1 warning | [PENDING D1P-33] | [PENDING D1P-33] | [PENDING D1P-33] |
-| Validated (E4) | [PENDING D1P-33] | [PENDING D1P-33] | [PENDING D1P-33] |
+| Stage | Projects | Notes |
+| --- | --- | --- |
+| Candidate frame (names and URLs only) | 8 | Stratum `noir-evm:eligible`; AI-prepared list; none in the 0xPARC tracker |
+| Reserved (custodian draw) | 4 | Commitment `514ad719…`; D1P-33 records no check of the opening against it |
+| Retrieved and pinned | 4 | Full commits and recursive submodules |
+| Built locally | 4 | IP-NFT only through an evidenced compiler fallback and a contracts-only route; zkt-research without a complete generated verifier pairing in the checkout |
+| Supported by v1.1 | 0 | 3 stopped at the exact Noir version gate (beta.19, beta.3, beta.21); 1 at `RecursiveAggregation` (beta.22) |
+| Analyzed to completion | 0 | — |
+| With ≥1 warning | 0 | — |
+| Validated | 0 | No warning to validate; no `bindcheck validate` run |
 
-Stages are monotone. An unsupported family explains attrition and is never
-counted as a miss or as safe. v1.1 accepts exactly two Noir versions, so a
-reserved project on another compiler version will be unsupported without a
-frontend change. Making that change after opening the reservation would end
-the project's held-out status.
+Stages are monotone. An unsupported project explains attrition and is never
+counted as a miss or as safe.
 
-**Answer to RQ4.** [PENDING D1P-33]
+**Answer to RQ4.** With the tool frozen, BindCheck v1.1 supported none of
+the four reserved projects: 0 supported, 4 unsupported, 0 warnings and 0
+validations. Three stopped at the exact compiler-version gate of the
+producer frontend (Noir beta.19, beta.3 and beta.21). The fourth uses a
+supported version (beta.22) but contains recursive verification, which the
+decoder rejects by name. The result is a capability limitation. v1.1's two
+version-keyed decoders do not reach the compiler versions these projects
+use, and no held-out consumer reached the AST frontend. The scan measures
+neither false negatives nor warning precision nor validation transfer,
+because no analysis completed. Transfer of the rules remains untested.
+
+**Pending: a version-only change and a rescan.**
+- **D1P-35 [PENDING D1P-35].** BindCheck v1.2 changes only compiler-version
+  support in the producer frontend. No rule, consumer-lowering step, effect
+  model or validation route changes. In particular, R-ANCHOR stays
+  unreachable and the location defects of §V-G stay unfixed (§V-F;
+  §VII-H).
+- **D1P-36 [PENDING D1P-36].** v1.2 rescans the four reserved projects and
+  scans four unseen, non-reserved projects once each.
+
+A version-only change cannot help the ZKPassport route, which fails on
+recursive aggregation, not on its version. It also cannot supply
+zkt-research's missing verifier pairing. Tables 9 and 10 will gain v1.2
+rows, and the v1.1 rows above stay unchanged.
+
+**Disclosure for the rescan (pre-written for D1P-36).** The D1P-36 rescan of
+the reserved projects is not a first, blind held-out attempt. It follows a
+tool change made *after* the first attempt (D1P-33) failed at the compiler
+version gate on three of the four reserved projects. The change was
+motivated by that failure, and the versions it adds
+**[PENDING D1P-35: list]** were chosen knowing which versions the reserved
+projects use. The change is confined to version support. No rule, consumer
+lowering, effect model or validation route changed, and v1.2 was frozen by
+hash before the rescan. The analysis lane had also already retrieved and
+built the reserved projects, and the D1P-33 report describes their consumer
+boundaries. It had seen no warning on them, because none was emitted. We
+therefore report two strata and never pool them:
+1. the four reserved projects, labeled *held out, second attempt after a
+   version-only change made in response to the first attempt*;
+2. the four unseen, non-reserved projects, which are first attempts, with
+   their selection procedure frozen before any of them was inspected
+   **[PENDING D1P-36: procedure]**.
+
+Only the second stratum is a first-attempt transfer result. Any change
+beyond version support would end the reserved projects' held-out status.
 
 ### G. RQ5 — Taxonomy
 
-**Status: AI-assisted extraction, pending human labels.** Every number below
+**Status: AI-assisted extraction, pending human labels.** A blind labeling
+sheet with the AI labels and include tags removed has been prepared for the
+human annotators ([`v1-blind-labels.md`](../docs/taxonomy/v1-blind-labels.md));
+its one-line summaries are still AI-written. Every number below
 comes from the seed-only v1 corpus (§IV-D). Relevance decisions were made by
 an AI agent, and every cause label is AI-suggested, recorded as `ASSUMED`,
 with the `human_label` field empty. These are not annotation data. Under
@@ -1725,21 +1829,42 @@ non-detection may hide a weak or wrong binding, which is the main reason for
 the 14 unsupported mutants.
 
 **Validation provenance.** Every D1P-30 E4 replays a witness construction
-that people designed before D1P-30. The Lane X pipeline needs no manual
-steps at run time. It is WarpToad-specific, however, has plan branches for
-four specific mutants, and was written by the same AI-assisted lane as the
-benchmark, with the ground truth available. It was measured on v1 warnings.
+that people designed before D1P-30. The Lane X harnesses need no manual
+steps at run time. They are written per application, however, and their
+WarpToad plans match WarpToad word names. They were written by the same
+AI-assisted lane as the benchmark, with the ground truth available, and the
+v1.1 plans were revised after the v1.1 warnings were known. The Payy
+consumer rows use a mock verifier and check no producer assignment.
+
+**R-ANCHOR is unreachable.** In v1.1, and in the planned version-only v1.2,
+both consumer loaders record an anchor only after finding a guarded storage
+lookup. The root-specific R-ANCHOR rule therefore cannot fire (§V-F).
+Removed root guards are still reported, through R-CONSUMER, but a root
+whose guard is present with the wrong direction or the wrong map is not.
+We defer the fix until after the transfer test. Changing a rule between the
+first held-out attempt and the rescan would be held-out tuning (contract
+§9).
+
+**The repaired-control warning.** The only warning on the repaired Payy
+control is R-CONSUMER on `commit_hash`, whose consumer check
+`verifyCommitHash` is an empty placeholder (`RollupV1.sol:381–382`). The
+structural observation is true: the authenticated word reaches no on-chain
+check. Whether it is a defect depends on the intended off-chain
+data-availability check, and adjudication is pending. Until then, we report
+one of two controls as carrying a warning, and we count that warning
+neither as a detection nor as a false alarm.
 
 **Injected cases and benchmark.** M-DOM and M-SRC are injected. M-DOM is
 grounded in an unused in-tree package and a developer warning, M-SRC in
 documented reliance. Neither indicates a defect in pinned WarpToad. The
 benchmark was built in parallel with D1P-30 by an AI-assisted lane. Its
 operators share mechanisms with the cases. Its predicted effects are mostly
-unexecuted outside the pipeline's WarpToad rows. Its Payy mutants sit on the
+unexecuted outside the harness rows. Its Payy mutants sit on the
 faulty revision.
 
 **Admitted state.** The M-DOM differential uses privileged synthetic root
-admission (`S_DOM`). The pipeline's WT-S02 run uses a mock provider that
+admission (`S_DOM`). The WarpToad
+harness's WT-S02 run uses a mock provider that
 admits the plan's giga root by construction. Neither variant demonstrates
 cross-chain reachability.
 
@@ -1749,9 +1874,13 @@ No Payy or circuit-mutant harness was written after the results were seen,
 so those cells stay unresolved (D1P-32). BindCheck's own scale and the
 baselines' scale differ, so Table 8 shows BindCheck under both.
 
-**Held-out frame.** The reserved frame has eight candidates from one
-AI-prepared search. Its commitment shows consistency, not randomness or
-timing, and the custodian's signature is not yet added (§IV-D).
+**Held-out frame and rescan.** The reserved frame has eight candidates
+from one AI-prepared search, of which four were reserved. Its commitment
+shows consistency, not randomness or timing, and the custodian's signature
+is not yet added (§IV-D). The first scan supported none of the four. The
+planned rescan follows a version-only change that was made because of
+that failure, after the analysis lane had built the projects. Its results
+on the reserved projects will be labeled as second attempts (§VII-F).
 
 **Taxonomy.** The corpus covers one seed endpoint. Its relevance decisions
 and labels are AI-made, and its extraction deviated from the metadata-only
@@ -1762,9 +1891,9 @@ counts, not false-positive rates.
 
 **AI involvement.** AI agents did all of the following:
 - implemented the code;
-- ran D1P-22, D1P-30, D1P-31, D1P-32 and D1P-34;
-- built the benchmark, the automatic-validation pipeline and the Foundry
-  policy harness;
+- ran D1P-22, D1P-30, D1P-31, D1P-32, D1P-34 and the D1P-33 held-out scan;
+- built the benchmark, the validation harnesses (including TC02) and the
+  Foundry policy harness;
 - extracted the taxonomy seed corpus and prepared the held-out candidate
   list;
 - wrote the B02 obligations and drafted this text (§X-B).
@@ -1904,7 +2033,9 @@ extractor supports one entry point's reachable constructs with OpenZeppelin
 reentrancy, and both assume standard atomic ERC-20 behavior. Unsupported
 inputs stop with a named reason. That keeps results honest but bounds
 applicability. On the benchmark, 14 of 30 mutants were unsupported
-(§VII-C). RQ4's funnel will measure the same on held-out projects.
+(§VII-C). On the four reserved held-out projects, all four were
+unsupported: three at the compiler-version gate and one at recursive
+aggregation (§VII-F).
 
 **Occurrence is not correct binding.** R-BIND treats one proof-enforced
 occurrence as sufficient. It misses a public input that is used but bound
@@ -1921,7 +2052,8 @@ does not say whether the word should have been a root to admit, a key to
 spend or an amount to transfer, and its suggested fix is generic (D1P-34
 §7). Consumer-supplied configuration and environment words are exempt, so a
 missing use of such a word is not reported. v1's root-specific R-ANCHOR
-remains in the code but cannot fire under v1.1's loaders (§V-F).
+remains in the code but cannot fire under v1.1's loaders, and its fix is
+deferred until after the transfer test (§V-F).
 
 **Loop widening.** The AST frontend widens a loop-carried index to the whole
 tail of the public array from its known lower bound. This is a conservative
@@ -1959,14 +2091,15 @@ specialization (later repaired) and general queries that did not finish
 (T22, T22-v3, T22-v4).
 
 **Validation coverage.** D1P-30's E4 results replay witness constructions
-designed before D1P-30. The Lane X pipeline removes manual steps for 11
-WarpToad warnings. It is WarpToad-specific, however, has target-specific
-plan branches, cannot build Payy witnesses, and has not been rerun on v1.1's
-warnings **[PENDING V1.1-RERUN]**. Under the registered index, 52 of 53
-v1.1 benchmark warnings stop at E1. Validation covers one consumer call from
-a fixed admitted pre-state, or a replay in a second call. Multi-transaction
-histories, front-running and observation of honest proofs are out of scope
-(B02 §3.1).
+designed before D1P-30. The Lane X harnesses run without manual steps but
+are written per application. Only WarpToad has a full warning-to-E4 path.
+Payy has a mock-verifier consumer harness and a one-mutant real-proof
+circuit harness (TC02), and no Payy warning has reached E4. Of the 53 v1.1
+benchmark warnings, 32 remain at E1. A new application needs its own
+harness before any of its warnings can be validated. Validation covers one
+consumer call from a fixed admitted pre-state, or a replay in a second
+call. Multi-transaction histories, front-running and observation of honest
+proofs are out of scope (B02 §3.1).
 
 **Same-policy arm for WarpToad only.** D1P-32's same-policy Foundry harness
 covers WarpToad's consumer and case targets. It is handwritten,
@@ -1975,8 +2108,10 @@ same-policy harness exists for Payy or for circuit mutants. Those cells are
 unresolved, so the comparison cannot show how a same-policy baseline would
 do there.
 
-**Small held-out frame; AI-assisted taxonomy.** The reserved frame has eight
-candidates from one AI-prepared search, smaller than the frozen plan. The
+**Held-out coverage; AI-assisted taxonomy.** The reserved frame has four
+projects from one AI-prepared search, smaller than the frozen plan, and the
+frozen tool supported none of them. The binding constraint is the
+producer frontend's exact compiler-version gate. The
 taxonomy corpus covers one seed endpoint, and its relevance decisions and
 labels are AI-made, pending human labels (§IV-D).
 
@@ -2009,17 +2144,19 @@ Venue requirements are from the IEEE S&P 2027 call for papers [8], retrieved
   our own injected variants and imply no defect in WarpToad. Any new
   candidate from RQ2 or RQ4 is disclosed to its maintainers before the
   original submission where possible, and no later than the rebuttal
-  deadline, as the CFP requires [8]. The paper will describe the steps taken
-  **[PENDING D1P-33]**.
+  deadline, as the CFP requires [8]. D1P-33 emitted no warning, so there
+  was nothing to disclose and no maintainer was contacted. Any candidate
+  from D1P-36 follows the same procedure **[PENDING D1P-36]**.
 - **New tool.** BindCheck's validation routes produce working forged proofs
   against local deployments. Misuse risk: an attacker could use validated
   warnings against live systems. Mitigations: validation runs only on
-  owned-local chains with fresh deployments. The Lane X pipeline does
-  synthesize attack witnesses and forged proofs, but only for the WarpToad
-  same-root and Aztec paths of our development mutants, and only against
-  fresh local deployments. The planned artifact omits automation for
+  owned-local chains with fresh deployments. The Lane X harnesses
+  do synthesize attack witnesses and forged proofs. They do so only for our
+  two development applications (WarpToad, and one Payy mutant in TC02) and
+  only against fresh local deployments. The Payy consumer harness uses a
+  mock verifier. The planned artifact omits automation for
   live-network submission **[TODO: authors confirm]**, and whether to
-  release the pipeline at all is **[TODO: authors decide]**. Held-out
+  release the harnesses at all is **[TODO: authors decide]**. Held-out
   findings are released only after disclosure. The benefit is that developers can find and fix
   binding failures before deployment, the same capability attackers already
   apply by hand.
@@ -2037,8 +2174,8 @@ recorded as `ASSUMED` and are not annotation. AI systems are excluded from
 final taxonomy labeling and adjudication. An AI planner also prepared the
 held-out candidate list from names and URLs only. A human custodian
 performed the draw outside every agent session. AI agents also wrote
-BindCheck v1.1 (D1P-34), the automatic-validation pipeline and the D1P-32
-Foundry policy harness. D1P-32 records no human inspection of that harness.
+BindCheck v1.1 (D1P-34), the validation harnesses (including TC02) and the
+D1P-32 Foundry policy harness, and they ran the D1P-33 held-out scan. D1P-32 records no human inspection of that harness.
 Authors inspect every claim, citation, label and result. **[TODO]** Write the disclosure from the preserved task
 prompts and reports.
 
@@ -2077,10 +2214,13 @@ detection named the broken binding. A handwritten same-policy harness does
 better on WarpToad consumer mutants (8/9 against 5/9). BindCheck covers the
 circuit-side mutants that no Solidity baseline reaches, needs no
 per-application policy, and catches the one consumer mutant the harness
-misses. An automatic pipeline drove 7 of 20 v1 warnings to fresh E4 with no
-manual steps, on WarpToad only. These are development results. The
-pipeline rerun on v1.1 warnings [PENDING V1.1-RERUN], held-out results on
-the disclosed mini-draw [PENDING D1P-33], and human taxonomy labels remain.
+misses. Per-application validation harnesses took every WarpToad warning to at
+least E3 and nine to E4. No Payy warning has reached E4. These are
+development results. On the four reserved held-out projects, the frozen
+tool supported none: three stopped at its compiler-version gate and one at
+recursive aggregation, so transfer is untested. Still to come are a
+version-only v1.2, a rescan that adds four unseen projects
+[PENDING D1P-35, D1P-36], and human taxonomy labels.
 
 ---
 
@@ -2134,7 +2274,9 @@ None of these timeouts is evidence of safety.
 | Preserved E4 audit for Payy (v1 warning, N=8 build) | D1P-30 §5.3 | Automatic audit of preserved evidence |
 | Benchmark: 16/30 detected, 14 unsupported, 0 missed; 53 warnings (20 related, 33 inherited) | D1P-34 §§1, 5 | Tool output (E1) with post-run adjudication, development |
 | Benchmark index validation: 1 preserved E4, 52 E1 | D1P-34 §5.1 | Automatic audit of preserved evidence; no new proof |
-| Automatic validation of 20 v1 warnings: 7 fresh E4, 1 preserved E4, 4 E3, 8 E1 | AUTO-VALIDATE; ignored `results/raw/X-AV/results.json` | Locally reproduced (injected), pipeline-driven; WarpToad only; v1 warnings |
+| Validation of 53 v1.1 warnings: 8 E4, 1 preserved E4, 6 E3, 6 mock-verifier E2, 32 E1 | AUTO-VALIDATE (v1.1 table); ignored `results/raw/X-AV/v11/` | Locally reproduced (injected), per-application harnesses; E4 on WarpToad only |
+| PY-C02 real aggregation proof accepted by the mutant, rejected by the pristine circuit | TC02; ignored `results/raw/TC02/` | Locally reproduced (injected), E3 |
+| Held-out scan: 4 reserved projects, 0 supported, 0 warnings; frozen files unchanged | D1P-33; ignored `results/raw/D1P-33/manifest.json` | Tool output under freeze; capability limitation |
 | Benchmark baselines, including the Foundry same-policy harness and the Mythril retry | D1P-32; ignored `results/raw/D1P-32/` | Tool output, scored under the frozen plan |
 | Baselines on the case targets | D1P-22 record; ignored `results/raw/D1P-22/` | Tool output, scored under the preregistered plan |
 | v1 history: 13/30, 16 unsupported, 1 miss | D1P-31 §§1, 4 | Tool output, superseded |
@@ -2142,57 +2284,48 @@ None of these timeouts is evidence of safety.
 | Contract revision 3 | D1P-31 §2; contract change log | Controlling document |
 | Taxonomy seed corpus (27 screened, 19 included, 15 families) | v1-corpus.md; v1-corpus-ledger.json | AI-assisted extraction; human labels pending |
 | Held-out mini-draw commitment (8 candidates) | reservation-commitment-2026-10-28.json | Custodian-reported; signature pending |
-| Pipeline rerun on v1.1 warnings, held-out scan, human labels | — | [PENDING V1.1-RERUN, D1P-33] |
+| Version-only v1.2, rescan plus four unseen projects, human labels | — | [PENDING D1P-35, D1P-36] |
 
 ---
 
 ## Open items for authors
 
-1. **R-ANCHOR is unreachable under v1.1.** Both loaders record an anchor
-   only after finding a guarded storage lookup, so `must_be_in` is always
-   true (§V-F; our code reading). Either remove R-ANCHOR from the code and
-   the result schema, or make admission direction-sensitive. Decide before
-   the D1P-33 freeze.
+1. **R-ANCHOR is unreachable** in v1.1 and v1.2 (§V-F). The fix is deferred
+   until after D1P-36. Then decide whether to remove the rule or make
+   admission direction-sensitive, and rerun the development evaluation.
 2. **Lost source lines.** WarpToad R-CONSUMER and R-POLARITY warnings print
-   `WarpToadCore.sol:?`, and Payy R-EFFECT points to `RollupV1.sol:850`, a
-   write with no public-word dependency (§V-G). D1P-34 does not mention
-   either. Fixing them changes the tool, so it must happen before the D1P-33
-   freeze and be followed by a rerun.
-3. **Validation identities.** The M-SRC, WT-S01, WT-S02, WT-S03 and Payy
-   v1.1 warnings no longer match their v1 routes (rule or artifact hash
-   changed). Rerun the Lane X pipeline on v1.1 warnings, including WT-S06,
-   PY-S01 and PY-S02. Record whether the full-size artifact `83b75a4a…` is
-   the one T15 proved with.
-4. **AUTO-VALIDATE count mismatch.** Its summary text and the project-status
-   row say "5 E3-contained" and "7 Payy" warnings. Its row table and
-   `results.json` list 4 E3 rows (WT-C02, WT-C07, WT-C08 ×2) and 8 Payy rows
-   (PY-C02 ×2, PY-C04 ×3, PY-C06 ×3). This draft reports the rows. Correct
-   the summary or explain the difference.
-5. **Pipeline generality.** The plan table has branches keyed to WT-C04,
-   WT-C06, WT-C07 and WT-S02, plus WarpToad-specific hash code and attacker
-   values. Either describe it permanently as development scaffolding, as
-   this draft does, or replace the target branches with rule-level plans
-   before any held-out use.
+   `WarpToadCore.sol:?`, and Payy R-EFFECT points to a first-effect position
+   such as `RollupV1.sol:850` (§V-G). These are also deferred, because the
+   fix is a tool change. Note that any held-out warning in D1P-36 will carry
+   the same defects.
+3. **Payy E4.** No Payy warning has reached E4. TC02's recommended next
+   step deploys the real mutant verifier and the pinned consumer, then
+   submits the verified block with validator signatures.
+4. **Reservation.** Record a check that the four D1P-33 projects match the
+   commitment opening (`514ad719…`), and add the custodian's signature.
+5. **D1P-35/36 records.** Record the exact versions v1.2 adds and freeze it
+   by hash before the rescan. Freeze the selection procedure for the four
+   unseen, non-reserved projects before inspecting any of them. Report the
+   two strata separately, as pre-written in §VII-F.
 6. **The `commit_hash` warning.** Adjudicate R-CONSUMER on Payy's
-   `commit_hash` (empty `verifyCommitHash` placeholder). It decides whether
-   the repaired control carries an actionable warning or a modeled-scope
-   artifact.
-7. **Taxonomy.**
+   `commit_hash` (empty `verifyCommitHash` placeholder).
+7. **Mock-verifier grade.** The lane's "E2, mock-verifier-scoped" label does
+   not meet the contract's E2 wording, because no producer assignment is
+   checked (§V-H). Decide on a separate label before submission.
+8. **Taxonomy.**
    - The metadata-only access rule was not followed for the seed endpoint.
      The custodian-sanitized flow is owed before any annotation round.
-   - Decide whether human annotators see the AI-suggested labels. Showing
-     them risks anchoring; the protocol does not say.
+   - A blind labeling sheet now hides the AI labels, but its one-line
+     summaries are AI-written. Decide whether that is acceptable.
    - Several AI inclusions need checking against the pure-circuit exclusion
      (§VII-G).
-8. **Reservation.** Add the custodian's signature to the commitment record.
-   Record the number of reserved groups privately, so that the opening can
-   be checked against it.
 9. **Policy harness review.** The Foundry same-policy harness has no recorded
    human inspection. A human should review it before the comparison is
    published.
 10. **Citations.** CIVER and CCC-Check full texts remain unread. Supply
     copies and resolve each **[TODO-VERIFY]**.
 11. Draw Figure 1. Replace repository links with an anonymized artifact.
+    Decide whether the held-out project names stay in Table 9.
 12. Have a human author inspect every claim and citation (contract §10).
 
 ---
