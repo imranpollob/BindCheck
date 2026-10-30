@@ -309,7 +309,8 @@ def ledger_table() -> None:
     sys.path.insert(0, str(ROOT / "src"))
     from bindcheck_d1 import xav_core
     results = json.loads((RAW / "X-AV/v11/results.json").read_text())
-    graded = xav_core.check_ledger(results)
+    warnings = xav_core.load_warnings(str(RAW / "X-AV/warnings-v11.json"))
+    graded = xav_core.check_ledger(results, warnings)
     evidence = [
         RAW / "X-AV/v11/results.json",
         ROOT / "build/TE05/proof-final/proof",
@@ -317,6 +318,8 @@ def ledger_table() -> None:
         RAW / "REPAIR/repair-report.json",
         RAW / "REPAIR/s02-corrected/report-mutant-accepts.json",
         RAW / "REPAIR/s02-corrected/report-pinned-reverts.json",
+        ROOT / "build/TE06/e4/te06-S01-report.json",
+        ROOT / "build/TE06/e4/te06-S03-report.json",
     ]
     missing = [str(p) for p in evidence if not p.exists()]
     if missing:
@@ -327,6 +330,10 @@ def ledger_table() -> None:
     reverts = {k: v for k, v in te05.items() if k.startswith("revert")}
     if len(reverts) < 2:
         raise AssertionError(f"TE05 must record both submits reverting: {reverts}")
+    for name in ("S01", "S03"):
+        rep = json.loads((ROOT / f"build/TE06/e4/te06-{name}-report.json").read_text())
+        if not any("success" in json.dumps(s) for s in rep.get("steps", [])):
+            raise AssertionError(f"TE06 {name} must show the mutant-side effect")
     repair = json.loads((RAW / "REPAIR/repair-report.json").read_text())
     verdicts = {(r["mutant"]): r.get("verdict") for r in repair["rows"]}
     bad = {m: v for m, v in verdicts.items() if not (
