@@ -1,4 +1,4 @@
-"""BindCheck v1.2 cross-layer static analyzer.
+"""BindCheck v1.3 cross-layer static analyzer.
 
 The rule engine is deliberately application-neutral.  It joins flattened
 producer ABI leaves and ACIR witness use with either an extracted consumer
@@ -21,7 +21,7 @@ from typing import Any
 from .frontends import acir_binary_beta15_21, acir_binary_beta22, acir_binary_v1
 
 
-SCHEMA = "bindcheck.static-analysis.v1.2"
+SCHEMA = "bindcheck.static-analysis.v1.3"
 
 
 def sha256(path: Path) -> str:
@@ -88,6 +88,77 @@ def _opcode_witnesses(opcode: dict[str, Any]) -> tuple[list[int], list[int], lis
         # is actually used.
         return [], [], list(opcode.get("init", []))
     return _nested_witnesses(opcode), [], []
+
+
+def _constant_expression(value: Any) -> int | None:
+    """Return an exact ACIR expression constant, or ``None`` if it has witnesses."""
+    if isinstance(value, int) and not isinstance(value, bool):
+        return None  # beta.22 MemoryOp integers are witness identifiers.
+    if not isinstance(value, dict) or "mul" not in value or "linear" not in value:
+        return None
+    if value.get("mul") or value.get("linear"):
+        return None
+    constant = value.get("constant")
+    return constant if isinstance(constant, int) and not isinstance(constant, bool) else None
+
+
+def _memory_dependency_facts(opcodes: list[dict[str, Any]]) -> tuple[Counter[int], set[int]]:
+    """Recover exact MemoryInit dependencies and flag unresolved dynamic ones.
+
+    A constant-address read has an exact dependency on the current cell.  A
+    dynamic read may select any current cell; without proving its address
+    range, counting every initializer as used or every initializer as unused
+    would both be unsound.  Those witnesses are therefore returned as
+    unresolved and force the caller to fail closed when no other occurrence
+    establishes their use.
+    """
+    blocks: dict[int, list[set[int]]] = {}
+    tainted_blocks: set[int] = set()
+    exact: Counter[int] = Counter()
+    unresolved: set[int] = set()
+    for opcode in opcodes:
+        kind = opcode["kind"]
+        block_id = opcode.get("block_id")
+        if kind == "MemoryInit":
+            blocks[block_id] = [{witness} for witness in opcode.get("init", [])]
+            continue
+        if kind != "MemoryOp" or block_id not in blocks:
+            continue
+        operation = opcode.get("operation")
+        if isinstance(operation, str):
+            operation_kind = operation
+        else:
+            operation_constant = _constant_expression(operation)
+            operation_kind = "read" if operation_constant == 0 else (
+                "write" if operation_constant == 1 else "unknown"
+            )
+        cells = blocks[block_id]
+        index = _constant_expression(opcode.get("index"))
+        value_witnesses = set(_nested_witnesses(opcode.get("value"), "value"))
+        if operation_kind == "read":
+            if index is not None and 0 <= index < len(cells) and block_id not in tainted_blocks:
+                exact.update(cells[index])
+            elif index is not None and 0 <= index < len(cells):
+                unresolved.update(cells[index])
+            else:
+                for cell in cells:
+                    unresolved.update(cell)
+        elif operation_kind == "write":
+            if index is not None and 0 <= index < len(cells):
+                cells[index] = value_witnesses
+            else:
+                # A dynamic write may replace any cell.  Preserve both the old
+                # and new dependencies and mark the selection unresolved.
+                prior = set().union(*cells) if cells else set()
+                unresolved.update(prior | value_witnesses)
+                replacement = prior | value_witnesses
+                blocks[block_id] = [set(replacement) for _ in cells]
+                tainted_blocks.add(block_id)
+        else:
+            unresolved.update(set().union(*cells) if cells else set())
+            unresolved.update(value_witnesses)
+            tainted_blocks.add(block_id)
+    return exact, unresolved
 
 
 def _leaf_bindings(abi: dict[str, Any], bindings: dict[str, list[int]]) -> list[dict[str, Any]]:
@@ -158,6 +229,14 @@ def load_producer(path: Path) -> dict[str, Any]:
                     f"opcode[{opcode.get('opcode_index', ordinal)}]/{kind}"
                 )
 
+    exact_memory_occurrences, unresolved_memory_witnesses = _memory_dependency_facts(
+        circuit["opcodes"]
+    )
+    for witness, count in exact_memory_occurrences.items():
+        occurrences[witness] += count
+        if len(locations.setdefault(witness, [])) < 8:
+            locations[witness].append("memory/exact-constant-read")
+
     leaves = _leaf_bindings(decoded["abi"], bindings)
     public_leaves = []
     for public_index, leaf in enumerate(item for item in leaves if item["visibility"] == "public"):
@@ -174,6 +253,11 @@ def load_producer(path: Path) -> dict[str, Any]:
             "memory_definition_occurrence_locations": memory_definition_locations.get(
                 leaf["witness"], []
             ),
+            "memory_dependency_status": (
+                "proof-enforced-exact" if exact_memory_occurrences[leaf["witness"]]
+                else "unresolved-dynamic" if leaf["witness"] in unresolved_memory_witnesses
+                else "none"
+            ),
         })
         public_leaves.append(leaf)
     return {
@@ -184,9 +268,9 @@ def load_producer(path: Path) -> dict[str, Any]:
         "opcode_count": len(circuit["opcodes"]),
         "opcode_counts": dict(sorted(kinds.items())),
         "occurrence_policy": {
-            "proof_enforced": "assertions, black boxes (inputs and outputs), memory-op address/value expressions, and constrained calls",
+            "proof_enforced": "assertions, black boxes (inputs and outputs), exact constant-address MemoryInit reads, memory-op address/value expressions, and constrained calls",
             "witness_generation_only": "Brillig call inputs, outputs, and predicates",
-            "definition_only": "MemoryInit cell definitions; not counted as proof-enforced use without a MemoryOp",
+            "definition_only": "MemoryInit cell definitions; dynamic-address dependencies fail closed when no other proof-enforced occurrence exists",
         },
         "public_leaves": public_leaves,
         "public_witnesses": circuit["public_parameters"],
@@ -313,7 +397,11 @@ def load_relation_consumer(source: Path, relation_path: Path, public_count: int)
     expected_source = relation.get("source_sha256")
     if expected_source is not None and expected_source != sha256(source):
         raise ValueError("CONSUMER_RELATION_SOURCE_HASH_MISMATCH")
-    if relation.get("schema") == "bindcheck.consumer-ast.v1.1":
+    if relation.get("schema") in {"bindcheck.consumer-ast.v1.1", "bindcheck.consumer-ast.v1.2"}:
+        if "AST_VERIFIER_SELECTOR_PREFIX_WIDTH_DERIVED_FROM_ABI_AND_ARRAY_HEADER" in relation.get(
+            "limitations", []
+        ):
+            raise ValueError("CONSUMER_PUBLIC_INPUT_MAPPING_UNVERIFIED")
         words = relation["public_words"]
         if len(words) != public_count:
             raise ValueError(
@@ -465,6 +553,16 @@ def analyze(artifact_path: Path, source_path: Path, relation_path: Path | None =
     consumer = load_relation_consumer(source_path, relation_path, len(producer["public_leaves"]))
     warnings: list[dict[str, Any]] = []
 
+    unresolved_memory = [
+        leaf for leaf in producer["public_leaves"]
+        if leaf["occurrence_count"] == 0
+        and leaf.get("memory_dependency_status") == "unresolved-dynamic"
+    ]
+    if unresolved_memory:
+        paths = ",".join(leaf["path"] for leaf in unresolved_memory[:8])
+        suffix = "..." if len(unresolved_memory) > 8 else ""
+        raise ValueError(f"UNSUPPORTED_DYNAMIC_MEMORY_DEPENDENCY:{paths}{suffix}")
+
     def warning(rule: str, location: str, explanation: str, suggested_fix: str,
                 evidence: dict[str, Any], confidence: str = "high") -> None:
         warnings.append({
@@ -583,7 +681,7 @@ def analyze(artifact_path: Path, source_path: Path, relation_path: Path | None =
 
 
 def readable(result: dict[str, Any]) -> str:
-    lines = [f"BindCheck v1.2: {result['target']}",
+    lines = [f"BindCheck v1.3: {result['target']}",
              f"  producer: {result['producer']['sha256']} ({result['producer']['decoder']})",
              f"  consumer: {result['consumer']['source_sha256']} ({result['consumer']['kind']})",
              f"  warnings: {result['warning_count']}  runtime: {result['runtime_seconds']:.3f}s"]

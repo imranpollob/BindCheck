@@ -1,4 +1,4 @@
-"""Application-neutral Solidity consumer extraction for BindCheck v1.1.
+"""Application-neutral Solidity consumer extraction for BindCheck v1.3.
 
 The frontend consumes a solc combined-json AST.  It recognizes a verifier
 boundary from the declared function type (``bytes``, ``bytes32[]`` and a
@@ -20,7 +20,7 @@ import re
 from typing import Any, Iterable
 
 
-SCHEMA = "bindcheck.consumer-ast.v1.1"
+SCHEMA = "bindcheck.consumer-ast.v1.2"
 
 
 def _walk(value: Any) -> Iterable[dict[str, Any]]:
@@ -70,11 +70,66 @@ def _literal_bool(node: dict[str, Any] | None) -> bool | None:
     return None
 
 
+def _select_effect_model(models: list[dict[str, Any]],
+                         candidates: list[tuple[str, str]]) -> dict[str, Any] | None:
+    return next((
+        model for model in models
+        if any(model.get("function_name") == name
+               and model["function_type_contains"] in signature
+               for name, signature in candidates)
+    ), None)
+
+
+def _resolve_direct_width(public_count: int, literal_widths: set[int],
+                          inferred_width: int) -> int:
+    if len(literal_widths) > 1:
+        raise ValueError("SOLIDITY_PUBLIC_ARRAY_LENGTH_AMBIGUOUS")
+    direct_width = next(iter(literal_widths), inferred_width)
+    if direct_width > public_count:
+        raise ValueError("SOLIDITY_PUBLIC_ARRAY_ABI_WIDTH_OVERFLOW")
+    if direct_width != public_count:
+        raise ValueError(
+            f"SOLIDITY_PUBLIC_INPUT_MAPPING_AMBIGUOUS:consumer={direct_width},producer={public_count}"
+        )
+    return direct_width
+
+
+def _anchor_candidates(storage_reads: list[dict[str, Any]], guards: list[dict[str, Any]],
+                       replay_records: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    replay_pairs = {
+        (tuple(item["write"]["declarations"]), tuple(item["write"]["key_words"]))
+        for item in replay_records
+    }
+    anchors = []
+    for read in storage_reads:
+        pair = (tuple(read["declarations"]), tuple(read["key_words"]))
+        if pair in replay_pairs:
+            continue
+        matching = [
+            guard for guard in guards
+            if not guard["requires_false"] and any(
+                slot["declarations"] == read["declarations"]
+                and set(slot["key_words"]) == set(read["key_words"])
+                for slot in guard["storage"]
+            )
+        ]
+        for index in read["key_words"]:
+            anchors.append({
+                "public_index": index,
+                "origin": f"public_inputs[{index}]",
+                "must_be_in": bool(matching),
+                "evidence": [guard["location"] for guard in matching] or [read["location"]],
+            })
+    return anchors
+
+
 @dataclass(frozen=True)
 class Value:
     words: frozenset[int] = frozenset()
     array_start: int | None = None
     integer: int | None = None
+    lower: int | None = None
+    upper: int | None = None
 
     @staticmethod
     def merge(*values: "Value") -> "Value":
@@ -92,8 +147,11 @@ class Trace:
     guards: list[dict[str, Any]] = field(default_factory=list)
     effects: list[dict[str, Any]] = field(default_factory=list)
     writes: list[dict[str, Any]] = field(default_factory=list)
+    storage_reads: list[dict[str, Any]] = field(default_factory=list)
     verifier_calls: list[dict[str, Any]] = field(default_factory=list)
     unsupported: set[str] = field(default_factory=set)
+    loop_widened: bool = False
+    literal_array_widths: list[tuple[int, int]] = field(default_factory=list)
 
 
 class Extractor:
@@ -106,7 +164,7 @@ class Extractor:
         self.public_leaves = public_leaves
         self.public_count = len(public_leaves)
         self.array_lower_bounds: set[int] = set()
-        effect_table_path = Path(__file__).resolve().parents[3] / "protocols/d1/bindcheck-v1.1-effect-models.json"
+        effect_table_path = Path(__file__).resolve().parents[3] / "protocols/d1/bindcheck-v1.3-effect-models.json"
         self.effect_table = json.loads(effect_table_path.read_text())
         source_record = combined.get("sources", {}).get(source_key)
         if not source_record or "AST" not in source_record:
@@ -150,6 +208,10 @@ class Extractor:
             return frozenset()
         if index.integer is not None and 0 <= index.integer < self.public_count:
             return frozenset({index.integer})
+        if index.lower is not None and index.upper is not None:
+            lower = max(0, index.lower, array.array_start)
+            upper = min(self.public_count - 1, index.upper)
+            return frozenset(range(lower, upper + 1)) if lower <= upper else frozenset()
         start = max(0, array.array_start)
         return frozenset(range(start, self.public_count))
 
@@ -187,8 +249,20 @@ class Extractor:
             declaration = node.get("referencedDeclaration")
             return env.get(declaration, Value()) if isinstance(declaration, int) else Value()
         if kind == "Literal":
-            return Value(integer=_literal_int(node))
+            integer = _literal_int(node)
+            return Value(integer=integer, lower=integer, upper=integer)
         if kind == "IndexAccess":
+            storage = self._storage_signature(node, env)
+            if storage is not None:
+                if _type(node).startswith("bool"):
+                    record = {
+                        "declarations": list(storage[0]),
+                        "key_words": sorted(storage[1]),
+                        "location": f"{self.source_path.name}:{_line(self.source_text, node)}",
+                    }
+                    if record not in self.trace.storage_reads:
+                        self.trace.storage_reads.append(record)
+                return Value(storage[1])
             base = self._eval(node.get("baseExpression"), env)
             index = self._eval(node.get("indexExpression"), env)
             return Value(self._words_for_array_index(base, index))
@@ -207,19 +281,25 @@ class Extractor:
                 self._run_function(declaration, values)
             # Standard token effects are signature-based, never name/path based.
             signature = _type(node.get("expression", {}))
-            candidate_signatures = [signature]
+            candidates: list[tuple[str, str]] = []
+            if declaration is not None and declaration.get("nodeType") == "FunctionDefinition":
+                parameters = declaration.get("parameters", {}).get("parameters", [])
+                candidates.append((str(declaration.get("name", "")),
+                                   "function (" + ",".join(
+                                       _type(parameter).split(" ", 1)[0]
+                                       for parameter in parameters
+                                   ) + ")"))
             for item in _walk(node.get("arguments", [])):
                 declaration_id = item.get("referencedDeclaration")
                 declaration_node = self.nodes_by_id.get(declaration_id, {})
                 if declaration_node.get("nodeType") == "FunctionDefinition":
                     parameters = declaration_node.get("parameters", {}).get("parameters", [])
-                    candidate_signatures.append(
-                        "function (" + ",".join(_type(parameter).split(" ", 1)[0]
-                                                 for parameter in parameters) + ")"
-                    )
-            effect_model = next((model for model in self.effect_table["models"]
-                                 if any(model["function_type_contains"] in candidate
-                                        for candidate in candidate_signatures)), None)
+                    candidates.append((str(declaration_node.get("name", "")),
+                                       "function (" + ",".join(
+                                           _type(parameter).split(" ", 1)[0]
+                                           for parameter in parameters
+                                       ) + ")"))
+            effect_model = _select_effect_model(self.effect_table["models"], candidates)
             if effect_model is not None:
                 words = sorted(Value.merge(*values).words)
                 self.trace.effects.append({
@@ -244,11 +324,52 @@ class Extractor:
             if operator in {"+", "-"}:
                 if left.integer is not None and right.integer is not None:
                     number = left.integer + right.integer if operator == "+" else left.integer - right.integer
-                    return Value(left.words | right.words, integer=number)
+                    return Value(left.words | right.words, integer=number, lower=number, upper=number)
+                if (left.lower is not None and left.upper is not None
+                        and right.lower is not None and right.upper is not None):
+                    if operator == "+":
+                        return Value(left.words | right.words, lower=left.lower + right.lower,
+                                     upper=left.upper + right.upper)
+                    return Value(left.words | right.words, lower=left.lower - right.upper,
+                                 upper=left.upper - right.lower)
         return merged
+
+    def _loop_bounds(self, condition: Any, env: dict[int, Value]) -> dict[int, tuple[int, int]]:
+        if not isinstance(condition, dict) or condition.get("nodeType") != "BinaryOperation":
+            return {}
+        operator = condition.get("operator")
+        left = condition.get("leftExpression", {})
+        right = condition.get("rightExpression", {})
+        if left.get("nodeType") != "Identifier" or operator not in {"<", "<="}:
+            return {}
+        declaration = left.get("referencedDeclaration")
+        current = env.get(declaration) if isinstance(declaration, int) else None
+        limit = self._eval(right, env)
+        lower = current.integer if current and current.integer is not None else (
+            current.lower if current else None
+        )
+        upper = limit.integer if limit.integer is not None else limit.upper
+        if lower is None or upper is None:
+            return {}
+        if operator == "<":
+            upper -= 1
+        return {declaration: (lower, upper)} if lower <= upper else {}
 
     def _guard(self, expression: dict[str, Any], env: dict[int, Value]) -> None:
         value = self._eval(expression, env)
+        for node in _walk(expression):
+            if node.get("nodeType") != "BinaryOperation" or node.get("operator") != "==":
+                continue
+            left, right = node.get("leftExpression", {}), node.get("rightExpression", {})
+            for member, literal in ((left, right), (right, left)):
+                base = member.get("expression", {}) if isinstance(member, dict) else {}
+                width = _literal_int(literal)
+                declaration = base.get("referencedDeclaration") if isinstance(base, dict) else None
+                if (member.get("nodeType") == "MemberAccess"
+                        and member.get("memberName") == "length"
+                        and base.get("nodeType") == "Identifier"
+                        and isinstance(declaration, int) and width is not None):
+                    self.trace.literal_array_widths.append((declaration, width))
         storage = []
         for node in _walk(expression):
             signature = self._storage_signature(node, env)
@@ -319,13 +440,21 @@ class Extractor:
                 self._run_statement(node.get("initializationExpression"), env)
             body_env = dict(env)
             if kind in {"WhileStatement", "ForStatement", "DoWhileStatement"}:
-                # A loop-carried integer index is widened. Its lower bound is
-                # retained on the array value propagated into this function.
+                # Retain a simple literal interval; widen when the condition
+                # cannot establish one.
+                bounded = self._loop_bounds(condition, env)
                 for item in _walk(condition or {}):
                     declaration = item.get("referencedDeclaration")
                     if item.get("nodeType") == "Identifier" and declaration in body_env:
                         old = body_env[declaration]
-                        body_env[declaration] = Value(old.words, old.array_start, None)
+                        limits = bounded.get(declaration)
+                        if limits is None:
+                            self.trace.loop_widened = True
+                        body_env[declaration] = Value(
+                            old.words, old.array_start, None,
+                            limits[0] if limits else old.lower,
+                            limits[1] if limits else old.upper,
+                        )
             self._run_statement(node.get("trueBody") or node.get("body"), body_env)
             self._run_statement(node.get("falseBody"), dict(env))
             return
@@ -387,10 +516,14 @@ class Extractor:
         if len(self.trace.verifier_calls) != 1:
             raise ValueError(f"SOLIDITY_TRACED_VERIFIER_BOUNDARY_COUNT:{len(self.trace.verifier_calls)}")
 
-        # Map the verifier's direct public array into the producer ABI. A
-        # recursive verifier selector may account for a public prefix outside
-        # the bytes32[] argument. The mapping is derived from the dynamic-array
-        # header bound and the largest declared public ABI array, not names.
+        # Map the verifier's direct public array into the producer ABI.  An
+        # exact literal length check can establish identity mapping.  A shorter
+        # array does not identify which producer leaves are supplied elsewhere;
+        # the former largest-ABI-array/header inference was non-unique.
+        literal_widths = {
+            width for declaration, width in self.trace.literal_array_widths
+            if declaration == array_id
+        }
         groups: dict[str, set[int]] = {}
         for leaf in self.public_leaves:
             match = re.match(r"^(.*)\[(\d+)\]$", leaf["path"])
@@ -398,10 +531,9 @@ class Extractor:
                 groups.setdefault(match.group(1), set()).add(int(match.group(2)))
         largest_array = max((len(indices) for indices in groups.values()), default=0)
         header = max(self.array_lower_bounds, default=0)
-        direct_width = header + largest_array if largest_array else self.public_count
-        if direct_width > self.public_count:
-            raise ValueError("SOLIDITY_PUBLIC_ARRAY_ABI_WIDTH_OVERFLOW")
-        producer_prefix = self.public_count - direct_width
+        inferred_width = header + largest_array if largest_array else self.public_count
+        direct_width = _resolve_direct_width(self.public_count, literal_widths, inferred_width)
+        producer_prefix = 0
 
         def mapped(indices: Iterable[int]) -> list[int]:
             return sorted(producer_prefix + index for index in indices
@@ -417,6 +549,8 @@ class Extractor:
                 effect["key_words"] = mapped(effect["key_words"])
             if "value_words" in effect:
                 effect["value_words"] = mapped(effect["value_words"])
+        for read in self.trace.storage_reads:
+            read["key_words"] = mapped(read["key_words"])
         guard_words = set().union(*(set(item["words"]) for item in self.trace.guards), set())
         effect_words = set().union(*(set(item["words"]) for item in self.trace.effects), set())
         consumer_words = guard_words | effect_words
@@ -433,17 +567,9 @@ class Extractor:
             replay_records.append({"write": write, "guarded_absent": bool(matching),
                                    "guards": matching})
 
-        anchor_words = []
-        for guard in self.trace.guards:
-            if not guard["storage"]:
-                continue
-            for index in guard["words"]:
-                anchor_words.append({
-                    "public_index": index,
-                    "origin": (f"public_inputs[{index - producer_prefix}]"
-                               if index >= producer_prefix else f"verifier_selector_part[{index}]"),
-                    "must_be_in": True, "evidence": [guard["location"]],
-                })
+        anchor_words = _anchor_candidates(
+            self.trace.storage_reads, self.trace.guards, replay_records
+        )
         unique_anchors = {item["public_index"]: item for item in anchor_words}
         return {
             "schema": SCHEMA,
@@ -455,11 +581,6 @@ class Extractor:
                                   "direct_array_width": direct_width,
                                   "producer_prefix_width": producer_prefix},
             "public_words": ([
-                {"index": index, "origin": f"verifier_selector_part[{index}]",
-                 "source_class": "calldata", "consumer_used": True,
-                 "guard_used": True, "effect_used": False}
-                for index in range(producer_prefix)
-            ] + [
                 {"index": producer_prefix + index, "origin": f"public_inputs[{index}]",
                  "source_class": "calldata", "consumer_used": producer_prefix + index in consumer_words,
                  "guard_used": producer_prefix + index in guard_words,
@@ -471,11 +592,12 @@ class Extractor:
             "effect_word_indices": sorted(effect_words),
             "guards": self.trace.guards,
             "replay_records": replay_records,
-            "limitations": sorted(self.trace.unsupported | {
-                "AST_LOOP_INDEX_WIDENED_TO_PUBLIC_ARRAY_TAIL",
-                "AST_FRONTEND_IS_NOT_SOLIDITY_SEMANTIC_EQUIVALENCE",
-                "AST_VERIFIER_SELECTOR_PREFIX_WIDTH_DERIVED_FROM_ABI_AND_ARRAY_HEADER",
-            }),
+            "limitations": sorted(
+                self.trace.unsupported
+                | {"AST_FRONTEND_IS_NOT_SOLIDITY_SEMANTIC_EQUIVALENCE"}
+                | ({"AST_LOOP_INDEX_WIDENED_TO_PUBLIC_ARRAY_TAIL"}
+                   if self.trace.loop_widened else set())
+            ),
         }
 
 

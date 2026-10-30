@@ -51,16 +51,13 @@ class BindCheckV1Tests(unittest.TestCase):
         self.assertEqual(resolve_consumer_ir(MSRC_SOURCE, None, DEFAULT_CONSUMER_INDEX), MSRC_RELATION)
         self.assertIsNone(resolve_consumer_ir(PAYY_SOURCE, None, DEFAULT_CONSUMER_INDEX))
 
-    def test_full_size_payy_differential_without_reference_oracle(self):
-        earlier = analyze(PAYY_EARLIER, PAYY_SOURCE, PAYY_EARLIER_IR, "earlier")
-        repaired = analyze(PAYY_CHECK, PAYY_CHECK_SOURCE, PAYY_CHECK_IR, "check-added")
-        self.assertEqual([warning["rule"] for warning in earlier["warnings"]],
-                         ["R-BIND", "R-EFFECT", "R-CONSUMER"])
-        self.assertEqual(earlier["warnings"][0]["evidence"]["public_indices"],
-                         list(range(6, 1005)))
-        self.assertEqual([warning["rule"] for warning in repaired["warnings"]], ["R-CONSUMER"])
-        self.assertTrue(repaired["polarity"]["replay"]["must_not_be_in"])
-        self.assertTrue(repaired["polarity"]["replay"]["written"])
+    def test_payy_selector_prefix_inference_fails_closed(self):
+        for artifact, source, relation in (
+                (PAYY_EARLIER, PAYY_SOURCE, PAYY_EARLIER_IR),
+                (PAYY_CHECK, PAYY_CHECK_SOURCE, PAYY_CHECK_IR)):
+            with self.subTest(artifact=artifact):
+                with self.assertRaisesRegex(ValueError, "CONSUMER_PUBLIC_INPUT_MAPPING_UNVERIFIED"):
+                    analyze(artifact, source, relation, "payy")
 
     def test_source_only_loader_is_removed(self):
         with self.assertRaisesRegex(ValueError, "UNSUPPORTED_CONSUMER_AST_REQUIRED"):

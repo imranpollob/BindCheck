@@ -1,0 +1,6 @@
+[package]
+name = "d1p40_memory_dynamic"
+type = "bin"
+authors = [""]
+
+[dependencies]

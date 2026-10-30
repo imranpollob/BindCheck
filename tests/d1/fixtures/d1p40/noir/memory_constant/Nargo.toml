@@ -1,0 +1,6 @@
+[package]
+name = "d1p40_memory_constant"
+type = "bin"
+authors = [""]
+
+[dependencies]

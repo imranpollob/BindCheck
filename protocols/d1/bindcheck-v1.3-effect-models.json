@@ -1,0 +1,19 @@
+{
+  "schema": "bindcheck.effect-models.v1.3",
+  "models": [
+    {
+      "effect": "token-transfer",
+      "function_name": "transfer",
+      "function_type_contains": "function (address,uint256)",
+      "amount_argument": 1,
+      "beneficiary_argument": 0
+    },
+    {
+      "effect": "token-transfer-from",
+      "function_name": "transferFrom",
+      "function_type_contains": "function (address,address,uint256)",
+      "amount_argument": 2,
+      "beneficiary_argument": 1
+    }
+  ]
+}

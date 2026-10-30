@@ -85,7 +85,9 @@ flowchart TD
     d1p34 --> d1p33["D1P-33 frozen held-out scan [DONE]"]
     d1p33 --> d1p35["D1P-35 v1.2 format + location freeze [DONE]"]
     d1p35 --> d1p36["D1P-36 frozen v1.2 transfer scan [DONE]"]
-    d1p36 --> plannerReview["Capability baselines + supported transfer review [NEXT]"]
+    d1p36 --> d1p40["D1P-40 extraction correctness audit [DONE]"]
+    d1p40 --> payyFidelity["Payy exact mapping + memory fidelity [NEXT]"]
+    payyFidelity --> plannerReview["Capability baselines + supported transfer review [WAITING]"]
     d1paper --> lanex["Lane-X exploratory, benchmark, auto-validation v1+v1.1 [DONE]"]
     plannerReview --> capabilityGate["Automated discovery + E4 capability gate [WAITING]"]
     d1p10 --> d1p10result["Transformed-arm eligibility [UNKNOWN]"]
@@ -138,10 +140,10 @@ flowchart TD
     classDef waiting fill:#D9D9D9,stroke:#B3B3B3
     classDef unknown fill:#FFE0C2,stroke:#FF9E42
 
-    class foundation,fixture,payy,sourceCheck,coneGate,nineCases,failureAnalysis,v3Rerun,generalGate,tracking,livingTree,d100,d101,d102,d103preflight,d103review,d103typed,d103boundary,d103guards,d103guardreview,d103concrete,d103replayreview,d103recovery,d1p00,d1p01,d1p01artifact,d1p02,d1p03,d1p04,d1p05,d1p04elig,d1p07,d1p08,d1p09,d1p10,d1p11,d1p12,warptoadRecovery,d1p12r,d1p13,d1p14a,d1p14b,d1p14c,d1p14d,d1p17,d1pint1,d1p16,d1p18,d1p15,d1p19,d1p20,d1p21a,d1p21b,d1p30,d1p31,d1p34,d1p33,lanex done
+    class foundation,fixture,payy,sourceCheck,coneGate,nineCases,failureAnalysis,v3Rerun,generalGate,tracking,livingTree,d100,d101,d102,d103preflight,d103review,d103typed,d103boundary,d103guards,d103guardreview,d103concrete,d103replayreview,d103recovery,d1p00,d1p01,d1p01artifact,d1p02,d1p03,d1p04,d1p05,d1p04elig,d1p07,d1p08,d1p09,d1p10,d1p11,d1p12,warptoadRecovery,d1p12r,d1p13,d1p14a,d1p14b,d1p14c,d1p14d,d1p17,d1pint1,d1p16,d1p18,d1p15,d1p19,d1p20,d1p21a,d1p21b,d1p30,d1p31,d1p34,d1p33,d1p35,d1p36,d1p40,lanex done
     class analysis,d1,d1paper,d103,d103impl,d103consumer,d103effects active
-    class d103linkreview,plannerReview next
-    class evaluation,history,heldOut,baselines,manuscript,claims,artifacts,draft,transferCase,sensitivity,submit,t22,acirSummary,d104,d105,d106,d107,d108,d103symbolic,d1p09decision,d1p10decision,warptoadJoint,capabilityGate waiting
+    class d103linkreview,payyFidelity next
+    class evaluation,history,heldOut,baselines,manuscript,claims,artifacts,draft,transferCase,sensitivity,submit,t22,acirSummary,d104,d105,d106,d107,d108,d103symbolic,d1p09decision,d1p10decision,warptoadJoint,plannerReview,capabilityGate waiting
     class contribution,primaryResult,generalResult,d103gate,d103recoveryresult,d1p06,d1p10result,d1p14bresult,d1p14cresult,d1p14dresult,d1p17result unknown
 ```
 
@@ -448,8 +450,11 @@ unrelated inherited warnings on the exposed 30-mutant benchmark. D1P-35 adds
 bounded beta.15–21 container support and reporting-only locations without
 changing those outcomes. D1P-36 then records eight fail-closed unsupported
 transfer analyses, including the explicit second attempt on D1P-33's reserved
-set and four unseen non-reserved candidates. Baseline comparison and supported
-held-out transfer remain open, so
+set and four unseen non-reserved candidates. D1P-40 then corrects five
+development extraction defects: the prospective 30-mutant result is 11
+detected, 19 unsupported and zero misses, while the exact Payy selector mapping
+and 999 dynamic message-tail dependencies remain UNKNOWN. Exact Payy fidelity,
+baseline comparison and supported held-out transfer remain open, so
 the campaign still does not complete the capability gate. Neither screen, blocker,
 development fixture nor component check is a method-evaluation,
 cross-chain, policy or security result. D1
@@ -461,6 +466,7 @@ slots were executed.
 
 | Date | Checkpoint | Status | Evidence and meaning |
 | --- | --- | --- | --- |
+| 2026-10-30 | D1P-40 extraction-correctness audit | `[DONE]` bounded audit and repairs / `[UNKNOWN]` Payy fidelity, capability and security | [Report](../reports/D1P-40-correctness-audit.md) and ignored `results/raw/D1P-40/final-04/` evidence: compile five synthetic Noir and six Solidity controls; confirm and repair dynamic-memory, selector-prefix, token-effect, loop-widening and R-ANCHOR reachability defects. Nested ABI order and constant/write-only memory controls are correct. The 30-mutant rerun changes 16 detected / 14 unsupported / 0 misses / 53 warnings to 11 / 19 / 0 / 13; all 12 Payy mutants fail closed at exact mapping, while all 13 remaining WarpToad warning identities persist. Payy `messages[1..999]` remain UNKNOWN under dynamic addressing. No held-out source, solver, proof, validation, live chain, capability, security or D1 verdict. |
 | 2026-10-20 | T22-v2 single-case feasibility gate | `[DONE]` | [T22](../reports/T22.md): the known vulnerable Payy case produced a counterexample in 4.1 seconds after exact specialization reduced the probe from 587 opcodes and 523 witnesses to 0 opcodes and 1 witness. This is not the nine-case result. |
 | 2026-10-20 | Living project checkpoint tree | `[DONE]` | This page and the corresponding `AGENTS.md` update establish the visual checkpoint routine. No research verdict changed. |
 | 2026-10-20 | T22-v2 frozen nine-case primary run | `[DONE]` | [T22](../reports/T22.md): 2/9 outcomes matched, 6 were `UNKNOWN`, and the running-flag negative control returned a likely spurious `VIOLATION`. The evaluation task completed, but the T22 result remains `[UNKNOWN]`. |

@@ -1,0 +1,6 @@
+[package]
+name = "d1p40_nested_abi"
+type = "bin"
+authors = [""]
+
+[dependencies]

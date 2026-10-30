@@ -4,10 +4,11 @@ BindCheck investigates whether the guarantees of an accepted zero-knowledge proo
 
 The current integration checkout is the linked worktree
 `/Users/imranpollob/Coding/bc/bindcheck-d1-paper` on `d1-paper`, currently at
-integrated revision `d981c6468acbaef8c1d5d4a1c542dec4ec2d088a` plus the
-uncommitted D1P-35 v1.2 freeze and D1P-36 transfer-scan evidence/report. This
-state includes the integrated D1P-33 held-out scan, D1P-34 application-neutral
-v1.1 freeze, D1P-31 evaluation/contract revision, D1P-30 tool, mutation benchmark,
+integrated revision `83a4d8d2e4d8bb6ef8b3be6c3f91126d2c9cf580` plus the
+uncommitted D1P-40 extraction-correctness audit and repairs. This state includes
+the integrated D1P-33/D1P-36 transfer scans, D1P-34 application-neutral v1.1
+freeze, D1P-35 v1.2 format/location change, D1P-31 evaluation/contract revision,
+D1P-30 tool, mutation benchmark,
 D1P-22 baselines, D1P-21A/B, D1P-20, D1P-19, D1P-17, and the merged Lane C
 taxonomy/extraction work. The linked
 worktree was originally established from `chatgpt-codex` revision
@@ -38,6 +39,19 @@ The principal directories are `circuits/` and `contracts/` for the small fixture
 
 ## Current status
 
+- [D1P-40](reports/D1P-40-correctness-audit.md) audits producer memory facts,
+  exact public-input mapping, consumer effect dependencies and R-ANCHOR on
+  compiled synthetic controls, then repairs five confirmed extraction defects.
+  Dynamic MemoryInit dependencies now fail closed unless exact, shorter
+  verifier arrays no longer invent a selector prefix, token effects require
+  standard method identity plus signature, literal loop bounds exclude
+  unreachable tail words, and anchor candidates precede guard matching. The
+  30-mutant rerun changes **16 detected / 14 unsupported / 0 misses / 53
+  warnings** to **11 / 19 / 0 / 13**: all five reclassified detections are Payy
+  and all 13 surviving warnings retain their WarpToad identities. Payy's exact
+  1,005-to-1,003 mapping and `messages[1..999]` dynamic-memory dependencies are
+  **UNKNOWN**, not safe or missed. No held-out project, solver, proof,
+  validation, live-chain action, capability, security, or D1 verdict follows.
 - [D1P-36](reports/D1P-36.md) runs frozen BindCheck v1.2 once on eight
   projects: the four D1P-33 reserved targets as an explicit second attempt and
   four previously unseen, non-reserved candidates opened only after the v1.2
