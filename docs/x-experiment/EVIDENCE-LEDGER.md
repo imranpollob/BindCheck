@@ -41,6 +41,16 @@ registered in that run, so the substitute path was inactive.
 Format: warning word == mutant edit word == experiment word; effect;
 location. `results.json` grade → ledger grade.
 
+Adjudication keys (tracked: `warning_key` in `src/bindcheck_d1/xav_core.py`):
+`(target, rule, public word, effect)` — R-BIND takes the ABI leaf/range,
+R-EFFECT the paths range + sorted effect kinds (line numbers excluded as
+version-volatile), R-CONSUMER the evidence consumer path,
+R-POLARITY `single-use` + polarity. Warning ids (`W001`, …) and `:line`
+locations are analyzer-version-specific and informational only, so the
+AI1/AI2 v2.0 re-run remaps mechanically: extract keys from the new
+warnings file, join against `OVERRIDES`, and re-assert totals. Rows whose
+key is absent keep the driver grade (plus the E1+mock rule, §5).
+
 ### WarpToad circuit rows (mutant circuits, pinned consumer)
 
 | row | same word | same effect | same location | grade |
@@ -68,20 +78,22 @@ location. `results.json` grade → ledger grade.
 |---|---|---|
 | PY-C02 W001 R-BIND `messages[0]..messages[999]` | warning range covers the removed `:74` export assert; mutant proves attacker mint @0–3 (TC02 slot 009) and attacker burn @4–8; TE05 wraps the ACTIVE proof to a verifying mutant final proof; original/repaired reject the same witness at ACVM | E3 on its own mutation (TE05). The v1.1 E4 rode on the tail block — corrected. |
 | PY-C02 W002 R-EFFECT `:850` | same block under both keys reverts `Mint value invalid` BEFORE proof verification (gate order `RollupV1.sol:349` before `:357`); zero state change | E1 (contained). The v1.1 E4 rode on TE04's tail block — corrected. |
-| PY-C02 W003 R-CONSUMER `commit_hash` | by-design offchain (Celestia) commitment; no experiment | E1, stands (structural, acceptable-remaining, §5) |
-| PY-S01 W002 R-EFFECT `:842` + W004 R-POLARITY `:357` | unregistered-mint admission removed; mock-verifier replay settles unregistered mint | E1+mock (NOT contract E2). Same word/effect/location; proof acceptance assumed. |
-| PY-S02 W002 `:850` + W004 `:357` | single-use removed; mock replay settles registered mint twice | E1+mock (NOT E2) |
-| PY-S03 W002 `:851` | burn recipient misbound to the note-kind word; mock replay pays 1000 to `0x1111…`, recipient 0; NO substitute registered, so the substitute path was inactive and the effect is attributable to the misbinding | E1+mock (NOT E2) |
-| PY-S04 W002 `:853` | dead kind-4 settled as burn; recipient +1000 | E1+mock (NOT E2) |
+| PY-C02 W003 R-CONSUMER `commit_hash` | offchain (Celestia) commitment placeholder; no experiment | E1, stands — author-labeled out of scope (data availability) per the 2026-10-30 policy addendum (`39ebeab`): structurally accurate, not a false positive, not a confirmed defect; acceptable-remaining after a valid repair |
+| PY-S01 W002 R-EFFECT `:842` + W004 R-POLARITY `:357` | unregistered-mint admission removed; TE06 real-verifier replay settles the unregistered mint on the mutant (`height 1`, spent) while the same transaction reverts `Mint value invalid` on pinned (zero state change) | E4 (TE06, zero mock). Same word/effect/location; committed-key proofs, matching keys. |
+| PY-S02 W002 `:850` + W004 `:357` | single-use removed; real proof settles honestly on both sides (also the Payy honest control) | E3: second settlement UNPROVABLE at circuit level — re-processing the same mint note fails at witness construction (`CollisionError`) and, with re-reference tolerated, at the `agg_utxo` output-slot emptiness check (`:140`). The missing spent check is defense-in-depth removal; the effect is unreachable with real proofs alone (§10). Mock double kept as logic illustration only. |
+| PY-S03 W002 `:851` | burn recipient misbound to the note-kind word; TE06 real-verifier replay settles on both sides with the same proof: mutant pays 7 to the note-kind-derived address, pinned pays 7 to the message recipient (`0xdead`); NO substitute registered either side | E4 (TE06, zero mock). Substitute path inactive both sides. |
+| PY-S04 W002 `:853` | dead kind-4 settled as burn in the mock replay (recipient +1000) | E1+mock retained: no pinned-producible kind-4 export exists (inner proofs only yield kinds 2/3; a kind-4 word needs the export-removal mutation, i.e. a different defect). Real-proof lift infeasible by construction; recorded, not attempted. |
 | all other Payy rows (31) | no real inner-proof vector (Rust stack) | E1, stand |
 
-Corrected totals over the 53 v1.1 warnings: E4: 8 (WT-C01, WT-C04×2,
-WT-S01, WT-S02-corrected, WT-S03, WT-S06, WT-S09); E4-preserved: 1
-(WT-C03); E3: 5 (WT-C02, WT-C07, WT-C08×2, PY-C02 W001); E1+mock: 6;
-E1: 33 (incl. PY-C02 W002 and W003). 8+1+5+6+33 = 53. The TE04
-inherited-tail E4 is recorded at defect level (§6), not as an extra
-warning row: it was produced through PY-C02's mutant stack but the
-original circuit accepts the same tail block.
+Corrected totals over the 53 v1.1 warnings (TE06 final): E4: 11
+(WT-C01, WT-C04×2, WT-S01, WT-S02-corrected, WT-S03, WT-S06, WT-S09,
+PY-S01 W002/W004, PY-S03 W002); E4-preserved: 1 (WT-C03); E3: 7
+(WT-C02, WT-C07, WT-C08×2, PY-C02 W001, PY-S02 W002/W004); E1+mock: 1
+(PY-S04 W002, infeasible by construction); E1: 33 (incl. PY-C02 W002
+and W003). 11+1+7+1+33 = 53, asserted by `reproduce.py ledger`.
+The TE04 inherited-tail E4 is recorded at defect level (§6), not as an
+extra warning row: it was produced through PY-C02's mutant stack but
+the original circuit accepts the same tail block.
 
 ## 3. Repair checks (`scripts/xav/repair_check.py`, evidence `results/raw/REPAIR/`)
 
@@ -115,35 +127,49 @@ consumer on Hardhat EDR; `repair-report.json` + `honest-controls/`):
 
 Warning-remains: all WarpToad repairs are pinned bytes and D1P-34 §4
 records zero warnings on pinned WarpToad — none remain. PY-C02 repaired
-is pinned bytes, which carries the structural W003 `commit_hash`
-R-CONSUMER (by-design offchain commitment; cf. check-added precedent,
-D1P-34 §4) — a remaining structural warning after a valid repair, which
-is acceptable and reported, not a vulnerability claim.
+is pinned bytes, which carries the structural `commit_hash` R-CONSUMER
+(cf. check-added precedent, D1P-34 §4) — author-labeled out of scope
+(data availability), structurally accurate, and acceptable-remaining
+after a valid repair, not a vulnerability claim.
 
 ## 4. Warning-quality flag: WT-C02 R-BIND `max_fee`
 
 The v1.1 warning claims `max_fee` has no proof-enforced occurrence, but
-the pinned circuit constrains it (`assert(!amount.lt(max_fee))`) and the
-pinned `nargo execute` ACCEPTS the attacker witness `max_fee=0` exactly
-as the mutant does. The analyzer undercounts this word's occurrence
-(integer-comparison path). The E3-contained demonstration stands (real
-proof, consumer fee-cap containment), but the warning's "unbound" claim
-is not confirmed — possible false warning at warning level. Follow-up:
-reconcile occurrence counting for integer-comparison opcodes against the
-pinned ACIR; do not tune on held-out cases.
+the pinned circuit constrains it (`assert(!amount.lt(max_fee))`,
+`main.nr:47`) and the pinned `nargo execute` ACCEPTS the attacker
+witness `max_fee=0` exactly as the mutant does. Discrimination pair on
+pinned bytes (`results/raw/REPAIR/c02-discrimination/`: `max_fee=0`
+exit 0; `max_fee=2^64` exit 1, `Failed assertion at src/main.nr:47:5`):
+the word IS bounded above by `amount`; the X-AV attacker merely
+satisfies the bound. The analyzer undercounts this word's occurrence
+(integer-comparison path) — evidence for AI1, no analyzer change made
+here. The E3-contained demonstration stands (real proof, consumer
+fee-cap containment), but the warning's "unbound" claim is not
+confirmed — possible false warning at warning level. Follow-up for AI1:
+reconcile occurrence counting for integer-comparison opcodes against
+the pinned ACIR; do not tune on held-out cases.
 
 ## 5. Mock-verifier relabel rationale
 
 Contract E2 requires a model satisfying the ACTUAL compiled producer
 relation, decoder AND consumer model. `MockVerifier` (the project's own
 `eth/test` pattern) decides proof acceptance by test configuration, not
-by the pinned relation — the consumer-model leg is counterfactual. The
-six rows (PY-S01 W002/W004, PY-S02 W002/W004, PY-S03 W002, PY-S04 W002)
-are therefore E1+mock: genuine consumer-logic demonstrations (same word,
-same effect, same location; reports self-label the mock) contingent on
-assumed proof acceptance. They earn detection credit at E1, not E2. The
-v1.1 `results.json` string `E2 (mock-verifier-scoped)` is retained
-verbatim as generated evidence; this ledger is the grading correction.
+by the pinned relation — the consumer-model leg is counterfactual. Rows
+that keep only a mock demonstration are therefore E1+mock: genuine
+consumer-logic demonstrations (same word, same effect, same location;
+reports self-label the mock) contingent on assumed proof acceptance.
+They earn detection credit at E1, not E2. The v1.1 `results.json` string
+`E2 (mock-verifier-scoped)` is retained verbatim as generated evidence;
+this ledger is the grading correction.
+
+TE06 lifts three of the six mock rows to zero-mock E4 (PY-S01 W002/W004,
+PY-S03 W002; PY-S02 pending, §10); PY-S04 W002 stays E1+mock
+(infeasible by construction). Mock subtlety found during the lift: the
+v1.1 S02 mock double-settlement rewrote `oldRoot` in the second block's
+public inputs, which a mock verifier cannot bind — under a real verifier
+that rewrite is unprovable, so the mock "effect" was doubly counterfactual
+(proof acceptance AND input binding both assumed). Mock demonstrations
+must freeze public inputs across submits; TE06 replays do.
 
 ## 6. TE04 attribution correction + TE05 (PY-C02's own E3)
 
@@ -211,6 +237,32 @@ verbatim as generated evidence; this ledger is the grading correction.
 - WT-C08 scope: containment shown for the zero address
   (`ERC20InvalidReceiver`); an owner-chosen nonzero recipient may be
   permitted — no claim beyond the tested transaction.
+
+## 10. PY-S02 double-settlement: circuit-level unreachability (TE06)
+
+Two attempts to construct a chained height-2 re-settlement proof, both
+failing before any proving — evidence in `results/raw/TE06/double-build-run.log`
+(first, collision) and `double-rerun.log` (second, `:140`):
+
+1. Re-processing the same mint utxo against the advanced tree panics at
+   witness construction: smirk `CollisionError` — the note commitment is
+   already present and the test tree refuses duplicate insertion.
+2. With re-reference tolerated (`insert_allow_existing` in the
+   attacker-client model), the batch-2 `agg_utxo` proof fails at ACVM:
+   output commitments must land in empty slots
+   (`validate_null … "Merkle path root does not match"`,
+   `agg_utxo/src/main.nr:140`, called from `:167`).
+
+The circuit enforces note uniqueness at output: the same mint words
+cannot be re-exported by any party, attacker included, under the pinned
+circuit. The consumer-side missing spent check therefore guards an
+unreachable state — defense-in-depth removal, graded E3 (real proof +
+onchain honest settlement + code-real defect). Reachable variant (NOT
+tested, single-mutant scope): PY-C02's export removal would let messages
+diverge from inner exports, so a PY-C02 × PY-S02 combined stack could
+re-settle; that combination was not constructed. The v1.1 mock double
+(which rewrote `oldRoot` per height) is triply counterfactual and is
+retained only as consumer-logic illustration.
 
 ## 9. Evidence locations
 
