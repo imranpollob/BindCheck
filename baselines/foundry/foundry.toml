@@ -1,0 +1,19 @@
+[profile.default]
+src = "contracts"
+test = "test"
+out = "out"
+cache_path = "cache"
+solc = "/Users/imranpollob/.svm/0.8.29/solc-0.8.29"
+optimizer = true
+optimizer_runs = 200
+remappings = [
+  "forge-std/=/Users/imranpollob/Coding/bc/bindcheck-lane-c/results/raw/D1P-22/harnesses/payy-policy/lib/forge-std/src/",
+  "poseidon-solidity/=node_modules/poseidon-solidity/",
+  "@zk-kit/=node_modules/@zk-kit/",
+  "@openzeppelin/=node_modules/@openzeppelin/"
+]
+
+[invariant]
+runs = 256
+depth = 100
+fail_on_revert = false

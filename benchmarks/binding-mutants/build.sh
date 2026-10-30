@@ -9,15 +9,17 @@ XBM_ROOT="$(cd "$(dirname "$0")" && pwd)"
 OUT="${OUT:-$XBM_ROOT/../../results/raw/X-BM}"
 ONLY="${ONLY:-}"
 
-PIN_SRC=/Users/imranpollob/Coding/bc/bindcheck-d1-paper/results/raw/D1P-19/workspace/pinned-source/backend
-PAYY_NOIR=/Users/imranpollob/Coding/bc/BindCheck/tools/cases/payy-c4d2c90/noir
-PAYY_ETH=/Users/imranpollob/Coding/bc/BindCheck/tools/cases/payy-c4d2c90/eth
-NM12=/Users/imranpollob/Coding/bc/bindcheck-d1-paper/results/raw/D1P-12R/workspace/source/backend/node_modules
-NARGO22=/Users/imranpollob/Coding/bc/bindcheck-d1-paper/results/raw/D1P-13/tools/nargo-beta22/nargo
-NARGO14=/Users/imranpollob/Coding/bc/BindCheck/tools/noir-1.0.0-beta.14/nargo
-SOLC29=/Users/imranpollob/.svm/0.8.29/solc-0.8.29
-SOLC20=/Users/imranpollob/.svm/0.8.20/solc-0.8.20
-HONEST_TOML=/Users/imranpollob/Coding/bc/bindcheck-d1-paper/results/raw/D1P-15/workspace/source/backend/circuits/withdraw/D1P15_12R.toml
+ROOT="${BINDCHECK_ROOT:-$(cd "$XBM_ROOT/../.." && pwd)}"
+PIN_SRC="${BINDCHECK_WARPTOAD_BACKEND:-$ROOT/results/raw/D1P-19/workspace/pinned-source/backend}"
+PAYY_ROOT="${BINDCHECK_PAYY_ROOT:-$ROOT}"
+PAYY_NOIR="${BINDCHECK_PAYY_NOIR:-$PAYY_ROOT/tools/cases/payy-c4d2c90/noir}"
+PAYY_ETH="${BINDCHECK_PAYY_ETH:-$PAYY_ROOT/tools/cases/payy-c4d2c90/eth}"
+NM12="${BINDCHECK_WARPTOAD_NODE_MODULES:-$ROOT/results/raw/D1P-19/workspace/source/backend/node_modules}"
+NARGO22="${BINDCHECK_NARGO_22:-$ROOT/results/raw/artifact-tools/bin/nargo-beta22}"
+NARGO14="${BINDCHECK_NARGO_14:-$ROOT/results/raw/artifact-tools/bin/nargo-beta14}"
+SOLC29="${BINDCHECK_SOLC_0_8_29:-$ROOT/results/raw/artifact-tools/bin/solc-0.8.29}"
+SOLC20="${BINDCHECK_SOLC_0_8_20:-$ROOT/results/raw/artifact-tools/bin/solc-0.8.20}"
+HONEST_TOML="${BINDCHECK_HONEST_TOML:-$ROOT/results/raw/D1P-15/workspace/source/backend/circuits/withdraw/D1P15_12R.toml}"
 
 MUTDIR="$OUT/mutants"; BUILDDIR="$OUT/build"; LOGDIR="$OUT/logs"
 mkdir -p "$MUTDIR" "$BUILDDIR" "$LOGDIR"
@@ -39,7 +41,7 @@ for ID in $IDS; do
       if [ -f "$MUTDIR/$ID/warptoad-nargo-hashing-lib.nr" ]; then
         cp "$MUTDIR/$ID/warptoad-nargo-hashing-lib.nr" "$B/circuits/nargo_hashing/src/lib.nr"
       fi
-      cp "$HONEST_TOML" "$B/circuits/withdraw/Prover.toml"
+      [ -f "$HONEST_TOML" ] && cp "$HONEST_TOML" "$B/circuits/withdraw/Prover.toml"
       # C03 adds a struct field the honest Prover.toml lacks; drop the stale
       # witness file so compile is still checked and execute isHonestly skipped.
       if [ "$ID" = "WT-C03" ]; then rm -f "$B/circuits/withdraw/Prover.toml"; fi

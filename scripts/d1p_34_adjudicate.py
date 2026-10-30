@@ -115,7 +115,19 @@ def main() -> int:
                  "runtime_seconds": round(sum(i["runtime_seconds"] for i in items), 6)}
                 for name, items in sorted(groups.items())]
 
-    old = json.loads((ROOT / "results/raw/D1P-31/adjudication.json").read_text())["totals"]
+    old_path = ROOT / "results/raw/D1P-31/adjudication.json"
+    if old_path.is_file():
+        old = json.loads(old_path.read_text())["totals"]
+    else:
+        # D1P-31 raw evidence is intentionally ignored.  These are its frozen,
+        # asserted totals (also recorded in reports/D1P-31.md); the D1P-34
+        # computation below never consumes its per-target labels.
+        old = {
+            "targets": 30, "detected": 13, "misses": 1, "unsupported": 16,
+            "supported_targets": 14, "warning_objects": 38,
+            "ground_truth_related_warning_objects": 16,
+            "unrelated_warning_objects": 22, "detected_location_matches": 13,
+        }
     d1p30 = []
     for name in ("warptoad-pinned", "warptoad-m-dom", "warptoad-m-src",
                  "payy-earlier", "payy-check-added"):

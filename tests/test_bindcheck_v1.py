@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 import sys
 import tempfile
@@ -18,7 +19,9 @@ PINNED_SOURCE = ROOT / "results/raw/D1P-19/workspace/pinned-source/backend/contr
 PINNED_RELATION = ROOT / "results/raw/D1P-18/relation.json"
 MSRC_SOURCE = ROOT / "results/raw/D1P-19/workspace/source/backend/contracts/core/WarpToadCore.sol"
 MSRC_RELATION = ROOT / "results/raw/D1P-21B/m-src-relation.json"
-PAYY_ROOT = ROOT.parent / "BindCheck"
+PAYY_ROOT = Path(os.environ.get("BINDCHECK_PAYY_ROOT", ROOT)).resolve()
+if not (PAYY_ROOT / "tools/cases").is_dir():
+    PAYY_ROOT = ROOT.parent / "BindCheck"
 PAYY_SOURCE = ROOT / "benchmarks/binding-mutants/baselines/RollupV1.sol"
 PAYY_CHECK_SOURCE = PAYY_ROOT / "tools/cases/payy-history/eth/contracts/rollup3/RollupV1.sol"
 PAYY_EARLIER = PAYY_ROOT / "tools/cases/payy-c4d2c90/noir/target/agg_agg.json"
