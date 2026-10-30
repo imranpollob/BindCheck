@@ -1,4 +1,4 @@
-"""BindCheck v1.3 cross-layer static analyzer.
+"""BindCheck v1.4-dev cross-layer static analyzer.
 
 The rule engine is deliberately application-neutral.  It joins flattened
 producer ABI leaves and ACIR witness use with either an extracted consumer
@@ -19,9 +19,10 @@ import time
 from typing import Any
 
 from .frontends import acir_binary_beta15_21, acir_binary_beta22, acir_binary_v1
+from .frontends.recursive_public_mapping_v1 import verify_certificate as verify_mapping_certificate
 
 
-SCHEMA = "bindcheck.static-analysis.v1.3"
+SCHEMA = "bindcheck.static-analysis.v1.4-dev"
 
 
 def sha256(path: Path) -> str:
@@ -183,7 +184,104 @@ def _leaf_bindings(abi: dict[str, Any], bindings: dict[str, list[int]]) -> list[
     return leaves
 
 
-def load_producer(path: Path) -> dict[str, Any]:
+def _canonical_symbol(value: str) -> str:
+    value = re.sub(r"([a-z0-9])([A-Z])", r"\1_\2", value)
+    return re.sub(r"[^a-zA-Z0-9]+", "_", value).strip("_").lower()
+
+
+def _line_for(source: str, offset: int) -> int:
+    return source.count("\n", 0, offset) + 1
+
+
+def _producer_extent_profiles(source_path: Path | None, public_leaves: list[dict[str, Any]],
+                              circuit: dict[str, Any],
+                              bindings: dict[str, list[int]]) -> dict[str, dict[str, Any]]:
+    """Extract two bounded Noir prefix idioms and check their ACIR memory shape.
+
+    The recognized forms are (1) a loop-index prefix guard around an array
+    assertion and (2) a monotonically incremented dynamic array address used
+    by an equality assertion.  Any near miss remains UNKNOWN.
+    """
+    if source_path is None:
+        return {}
+    source = source_path.read_text()
+    groups: dict[str, list[dict[str, Any]]] = {}
+    for leaf in public_leaves:
+        match = re.match(r"^(.*)\[(\d+)\]$", leaf["path"])
+        if match:
+            groups.setdefault(match.group(1), []).append(leaf)
+    profiles: dict[str, dict[str, Any]] = {}
+    for base, leaves in groups.items():
+        short = base.rsplit(".", 1)[-1]
+        escaped = re.escape(short)
+        guarded = re.search(
+            rf"if\s+([A-Za-z_]\w*)\s*<\s*([A-Za-z_]\w*)\s*\{{[\s\S]{{0,500}}?"
+            rf"assert\s*\([^;]*\b{escaped}\s*\[\s*\1\s*\]",
+            source,
+        )
+        dynamic = re.search(
+            rf"(?:let\s+mut\s+)?([A-Za-z_]\w*)\s*=\s*0\s*;[\s\S]*?"
+            rf"assert\s*\([^;]*\b{escaped}\s*\[\s*\1\s*\][^;]*\)\s*;"
+            rf"[\s\S]{{0,180}}?\b\1\s*\+=\s*1\s*;",
+            source,
+        )
+        tail = None
+        if dynamic:
+            counter = dynamic.group(1)
+            tail = re.search(
+                rf"if\s+([A-Za-z_]\w*)\s*>=\s*{re.escape(counter)}\s*\{{"
+                rf"[\s\S]{{0,240}}?assert\s*\(\s*{escaped}\s*\[\s*\1\s*\]\s*==\s*0",
+                source,
+            )
+
+        evidence: dict[str, Any] = {"source_sha256": sha256(source_path)}
+        if dynamic:
+            witnesses = set(bindings.get(base, []))
+            memory_blocks = [opcode for opcode in circuit["opcodes"]
+                             if opcode["kind"] == "MemoryInit"
+                             and set(opcode.get("init", [])) == witnesses]
+            if len(memory_blocks) != 1:
+                profiles[base] = {"status": "UNKNOWN", "condition": {"kind": "unknown",
+                    "reason": "PRODUCER_EXTENT_MEMORY_BLOCK_UNRESOLVED"}, "evidence": evidence}
+                continue
+            block_id = memory_blocks[0]["block_id"]
+            operations = [opcode for opcode in circuit["opcodes"]
+                          if opcode["kind"] == "MemoryOp" and opcode.get("block_id") == block_id]
+            reads = [opcode for opcode in operations if _constant_expression(opcode["operation"]) == 0]
+            writes = [opcode for opcode in operations if _constant_expression(opcode["operation"]) != 0]
+            if not reads or writes:
+                profiles[base] = {"status": "UNKNOWN", "condition": {"kind": "unknown",
+                    "reason": "PRODUCER_EXTENT_MEMORY_ACCESS_UNRESOLVED"}, "evidence": evidence}
+                continue
+            evidence.update({"source_location": f"{source_path.name}:{_line_for(source, dynamic.start())}",
+                             "memory_block": block_id, "dynamic_read_count": len(reads),
+                             "dynamic_write_count": len(writes)})
+            if tail:
+                profiles[base] = {"status": "EXACT", "condition": {"kind": "always"},
+                                  "evidence": evidence | {"tail_zero": True}}
+            else:
+                profiles[base] = {
+                    "status": "EXACT",
+                    "condition": {"kind": "prefix", "word_offset": "word_offset",
+                                  "extent": f"active_{_canonical_symbol(short)}_count",
+                                  "array_offset": 0, "limit_offset": 0},
+                    "evidence": evidence | {"tail_zero": False},
+                }
+        elif guarded:
+            profiles[base] = {
+                "status": "EXACT",
+                "condition": {"kind": "prefix", "word_offset": "word_offset",
+                              "extent": _canonical_symbol(guarded.group(2)),
+                              "array_offset": 0, "limit_offset": 0},
+                "evidence": evidence | {
+                    "source_location": f"{source_path.name}:{_line_for(source, guarded.start())}",
+                    "guard_index": guarded.group(1),
+                },
+            }
+    return profiles
+
+
+def load_producer(path: Path, source_path: Path | None = None) -> dict[str, Any]:
     artifact = json.loads(path.read_text())
     version = artifact.get("noir_version", "")
     if version == acir_binary_beta22.VERSION:
@@ -260,6 +358,28 @@ def load_producer(path: Path) -> dict[str, Any]:
             ),
         })
         public_leaves.append(leaf)
+    profiles = _producer_extent_profiles(source_path, public_leaves, circuit, bindings)
+    for leaf in public_leaves:
+        match = re.match(r"^(.*)\[(\d+)\]$", leaf["path"])
+        profile = profiles.get(match.group(1)) if match else None
+        if profile is not None:
+            leaf["binding_status"] = profile["status"]
+            leaf["binding_condition"] = profile["condition"]
+            leaf["binding_evidence"] = profile["evidence"]
+        elif leaf["occurrence_count"]:
+            leaf["binding_status"] = "EXACT"
+            leaf["binding_condition"] = {"kind": "always"}
+            leaf["binding_evidence"] = {"occurrence_locations": leaf["occurrence_locations"]}
+        elif leaf["memory_dependency_status"] == "unresolved-dynamic":
+            leaf["binding_status"] = "UNKNOWN"
+            leaf["binding_condition"] = {"kind": "unknown",
+                                         "reason": "PRODUCER_DYNAMIC_MEMORY_ADDRESS_UNRESOLVED"}
+            leaf["binding_evidence"] = {"memory_definition_locations":
+                                         leaf["memory_definition_occurrence_locations"]}
+        else:
+            leaf["binding_status"] = "EXACT"
+            leaf["binding_condition"] = {"kind": "never"}
+            leaf["binding_evidence"] = {"occurrence_locations": []}
     return {
         "path": str(path.resolve()),
         "sha256": sha256(path),
@@ -274,6 +394,8 @@ def load_producer(path: Path) -> dict[str, Any]:
         },
         "public_leaves": public_leaves,
         "public_witnesses": circuit["public_parameters"],
+        "source": (str(source_path.resolve()) if source_path else None),
+        "source_sha256": (sha256(source_path) if source_path else None),
     }
 
 
@@ -397,7 +519,8 @@ def load_relation_consumer(source: Path, relation_path: Path, public_count: int)
     expected_source = relation.get("source_sha256")
     if expected_source is not None and expected_source != sha256(source):
         raise ValueError("CONSUMER_RELATION_SOURCE_HASH_MISMATCH")
-    if relation.get("schema") in {"bindcheck.consumer-ast.v1.1", "bindcheck.consumer-ast.v1.2"}:
+    if relation.get("schema") in {"bindcheck.consumer-ast.v1.1", "bindcheck.consumer-ast.v1.2",
+                                  "bindcheck.consumer-ast.v1.3"}:
         if "AST_VERIFIER_SELECTOR_PREFIX_WIDTH_DERIVED_FROM_ABI_AND_ARRAY_HEADER" in relation.get(
             "limitations", []
         ):
@@ -431,6 +554,7 @@ def load_relation_consumer(source: Path, relation_path: Path, public_count: int)
             "effects": relation.get("effects", []),
             "replay": replay,
             "limitations": relation.get("limitations", []),
+            "mapping_certificate": relation.get("mapping_certificate"),
         }
 
     boundary = relation["verifier_boundary"]
@@ -544,19 +668,101 @@ def _ranges(leaves: list[dict[str, Any]]) -> list[list[dict[str, Any]]]:
     return groups
 
 
+def _condition_text(condition: dict[str, Any]) -> str:
+    kind = condition.get("kind")
+    if kind == "always":
+        return "true"
+    if kind == "never":
+        return "false"
+    if kind == "prefix":
+        return f"word_offset < {condition.get('extent', 'unknown_extent')}"
+    if kind == "any":
+        return " OR ".join(_condition_text(item) for item in condition.get("conditions", []))
+    return f"UNKNOWN({condition.get('reason', 'condition unresolved')})"
+
+
+def _extent_coverage(producer_fact: dict[str, Any],
+                     consumer_fact: dict[str, Any]) -> dict[str, Any]:
+    """Stable extent-facts interface consumed by the prospective rule engine."""
+    producer_condition = producer_fact["condition"]
+    consumer_condition = consumer_fact["condition"]
+    result = {
+        "producer_condition": _condition_text(producer_condition),
+        "consumer_condition": _condition_text(consumer_condition),
+        "uncovered_region": None,
+    }
+    if producer_fact["status"] != "EXACT" or consumer_fact["status"] != "EXACT":
+        return result | {"status": "UNKNOWN", "covered": None}
+    producer_kind = producer_condition.get("kind")
+    consumer_kind = consumer_condition.get("kind")
+    if consumer_kind == "never" or producer_kind == "always":
+        return result | {"status": "EXACT", "covered": True}
+    if producer_kind == "unknown" or consumer_kind in {"unknown", "any"}:
+        return result | {"status": "UNKNOWN", "covered": None}
+    if producer_kind == "never":
+        return result | {"status": "EXACT", "covered": False,
+                         "uncovered_region": result["consumer_condition"]}
+    if producer_kind == "prefix" and consumer_kind == "prefix":
+        same_extent = (producer_condition.get("extent") == consumer_condition.get("extent")
+                       and producer_condition.get("extent_value") == consumer_condition.get("extent_value"))
+        if same_extent:
+            return result | {"status": "EXACT", "covered": True}
+        uncovered = (f"{producer_condition.get('extent')} <= word_offset < "
+                     f"{consumer_condition.get('extent')}")
+        return result | {"status": "EXACT", "covered": False,
+                         "uncovered_region": uncovered}
+    if producer_kind == "prefix" and consumer_kind == "always":
+        return result | {"status": "EXACT", "covered": False,
+                         "uncovered_region":
+                         f"{producer_condition.get('extent')} <= word_offset < configured_length"}
+    return result | {"status": "UNKNOWN", "covered": None}
+
+
+def _word_extent_facts(producer: dict[str, Any], consumer: dict[str, Any]) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    producer_facts = [{
+        "public_index": leaf["public_index"], "path": leaf["path"],
+        "status": leaf.get("binding_status", "UNKNOWN"),
+        "condition": leaf.get("binding_condition", {"kind": "unknown", "reason": "MISSING"}),
+        "evidence": leaf.get("binding_evidence", {}),
+    } for leaf in producer["public_leaves"]]
+    consumer_by_index = {word["index"]: word for word in consumer["public_words"]}
+    consumer_facts = []
+    for leaf in producer["public_leaves"]:
+        word = consumer_by_index.get(leaf["public_index"])
+        if word is None:
+            consumer_facts.append({
+                "public_index": leaf["public_index"], "path": leaf["path"],
+                "status": "UNKNOWN", "condition": {"kind": "unknown", "reason": "CONSUMER_WORD_MISSING"},
+                "evidence": {},
+            })
+            continue
+        consumer_facts.append({
+            "public_index": leaf["public_index"], "path": leaf["path"],
+            "status": word.get("reliance_status", "UNKNOWN"),
+            "condition": word.get("reliance_condition", {"kind": "unknown", "reason": "LEGACY_RELATION"}),
+            "evidence": {"origin": word.get("origin"), "source_class": word.get("source_class")},
+        })
+    return producer_facts, consumer_facts
+
+
 def analyze(artifact_path: Path, source_path: Path, relation_path: Path | None = None,
-            label: str | None = None) -> dict[str, Any]:
+            label: str | None = None, *, producer_source: Path | None = None,
+            mapping_bridge: Path | None = None) -> dict[str, Any]:
     started = time.monotonic()
-    producer = load_producer(artifact_path)
+    producer = load_producer(artifact_path, producer_source)
     if relation_path is None:
         raise ValueError("UNSUPPORTED_CONSUMER_AST_REQUIRED")
     consumer = load_relation_consumer(source_path, relation_path, len(producer["public_leaves"]))
+    mapping_certificate = consumer.get("mapping_certificate")
+    if mapping_certificate is not None:
+        if mapping_bridge is None:
+            raise ValueError("RECURSIVE_MAPPING_BRIDGE_ARTIFACT_REQUIRED")
+        verify_mapping_certificate(mapping_certificate, artifact_path, mapping_bridge)
     warnings: list[dict[str, Any]] = []
 
     unresolved_memory = [
         leaf for leaf in producer["public_leaves"]
-        if leaf["occurrence_count"] == 0
-        and leaf.get("memory_dependency_status") == "unresolved-dynamic"
+        if leaf.get("binding_status") == "UNKNOWN"
     ]
     if unresolved_memory:
         paths = ",".join(leaf["path"] for leaf in unresolved_memory[:8])
@@ -572,7 +778,49 @@ def analyze(artifact_path: Path, source_path: Path, relation_path: Path | None =
             "suggested_fix": suggested_fix, "evidence": evidence,
         })
 
-    unused = [leaf for leaf in producer["public_leaves"] if leaf["occurrence_count"] == 0]
+    producer_extent_facts, consumer_extent_facts = _word_extent_facts(producer, consumer)
+    extent_rows = []
+    for producer_fact, consumer_fact in zip(producer_extent_facts, consumer_extent_facts):
+        coverage = _extent_coverage(producer_fact, consumer_fact)
+        extent_rows.append({"public_index": producer_fact["public_index"],
+                            "path": producer_fact["path"], **coverage})
+    uncovered = [row for row in extent_rows
+                 if row["status"] == "EXACT" and row["covered"] is False]
+    grouped_uncovered: list[list[dict[str, Any]]] = []
+    for row in uncovered:
+        base = re.sub(r"\[\d+\]$", "", row["path"])
+        if grouped_uncovered:
+            previous = grouped_uncovered[-1][-1]
+            previous_base = re.sub(r"\[\d+\]$", "", previous["path"])
+            if (base == previous_base
+                    and row["public_index"] == previous["public_index"] + 1
+                    and (row["producer_condition"], row["consumer_condition"], row["uncovered_region"])
+                    == (previous["producer_condition"], previous["consumer_condition"],
+                        previous["uncovered_region"])):
+                grouped_uncovered[-1].append(row)
+                continue
+        grouped_uncovered.append([row])
+    for group in grouped_uncovered:
+        first, last = group[0], group[-1]
+        label_paths = first["path"] if len(group) == 1 else f"{first['path']}..{last['path']}"
+        warning(
+            "R-EXTENT",
+            _effect_warning_location(consumer, [row["public_index"] for row in group]),
+            f"The consumer relies on {label_paths} when {first['consumer_condition']}, but the producer "
+            f"binds those words only when {first['producer_condition']}. Uncovered region: "
+            f"{first['uncovered_region']}.",
+            "Make the producer bind every consumer-relied word, or limit the consumer to the producer's "
+            "proof-enforced extent and rebuild the checked boundary artifacts together.",
+            {"public_indices": [row["public_index"] for row in group],
+             "paths": [row["path"] for row in group],
+             "producer_condition": first["producer_condition"],
+             "consumer_condition": first["consumer_condition"],
+             "uncovered_region": first["uncovered_region"]},
+        )
+
+    unused = [leaf for leaf in producer["public_leaves"]
+              if leaf.get("binding_status") == "EXACT"
+              and leaf.get("binding_condition", {}).get("kind") == "never"]
     for group in _ranges(unused):
         paths = [leaf["path"] for leaf in group]
         indices = [leaf["public_index"] for leaf in group]
@@ -666,7 +914,12 @@ def analyze(artifact_path: Path, source_path: Path, relation_path: Path | None =
             "R-EFFECT": "effect amount/beneficiary/message words are producer-bound public inputs",
             "R-POLARITY": "anchors are must-be-in; replay keys are must-not-be-in and written on success",
             "R-CONSUMER": "each verifier public word reaches a guard, committed state, or modeled effect",
+            "R-EXTENT": "consumer reliance implies the producer's proof-enforced binding condition",
         },
+        "extent_facts": {"schema": "bindcheck.extent-facts.v1",
+                         "producer": producer_extent_facts,
+                         "consumer": consumer_extent_facts,
+                         "coverage": extent_rows},
         "polarity": {"anchors": consumer["anchor_words"], "replay": replay},
         "warnings": warnings,
         "warning_count": len(warnings),
@@ -681,7 +934,7 @@ def analyze(artifact_path: Path, source_path: Path, relation_path: Path | None =
 
 
 def readable(result: dict[str, Any]) -> str:
-    lines = [f"BindCheck v1.3: {result['target']}",
+    lines = [f"BindCheck v1.4-dev: {result['target']}",
              f"  producer: {result['producer']['sha256']} ({result['producer']['decoder']})",
              f"  consumer: {result['consumer']['source_sha256']} ({result['consumer']['kind']})",
              f"  warnings: {result['warning_count']}  runtime: {result['runtime_seconds']:.3f}s"]

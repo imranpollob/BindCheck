@@ -20,7 +20,7 @@ import re
 from typing import Any, Iterable
 
 
-SCHEMA = "bindcheck.consumer-ast.v1.2"
+SCHEMA = "bindcheck.consumer-ast.v1.3"
 
 
 def _walk(value: Any) -> Iterable[dict[str, Any]]:
@@ -35,6 +35,11 @@ def _walk(value: Any) -> Iterable[dict[str, Any]]:
 
 def _sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def _canonical_symbol(value: str) -> str:
+    value = re.sub(r"([a-z0-9])([A-Z])", r"\1_\2", value)
+    return re.sub(r"[^a-zA-Z0-9]+", "_", value).strip("_").lower()
 
 
 def _src_start(node: dict[str, Any]) -> int:
@@ -130,6 +135,9 @@ class Value:
     integer: int | None = None
     lower: int | None = None
     upper: int | None = None
+    affine_symbol: str | None = None
+    affine_offset: int = 0
+    extent_condition: dict[str, Any] | None = None
 
     @staticmethod
     def merge(*values: "Value") -> "Value":
@@ -139,7 +147,14 @@ class Value:
             words.update(value.words)
             if value.array_start is not None:
                 starts.append(value.array_start)
-        return Value(frozenset(words), min(starts) if starts else None, None)
+        affine = {(value.affine_symbol, value.affine_offset)
+                  for value in values if value.affine_symbol}
+        extent = next((value.extent_condition for value in values
+                       if value.extent_condition is not None), None)
+        symbol, offset = next(iter(affine)) if len(affine) == 1 else (None, 0)
+        return Value(frozenset(words), min(starts) if starts else None, None,
+                     affine_symbol=symbol, affine_offset=offset,
+                     extent_condition=extent)
 
 
 @dataclass
@@ -152,17 +167,20 @@ class Trace:
     unsupported: set[str] = field(default_factory=set)
     loop_widened: bool = False
     literal_array_widths: list[tuple[int, int]] = field(default_factory=list)
+    word_reliance: dict[int, list[dict[str, Any]]] = field(default_factory=dict)
 
 
 class Extractor:
     def __init__(self, combined: dict[str, Any], source_key: str, source: Path,
-                 public_leaves: list[dict[str, Any]]):
+                 public_leaves: list[dict[str, Any]],
+                 mapping_certificate: dict[str, Any] | None = None):
         self.combined = combined
         self.source_key = source_key
         self.source_path = source
         self.source_text = source.read_text()
         self.public_leaves = public_leaves
         self.public_count = len(public_leaves)
+        self.mapping_certificate = mapping_certificate
         self.array_lower_bounds: set[int] = set()
         effect_table_path = Path(__file__).resolve().parents[3] / "protocols/d1/bindcheck-v1.3-effect-models.json"
         self.effect_table = json.loads(effect_table_path.read_text())
@@ -215,6 +233,18 @@ class Extractor:
         start = max(0, array.array_start)
         return frozenset(range(start, self.public_count))
 
+    def _record_reliance(self, words: frozenset[int], condition: dict[str, Any] | None) -> None:
+        fact = condition or {"kind": "always"}
+        for index in words:
+            facts = self.trace.word_reliance.setdefault(index, [])
+            if fact not in facts:
+                facts.append(fact)
+
+    def _storage_symbol(self, declarations: tuple[int, ...]) -> str:
+        target = self.nodes_by_id.get(declarations[-1], {}) if declarations else {}
+        name = target.get("name")
+        return _canonical_symbol(str(name)) if isinstance(name, str) and name else "storage_extent"
+
     def _storage_signature(self, node: Any, env: dict[int, Value] | None = None) -> tuple[tuple[int, ...], frozenset[int]] | None:
         """Return declaration-id path and public-word key dependencies."""
         if not isinstance(node, dict):
@@ -250,7 +280,12 @@ class Extractor:
             return env.get(declaration, Value()) if isinstance(declaration, int) else Value()
         if kind == "Literal":
             integer = _literal_int(node)
-            return Value(integer=integer, lower=integer, upper=integer)
+            return Value(integer=integer, lower=integer, upper=integer,
+                         affine_offset=integer or 0)
+        if kind == "MemberAccess":
+            storage = self._storage_signature(node, env)
+            if storage is not None:
+                return Value(storage[1], affine_symbol=self._storage_symbol(storage[0]))
         if kind == "IndexAccess":
             storage = self._storage_signature(node, env)
             if storage is not None:
@@ -262,10 +297,18 @@ class Extractor:
                     }
                     if record not in self.trace.storage_reads:
                         self.trace.storage_reads.append(record)
-                return Value(storage[1])
+                return Value(storage[1], affine_symbol=self._storage_symbol(storage[0]))
             base = self._eval(node.get("baseExpression"), env)
             index = self._eval(node.get("indexExpression"), env)
-            return Value(self._words_for_array_index(base, index))
+            words = self._words_for_array_index(base, index)
+            if base.array_start is not None:
+                self._record_reliance(words, index.extent_condition)
+            symbol = None
+            if index.integer is not None and 0 <= index.integer < len(self.public_leaves):
+                path = self.public_leaves[index.integer]["path"]
+                if "[" not in path and "." not in path:
+                    symbol = _canonical_symbol(path)
+            return Value(words, affine_symbol=symbol)
         if kind == "FunctionCall":
             values = [self._eval(arg, env) for arg in node.get("arguments", [])]
             declaration = self._call_declaration(node)
@@ -322,16 +365,35 @@ class Extractor:
             right = self._eval(node.get("rightExpression"), env)
             operator = node.get("operator")
             if operator in {"+", "-"}:
+                affine_symbol = None
+                affine_offset = 0
+                if operator == "+":
+                    if left.affine_symbol and not right.affine_symbol:
+                        affine_symbol, affine_offset = left.affine_symbol, left.affine_offset + (right.integer or 0)
+                    elif right.affine_symbol and not left.affine_symbol:
+                        affine_symbol, affine_offset = right.affine_symbol, right.affine_offset + (left.integer or 0)
+                elif left.affine_symbol and not right.affine_symbol:
+                    affine_symbol, affine_offset = left.affine_symbol, left.affine_offset - (right.integer or 0)
+                extent_condition = left.extent_condition or right.extent_condition
                 if left.integer is not None and right.integer is not None:
                     number = left.integer + right.integer if operator == "+" else left.integer - right.integer
-                    return Value(left.words | right.words, integer=number, lower=number, upper=number)
+                    return Value(left.words | right.words, integer=number, lower=number, upper=number,
+                                 affine_offset=number, extent_condition=extent_condition)
                 if (left.lower is not None and left.upper is not None
                         and right.lower is not None and right.upper is not None):
                     if operator == "+":
                         return Value(left.words | right.words, lower=left.lower + right.lower,
-                                     upper=left.upper + right.upper)
+                                     upper=left.upper + right.upper,
+                                     affine_symbol=affine_symbol, affine_offset=affine_offset,
+                                     extent_condition=extent_condition)
                     return Value(left.words | right.words, lower=left.lower - right.upper,
-                                 upper=left.upper - right.lower)
+                                 upper=left.upper - right.lower,
+                                 affine_symbol=affine_symbol, affine_offset=affine_offset,
+                                 extent_condition=extent_condition)
+                if affine_symbol or extent_condition:
+                    return Value(left.words | right.words, affine_symbol=affine_symbol,
+                                 affine_offset=affine_offset,
+                                 extent_condition=extent_condition)
         return merged
 
     def _loop_bounds(self, condition: Any, env: dict[int, Value]) -> dict[int, tuple[int, int]]:
@@ -354,6 +416,36 @@ class Extractor:
         if operator == "<":
             upper -= 1
         return {declaration: (lower, upper)} if lower <= upper else {}
+
+    def _loop_extent(self, condition: Any, env: dict[int, Value]) -> dict[int, dict[str, Any]]:
+        if not isinstance(condition, dict) or condition.get("nodeType") != "BinaryOperation":
+            return {}
+        if condition.get("operator") not in {"<", "<="}:
+            return {}
+        left = condition.get("leftExpression", {})
+        if left.get("nodeType") != "Identifier":
+            return {}
+        declaration = left.get("referencedDeclaration")
+        if not isinstance(declaration, int):
+            return {}
+        current = env.get(declaration, Value())
+        limit = self._eval(condition.get("rightExpression"), env)
+        if limit.affine_symbol:
+            return {declaration: {
+                "kind": "prefix",
+                "word_offset": "word_offset",
+                "extent": _canonical_symbol(limit.affine_symbol),
+                "array_offset": current.integer if current.integer is not None else current.affine_offset,
+                "limit_offset": limit.affine_offset,
+            }}
+        if limit.integer is not None:
+            return {declaration: {
+                "kind": "prefix", "word_offset": "word_offset",
+                "extent": "configured_length", "extent_value": limit.integer,
+                "array_offset": current.integer if current.integer is not None else current.affine_offset,
+                "limit_offset": 0,
+            }}
+        return {}
 
     def _guard(self, expression: dict[str, Any], env: dict[int, Value]) -> None:
         value = self._eval(expression, env)
@@ -443,17 +535,25 @@ class Extractor:
                 # Retain a simple literal interval; widen when the condition
                 # cannot establish one.
                 bounded = self._loop_bounds(condition, env)
+                extents = self._loop_extent(condition, env)
                 for item in _walk(condition or {}):
                     declaration = item.get("referencedDeclaration")
                     if item.get("nodeType") == "Identifier" and declaration in body_env:
                         old = body_env[declaration]
                         limits = bounded.get(declaration)
+                        extent = extents.get(declaration)
                         if limits is None:
                             self.trace.loop_widened = True
                         body_env[declaration] = Value(
                             old.words, old.array_start, None,
-                            limits[0] if limits else old.lower,
-                            limits[1] if limits else old.upper,
+                            limits[0] if limits else (
+                                extent.get("array_offset", 0) if extent else old.lower
+                            ),
+                            limits[1] if limits else (
+                                self.public_count - 1 if extent else old.upper
+                            ),
+                            old.affine_symbol, old.affine_offset,
+                            extent,
                         )
             self._run_statement(node.get("trueBody") or node.get("body"), body_env)
             self._run_statement(node.get("falseBody"), dict(env))
@@ -511,7 +611,10 @@ class Extractor:
         params = entry.get("parameters", {}).get("parameters", [])
         initial = []
         for param in params:
-            initial.append(Value(array_start=0) if param.get("id") == array_id else Value())
+            initial.append(
+                Value(array_start=0) if param.get("id") == array_id
+                else Value(affine_symbol=str(param.get("name") or "consumer_extent"))
+            )
         self._run_function(entry, initial)
         if len(self.trace.verifier_calls) != 1:
             raise ValueError(f"SOLIDITY_TRACED_VERIFIER_BOUNDARY_COUNT:{len(self.trace.verifier_calls)}")
@@ -532,12 +635,29 @@ class Extractor:
         largest_array = max((len(indices) for indices in groups.values()), default=0)
         header = max(self.array_lower_bounds, default=0)
         inferred_width = header + largest_array if largest_array else self.public_count
-        direct_width = _resolve_direct_width(self.public_count, literal_widths, inferred_width)
-        producer_prefix = 0
+        raw_direct_width = next(iter(literal_widths), inferred_width)
+        if self.mapping_certificate is None:
+            direct_width = _resolve_direct_width(self.public_count, literal_widths, inferred_width)
+            direct_to_producer = {index: index for index in range(direct_width)}
+            configuration_prefix: list[dict[str, Any]] = []
+        else:
+            direct_width = raw_direct_width
+            if direct_width != self.mapping_certificate.get("consumer_public_count"):
+                raise ValueError("SOLIDITY_MAPPING_CERTIFICATE_CONSUMER_WIDTH_MISMATCH")
+            if self.public_count != self.mapping_certificate.get("inner_public_count"):
+                raise ValueError("SOLIDITY_MAPPING_CERTIFICATE_PRODUCER_WIDTH_MISMATCH")
+            rows = self.mapping_certificate.get("mapping", [])
+            direct_to_producer = {row["consumer_index"]: row["producer_index"] for row in rows}
+            if set(direct_to_producer) != set(range(direct_width)):
+                raise ValueError("SOLIDITY_MAPPING_CERTIFICATE_NOT_TOTAL")
+            for row in rows:
+                if self.public_leaves[row["producer_index"]]["path"] != row["producer_path"]:
+                    raise ValueError("SOLIDITY_MAPPING_CERTIFICATE_PATH_MISMATCH")
+            configuration_prefix = self.mapping_certificate.get("configuration_prefix", [])
 
         def mapped(indices: Iterable[int]) -> list[int]:
-            return sorted(producer_prefix + index for index in indices
-                          if 0 <= index < direct_width)
+            return sorted(direct_to_producer[index] for index in indices
+                          if index in direct_to_producer)
 
         for guard in self.trace.guards:
             guard["words"] = mapped(guard["words"])
@@ -571,6 +691,35 @@ class Extractor:
             self.trace.storage_reads, self.trace.guards, replay_records
         )
         unique_anchors = {item["public_index"]: item for item in anchor_words}
+        reliance_by_producer: dict[int, list[dict[str, Any]]] = {}
+        for direct_index, conditions in self.trace.word_reliance.items():
+            if direct_index in direct_to_producer:
+                reliance_by_producer.setdefault(direct_to_producer[direct_index], []).extend(conditions)
+
+        public_words = [
+            {"index": item["producer_index"],
+             "origin": f"verifier_configuration[{item['producer_index']}]",
+             "source_class": "verifier-configuration", "consumer_used": False,
+             "guard_used": False, "effect_used": False,
+             "reliance_status": "EXACT", "reliance_condition": {"kind": "never"}}
+            for item in configuration_prefix
+        ]
+        for index in range(direct_width):
+            producer_index = direct_to_producer[index]
+            conditions = reliance_by_producer.get(producer_index, [])
+            condition = ({"kind": "always"} if any(item.get("kind") == "always" for item in conditions)
+                         else conditions[0] if len(conditions) == 1
+                         else {"kind": "any", "conditions": conditions} if conditions
+                         else {"kind": "never"})
+            public_words.append({
+                "index": producer_index, "origin": f"public_inputs[{index}]",
+                "source_class": "calldata", "consumer_used": producer_index in consumer_words,
+                "guard_used": producer_index in guard_words,
+                "effect_used": producer_index in effect_words,
+                "reliance_status": "EXACT", "reliance_condition": condition,
+            })
+        public_words.sort(key=lambda item: item["index"])
+
         return {
             "schema": SCHEMA,
             "source": str(self.source_path.resolve()),
@@ -579,14 +728,9 @@ class Extractor:
             "scope": "solc AST type-directed verifier boundary, guards, storage writes, and standard token calls",
             "verifier_boundary": {**self.trace.verifier_calls[0],
                                   "direct_array_width": direct_width,
-                                  "producer_prefix_width": producer_prefix},
-            "public_words": ([
-                {"index": producer_prefix + index, "origin": f"public_inputs[{index}]",
-                 "source_class": "calldata", "consumer_used": producer_prefix + index in consumer_words,
-                 "guard_used": producer_prefix + index in guard_words,
-                 "effect_used": producer_prefix + index in effect_words}
-                for index in range(direct_width)
-            ]),
+                                  "producer_prefix_width": len(configuration_prefix)},
+            "public_words": public_words,
+            "mapping_certificate": self.mapping_certificate,
             "anchor_words": [unique_anchors[index] for index in sorted(unique_anchors)],
             "effects": self.trace.effects,
             "effect_word_indices": sorted(effect_words),
@@ -602,5 +746,7 @@ class Extractor:
 
 
 def extract(combined_ast: Path, source_key: str, source: Path,
-            public_leaves: list[dict[str, Any]]) -> dict[str, Any]:
-    return Extractor(json.loads(combined_ast.read_text()), source_key, source, public_leaves).extract()
+            public_leaves: list[dict[str, Any]],
+            mapping_certificate: dict[str, Any] | None = None) -> dict[str, Any]:
+    return Extractor(json.loads(combined_ast.read_text()), source_key, source, public_leaves,
+                     mapping_certificate).extract()

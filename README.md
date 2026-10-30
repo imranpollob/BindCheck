@@ -4,8 +4,8 @@ BindCheck investigates whether the guarantees of an accepted zero-knowledge proo
 
 The current integration checkout is the linked worktree
 `/Users/imranpollob/Coding/bc/bindcheck-d1-paper` on `d1-paper`, currently at
-integrated revision `83a4d8d2e4d8bb6ef8b3be6c3f91126d2c9cf580` plus the
-uncommitted D1P-40 extraction-correctness audit and repairs. This state includes
+integrated revision `55d7da7d2ec8e1f7779d02eda104351f66d57257` plus the
+uncommitted D1P-42 conditional-extent implementation and audit. This state includes
 the integrated D1P-33/D1P-36 transfer scans, D1P-34 application-neutral v1.1
 freeze, D1P-35 v1.2 format/location change, D1P-31 evaluation/contract revision,
 D1P-30 tool, mutation benchmark,
@@ -39,6 +39,19 @@ The principal directories are `circuits/` and `contracts/` for the small fixture
 
 ## Current status
 
+- [D1P-42](reports/D1P-42.md) supplies an exact, replay-checked Payy recursive
+  public-input certificate (1,005 inner words, two verified configuration
+  constants, and 1,003 consumer words), per-word producer binding and consumer
+  reliance conditions, and the development-only `R-EXTENT` rule. Independent
+  synthetic controls establish all-path versus prefix-only binding and matching
+  versus wider consumer reliance. Payy earlier now warns for
+  `active_messages_count <= word_offset < messages_length`; check-added does not
+  because its tail-zero constraints bind all message words. WT-C02's `max_fee`
+  concern is **not a counting bug**: pinned has three proof-enforced plus three
+  Brillig inventory occurrences and the mutant has zero of each. The unchanged
+  30-mutant rerun remains **11 detected / 19 unsupported / 0 misses / 13 warning
+  objects**. This is an unfrozen bounded implementation over development cases;
+  no held-out, capability, security, or D1 verdict follows.
 - [D1P-40](reports/D1P-40-correctness-audit.md) audits producer memory facts,
   exact public-input mapping, consumer effect dependencies and R-ANCHOR on
   compiled synthetic controls, then repairs five confirmed extraction defects.

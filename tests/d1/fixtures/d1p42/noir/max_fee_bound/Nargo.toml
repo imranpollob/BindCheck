@@ -1,0 +1,6 @@
+[package]
+name = "d1p42_max_fee_bound"
+type = "bin"
+authors = [""]
+
+[dependencies]

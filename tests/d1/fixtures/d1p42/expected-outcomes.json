@@ -1,0 +1,64 @@
+{
+  "schema": "bindcheck.d1p42.expected-outcomes/v1",
+  "written_before_implementation": true,
+  "condition_interface": "bindcheck.extent-facts.v1",
+  "cases": [
+    {
+      "id": "bound-all-consumer-all",
+      "producer_fixture": "noir/bound_all",
+      "consumer_fixture": "solidity/ConsumerAll.sol",
+      "producer_condition": "true",
+      "consumer_condition": "word_offset < configured_length",
+      "expected_r_extent": false,
+      "reason": "Every public payload word is proof-enforced on every path."
+    },
+    {
+      "id": "bound-prefix-consumer-limited",
+      "producer_fixture": "noir/bound_prefix",
+      "consumer_fixture": "solidity/ConsumerLimited.sol",
+      "producer_condition": "word_offset < active_count",
+      "consumer_condition": "word_offset < active_count",
+      "expected_r_extent": false,
+      "reason": "The consumer relies on exactly the producer-bound active prefix."
+    },
+    {
+      "id": "bound-prefix-consumer-all",
+      "producer_fixture": "noir/bound_prefix",
+      "consumer_fixture": "solidity/ConsumerAll.sol",
+      "producer_condition": "word_offset < active_count",
+      "consumer_condition": "word_offset < configured_length",
+      "expected_r_extent": true,
+      "expected_uncovered_region": "active_count <= word_offset < configured_length",
+      "reason": "The consumer can rely on tail words after the producer stops binding them."
+    },
+    {
+      "id": "payy-earlier",
+      "producer_condition": "word_offset < active_messages_count",
+      "consumer_condition": "word_offset < messages_length",
+      "expected_r_extent": true,
+      "expected_uncovered_region": "active_messages_count <= word_offset < messages_length",
+      "reason": "Earlier agg_agg binds the active compacted prefix, while RollupV1 scans the configured message extent."
+    },
+    {
+      "id": "payy-check-added",
+      "producer_condition": "true",
+      "consumer_condition": "word_offset < messages_length",
+      "expected_r_extent": false,
+      "reason": "The added tail-zero constraints cover every word outside the active prefix."
+    },
+    {
+      "id": "integer-comparison-bound",
+      "producer_fixture": "noir/max_fee_bound",
+      "expected_max_fee_binding": "true",
+      "rejects": "max_fee > amount",
+      "reason": "The pinned integer-comparison path contains proof-enforced max_fee occurrences and rejects a value above amount."
+    },
+    {
+      "id": "integer-comparison-unbound",
+      "producer_fixture": "noir/max_fee_unbound",
+      "expected_max_fee_binding": "false",
+      "accepts": "max_fee > amount",
+      "reason": "Removing the comparison removes every max_fee occurrence; acceptance of max_fee=0 by the bound circuit does not refute this differential."
+    }
+  ]
+}

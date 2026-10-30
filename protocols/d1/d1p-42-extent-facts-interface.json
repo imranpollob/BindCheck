@@ -1,0 +1,29 @@
+{
+  "schema": "bindcheck.extent-facts-interface/v1",
+  "status_values": ["EXACT", "UNKNOWN"],
+  "fact": {
+    "required_fields": ["public_index", "path", "status", "condition", "evidence"],
+    "condition_kinds": {
+      "always": "The word is bound or relied upon on every supported successful path.",
+      "never": "The word is not bound or relied upon in the supported relation.",
+      "prefix": "The condition is word_offset < extent after applying the recorded array/limit offsets.",
+      "any": "Disjunction of exact child conditions.",
+      "unknown": "No coverage conclusion is permitted; reason is required."
+    }
+  },
+  "coverage_request": {
+    "required_fields": ["producer_fact", "consumer_fact"],
+    "meaning": "Decide whether consumer reliance implies producer binding."
+  },
+  "coverage_response": {
+    "required_fields": ["status", "covered", "producer_condition", "consumer_condition", "uncovered_region"],
+    "status_values": ["EXACT", "UNKNOWN"],
+    "rule": "covered may be true or false only when status is EXACT; UNKNOWN never suppresses another supported rule and never becomes safety evidence."
+  },
+  "normalization": {
+    "symbols": "lower snake case",
+    "word_offset": "zero-based within the named ABI array, independent of verifier-array and producer-prefix offsets",
+    "prefix_equivalence": "same normalized extent and same normalized offset relation",
+    "uncovered_prefix_region": "producer_extent <= word_offset < consumer_extent"
+  }
+}

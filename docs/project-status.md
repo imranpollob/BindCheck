@@ -87,8 +87,9 @@ flowchart TD
     d1p35 --> d1p36["D1P-36 frozen v1.2 transfer scan [DONE]"]
     d1p36 --> d1p40["D1P-40 extraction correctness audit [DONE]"]
     d1p36 --> d1p41["D1P-41 preliminary novelty ablation [DONE]"]
-    d1p40 --> payyFidelity["Payy exact mapping + memory fidelity [NEXT]"]
-    d1p41 --> payyFidelity
+    d1p40 --> d1p42["D1P-42 conditional extent analysis [DONE]"]
+    d1p41 --> d1p42
+    d1p42 --> payyFidelity["Payy exact mapping + extent fidelity [DONE]"]
     payyFidelity --> plannerReview["Capability baselines + supported transfer review [WAITING]"]
     d1paper --> lanex["Lane-X exploratory, benchmark, auto-validation v1+v1.1 [DONE]"]
     plannerReview --> capabilityGate["Automated discovery + E4 capability gate [WAITING]"]
@@ -142,9 +143,9 @@ flowchart TD
     classDef waiting fill:#D9D9D9,stroke:#B3B3B3
     classDef unknown fill:#FFE0C2,stroke:#FF9E42
 
-    class foundation,fixture,payy,sourceCheck,coneGate,nineCases,failureAnalysis,v3Rerun,generalGate,tracking,livingTree,d100,d101,d102,d103preflight,d103review,d103typed,d103boundary,d103guards,d103guardreview,d103concrete,d103replayreview,d103recovery,d1p00,d1p01,d1p01artifact,d1p02,d1p03,d1p04,d1p05,d1p04elig,d1p07,d1p08,d1p09,d1p10,d1p11,d1p12,warptoadRecovery,d1p12r,d1p13,d1p14a,d1p14b,d1p14c,d1p14d,d1p17,d1pint1,d1p16,d1p18,d1p15,d1p19,d1p20,d1p21a,d1p21b,d1p30,d1p31,d1p34,d1p33,d1p35,d1p36,d1p40,d1p41,lanex done
+    class foundation,fixture,payy,sourceCheck,coneGate,nineCases,failureAnalysis,v3Rerun,generalGate,tracking,livingTree,d100,d101,d102,d103preflight,d103review,d103typed,d103boundary,d103guards,d103guardreview,d103concrete,d103replayreview,d103recovery,d1p00,d1p01,d1p01artifact,d1p02,d1p03,d1p04,d1p05,d1p04elig,d1p07,d1p08,d1p09,d1p10,d1p11,d1p12,warptoadRecovery,d1p12r,d1p13,d1p14a,d1p14b,d1p14c,d1p14d,d1p17,d1pint1,d1p16,d1p18,d1p15,d1p19,d1p20,d1p21a,d1p21b,d1p30,d1p31,d1p34,d1p33,d1p35,d1p36,d1p40,d1p41,d1p42,payyFidelity,lanex done
     class analysis,d1,d1paper,d103,d103impl,d103consumer,d103effects active
-    class d103linkreview,payyFidelity next
+    class d103linkreview next
     class evaluation,history,heldOut,baselines,manuscript,claims,artifacts,draft,transferCase,sensitivity,submit,t22,acirSummary,d104,d105,d106,d107,d108,d103symbolic,d1p09decision,d1p10decision,warptoadJoint,plannerReview,capabilityGate waiting
     class contribution,primaryResult,generalResult,d103gate,d103recoveryresult,d1p06,d1p10result,d1p14bresult,d1p14cresult,d1p14dresult,d1p17result unknown
 ```
@@ -541,6 +542,7 @@ slots were executed.
 | 2026-10-29 | D1P-35 BindCheck v1.2 format and location freeze | `[DONE]` development tool/evaluation / `[UNKNOWN]` transfer, capability and security | [Report](../reports/D1P-35.md), ignored version-validation/evaluation ledgers and freeze manifest: compile one development-only circuit with exact beta.14–22 toolchains; validate beta.15–18 through the unchanged beta.14 bincode reader and beta.19–21 through a compact-MessagePack adapter while beta.3 remains unsupported. Reporting-only changes resolve unique verifier call lines and select the already recognized vulnerable payout effect. The unchanged 35-target D1P-34 rerun preserves all identities and 16 detected / 14 unsupported / 0 misses while reducing emitted `:?` warning locations from six to zero. Protected rule/use/effect/frontend gates pass. No held-out artifact developed the adapter; no validation, security, performance, capability or D1 verdict follows. |
 | 2026-10-29 | D1P-36 frozen v1.2 transfer scan | `[DONE]` scan / `[UNKNOWN]` supported transfer, capability and security | [Report](../reports/D1P-36.md) and ignored evidence manifest: scan the four D1P-33 projects as a reserved second attempt plus four unseen non-reserved candidates exactly once each after the v1.2 freeze. All eight fail closed before rule completion: consumer-AST ambiguity/absence, beta.3/beta.25 identity, `MultiScalarMul`, `RecursiveAggregation`, or a beta.21 MemoryOp encoding gap. Outcome: 0 supported, 8 unsupported, 0 warnings and 0 validations; unsupported is not a miss or safety evidence. Frozen files remain unchanged. No finding, disclosure, contact, live-chain action, capability, security or D1 verdict follows. |
 | 2026-10-30 | D1P-41 preliminary novelty ablation | `[DONE]` preliminary task / `[WAITING]` corrected-tool rerun / `[UNKNOWN]` capability and security | [Report](../reports/D1P-41-ablation-preliminary.md), [frozen examples](ablations/d1p-41-discriminating-examples.md), and [protocol](../protocols/d1/d1p-41-ablation-preliminary.json): mask unchanged v1.2 facts/outputs across producer-only, consumer-only, unjoined-union and full arms on eight exposed development positives plus one control. Producer and consumer arms each match 3/8; union and full each match 6/8. R-EFFECT adds no detected example, but adds one related effect-naming warning and one irrelevant Payy warning; wrong state/domain relationships remain unsupported. Noir lint and Slither are separate external baselines. All results are E1/UNKNOWN, not security verdicts. AI 1 fact audit and a one-command corrected frozen-tool rerun remain required. |
+| 2026-10-30 | D1P-42 conditional extent facts and `R-EXTENT` | `[DONE]` bounded development implementation / `[UNKNOWN]` capability and security | [Report](../reports/D1P-42.md), [facts interface](../protocols/d1/d1p-42-extent-facts-interface.json), and ignored raw evidence: replay 1,630 bridge polynomial identities to certify Payy's exact 1,005-to-1,003 mapping; extract proof-enforced and consumer-reliance conditions per word; warn on the earlier Payy uncovered region `active_messages_count <= word_offset < messages_length`; and remain silent for check-added's all-word tail-zero binding. WT-C02's max-fee undercount concern is not a bug. The unchanged benchmark remains 11 detected / 19 unsupported / 0 misses / 13 warning objects. The implementation is unfrozen and bounded to development/synthetic inputs; no held-out, capability, security, or D1 verdict follows. |
 
 ## Update rule
 
