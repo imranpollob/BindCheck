@@ -108,6 +108,23 @@ has 6 E3 and 32 E1 because two PY-C02 rows were subsequently promoted by the
 separate TC02 Rust-stack real-proof experiment; that merge is not presented
 as an automatic X-AV result.
 
+### Corrected validation + repair table (evidence ledger)
+
+```sh
+python3 scripts/artifact/reproduce.py ledger
+```
+
+Expected: ledger grades 8 E4, 1 E4-preserved, 5 E3, 6 E1+mock, 33 E1
+over the same 53 warnings (tracked core `src/bindcheck_d1/xav_core.py`).
+The mock rows are relabeled E1+mock (a mock does not meet the contract's
+E2); PY-C02 is corrected by the TE05 active-prefix experiment (W001 E3 on
+its own mutation, W002 E1-contained; TE04 is E4 for the inherited
+message-tail defect); WT-S02 is corrected by the honest-seeded
+mock experiment. The command asserts the TE05 zero-state-change report
+and every repair-check verdict without rerunning provers, then writes
+`ledger-table.md`. Held-out transfer (RQ4) has no reproduce command: it
+requires the custodian reservation (D1P-33/D1P-36 frozen runs).
+
 ## Expected runtime
 
 Approximate wall times on an idle recent M-series Mac (not performance
