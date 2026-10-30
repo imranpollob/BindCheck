@@ -1,0 +1,187 @@
+{
+  "schema": "bindcheck.d1p43.role-binding-protocol/v1",
+  "date": "2026-10-30",
+  "status": "PRELIMINARY",
+  "base_ablation_protocol": "protocols/d1/d1p-41-ablation-preliminary.json",
+  "purpose": "Prospectively freeze the typed producer/consumer role-binding targets and scoring predicates before executing the D1P-43 rule.",
+  "claim_limits": [
+    "These development mutants and their seeded labels were exposed before D1P-43; they are not blind or held-out evidence.",
+    "A matching R-ROLE warning is E1 diagnostic evidence, not a VIOLATION verdict.",
+    "Silence is not VERIFIED_WITHIN_SCOPE.",
+    "Payy targets must remain UNKNOWN while the D1P-40 public-input mapping and dynamic-memory gates are unresolved.",
+    "This preliminary run will be repeated after the analyzer and extracted facts are corrected and frozen."
+  ],
+  "arms": {
+    "producer-only": ["R-BIND"],
+    "consumer-only": ["R-CONSUMER", "R-POLARITY", "R-ANCHOR"],
+    "unjoined-union": ["R-BIND", "R-CONSUMER", "R-POLARITY", "R-ANCHOR"],
+    "full-bindcheck": ["R-BIND", "R-CONSUMER", "R-POLARITY", "R-ANCHOR", "R-EFFECT", "R-ROLE"]
+  },
+  "existing_discriminating_examples": [
+    {
+      "id": "E1",
+      "target": "WT-C08",
+      "expected_role_result": "no R-ROLE diagnostic; retain the frozen R-BIND/R-EFFECT expectation"
+    },
+    {
+      "id": "E2",
+      "target": "WT-C03",
+      "expected_role_result": "no additional R-ROLE diagnostic in the bounded correspondence vocabulary; retain R-BIND"
+    },
+    {
+      "id": "E3",
+      "target": "WT-S03",
+      "expected_role_result": "no additional R-ROLE diagnostic; retain R-CONSUMER"
+    },
+    {
+      "id": "E4",
+      "target": "WT-S09",
+      "expected_role_result": "R-ROLE/polarity may corroborate the missing spent-state transition; R-POLARITY remains the frozen detector"
+    },
+    {
+      "id": "E5",
+      "target": "WT-S05",
+      "expected_role_result": "R-ROLE/state-identity at public words 3 and 4"
+    },
+    {
+      "id": "E6",
+      "target": "WT-C05",
+      "expected_role_result": "R-ROLE/producer-state-membership at public word 4"
+    },
+    {
+      "id": "E7",
+      "target": "WT-C07",
+      "expected_role_result": "no additional R-ROLE diagnostic; retain R-BIND"
+    },
+    {
+      "id": "E8",
+      "target": "PY-S01",
+      "expected_role_result": "UNKNOWN at the D1P-40 Payy public-input mapping gate"
+    },
+    {
+      "id": "E9",
+      "target": "warptoad-pinned",
+      "expected_role_result": "no target R-ROLE diagnostic; result remains UNKNOWN rather than a safety claim"
+    }
+  ],
+  "new_targets": [
+    {
+      "id": "R1",
+      "target": "WT-C05",
+      "artifact": "results/raw/X-BM/build/WT-C05/circuits/withdraw/target/withdraw.json",
+      "producer_source": "results/raw/X-BM/mutants/WT-C05/warptoad-withdraw-main.nr",
+      "producer_support_sources": ["results/raw/X-BM/mutants/WT-C05/warptoad-nargo-hashing-lib.nr"],
+      "consumer_source": "results/raw/D1P-19/workspace/pinned-source/backend/contracts/core/WarpToadCore.sol",
+      "relation": "results/raw/D1P-18/relation.json",
+      "intended_policy": "The cross-root branch must prove membership of the private origin local root under the public giga root; the public destination local root only names the destination admission set.",
+      "reachable_execution": "The same-root honest path remains reachable. A cross-root witness distinguishes the mutant because it proves the public destination root as the giga-tree member instead of the private origin root.",
+      "expected_outcome_before_run": "R-ROLE/producer-state-membership involving public word 4; research verdict remains UNKNOWN without the adversarial proof route.",
+      "expected_rule": "R-ROLE",
+      "expected_kinds": ["producer-state-membership"],
+      "expected_public_indices": [4]
+    },
+    {
+      "id": "R2",
+      "target": "WT-C06",
+      "artifact": "results/raw/X-BM/build/WT-C06/circuits/withdraw/target/withdraw.json",
+      "producer_source": "results/raw/X-BM/mutants/WT-C06/warptoad-withdraw-main.nr",
+      "producer_support_sources": ["results/raw/X-BM/mutants/WT-C06/warptoad-nargo-hashing-lib.nr"],
+      "consumer_source": "results/raw/D1P-19/workspace/pinned-source/backend/contracts/core/WarpToadCore.sol",
+      "relation": "results/raw/D1P-18/relation.json",
+      "intended_policy": "The public withdrawal amount that controls the principal mint must be an input to the note commitment opened by the circuit.",
+      "reachable_execution": "The mutant commitment is computed with literal zero while the independent public amount still reaches fee checks and the principal mint; a note committed for zero can therefore authorize a nonzero public withdrawal subject to the remaining constraints.",
+      "expected_outcome_before_run": "R-ROLE/effect-authorization at public word 2, naming the principal mint amount as insufficiently commitment-authorized.",
+      "expected_rule": "R-ROLE",
+      "expected_kinds": ["effect-authorization"],
+      "expected_public_indices": [2]
+    },
+    {
+      "id": "R3",
+      "target": "WT-C09",
+      "artifact": "results/raw/X-BM/build/WT-C09/circuits/withdraw/target/withdraw.json",
+      "producer_source": "results/raw/X-BM/mutants/WT-C09/warptoad-withdraw-main.nr",
+      "producer_support_sources": ["results/raw/X-BM/mutants/WT-C09/warptoad-nargo-hashing-lib.nr"],
+      "consumer_source": "results/raw/D1P-19/workspace/pinned-source/backend/contracts/core/WarpToadCore.sol",
+      "relation": "results/raw/D1P-18/relation.json",
+      "intended_policy": "Verifier word 2 is amount and word 8 is maximum fee on both sides of the boundary.",
+      "reachable_execution": "The consumer submits amount at word 2 and maxFee at word 8, while the mutant circuit decodes the positions in the opposite roles; unequal values distinguish the mismatch and generally reject honest proofs or reinterpret policy checks.",
+      "expected_outcome_before_run": "R-ROLE/boundary-role at public words 2 and 8.",
+      "expected_rule": "R-ROLE",
+      "expected_kinds": ["boundary-role"],
+      "expected_public_indices": [2, 8]
+    },
+    {
+      "id": "R4",
+      "target": "WT-S05",
+      "artifact": "results/raw/D1P-13/workspace/source/backend/circuits/withdraw/target/withdraw.json",
+      "producer_source": "benchmarks/binding-mutants/baselines/warptoad-withdraw-main.nr",
+      "producer_support_sources": ["benchmarks/binding-mutants/baselines/warptoad-nargo-hashing-lib.nr"],
+      "consumer_source": "results/raw/X-BM/mutants/WT-S05/WarpToadCore.sol",
+      "relation": "results/raw/D1P-31/consumer-relations/WT-S05/relation.json",
+      "intended_policy": "The giga root must be admitted by gigaRootHistory and the destination local root by localRootHistory.",
+      "reachable_execution": "Honest distinct roots fail the crossed checks. A value admitted to the wrong state set has the bypass shape, but D1P-43 does not newly establish a committed adversarial route.",
+      "expected_outcome_before_run": "R-ROLE/state-identity at public words 3 and 4; research verdict remains UNKNOWN beyond seeded development evidence.",
+      "expected_rule": "R-ROLE",
+      "expected_kinds": ["state-identity"],
+      "expected_public_indices": [3, 4]
+    },
+    {
+      "id": "R5",
+      "target": "WT-S07",
+      "artifact": "results/raw/D1P-13/workspace/source/backend/circuits/withdraw/target/withdraw.json",
+      "producer_source": "benchmarks/binding-mutants/baselines/warptoad-withdraw-main.nr",
+      "producer_support_sources": ["benchmarks/binding-mutants/baselines/warptoad-nargo-hashing-lib.nr"],
+      "consumer_source": "results/raw/X-BM/mutants/WT-S07/WarpToadCore.sol",
+      "relation": "results/raw/D1P-31/consumer-relations/WT-S07/relation.json",
+      "intended_policy": "The note-bound recipient authorizes the principal mint beneficiary; the relayer is authorized only for the fee mint.",
+      "reachable_execution": "A successful withdrawal executes both mints, but the mutant directs the principal amount to relayer as well as the fee.",
+      "expected_outcome_before_run": "R-ROLE/effect-beneficiary involving recipient word 10 and relayer word 9, naming the principal mint.",
+      "expected_rule": "R-ROLE",
+      "expected_kinds": ["effect-beneficiary"],
+      "expected_public_indices": [9, 10]
+    },
+    {
+      "id": "R6",
+      "target": "WT-S08",
+      "artifact": "results/raw/D1P-13/workspace/source/backend/circuits/withdraw/target/withdraw.json",
+      "producer_source": "benchmarks/binding-mutants/baselines/warptoad-withdraw-main.nr",
+      "producer_support_sources": ["benchmarks/binding-mutants/baselines/warptoad-nargo-hashing-lib.nr"],
+      "consumer_source": "results/raw/X-BM/mutants/WT-S08/WarpToadCore.sol",
+      "relation": "results/raw/D1P-31/consumer-relations/WT-S08/relation.json",
+      "intended_policy": "Verifier word 2 is amount and word 8 is maximum fee on both sides of the boundary.",
+      "reachable_execution": "The mutant formatter submits maxFee at word 2 and amount at word 8; unequal values distinguish the boundary-role swap.",
+      "expected_outcome_before_run": "R-ROLE/boundary-role at public words 2 and 8.",
+      "expected_rule": "R-ROLE",
+      "expected_kinds": ["boundary-role"],
+      "expected_public_indices": [2, 8]
+    },
+    {
+      "id": "R7",
+      "target": "PY-S03",
+      "artifact": "../BindCheck/tools/cases/payy-c4d2c90/noir/target/agg_agg.json",
+      "consumer_source": "results/raw/X-BM/mutants/PY-S03/RollupV1.sol",
+      "relation": "results/raw/D1P-34/consumer-relations/PY-S03.json",
+      "intended_policy": "A burn transfer must use the message recipient field, not the note-kind field, as the burn address.",
+      "reachable_execution": "A processed burn record reaches the transfer with message word i+1 in the mutant instead of recipient word i+4.",
+      "expected_outcome_before_run": "UNKNOWN at the audited Payy public-input mapping gate; do not emit or score an R-ROLE result from the stale selector-prefix relation.",
+      "expected_rule": null,
+      "expected_kinds": [],
+      "expected_public_indices": [],
+      "expected_status": "UNKNOWN"
+    },
+    {
+      "id": "R8",
+      "target": "PY-S05",
+      "artifact": "../BindCheck/tools/cases/payy-c4d2c90/noir/target/agg_agg.json",
+      "consumer_source": "results/raw/X-BM/mutants/PY-S05/RollupV1.sol",
+      "relation": "results/raw/D1P-34/consumer-relations/PY-S05.json",
+      "intended_policy": "The consumer must skip the three-word batch header before interpreting per-message fields.",
+      "reachable_execution": "The mutant parses message records from index zero, so header words are reinterpreted as note kind, asset, amount, sender, and recipient.",
+      "expected_outcome_before_run": "UNKNOWN at the audited Payy public-input mapping gate; do not emit or score an R-ROLE result from the stale selector-prefix relation.",
+      "expected_rule": null,
+      "expected_kinds": [],
+      "expected_public_indices": [],
+      "expected_status": "UNKNOWN"
+    }
+  ]
+}
