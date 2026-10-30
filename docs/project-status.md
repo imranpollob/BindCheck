@@ -89,7 +89,10 @@ flowchart TD
     d1p36 --> d1p41["D1P-41 preliminary novelty ablation [DONE]"]
     d1p40 --> d1p42["D1P-42 conditional extent analysis [DONE]"]
     d1p41 --> d1p42
+    d1p40 --> d1p43["D1P-43 typed role correspondence [DONE]"]
+    d1p41 --> d1p43
     d1p42 --> payyFidelity["Payy exact mapping + extent fidelity [DONE]"]
+    d1p43 --> plannerReview
     payyFidelity --> plannerReview["Capability baselines + supported transfer review [WAITING]"]
     d1paper --> lanex["Lane-X exploratory, benchmark, auto-validation v1+v1.1 [DONE]"]
     plannerReview --> capabilityGate["Automated discovery + E4 capability gate [WAITING]"]
@@ -143,7 +146,7 @@ flowchart TD
     classDef waiting fill:#D9D9D9,stroke:#B3B3B3
     classDef unknown fill:#FFE0C2,stroke:#FF9E42
 
-    class foundation,fixture,payy,sourceCheck,coneGate,nineCases,failureAnalysis,v3Rerun,generalGate,tracking,livingTree,d100,d101,d102,d103preflight,d103review,d103typed,d103boundary,d103guards,d103guardreview,d103concrete,d103replayreview,d103recovery,d1p00,d1p01,d1p01artifact,d1p02,d1p03,d1p04,d1p05,d1p04elig,d1p07,d1p08,d1p09,d1p10,d1p11,d1p12,warptoadRecovery,d1p12r,d1p13,d1p14a,d1p14b,d1p14c,d1p14d,d1p17,d1pint1,d1p16,d1p18,d1p15,d1p19,d1p20,d1p21a,d1p21b,d1p30,d1p31,d1p34,d1p33,d1p35,d1p36,d1p40,d1p41,d1p42,payyFidelity,lanex done
+    class foundation,fixture,payy,sourceCheck,coneGate,nineCases,failureAnalysis,v3Rerun,generalGate,tracking,livingTree,d100,d101,d102,d103preflight,d103review,d103typed,d103boundary,d103guards,d103guardreview,d103concrete,d103replayreview,d103recovery,d1p00,d1p01,d1p01artifact,d1p02,d1p03,d1p04,d1p05,d1p04elig,d1p07,d1p08,d1p09,d1p10,d1p11,d1p12,warptoadRecovery,d1p12r,d1p13,d1p14a,d1p14b,d1p14c,d1p14d,d1p17,d1pint1,d1p16,d1p18,d1p15,d1p19,d1p20,d1p21a,d1p21b,d1p30,d1p31,d1p34,d1p33,d1p35,d1p36,d1p40,d1p41,d1p42,payyFidelity,lanex,d1p43 done
     class analysis,d1,d1paper,d103,d103impl,d103consumer,d103effects active
     class d103linkreview next
     class evaluation,history,heldOut,baselines,manuscript,claims,artifacts,draft,transferCase,sensitivity,submit,t22,acirSummary,d104,d105,d106,d107,d108,d103symbolic,d1p09decision,d1p10decision,warptoadJoint,plannerReview,capabilityGate waiting
@@ -456,7 +459,10 @@ transfer analyses, including the explicit second attempt on D1P-33's reserved
 set and four unseen non-reserved candidates. D1P-40 then corrects five
 development extraction defects: the prospective 30-mutant result is 11
 detected, 19 unsupported and zero misses, while the exact Payy selector mapping
-and 999 dynamic message-tail dependencies remain UNKNOWN. Exact Payy fidelity,
+and 999 dynamic message-tail dependencies remain UNKNOWN. D1P-43 adds a
+separate typed state/domain/effect correspondence rule: the preliminary
+supported D1P-41 denominator changes from union 5/7 to full 7/7, while two
+Payy role targets remain fail-closed UNKNOWN. Exact Payy fidelity,
 baseline comparison and supported held-out transfer remain open, so
 the campaign still does not complete the capability gate. Neither screen, blocker,
 development fixture nor component check is a method-evaluation,
@@ -543,6 +549,7 @@ slots were executed.
 | 2026-10-29 | D1P-36 frozen v1.2 transfer scan | `[DONE]` scan / `[UNKNOWN]` supported transfer, capability and security | [Report](../reports/D1P-36.md) and ignored evidence manifest: scan the four D1P-33 projects as a reserved second attempt plus four unseen non-reserved candidates exactly once each after the v1.2 freeze. All eight fail closed before rule completion: consumer-AST ambiguity/absence, beta.3/beta.25 identity, `MultiScalarMul`, `RecursiveAggregation`, or a beta.21 MemoryOp encoding gap. Outcome: 0 supported, 8 unsupported, 0 warnings and 0 validations; unsupported is not a miss or safety evidence. Frozen files remain unchanged. No finding, disclosure, contact, live-chain action, capability, security or D1 verdict follows. |
 | 2026-10-30 | D1P-41 preliminary novelty ablation | `[DONE]` preliminary task / `[WAITING]` corrected-tool rerun / `[UNKNOWN]` capability and security | [Report](../reports/D1P-41-ablation-preliminary.md), [frozen examples](ablations/d1p-41-discriminating-examples.md), and [protocol](../protocols/d1/d1p-41-ablation-preliminary.json): mask unchanged v1.2 facts/outputs across producer-only, consumer-only, unjoined-union and full arms on eight exposed development positives plus one control. Producer and consumer arms each match 3/8; union and full each match 6/8. R-EFFECT adds no detected example, but adds one related effect-naming warning and one irrelevant Payy warning; wrong state/domain relationships remain unsupported. Noir lint and Slither are separate external baselines. All results are E1/UNKNOWN, not security verdicts. AI 1 fact audit and a one-command corrected frozen-tool rerun remain required. |
 | 2026-10-30 | D1P-42 conditional extent facts and `R-EXTENT` | `[DONE]` bounded development implementation / `[UNKNOWN]` capability and security | [Report](../reports/D1P-42.md), [facts interface](../protocols/d1/d1p-42-extent-facts-interface.json), and ignored raw evidence: replay 1,630 bridge polynomial identities to certify Payy's exact 1,005-to-1,003 mapping; extract proof-enforced and consumer-reliance conditions per word; warn on the earlier Payy uncovered region `active_messages_count <= word_offset < messages_length`; and remain silent for check-added's all-word tail-zero binding. WT-C02's max-fee undercount concern is not a bug. The unchanged benchmark remains 11 detected / 19 unsupported / 0 misses / 13 warning objects. The implementation is unfrozen and bounded to development/synthetic inputs; no held-out, capability, security, or D1 verdict follows. |
+| 2026-10-30 | D1P-43 typed state/domain correspondence | `[DONE]` bounded implementation and preliminary rerun / `[NEXT]` Payy fidelity and frozen rerun / `[UNKNOWN]` capability and security | [Report](../reports/D1P-43.md), [interface](d1/role-binding-interface.md), [frozen targets](ablations/d1p-43-role-targets.md), and [protocol](../protocols/d1/d1p-43-role-binding-preliminary.json): add separate `R-ROLE` producer/consumer word roles for tree/state/domain/polarity/effect correspondence without changing AI 1 frontends or analyzer. On seven supported D1P-41 positives, producer 3, consumer 2, union 5 and full 7 detect; the clean control is silent. Six WarpToad role targets match and PY-S03/PY-S05 fail closed at public-input mapping, so 8/8 expected outcomes match. Development E1 only; no proof/replay/held-out/security verdict. Final conclusions await exact Payy mapping/memory fidelity and a corrected frozen-tool rerun. |
 
 ## Update rule
 
