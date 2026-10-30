@@ -1,8 +1,10 @@
 # Independent held-out evaluation protocol, version 2
 
-**Status:** DRAFT for planner and custodian approval, 30 October 2026.
-Nothing in this protocol has been executed. No search was run, no candidate
-repository was opened, and no draw was made while writing it.
+**Status:** FINAL TEXT FOR APPROVAL, 30 October 2026. It becomes frozen
+only when the approval block (§19) records two planner approvals and the
+custodian's agreement against the SHA-256 given there. Nothing in this
+protocol has been executed. No search was run, no candidate repository was
+opened, and no draw was made while writing it.
 **Author:** AI 3 (independent evaluation design). This is AI output and not an
 independent annotation (contract §10). Authors must inspect it before
 freezing it.
@@ -15,8 +17,11 @@ The inputs read for this design were AGENTS.md, the research contract, the
 taxonomy protocol, the
 [2026-10-28 reservation commitment](../taxonomy/reservation-commitment-2026-10-28.json),
 [D1P-33](../../reports/D1P-33.md), [D1P-35](../../reports/D1P-35.md),
-[D1P-36](../../reports/D1P-36.md), the
-[2026-10-30 policy review](../validation/policy-review-2026-10-30.md),
+[D1P-36](../../reports/D1P-36.md),
+[D1P-40](../../reports/D1P-40-correctness-audit.md),
+[D1P-41](../../reports/D1P-41-ablation-preliminary.md), the
+[2026-10-30 policy review](../validation/policy-review-2026-10-30.md), the
+[evidence ledger](../x-experiment/EVIDENCE-LEDGER.md),
 `scripts/taxonomy/reserve_families.py` and `paper/draft.md`. No candidate
 repository's code was opened.
 
@@ -243,12 +248,17 @@ each stratum.** With about 30 eligible groups this gives about 10. The
 fraction is fixed here, before the grouped list exists. It is never chosen
 after the group count is known.
 
-This amends the v0.2.0 default of one half (§14, A-V2-1).
-`reserve_families.py` currently implements only half (`reserve_count`).
-**Prerequisite P1:** a versioned script change that adds an explicit
-`fraction` field to the grouped input, recorded in the private manifest,
-with a unit test for 30→10 and 8→3. Until P1 lands, the draw cannot run
-under this rule. The unchanged half rule must not be used silently instead.
+This amends the v0.2.0 default of one half (§14, A-V2-1). The custodian runs
+`reserve_families.py --fraction 1/3` (prerequisite P1, §18):
+- the private manifest records `"reservation_fraction": "1/3"`, so the
+  commitment covers the rule actually applied;
+- the default of one half is unchanged and adds no manifest field; and
+- unit tests check 30→10 and 8→3 with ceiling rounding per stratum.
+
+The fraction is a command-line argument rather than a grouped-list field,
+because the grouped-list schema is the frozen v0.2.0 schema. The default
+half rule must never be used in place of 1/3. At the opening, the executor
+checks that the manifest carries `reservation_fraction` = `1/3` (§7.4).
 
 ### 7.2 Procedure
 
@@ -283,7 +293,8 @@ nonce and the private manifest. The executor:
 - recomputes the commitment and checks it against the public value;
 - checks that `grouped_list_sha256` matches the grouped list the custodian
   provides; and
-- checks that the reserved count equals the public count.
+- checks that the reserved count equals the public count and that the
+  manifest records `reservation_fraction` = `1/3`.
 
 The executor records the result in the evaluation report. A mismatch stops
 the evaluation, and the stop is reported. As in v0.2.0, the commitment shows
@@ -428,6 +439,8 @@ it, and it is labeled as a diagnostic.
 | Generated verifier present in the checkout | yes or no, with path |
 | Verifier corresponds to the rebuilt circuit (regenerate with pinned bb, compare VK hash) | `match`, `mismatch`, `stub`, `undetermined` |
 | Consumer verifier-boundary count | integer, or `undetermined` |
+| Producer-to-verifier public-input mapping | `established` (full-width identity), or the named fail-closed reason, e.g. `SOLIDITY_PUBLIC_INPUT_MAPPING_AMBIGUOUS` |
+| Dynamic-memory dependencies on public leaves | `none`, `exact`, or `UNSUPPORTED_DYNAMIC_MEMORY_DEPENDENCY` |
 | Recursion present (named black box) | yes or no |
 | Other unsupported operations named by the tool | list |
 | Pairs determined, analyzed and capped | counts |
@@ -440,10 +453,12 @@ runs on the same pairs, once each:
 - **Noir compiler warnings.** These come from the producer build log, with
   no extra run. They matter because the pinned Noir compiler's
   unused-variable warning matched every circuit-side BindCheck detection on
-  the development benchmark (D1P-32).
+  the development benchmark (D1P-32; D1P-41 §5).
 - **Slither 0.11.6** in its default configuration on the consumer.
 
-The same-policy arm does not apply, because no reviewed policy exists for an
+Circom-only tools such as ZKAP, Circomspect and CIVER are recorded as `U`
+(input language not accepted), without adapting them. The same-policy arm
+does not apply, because no reviewed policy exists for an
 unseen project before analysis. Writing one after seeing BindCheck's output
 would not give an equal-information comparison. It is recorded as `not
 applicable` with that reason.
@@ -538,8 +553,17 @@ variant", so the comparison is between the original and a minimal repair
 that adds the missing binding. That repair is validation scaffolding, not a
 change to the tool.
 
-An E4 without this contrast is reported as `E4, causation pending`. Manual
-steps are counted.
+Three rules from the [evidence ledger](../x-experiment/EVIDENCE-LEDGER.md)
+§0 and TE05 apply:
+- verification failure under a *different* key is not a contrast;
+- a run that reverts at a consumer gate *before* the verifier call says
+  nothing about proof acceptance, and is recorded as uninformative, not as a
+  contrast; and
+- a run whose proof acceptance comes from a mock verifier is graded
+  `E1+mock`, never E2 or above.
+
+An E4 without a valid contrast is reported as `E4, causation pending`.
+Manual steps are counted.
 
 ### 13.5 Confirmed defect
 
@@ -617,8 +641,8 @@ GitHub search.
 
 | Step | Owner | Completion criterion |
 | --- | --- | --- |
-| P1: fractional draw support | Integrator | Script and test merged. The fraction is recorded in the private manifest. 30→10 and 8→3 tests pass |
-| P2: freeze this protocol | Two planners and the custodian | Hash of this file recorded with approvals, before any query runs |
+| P1: fractional draw support | Integrator | **Implemented, uncommitted (30 October 2026).** `reserve_families.py --fraction p/q`; non-default fractions are recorded in the private manifest; `scripts/taxonomy/test_reserve_families.py` passes 9/9, including 30→10 and 8→3 per stratum and a default-unchanged check. Becomes DONE when committed |
+| P2: freeze this protocol | Two planners and the custodian | Approval block (§19) filled against the recorded SHA-256, before any query runs |
 | S1: search and screen | Custodian or search operator | Search-log and screen-sheet hashes published, with per-query and per-stratum counts |
 | S2: draw | Custodian | `reservation-commitment-v2.json` committed with counts, hashes and a signed attestation |
 | S3: release development set | Custodian → AI 1 | Release recorded with count and date. AI 1 exposure log started |
@@ -631,3 +655,31 @@ The venue dates (abstract 10 November 2026, paper 17 November 2026) are
 external constraints. If S5 cannot finish in time, the paper
 reports the stages that are done and the stage at which the protocol stopped.
 It must not substitute a smaller frame.
+
+## 19. Approval block
+
+**Hash rule.** `protocol_sha256` is the SHA-256 of this file's UTF-8 bytes
+from the first byte up to, but not including, the line `## 19. Approval
+block`. Filling in this block does not change the hash. Any edit above the
+line does, and voids every approval recorded below. Recompute with:
+
+```sh
+python3 -c "import hashlib,sys; b=open(sys.argv[1],'rb').read(); \
+print(hashlib.sha256(b[:b.index(b'## 19. Approval block')]).hexdigest())" \
+  docs/evaluation/independent-protocol-v2.md
+```
+
+```text
+protocol_sha256: cd80f5f7f1eb555caeb566a140f03d8ad880b96bba6d89a132d708dacfb99d9d
+recorded:        2026-10-30 by AI 3 (computed, not an approval)
+```
+
+| Role | Identity | Decision | Date (UTC) | Scope approved | Note |
+| --- | --- | --- | --- | --- | --- |
+| Planner 1 | | | | | |
+| Planner 2 | | | | | |
+| Custodian (human) | | | | | |
+
+Do not invent an identity, signature or date to fill this table (taxonomy
+protocol §6). Leaving it empty means the protocol is not frozen.
+
