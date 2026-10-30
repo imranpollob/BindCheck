@@ -1,0 +1,6 @@
+[package]
+name = "bindcheck_version_fixture"
+type = "bin"
+authors = [""]
+
+[dependencies]

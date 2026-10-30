@@ -1,4 +1,4 @@
-"""BindCheck v1.1 cross-layer static analyzer.
+"""BindCheck v1.2 cross-layer static analyzer.
 
 The rule engine is deliberately application-neutral.  It joins flattened
 producer ABI leaves and ACIR witness use with either an extracted consumer
@@ -18,10 +18,10 @@ import re
 import time
 from typing import Any
 
-from .frontends import acir_binary_beta22, acir_binary_v1
+from .frontends import acir_binary_beta15_21, acir_binary_beta22, acir_binary_v1
 
 
-SCHEMA = "bindcheck.static-analysis.v1.1"
+SCHEMA = "bindcheck.static-analysis.v1.2"
 
 
 def sha256(path: Path) -> str:
@@ -118,6 +118,9 @@ def load_producer(path: Path) -> dict[str, Any]:
     if version == acir_binary_beta22.VERSION:
         decoder = acir_binary_beta22
         decoder_name = "beta.22-msgpack"
+    elif version in acir_binary_beta15_21.VERSIONS:
+        decoder = acir_binary_beta15_21
+        decoder_name = acir_binary_beta15_21.VERSIONS[version]
     elif version == acir_binary_v1.VERSION:
         decoder = acir_binary_v1
         decoder_name = "beta.14-bincode"
@@ -255,6 +258,56 @@ def _false_selects(value: Any) -> list[tuple[str, frozenset[str]]]:
     return result
 
 
+def _reported_boundary_location(source: Path, relation: dict[str, Any]) -> str:
+    """Recover a missing line from the relation's recorded call signature.
+
+    This is reporting-only: ambiguity retains ``?`` and cannot affect any
+    dependency, guard, effect, polarity, or warning predicate.
+    """
+    boundary = relation.get("verifier_boundary", {})
+    recorded = boundary.get("location")
+    if isinstance(recorded, str) and not recorded.endswith(":?"):
+        return recorded
+    names: list[str] = []
+    declaration = boundary.get("declaration")
+    if isinstance(declaration, str) and "::" in declaration:
+        names.append(declaration.rsplit("::", 1)[-1].split("(", 1)[0])
+    expression = boundary.get("expression")
+    if isinstance(expression, str) and "@" in expression:
+        names.append(expression.split("@", 1)[0])
+    source_text = source.read_text()
+    for name in dict.fromkeys(item for item in names if re.fullmatch(r"[A-Za-z_$][\w$]*", item)):
+        matches = list(re.finditer(rf"\.\s*{re.escape(name)}\s*\(", source_text))
+        if len(matches) == 1:
+            line = source_text.count("\n", 0, matches[0].start()) + 1
+            return f"{source.name}:{line}"
+    return recorded if isinstance(recorded, str) else f"{source.name}:?"
+
+
+def _effect_warning_location(consumer: dict[str, Any], indices: list[int]) -> str:
+    """Select the reported committed-effect site that consumes the words.
+
+    Effect recognition and dependency sets are inputs to this helper and are
+    not changed here.  External effects are preferable to bookkeeping writes
+    when both already carry the vulnerable public words.
+    """
+    vulnerable = set(indices)
+    candidates = []
+    for effect in consumer["effects"]:
+        words = set(effect.get("words", []))
+        if not words and isinstance(effect.get("raw"), dict):
+            symbols = _symbols(effect["raw"])
+            words = {
+                word["index"] for word in consumer["public_words"]
+                if word.get("origin") in symbols
+            }
+        if words.intersection(vulnerable) and effect.get("location"):
+            candidates.append(effect)
+    preferred = [effect for effect in candidates if effect.get("kind") != "storage-write"]
+    selected = preferred[0] if preferred else (candidates[0] if candidates else None)
+    return selected["location"] if selected else consumer["verifier_location"]
+
+
 def load_relation_consumer(source: Path, relation_path: Path, public_count: int) -> dict[str, Any]:
     relation = json.loads(relation_path.read_text())
     expected_source = relation.get("source_sha256")
@@ -280,7 +333,7 @@ def load_relation_consumer(source: Path, relation_path: Path, public_count: int)
             "source": str(source.resolve()), "source_sha256": sha256(source),
             "relation": str(relation_path.resolve()), "relation_sha256": sha256(relation_path),
             "relation_schema": relation["schema"], "scope": relation.get("scope"),
-            "verifier_location": relation["verifier_boundary"]["location"],
+            "verifier_location": _reported_boundary_location(source, relation),
             "public_words": words,
             "anchor_words": relation.get("anchor_words", []),
             "consumer_unused_indices": [item["index"] for item in words
@@ -374,7 +427,7 @@ def load_relation_consumer(source: Path, relation_path: Path, public_count: int)
         "relation_sha256": sha256(relation_path),
         "relation_schema": relation.get("schema"),
         "scope": relation.get("scope"),
-        "verifier_location": boundary.get("location", f"{source.name}:?"),
+        "verifier_location": _reported_boundary_location(source, relation),
         "public_words": normalized_words,
         "anchor_words": anchor_words,
         "consumer_unused_indices": [word["index"] for word in normalized_words
@@ -443,7 +496,7 @@ def analyze(artifact_path: Path, source_path: Path, relation_path: Path | None =
         effect_leaves = [producer["public_leaves"][index] for index in vulnerable_effect]
         warning(
             "R-EFFECT",
-            consumer["effects"][0]["location"] if consumer["effects"] else consumer["verifier_location"],
+            _effect_warning_location(consumer, vulnerable_effect),
             "The consumer interprets producer public words as effect amount, beneficiary, or message data, but "
             "one or more of those words are absent from all proof-enforced ACIR opcodes.",
             "Bind every effect-decoded public word in the producer and keep the consumer effect derived only from "
@@ -530,7 +583,7 @@ def analyze(artifact_path: Path, source_path: Path, relation_path: Path | None =
 
 
 def readable(result: dict[str, Any]) -> str:
-    lines = [f"BindCheck v1.1: {result['target']}",
+    lines = [f"BindCheck v1.2: {result['target']}",
              f"  producer: {result['producer']['sha256']} ({result['producer']['decoder']})",
              f"  consumer: {result['consumer']['source_sha256']} ({result['consumer']['kind']})",
              f"  warnings: {result['warning_count']}  runtime: {result['runtime_seconds']:.3f}s"]

@@ -1,4 +1,4 @@
-"""Command-line entry point for BindCheck v1.1."""
+"""Command-line entry point for BindCheck v1.2."""
 
 from __future__ import annotations
 

@@ -4,10 +4,10 @@ BindCheck investigates whether the guarantees of an accepted zero-knowledge proo
 
 The current integration checkout is the linked worktree
 `/Users/imranpollob/Coding/bc/bindcheck-d1-paper` on `d1-paper`, currently at
-integrated revision `4382ee61817c9249778193f222693bb10a4f34df`
-(`bindcheck-v1.1`) plus the uncommitted D1P-33 held-out evidence/report. This
-state includes the integrated D1P-34 application-neutral v1.1 freeze, D1P-31
-evaluation/contract revision, D1P-30 tool, mutation benchmark,
+integrated revision `d981c6468acbaef8c1d5d4a1c542dec4ec2d088a` plus the
+uncommitted D1P-35 v1.2 freeze and D1P-36 transfer-scan evidence/report. This
+state includes the integrated D1P-33 held-out scan, D1P-34 application-neutral
+v1.1 freeze, D1P-31 evaluation/contract revision, D1P-30 tool, mutation benchmark,
 D1P-22 baselines, D1P-21A/B, D1P-20, D1P-19, D1P-17, and the merged Lane C
 taxonomy/extraction work. The linked
 worktree was originally established from `chatgpt-codex` revision
@@ -38,6 +38,31 @@ The principal directories are `circuits/` and `contracts/` for the small fixture
 
 ## Current status
 
+- [D1P-36](reports/D1P-36.md) runs frozen BindCheck v1.2 once on eight
+  projects: the four D1P-33 reserved targets as an explicit second attempt and
+  four previously unseen, non-reserved candidates opened only after the v1.2
+  freeze. Every analysis fails closed before an R-* rule completes: NullProof's
+  beta.19 producer decodes but needs an unambiguous compiler-AST consumer
+  relation; beta.3 and beta.25 remain unsupported; zkt-research/e-voting stop
+  on `MultiScalarMul`; ZKPassport stops on `RecursiveAggregation`; and two
+  beta.21 targets expose a named MemoryOp encoding gap. The result is **0
+  supported, 8 unsupported, 0 warnings, and 0 validations**. Unsupported is
+  not a miss or safety evidence. All frozen files remain byte-identical; no
+  finding, disclosure, maintainer contact, live-chain action, capability,
+  security, or D1 verdict follows.
+- [D1P-35](reports/D1P-35.md) freezes BindCheck v1.2 on base `d981c64...`.
+  Development-only builds of one synthetic circuit validate beta.15–18 as the
+  existing beta.14 bincode layout and beta.19–21 as compact MessagePack with
+  `current_witness_index`; public leaves and occurrence counts match beta.14
+  and beta.22. Beta.3 remains a named unsupported distinct schema. Reporting
+  now recovers unique verifier-call lines and selects the already recognized
+  vulnerable payout effect. The unchanged 35-target D1P-34 rerun preserves
+  every warning identity and **16 detected / 14 unsupported / 0 misses** while
+  reducing emitted `:?` warning locations from six to zero. The rule
+  conditions, thresholds, use counting, effect table and beta.14/beta.22/
+  Solidity frontends are unchanged. This bounded format/location change does
+  not establish support for every opcode schema, held-out capability,
+  performance, security, or a D1 verdict.
 - [D1P-33](reports/D1P-33.md) runs the first custodian-reserved held-out scan
   with frozen BindCheck v1.1 at exact commit `4382ee6...` / tag
   `bindcheck-v1.1`. All four projects are pinned and built locally: NullProof,
