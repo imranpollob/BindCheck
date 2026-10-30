@@ -1,0 +1,338 @@
+{
+  "schema": "bindcheck.d1p41.ablation-protocol/v1",
+  "date": "2026-10-30",
+  "status": "PRELIMINARY",
+  "purpose": "Measure what producer facts, consumer facts, their unjoined union, and the current BindCheck join add on pre-existing synthetic development examples.",
+  "claim_limits": [
+    "The examples and current-tool outputs were exposed before this task; this is not blind or held-out evidence.",
+    "AI 1 is auditing extracted facts in parallel. Final conclusions require one rerun on the corrected, frozen tool.",
+    "A related warning is E1 detection credit, not a VIOLATION verdict.",
+    "No-warning controls are not VERIFIED_WITHIN_SCOPE.",
+    "The arms change no rule in src/; they mask the current analyzer's input fact classes and output rule classes."
+  ],
+  "arms": {
+    "producer-only": {
+      "input_facts": [
+        "public ABI schema and boundary width",
+        "producer proof-enforced occurrence facts"
+      ],
+      "output_rules": [
+        "R-BIND"
+      ]
+    },
+    "consumer-only": {
+      "input_facts": [
+        "public ABI names as boundary metadata",
+        "consumer sources, guards, effects, state identities, and replay facts"
+      ],
+      "masked_input_facts": [
+        "producer proof-enforced occurrence facts"
+      ],
+      "output_rules": [
+        "R-CONSUMER",
+        "R-POLARITY",
+        "R-ANCHOR"
+      ]
+    },
+    "unjoined-union": {
+      "definition": "Set union of producer-only and consumer-only warning objects; no cross-layer warning is synthesized.",
+      "output_rules": [
+        "R-BIND",
+        "R-CONSUMER",
+        "R-POLARITY",
+        "R-ANCHOR"
+      ]
+    },
+    "full-bindcheck": {
+      "input_facts": [
+        "producer and consumer facts"
+      ],
+      "output_rules": [
+        "R-BIND",
+        "R-CONSUMER",
+        "R-POLARITY",
+        "R-ANCHOR",
+        "R-EFFECT"
+      ],
+      "join_rule": "R-EFFECT requires an intersection between unused producer public indices and consumer effect-word indices."
+    }
+  },
+  "scoring": {
+    "detection": "One point when at least one emitted warning matches the example's predeclared related-warning predicate. For the clean control, a match means no warnings. Other warnings do not earn detection credit.",
+    "effect_at_risk": "Yes only when a related warning names a concrete consumer token/state effect or the missing replay write. R-BIND and R-CONSUMER alone do not qualify; R-POLARITY qualifies for the protected replay-state write but does not name the downstream duplicate mint.",
+    "irrelevant_warnings": "Every emitted warning that does not match the predeclared related-warning predicate. A warning may be real but irrelevant to the seeded example.",
+    "human_confirmation_steps": {
+      "definition": "Count of substantive checks still required after reading the warning set; navigation/clicks are not counted.",
+      "required_checks": [
+        "establish the relevant producer binding or gap",
+        "establish the relevant consumer guard/effect/state relationship",
+        "confirm the reviewed policy requires that relationship",
+        "confirm a reachable execution and committed or contained outcome"
+      ],
+      "warning_credit": {
+        "R-BIND": [
+          "establish the relevant producer binding or gap"
+        ],
+        "R-EFFECT": [
+          "establish the relevant producer binding or gap",
+          "establish the relevant consumer guard/effect/state relationship"
+        ],
+        "R-CONSUMER": [
+          "establish the relevant consumer guard/effect/state relationship"
+        ],
+        "R-POLARITY": [
+          "establish the relevant consumer guard/effect/state relationship"
+        ],
+        "R-ANCHOR": [
+          "establish the relevant consumer guard/effect/state relationship"
+        ],
+        "Noir lint": [],
+        "Slither": []
+      },
+      "range": [
+        2,
+        4
+      ],
+      "note": "The policy and reachability checks are never discharged by a current static warning. Lint can localize code but discharges no substantive cross-layer confirmation check."
+    }
+  },
+  "external_baselines": {
+    "status": "reported separately, not arms",
+    "sources": [
+      "docs/baselines/d1p-32-benchmark.md",
+      "paper/draft.md"
+    ],
+    "tools": [
+      "Noir compiler lint",
+      "Slither"
+    ]
+  },
+  "examples": [
+    {
+      "id": "E1",
+      "target": "WT-C08",
+      "hypothesis": "A producer-side gap is more actionable when the consumer directly consumes the word in an effect.",
+      "artifact": "results/raw/X-BM/build/WT-C08/circuits/withdraw/target/withdraw.json",
+      "source": "results/raw/D1P-19/workspace/pinned-source/backend/contracts/core/WarpToadCore.sol",
+      "relation": "results/raw/D1P-18/relation.json",
+      "intended_policy": "A withdrawal proof must exclude the zero recipient before the consumer attempts its recipient mint.",
+      "reachable_execution": "The honest witness still executes. A zero-recipient proof is expected to verify at circuit level, after which the consumer's ERC-20 implementation rejects the zero receiver.",
+      "expected_outcome_before_arms": "Producer binding defect at recipient_address; attempted recipient mint is contained by the consumer, so no E4 committed mint is expected.",
+      "expected_boundary": {
+        "public_indices": [
+          10
+        ],
+        "paths": [
+          "recipient_address"
+        ],
+        "rules": [
+          "R-BIND",
+          "R-EFFECT"
+        ]
+      },
+      "external_baseline": {
+        "noir": "E1-lint",
+        "slither": "unsupported"
+      }
+    },
+    {
+      "id": "E2",
+      "target": "WT-C03",
+      "hypothesis": "A producer-side context gap remains security-relevant even when the consumer does not directly use the context word in an effect.",
+      "artifact": "results/raw/X-BM/build/WT-C03/circuits/withdraw/target/withdraw.json",
+      "source": "results/raw/D1P-19/workspace/pinned-source/backend/contracts/core/WarpToadCore.sol",
+      "relation": "results/raw/D1P-18/relation.json",
+      "intended_policy": "The note's silo domain must equal the consumer-configured WarpToad address.",
+      "reachable_execution": "The preserved M-DOM route constructs a foreign-domain note, proves it with the mutant's own key, and the unchanged consumer commits the mint from the admitted synthetic state.",
+      "expected_outcome_before_arms": "End-to-end mismatch at aztec_warptoad_address; the protected mint is context-authorized incorrectly even though the word is not a direct effect operand.",
+      "expected_boundary": {
+        "public_indices": [
+          5
+        ],
+        "paths": [
+          "aztec_warptoad_address"
+        ],
+        "rules": [
+          "R-BIND"
+        ]
+      },
+      "external_baseline": {
+        "noir": "E1-lint",
+        "slither": "unsupported"
+      }
+    },
+    {
+      "id": "E3",
+      "target": "WT-S03",
+      "hypothesis": "Consumer-only non-use should identify an authenticated replay key that the consumer ignores.",
+      "artifact": "results/raw/D1P-13/workspace/source/backend/circuits/withdraw/target/withdraw.json",
+      "source": "results/raw/X-BM/mutants/WT-S03/WarpToadCore.sol",
+      "relation": "results/raw/D1P-31/consumer-relations/WT-S03/relation.json",
+      "intended_policy": "Each proof-bound nullifier may authorize at most one successful mint.",
+      "reachable_execution": "The same accepted proof and calldata are submitted twice; with both the pre-check and write removed, both calls can mint.",
+      "expected_outcome_before_arms": "Replay mismatch at public word 0/nullifier; duplicate mint is the downstream effect.",
+      "expected_boundary": {
+        "public_indices": [
+          0
+        ],
+        "paths": [
+          "nullifier"
+        ],
+        "rules": [
+          "R-CONSUMER"
+        ]
+      },
+      "external_baseline": {
+        "noir": "unsupported",
+        "slither": "E1-lint"
+      }
+    },
+    {
+      "id": "E4",
+      "target": "WT-S09",
+      "hypothesis": "A polarity-aware consumer fact should distinguish a retained absence check from a missing success write.",
+      "artifact": "results/raw/D1P-13/workspace/source/backend/circuits/withdraw/target/withdraw.json",
+      "source": "results/raw/X-BM/mutants/WT-S09/WarpToadCore.sol",
+      "relation": "results/raw/D1P-31/consumer-relations/WT-S09/relation.json",
+      "intended_policy": "The nullifier must be absent before acceptance and atomically marked spent after success.",
+      "reachable_execution": "The first call passes the retained absence check but performs no write; the same proof passes that unchanged check and mints again.",
+      "expected_outcome_before_arms": "Replay mismatch localized to the missing nullifier write; duplicate mint is the downstream effect.",
+      "expected_boundary": {
+        "public_indices": [
+          0
+        ],
+        "paths": [
+          "nullifier"
+        ],
+        "rules": [
+          "R-POLARITY"
+        ]
+      },
+      "external_baseline": {
+        "noir": "unsupported",
+        "slither": "E1-lint"
+      }
+    },
+    {
+      "id": "E5",
+      "target": "WT-S05",
+      "hypothesis": "Presence-only consumer admission facts cannot distinguish the correct state map from the wrong state map.",
+      "artifact": "results/raw/D1P-13/workspace/source/backend/circuits/withdraw/target/withdraw.json",
+      "source": "results/raw/X-BM/mutants/WT-S05/WarpToadCore.sol",
+      "relation": "results/raw/D1P-31/consumer-relations/WT-S05/relation.json",
+      "intended_policy": "The giga root must be admitted by gigaRootHistory and the local root by localRootHistory.",
+      "reachable_execution": "Honest roots from the two distinct sets are predicted to revert after the checks are crossed; a targeted value admitted to the wrong set supplies the bypass shape. This task does not newly execute that shape.",
+      "expected_outcome_before_arms": "State/domain mismatch despite both words reaching guarded storage lookups; research evidence remains UNKNOWN beyond the frozen development ground truth.",
+      "expected_boundary": {
+        "public_indices": [
+          3,
+          4
+        ],
+        "paths": [
+          "giga_root",
+          "destination_local_root"
+        ],
+        "rules": []
+      },
+      "external_baseline": {
+        "noir": "unsupported",
+        "slither": "E1-lint"
+      }
+    },
+    {
+      "id": "E6",
+      "target": "WT-C05",
+      "hypothesis": "Producer occurrence alone cannot distinguish a present dependency from the correct state relationship.",
+      "artifact": "results/raw/X-BM/build/WT-C05/circuits/withdraw/target/withdraw.json",
+      "source": "results/raw/D1P-19/workspace/pinned-source/backend/contracts/core/WarpToadCore.sol",
+      "relation": "results/raw/D1P-18/relation.json",
+      "intended_policy": "The private origin root, not the public destination root, must be the membership root on the cross-root branch.",
+      "reachable_execution": "The honest same-root branch still executes because origin equals destination; an adversarial cross-root witness distinguishes the swapped relation. This task does not newly execute that witness.",
+      "expected_outcome_before_arms": "Wrong producer relationship with all involved public words still occurring in constraints; research evidence remains UNKNOWN beyond the frozen development ground truth.",
+      "expected_boundary": {
+        "public_indices": [
+          4
+        ],
+        "paths": [
+          "destination_local_root"
+        ],
+        "rules": []
+      },
+      "external_baseline": {
+        "noir": "miss",
+        "slither": "unsupported"
+      }
+    },
+    {
+      "id": "E7",
+      "target": "WT-C07",
+      "hypothesis": "An unused domain word is detectable producer-side, but naming the consumer effect at risk requires a deeper context-to-effect relationship than direct operand flow.",
+      "artifact": "results/raw/X-BM/build/WT-C07/circuits/withdraw/target/withdraw.json",
+      "source": "results/raw/D1P-19/workspace/pinned-source/backend/contracts/core/WarpToadCore.sol",
+      "relation": "results/raw/D1P-18/relation.json",
+      "intended_policy": "A commitment and its withdrawal authorization must be bound to the executing chain ID.",
+      "reachable_execution": "The honest frozen witness fails because its commitment used the real chain ID; a cross-chain construction is the intended adversarial route. Existing validation reaches E3 but does not establish a cross-chain committed effect.",
+      "expected_outcome_before_arms": "Domain-binding gap at chain_id; the at-risk mint is not a direct operand of chain_id and the end-to-end verdict remains UNKNOWN.",
+      "expected_boundary": {
+        "public_indices": [
+          1
+        ],
+        "paths": [
+          "chain_id"
+        ],
+        "rules": [
+          "R-BIND"
+        ]
+      },
+      "external_baseline": {
+        "noir": "E1-lint",
+        "slither": "unsupported"
+      }
+    },
+    {
+      "id": "E8",
+      "target": "PY-S01",
+      "hypothesis": "Consumer polarity can detect the seeded missing admission check while inherited producer and consumer warnings test irrelevant-warning accounting.",
+      "artifact": "../BindCheck/tools/cases/payy-c4d2c90/noir/target/agg_agg.json",
+      "source": "results/raw/X-BM/mutants/PY-S01/RollupV1.sol",
+      "relation": "results/raw/D1P-34/consumer-relations/PY-S01.json",
+      "intended_policy": "A mint record must match a registered unspent mint before it is marked spent and settled.",
+      "reachable_execution": "An unregistered mint reaches settlement after the three verifyMint requirements are removed while the spent write remains. The development validation has not established an unchanged real-verifier E4 route for this warning.",
+      "expected_outcome_before_arms": "Missing must-not-be-in/admission-side guard localized by replay polarity; Payy's inherited tail and commit-hash warnings are irrelevant to this mutation.",
+      "expected_boundary": {
+        "public_indices": [],
+        "paths": [
+          "mint registration/spent record"
+        ],
+        "rules": [
+          "R-POLARITY"
+        ]
+      },
+      "external_baseline": {
+        "noir": "unsupported",
+        "slither": "miss"
+      }
+    },
+    {
+      "id": "E9",
+      "target": "warptoad-pinned",
+      "hypothesis": "A clean honest development fixture should not receive a target diagnostic, while silence remains UNKNOWN rather than safety evidence.",
+      "artifact": "results/raw/D1P-13/workspace/source/backend/circuits/withdraw/target/withdraw.json",
+      "source": "results/raw/D1P-19/workspace/pinned-source/backend/contracts/core/WarpToadCore.sol",
+      "relation": "results/raw/D1P-18/relation.json",
+      "intended_policy": "The pinned producer binds all eleven public words, roots are checked against their matching histories, the nullifier is checked and written, and mint effects use bound values.",
+      "reachable_execution": "The preserved honest proof mints once and identical replay is rejected.",
+      "expected_outcome_before_arms": "No target warning in the supported static scope; formal result remains UNKNOWN because the fixture is not a proved negative control.",
+      "expected_boundary": {
+        "public_indices": [],
+        "paths": [],
+        "rules": []
+      },
+      "clean_control": true,
+      "external_baseline": {
+        "noir": "no target lint (control)",
+        "slither": "no target lint (control)"
+      }
+    }
+  ]
+}
