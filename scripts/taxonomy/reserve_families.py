@@ -9,10 +9,12 @@ output contains only the salted commitment; diagnostics go to standard error.
 from __future__ import annotations
 
 import argparse
+from fractions import Fraction
 import hashlib
 import hmac
 import json
 import os
+import re
 from pathlib import Path
 import secrets
 import subprocess
@@ -34,6 +36,10 @@ GROUP_KEYS = {
     "grouping_basis",
 }
 ROOT_KEYS = {"schema_version", "grouped_at", "rounding", "groups"}
+# The v0.2.0 rule reserves half of each stratum. A different fraction must be
+# fixed by a frozen protocol before the grouped list exists; it is recorded in
+# the private manifest so the opening shows which rule was applied.
+DEFAULT_FRACTION = Fraction(1, 2)
 
 
 class InputError(ValueError):
@@ -120,14 +126,26 @@ def validate_grouped_list(value: dict[str, Any]) -> list[dict[str, Any]]:
     return normalized
 
 
-def reserve_count(size: int, rounding: str) -> int:
+def parse_fraction(text: str) -> Fraction:
+    """Parse an exact ``p/q`` reservation fraction strictly between 0 and 1."""
+    match = re.fullmatch(r"([1-9][0-9]*)/([1-9][0-9]*)", text)
+    if match is None:
+        raise InputError("fraction must be written as p/q with positive integers")
+    fraction = Fraction(int(match.group(1)), int(match.group(2)))
+    if not 0 < fraction < 1:
+        raise InputError("fraction must be strictly between 0 and 1")
+    return fraction
+
+
+def reserve_count(size: int, rounding: str, fraction: Fraction = DEFAULT_FRACTION) -> int:
+    scaled = size * fraction.numerator
     if rounding == "ceil_per_stratum":
-        return (size + 1) // 2
-    return size // 2
+        return -(-scaled // fraction.denominator)
+    return scaled // fraction.denominator
 
 
 def build_manifest(
-    grouped: dict[str, Any], seed: bytes
+    grouped: dict[str, Any], seed: bytes, fraction: Fraction = DEFAULT_FRACTION
 ) -> dict[str, Any]:
     """Build the private selection manifest from already validated input."""
     groups = validate_grouped_list(grouped)
@@ -155,7 +173,7 @@ def build_manifest(
                 group["group_id"],
             ),
         )
-        count = reserve_count(len(pool), grouped["rounding"])
+        count = reserve_count(len(pool), grouped["rounding"], fraction)
         selected.extend(group["group_id"] for group in ranked[:count])
         stratum_counts.append(
             {
@@ -175,7 +193,7 @@ def build_manifest(
             "fixed rounding/strata would reserve no tool-transfer-eligible group"
         )
 
-    return {
+    manifest = {
         "schema_version": SCHEMA_VERSION,
         "draw_algorithm": DRAW_ALGORITHM,
         "rounding": grouped["rounding"],
@@ -187,6 +205,11 @@ def build_manifest(
         "strata": stratum_counts,
         "reserved_family_group_ids": sorted(selected),
     }
+    # Omitted for the default so default manifests stay byte-identical to
+    # those produced before the fraction option existed.
+    if fraction != DEFAULT_FRACTION:
+        manifest["reservation_fraction"] = f"{fraction.numerator}/{fraction.denominator}"
+    return manifest
 
 
 def git_worktree_roots(start: Path) -> list[Path]:
@@ -237,14 +260,20 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("grouped_list", type=Path)
     parser.add_argument("--output", required=True, type=Path)
+    parser.add_argument(
+        "--fraction",
+        default="1/2",
+        help="exact p/q share of each stratum to reserve, fixed by the frozen protocol (default 1/2)",
+    )
     args = parser.parse_args()
     try:
+        fraction = parse_fraction(args.fraction)
         grouped = load_unique_json(args.grouped_list)
         validate_grouped_list(grouped)
         ensure_external_output(args.output, git_worktree_roots(Path(__file__).resolve().parent))
         seed = secrets.token_bytes(32)
         nonce = secrets.token_bytes(32)
-        manifest = build_manifest(grouped, seed)
+        manifest = build_manifest(grouped, seed, fraction)
         manifest_bytes = canonical_json(manifest)
         commitment = hashlib.sha256(nonce + manifest_bytes).hexdigest()
         envelope = canonical_json(

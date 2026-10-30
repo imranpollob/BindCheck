@@ -63,6 +63,42 @@ class ReservationTests(unittest.TestCase):
         with self.assertRaises(reserve.InputError):
             reserve.build_manifest(self.grouped, bytes(range(32)))
 
+    def test_default_fraction_is_unchanged_half(self):
+        seed = bytes(range(32))
+        manifest = reserve.build_manifest(self.grouped, seed)
+        explicit = reserve.build_manifest(self.grouped, seed, reserve.parse_fraction("1/2"))
+        self.assertEqual(manifest, explicit)
+        self.assertNotIn("reservation_fraction", manifest)
+        for size, ceil_count, floor_count in ((1, 1, 0), (5, 3, 2), (8, 4, 4), (30, 15, 15)):
+            self.assertEqual(reserve.reserve_count(size, "ceil_per_stratum"), ceil_count)
+            self.assertEqual(reserve.reserve_count(size, "floor_per_stratum"), floor_count)
+
+    def test_one_third_ceil_per_stratum_30_and_8(self):
+        third = reserve.parse_fraction("1/3")
+        self.grouped["groups"] = [group(f"e{i:02d}", "eligible") for i in range(30)] + [
+            group(f"u{i}", "unknown") for i in range(8)
+        ]
+        manifest = reserve.build_manifest(self.grouped, bytes(range(32)), third)
+        counts = {row["stratum_id"]: row["reserved_group_count"] for row in manifest["strata"]}
+        self.assertEqual(counts, {"synthetic:eligible": 10, "synthetic:unknown": 3})
+        self.assertEqual(manifest["reserved_group_count"], 13)
+        self.assertEqual(len(manifest["reserved_family_group_ids"]), 13)
+        self.assertEqual(manifest["reservation_fraction"], "1/3")
+
+    def test_one_third_single_strata_counts(self):
+        third = reserve.parse_fraction("1/3")
+        for size, expected in ((30, 10), (8, 3)):
+            self.grouped["groups"] = [group(f"e{i:02d}", "eligible") for i in range(size)]
+            manifest = reserve.build_manifest(self.grouped, bytes(range(32)), third)
+            self.assertEqual(manifest["reserved_group_count"], expected)
+        self.assertEqual(reserve.reserve_count(8, "floor_per_stratum", third), 2)
+
+    def test_fraction_must_be_exact_and_proper(self):
+        for text in ("0.33", "1/1", "0/3", "3/2", "1/0", "-1/3", " 1/3", "1 / 3"):
+            with self.assertRaises(reserve.InputError, msg=text):
+                reserve.parse_fraction(text)
+        self.assertEqual(reserve.parse_fraction("2/6"), reserve.parse_fraction("1/3"))
+
     def test_output_inside_worktree_is_rejected(self):
         with self.assertRaises(reserve.InputError):
             reserve.ensure_external_output(

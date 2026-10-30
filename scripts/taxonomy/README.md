@@ -9,8 +9,17 @@ index to an agent; prepare a sanitized name-only list manually.
 Validate the input against
 `docs/taxonomy/grouped-families.schema.json`. Each `stratum_id` must end with
 `:eligible`, `:ineligible`, or `:unknown` matching the group's separately
-recorded `tool_transfer_eligibility`. The script reserves half of each stratum
-using the input's predeclared ceiling/floor rule.
+recorded `tool_transfer_eligibility`. By default the script reserves half of
+each stratum using the input's predeclared ceiling/floor rule.
+
+`--fraction p/q` reserves a different exact share of each stratum, for
+example `--fraction 1/3` under the
+[independent evaluation protocol v2](../../docs/evaluation/independent-protocol-v2.md).
+The fraction must be fixed by a frozen protocol before the grouped list
+exists, never chosen after the group count is known. A non-default fraction
+is recorded as `reservation_fraction` in the private manifest, so it is
+covered by the commitment. The default (`1/2`) adds no field, so default
+manifests are byte-identical to those produced before the option existed.
 
 Example invocation (replace both paths; the output must be outside every Git
 worktree and must not already exist):
@@ -18,7 +27,8 @@ worktree and must not already exist):
 ```sh
 python3 scripts/taxonomy/reserve_families.py \
   /absolute/path/to/grouped-name-only-list.json \
-  --output /absolute/external/private/reservation-opening.json
+  --output /absolute/external/private/reservation-opening.json \
+  [--fraction 1/3]
 ```
 
 On success, standard output is exactly one 64-hex SHA-256 commitment. Store
