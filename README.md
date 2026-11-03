@@ -45,6 +45,21 @@ The principal directories are `circuits/` and `contracts/` for the small fixture
 
 ## Current status
 
+- [Feasibility v2](feasibility/v2/REPORT.md) replaces the earlier zero-hit
+  interpretation with a working Solidity-first screen and targeted real-proof
+  validation. Across 50 exact repository revisions it screens 4,251 Solidity
+  files and 42,668 functions, then reaches two local E4 `VIOLATION` results:
+  RacePass reuses the same real age/KYC proofs to mint passes to two
+  caller-selected recipients, and ZKredential uses a proof for one wallet to
+  mint a caller-selected amount to another caller through unchanged contracts.
+  The exact historical zkDrops vulnerable parent also reaches E4, while the P3
+  source check fires on both zkDrops and Semaphore vulnerable revisions. A P4
+  source census finds 16 default `gamma == delta` verifier files, one
+  duplicate-IC file, and 33 verifier files without a detected public-input
+  guard; all P4 entries remain E1/`UNKNOWN` because deployment correspondence
+  was not established and none was tested. These are local/tool-feasibility
+  results, not ecosystem prevalence, deployed exposure, independent-human
+  validation, or a completed capability gate.
 - [D2-20](reports/D2-20-review.md) completes a documentary evidence audit with
   status `EVIDENCE_AUDIT_COMPLETE_NO_NEW_EXPERIMENT`. Three PDF-only reviews
   reduce to 12 concerns: one future

@@ -12,6 +12,8 @@ __pycache__/
 # T01: regenerable by `bash scripts/t01.sh`
 build/
 tools/circom-src/
+tools/circom-2.1.9/
+tools/circomspect-src/
 
 # T02: regenerable by `bash scripts/t02.sh`
 out/

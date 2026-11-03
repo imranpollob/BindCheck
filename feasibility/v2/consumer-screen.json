@@ -1,0 +1,470 @@
+{
+  "records": [
+    {
+      "commit": "c8cf762ccee253d1002acc1150171ddcf1cbacd8",
+      "effects": [
+        {
+          "call": "handleTransfer",
+          "expression": "publicInfo.recipient",
+          "role": "recipient"
+        },
+        {
+          "call": "handleTransfer",
+          "expression": "publicSignals.publicOutAmt",
+          "role": "amount"
+        }
+      ],
+      "evidence_grade": "E1",
+      "function": "createTx",
+      "function_parameters": [
+        "proof",
+        "publicInfo"
+      ],
+      "line": 61,
+      "path": "contracts/Cipher.sol",
+      "public_input_counts": [],
+      "public_input_expressions": [
+        "utxoType"
+      ],
+      "public_input_sources": [
+        "utxoType"
+      ],
+      "repo_verifier_arities": [],
+      "repository": "Cipher-Protocol/cipher-core",
+      "source_sha256": "fa1746bc03348bf03d6a304d457f6d14092b97523670a9ade04d0ae1f78a31dd",
+      "verdict": "UNKNOWN",
+      "warnings": {
+        "P1": [],
+        "P2": [
+          "no chain id, contract address, or explicit app/domain value recovered in verifier inputs or local guards"
+        ],
+        "P3": [],
+        "P5": []
+      }
+    },
+    {
+      "commit": "c8cf762ccee253d1002acc1150171ddcf1cbacd8",
+      "effects": [
+        {
+          "call": "handleTransfer",
+          "expression": "publicInfo.recipient",
+          "role": "recipient"
+        },
+        {
+          "call": "handleTransfer",
+          "expression": "publicSignals.publicOutAmt - feeAmt",
+          "role": "amount"
+        },
+        {
+          "call": "handleTransfer",
+          "expression": "relayerInfo.feeReceiver",
+          "role": "recipient"
+        },
+        {
+          "call": "handleTransfer",
+          "expression": "feeAmt",
+          "role": "amount"
+        }
+      ],
+      "evidence_grade": "E1",
+      "function": "createTxWithRelayer",
+      "function_parameters": [
+        "proof",
+        "publicInfo",
+        "relayerInfo"
+      ],
+      "line": 107,
+      "path": "contracts/Cipher.sol",
+      "public_input_counts": [],
+      "public_input_expressions": [
+        "utxoType"
+      ],
+      "public_input_sources": [
+        "utxoType"
+      ],
+      "repo_verifier_arities": [],
+      "repository": "Cipher-Protocol/cipher-core",
+      "source_sha256": "fa1746bc03348bf03d6a304d457f6d14092b97523670a9ade04d0ae1f78a31dd",
+      "verdict": "UNKNOWN",
+      "warnings": {
+        "P1": [],
+        "P2": [
+          "no chain id, contract address, or explicit app/domain value recovered in verifier inputs or local guards"
+        ],
+        "P3": [],
+        "P5": []
+      }
+    },
+    {
+      "commit": "6d07155ecf295e6d68936bf424557621d0c66456",
+      "effects": [
+        {
+          "call": "transfer",
+          "expression": "recipient",
+          "role": "recipient"
+        },
+        {
+          "call": "transfer",
+          "expression": "publicAmountOut",
+          "role": "amount"
+        }
+      ],
+      "evidence_grade": "E1",
+      "function": "transact",
+      "function_parameters": [
+        "commitmentsOut",
+        "encryptedOutputs",
+        "extDataHash",
+        "fee",
+        "nullifiers",
+        "proof",
+        "publicAmountIn",
+        "publicAmountOut",
+        "recipient",
+        "rootUsed"
+      ],
+      "line": 216,
+      "path": "contracts/circom/src/SPSC.sol",
+      "public_input_counts": [
+        13
+      ],
+      "public_input_expressions": [
+        "pubSignals"
+      ],
+      "public_input_sources": [
+        "pubSignals"
+      ],
+      "repo_verifier_arities": [
+        13
+      ],
+      "repository": "NethermindEth/spsc",
+      "source_sha256": "751d42acdfdf234060de3e182c8e6483bca2a853933ad3eaa5bf5bbcb229c271",
+      "verdict": "UNKNOWN",
+      "warnings": {
+        "P1": [
+          "effect transfer.recipient uses function parameter recipient absent from recovered verifier public-input sources",
+          "effect transfer.amount uses function parameter publicAmountOut absent from recovered verifier public-input sources"
+        ],
+        "P2": [],
+        "P3": [],
+        "P5": []
+      }
+    },
+    {
+      "commit": "abd54b5c541ac9d26f938a6bdbd78545526249e5",
+      "effects": [
+        {
+          "call": "_safeMint",
+          "expression": "recipient",
+          "role": "recipient"
+        },
+        {
+          "call": "_safeMint",
+          "expression": "tokenId",
+          "role": "amount"
+        }
+      ],
+      "evidence_grade": "E1",
+      "function": "mintPass",
+      "function_parameters": [
+        "a_age",
+        "a_kyc",
+        "age_pub",
+        "b_age",
+        "b_kyc",
+        "c_age",
+        "c_kyc",
+        "countryCode",
+        "credHash",
+        "kyc_pub",
+        "recipient"
+      ],
+      "line": 127,
+      "path": "contracts/passes/EventPass.sol",
+      "public_input_counts": [],
+      "public_input_expressions": [
+        "age_pub",
+        "kyc_pub"
+      ],
+      "public_input_sources": [
+        "age_pub",
+        "kyc_pub"
+      ],
+      "repo_verifier_arities": [
+        3,
+        4,
+        6
+      ],
+      "repository": "Servesh21/RacePass",
+      "source_sha256": "744df60550e476ba20990bf2b533e1a10133cfa9bac4556b54011a3d9c42ec31",
+      "verdict": "UNKNOWN",
+      "warnings": {
+        "P1": [
+          "effect _safeMint.recipient uses function parameter recipient absent from recovered verifier public-input sources"
+        ],
+        "P2": [
+          "no chain id, contract address, or explicit app/domain value recovered in verifier inputs or local guards"
+        ],
+        "P3": [],
+        "P5": []
+      }
+    },
+    {
+      "commit": "d588661d8e803000c1390a65911c7f0e805ec69d",
+      "effects": [],
+      "evidence_grade": "E1",
+      "function": "withdraw",
+      "function_parameters": [
+        "_amount",
+        "_fee",
+        "_nullifierHash",
+        "_proof",
+        "_recipient",
+        "_relayer",
+        "_root"
+      ],
+      "line": 136,
+      "path": "privatecrypmix/packages/contracts/contracts/PrivateCrypMix.sol",
+      "public_input_counts": [
+        6
+      ],
+      "public_input_expressions": [
+        "[uint256(_root), uint256(_nullifierHash), uint256(uint160(_recipient)), uint256(uint160(_relayer)), _fee, _amount]"
+      ],
+      "public_input_sources": [
+        "_amount",
+        "_fee",
+        "_nullifierHash",
+        "_recipient",
+        "_relayer",
+        "_root",
+        "uint160"
+      ],
+      "repo_verifier_arities": [
+        6
+      ],
+      "repository": "SovereignWave/qwer",
+      "source_sha256": "273861e2dc2532024d3a1fca03f6443f95923b18c282444ffd794fa57102ccbd",
+      "verdict": "UNKNOWN",
+      "warnings": {
+        "P1": [],
+        "P2": [],
+        "P3": [
+          "raw spent key _nullifierHash is a verifier public input but neither the consumer nor a repository verifier has a detected < r canonicality guard"
+        ],
+        "P5": []
+      }
+    },
+    {
+      "commit": "fe3a863f9613e1992ffd218fd1e38ea665866738",
+      "effects": [],
+      "evidence_grade": "E1",
+      "function": "userStateTransition",
+      "function_parameters": [
+        "proof",
+        "publicSignals"
+      ],
+      "line": 339,
+      "path": "packages/contracts/contracts/Unirep.sol",
+      "public_input_counts": [],
+      "public_input_expressions": [
+        "proof"
+      ],
+      "public_input_sources": [
+        "proof"
+      ],
+      "repo_verifier_arities": [
+        8
+      ],
+      "repository": "Unirep/Unirep",
+      "source_sha256": "04df484aad6cfd4017f0a95c26806e465c3f2f589654bc20a32084f57b5b2d3c",
+      "verdict": "UNKNOWN",
+      "warnings": {
+        "P1": [],
+        "P2": [
+          "no chain id, contract address, or explicit app/domain value recovered in verifier inputs or local guards"
+        ],
+        "P3": [],
+        "P5": []
+      }
+    },
+    {
+      "commit": "955cc7511f4f5f4044613c886f10ddb62002b4ac",
+      "effects": [
+        {
+          "call": "safeTransfer",
+          "expression": "recipient",
+          "role": "recipient"
+        },
+        {
+          "call": "safeTransfer",
+          "expression": "payout",
+          "role": "amount"
+        },
+        {
+          "call": "safeTransfer",
+          "expression": "feeRecipient",
+          "role": "recipient"
+        },
+        {
+          "call": "safeTransfer",
+          "expression": "fee",
+          "role": "amount"
+        }
+      ],
+      "evidence_grade": "E1",
+      "function": "withdraw",
+      "function_parameters": [
+        "amount",
+        "merkleRoot",
+        "nullifierHash",
+        "proof",
+        "recipient",
+        "token"
+      ],
+      "line": 310,
+      "path": "packages/contracts-evm/src/VeilPool.sol",
+      "public_input_counts": [
+        5
+      ],
+      "public_input_expressions": [
+        "pub"
+      ],
+      "public_input_sources": [
+        "amount",
+        "bytes32",
+        "merkleRoot",
+        "nullifierHash",
+        "pub",
+        "recipient",
+        "token",
+        "uint160"
+      ],
+      "repo_verifier_arities": [],
+      "repository": "Veilpayapp/VEILPAY-APP",
+      "source_sha256": "9ac1c6ea2d4b4825651bef66f2d414cf65f371ee2d5750aeb45a14f33e454a9f",
+      "verdict": "UNKNOWN",
+      "warnings": {
+        "P1": [],
+        "P2": [
+          "no chain id, contract address, or explicit app/domain value recovered in verifier inputs or local guards"
+        ],
+        "P3": [],
+        "P5": []
+      }
+    },
+    {
+      "commit": "23917814522bac494150c7e99a123aa15a448155",
+      "effects": [
+        {
+          "call": "mint",
+          "expression": "msg.sender",
+          "role": "recipient"
+        },
+        {
+          "call": "mint",
+          "expression": "amount",
+          "role": "amount"
+        }
+      ],
+      "evidence_grade": "E1",
+      "function": "verifyAndExecute",
+      "function_parameters": [
+        "amount",
+        "platform",
+        "proofA",
+        "proofB",
+        "proofC",
+        "pubSignals",
+        "targetAction"
+      ],
+      "line": 130,
+      "path": "projects/ZKredential/packages/zk-contracts/contracts/core/ComplianceGateway.sol",
+      "public_input_counts": [],
+      "public_input_expressions": [
+        "expectedSignals"
+      ],
+      "public_input_sources": [
+        "expectedSignals"
+      ],
+      "repo_verifier_arities": [
+        2,
+        8,
+        12,
+        16,
+        69
+      ],
+      "repository": "ethpanda-org/ETHShanghai-2025",
+      "source_sha256": "9172c8f3d80de53ccb58539c9e2fb61b9c3f263879ffdea99cccb006d985d4e5",
+      "verdict": "UNKNOWN",
+      "warnings": {
+        "P1": [
+          "effect mint.amount uses function parameter amount absent from recovered verifier public-input sources"
+        ],
+        "P2": [
+          "no chain id, contract address, or explicit app/domain value recovered in verifier inputs or local guards"
+        ],
+        "P3": [],
+        "P5": []
+      }
+    },
+    {
+      "commit": "b6d9c2d6a8c99563411992ae3610ecf2afba1ee5",
+      "effects": [
+        {
+          "call": "_mint",
+          "expression": "msg.sender",
+          "role": "recipient"
+        },
+        {
+          "call": "_mint",
+          "expression": "tokenId",
+          "role": "amount"
+        }
+      ],
+      "evidence_grade": "E1",
+      "function": "mint",
+      "function_parameters": [
+        "proof",
+        "signals"
+      ],
+      "line": 61,
+      "path": "packages/contracts/src/ProofOfTwitter.sol",
+      "public_input_counts": [],
+      "public_input_expressions": [
+        "signals"
+      ],
+      "public_input_sources": [
+        "signals"
+      ],
+      "repo_verifier_arities": [
+        3
+      ],
+      "repository": "zkemail/proof-of-twitter",
+      "source_sha256": "5693ba4b87511ee38d3c6c4e9c7a5b40beadcc97b39304731a2f9e335a6cee37",
+      "verdict": "UNKNOWN",
+      "warnings": {
+        "P1": [],
+        "P2": [
+          "no chain id, contract address, or explicit app/domain value recovered in verifier inputs or local guards"
+        ],
+        "P3": [],
+        "P5": []
+      }
+    }
+  ],
+  "summary": {
+    "functions_screened": 42668,
+    "generated_utc": "2026-11-03T18:49:18.055336+00:00",
+    "proof_and_effect_functions": 10,
+    "repositories": 50,
+    "scope": "lexical Solidity function screen; warnings require adjudication",
+    "solidity_files_screened": 4251,
+    "warning_functions": 9,
+    "warning_functions_by_pattern": {
+      "P1": 3,
+      "P2": 7,
+      "P3": 1
+    }
+  }
+}
