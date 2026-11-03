@@ -1,0 +1,26 @@
+{
+  "schema": "bindcheck.d2.partial-development-artifact-status/v1",
+  "version": "1.0.0",
+  "date": "2026-11-02",
+  "status": "PARTIAL_DEVELOPMENT_ARTIFACT / FINAL_ARTIFACT_BLOCKED",
+  "research_verdict": "UNKNOWN",
+  "gate_a": "INCONCLUSIVE",
+  "gate_b": "NOT_EVALUATED",
+  "gate_c": "NOT_REACHED",
+  "submission_readiness": "NOT_SUBMISSION_READY",
+  "scored_results_added": 0,
+  "reserved_data_included": false,
+  "private_findings_included": false,
+  "frozen_release_claimed": false,
+  "final_paper_artifact_claimed": false,
+  "profiles": {
+    "metadata": "AVAILABLE_NO_RAW_EVIDENCE_REQUIRED",
+    "verify-retained-current-workspace": "AVAILABLE_IN_DEVELOPMENT_WORKSPACE",
+    "verify-retained-sidecar": "AVAILABLE_WHEN_EXPLICIT_COMPLETE_SIDECAR_IS_SUPPLIED",
+    "recompute": "AVAILABLE_AFTER_RETAINED_VERIFICATION",
+    "rerun-mechanical": "AVAILABLE_CURRENT_WORKSPACE_ONLY_OUTPUT_UNDER_ARTIFACT_WORK",
+    "rerun-d2-01-or-d2-06": "BLOCKED_PLATFORM_PATH_AND_RELEASE_DEPENDENCIES",
+    "final-artifact": "BLOCKED_GATE_B_GATE_C_CUSTODY_HUMAN_AND_RELEASE_DEPENDENCIES"
+  }
+}
+

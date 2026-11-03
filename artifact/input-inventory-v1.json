@@ -1,0 +1,100 @@
+{
+  "schema": "bindcheck.d2.partial-artifact-input-inventory/v1",
+  "status": "PARTIAL_DEVELOPMENT_ARTIFACT / FINAL_ARTIFACT_BLOCKED",
+  "no_sidecar_bytes_in_repository": true,
+  "sidecar_contract": {
+    "kind": "EXPLICIT_PREEXTRACTED_DIRECTORY",
+    "required_argument": "--source sidecar --sidecar-root <directory>",
+    "layout": {
+      "repository_relative_ignored_paths": "<sidecar-root>/<original repository-relative path>",
+      "sibling_bindcheck_paths": "<sidecar-root>/external/BindCheck/<path below ../BindCheck>",
+      "absolute_solc_0_8_29": "<sidecar-root>/external/tools/solc-0.8.29",
+      "historical_role_binding_byte": "<sidecar-root>/external/history/544656abbfb535dcbe0f1157087240464f38cb0b/src/bindcheck_d1/role_binding.py"
+    },
+    "archive_extraction": "Not performed by artifact/reproduce.py. The evaluator must review and safely extract any supplied archive first.",
+    "network_materialization": false,
+    "complete_known_offline_byte_set_bytes": 329481710,
+    "complete_known_offline_byte_set_mib": 314.2182445526123
+  },
+  "retained_namespaces": [
+    {"path": "results/raw/D2-00", "bytes": 9502, "required_for": ["D2-00 retained self-test"]},
+    {"path": "results/raw/D2-01", "bytes": 13776, "required_for": ["preserved failed first attempt"]},
+    {"path": "results/raw/D2-01-recovery-01", "bytes": 24695636, "required_for": ["D2-01 authoritative results", "D2-02", "D2-06A"]},
+    {"path": "results/raw/D2-06A", "bytes": 10215213, "required_for": ["construction history", "D2-07", "D2-08"]},
+    {"path": "results/raw/D2-06B", "bytes": 32755, "required_for": ["smoke history", "D2-07"]},
+    {"path": "results/raw/D2-07", "bytes": 310805, "required_for": ["preserved integration-race attempt"]},
+    {"path": "results/raw/D2-07-recovery-01", "bytes": 331387, "required_for": ["authoritative Gate A finalization", "D2-08", "D2-09", "D2-10"]},
+    {"path": "results/raw/D2-08", "bytes": 251892, "required_for": ["identity prototype"]},
+    {"path": "results/raw/D2-09", "bytes": 367313, "required_for": ["authorization-boundary prototype"]},
+    {"path": "results/raw/D2-10", "bytes": 135816, "required_for": ["superseded run-01 and authoritative run-02"]}
+  ],
+  "retained_namespace_total_bytes": 36364095,
+  "retained_namespace_total_mib": 34.679503440856934,
+  "controlling_seals": [
+    {"path": "protocols/d2/d2-01-seal-v1.json", "sha256": "9f47676dd85a81ce0088c742a154f3919d9d94af78c1c8979bdd0386f56ddc06", "files": 8134, "bytes": 151584076},
+    {"path": "results/raw/D2-07-recovery-01/content-seal-v1.json", "sha256": "b9f0f1eb6b9aa1bb3ea8aaf1fba3c3939b3d70a787a57be92f3c4154fad50558", "files": 623},
+    {"path": "results/raw/D2-08/content-seal-v1.json", "sha256": "d2195d93fc6e51458a994ecc63838935fb36bad275379ef15e43ca2f9c112343", "files": 92},
+    {"path": "results/raw/D2-09/content-seal-v1.json", "sha256": "c678085afa6a73d0f8115d10055fb753bd024a174a38618cb0e5e6943661e8bd", "files": 40},
+    {"path": "results/raw/D2-10/run-02/content-seal-v1.json", "sha256": "c5bb3163283c7b16a0d341067c6f2c3f8fa9965d85ab13dc761d4e948fcf21e6", "files": 9}
+  ],
+  "d2_01_historical_overlay": {
+    "purpose": "Replay the immutable historical seal after the authorized Step 8 role-binding quarantine without changing current code or historical evidence.",
+    "base_commit": "544656abbfb535dcbe0f1157087240464f38cb0b",
+    "path": "src/bindcheck_d1/role_binding.py",
+    "sha256": "a516f0e339f6fec23fcd96efb52821e9933feb6837e740c99a6d5dbee7bd9028",
+    "size_bytes": 41698,
+    "substitution": "IN_MEMORY_ONLY",
+    "live_current_replay": "EXPECTED_FAIL",
+    "live_mismatch_count": 1,
+    "historical_overlay_replay": "PASS",
+    "historical_overlay_checked_files": 8134,
+    "wrapper": {"path": "scripts/d2_d201_post_step8_replay.py", "sha256": "eee0ad0b2e4853ecece363dd5f7f17d04bef17c08acba09a7476b9e2beee78c5"},
+    "protocol": {"path": "protocols/d2/d2-01-post-step8-replay-v1.json", "sha256": "cbb4208d84885e54f2fbb77331000713aed9953dc2db6950ef94a38e3250200c"},
+    "report": {"path": "reports/D2-01-post-step8-replay.md", "sha256": "1a05bcdbd6d16afb7f3db7cfb1fc5fbd96daa0355b4bd755bb6527739677f433"},
+    "test": {"path": "tests/test_d2_d201_post_step8_replay.py", "sha256": "48d9625316a342da324ca7c8f0a3ef64d388e763f92dc91dcaafb18185e9958a"},
+    "current_checkout_equivalence": false,
+    "d2_00_retention_gap": "UNAVAILABLE_RETENTION_GAP_NOT_RECONSTRUCTED"
+  },
+  "retained_headline_hashes": [
+    {"path": "results/raw/D2-00/foundation-self-test-20261102-02/self-test-summary.json", "sha256": "7f8f059bc648a312dfde99df7500ec447aba19df550d94db10538a82851897d1"},
+    {"path": "results/raw/D2-01-recovery-01/run-summary.json", "sha256": "874c264972eeb870d78d95b48266dd5fdc61b1e9e72d6ba81f00cbe6e5f427ca"},
+    {"path": "results/raw/D2-06A/construction-03/run-summary.json", "sha256": "853af59f1d071e6234aa1a031c9f17fc488b8ba6e28eb880d2b05889934393f6"},
+    {"path": "results/raw/D2-06B/recovery-01/smoke-summary.json", "sha256": "1df2373fe3c371dc6c3f29553090a0fc471c66876340b315d44afc070884cfa1"},
+    {"path": "results/raw/D2-07-recovery-01/content-seal-v1.json", "sha256": "b9f0f1eb6b9aa1bb3ea8aaf1fba3c3939b3d70a787a57be92f3c4154fad50558"},
+    {"path": "results/raw/D2-08/content-seal-v1.json", "sha256": "d2195d93fc6e51458a994ecc63838935fb36bad275379ef15e43ca2f9c112343"},
+    {"path": "results/raw/D2-09/content-seal-v1.json", "sha256": "c678085afa6a73d0f8115d10055fb753bd024a174a38618cb0e5e6943661e8bd"},
+    {"path": "results/raw/D2-10/run-02/run-summary.json", "sha256": "0ebf8ca1f555701a6cbc942b0140df1440e7e5e60eb4daec87fd4bffb1dc42ab"},
+    {"path": "results/raw/D2-10/run-02/content-seal-v1.json", "sha256": "c5bb3163283c7b16a0d341067c6f2c3f8fa9965d85ab13dc761d4e948fcf21e6"}
+  ],
+  "external_d2_01": {
+    "manifest": "protocols/d2/d2-01-external-inputs-v1.json",
+    "manifest_sha256": "990de3bbcc78c696f15f54eed24166d6eddcabdff0c1ac18c4ab5658a51d6c5a",
+    "files": 9,
+    "declared_bytes": 81775270,
+    "notes": [
+      "The pinned Nargo file is also present in the D2-01 repository seal and is deduplicated in the 314.22 MiB union.",
+      "Seven source/artifact files live in sibling ../BindCheck paths in the development workspace.",
+      "The solc binary is bound to an absolute user path in the original protocol."
+    ]
+  },
+  "oversized_or_ignored_exclusions": [
+    {"path": "results/raw/D1P-32", "observed_kib": 603284, "reason": "Whole tree is unnecessary; only manifest-selected Step 6B inputs belong in a local sidecar."},
+    {"path": "results/raw/D1P-35", "observed_kib": 556944, "reason": "Whole tree is unnecessary; only the pinned Nargo and sealed D2-01 members are needed."},
+    {"path": "results/raw/D1P-21A", "observed_kib": 536292, "reason": "Whole tree is unnecessary; selected source bytes are already identified by hashes."},
+    {"path": "results/raw", "reason": "Ignored by Git; authoritative bytes require an explicit content-addressed sidecar."},
+    {"path": ".venv*", "reason": "Local environments are not portable artifact contents."},
+    {"path": "node_modules", "reason": "Do not package the repository-wide dependency tree."},
+    {"path": "build and compiler caches", "reason": "Generated and unnecessary for retained-result recomputation."}
+  ],
+  "private_and_reserved_exclusions": [
+    "reserved identities",
+    "reserved source or decoded mappings",
+    "reserved policies, labels, annotations or judgment values",
+    "reserved evaluator output",
+    "private vulnerability findings or disclosure drafts",
+    "any private destination outside the public repository"
+  ],
+  "human_data_boundary": "D2-04 blank forms and known-answer tests may be included. No human ratings, policy adoption, review, scoring or adjudication may be invented.",
+  "privacy_note": "Retained historical records contain absolute development paths. Exact local verification is permitted; public release requires separate human privacy and release review."
+}
+

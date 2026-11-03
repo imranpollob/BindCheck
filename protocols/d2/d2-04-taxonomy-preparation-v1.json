@@ -1,0 +1,160 @@
+{
+  "schema": "bindcheck.d2.taxonomy-preparation/v1",
+  "version": "0.3.0",
+  "date": "2026-11-02",
+  "status": "FROZEN_PRE_ANNOTATION",
+  "research_verdict": "UNKNOWN",
+  "objective": "Prepare a defensible taxonomy study without creating human labels or treating the exposed Lane-X pilot as independent validation.",
+  "authority": [
+    "docs/research-contract.md",
+    "../bindcheck-agent-playbook.md Step 4"
+  ],
+  "exposed_pilot": {
+    "source": "docs/taxonomy/v1-agreement.md",
+    "candidate_entries": 27,
+    "single_human_included_entries": 17,
+    "status": "EXPOSED_CODEBOOK_DEVELOPMENT_ONLY",
+    "limitations": [
+      "The comparison was one repository author versus AI suggestions, not inter-human agreement.",
+      "The author saw AI-written summaries and received an ordered stop-at-first-match instruction absent from protocol v0.2.0.",
+      "The seed tracker is secondary aggregation; linked primary records were not opened for that corpus.",
+      "Every read Lane-X family remains exposed and cannot become held out by relabeling."
+    ]
+  },
+  "unit": {
+    "primary_sampling_unit": "one canonical finding per conservative family",
+    "finding_definition": "one root cause, affected producer-to-consumer boundary, and repair lineage",
+    "split_rule": "split only independent missing relations that require independent repairs",
+    "merge_rule": "merge reports that share root cause, boundary, and repair lineage; retain aliases and manifestations"
+  },
+  "relevance": {
+    "values": ["include", "exclude", "unresolved"],
+    "include": "Primary evidence supports a sound accepted relation or configuration, its decoding/consumer interpretation, and a possible committed incompatible protected effect or undischarged required obligation under an independently stated policy.",
+    "exclude": "Positive evidence establishes an out-of-scope cryptographic/setup/privacy-only issue, a pure producer or pure consumer bug without a proof-to-execution disagreement, or availability/DoS only with no accepted transition and no committed incompatible effect or undischarged obligation.",
+    "unresolved": "The boundary, policy, accepted-proof feasibility, consumer effect, or primary evidence is missing, conflicting, or too weak to decide inclusion.",
+    "missing_primary_evidence": "UNRESOLVED, never EXCLUDE and never inferred from an aggregator summary",
+    "no_safety_inference": "A reverted or unavailable path is not a committed effect, but missing feasibility evidence remains unresolved rather than safe."
+  },
+  "codebook": {
+    "rating_states": ["present", "absent", "uncertain", "unassessed"],
+    "missing_states": ["uncertain", "unassessed", null],
+    "axes": {
+      "causes": {
+        "structure": "multilabel binary categories",
+        "labels": [
+          "C_RELATION_GAP",
+          "C_FIELD_MAPPING",
+          "C_REPRESENTATION",
+          "C_ACTIVATION_EXTENT",
+          "C_CONTEXT_IDENTITY",
+          "C_VERIFICATION_CONFIG",
+          "C_OCCURRENCE_ACCOUNTING",
+          "C_DISCHARGE_TRANSFORMATION",
+          "C_OTHER_BINDING"
+        ]
+      },
+      "consequences": {
+        "structure": "multilabel binary categories",
+        "labels": [
+          "K_AUTHORIZATION",
+          "K_COVERAGE",
+          "K_MISDIRECTED",
+          "K_QUANTITY",
+          "K_DUPLICATE_REPLAY",
+          "K_OMITTED_DISCHARGE",
+          "K_STATE_INCONSISTENCY",
+          "K_OTHER_EFFECT"
+        ]
+      },
+      "roles": {
+        "structure": "multilabel binary categories",
+        "labels": [
+          "A_PUBLIC_CALLER",
+          "A_WITNESS_PROVER",
+          "A_RELAYER",
+          "A_REGISTERED_PROVER",
+          "A_OPERATOR_ORDERER",
+          "A_PRIVILEGED_CONFIGURATOR",
+          "A_OTHER_ROLE"
+        ]
+      }
+    },
+    "cause_rules": [
+      "Label the evidenced root boundary mechanism, not downstream effects or manifestations.",
+      "Use multiple causes only for distinct evidenced mechanisms; co-occurrence or alternate wording is insufficient.",
+      "A specific mapping, representation, activation, context, verification-configuration, occurrence, or transformation label takes precedence over C_RELATION_GAP for the same omitted relation.",
+      "C_RELATION_GAP is reserved for an omitted dependency not fully described by a more specific code.",
+      "A non-binary or out-of-range selector is C_REPRESENTATION; a separately misbound count, prefix, tag, padding, length, or activation relation is C_ACTIVATION_EXTENT.",
+      "A wrong forwarded identity/order/slice is C_FIELD_MAPPING; do not add it merely because a representation defect later selects a wrong value.",
+      "Replay or duplication is a consequence unless the boundary itself loses multiplicity, identity, or single-use accounting.",
+      "C_OTHER_BINDING requires a mechanism description and codebook-review flag."
+    ],
+    "consequence_rules": [
+      "Every complete included finding marks K_AUTHORIZATION, K_COVERAGE, or both present.",
+      "Secondary consequence codes describe the committed effect or undischarged obligation and never substitute for the top-level property.",
+      "Severity, privacy, financial loss, and liveness are source claims outside this axis.",
+      "A reverted effect is absent; uncertain reachability or proof feasibility remains uncertain."
+    ],
+    "role_rules": [
+      "Record minimum sufficient attacker roles, not every actor in the system.",
+      "Use attack-path notes to distinguish conjunctive roles from alternatives.",
+      "Unsupported or unevidenced capability is uncertain, not absent."
+    ]
+  },
+  "future_corpus": {
+    "frame": "Complete the frozen v0.2.0 source-class traversal or a prospectively amended frame; seed-only or application-name searches cannot be the primary frame.",
+    "eligible_units": "Canonical findings with primary-evidence packets and family/exposure provenance.",
+    "primary_agreement_sample": "At most one finding per conservative family, selected without seeing labels and stratified prospectively by source class and pre-annotation relevance uncertainty, not by a desired mechanism distribution.",
+    "calibration": "A separate exposed calibration set may be discussed and is never scored.",
+    "freshness": "Reliability items must be fresh to both raters; re-rating the 17 exposed pilot items is reported only as an exposed-pilot study.",
+    "stopping": "Freeze the frame, sample size, draw, replacements, and inaccessible-item handling before ratings; never stop after a desired coefficient or category count.",
+    "claim_limit": "No ecosystem prevalence or incidence estimate follows from this purposive public-disclosure frame."
+  },
+  "annotation": {
+    "raters": "exactly two independent humans for the primary round",
+    "adjudicator": "one distinct human after original ratings and agreement output are sealed",
+    "packet_blinding": [
+      "no BindCheck output",
+      "no analyzer prediction",
+      "no AI-suggested label",
+      "no other-rater judgment",
+      "no prior adjudication",
+      "no E-level validation result unless it is inseparable from the frozen primary disclosure"
+    ],
+    "independence": "Raters work separately and disclose actual prior exposure per family.",
+    "disagreement": "Retain both original ratings; adjudication appends a cited resolution and never overwrites them.",
+    "codebook_change": "Any change after ratings are unsealed increments the version and makes the affected round developmental, not confirmatory."
+  },
+  "agreement": {
+    "primary_relevance_metric": "three-category Cohen kappa",
+    "primary_multilabel_metric": "Cohen kappa separately for each binary category",
+    "prevalence_diagnostics": [
+      "per-rater positive prevalence",
+      "positive agreement",
+      "negative agreement",
+      "raw agreement",
+      "comparable and missing counts"
+    ],
+    "secondary": "raw exact-set agreement per axis for complete pairs only",
+    "missingness": "uncertain, unassessed, omitted, and null are missing rather than absent",
+    "undefined": "return null with a reason when there are no comparable pairs or no chance variance",
+    "uncertainty": "No interval is computed in preparation. A family-cluster interval design and adequacy rule must be frozen before ratings are unsealed.",
+    "prohibited": "Do not choose among kappa, alpha, AC1, or another coefficient after seeing which is favorable; do not pool labels into one macro score."
+  },
+  "blank_artifacts": [
+    "docs/taxonomy/d2-primary-evidence-packet-template-v1.json",
+    "docs/taxonomy/d2-blank-annotation-form-v1.json"
+  ],
+  "human_dependencies": [
+    "A custodian completes and freezes the future sampling frame and exposure-safe draw.",
+    "Two humans with disclosed prior exposure independently annotate fresh packets.",
+    "A third human adjudicates only after original ratings and agreement are sealed.",
+    "Authors inspect the codebook, packets, script, labels, and claims before publication."
+  ],
+  "claim_limits": [
+    "This preparation contains no new human labels, judgments, predictions, or agreement result.",
+    "The exposed pilot refines the codebook but cannot validate it or establish inter-rater reliability.",
+    "Agreement measures reproducibility, not truth, taxonomy validity, security, or prevalence.",
+    "AI systems are not raters, adjudicators, or independent reviewers."
+  ]
+}

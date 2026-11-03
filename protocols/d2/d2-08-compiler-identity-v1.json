@@ -1,0 +1,293 @@
+{
+  "schema": "bindcheck.d2.step8-compiler-identity-protocol/v1",
+  "version": "1.0.0",
+  "date": "2026-11-02",
+  "status": "AUTHORIZED_MECHANICAL_PROTOTYPE_UNSCORED",
+  "fixture_label": "UNREVIEWED_DEVELOPMENT_FIXTURE",
+  "research_verdict": "UNKNOWN",
+  "objective": "Implement and mechanically validate a name-independent compiler-backed object/context identity and provenance interface over the exposed D1P-42 Step 6a controls, without performing an authorization check or creating a security conclusion.",
+  "authority": [
+    "docs/research-contract.md revision 3",
+    "../bindcheck-agent-playbook.md Step 8",
+    "reports/D2-07.md",
+    "protocols/d2/d2-07-gate-a-finalization-v1.json"
+  ],
+  "step_7_authority": {
+    "gate_a_result": "INCONCLUSIVE",
+    "scope_recommendation": "BOUNDED_PROTOTYPE",
+    "seal_path": "results/raw/D2-07-recovery-01/content-seal-v1.json",
+    "seal_sha256": "b9f0f1eb6b9aa1bb3ea8aaf1fba3c3939b3d70a787a57be92f3c4154fad50558",
+    "report_path": "reports/D2-07.md",
+    "report_sha256": "fcdff01dbadade6f7f28116e46ee2c6016fb2945767492c822acaef87a60f07a",
+    "combined_steps_8_10_cap": {
+      "researcher_days": 2,
+      "machine_hours": 8
+    }
+  },
+  "execution_boundary": {
+    "scored": false,
+    "score_rows": 0,
+    "security_verdict_authorized": false,
+    "policy_correctness_claim_authorized": false,
+    "comparative_advantage_claim_authorized": false,
+    "formal_or_general_equivalence_claim_authorized": false,
+    "reserved_data_authorized": false,
+    "analyzer_or_policy_checker_dispatch_authorized": false,
+    "network_calls": 0,
+    "scientific_retries": 0,
+    "allowed": "Mechanical schema, compiler/ABI/AST provenance, deterministic hashes, mapping certificates, name-influence quarantine, source-preserving transformation controls, and synthetic negative identity/context swaps over exposed material only."
+  },
+  "inputs": {
+    "transformation_ledger": "results/raw/D2-06A/construction-03/transformation-ledger.json",
+    "transformation_ledger_sha256": "99590ae58ddd8f7637dd4f9648beda721fc8fe07595f6c7c870b944eddd29ae8",
+    "construction_run_manifest": "results/raw/D2-06A/construction-03/run-manifest.json",
+    "construction_run_manifest_sha256": "078c9f64b07ac0f6e1c85fcffe56336f007e661b3cd20f78ef02256a916573f0",
+    "original_id": "ORIGINAL",
+    "transformation_ids": [
+      "TR-IDENTIFIER-RENAME",
+      "TR-HELPER-EXTRACTION",
+      "TR-EQUIVALENT-EXPRESSION",
+      "TR-MATCHED-PUBLIC-REORDER"
+    ],
+    "rejected_transformations_retained_but_not_reinterpreted": [
+      "TR-REJECT-PAYY-APPLICATION-REORDER",
+      "TR-REJECT-WARPTOAD-APPLICATION-HELPER"
+    ]
+  },
+  "public_interface": {
+    "module": "bindcheck_d1.roles.compiler_identity_v1",
+    "schemas": {
+      "identity": "bindcheck.compiler-object-context-identity/v1",
+      "opaque_identity_ref": "bindcheck.compiler-object-context-identity-ref/v1",
+      "provenance": "bindcheck.compiler-identity-provenance/v1",
+      "fact": "bindcheck.compiler-identity-fact/v1",
+      "mapping": "bindcheck.compiler-identity-mapping/v1",
+      "bundle": "bindcheck.compiler-identity-bundle/v1"
+    },
+    "types": [
+      "ObjectIdentity",
+      "ContextIdentity",
+      "CompilerProvenance",
+      "IdentityRecord",
+      "IdentityFact",
+      "MappingEntry",
+      "MappingCertificate",
+      "IdentityBundle"
+    ],
+    "validation_functions": [
+      "identity_reference",
+      "validate_bundle",
+      "validate_mapping_certificate"
+    ],
+    "opaque_poe_reference_fields": [
+      "schema",
+      "semantic_hash",
+      "canonical_bytes_sha256"
+    ],
+    "semantic_hash_domain": "Canonical logical object plus canonical execution context only.",
+    "separate_provenance_domain": "Compiler/language/version, artifact hash/schema, AST node or ABI index, mapping ID, source hash/span, derivation class, assumptions, annotations, support/reason, and display hints.",
+    "prohibited_semantic_hash_inputs": [
+      "surface identifier spelling",
+      "source path or source line",
+      "display label",
+      "warning text or warning ordinal",
+      "compiler artifact hash",
+      "physical ABI index"
+    ]
+  },
+  "identity_model": {
+    "object_fields": [
+      "kind",
+      "logical_slot",
+      "representation",
+      "state_scope",
+      "encoding",
+      "value_type",
+      "attributes"
+    ],
+    "context_fields": [
+      "kind",
+      "domain",
+      "deployment",
+      "state_version",
+      "actor",
+      "epoch",
+      "attributes"
+    ],
+    "fact_fields": [
+      "fact_id",
+      "fact_kind",
+      "subject_identity_ref",
+      "object_identity_ref",
+      "quantifier",
+      "condition",
+      "approximation",
+      "derivation_class",
+      "support",
+      "reason",
+      "provenance_refs",
+      "parent_fact_ids",
+      "assumption_refs",
+      "annotation_refs",
+      "mapping_refs"
+    ],
+    "fact_identity_ref_representation": "Both subject_identity_ref and object_identity_ref use the exact opaque three-field identity reference, never the truncated semantic hash alone.",
+    "condition_boundary": {
+      "step_8": "Canonical structured extraction JSON with a mandatory nonempty kind; no authorization interpretation.",
+      "step_9": "The authorization boundary applies its stricter allowlist ALWAYS, NEVER, UNKNOWN, or PREDICATE and returns UNKNOWN for unsupported conditions."
+    },
+    "reference_resolution_boundary": {
+      "provenance_refs": "Must resolve to an identity provenance hash inside the bundle or an explicit external: namespace.",
+      "parent_fact_ids": "Must resolve to another fact in the same bundle or an explicit external: namespace.",
+      "assumption_refs": "Resolved only through a separate hash-bound external inventory.",
+      "annotation_refs": "Resolved only through a separate hash-bound external inventory.",
+      "mapping_refs": "Resolved only through the input manifest's hash-bound external mapping inventory."
+    },
+    "derivation_classes": [
+      "DERIVED",
+      "ANNOTATED",
+      "ASSUMED",
+      "UNKNOWN"
+    ],
+    "quantifiers": [
+      "MUST",
+      "MAY"
+    ],
+    "mapping_properties": [
+      "total",
+      "injective",
+      "surjective",
+      "order_preserving",
+      "semantic_identity_preserving"
+    ],
+    "mapping_reference_rule": "Mapping entries carry exact opaque from/to identity refs. Certificates require unique source refs/indices for totality, unique target refs/indices for injectivity/surjectivity, exhaustive bundle binding during replay, and mapping_source_refs linked through the external inventory."
+  },
+  "fixture_annotation": {
+    "id": "ANNOTATION:D1P42_LOGICAL_SLOT_MAP_V1",
+    "logical_slots": [
+      "d1p42.batch.element[0]",
+      "d1p42.batch.element[1]",
+      "d1p42.batch.element[2]",
+      "d1p42.batch.element[3]",
+      "d1p42.batch.extent"
+    ],
+    "provenance": "Explicitly authored from the exposed Step 6a D1P-42 mapping records before the D2-08 run.",
+    "status": "ANNOTATED_UNREVIEWED_MECHANICAL_FIXTURE",
+    "claim_limit": "This annotation is not independently reviewed policy and cannot support an automatic semantic-recovery or authorization claim."
+  },
+  "name_influence_audit": {
+    "legacy_status": "ANNOTATION_ONLY_QUARANTINED",
+    "required_public_behavior_without_bundle": "COMPILER_BACKED_IDENTITY_REQUIRED",
+    "required_public_behavior_with_valid_bundle": "AUTHORIZATION_BOUNDARY_CHECK_REQUIRED_STEP9",
+    "rule": "The public role-binding entry point must contain no symbol references or calls to canonical_role, semantic_identity, or the quarantined legacy analyzer."
+  },
+  "transformation_controls": {
+    "required": [
+      "seeded identifier renaming",
+      "helper extraction",
+      "equivalent expression rewriting",
+      "matched public-input reordering with explicit mapping"
+    ],
+    "acceptance": "For each transformation, compiler artifacts and source/mapping hashes verify, the mapping is total/injective/surjective, and corresponding logical slots retain the same semantic identity hash.",
+    "order_rule": "The first three mappings are order-preserving; matched reorder is intentionally not order-preserving and must preserve semantic identity through its explicit bijection.",
+    "claim_limit": "The Step 6a source argument and focused build/execution/algebra controls plus this identity mapping are bounded fixture controls, not formal or general semantic-equivalence proof."
+  },
+  "negative_and_control_fixtures": [
+    {
+      "id": "NEG-SAME-NAME-DIFFERENT-OBJECT",
+      "expected": "MISMATCH"
+    },
+    {
+      "id": "NEG-SAME-OBJECT-DIFFERENT-CONTEXT",
+      "expected": "MISMATCH"
+    },
+    {
+      "id": "NEG-OBJECT-CONTEXT-CROSS-SWAP",
+      "expected": "MISMATCH"
+    },
+    {
+      "id": "CONTROL-MATCHED-REORDER",
+      "expected": "SEMANTIC_IDENTITY_PRESERVED_WITH_EXPLICIT_NON_ORDER_PRESERVING_MAPPING"
+    },
+    {
+      "id": "CONTROL-DISPLAY-NAME-IGNORED",
+      "expected": "MATCH"
+    }
+  ],
+  "step_9_interface_coordination": {
+    "module": "bindcheck_d1.core.authorization_boundary_v1",
+    "consumes": "IdentityBundle, IdentityFact, and the exact opaque identity reference",
+    "rule": "The P/O/E boundary may not consume display labels, source locations, or legacy semantic tokens. UNREVIEWED_DEVELOPMENT_FIXTURE keeps the effective result UNKNOWN."
+  },
+  "step_10_extraction_coordination": {
+    "required": "Separate object/context identities; typed facts with MUST/MAY and approximation; compiler/artifact/node-or-ABI provenance; parent/assumption/annotation/mapping references; first-class mapping certificates.",
+    "rule": "Current role labels and semantic tokens are annotations only."
+  },
+  "resource_budget": {
+    "wall_seconds": 600,
+    "memory_mib": 512,
+    "subprocess_calls": 7,
+    "subprocess_call_breakdown": {
+      "foundation_git_metadata_calls": 7,
+      "analyzer_compiler_policy_proof_or_score_calls": 0
+    },
+    "network_calls": 0,
+    "scientific_retries": 0,
+    "human_minutes": null,
+    "human_minutes_reason": "No independently timed human session; zero is not imputed.",
+    "combined_steps_8_10_cap_still_controls": true
+  },
+  "outputs": {
+    "namespace": "results/raw/D2-08",
+    "post_run_report": "reports/D2-08.md",
+    "bundle_count": 5,
+    "identity_count_per_bundle": 5,
+    "fact_count_per_bundle": 10,
+    "mapping_count": 4,
+    "negative_and_control_fixture_count": 5,
+    "scored_rows": 0
+  },
+  "seal_plan": {
+    "version": "D2-08-compiler-identity-mechanical-v1",
+    "entries": [
+      "protocols/d2/d2-08-compiler-identity-v1.json",
+      "docs/research-contract.md",
+      "docs/formal/d2-step8-compiler-identity-v1.md",
+      "docs/d1/role-binding-interface.md",
+      "src/bindcheck_d1/role_binding.py",
+      "src/bindcheck_d1/roles/__init__.py",
+      "src/bindcheck_d1/roles/compiler_identity_v1.py",
+      "scripts/d2_foundation.py",
+      "scripts/d2_step8_identity.py",
+      "tests/test_role_binding.py",
+      "tests/test_d2_step8_identity.py",
+      "reports/D2-06A.md",
+      "reports/D2-07.md",
+      "results/raw/D2-06A/construction-03/transformation-ledger.json",
+      "results/raw/D2-06A/construction-03/run-manifest.json",
+      "results/raw/D2-06A/construction-03/transformations",
+      "results/raw/D2-07-recovery-01/finalization-summary.json",
+      "results/raw/D2-07-recovery-01/content-seal-v1.json",
+      "results/raw/D2-07-recovery-01/seal-verification.json"
+    ],
+    "verification_record_excluded_due_to_hash_dependency": true,
+    "post_run_report_excluded_so_it_can_record_the_final_seal_hash": true
+  },
+  "completion_criteria": [
+    "public security conclusion path is fail-closed against name-derived roles",
+    "identity and provenance hashes replay deterministically",
+    "all external annotation, mapping, assumption, parent, and provenance references resolve through the explicit input inventory",
+    "all four bounded Step 6a transformation mappings pass their declared properties",
+    "three negative object/context fixtures and two controls match known answers",
+    "Step 9 and Step 10 consume stable versioned symbols without display labels",
+    "fresh raw namespace is checksum-complete, sealed, and independently verifies",
+    "no score, security verdict, formal/general proof, or reserved data access occurs"
+  ],
+  "claim_limits": [
+    "Mechanical unreviewed development evidence only.",
+    "Compiler/ABI provenance does not itself establish semantic policy, authorization, or object authenticity.",
+    "The logical slot map is an annotation, not automatic semantic recovery.",
+    "No stable Noir SSA identifier is claimed when the artifact does not expose one.",
+    "No current novelty, capability, generality, transfer, or security claim follows."
+  ]
+}

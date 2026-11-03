@@ -1,4 +1,4 @@
-"""Command-line entry point for BindCheck v1.2."""
+"""Command-line entry point for the integrated BindCheck development tool."""
 
 from __future__ import annotations
 
@@ -8,7 +8,8 @@ import json
 from pathlib import Path
 import sys
 
-from .static_analyzer_v1 import analyze, readable as readable_analysis
+from .integrated_analyzer_v1 import analyze_integrated, readable as readable_integrated
+from .static_analyzer_v1 import analyze as analyze_static, readable as readable_static
 from .validation_v1 import validate, readable as readable_validation
 
 
@@ -55,6 +56,26 @@ def parser() -> argparse.ArgumentParser:
                                 help="checked compiler-AST consumer relation (or content-indexed relation)")
     analyze_parser.add_argument("--consumer-index", type=Path, default=DEFAULT_CONSUMER_INDEX,
                                 help="content-addressed checked-relation index")
+    analyze_parser.add_argument(
+        "--producer-source", type=Path,
+        help="Noir semantic source used for extent and typed-role facts",
+    )
+    analyze_parser.add_argument(
+        "--producer-support-source", type=Path, action="append", default=[],
+        help="support source declaring producer semantic operations (repeatable)",
+    )
+    analyze_parser.add_argument(
+        "--mapping-bridge", type=Path,
+        help="recursive verifier/configuration artifact required by an exact mapping certificate",
+    )
+    analyze_parser.add_argument(
+        "--no-role-binding", action="store_true",
+        help="intentionally disable R-ROLE even when a producer source is supplied",
+    )
+    analyze_parser.add_argument(
+        "--integrated", action="store_true",
+        help="emit the integrated support/provenance schema even without integration inputs",
+    )
     analyze_parser.add_argument("--label")
     analyze_parser.add_argument("--json", type=Path, help="write machine-readable result")
     analyze_parser.add_argument("--json-stdout", action="store_true")
@@ -74,10 +95,38 @@ def main(argv: list[str] | None = None) -> int:
     try:
         if args.command == "analyze":
             consumer_ir = resolve_consumer_ir(args.consumer_source, args.consumer_ir, args.consumer_index)
-            result = analyze(args.producer_artifact, args.consumer_source, consumer_ir, args.label)
+            integrated = bool(
+                args.integrated
+                or args.producer_source
+                or args.producer_support_source
+                or args.mapping_bridge
+                or args.no_role_binding
+            )
+            if integrated:
+                result = analyze_integrated(
+                    args.producer_artifact,
+                    args.consumer_source,
+                    consumer_ir,
+                    args.label,
+                    producer_source=args.producer_source,
+                    producer_support_sources=args.producer_support_source,
+                    mapping_bridge=args.mapping_bridge,
+                    role_binding=False if args.no_role_binding else None,
+                )
+                rendered = readable_integrated(result)
+                exit_code = 0 if result["support_status"] == "SUPPORTED" else 2
+            else:
+                result = analyze_static(
+                    args.producer_artifact,
+                    args.consumer_source,
+                    consumer_ir,
+                    args.label,
+                )
+                rendered = readable_static(result)
+                exit_code = 0
             _write_json(args.json, result)
-            print(json.dumps(result, indent=2, sort_keys=True) if args.json_stdout else readable_analysis(result))
-            return 0
+            print(json.dumps(result, indent=2, sort_keys=True) if args.json_stdout else rendered)
+            return exit_code
         result = validate(args.warning, args.validation_index, args.repository.resolve())
         _write_json(args.json, result)
         print(json.dumps(result, indent=2, sort_keys=True) if args.json_stdout else readable_validation(result))

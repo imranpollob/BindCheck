@@ -16,6 +16,8 @@ import subprocess
 import time
 from typing import Any
 
+from .integrated_analyzer_v1 import warning_stable_id
+
 
 SCHEMA = "bindcheck.validation-result.v1"
 LEVELS = {"E0": 0, "E1": 1, "E2": 2, "E3": 3, "E4": 4}
@@ -69,6 +71,15 @@ def _check(root: Path, check: dict[str, Any]) -> dict[str, Any]:
     return record
 
 
+def _verified_stable_id(warning: dict[str, Any]) -> str:
+    """Derive warning identity and reject a stale or forged serialized ID."""
+    observed = warning_stable_id(warning)
+    if "stable_id" in warning and warning["stable_id"] != observed:
+        identifier = warning.get("id", warning.get("source_id", "<unknown>"))
+        raise ValueError(f"WARNING_STABLE_ID_MISMATCH:{identifier}")
+    return observed
+
+
 def select_warning(path_selector: str) -> tuple[Path, dict[str, Any]]:
     if "#" in path_selector:
         raw_path, wanted = path_selector.rsplit("#", 1)
@@ -76,17 +87,28 @@ def select_warning(path_selector: str) -> tuple[Path, dict[str, Any]]:
         raw_path, wanted = path_selector, None
     path = Path(raw_path)
     document = json.loads(path.read_text())
-    if document.get("schema") in {"bindcheck.static-analysis.v1", "bindcheck.static-analysis.v1.1"}:
+    schema = str(document.get("schema", ""))
+    if (
+        schema == "bindcheck.static-analysis.v1"
+        or schema.startswith("bindcheck.static-analysis.v1.")
+        or schema.startswith("bindcheck.integrated-analysis.v1")
+    ):
         warnings = document["warnings"]
+        verified = [(warning, _verified_stable_id(warning)) for warning in warnings]
         if wanted:
-            matches = [warning for warning in warnings if warning["id"] == wanted]
+            matches = [warning for warning, stable_id in verified if wanted in {
+                warning.get("id"), warning.get("source_id"), stable_id
+            }]
             if len(matches) != 1:
                 raise ValueError(f"warning selector {wanted!r} matched {len(matches)} warnings")
             return path, matches[0]
         if len(warnings) != 1:
-            raise ValueError("analysis contains multiple warnings; use analysis.json#W001")
+            raise ValueError(
+                "analysis contains multiple warnings; select a legacy or stable warning ID"
+            )
         return path, warnings[0]
     if document.get("rule") and document.get("target_identity"):
+        _verified_stable_id(document)
         return path, document
     raise ValueError("input is neither a BindCheck analysis nor a standalone warning")
 
@@ -94,8 +116,13 @@ def select_warning(path_selector: str) -> tuple[Path, dict[str, Any]]:
 def validate(path_selector: str, index_path: Path, repository: Path) -> dict[str, Any]:
     started = time.monotonic()
     warning_path, warning = select_warning(path_selector)
+    stable_id = _verified_stable_id(warning)
+    warning = {**warning, "stable_id": stable_id}
     index = json.loads(index_path.read_text())
-    identity = warning["target_identity"]
+    identity = {
+        **warning["target_identity"],
+        "stable_id": stable_id,
+    }
     routes = [route for route in index["routes"] if all(
         identity.get(key) == value for key, value in route["match"].items()
     )]

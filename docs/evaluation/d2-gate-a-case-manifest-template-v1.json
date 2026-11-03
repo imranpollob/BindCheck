@@ -1,0 +1,62 @@
+{
+  "schema": "bindcheck.d2.gate-a-case-manifest/v1",
+  "template_status": "BLANK_DRAFT_NO_CASE_SELECTION",
+  "protocol_version": "1.0.0-draft",
+  "manifest_id": null,
+  "manifest_status": "DRAFT",
+  "created_at": null,
+  "sealed_at": null,
+  "sealed_before_scored_output": null,
+  "custodian": {
+    "human_id": null,
+    "prior_exposure_summary": null
+  },
+  "cases": [],
+  "construction_failures": [],
+  "rejected_transformations": [],
+  "tools_and_arms": [],
+  "human_roles": {
+    "policy_authors": [],
+    "policy_reviewers": [],
+    "scorers": [],
+    "adjudicators": []
+  },
+  "resource_enforcement": {
+    "time_method": null,
+    "memory_method": null,
+    "network_method": null,
+    "parallelism_method": null
+  },
+  "output_namespace": null,
+  "content_seal": {
+    "algorithm": "sha256",
+    "manifest_sha256": null,
+    "member_count": null,
+    "members": []
+  },
+  "step_7_checklist": {
+    "cases_and_exposure_complete": null,
+    "files_hashes_and_sizes_complete": null,
+    "labels_and_primary_provenance_complete": null,
+    "policies_human_authored_and_reviewed": null,
+    "safe_controls_property_specific": null,
+    "construction_failures_retained": null,
+    "arms_and_information_budgets_complete": null,
+    "tools_versions_configs_and_seeds_complete": null,
+    "transformations_and_controls_complete": null,
+    "warning_targets_and_matching_frozen": null,
+    "human_scoring_and_adjudication_ready": null,
+    "validation_routes_and_budgets_equal": null,
+    "resource_and_retry_rules_enforceable": null,
+    "blank_form_hashes_bound": null,
+    "output_namespace_empty": null,
+    "timestamped_content_seal_verified": null
+  },
+  "instructions": [
+    "Create a separately named completed manifest; never overwrite this template.",
+    "Each case records family lineage, exposure, exact files and hashes, policy and label provenance, target fields, property-specific control status, applicable arms, and construction status.",
+    "Keep build failures, rejected transformations, unsupported tools, and unresolved rows in the manifest.",
+    "A case-specific unresolved policy or required human score marks that row UNRESOLVED without blocking unrelated objectively scored rows.",
+    "No scored execution is permitted while manifest_status is DRAFT or any global seal requirement is incomplete."
+  ]
+}

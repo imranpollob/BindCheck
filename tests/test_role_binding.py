@@ -8,7 +8,19 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from bindcheck_d1.role_binding import RoleBindingUnsupported, analyze_role_binding
+from bindcheck_d1.role_binding import (
+    LEGACY_SURFACE_ROLE_STATUS,
+    RoleBindingUnsupported,
+    analyze_role_binding,
+    canonical_role,
+)
+from bindcheck_d1.roles.compiler_identity_v1 import (
+    CompilerProvenance,
+    ContextIdentity,
+    IdentityBundle,
+    IdentityRecord,
+    ObjectIdentity,
+)
 
 
 def sha256(path: Path) -> str:
@@ -20,6 +32,42 @@ def symbol(name: str) -> dict:
 
 
 class RoleBindingTests(unittest.TestCase):
+    def identity_bundle(self) -> dict:
+        identity = IdentityRecord(
+            object_identity=ObjectIdentity(
+                kind="PUBLIC_STATEMENT_WORD",
+                logical_slot="fixture.word[0]",
+                representation="FIELD_ELEMENT",
+                state_scope="TRANSITION_INPUT",
+                encoding="ACIR_PUBLIC_INPUT",
+                value_type="Field",
+            ),
+            context_identity=ContextIdentity(
+                kind="PROGRAM_INTERFACE",
+                domain="fixture-domain",
+                deployment="UNSPECIFIED",
+                state_version="fixture-v1",
+                actor="UNSPECIFIED",
+                epoch="UNSPECIFIED",
+            ),
+            provenance=(CompilerProvenance(
+                artifact_sha256="0" * 64,
+                compiler_id="nargo",
+                compiler_version="fixture",
+                artifact_schema="fixture",
+                evidence_kind="COMPILER_ABI",
+                abi_index=0,
+            ),),
+            derivation_class="ANNOTATED",
+            annotation_refs=("UNREVIEWED_DEVELOPMENT_FIXTURE",),
+        )
+        return IdentityBundle(
+            bundle_name="fixture",
+            identities=(identity,),
+            facts=(),
+            input_sha256=("0" * 64,),
+        ).to_dict()
+
     def make_fixture(
         self,
         directory: Path,
@@ -30,6 +78,7 @@ class RoleBindingTests(unittest.TestCase):
         guards: list[dict] | None = None,
         beneficiary: str = "calldata._recipient",
     ) -> tuple[dict, Path, Path]:
+        directory.mkdir(parents=True, exist_ok=True)
         source = directory / "main.nr"
         source.write_text(
             "fn main("
@@ -93,96 +142,68 @@ class RoleBindingTests(unittest.TestCase):
         }
         return analysis, source, support
 
-    def test_matching_amount_commitment_and_recipient_effect_are_clean(self) -> None:
+    def test_surface_names_cannot_produce_a_public_security_result(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             analysis, source, support = self.make_fixture(Path(temporary))
-            result = analyze_role_binding(
-                analysis,
-                producer_source=source,
-                producer_support_sources=[support],
-            )
-        self.assertEqual(result["warning_count"], 0)
-        self.assertEqual(
-            [word["boundary_correspondence"] for word in result["words"]],
-            ["match", "match"],
-        )
-
-    def test_principal_amount_not_in_commitment_warns(self) -> None:
-        with tempfile.TemporaryDirectory() as temporary:
-            analysis, source, support = self.make_fixture(
-                Path(temporary), producer_call="hash_commitment(secret, 0);"
-            )
-            result = analyze_role_binding(
-                analysis,
-                producer_source=source,
-                producer_support_sources=[support],
-            )
-        self.assertEqual(
-            [(warning["evidence"]["kind"], warning["evidence"]["public_index"])
-             for warning in result["warnings"]],
-            [("effect-authorization", 0)],
-        )
-
-    def test_state_identity_and_principal_beneficiary_are_typed(self) -> None:
-        guards = [{
-            "op": "select",
-            "args": [
-                {"op": "storage", "args": ["gigaRootHistory"]},
-                symbol("calldata._localRoot"),
-            ],
-        }]
-        names = ("amount", "destination_local_root", "relayer_address", "recipient_address")
-        origins = (
-            "calldata._amount", "calldata._localRoot",
-            "calldata._relayer", "calldata._recipient",
-        )
-        with tempfile.TemporaryDirectory() as temporary:
-            analysis, source, support = self.make_fixture(
-                Path(temporary),
-                public_names=names,
-                consumer_origins=origins,
-                guards=guards,
-                beneficiary="calldata._relayer",
-            )
-            result = analyze_role_binding(
-                analysis,
-                producer_source=source,
-                producer_support_sources=[support],
-            )
-        kinds = {warning["evidence"]["kind"] for warning in result["warnings"]}
-        self.assertEqual(kinds, {"state-identity", "effect-beneficiary"})
-
-    def test_source_artifact_public_order_mismatch_is_unknown(self) -> None:
-        with tempfile.TemporaryDirectory() as temporary:
-            analysis, source, support = self.make_fixture(Path(temporary))
-            analysis["producer"]["public_leaves"][0]["path"] = "different_amount"
             with self.assertRaisesRegex(
-                RoleBindingUnsupported, "PRODUCER_SOURCE_ARTIFACT_ABI_MISMATCH"
+                RoleBindingUnsupported, "COMPILER_BACKED_IDENTITY_REQUIRED"
             ):
                 analyze_role_binding(
                     analysis,
                     producer_source=source,
                     producer_support_sources=[support],
                 )
+        self.assertEqual(LEGACY_SURFACE_ROLE_STATUS, "ANNOTATION_ONLY_QUARANTINED")
 
-    def test_application_domain_identity_mismatch_warns(self) -> None:
+    def test_different_surface_names_have_the_same_fail_closed_result(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
-            analysis, source, support = self.make_fixture(
-                Path(temporary),
-                producer_call="",
-                public_names=("aztec_warptoad_address",),
-                consumer_origins=("pre.other_app_address",),
-                beneficiary="external.account",
+            root = Path(temporary)
+            first = self.make_fixture(root / "first")
+            second = self.make_fixture(
+                root / "second",
+                public_names=("looks_like_root", "looks_like_recipient"),
+                consumer_origins=("calldata.foo", "calldata.bar"),
             )
-            result = analyze_role_binding(
-                analysis,
-                producer_source=source,
-                producer_support_sources=[support],
-            )
-        self.assertEqual(
-            [warning["evidence"]["kind"] for warning in result["warnings"]],
-            ["domain-identity"],
-        )
+            for analysis, source, support in (first, second):
+                with self.assertRaisesRegex(
+                    RoleBindingUnsupported, "COMPILER_BACKED_IDENTITY_REQUIRED"
+                ):
+                    analyze_role_binding(
+                        analysis,
+                        producer_source=source,
+                        producer_support_sources=[support],
+                    )
+
+    def test_valid_compiler_identities_still_require_step9_policy_check(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            analysis, source, support = self.make_fixture(Path(temporary))
+            with self.assertRaisesRegex(
+                RoleBindingUnsupported, "AUTHORIZATION_BOUNDARY_CHECK_REQUIRED_STEP9"
+            ):
+                analyze_role_binding(
+                    analysis,
+                    producer_source=source,
+                    producer_support_sources=[support],
+                    compiler_identity_bundle=self.identity_bundle(),
+                )
+
+    def test_invalid_identity_bundle_is_unknown(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            analysis, source, support = self.make_fixture(Path(temporary))
+            with self.assertRaisesRegex(
+                RoleBindingUnsupported, "COMPILER_IDENTITY_BUNDLE_INVALID"
+            ):
+                analyze_role_binding(
+                    analysis,
+                    producer_source=source,
+                    producer_support_sources=[support],
+                    compiler_identity_bundle={"schema": "wrong"},
+                )
+
+    def test_legacy_role_parser_is_explicitly_annotation_only(self) -> None:
+        self.assertEqual(canonical_role("gigaRoot"), "state-root:giga")
+        self.assertEqual(canonical_role("unrelated_name"), "unknown")
+        self.assertEqual(LEGACY_SURFACE_ROLE_STATUS, "ANNOTATION_ONLY_QUARANTINED")
 
 
 if __name__ == "__main__":

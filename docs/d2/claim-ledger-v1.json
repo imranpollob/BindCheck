@@ -1,0 +1,701 @@
+{
+  "schema": "bindcheck.claim-ledger.v1",
+  "ledger_version": "D2-03-v1",
+  "as_of": "2026-11-02",
+  "research_verdict": "UNKNOWN",
+  "controlling_snapshot": {
+    "git_base": "544656abbfb535dcbe0f1157087240464f38cb0b",
+    "d2_01_report_sha256": "ee13591c20fc4078ac71ce720b53ff2c1af7e51fa50f0a974fe4a2a6a74cba3f",
+    "paper_draft_version": "D1P-P07",
+    "paper_draft_sha256": "d8aa536992f9391b19405836796e4620a639dc79d191c404eb99140de6b77217"
+  },
+  "status_values": [
+    "supported",
+    "overstated",
+    "contradicted",
+    "unresolved"
+  ],
+  "exposure_values": [
+    "framing",
+    "exposed-development",
+    "historical-development",
+    "injected-development",
+    "independent-attempt-unsupported",
+    "proposed"
+  ],
+  "interpretation_rules": [
+    "D1P-41 and D1P-43 are separate versioned experiments with different analyzer assumptions and denominators.",
+    "D1P-34, D1P-42, and D2-01 benchmark counts are separate tool versions and are not pooled.",
+    "E1 diagnostics do not establish authorization failure, exploitability, VIOLATION, security, transfer, or novelty.",
+    "Historical E4 evidence is not relabeled as validation of a current warning or as automated discovery.",
+    "Unsupported and silence remain UNKNOWN and are not misses, negatives, or safety evidence."
+  ],
+  "claims": [
+    {
+      "id": "CLM-001",
+      "wording": "Whether a committed consumer effect is authorized can require relating the proof-backed permission to the effect's identity, asset, beneficiary, domain, quantity, state version, and activation condition.",
+      "location": [
+        {
+          "path": "docs/research-contract.md",
+          "section": "sections 4-5"
+        }
+      ],
+      "supporting_result_or_source": [
+        {
+          "path": "docs/research-contract.md",
+          "detail": "Defines P, O, E and compatibility across authorization fields."
+        }
+      ],
+      "version": {
+        "claim": "research-contract-r3",
+        "evidence": "formal framing"
+      },
+      "exposure": "framing",
+      "evidence_grade": "N/A-framing",
+      "status": "supported",
+      "claim_limit": "This supports the relational problem statement, not a claim that BindCheck currently proves authorization.",
+      "paper_action": "Use this qualified formulation in the abstract and model; do not reduce authorization to occurrence or name agreement."
+    },
+    {
+      "id": "CLM-002",
+      "wording": "Whether those effects are justified is a property of neither component alone.",
+      "location": [
+        {
+          "path": "paper/draft.md",
+          "lines": "159-167"
+        },
+        {
+          "path": "paper/draft.md",
+          "lines": "2929-2932"
+        }
+      ],
+      "supporting_result_or_source": [
+        {
+          "path": "reports/D1P-41-ablation-preliminary.md",
+          "detail": "One-sided arms detect several exposed cases; their union matched full BindCheck on the historical preliminary run."
+        },
+        {
+          "path": "reports/D1P-43.md",
+          "detail": "The successor typed join adds two exposed E1 detections over the union, but one-sided diagnoses still exist."
+        }
+      ],
+      "version": {
+        "claim": "D1P-P07",
+        "evidence": "D1P-41 plus D1P-43"
+      },
+      "exposure": "framing",
+      "evidence_grade": "E1-development",
+      "status": "overstated",
+      "claim_limit": "Some defects are diagnosable from one side; the full authorization judgment may require both sides.",
+      "paper_action": "Replace with: 'For some effects, deciding whether the proof authorizes the execution requires relating producer and consumer facts.'"
+    },
+    {
+      "id": "CLM-003",
+      "wording": "Failures of this kind are invisible to an analysis of either side in isolation unless someone first states the cross-boundary property.",
+      "location": [
+        {
+          "path": "paper/draft.md",
+          "lines": "240-246"
+        }
+      ],
+      "supporting_result_or_source": [
+        {
+          "path": "reports/D1P-41-ablation-preliminary.md",
+          "detail": "Producer-only and consumer-only arms each diagnose exposed examples; ZKAP covers an unused-public-input pattern."
+        },
+        {
+          "path": "reports/D1P-43.md",
+          "detail": "Only the two typed relationship cases distinguish the full arm on this exposed set."
+        }
+      ],
+      "version": {
+        "claim": "D1P-P07",
+        "evidence": "D1P-41/D1P-43"
+      },
+      "exposure": "framing",
+      "evidence_grade": "E1-development",
+      "status": "overstated",
+      "claim_limit": "The informational argument applies to effect-specific or relationship-specific diagnoses, not every binding failure.",
+      "paper_action": "State the narrower information requirement and reserve empirical tool comparisons for Gate A."
+    },
+    {
+      "id": "CLM-004",
+      "wording": "On the current 30-mutant integrated development benchmark: 17 detected, 13 unsupported, 0 misses, 26 warning objects, and 23 associated warning objects.",
+      "location": [
+        {
+          "path": "reports/D2-01.md",
+          "lines": "16-26, 78-97"
+        },
+        {
+          "path": "README.md",
+          "lines": "44-58"
+        }
+      ],
+      "supporting_result_or_source": [
+        {
+          "path": "reports/D2-01.md",
+          "detail": "Frozen, content-sealed integrated development run."
+        },
+        {
+          "path": "results/raw/D2-01-recovery-01/run-summary.json",
+          "detail": "Ignored completed run record, SHA-256 recorded in D2-01."
+        }
+      ],
+      "version": {
+        "claim": "D2-01-integrated-v1",
+        "evidence": "seal 9f47676dd85a81ce0088c742a154f3919d9d94af78c1c8979bdd0386f56ddc06"
+      },
+      "exposure": "exposed-development",
+      "evidence_grade": "E1",
+      "status": "supported",
+      "claim_limit": "The zero-miss count is only against predeclared labels within supported exposed cases; it is not a false-negative, precision, recall, or security estimate.",
+      "paper_action": "If reported, label as the current integrated exposed-development result and keep all five count fields."
+    },
+    {
+      "id": "CLM-005",
+      "wording": "The historical D1P-34, corrected D1P-42, and current D2-01 benchmark rows are distinct: 16/14/0/53, 11/19/0/13, and 17/13/0/26 respectively (detected/unsupported/missed or misses/warning objects).",
+      "location": [
+        {
+          "path": "reports/D2-01.md",
+          "lines": "86-97"
+        }
+      ],
+      "supporting_result_or_source": [
+        {
+          "path": "reports/D1P-34.md",
+          "detail": "Historical v1.1 row."
+        },
+        {
+          "path": "reports/D1P-42.md",
+          "detail": "Corrected static-only row."
+        },
+        {
+          "path": "reports/D2-01.md",
+          "detail": "Integrated current row."
+        }
+      ],
+      "version": {
+        "claim": "D2-03-reconciliation",
+        "evidence": "D1P-34/D1P-42/D2-01"
+      },
+      "exposure": "exposed-development",
+      "evidence_grade": "E1",
+      "status": "supported",
+      "claim_limit": "The rows use different tool versions; warning-object counts are not defect counts and must not be pooled.",
+      "paper_action": "Use a versioned table rather than replacing historical counts in place."
+    },
+    {
+      "id": "CLM-006",
+      "wording": "In D1P-41's historical preliminary ablation, the unjoined union and full arm each matched 6 of 8 exposed positives.",
+      "location": [
+        {
+          "path": "reports/D1P-41-ablation-preliminary.md",
+          "lines": "9-16, 108-138"
+        },
+        {
+          "path": "paper/draft.md",
+          "lines": "21-26, 383-399"
+        }
+      ],
+      "supporting_result_or_source": [
+        {
+          "path": "reports/D1P-41-ablation-preliminary.md",
+          "detail": "Immutable historical preliminary report."
+        }
+      ],
+      "version": {
+        "claim": "D1P-41-preliminary",
+        "evidence": "pre-D1P-42/D1P-43 analyzer assumptions"
+      },
+      "exposure": "exposed-development",
+      "evidence_grade": "E1",
+      "status": "supported",
+      "claim_limit": "Historical only; its Payy support assumption and denominator are not the corrected successor result.",
+      "paper_action": "Retain only as history or a versioned contrast, never as the current ablation."
+    },
+    {
+      "id": "CLM-007",
+      "wording": "In the corrected D1P-43 successor ablation, producer-only detects 3/7, consumer-only 2/7, union 5/7, and full BindCheck 7/7, with one UNKNOWN positive and one matching clean control.",
+      "location": [
+        {
+          "path": "reports/D1P-43.md",
+          "lines": "118-156"
+        },
+        {
+          "path": "reports/D2-01.md",
+          "lines": "99-123"
+        }
+      ],
+      "supporting_result_or_source": [
+        {
+          "path": "reports/D1P-43.md",
+          "detail": "Corrected successor rerun on seven supported exposed positives."
+        },
+        {
+          "path": "reports/D2-01.md",
+          "detail": "Frozen reconciliation checks the per-case/per-arm vector."
+        }
+      ],
+      "version": {
+        "claim": "D1P-43-successor",
+        "evidence": "reconciled by D2-01"
+      },
+      "exposure": "exposed-development",
+      "evidence_grade": "E1",
+      "status": "supported",
+      "claim_limit": "Known, prospectively labeled mutants; role names are bounded source-derived facts; no baseline arms, proof, or held-out case ran.",
+      "paper_action": "Present as a development ablation, not as novelty, security, or transfer evidence."
+    },
+    {
+      "id": "CLM-008",
+      "wording": "The typed join adds two supported exposed-case detections over the unjoined union in the D1P-43 successor run.",
+      "location": [
+        {
+          "path": "reports/D1P-43.md",
+          "lines": "143-156"
+        }
+      ],
+      "supporting_result_or_source": [
+        {
+          "path": "reports/D1P-43.md",
+          "detail": "WT-S05 and WT-C05 distinguish full from union on the frozen exposed set."
+        }
+      ],
+      "version": {
+        "claim": "D1P-43-successor",
+        "evidence": "E1 role-target associations"
+      },
+      "exposure": "exposed-development",
+      "evidence_grade": "E1",
+      "status": "supported",
+      "claim_limit": "This is a bounded within-tool ablation, not an advantage over external methods or a causal authorization result.",
+      "paper_action": "Use as motivation for Gate A's transformation-controlled join test."
+    },
+    {
+      "id": "CLM-009",
+      "wording": "BindCheck's novelty is the automated circuit-to-consumer join.",
+      "location": [
+        {
+          "path": "paper/draft.md",
+          "lines": "202-208, 383-402, 2837-2839, 2950-2956"
+        }
+      ],
+      "supporting_result_or_source": [
+        {
+          "path": "reports/D1P-43.md",
+          "detail": "Within-tool exposed ablation suggests a relationship-specific diagnostic difference."
+        },
+        {
+          "path": "docs/d2/related-work-matrix-v1.json",
+          "detail": "Closest-work audit identifies overlap and unresolved comparison obligations."
+        }
+      ],
+      "version": {
+        "claim": "D1P-P07",
+        "evidence": "D2-03 audit"
+      },
+      "exposure": "proposed",
+      "evidence_grade": "E1-development-only",
+      "status": "unresolved",
+      "claim_limit": "Novelty requires a demonstrated distinguishing capability under fair information and assumptions; a bounded absence search is not enough.",
+      "paper_action": "Call it a candidate contribution until Gate A and closest-tool comparisons are complete."
+    },
+    {
+      "id": "CLM-010",
+      "wording": "No verified prior tool performs the circuit-to-consumer join and names the consumer effect or state at risk.",
+      "location": [
+        {
+          "path": "paper/draft.md",
+          "lines": "394-399, 2687-2694, 2953-2955"
+        }
+      ],
+      "supporting_result_or_source": [
+        {
+          "path": "reports/D1P-41-ablation-preliminary.md",
+          "detail": "Bounded primary-source search explicitly did not prove exhaustive absence."
+        },
+        {
+          "path": "docs/d2/related-work-matrix-v1.json",
+          "detail": "ELSA's exact ZKP scope is inaccessible from the official abstract alone; SmartAxe is a close cross-program semantic analogue."
+        }
+      ],
+      "version": {
+        "claim": "D1P-P07",
+        "evidence": "D1P-41 plus D2-03 refresh"
+      },
+      "exposure": "proposed",
+      "evidence_grade": "bibliographic-primary-source-audit",
+      "status": "unresolved",
+      "claim_limit": "The audit supports only a scoped statement about inspected sources, not absence from the literature.",
+      "paper_action": "Replace with an overlap table and say 'we did not identify this exact input/output relation in the inspected sources'; keep ELSA unresolved."
+    },
+    {
+      "id": "CLM-011",
+      "wording": "Path-conditional binding and role correspondence remain future work.",
+      "location": [
+        {
+          "path": "paper/draft.md",
+          "lines": "39-40, 216-219, 377-378, 2820-2824, 2946-2948, 3044"
+        }
+      ],
+      "supporting_result_or_source": [
+        {
+          "path": "reports/D1P-42.md",
+          "detail": "R-EXTENT and exact Payy mapping are implemented for bounded development scope."
+        },
+        {
+          "path": "reports/D1P-43.md",
+          "detail": "R-ROLE is implemented and preliminarily evaluated."
+        },
+        {
+          "path": "reports/D2-01.md",
+          "detail": "Both are integrated in the content-sealed D2 interface."
+        }
+      ],
+      "version": {
+        "claim": "D1P-P07",
+        "evidence": "D1P-42/D1P-43/D2-01"
+      },
+      "exposure": "exposed-development",
+      "evidence_grade": "E1",
+      "status": "contradicted",
+      "claim_limit": "The implemented capability is bounded, source-derived, and not a compiler-semantic authorization proof.",
+      "paper_action": "Describe the implemented dev capability and move compiler-backed object/context identity and relational authorization to future work."
+    },
+    {
+      "id": "CLM-012",
+      "wording": "The real Payy message-tail bug is UNKNOWN to the current static analyzer because the 1,005-to-1,003 mapping and dynamic-memory dependencies are unresolved.",
+      "location": [
+        {
+          "path": "paper/draft.md",
+          "lines": "17-20, 110-119, 189-194, 371-375, 2940-2941"
+        }
+      ],
+      "supporting_result_or_source": [
+        {
+          "path": "reports/D1P-42.md",
+          "detail": "Subsequently supplies the exact mapping certificate and conditional extent facts."
+        },
+        {
+          "path": "reports/D2-01.md",
+          "detail": "Exact earlier Payy pair emits R-EXTENT plus R-CONSUMER at E1; check-added emits no R-EXTENT."
+        }
+      ],
+      "version": {
+        "claim": "D1P-P07 on prospective v1.3",
+        "evidence": "superseded by D1P-42/D2-01 exact-pair analysis"
+      },
+      "exposure": "historical-development",
+      "evidence_grade": "E1-current plus E4-historical",
+      "status": "contradicted",
+      "claim_limit": "All 12 Payy benchmark mutants remain unsupported in D2-01; support for the exact earlier/check-added pair does not transfer to them.",
+      "paper_action": "Report the exact pair and mutant rows separately; do not say all Payy is supported."
+    },
+    {
+      "id": "CLM-013",
+      "wording": "The exact earlier Payy pair currently emits R-EXTENT and R-CONSUMER at E1, while the check-added pair emits no R-EXTENT but retains R-CONSUMER.",
+      "location": [
+        {
+          "path": "reports/D2-01.md",
+          "lines": "125-139"
+        }
+      ],
+      "supporting_result_or_source": [
+        {
+          "path": "reports/D2-01.md",
+          "detail": "Exact-pair reconciliation with stable warning IDs."
+        }
+      ],
+      "version": {
+        "claim": "D2-01-integrated-v1",
+        "evidence": "content-sealed recovery run"
+      },
+      "exposure": "historical-development",
+      "evidence_grade": "E1",
+      "status": "supported",
+      "claim_limit": "The R-CONSUMER warning on check-added is separate and outside the message-tail repair contrast; no-warning R-EXTENT is not safety evidence.",
+      "paper_action": "Use exact warning/rule wording and keep the historical E4 chain separate."
+    },
+    {
+      "id": "CLM-014",
+      "wording": "T15-T19 provide historical E4 evidence for the known earlier Payy tail mechanism and a repair contrast.",
+      "location": [
+        {
+          "path": "paper/draft.md",
+          "lines": "252-261, 509-540"
+        },
+        {
+          "path": "reports/D2-01.md",
+          "lines": "136-139"
+        }
+      ],
+      "supporting_result_or_source": [
+        {
+          "path": "reports/T15.md",
+          "detail": "Earlier producer witness/proof."
+        },
+        {
+          "path": "reports/T18.md",
+          "detail": "Committed consumer effect."
+        },
+        {
+          "path": "reports/T19.md",
+          "detail": "Repair rejects the same witness and preserves an honest control."
+        }
+      ],
+      "version": {
+        "claim": "historical-Payy-chain",
+        "evidence": "T15-T19"
+      },
+      "exposure": "historical-development",
+      "evidence_grade": "E4",
+      "status": "supported",
+      "claim_limit": "Known disclosure, hand-built after the advisory, development data; not automated discovery and not validation of every current Payy warning or mutant.",
+      "paper_action": "Keep 'known historical case' and manual-input language adjacent to every capability discussion."
+    },
+    {
+      "id": "CLM-015",
+      "wording": "A current R-ROLE, R-BIND, R-EXTENT, R-EFFECT, or R-CONSUMER warning establishes an unauthorized effect.",
+      "location": [
+        {
+          "path": "paper/draft.md",
+          "lines": "353-357"
+        },
+        {
+          "path": "reports/D1P-43.md",
+          "lines": "60-70, 235-250"
+        }
+      ],
+      "supporting_result_or_source": [
+        {
+          "path": "docs/research-contract.md",
+          "detail": "Only E4 establishes an end-to-end mismatch; authorization requires compatible P and E records."
+        },
+        {
+          "path": "reports/D2-01.md",
+          "detail": "All current integrated warnings remain E1/UNKNOWN."
+        }
+      ],
+      "version": {
+        "claim": "prohibited-inference",
+        "evidence": "contract-r3 and D2-01"
+      },
+      "exposure": "exposed-development",
+      "evidence_grade": "E1",
+      "status": "contradicted",
+      "claim_limit": "Warning kinds are diagnostics; they do not establish reachability, causal authorization, or a VIOLATION verdict.",
+      "paper_action": "Use 'candidate mismatch' or 'diagnostic' for E1; reserve 'unauthorized committed effect' for policy-reviewed E4."
+    },
+    {
+      "id": "CLM-016",
+      "wording": "Matching an amount, beneficiary, state, domain, or role name proves that a consumer effect is authorized by the proof.",
+      "location": [
+        {
+          "path": "reports/D1P-43.md",
+          "lines": "60-70, 143-156, 225-250"
+        }
+      ],
+      "supporting_result_or_source": [
+        {
+          "path": "docs/research-contract.md",
+          "detail": "Authorization is compatibility of complete records, not name equality or occurrence."
+        },
+        {
+          "path": "reports/D1P-43.md",
+          "detail": "Explicitly limits consumer authorization and does not prove a minimal causal authorization slice."
+        }
+      ],
+      "version": {
+        "claim": "authorization-language-audit",
+        "evidence": "D2-03"
+      },
+      "exposure": "framing",
+      "evidence_grade": "N/A-semantic-review",
+      "status": "overstated",
+      "claim_limit": "A public amount can be range-correct yet authorize no particular note, asset, beneficiary, domain, or state transition; identity/context binding and the reviewed policy are separate.",
+      "paper_action": "Rename rule-level language to 'effect-role correspondence' where possible and define authorization only at the P/O/E policy layer."
+    },
+    {
+      "id": "CLM-017",
+      "wording": "BindCheck currently derives the exact consumer effect at risk without a per-application policy.",
+      "location": [
+        {
+          "path": "paper/draft.md",
+          "lines": "2837-2839, 2950-2955"
+        }
+      ],
+      "supporting_result_or_source": [
+        {
+          "path": "reports/D1P-43.md",
+          "detail": "Role facts and effects are source-derived but bounded; policy and reachable/contained outcomes still require human confirmation."
+        },
+        {
+          "path": "reports/D2-01.md",
+          "detail": "All current results are E1 and stable warning identities are not adjudication."
+        }
+      ],
+      "version": {
+        "claim": "D1P-P07",
+        "evidence": "D1P-43/D2-01"
+      },
+      "exposure": "exposed-development",
+      "evidence_grade": "E1",
+      "status": "overstated",
+      "claim_limit": "The analyzer can name modeled effect operands or associations; 'at risk' and authorization require policy and causal validation.",
+      "paper_action": "Use 'names a modeled consumer effect associated with the word' unless an E4 policy record supports stronger language."
+    },
+    {
+      "id": "CLM-018",
+      "wording": "Two frozen scans establish generality or transfer.",
+      "location": [
+        {
+          "path": "paper/draft.md",
+          "lines": "210-214, 403-412, 2958-2964"
+        }
+      ],
+      "supporting_result_or_source": [
+        {
+          "path": "reports/D1P-33.md",
+          "detail": "0/4 supported analyses."
+        },
+        {
+          "path": "reports/D1P-36.md",
+          "detail": "0/8 supported analyses across 12 attempts/8 unique projects."
+        },
+        {
+          "path": "reports/D2-01.md",
+          "detail": "No adjudicated independent-family result."
+        }
+      ],
+      "version": {
+        "claim": "generality",
+        "evidence": "D1P-33/D1P-36"
+      },
+      "exposure": "independent-attempt-unsupported",
+      "evidence_grade": "E0/UNKNOWN",
+      "status": "unresolved",
+      "claim_limit": "The scans establish applicability blockers only; unsupported is not a miss, negative, or transfer result.",
+      "paper_action": "Keep generality as an unanswered RQ and report attempt/project counts separately."
+    },
+    {
+      "id": "CLM-019",
+      "wording": "The D2-01 49-row table contains 49 independent findings or projects.",
+      "location": [
+        {
+          "path": "reports/D2-01.md",
+          "lines": "198-200"
+        }
+      ],
+      "supporting_result_or_source": [
+        {
+          "path": "reports/D2-01.md",
+          "detail": "Rows comprise 30 mutants, 9 D1P-41 cases, 8 D1P-43 targets, and 2 Payy exact-pair cases with overlap between datasets."
+        }
+      ],
+      "version": {
+        "claim": "prohibited-inference",
+        "evidence": "D2-01 reconciliation"
+      },
+      "exposure": "exposed-development",
+      "evidence_grade": "E1",
+      "status": "contradicted",
+      "claim_limit": "It is a reconciliation table, not a sample-size or independence count.",
+      "paper_action": "Always state the four constituent datasets and their overlaps."
+    },
+    {
+      "id": "CLM-020",
+      "wording": "The final TE06 ledger validates 53 distinct defects or the current integrated warning set.",
+      "location": [
+        {
+          "path": "reports/D2-01.md",
+          "lines": "141-149"
+        },
+        {
+          "path": "paper/draft.md",
+          "lines": "3022-3027"
+        }
+      ],
+      "supporting_result_or_source": [
+        {
+          "path": "reports/TE06.md",
+          "detail": "Historical v1.1 warning ledger."
+        },
+        {
+          "path": "reports/D2-01.md",
+          "detail": "Final historical grade totals are 11 E4, 1 preserved E4, 7 E3, 1 E1+mock, and 33 E1."
+        }
+      ],
+      "version": {
+        "claim": "prohibited-inference",
+        "evidence": "TE06 historical ledger"
+      },
+      "exposure": "injected-development",
+      "evidence_grade": "mixed E1-E4",
+      "status": "contradicted",
+      "claim_limit": "Rows are warnings under historical v1.1, not distinct defects; their grades do not transfer to current stable IDs.",
+      "paper_action": "Report grade totals with the historical tool version and avoid a single 'validated warnings' total."
+    },
+    {
+      "id": "CLM-021",
+      "wording": "BindCheck currently satisfies the contract's capability gate.",
+      "location": [
+        {
+          "path": "docs/research-contract.md",
+          "section": "section 11"
+        },
+        {
+          "path": "README.md",
+          "lines": "494-498"
+        }
+      ],
+      "supporting_result_or_source": [
+        {
+          "path": "reports/D2-01.md",
+          "detail": "No baseline arm, current automated E4 validation, or supported held-out transfer ran."
+        }
+      ],
+      "version": {
+        "claim": "capability-gate-r3",
+        "evidence": "through D2-01"
+      },
+      "exposure": "proposed",
+      "evidence_grade": "UNKNOWN",
+      "status": "unresolved",
+      "claim_limit": "Current evidence does not establish all four gate conditions; the research verdict remains UNKNOWN.",
+      "paper_action": "Do not use final capability, security, venue-readiness, or success language before Gate A/B/C evidence."
+    },
+    {
+      "id": "CLM-022",
+      "wording": "The current bounded implementation can emit cross-layer E1 diagnostics that associate producer binding/role facts with modeled consumer guards, state identities, and effects.",
+      "location": [
+        {
+          "path": "reports/D2-01.md",
+          "lines": "56-76"
+        },
+        {
+          "path": "reports/D1P-43.md",
+          "lines": "37-70"
+        }
+      ],
+      "supporting_result_or_source": [
+        {
+          "path": "reports/D2-01.md",
+          "detail": "Integrated schema, component gates, provenance, and stable IDs."
+        },
+        {
+          "path": "reports/D1P-43.md",
+          "detail": "Typed producer/consumer role record and warning kinds."
+        }
+      ],
+      "version": {
+        "claim": "D2-01-integrated-v1",
+        "evidence": "exposed development run"
+      },
+      "exposure": "exposed-development",
+      "evidence_grade": "E1",
+      "status": "supported",
+      "claim_limit": "Bounded to supported Noir/ACIR and checked Solidity facts; role atoms are source-derived, and current warnings are not authorization verdicts.",
+      "paper_action": "This is the safe current-contribution statement for an advisor update."
+    }
+  ]
+}

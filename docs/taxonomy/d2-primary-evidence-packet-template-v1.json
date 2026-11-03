@@ -1,0 +1,46 @@
+{
+  "schema": "bindcheck.d2.taxonomy-primary-evidence-packet/v1",
+  "template_status": "BLANK_NO_JUDGMENTS",
+  "codebook_version": "0.3.0",
+  "packet_id": null,
+  "canonical_finding_id": null,
+  "family_id": null,
+  "application_id": null,
+  "sampling": {
+    "frame_id": null,
+    "draw_id": null,
+    "source_class": null,
+    "completeness_unit_id": null,
+    "replacement_status": null
+  },
+  "exposure": {
+    "family_exposure_class_before_draw": null,
+    "known_prior_actors": [],
+    "merged_family_exposure_propagated": null,
+    "notes": []
+  },
+  "primary_sources": [],
+  "relation_or_configuration_evidence": [],
+  "decoding_and_consumer_use_evidence": [],
+  "policy_permissions_obligations_transformations": [],
+  "actor_reachability_proof_and_effect_evidence": [],
+  "repair_and_lineage_evidence": [],
+  "missing_conflicting_or_inaccessible_evidence": [],
+  "coordinator_blinding_check": {
+    "contains_bindcheck_output": null,
+    "contains_analyzer_prediction": null,
+    "contains_ai_suggested_label": null,
+    "contains_prior_human_label": null,
+    "contains_other_rater_judgment": null,
+    "contains_adjudication": null,
+    "contains_project_evidence_grade": null,
+    "checked_by_human_id": null,
+    "checked_at": null
+  },
+  "packet_sha256": null,
+  "notes": [
+    "Every evidence item must identify a primary source, immutable revision or content hash when available, and pinpoint.",
+    "Missing primary evidence is recorded explicitly and cannot be replaced by an aggregator summary.",
+    "This template contains no inclusion decision, taxonomy label, analyzer prediction, or security verdict."
+  ]
+}

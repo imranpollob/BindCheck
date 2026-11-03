@@ -1,0 +1,218 @@
+{
+  "schema": "bindcheck.related-work-matrix.v2",
+  "matrix_version": "D2-18-v2",
+  "as_of": "2026-11-02",
+  "search_policy": {
+    "sources": "Primary papers, publisher or official conference records, and official artifacts only.",
+    "access_rule": "State exactly which primary text was inspected. A failed build, unavailable frontend, or inaccessible full text does not establish a method limitation.",
+    "absence_rule": "The matrix does not authorize first-ever or exhaustive-absence claims.",
+    "execution_boundary": "No external comparator was installed or run for Step 18; D2-06B preserves prior native or construction dispositions."
+  },
+  "current_contribution": "A bounded exposed-development E1 diagnostic interface plus separately sealed mechanical identity, authorization-boundary, and typed-extraction prototypes. Gate A is INCONCLUSIVE, all prototype effective outcomes are UNKNOWN, and no comparative capability is established.",
+  "proposed_contribution": "Automatic artifact-derived discovery and automatic E4 validation of a relational proof-to-execution authorization mismatch, under equal-information comparisons and supported independent transfer. This remains unresolved.",
+  "works": [
+    {
+      "id": "RW-ZKAP",
+      "name": "ZKAP",
+      "title": "Practical Security Analysis of Zero-Knowledge Proof Circuits",
+      "venue": "USENIX Security 2024",
+      "actual_overlap": [
+        "Builds a Circuit Dependence Graph for Circom programs and expresses semantic vulnerability patterns as queries.",
+        "Implements nine detectors.",
+        "Explicitly treats a completely unused public input as dangerous because proof verification can accept a different value; this directly overlaps producer-side unused-public-input or R-BIND-style detection."
+      ],
+      "assumptions_and_inputs": [
+        "The inspected implementation is Circom-oriented.",
+        "A native language mismatch is an applicability issue, not an algorithmic miss.",
+        "A fair adapted comparison must validate any Circom/Noir translation and charge its effort."
+      ],
+      "full_text_status": "Primary USENIX paper inspected.",
+      "artifact_status": "Official artifact repository inspected; not executed in Step 18.",
+      "unresolved_gap": "The inspected paper does not itself establish a Solidity consumer extraction, but this does not prove that ZKAP or a straightforward extension cannot supply a cross-boundary diagnostic.",
+      "prohibited_inference": "Do not claim unused-public-input detection, circuit dependency analysis, or application-impact motivation as new.",
+      "minimal_distinguishing_experiment": {
+        "question": "Does consumer information change a diagnosis in a way the fixed circuit-only result cannot?",
+        "design": "Hold one producer and unbound public word fixed. Pair it with two consumers: one commits a protected effect from the word and one does not. Give every arm the same mapping facts and either run ZKAP on a validated native equivalent or mark and charge the adaptation. Score producer signal, effect localization, irrelevant warnings, specification effort, and E1-to-E4 outcome separately.",
+        "distinguishing_outcome": "A predeclared consumer-specific effect/state association changes while the circuit and circuit-only output remain fixed. This would show added information, not novelty by itself."
+      },
+      "primary_sources": [
+        {
+          "kind": "paper",
+          "url": "https://www.usenix.org/system/files/usenixsecurity24-wen_1.pdf",
+          "accessed": "2026-11-02"
+        },
+        {
+          "kind": "publisher-page",
+          "url": "https://www.usenix.org/conference/usenixsecurity24/presentation/wen",
+          "accessed": "2026-11-02"
+        },
+        {
+          "kind": "artifact",
+          "url": "https://github.com/whbjzzwjxq/ZKAP",
+          "accessed": "2026-11-02"
+        }
+      ]
+    },
+    {
+      "id": "RW-CIVER",
+      "name": "CIVER",
+      "title": "Scalable Verification of Zero-Knowledge Protocols",
+      "venue": "IEEE Symposium on Security and Privacy 2024",
+      "doi": "10.1109/SP54263.2024.00133",
+      "actual_overlap": [
+        "Uses modular transformation and deduction rules to verify properties of circuit signals over polynomial equations in a prime field.",
+        "The public artifact documents weak-safety or determinism checks, tag specifications, and explicit preconditions and postconditions.",
+        "Provides a strong comparison for modular reasoning and expressive circuit specifications."
+      ],
+      "assumptions_and_inputs": [
+        "The inspected artifact is Circom-focused and lists R1CS, PLONK, and ACIR support as future work.",
+        "CIVER can receive expressive user specifications; every property, annotation, and adapter must be included in the information and effort budget.",
+        "Native frontend incompatibility is not a method failure."
+      ],
+      "full_text_status": "IEEE publisher metadata/abstract inspected; publisher full text was not retrieved in the bounded audit.",
+      "artifact_status": "Official artifact repository inspected; not executed in Step 18.",
+      "unresolved_gap": "A fair comparison must encode the same language-neutral relational property and compare specification effort; saying only that CIVER is circuit-focused is insufficient.",
+      "prohibited_inference": "Do not claim modular verification, rich circuit specifications, pre/postconditions, or summaries as new.",
+      "minimal_distinguishing_experiment": {
+        "question": "Can the relevant circuit-to-consumer relation be derived or localized with less manual information than an expressive modular specification?",
+        "design": "Freeze one state/domain/identity relationship case and a language-neutral obligation. Give CIVER the smallest equivalent property on a native circuit or a predeclared charged adaptation. Give BindCheck every role and policy input explicitly. Report property and adapter size, authoring and correction time, runtime, grade, and effect/state localization.",
+        "distinguishing_outcome": "Artifact-derived association with materially less manual implementation information, or a diagnosis unavailable under equal inputs; otherwise the contribution narrows to engineering integration."
+      },
+      "primary_sources": [
+        {
+          "kind": "publisher-page",
+          "url": "https://ieeexplore.ieee.org/document/10646792/",
+          "accessed": "2026-11-02"
+        },
+        {
+          "kind": "artifact",
+          "url": "https://github.com/costa-group/circom_civer",
+          "accessed": "2026-11-02"
+        }
+      ]
+    },
+    {
+      "id": "RW-CCC-CHECK",
+      "name": "CCC-Check",
+      "title": "Language-Agnostic Detection of Computation-Constraint Inconsistencies in ZKP Programs via Value Inference",
+      "venue": "IEEE Symposium on Security and Privacy 2026",
+      "actual_overlap": [
+        "Relates prover computation to verifier constraints through value inference and abstract interpretation.",
+        "Detects under- and overconstrained computation-constraint inconsistencies.",
+        "Consumes CirC IR; the inspected author-hosted paper states that CirC frontends include ZoKrates, Noir, and Circom.",
+        "Can overlap producer defects beyond occurrence counting."
+      ],
+      "assumptions_and_inputs": [
+        "Exact compatibility with the pinned Noir/ACIR revisions was not established.",
+        "The retained pinned build attempt was unavailable as a runnable comparison, which is a construction limitation rather than a miss.",
+        "A fair run must separate computation-constraint findings from consumer-only relationship findings."
+      ],
+      "full_text_status": "Author-hosted primary paper inspected.",
+      "artifact_status": "Official artifact repository inspected; prior bounded build did not establish a runnable target path; not executed in Step 18.",
+      "unresolved_gap": "CCC-Check may detect producer defects missed by occurrence and extent rules. Exact overlap on the exposed producer cases requires a compatible pinned run.",
+      "prohibited_inference": "Do not claim computation-constraint consistency, language-agnostic ZKP IR analysis, or value inference as new; do not assume CCC-Check misses Payy from a build failure.",
+      "minimal_distinguishing_experiment": {
+        "question": "Does a circuit-to-consumer analysis add value beyond a language-agnostic computation-constraint checker?",
+        "design": "Use one producer computation/constraint mutant with consumer fixed and one consumer-only state/role mutant with byte-identical producer computation and constraints. Run CCC-Check on a supported native input or predeclare a charged adapter. Separate producer inconsistency detection from consumer relationship localization and validate all candidates identically.",
+        "distinguishing_outcome": "Credit every producer inconsistency CCC-Check finds. A controlled consumer-only relationship diagnosis with unchanged producer bytes would isolate additional boundary information."
+      },
+      "primary_sources": [
+        {
+          "kind": "paper",
+          "url": "https://vdb.space/papers/zkp2026.pdf",
+          "accessed": "2026-11-02"
+        },
+        {
+          "kind": "artifact",
+          "url": "https://github.com/ArmanKolozyan/CCC-Check",
+          "accessed": "2026-11-02"
+        }
+      ]
+    },
+    {
+      "id": "RW-SMARTAXE",
+      "name": "SmartAxe",
+      "title": "SmartAxe: Detecting Cross-Chain Vulnerabilities in Bridge Smart Contracts via Fine-Grained Static Analysis",
+      "venue": "Proceedings of the ACM on Software Engineering, FSE 2024",
+      "doi": "10.1145/3643738",
+      "actual_overlap": [
+        "Analyzes relationships across multiple smart-contract programs instead of treating each contract in isolation.",
+        "Normalizes heterogeneous access-control checks, infers protected resources, and builds cross-chain control-flow and data-flow graphs.",
+        "Detects cross-bridge semantic inconsistency and is therefore a close structural analogue for a cross-component semantic join."
+      ],
+      "assumptions_and_inputs": [
+        "The method assumes paired bridge-contract semantics; Payy is not such a pair and the exposed same-chain WarpToad fixture may not satisfy the native pairing assumptions.",
+        "An inapplicable case must remain not applicable rather than a miss.",
+        "A strongest simple graph-composition adaptation must receive the same identities and mappings as the full arm."
+      ],
+      "full_text_status": "Author-hosted primary paper inspected.",
+      "artifact_status": "Official artifact index inspected; a runnable downloadable target setup was not established in the retained construction attempt; not executed in Step 18.",
+      "unresolved_gap": "Native applicability and adaptation cost must be established on a genuine paired bridge before comparative conclusions.",
+      "prohibited_inference": "Do not claim cross-program semantic joining, protected-resource association, or graph alignment as new; do not score a non-pair as a SmartAxe miss.",
+      "minimal_distinguishing_experiment": {
+        "question": "Is the typed circuit-consumer join more than a domain-specific instance of cross-program semantic alignment?",
+        "design": "Run SmartAxe natively on a permitted paired bridge if available and construct a strongest-simple-composition baseline using the same extracted producer/consumer identities. Freeze role/domain/state swaps and no-op renamings; charge all pairing, adapter, and label work.",
+        "distinguishing_outcome": "Separate proof-specific producer semantics from generic graph alignment. If a simple alignment matches the relational diagnostics, narrow the contribution."
+      },
+      "primary_sources": [
+        {
+          "kind": "paper",
+          "url": "https://people.cs.umass.edu/~juanzhai/papers/fse24liao.pdf",
+          "accessed": "2026-11-02"
+        },
+        {
+          "kind": "artifact-index",
+          "url": "https://github.com/InPlusLab/FSE24-SmartAxe",
+          "accessed": "2026-11-02"
+        }
+      ]
+    },
+    {
+      "id": "RW-ELSA",
+      "name": "ELSA",
+      "title": "Augmenting Multi-Technique Static Analysis with Large Language Models: A Neuro-Symbolic Approach to Smart Contract Vulnerability Detection",
+      "authors": [
+        "Junxiang Wang",
+        "Fu Song",
+        "Miaomiao Zhang",
+        "Bowen Du",
+        "Rongcan Pei"
+      ],
+      "venue": "ISSTA 2026",
+      "doi": "10.1145/3832222",
+      "actual_overlap": [
+        "The official abstract describes Ensemble LLM-assisted Static Analysis, combining LLM-assisted individual analyzers with an analyzer ensemble.",
+        "It describes constraint-guided neural semantic reasoning and conflict resolution among analyzer outputs.",
+        "It reports evaluation on three open-source datasets plus self-constructed Zero-Knowledge Proof-based smart contracts.",
+        "The stated semantic-integration objective makes ELSA a closest-work obligation for BindCheck's positioning."
+      ],
+      "assumptions_and_inputs": [
+        "Only the official conference abstract and proceedings DOI were available for this bounded refresh.",
+        "No primary full paper, artifact, model, prompt, benchmark, stochastic configuration, or cost record was inspected.",
+        "The abstract does not reveal enough to determine whether ELSA models circuit constraints, consumer semantics, or their exact relation."
+      ],
+      "full_text_status": "Not primary-sourced or inspected. The official abstract was inspected; DOI resolution/full text was inaccessible in the bounded audit.",
+      "artifact_status": "No primary artifact was located or inspected. No model baseline was selected or invented.",
+      "unresolved_gap": "Exact overlap with proof-to-execution relationship defects cannot be determined from the abstract. Both overlap and non-overlap remain unresolved.",
+      "prohibited_inference": "Do not state that ELSA is contract-only, lacks circuit semantics, misses the target, proves BindCheck novel, or proves BindCheck non-novel from the abstract alone.",
+      "minimal_distinguishing_experiment": {
+        "question": "Can a reproducible neuro-symbolic ensemble identify and localize the same producer-consumer relationship defects under a fixed information and cost budget?",
+        "design": "Only after obtaining the primary full paper and artifact, freeze models, prompts, benchmark inputs, stochastic settings, token/model cost, and repetition policy. Give ELSA and BindCheck the same exposed source bundle, including byte-identical producers with paired consumer role/domain/state mutations. Score relationship localization, irrelevant warnings, manual information, and E1-to-E4 validation identically.",
+        "distinguishing_outcome": "A relationship-specific diagnosis attributable to both producer constraints and consumer semantics under equal inputs. If inputs or labels differ, the result is not a capability comparison."
+      },
+      "primary_sources": [
+        {
+          "kind": "official-conference-page-and-abstract",
+          "url": "https://conf.researchr.org/details/issta-2026/issta-2026-research-papers/131/Augmenting-Multi-Technique-Static-Analysis-with-Large-Language-Models-A-Neuro-Symbol",
+          "accessed": "2026-11-02"
+        },
+        {
+          "kind": "proceedings-doi",
+          "url": "https://doi.org/10.1145/3832222",
+          "accessed": "2026-11-02",
+          "access_note": "Identifier recorded; resolver/full text was not accessible during the bounded audit."
+        }
+      ]
+    }
+  ]
+}

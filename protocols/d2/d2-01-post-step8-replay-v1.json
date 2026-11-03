@@ -1,0 +1,78 @@
+{
+  "schema": "bindcheck.d2.d2-01-post-step8-historical-replay/v1",
+  "status": "HISTORICAL_REPLAY_OVERLAY_ONLY",
+  "purpose": "Recheck the immutable D2-01 content seal after the authorized D2-08 role-binding quarantine changed one live source file, without changing the workspace or any historical evidence.",
+  "source_seal": {
+    "path": "protocols/d2/d2-01-seal-v1.json",
+    "sha256": "9f47676dd85a81ce0088c742a154f3919d9d94af78c1c8979bdd0386f56ddc06",
+    "schema": "bindcheck.d2.content-seal/v1",
+    "member_count": 8134
+  },
+  "live_checkout_expectation": {
+    "status": "EXPECTED_FAIL",
+    "mismatch_count": 1,
+    "path": "src/bindcheck_d1/role_binding.py",
+    "reason": "CONTENT_MISMATCH",
+    "sealed_sha256": "a516f0e339f6fec23fcd96efb52821e9933feb6837e740c99a6d5dbee7bd9028",
+    "sealed_size_bytes": 41698,
+    "current_sha256": "5bb3012b7d192e75e266cc3f5265e024046e8614c0cb63891c7acd5271eeaa71",
+    "current_size_bytes": 43263
+  },
+  "historical_overlay": {
+    "path": "src/bindcheck_d1/role_binding.py",
+    "base_commit": "544656abbfb535dcbe0f1157087240464f38cb0b",
+    "git_object_spec": "544656abbfb535dcbe0f1157087240464f38cb0b:src/bindcheck_d1/role_binding.py",
+    "expected_sha256": "a516f0e339f6fec23fcd96efb52821e9933feb6837e740c99a6d5dbee7bd9028",
+    "expected_size_bytes": 41698,
+    "substitution_mode": "IN_MEMORY_BYTES_ONLY",
+    "allowed_substitution_count": 1,
+    "workspace_writes_allowed": false,
+    "expected_replay_status": "PASS",
+    "expected_replay_mismatch_count": 0
+  },
+  "step8_provenance": {
+    "reason": "D2-08 quarantined historical identifier-derived role logic as ANNOTATION_ONLY_QUARANTINED. The public role-binding path now fails closed without compiler-backed identity and the separate Step 9 authorization boundary. Historical D2-01 warnings are preserved and are not rescored.",
+    "artifacts": [
+      {
+        "path": "reports/D2-08.md",
+        "sha256": "aaca4aa036a0604febd6869604e8dfcfc3709a72a15c8fa588717309316fd2cd"
+      },
+      {
+        "path": "protocols/d2/d2-08-compiler-identity-v1.json",
+        "sha256": "b529f9c12ca695cf4737a0f01f10f9f357216fea0f7505a42fc381614c6b04ba"
+      },
+      {
+        "path": "results/raw/D2-08/content-seal-v1.json",
+        "sha256": "d2195d93fc6e51458a994ecc63838935fb36bad275379ef15e43ca2f9c112343"
+      }
+    ],
+    "sealed_current_role_binding": {
+      "path": "src/bindcheck_d1/role_binding.py",
+      "sha256": "5bb3012b7d192e75e266cc3f5265e024046e8614c0cb63891c7acd5271eeaa71",
+      "size_bytes": 43263
+    }
+  },
+  "d2_00_retention_gap": {
+    "report_path": "reports/D2-00.md",
+    "report_sha256": "171e628a5b677a6ee85ad980c62b1634693f716bf98d164f113ecdd94851b3e9",
+    "historical_path": "docs/d2/status-and-ownership.md",
+    "pre_report_sha256": "afc86272b099d2bca73c785af3cee210b33f323d600cf0e5d96bbf2eb1ca47a0",
+    "base_commit_lookup": "ABSENT",
+    "current_observation_sha256_at_protocol_creation": "90382119f833b98cc123905654e5dc87812a22c4491906f98309f2017386ac41",
+    "disposition": "UNAVAILABLE_RETENTION_GAP_NOT_RECONSTRUCTED",
+    "included_in_overlay": false
+  },
+  "result_semantics": {
+    "historical_reproducibility": "A PASS shows that the D2-01 seal still verifies when the one exact sealed byte sequence is sourced from the immutable base commit entirely in memory.",
+    "current_checkout_equivalence": false,
+    "current_behavior_claim": false,
+    "rescoring_or_relabeling": false,
+    "research_verdict": "UNKNOWN"
+  },
+  "prohibitions": [
+    "Do not modify the D2-01 seal, raw evidence, report, foundation verifier, or current role-binding implementation.",
+    "Do not write the historical blob into the workspace or a temporary checkout.",
+    "Do not use the unavailable D2-00 pre-report status-document byte as an overlay.",
+    "Do not interpret historical replay PASS as current-checkout equivalence, safety, capability, or a new scientific result."
+  ]
+}

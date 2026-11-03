@@ -1,0 +1,368 @@
+{
+  "schema": "bindcheck.d2.step10-protocol/v1",
+  "protocol_status": "FROZEN_BEFORE_RUN",
+  "fixture_label": "UNREVIEWED_DEVELOPMENT_FIXTURE",
+  "research_verdict": "UNKNOWN",
+  "score_enabled": false,
+  "reserved_data_allowed": false,
+  "network_allowed": false,
+  "authority": {
+    "gate_result": "INCONCLUSIVE",
+    "authorized_scope": "BOUNDED_PROTOTYPE",
+    "step7_report_sha256": "fcdff01dbadade6f7f28116e46ee2c6016fb2945767492c822acaef87a60f07a",
+    "step7_recovery_seal_sha256": "b9f0f1eb6b9aa1bb3ea8aaf1fba3c3939b3d70a787a57be92f3c4154fad50558",
+    "step8_module_sha256": "7ef3e330d7e3b4ee93a00340c3aeb2ff43d6860ebd11b6620e0f6ba2a85314a2",
+    "step8_seal_sha256": "d2195d93fc6e51458a994ecc63838935fb36bad275379ef15e43ca2f9c112343",
+    "step9_module_sha256": "5c275ebb77f9373cc13dbee81c2fa3809ea04f02e7e2af70fa278e88b2fc31ec",
+    "step9_seal_sha256": "c678085afa6a73d0f8115d10055fb753bd024a174a38618cb0e5e6943661e8bd"
+  },
+  "budget": {
+    "shared_steps_8_to_10_researcher_days_cap": 2,
+    "shared_steps_8_to_10_machine_hours_cap": 8,
+    "step10_external_compiler_or_prover_calls_cap": 0,
+    "step10_runner_wall_seconds_cap": 600,
+    "memory_cap": "NOT_ENFORCED_NO_RESOURCE_CLAIM"
+  },
+  "input_files": [
+    {
+      "path": "reports/D2-07.md",
+      "role": "gate_authority",
+      "sha256": "fcdff01dbadade6f7f28116e46ee2c6016fb2945767492c822acaef87a60f07a",
+      "size_bytes": 10847
+    },
+    {
+      "path": "results/raw/D2-07-recovery-01/content-seal-v1.json",
+      "role": "gate_authoritative_seal",
+      "sha256": "b9f0f1eb6b9aa1bb3ea8aaf1fba3c3939b3d70a787a57be92f3c4154fad50558",
+      "size_bytes": 136541
+    },
+    {
+      "path": "protocols/d2/d2-08-compiler-identity-v1.json",
+      "role": "step8_protocol",
+      "sha256": "b529f9c12ca695cf4737a0f01f10f9f357216fea0f7505a42fc381614c6b04ba",
+      "size_bytes": 12738
+    },
+    {
+      "path": "reports/D2-08.md",
+      "role": "step8_report",
+      "sha256": "aaca4aa036a0604febd6869604e8dfcfc3709a72a15c8fa588717309316fd2cd",
+      "size_bytes": 7388
+    },
+    {
+      "path": "results/raw/D2-08/content-seal-v1.json",
+      "role": "step8_seal",
+      "sha256": "d2195d93fc6e51458a994ecc63838935fb36bad275379ef15e43ca2f9c112343",
+      "size_bytes": 20641
+    },
+    {
+      "path": "src/bindcheck_d1/roles/compiler_identity_v1.py",
+      "role": "step8_public_interface",
+      "sha256": "7ef3e330d7e3b4ee93a00340c3aeb2ff43d6860ebd11b6620e0f6ba2a85314a2",
+      "size_bytes": 35082
+    },
+    {
+      "path": "protocols/d2/d2-09-authorization-boundary-v1.json",
+      "role": "step9_protocol",
+      "sha256": "2a833bc150a21bfc82dc9847fe36c0f6e92e85a592cac771836bb9b0a717b04a",
+      "size_bytes": 12432
+    },
+    {
+      "path": "reports/D2-09.md",
+      "role": "step9_report",
+      "sha256": "f7254e4ccb510a8ccfea9954cfd341c81620084147159a81dfa52c3f6595cf03",
+      "size_bytes": 12481
+    },
+    {
+      "path": "results/raw/D2-09/content-seal-v1.json",
+      "role": "step9_seal",
+      "sha256": "c678085afa6a73d0f8115d10055fb753bd024a174a38618cb0e5e6943661e8bd",
+      "size_bytes": 8752
+    },
+    {
+      "path": "src/bindcheck_d1/core/authorization_boundary_v1.py",
+      "role": "step9_public_interface",
+      "sha256": "5c275ebb77f9373cc13dbee81c2fa3809ea04f02e7e2af70fa278e88b2fc31ec",
+      "size_bytes": 45497
+    },
+    {
+      "path": "reports/D1P-40-correctness-audit.md",
+      "role": "five_defect_source",
+      "sha256": "ba8daf973771300cc72c5b64d85685399bd86b3cccd76f6c9072021ad3d52b0f",
+      "size_bytes": 15012
+    },
+    {
+      "path": "src/bindcheck_d1/static_analyzer_v1.py",
+      "role": "audited_fact_producer",
+      "sha256": "005f45dd5a8f4a1c4850afdd095f441d8c1aaf557563a0db7aefe7bc7af054ca",
+      "size_bytes": 46513
+    },
+    {
+      "path": "src/bindcheck_d1/frontends/solidity_ast_v1_1.py",
+      "role": "audited_consumer_fact_producer",
+      "sha256": "77d7d52404d5c952fc1e2d67b72dc94af95142f03ecaf6811edc3756f2d2140c",
+      "size_bytes": 38221
+    },
+    {
+      "path": "src/bindcheck_d1/integrated_analyzer_v1.py",
+      "role": "audited_fact_composer",
+      "sha256": "c61c2f3aa41806e6404cd7bd4ae81552c80338a7e7d1bb2c3a4cfce1b386da77",
+      "size_bytes": 14087
+    },
+    {
+      "path": "src/bindcheck_d1/role_binding.py",
+      "role": "audited_role_annotation_producer",
+      "sha256": "5bb3012b7d192e75e266cc3f5265e024046e8614c0cb63891c7acd5271eeaa71",
+      "size_bytes": 43263
+    },
+    {
+      "path": "src/bindcheck_d1/composition_baselines_v1.py",
+      "role": "audited_fact_consumer",
+      "sha256": "5f9ad35a7f501c93ba9117b0a7e15446686789eb662cfd7d3a56f4b0a8046e07",
+      "size_bytes": 39922
+    },
+    {
+      "path": "src/bindcheck_d1/typed_extraction_v1.py",
+      "role": "step10_adapter",
+      "sha256": "29860785ca5ef8a94c912aa052963edb03712de8beb6e95186e1e393b2db8290",
+      "size_bytes": 29118
+    },
+    {
+      "path": "scripts/d2_step10_typed_extraction.py",
+      "role": "step10_runner",
+      "sha256": "23bb1a40943d2ffa8609e8cb8ba49c43e57283de26f5d00fa7ecbea78792ee93",
+      "size_bytes": 19389
+    },
+    {
+      "path": "tests/test_d2_step10_typed_extraction.py",
+      "role": "step10_regressions",
+      "sha256": "a5759d60b79ee1272a4f1abc3678d3d64bbf42694f7957688692299f714e4bc9",
+      "size_bytes": 19461
+    }
+  ],
+  "fact_type_inventory": [
+    {
+      "id": "FT-01-COMPILER-IDENTITY",
+      "source": "compiler_identity_v1.IdentityRecord",
+      "fields": ["object", "context", "semantic_hash", "canonical_bytes_sha256"],
+      "consumed_by": ["typed_extraction_v1", "authorization_boundary_v1"],
+      "declared_type": "mapping",
+      "quantifier": "N/A",
+      "approximation": "EXACT_BYTES",
+      "derivation_class": "DERIVED_OR_ANNOTATED_AS_RECORDED",
+      "provenance": "separate CompilerProvenance hash; names and lines display-only",
+      "step10_rule": "exact three-field opaque reference; object and context are inseparable"
+    },
+    {
+      "id": "FT-02-COMPILER-PROVENANCE",
+      "source": "compiler_identity_v1.CompilerProvenance",
+      "fields": ["artifact_sha256", "compiler_id", "compiler_version", "artifact_schema", "node_id", "abi_index", "source_sha256"],
+      "consumed_by": ["typed_extraction_v1"],
+      "declared_type": "provenance",
+      "quantifier": "N/A",
+      "approximation": "EXACT_RECORD_OR_UNKNOWN",
+      "derivation_class": "DERIVED",
+      "provenance": "hash-bound compiler/artifact/node-or-ABI record",
+      "step10_rule": "a supported ABI index may anchor a value identity; collisions fail"
+    },
+    {
+      "id": "FT-03-PRODUCER-OCCURRENCE",
+      "source": "static_analysis.producer.public_leaves",
+      "fields": ["occurrence_count", "occurrence_locations", "binding_status", "binding_condition"],
+      "consumed_by": ["static_analyzer_v1", "composition_baselines_v1", "typed_extraction_v1"],
+      "declared_type": "may-dependency",
+      "quantifier": "MAY",
+      "approximation": "OVER_APPROXIMATION",
+      "derivation_class": "DERIVED",
+      "provenance": "artifact hash, witness, opcode location through observation ledger",
+      "step10_rule": "never promoted from syntactic occurrence to producer_guarantee"
+    },
+    {
+      "id": "FT-04-PRODUCER-AUTH-CANDIDATE",
+      "source": "static producer fact plus caller-supplied authorization identity ref",
+      "fields": ["public_index", "binding_condition", "authorization_identity_by_index"],
+      "consumed_by": ["authorization_boundary_v1"],
+      "declared_type": "annotation",
+      "quantifier": "MAY",
+      "approximation": "OVER_APPROXIMATION",
+      "derivation_class": "ANNOTATED",
+      "provenance": "producer/value identity provenance plus declared external annotation ref",
+      "step10_rule": "producer_binding_candidate cannot discharge MUST; producer_guarantee count is zero"
+    },
+    {
+      "id": "FT-05-WITNESS-GENERATION",
+      "source": "static_analysis.producer.public_leaves",
+      "fields": ["witness_generation_occurrence_count", "witness_generation_occurrence_locations"],
+      "consumed_by": ["static_analyzer_v1", "typed_extraction observation ledger"],
+      "declared_type": "annotation",
+      "quantifier": "MAY",
+      "approximation": "UNKNOWN_FOR_PROOF_ENFORCEMENT",
+      "derivation_class": "DERIVED",
+      "provenance": "Brillig generation locations",
+      "step10_rule": "never treated as proof-enforced binding"
+    },
+    {
+      "id": "FT-06-MEMORY-DEFINITION",
+      "source": "static_analysis.producer.public_leaves",
+      "fields": ["memory_definition_occurrence_count", "memory_definition_occurrence_locations", "memory_dependency_status"],
+      "consumed_by": ["static_analyzer_v1", "typed_extraction_v1"],
+      "declared_type": "may-dependency",
+      "quantifier": "MAY",
+      "approximation": "EXACT_CONSTANT_READ_OR_OVER_APPROXIMATION",
+      "derivation_class": "DERIVED_OR_UNKNOWN",
+      "provenance": "MemoryInit/MemoryOp block and occurrence evidence",
+      "step10_rule": "dynamic aliasing remains UNKNOWN and never unused/safe"
+    },
+    {
+      "id": "FT-07-CONSUMER-MAPPING",
+      "source": "static_analysis.consumer.public_words",
+      "fields": ["index", "origin", "source_class", "mapping_certificate"],
+      "consumed_by": ["static_analyzer_v1", "role_binding", "composition_baselines_v1", "typed_extraction_v1"],
+      "declared_type": "mapping",
+      "quantifier": "N/A",
+      "approximation": "EXACT_WHEN_FULL_WIDTH_OR_CERTIFIED_OTHERWISE_UNKNOWN",
+      "derivation_class": "DERIVED",
+      "provenance": "consumer source/AST hash and exact opaque identity mapping",
+      "step10_rule": "ambiguous prefix/suffix/interleaving is unsupported"
+    },
+    {
+      "id": "FT-08-CONSUMER-RELIANCE",
+      "source": "static_analysis.consumer.public_words",
+      "fields": ["consumer_used", "guard_used", "effect_used", "reliance_status", "reliance_condition"],
+      "consumed_by": ["static_analyzer_v1", "composition_baselines_v1", "authorization_boundary_v1"],
+      "declared_type": "may-reachability",
+      "quantifier": "MAY",
+      "approximation": "EXACT_OR_OVER_APPROXIMATION",
+      "derivation_class": "DERIVED",
+      "provenance": "consumer AST node/origin and effect index in observation ledger",
+      "step10_rule": "may coverage need not execute on every trace; disjunctive unjoined paths are UNKNOWN"
+    },
+    {
+      "id": "FT-09-EXTENT-COVERAGE",
+      "source": "static_analysis.extent_facts.coverage",
+      "fields": ["public_index", "status", "covered", "producer_condition", "consumer_condition", "uncovered_region"],
+      "consumed_by": ["static_analyzer_v1", "composition_baselines_v1", "typed_extraction_v1"],
+      "declared_type": "conditional-guarantee",
+      "quantifier": "MUST_WITHIN_SUPPORTED_ANTECEDENT",
+      "approximation": "EXACT_OR_UNKNOWN",
+      "derivation_class": "DERIVED",
+      "provenance": "producer and consumer condition observations",
+      "step10_rule": "prefix variables require compiler-backed identities; unsupported antecedents remain UNKNOWN"
+    },
+    {
+      "id": "FT-10-ANCHOR-POLARITY",
+      "source": "static_analysis.consumer.anchor_words",
+      "fields": ["public_index", "must_be_in", "evidence"],
+      "consumed_by": ["static_analyzer_v1", "integrated_analyzer_v1"],
+      "declared_type": "conditional-guarantee",
+      "quantifier": "MUST_ON_SUPPORTED_SUCCESS_PATHS",
+      "approximation": "BOUNDED_STRUCTURAL_OR_UNKNOWN",
+      "derivation_class": "DERIVED",
+      "provenance": "storage declaration/key and positive-guard AST locations",
+      "step10_rule": "candidate exists before a positive guard; missing guard is not suppressed"
+    },
+    {
+      "id": "FT-11-REPLAY-POLARITY",
+      "source": "static_analysis.consumer.replay",
+      "fields": ["applicable", "must_not_be_in", "written", "evidence"],
+      "consumed_by": ["static_analyzer_v1", "integrated_analyzer_v1"],
+      "declared_type": "conditional-guarantee",
+      "quantifier": "MUST_ON_SUPPORTED_SUCCESS_PATHS",
+      "approximation": "BOUNDED_STRUCTURAL_OR_UNKNOWN",
+      "derivation_class": "DERIVED",
+      "provenance": "guard/write AST locations",
+      "step10_rule": "alternative authorization and unsupported paths are not inferred"
+    },
+    {
+      "id": "FT-12-EFFECT-DEPENDENCY",
+      "source": "static_analysis.consumer.effects and effect_word_indices",
+      "fields": ["kind", "location", "effect_word_indices"],
+      "consumed_by": ["static_analyzer_v1", "integrated_analyzer_v1", "typed_extraction_v1"],
+      "declared_type": "may-reachability",
+      "quantifier": "MAY",
+      "approximation": "CONSERVATIVE_SUPPORTED_MODEL",
+      "derivation_class": "DERIVED",
+      "provenance": "method identity, signature, AST call/write and operand",
+      "step10_rule": "signature alone is insufficient; unsupported external behavior remains UNKNOWN"
+    },
+    {
+      "id": "FT-13-ROLE-CORRESPONDENCE",
+      "source": "role_binding.words",
+      "fields": ["producer", "consumer", "boundary_correspondence", "confidence"],
+      "consumed_by": ["integrated_analyzer_v1", "composition_baselines_v1", "typed_extraction_v1"],
+      "declared_type": "annotation",
+      "quantifier": "MAY",
+      "approximation": "UNKNOWN",
+      "derivation_class": "ANNOTATED",
+      "provenance": "separate display/role evidence",
+      "step10_rule": "identifier-derived roles never become authorization identity or MUST facts"
+    },
+    {
+      "id": "FT-14-IDENTITY-MAPPING-CERTIFICATE",
+      "source": "compiler_identity_v1.MappingCertificate",
+      "fields": ["from_identity_ref", "to_identity_ref", "from_abi_index", "to_abi_index", "properties"],
+      "consumed_by": ["typed_extraction_v1", "authorization_boundary_v1"],
+      "declared_type": "mapping",
+      "quantifier": "N/A",
+      "approximation": "EXACT_CERTIFICATE",
+      "derivation_class": "DERIVED_OR_ANNOTATED_AS_RECORDED",
+      "provenance": "hash-bound external mapping evidence",
+      "step10_rule": "total, injective, surjective, semantic-identity preserving required; Step9 remains UNKNOWN until mapping is bound"
+    },
+    {
+      "id": "FT-15-MANUAL-POLICY-AND-ASSUMPTION",
+      "source": "analysis.manual_inputs, IdentityFact assumption_refs, PolicyRecord",
+      "fields": ["kind", "path", "assumption_refs", "review_status", "source_sha256"],
+      "consumed_by": ["integrated_analyzer_v1", "authorization_boundary_v1"],
+      "declared_type": "assumption",
+      "quantifier": "N/A",
+      "approximation": "AS_DECLARED",
+      "derivation_class": "ASSUMED",
+      "provenance": "external registry and human policy source/reviewer records",
+      "step10_rule": "unreviewed fixture, absent reviewer, or unresolved ref fails closed"
+    },
+    {
+      "id": "FT-16-WARNING-AND-CANDIDATE",
+      "source": "static_analysis.warnings and integrated/composition outcomes",
+      "fields": ["rule", "message", "evidence", "reason_codes", "outcome"],
+      "consumed_by": ["integrated_analyzer_v1", "composition_baselines_v1"],
+      "declared_type": "diagnostic-not-implementation-fact",
+      "quantifier": "N/A",
+      "approximation": "N/A",
+      "derivation_class": "DERIVED_DIAGNOSTIC",
+      "provenance": "parent facts and analyzer version",
+      "step10_rule": "a warning is E1 at most and never a policy or safety fact"
+    }
+  ],
+  "required_controls": [
+    "five D1P-40 permanent regressions",
+    "Payy corrected unsupported dispositions",
+    "dynamic memory alias fail-closed",
+    "compiler-backed versus surface-only prefix condition",
+    "inactive padding non-vacuity",
+    "unjoined multiple verifier paths",
+    "semantic mapping retained but not silently discharged",
+    "field/integer encoding mismatch rejection",
+    "same display name/different object and same object/different context",
+    "swapped protected-effect identity"
+  ],
+  "known_unsupported": [
+    "No current static occurrence is promoted to a relational producer_guarantee.",
+    "Dynamic memory addresses without an address/path proof remain UNKNOWN.",
+    "Disjunctive reliance conditions are not normalized and remain UNKNOWN.",
+    "Mappings carried by facts are not discharged by Step9 until explicitly bound to both bundles.",
+    "Aggregation, splitting, deferral, unbounded paths, and unsupported external calls remain outside the bounded prototype.",
+    "External authorization identity links are annotations, not automatically recovered implementation facts.",
+    "The evidence is synthetic/compiler-free construction plus regressions, not a scored or primary case result."
+  ],
+  "completion_criteria": {
+    "focused_tests_pass": true,
+    "d1p40_rows_pass": 5,
+    "semantic_controls_pass": 7,
+    "adversarial_controls_pass": 3,
+    "identity_chain_exact_fixture": "PASS",
+    "equal_input_semantic_parity": true,
+    "effective_result": "UNKNOWN_UNREVIEWED_DEVELOPMENT_FIXTURE",
+    "raw_namespace": "results/raw/D2-10/run-01",
+    "overwrite_allowed": false
+  }
+}

@@ -4,11 +4,17 @@ BindCheck investigates whether the guarantees of an accepted zero-knowledge proo
 
 The current integration checkout is the linked worktree
 `/Users/imranpollob/Coding/bc/bindcheck-d1-paper` on `d1-paper`, currently at
-integrated revision `55d7da7d2ec8e1f7779d02eda104351f66d57257` plus the
-uncommitted D1P-42 conditional-extent implementation and audit. This state includes
-the integrated D1P-33/D1P-36 transfer scans, D1P-34 application-neutral v1.1
-freeze, D1P-35 v1.2 format/location change, D1P-31 evaluation/contract revision,
-D1P-30 tool, mutation benchmark,
+base revision `544656abbfb535dcbe0f1157087240464f38cb0b` plus the uncommitted
+D2 Steps 0–20 development, documentary, and artifact records. The current
+bounded state is identified by the authoritative reports and seals summarized
+below, not by the base commit alone. After Step 8, the live D2-01 replay has
+exactly one expected mismatch among 8,134 members; an in-memory overlay of the
+historical byte passes 8,134/8,134 and is not current-checkout equivalence.
+This state includes
+the corrected D1P-42 extent work, D1P-43 typed role work, integrated
+D1P-33/D1P-36 transfer scans, D1P-34 application-neutral v1.1 freeze, D1P-35
+v1.2 format/location change, D1P-31 evaluation/contract revision, D1P-30 tool,
+mutation benchmark,
 D1P-22 baselines, D1P-21A/B, D1P-20, D1P-19, D1P-17, and the merged Lane C
 taxonomy/extraction work. The linked
 worktree was originally established from `chatgpt-codex` revision
@@ -35,10 +41,89 @@ For a shareable introduction to the project and completed work, use the [researc
 
 The [research guide](BindCheck_Research_Guide.md) and [16 October progress update](2026-10-16-research-update.md) are historical planning and progress records. They remain useful context, but their evidence status and schedules may have been superseded.
 
-The principal directories are `circuits/` and `contracts/` for the small fixture, `bindcheck/` for the checker and specification, `payy-harness/` and `payy-consumer/` for the Payy experiment, `scripts/` for task runners, and `reports/` for evidence reviews. Generated proof data and raw logs are under the ignored `results/raw/` tree and must be regenerated on a fresh checkout.
+The principal directories are `circuits/` and `contracts/` for the small fixture, `bindcheck/` for the checker and specification, `payy-harness/` and `payy-consumer/` for the Payy experiment, `scripts/` for task runners, and `reports/` for evidence reviews. Generated proof data and raw logs are normally under the ignored `results/raw/` tree and are absent from a fresh checkout unless separately retained. Preserve and verify existing sealed namespaces; never overwrite them or describe missing bytes as regenerated evidence. Only a task-documented command may create a new, separately named namespace.
 
 ## Current status
 
+- [D2-20](reports/D2-20-review.md) completes a documentary evidence audit with
+  status `EVIDENCE_AUDIT_COMPLETE_NO_NEW_EXPERIMENT`. Three PDF-only reviews
+  reduce to 12 concerns: one future
+  writing improvement, four existing-data analyses, five new experiments, and
+  two enduring limitations. All 12 record zero factual contradiction to the
+  qualified Step 18 status manuscript, so no manuscript correction, scored
+  row, evidence grade, gate result, or verdict changed. Research remains
+  **UNKNOWN**.
+- [D2-19](reports/D2-19-artifact.md) supplies a
+  **PARTIAL_DEVELOPMENT_ARTIFACT / FINAL_ARTIFACT_BLOCKED** package. A
+  [fresh same-host evaluator](reports/D2-19-fresh-reproduction.md) reproduced
+  all four requested profiles with zero unexpected mismatch. This is an
+  engineering reproduction in a fresh AI session on the same checkout, not a
+  sidecar, clean-container, fresh-machine, anonymous, or independent-human
+  replication. No reviewed sidecar was supplied, and portable D2-01/D2-06
+  container execution remains blocked.
+- [D2-18](reports/D2-18-paper.md) completes the
+  [evidence-led status manuscript](paper/d2-status-draft.md), claim map,
+  versioned claim ledger, related-work matrix, source record, and IEEE S&P 2027
+  readiness checklist. It centers `UNKNOWN`, Gate A `INCONCLUSIVE`, and the
+  absence of scored, transfer, and human-review evidence. It is explicitly
+  **NOT_SUBMISSION_READY**.
+- The [Steps 11–14 dependency audit](reports/D2-11-14-dependency-audit.md) and
+  [Steps 15–17 readiness audit](reports/D2-15-17-readiness-audit.md) are
+  read-only dispositions: the scientific steps were **not executed**, Gate B
+  is **NOT_EVALUATED**, and Gate C is **NOT_REACHED**. They add no score,
+  reserved result, human judgment, or frozen release.
+- [D2-07](reports/D2-07.md) completes Gate A only through the authoritative
+  recovery packet: Gate A is **INCONCLUSIVE**, the objective subset and score
+  table are empty, and zero analyzer or baseline arm was scored. The separately
+  authorized [D2-08](reports/D2-08.md), [D2-09](reports/D2-09.md), and corrected
+  [D2-10](reports/D2-10.md) work is bounded mechanical development evidence
+  labeled `UNREVIEWED_DEVELOPMENT_FIXTURE`. Corrected D2-10 run-02 contains
+  zero producer guarantees and zero eligible derived consumer-use facts. These
+  steps remain unscored and **UNKNOWN**.
+- [D2-05](reports/D2-05.md) is a completed
+  `DRAFT_UNSEALED_DO_NOT_SCORE` protocol, while [D2-06A](reports/D2-06A.md) and
+  [D2-06B](reports/D2-06B.md) complete construction and smoke testing only.
+  Their baseline, transformation, comparator, and same-policy records are not
+  comparative scores or security results.
+- [D2-00](reports/D2-00.md) completes only the coordination and integrity
+  foundation. Its manifest and seal controls are infrastructure evidence, not
+  analyzer correctness or capability evidence.
+- [D2-04](reports/D2-04.md) freezes taxonomy codebook v0.3.0 after auditing
+  the exposed Lane-X seed pilot. It supplies blank primary-evidence packets,
+  blank rating forms, a fresh-family sampling and independent-human annotation
+  procedure, and a known-answer-tested multilabel agreement implementation.
+  It creates no labels or agreement result: the prior author/AI comparison is
+  development history, not inter-rater validation, and the taxonomy claim
+  remains **UNKNOWN** pending a human-owned corpus freeze and fresh annotation.
+- [D2-03](reports/D2-03.md) versions 22 current, stale, overstated, and
+  unresolved claims; keeps D1P-41 and D1P-43 denominators separate; and
+  refreshes primary-source positioning for ZKAP, CIVER, CCC-Check, SmartAxe,
+  and the still-unresolved ELSA overlap. It narrows current `R-ROLE` evidence
+  to E1 effect-role correspondence rather than policy authorization and defines
+  equal-information distinguishing experiments. No novelty or capability claim
+  is established.
+- [D2-02](reports/D2-02.md) inventories the complete allowlisted exposed
+  development population: three pinned revisions in two repositories and two
+  architectural lineages, all analyzable as exact pairs. It keeps 30 authored
+  variants and historical transfer attempts out of that denominator. Thirteen
+  variants fail closed at the named consumer-AST gate; the 12 historical
+  attempts cover eight unique projects but have no adjudicated family count.
+  These bounded counts are not ecosystem prevalence or supported transfer.
+- [D2-01](reports/D2-01.md) freezes and runs one integrated development
+  interface over the corrected static/extent and typed-role analyses without
+  adding a rule. On 30 exposed mutants it records **17 detected / 13
+  unsupported / 0 misses / 26 warning objects**, with all six added detections
+  restricted to predeclared `R-ROLE` associations. The corrected successor
+  ablation is producer 3/7, consumer 2/7, union 5/7, and full 7/7, plus one
+  `UNKNOWN` positive and one matching clean control; all eight role-target
+  outcomes match. The 49-row table keeps those datasets and the exact Payy
+  pair separate. Payy earlier emits `R-EXTENT` plus `R-CONSUMER`; check-added
+  emits no `R-EXTENT` but retains a separate `R-CONSUMER` warning. The first
+  sealed attempt is preserved `PARTIAL/UNKNOWN` after a sandbox cache-lock
+  denial; the separately named recovery run uses the identical 8,134-file
+  seal, passes all eight completion checks in 82.167 seconds, and remains
+  **E1 / UNKNOWN**. This is exposed development evidence, not held-out
+  transfer, capability, prevalence, security, or a D1 verdict.
 - [D1P-42](reports/D1P-42.md) supplies an exact, replay-checked Payy recursive
   public-input certificate (1,005 inner words, two verified configuration
   constants, and 1,003 consumer words), per-word producer binding and consumer
@@ -486,13 +571,14 @@ D1-00 ran preservation and documentation checks only. D1-01 validated the saved 
 
 1. `docs/research-contract.md` — current research decisions.
 2. This README — current task status.
-3. `reports/Txx.md` and `reports/D1-xx.md` — tracked evidence summaries.
-4. `results/raw/Txx/` and `results/raw/D1-xx/` — ignored, regenerable raw logs.
-5. The research guide and dated updates — historical context.
+3. `reports/Txx.md`, `reports/D1-xx.md`, and `reports/D2-*.md` — tracked evidence summaries.
+4. `results/raw/Txx/`, `results/raw/D1-*`, and `results/raw/D2-*` — ignored task evidence, retained or freshly generated only as each controlling report permits; it is not assumed reconstructible.
+5. `artifact/` — the partial D2 development artifact, expected results, bindings, and fail-closed reproducer; it is not a final paper artifact.
+6. The research guide and dated updates — historical context.
 
 ## Repository layout
 
-The principal directories are `circuits/` and `contracts/` for the small fixture, `bindcheck/` for the checker and specification, `payy-harness/` and `payy-consumer/` for the Payy experiment, `scripts/` for task runners, `reports/` for tracked evidence summaries, and `docs/` for current and historical-facing documentation. Generated proof data, downloaded dependencies, compiler output, and raw logs are ignored and must be regenerated on a fresh checkout.
+The principal directories are `circuits/` and `contracts/` for the small fixture, `bindcheck/` for the checker and specification, `payy-harness/` and `payy-consumer/` for the Payy experiment, `scripts/` for task runners, `reports/` for tracked evidence summaries, `docs/` for current and historical-facing documentation, and `artifact/` for the partial D2 development reproducer. Generated proof data, downloaded dependencies, compiler output, and raw logs are ignored and are not necessarily reconstructible. Preserve retained sealed evidence and write authorized reruns only to fresh task-specific namespaces.
 
 ## Checking this checkout
 
@@ -510,6 +596,41 @@ python3 -m venv .venv
 .venv/bin/python -m pip install -r requirements-d1.txt
 PYTHONPATH=src .venv/bin/python -m unittest discover -s tests/d1 -v
 ```
+
+The current D2 development record has a non-destructive historical replay,
+three foundation-schema seal checks, a corrected Step 10 validation route, and
+four partial-artifact profiles:
+
+```sh
+PYTHONDONTWRITEBYTECODE=1 python3 scripts/d2_d201_post_step8_replay.py
+python3 scripts/d2_foundation.py verify \
+  results/raw/D2-07-recovery-01/content-seal-v1.json
+python3 scripts/d2_foundation.py verify \
+  results/raw/D2-08/content-seal-v1.json
+python3 scripts/d2_foundation.py verify \
+  results/raw/D2-09/content-seal-v1.json
+PYTHONPATH=src python3 scripts/d2_step10_typed_extraction.py \
+  --protocol protocols/d2/d2-10-typed-extraction-v2.json --validate-only
+
+python3 artifact/reproduce.py metadata
+python3 artifact/reproduce.py verify-retained --source current-workspace
+python3 artifact/reproduce.py recompute --source current-workspace
+python3 artifact/reproduce.py rerun-mechanical \
+  --source current-workspace --run-id <fresh-unused-id>
+
+PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src \
+  .venv-d1p-00/bin/python -m unittest discover -s tests -v
+```
+
+The D2-01 wrapper must report a live `EXPECTED_FAIL` with exactly one mismatch
+at `src/bindcheck_d1/role_binding.py`, followed by an in-memory historical
+overlay `PASS` for 8,134/8,134 members; that pass is not current-checkout
+equivalence. The D2-07, D2-08, and D2-09 seal checks pass 623/623, 92/92, and
+40/40 respectively. Corrected D2-10 v2 validation passes its 17 bound inputs.
+The recorded same-host Step 19 evaluator reports four of four profiles `PASS`,
+while the sidecar and generic-container routes remain blocked. The current
+repository suite passes 151/151 tests. A fresh mechanical artifact run requires
+an unused run ID and creates output only below ignored `artifact/work/`.
 
 The legacy checker tests use `node --test bindcheck/test/checker.test.js`,
 installed dependencies from `package-lock.json`, and the seven preserved T06

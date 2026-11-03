@@ -1,0 +1,219 @@
+{
+  "schema": "bindcheck.d2.external-comparator-smoke/v1",
+  "version": "1.0.0",
+  "date": "2026-11-02",
+  "status": "CONSTRUCTION_SMOKE_ONLY_UNSEALED_DO_NOT_SCORE",
+  "research_verdict": "UNKNOWN",
+  "authority": [
+    "docs/research-contract.md revision 3",
+    "../bindcheck-agent-playbook.md Step 6b",
+    "protocols/d2/d2-05-early-comparison-draft-v1.json",
+    "paper/baselines.md",
+    "docs/baselines/d1p-22-results.md",
+    "docs/baselines/d1p-32-benchmark.md"
+  ],
+  "execution_boundary": {
+    "scored_execution_authorized": false,
+    "step_7_seal_present": false,
+    "allowed_material": "The two named exposed WarpToad construction-smoke inputs only.",
+    "purpose": "Exercise the pinned same-policy runner and lossless native-output adapter before Step 7; no comparison or target denominator is formed.",
+    "forbidden": [
+      "reserved or private evaluation material",
+      "a final or scored Gate A comparison",
+      "changing a policy or expected parser field after reading this smoke output",
+      "treating a passing invariant campaign as safety evidence",
+      "treating an unsupported frontend, unavailable artifact, build failure, crash, or timeout as a miss",
+      "promoting the relational-verifier-stub result above E1",
+      "selecting or fabricating an LLM baseline"
+    ]
+  },
+  "same_policy": {
+    "policy_id": "SIGMA-WARPTOAD-MINT-V1",
+    "policy_version": "historical-D1P-32-a33732d2",
+    "policy_scope": "WarpToadCore.mint under the eleven-word public-input relation and the declared admitted-root/nullifier/token-accounting state.",
+    "independence": {
+      "documented_before_this_smoke": true,
+      "not_derived_from_d2_smoke_output": true,
+      "historical_record": "docs/baselines/d1p-32-benchmark.md",
+      "authorship_record": "AI-authored artifact; no human inspection recorded in D1P-32",
+      "human_policy_author_status": "UNRESOLVED",
+      "different_human_reviewer_status": "UNRESOLVED",
+      "step_7_eligibility": "BLOCKED_UNTIL_HUMAN_AUTHOR_AND_DISTINCT_REVIEWER_RECORDS_EXIST",
+      "claim_limit": "Temporal independence and source documentation make this suitable for adapter construction smoke only; they do not satisfy the draft Gate A human-review rule."
+    },
+    "implementation": {
+      "path": "baselines/foundry/test/WarpToadPolicy.t.sol",
+      "sha256": "a33732d2262e8115bd4a1ef66cc5f075f5d015cfbe686df14c2fc58862670370",
+      "native_framework": "Foundry invariant testing",
+      "verifier_boundary": "RelationalVerifierStub checks the proof hash and all eleven expected public words and can reject all calls.",
+      "evidence_ceiling": "E1",
+      "ceiling_reason": "The harness uses a relational verifier stub rather than a real variant-specific proof and unchanged deployed consumer path."
+    },
+    "source_basis": [
+      {
+        "path": "results/raw/D1P-19/workspace/pinned-source/backend/contracts/core/WarpToadCore.sol",
+        "sha256": "323a1cf26c7449f67cf277ff0a46c31e12f725c555f9fa165d5a60011e122c39",
+        "relevant_lines": "37-49, 67-81, 88-90, 107-112, 114-176, 183-190",
+        "role": "Pinned consumer state, eleven-word public-input formatting, guards, verifier call, and mint effects."
+      },
+      {
+        "path": "baselines/foundry/test/WarpToadPolicy.t.sol",
+        "sha256": "a33732d2262e8115bd4a1ef66cc5f075f5d015cfbe686df14c2fc58862670370",
+        "relevant_lines": "13-29, 35-178",
+        "role": "Pre-existing direct property implementation and explicit stub boundary."
+      }
+    ],
+    "obligations": [
+      {
+        "id": "WT-SIGMA-AMOUNT-BENEFICIARY",
+        "class": "same_policy_binding",
+        "invariant": "invariant_amount_and_beneficiary_bound",
+        "predicate": "A successful mint commits the proved total amount to the proved recipient and, when enabled, the declared relayer within the declared maximum fee.",
+        "required_information": ["public amount", "public recipient", "public relayer", "fee factor", "priority fee", "maximum fee", "balance and supply deltas"]
+      },
+      {
+        "id": "WT-SIGMA-ROOT-ADMISSION",
+        "class": "same_policy_state",
+        "invariant": "invariant_roots_are_admitted",
+        "predicate": "Every successful mint uses giga and local roots admitted by the consumer before the call.",
+        "required_information": ["public giga root", "public local root", "giga-root history", "local-root history", "successful protected mint effect"]
+      },
+      {
+        "id": "WT-GENERIC-NULLIFIER-SINGLE-USE",
+        "class": "generic_control",
+        "invariant": "invariant_nullifier_single_use",
+        "predicate": "A nullifier accepted once cannot authorize a second successful mint.",
+        "required_information": ["public nullifier", "nullifier mapping", "first and second call status"]
+      },
+      {
+        "id": "WT-GENERIC-ROLLBACK",
+        "class": "generic_control",
+        "invariant": "invariant_reverts_roll_back",
+        "predicate": "A rejected or malformed mint call leaves balances, supply, and the nullifier mapping unchanged.",
+        "required_information": ["call status", "pre/post balances", "pre/post supply", "pre/post nullifier state"]
+      },
+      {
+        "id": "WT-GENERIC-VERIFIER-GATE",
+        "class": "generic_control",
+        "invariant": "invariant_verifier_gates_mint",
+        "predicate": "No mint effect commits when the verifier boundary rejects the proof and public words.",
+        "required_information": ["verifier result", "call status", "mint effect"]
+      },
+      {
+        "id": "WT-POSITIVE-VALID-RELATION",
+        "class": "positive_harness_control",
+        "invariant": "invariant_valid_relation_is_accepted",
+        "predicate": "A fresh nullifier with admitted roots and a stub-accepted exact eleven-word relation is accepted by the harnessed consumer.",
+        "required_information": ["fresh nullifier", "admitted roots", "exact public words", "stub result", "call status"],
+        "claim_limit": "This checks harness reachability and is not a global safe-control claim."
+      },
+      {
+        "id": "WT-GENERIC-SUPPLY-EVENT",
+        "class": "generic_control",
+        "invariant": "invariant_supply_matches_transfer_events",
+        "predicate": "The committed total-supply delta equals the net mint/burn amount in token Transfer events.",
+        "required_information": ["pre/post supply", "Transfer events"]
+      }
+    ]
+  },
+  "toolchain": {
+    "forge": {
+      "version": "1.8.6",
+      "commit": "6bad0a66de7c83f7b33695044138f0f5fa4c5990",
+      "path": "results/raw/D1P-22/tools/foundry/forge",
+      "sha256": "f63f468bdeb5ea66b0379722657ddfacdd0141f1fab80fe542da345eb2961f07"
+    },
+    "solc": {
+      "version": "0.8.29+commit.ab55807c",
+      "path": "/Users/imranpollob/.svm/0.8.29/solc-0.8.29",
+      "sha256": "66fabdd17c8c0091311997ec7d17b4d92e1b7b2c2d213dc14e4ff28c3de864d1"
+    },
+    "forge_std": {
+      "path": "results/raw/D1P-22/harnesses/payy-policy/lib/forge-std/src",
+      "test_sol_sha256": "b1b48a4dfbd65fed186163326dc8870316679f64a195aa18050f83657d2df39c"
+    }
+  },
+  "smoke_configuration": {
+    "runs": 32,
+    "depth": 20,
+    "fail_on_revert": false,
+    "workers": 1,
+    "seed": "0x00000000000000000000000000000000000000000000000000000000d206b001",
+    "wall_seconds_per_case": 300,
+    "memory_mib": null,
+    "memory_limit_status": "NOT_ENFORCED_IN_CONSTRUCTION_SMOKE",
+    "network_calls": 0,
+    "scientific_retries": 0,
+    "purpose_limit": "Reduced deterministic construction smoke only. Step 7 must accept or replace the draft 256x100 historical/final configuration before sealing."
+  },
+  "smoke_cases": [
+    {
+      "id": "D2-06B-WT-PINNED-SMOKE",
+      "exposure": "KNOWN_EXPOSED_DEVELOPMENT_CONTROL",
+      "source_path": "results/raw/D1P-19/workspace/pinned-source/backend/contracts/core/WarpToadCore.sol",
+      "source_sha256": "323a1cf26c7449f67cf277ff0a46c31e12f725c555f9fa165d5a60011e122c39",
+      "expected_native_failed_invariants_for_adapter_self_check": [],
+      "expectation_provenance": "Archived D1P-32 native transcript, not a newly created safe label.",
+      "claim_limit": "A pass only tests runner/adapter behavior and is not evidence of safety."
+    },
+    {
+      "id": "D2-06B-WT-MSRC-SMOKE",
+      "exposure": "INJECTED_KNOWN_DEVELOPMENT",
+      "source_path": "results/raw/D1P-19/workspace/source/backend/contracts/core/WarpToadCore.sol",
+      "source_sha256": "64ec0efd0df934afc46f06be76764b74b97b9ac554e1bd72add7ce0a630373e3",
+      "expected_native_failed_invariants_for_adapter_self_check": ["invariant_roots_are_admitted"],
+      "expectation_provenance": "D1P-19 mutation record and archived D1P-32 native transcript; exposed before this smoke.",
+      "claim_limit": "A fresh stub-boundary counterexample remains E1 and is not a new Gate A result."
+    }
+  ],
+  "native_output_normalization": {
+    "retain": ["complete stdout", "complete stderr", "exit code", "elapsed time", "native invariant names", "PASS or FAIL token", "tool and input hashes", "configuration and seed"],
+    "may_add": ["stable case ID", "policy obligation ID", "actual evidence ceiling", "missing-output marker"],
+    "must_not_add": ["a location absent from native output", "a producer-side explanation", "a consumer-side explanation", "a two-sided relationship diagnosis", "a safety conclusion", "a DETECTED or MISSED Gate A class"]
+  },
+  "historical_native_transcripts": [
+    {
+      "case": "D2-06B-WT-PINNED-SMOKE",
+      "path": "results/raw/D1P-32/foundry-policy-pinned/invariant-g4-final.stdout.txt",
+      "sha256": "99dbb4e732273062883ed0d3a9ee004497c4265b1c3e9d8c6f23725c488db22b"
+    },
+    {
+      "case": "D2-06B-WT-MSRC-SMOKE",
+      "path": "results/raw/D1P-32/foundry-policy-m-src/invariant-g4-final.stdout.txt",
+      "sha256": "dee0226f349eaf054941c483e7a8d489ea3126a1764e3920c5ea3d526bef6b5b"
+    }
+  ],
+  "candidate_validation_routing": {
+    "rule": "Any future unique comparator candidate uses the same Step 5 draft E2-to-E4 route, budgets, admitted-state checks, variant-specific key/verifier rule, and deduplication as every other arm.",
+    "smoke_action": "NOT_ATTEMPTED",
+    "reason": "Step 6b construction smoke is capped at native E1 property output and precedes the Step 7 seal."
+  },
+  "effort_accounting": {
+    "historical_shared_harness": {
+      "solidity_nonblank_noncomment_lines": 156,
+      "foundry_config_nonblank_lines": 18,
+      "recorded_authoring_hours": 0.16,
+      "recorded_port_and_run_hours": 0.03,
+      "recorded_compile_or_setup_corrections": 7,
+      "recorded_later_completeness_corrections": 1,
+      "recorded_human_inspection": "none",
+      "source": "docs/baselines/d1p-32-benchmark.md"
+    },
+    "step_6b": {
+      "policy_obligation_count": 7,
+      "pilot_case_count": 2,
+      "human_policy_author_minutes": null,
+      "human_policy_review_minutes": null,
+      "human_adapter_review_minutes": null,
+      "null_reason": "No independent human timing or review record is available; zero is not imputed.",
+      "machine_and_agent_fields": "The runner emits exact adapter/config line counts, command, hashes, elapsed time, exit status, and environment into results/raw/D2-06B."
+    }
+  },
+  "step_7_handoff": [
+    "Obtain a human-authored/adopted policy record from primary sources and a distinct human review before eligibility.",
+    "Freeze the exact case manifest, tool inventory decisions, policy bytes, harness bytes, tool binaries, configuration, seed count, resource enforcement, normalization, and blank scoring forms.",
+    "Do not convert this smoke namespace or archived D1P-32 transcripts into final score rows.",
+    "Preserve unsupported, unavailable, build-failed, and unresolved cells outside any miss denominator.",
+    "Keep the Foundry relational verifier stub at E1 unless a separate variant-specific real-proof and unchanged-consumer route establishes E3 or E4."
+  ]
+}

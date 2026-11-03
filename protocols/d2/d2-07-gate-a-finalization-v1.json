@@ -1,0 +1,544 @@
+{
+  "schema": "bindcheck.d2.gate-a-finalization/v1",
+  "version": "1.0.0",
+  "date": "2026-11-02",
+  "status": "BLOCKED_FINALIZATION_ZERO_SCORED_ARMS",
+  "research_verdict": "UNKNOWN",
+  "gate_a_decision": "INCONCLUSIVE",
+  "objective": "Finalize Gate A without scored execution when the prospectively required fair-arm, equal-information, and reviewed-policy conditions are not met.",
+  "authority": [
+    "docs/research-contract.md revision 3",
+    "../bindcheck-agent-playbook.md Step 7",
+    "protocols/d2/d2-05-early-comparison-draft-v1.json",
+    "reports/D2-06A.md",
+    "reports/D2-06B.md"
+  ],
+  "execution_boundary": {
+    "scored_execution_authorized": false,
+    "scored_arm_count": 0,
+    "objective_subset": [],
+    "reserved_data_access_authorized": false,
+    "post_output_tuning_authorized": false,
+    "scientific_retries_authorized": 0,
+    "allowed_action": "Create and verify a timestamped blocked-finalization packet and immutable content seal only.",
+    "stop_rule": "If any expected global blocker is absent, any artifact binding is wrong, or the protocol authorizes scoring, fail closed without creating a score row.",
+    "claim_limit": "Construction and smoke evidence remains non-scored. No DETECTED or MISSED result, safe-control result, comparison denominator, or advantage claim is created."
+  },
+  "controlling_artifact_bindings": [
+    {
+      "role": "gate_a_draft",
+      "path": "protocols/d2/d2-05-early-comparison-draft-v1.json",
+      "sha256": "c397edaf46bfa703d4aae813502b73b71fc9a3a3fc4933e6a1d707640881a4b2"
+    },
+    {
+      "role": "step6a_protocol",
+      "path": "protocols/d2/d2-06a-construction-v1.json",
+      "sha256": "92a7c46af25f5fa575969f49d4c06ec9806ae45e7a883fc0717f38f95299cf5b"
+    },
+    {
+      "role": "step6a_report",
+      "path": "reports/D2-06A.md",
+      "sha256": "daf6fbe1c00c2184f541b09d4cf5cbe6eadb1aaf2903a742c53113d7d364c321"
+    },
+    {
+      "role": "step6a_run_manifest",
+      "path": "results/raw/D2-06A/construction-03/run-manifest.json",
+      "sha256": "078c9f64b07ac0f6e1c85fcffe56336f007e661b3cd20f78ef02256a916573f0"
+    },
+    {
+      "role": "step6a_run_summary",
+      "path": "results/raw/D2-06A/construction-03/run-summary.json",
+      "sha256": "853af59f1d071e6234aa1a031c9f17fc488b8ba6e28eb880d2b05889934393f6"
+    },
+    {
+      "role": "step6a_information_budget",
+      "path": "results/raw/D2-06A/construction-03/information-budget-matrix.json",
+      "sha256": "197d800e5007ba5e1fd8dd642ef2966c65c4740ca43e59b5f3db7909a1f34c26"
+    },
+    {
+      "role": "step6a_transformations",
+      "path": "results/raw/D2-06A/construction-03/transformation-ledger.json",
+      "sha256": "99590ae58ddd8f7637dd4f9648beda721fc8fe07595f6c7c870b944eddd29ae8"
+    },
+    {
+      "role": "step6b_protocol",
+      "path": "protocols/d2/d2-06b-comparator-smoke-v1.json",
+      "sha256": "c669939a14c19a5534cd4a35f54cb7df4ba03dcb67da11ee17ba918f1806d2fe"
+    },
+    {
+      "role": "step6b_inventory",
+      "path": "docs/evaluation/d2-06b-comparator-inventory-v1.json",
+      "sha256": "812bfc122ba390be90a32af3db8eebd2661512cc086571995e81f7bcd0bdd5dd"
+    },
+    {
+      "role": "step6b_report",
+      "path": "reports/D2-06B.md",
+      "sha256": "465ae8a9e91ee5008ef1ac00dfe2fcf48dd33d2768db81e909cabc4bf6fe4240"
+    },
+    {
+      "role": "step6b_recovery_summary",
+      "path": "results/raw/D2-06B/recovery-01/smoke-summary.json",
+      "sha256": "1df2373fe3c371dc6c3f29553090a0fc471c66876340b315d44afc070884cfa1"
+    },
+    {
+      "role": "step6b_recovery_checksums",
+      "path": "results/raw/D2-06B/recovery-01/checksums.sha256",
+      "sha256": "4fdc2e76e83aac26a10c2d7fe81337d99a1eb2e43ed8ea09bc258059c4bba764"
+    },
+    {
+      "role": "step6b_recovery_record",
+      "path": "results/raw/D2-06B/infrastructure-recovery.json",
+      "sha256": "106dd43d285e062bf1be1f8f10ed4a1a8b99da2e4ac9fd03c6d755576d6b61c8"
+    }
+  ],
+  "step_5_and_6_audit": {
+    "step_5": {
+      "status": "DRAFT_UNSEALED_DO_NOT_SCORE",
+      "finding": "The prospective design is complete enough to state the stop conditions, but its human-policy, equal-information, scorer, and final-seal requirements were not satisfied by construction."
+    },
+    "step_6a": {
+      "final_namespace": "results/raw/D2-06A/construction-03",
+      "construction_case_arms": 78,
+      "construction_status_counts": {
+        "SUPPORTED": 72,
+        "UNKNOWN": 6
+      },
+      "scored": false,
+      "historical_namespaces": {
+        "construction-01": "PRESERVED_CONTROL_FAILURE",
+        "construction-02": "PRESERVED_PRE_FINAL_RUNNER_BINDING_HISTORY",
+        "construction-03": "FINAL_UNSCORED_CONSTRUCTION"
+      },
+      "information_parity": "UNRESOLVED_EQUAL_POLICY_INTERFACE",
+      "finding": "Strong simple composition can consume a generic P/O/E obligation object, whereas the current full adapter records but does not consume that object. Shared implementation facts do not establish equal reviewed-policy consumption."
+    },
+    "step_6b": {
+      "status": "CONSTRUCTION_SMOKE_ONLY_UNSEALED_DO_NOT_SCORE",
+      "first_attempt": "PRESERVED_PRE_COMPILATION_ENVIRONMENT_PARSE_FAILURE",
+      "sole_recovery": "PRESERVED_UNSCORED_NATIVE_SMOKE",
+      "scored": false,
+      "finding": "The only fresh same-policy arm is a two-case Foundry smoke under an AI-authored, uninspected policy; other comparators remain native-only, unsupported, unavailable, or unconstructed for the same policy.",
+      "measurement_erratum": "The D2-06B report describes 6.314872 seconds as separate from compilation/setup, but the runner timer encloses the forge command and retained native stdout shows compilation within the measured interval. The number is retained as command wall time and is not used as compilation-exclusive or analysis-exclusive effort."
+    }
+  },
+  "step_7_recovery_history": {
+    "initial_attempt": {
+      "namespace": "results/raw/D2-07",
+      "status": "FAILED_INTEGRATION_RACE_NON_AUTHORITATIVE",
+      "explanation": "The zero-score finalizer completed and its seal verified at creation while the evaluation lead was still applying required pre-handoff tracked-document corrections. Those corrections changed sealed bytes after creation. The attempt ran no analyzer, baseline, scorer, proof, fuzzer, network call, or scientific retry, but its seal no longer verifies and it is not the authoritative handoff. The generated prior-attempt audit retains the exact mismatch list.",
+      "retained_files": [
+        {
+          "path": "results/raw/D2-07/run-manifest.json",
+          "sha256": "97386da9d3cc56f3b231c4246e0cf9ebfbfe590fa2f28a328254168aa3eabafb"
+        },
+        {
+          "path": "results/raw/D2-07/packet-manifest.json",
+          "sha256": "4581f4de43baf183092a2d185b66615197d3175d2ebf64578f6279f9f56fc1a0"
+        },
+        {
+          "path": "results/raw/D2-07/finalization-summary.json",
+          "sha256": "e966f57f1f8d8311f1aa5d76dadb47a0ffe8fa99d570ab1e7f67c6945b3456ce"
+        },
+        {
+          "path": "results/raw/D2-07/content-seal-v1.json",
+          "sha256": "44f612b3dbaba7f89d7504cd389c45019925a90beedd0044c9a0ba6473dedc03"
+        },
+        {
+          "path": "results/raw/D2-07/seal-verification.json",
+          "sha256": "944f0778273c01fca84c6923e7452fcf2d63bfdae1d44fc8727c46bfbc11e258"
+        }
+      ],
+      "required_current_verification": "FAIL",
+      "scientific_output_seen": false,
+      "scored_execution": false
+    },
+    "authoritative_recovery": {
+      "namespace": "results/raw/D2-07-recovery-01",
+      "purpose": "Repeat only the deterministic zero-score manifest/seal finalization after every tracked Step 7 byte, including the report, is final; retain and seal the initial attempt and its failed current verification.",
+      "scientific_retry": false,
+      "allowed_recovery_count": 1,
+      "authoritative_only_if": [
+        "the prior-attempt audit records the initial seal's current FAIL status and zero-score summary",
+        "the packet base inventory exactly equals the recovery seal base members",
+        "the recovery content seal verifies PASS",
+        "no scored arm, research tool, reserved input, network call, or analyzer/baseline dispatch occurs"
+      ]
+    }
+  },
+  "global_blockers": [
+    {
+      "code": "HUMAN_POLICY_AUTHOR_OR_ADOPTION_MISSING",
+      "scope": "all reviewed-policy comparisons",
+      "evidence": "Every Step 6a case output records policy_author=null and review_status=NOT_SUPPLIED; the Step 6b protocol and recovery summary independently record human_policy_author_status=UNRESOLVED."
+    },
+    {
+      "code": "DISTINCT_HUMAN_POLICY_REVIEW_MISSING",
+      "scope": "all reviewed-policy comparisons",
+      "evidence": "Every Step 6a case output records policy_reviewer=null and review_status=NOT_SUPPLIED; the Step 6b protocol and recovery summary independently record different_human_reviewer_status=UNRESOLVED."
+    },
+    {
+      "code": "STRONG_FULL_POE_INTERFACE_NOT_EQUAL",
+      "scope": "strong-simple-composition versus full-bindcheck",
+      "evidence": "The Step 6a information-budget matrix records strong_vs_full_equal_reviewed_policy_consumption=false and scored_comparison_allowed=false."
+    },
+    {
+      "code": "FAIR_SAME_POLICY_ARM_INCOMPLETE",
+      "scope": "external and direct-property comparisons",
+      "evidence": "Step 6b is explicitly construction smoke only; the comparator inventory contains no sealed, fully reviewed equal-policy comparison set."
+    }
+  ],
+  "row_local_unresolved_conditions": [
+    {
+      "code": "SUBJECTIVE_SCORER_ADJUDICATOR_UNAVAILABLE",
+      "scope": "ambiguous diagnosis, localization, and non-target rows only",
+      "evidence": "No two independent human score files or distinct adjudicator record exists. This does not independently block a fully objective row, but none survives the global fair-arm conditions."
+    }
+  ],
+  "case_and_target_dispositions": [
+    {
+      "group": "GA-PAYY-TAIL",
+      "case_ids": [
+        "GA-PAYY-TAIL-EARLIER",
+        "GA-PAYY-TAIL-CHECK-ADDED"
+      ],
+      "target_source": "Step 5 predeclared Payy tail association and D2-01 provenance",
+      "semantic_target": "The earlier revision's active message tail can reach consumer message effects without the missing outer tail constraint; the check-added revision is only an exact repair contrast for that property.",
+      "status": "UNRESOLVED",
+      "reason_codes": [
+        "HUMAN_POLICY_AUTHOR_OR_ADOPTION_MISSING",
+        "DISTINCT_HUMAN_POLICY_REVIEW_MISSING",
+        "STRONG_FULL_POE_INTERFACE_NOT_EQUAL",
+        "FAIR_SAME_POLICY_ARM_INCOMPLETE"
+      ],
+      "denominator_membership": false
+    },
+    {
+      "group": "GA-WARPTOAD-MDOM",
+      "case_ids": [
+        "GA-WARPTOAD-MDOM"
+      ],
+      "target_source": "Step 5 predeclared application-domain association and preserved E4 development provenance",
+      "semantic_target": "The injected producer no longer binds the executing application domain while the consumer commits the protected mint effect.",
+      "status": "UNRESOLVED",
+      "reason_codes": [
+        "HUMAN_POLICY_AUTHOR_OR_ADOPTION_MISSING",
+        "DISTINCT_HUMAN_POLICY_REVIEW_MISSING",
+        "STRONG_FULL_POE_INTERFACE_NOT_EQUAL",
+        "FAIR_SAME_POLICY_ARM_INCOMPLETE"
+      ],
+      "denominator_membership": false
+    },
+    {
+      "group": "GA-WARPTOAD-MSRC",
+      "case_ids": [
+        "GA-WARPTOAD-MSRC"
+      ],
+      "target_source": "Step 5 predeclared source-state association and preserved E4 development provenance",
+      "semantic_target": "The injected consumer accepts a root under the wrong source-state admission relationship before committing the protected mint effect.",
+      "status": "UNRESOLVED",
+      "reason_codes": [
+        "HUMAN_POLICY_AUTHOR_OR_ADOPTION_MISSING",
+        "DISTINCT_HUMAN_POLICY_REVIEW_MISSING",
+        "STRONG_FULL_POE_INTERFACE_NOT_EQUAL",
+        "FAIR_SAME_POLICY_ARM_INCOMPLETE"
+      ],
+      "denominator_membership": false
+    },
+    {
+      "group": "GA-WARPTOAD-RELATIONSHIP",
+      "case_ids": [
+        "GA-WARPTOAD-RELATIONSHIP-E1",
+        "GA-WARPTOAD-RELATIONSHIP-E2",
+        "GA-WARPTOAD-RELATIONSHIP-E3",
+        "GA-WARPTOAD-RELATIONSHIP-E4",
+        "GA-WARPTOAD-RELATIONSHIP-E5",
+        "GA-WARPTOAD-RELATIONSHIP-E6",
+        "GA-WARPTOAD-RELATIONSHIP-E7",
+        "GA-WARPTOAD-RELATIONSHIP-E8",
+        "GA-WARPTOAD-RELATIONSHIP-E9"
+      ],
+      "target_source": "Step 5 predeclared relationship-association comparison over the D1P-43 authored corpus",
+      "semantic_target": "Use each frozen D1P-43 case association to compare one-sided, union, structural, strong, and full relationship diagnoses without treating the nine rows as independent families or deriving an association from scored output.",
+      "status": "UNRESOLVED",
+      "reason_codes": [
+        "HUMAN_POLICY_AUTHOR_OR_ADOPTION_MISSING",
+        "DISTINCT_HUMAN_POLICY_REVIEW_MISSING",
+        "STRONG_FULL_POE_INTERFACE_NOT_EQUAL",
+        "FAIR_SAME_POLICY_ARM_INCOMPLETE"
+      ],
+      "special_handling": "E8 remains UNKNOWN and E9 remains an honest matching control, not a positively verified safe negative.",
+      "denominator_membership": false
+    }
+  ],
+  "arm_dispositions": {
+    "internal": [
+      "producer-only",
+      "consumer-only",
+      "unjoined-union",
+      "basic-structural-composition",
+      "strong-simple-composition",
+      "full-bindcheck"
+    ],
+    "external_inventory_ids": [
+      "CMP-NOIR",
+      "CMP-SLITHER",
+      "CMP-MYTHRIL",
+      "CMP-FOUNDRY",
+      "CMP-ECHIDNA",
+      "CMP-ZKAP",
+      "CMP-CIVER",
+      "CMP-CCC-CHECK",
+      "CMP-PICUS",
+      "CMP-SMARTAXE",
+      "CMP-ELSA"
+    ],
+    "status": "UNSCORED_CONSTRUCTION_OR_APPLICABILITY_ONLY",
+    "rule": "Unsupported, not-applicable, unavailable, build-failed, timeout, and unresolved cells remain visible and never become MISSED."
+  },
+  "transformation_dispositions": {
+    "accepted_as_bounded_controls": [
+      "TR-IDENTIFIER-RENAME",
+      "TR-HELPER-EXTRACTION",
+      "TR-EQUIVALENT-EXPRESSION",
+      "TR-MATCHED-PUBLIC-REORDER"
+    ],
+    "retained_preconstruction_rejections": [
+      "TR-REJECT-PAYY-APPLICATION-REORDER",
+      "TR-REJECT-WARPTOAD-APPLICATION-HELPER"
+    ],
+    "basis": "Direct source and mapping inspection plus successful builds, two producer execution vectors, exact consumer algebra vectors, logical ABI mapping, and semantic-ID comparison support these four syntactically narrow controls.",
+    "limit": "They are bounded controls, not formal or general semantic-equivalence proofs. They do not enter a score denominator here because no scored arm is eligible."
+  },
+  "warning_matching": {
+    "frozen_rule_source": "protocols/d2/d2-05-early-comparison-draft-v1.json warning_matching",
+    "required_match_fields": [
+      "case and revision identity",
+      "affected producer relation/configuration or explicitly permitted producer-only locus",
+      "decoded public identity/index set where applicable",
+      "consumer state/effect/obligation locus where applicable",
+      "property kind and direction",
+      "evidence grade"
+    ],
+    "multi_report_rule": "All mandatory identities and indices must be covered by the prospectively permitted union; no post-output association change is allowed.",
+    "duplicate_rule": "Warning ordinal and source line do not create independent findings.",
+    "current_use": "No matcher is invoked because the eligible objective subset is empty."
+  },
+  "human_dependencies_and_prior_exposure": {
+    "policy_author_or_adopter": "UNRESOLVED",
+    "distinct_policy_reviewer": "UNRESOLVED",
+    "two_independent_subjective_scorers": "UNRESOLVED",
+    "distinct_adjudicator": "UNRESOLVED",
+    "known_prior_exposure": "The corpus is exposed development material; D1/D2 authors and agents have inspected labels, mutations, construction outputs, and historical results.",
+    "ai_limit": "AI output is not a human policy adoption, independent review, scorer judgment, or adjudication."
+  },
+  "denominators": {
+    "objective_case_arm_rows": 0,
+    "target_detection": 0,
+    "diagnosis": 0,
+    "safe_control_false_warning": 0,
+    "validation": 0,
+    "transformation_stability": 0,
+    "scored_external_comparators": 0,
+    "construction_reporting_only": {
+      "step6a_case_arms": 78,
+      "step6a_planned_transformations": 6,
+      "step6a_attempted_transformations": 4,
+      "step6b_native_smoke_cases": 2,
+      "step6b_retained_pre_output_setup_failures": 2
+    },
+    "rule": "Empty scored denominators are reported as zero with dispositions, never as zero misses, zero false warnings, or perfect performance."
+  },
+  "resource_budget": {
+    "blocked_finalization": {
+      "wall_seconds": 300,
+      "memory_mib": 512,
+      "research_tool_or_analyzer_calls": 0,
+      "network_calls": 0,
+      "scientific_retries": 0
+    },
+    "unexecuted_step_5_scored_caps": {
+      "memory_mib_per_process": 16384,
+      "scored_parallelism": 1,
+      "network_calls": 0,
+      "scientific_retries": 0,
+      "stochastic_seed_count": 3
+    }
+  },
+  "forms": [
+    {
+      "path": "docs/evaluation/d2-gate-a-case-manifest-template-v1.json",
+      "sha256": "6ff7ae3a9c2b50dec5a8a2893fb3fbafb8b874905eac199c68fa1f7969c602c3"
+    },
+    {
+      "path": "docs/evaluation/d2-gate-a-measurement-form-v1.json",
+      "sha256": "f7edd8737666b0cff4e973591114d90ae1801b999f35297f91a328468b70dcf2"
+    },
+    {
+      "path": "docs/evaluation/d2-gate-a-effort-log-template-v1.json",
+      "sha256": "1d26ab8aac15a4ee53f024674030ba40734ee87ada8030305aa93dbfebe1e82f"
+    },
+    {
+      "path": "docs/evaluation/d2-gate-a-scoring-form-v1.json",
+      "sha256": "a93fd9225807db4546f79fc8c18e1a805ec9c384cf81022e336c2ce0d626f0c6"
+    }
+  ],
+  "completion_checklist": [
+    {
+      "item": "exact candidate case IDs and lineage retained",
+      "complete": true
+    },
+    {
+      "item": "construction failures and rejected transformations retained",
+      "complete": true
+    },
+    {
+      "item": "real hashes for controlling artifacts and blank forms verified",
+      "complete": true
+    },
+    {
+      "item": "human policy author/adopter recorded",
+      "complete": false,
+      "disposition": "UNRESOLVED"
+    },
+    {
+      "item": "distinct human policy reviewer recorded",
+      "complete": false,
+      "disposition": "UNRESOLVED"
+    },
+    {
+      "item": "strong and full arms consume identical reviewed P/O/E policy bytes",
+      "complete": false,
+      "disposition": "UNRESOLVED_EQUAL_POLICY_INTERFACE"
+    },
+    {
+      "item": "fair same-policy baseline set runnable under equal budgets",
+      "complete": false,
+      "disposition": "UNRESOLVED"
+    },
+    {
+      "item": "bounded transformation arguments and focused source/build/execution/algebra controls retained",
+      "complete": true,
+      "disposition": "BOUNDED_CONTROLS_ONLY_NOT_FORMAL_OR_GENERAL_PROOF"
+    },
+    {
+      "item": "two independent subjective scorers and distinct adjudicator",
+      "complete": false,
+      "disposition": "UNRESOLVED_FOR_AFFECTED_ROWS"
+    },
+    {
+      "item": "complete timestamped finalization manifest and seal",
+      "complete": "CREATED_AND_VERIFIED_BY_RUNNER_BEFORE_ANY_SCORE"
+    }
+  ],
+  "seal_plan": {
+    "version": "D2-07-blocked-finalization-recovery-01-v1",
+    "output_namespace": "results/raw/D2-07-recovery-01",
+    "manifest": "results/raw/D2-07-recovery-01/packet-manifest.json",
+    "seal": "results/raw/D2-07-recovery-01/content-seal-v1.json",
+    "verification": "results/raw/D2-07-recovery-01/seal-verification.json",
+    "entries": [
+      "protocols/d2/d2-01-integrated-development-v1.json",
+      "protocols/d2/d2-01-benchmark-associations-v1.json",
+      "protocols/d2/d2-01-external-inputs-v1.json",
+      "protocols/d2/d2-01-seal-v1.json",
+      "protocols/d2/d2-04-taxonomy-preparation-v1.json",
+      "protocols/d2/d2-05-early-comparison-draft-v1.json",
+      "protocols/d2/d2-06a-construction-v1.json",
+      "protocols/d2/history/d2-06a-construction-v1-f2627d.json",
+      "protocols/d2/d2-06b-comparator-smoke-v1.json",
+      "protocols/d2/d2-07-gate-a-finalization-v1.json",
+      "docs/evaluation/d2-gate-a-case-manifest-template-v1.json",
+      "docs/evaluation/d2-gate-a-measurement-form-v1.json",
+      "docs/evaluation/d2-gate-a-effort-log-template-v1.json",
+      "docs/evaluation/d2-gate-a-scoring-form-v1.json",
+      "docs/evaluation/d2-composition-baselines-and-controls.md",
+      "docs/evaluation/d2-06b-comparator-inventory-v1.json",
+      "docs/evaluation/d2-gate-a-finalization-v1.md",
+      "docs/d2/claim-ledger-v1.json",
+      "docs/d2/step3-claim-audit-and-positioning.md",
+      "docs/d2/step3-related-work-and-distinguishing-experiments.md",
+      "reports/D2-01.md",
+      "reports/D2-02.md",
+      "reports/D2-03.md",
+      "reports/D2-04.md",
+      "reports/D2-05.md",
+      "reports/D2-06A.md",
+      "reports/D2-06B.md",
+      "reports/D2-07.md",
+      "scripts/d2_foundation.py",
+      "scripts/d2_step6a_construct.py",
+      "scripts/d2_step6b_same_policy_smoke.py",
+      "scripts/d2_step7_gate_a.py",
+      "tests/test_d2_step6a_composition.py",
+      "tests/test_d2_step6a_construction.py",
+      "tests/test_d2_step6b_same_policy_smoke.py",
+      "tests/test_d2_step7_gate_a.py",
+      "results/raw/D2-01",
+      "results/raw/D2-01-recovery-01",
+      "results/raw/D2-06A",
+      "results/raw/D2-06B",
+      "results/raw/D2-07"
+    ],
+    "circularity_rule": "The seal manifest excludes itself. The post-seal verification record cannot be a seal member because it depends on the seal hash. Both exclusions are explicit."
+  },
+  "prospective_missing_mechanism_prototype": {
+    "implemented_in_step_7": false,
+    "mechanism": "A shared compiler-backed object/context identity representation plus one common versioned P/O/E obligation interface consumed byte-identically by full BindCheck and strong simple composition.",
+    "primary_test": "On the exposed D1P-42 producer/consumer pair and its prospectively controlled identifier-renaming and matched-reordering variants, extract object/context identities from compiler artifacts, provide one human-authored-or-adopted and independently reviewed P/O/E object to both arms, and test the predeclared relationship target against a matched non-violating control.",
+    "controls": [
+      "same source, artifact, ABI, mapping, policy bytes, assumptions, and resource caps for both arms",
+      "compiler-backed identity hashes invariant under seeded identifier renaming",
+      "logical identity mapping preserved under matched public-input reordering",
+      "positive violated obligation and matched non-violating control",
+      "no names, warning output, or manual defect relation used as hidden input"
+    ],
+    "success_criterion": "Both arms record the same policy hash and compiler-backed identities; full BindCheck produces a prospectively specified relationship diagnosis on the positive that strong simple composition does not, neither flags the matched control, and semantic diagnosis identity is stable under every accepted controlled transformation.",
+    "failure_criterion": "The interfaces consume different fields or hashes, either arm relies on names or manual hidden relations, the matched control is flagged, the diagnosis is unstable, the strong arm matches the full arm, or the budget expires unresolved.",
+    "budget": {
+      "researcher_days": 2,
+      "machine_hours": 8
+    },
+    "claim_limit": "Development-only prospective test; it cannot retroactively change the Step 7 INCONCLUSIVE decision."
+  },
+  "scope_recommendation": {
+    "decision": "BOUNDED_PROTOTYPE",
+    "effective_only_after": [
+      "results/raw/D2-07-recovery-01/content-seal-v1.json verifies PASS",
+      "results/raw/D2-07-recovery-01/seal-verification.json records PASS",
+      "reports/D2-07.md records the INCONCLUSIVE Gate A result and this separate scope recommendation"
+    ],
+    "authorized_scope": "Steps 8-10 development of the shared compiler-backed object/context identity representation and common versioned P/O/E obligation interface specified above, using exposed development material only.",
+    "mechanical_fixture_phase": {
+      "status": "AUTHORIZED_AFTER_EFFECTIVE_ONLY_AFTER_CONDITIONS",
+      "required_label": "UNREVIEWED_DEVELOPMENT_FIXTURE",
+      "permitted": [
+        "schema and byte-identical interface plumbing",
+        "compiler-backed identity extraction and provenance records",
+        "determinism and exact-hash checks",
+        "bounded identifier-renaming, helper-extraction, equivalent-expression, and matched-reordering controls",
+        "tests that make no policy-correctness, comparative-advantage, or primary-outcome claim"
+      ],
+      "prohibited": "Mechanical fixture outcomes cannot satisfy the primary discriminating experiment, substitute for human policy adoption/review, or become a Gate A score."
+    },
+    "primary_discriminating_experiment": {
+      "status": "BLOCKED_PENDING_HUMAN_POLICY_ROLES",
+      "preconditions": [
+        "a human authors or explicitly adopts the exact P/O/E policy bytes with provenance and exposure recorded",
+        "a different human reviews those bytes before seeing prototype comparison output",
+        "both strong-simple and full arms consume the same frozen policy and compiler-backed identity bytes",
+        "the primary positive, matched control, transformations, success/failure rule, and remaining budget are sealed before execution"
+      ],
+      "missing_preconditions_are": "UNRESOLVED, never waived or imputed"
+    },
+    "combined_cap": {
+      "researcher_days": 2,
+      "machine_hours": 8,
+      "applies_across_mechanical_and_primary_phases": true
+    },
+    "stop_rule": "Stop when the combined cap is reached, equal byte consumption cannot be established, required human roles remain unavailable for the primary experiment, the matched control fails, or the compiler-backed identity is unstable under an accepted bounded control.",
+    "reserved_data_authorized": false,
+    "retroactive_gate_a_rescore_authorized": false
+  },
+  "decision_rationale": "Gate A is INCONCLUSIVE because no eligible fair discriminating target can be scored under the frozen Step 5 semantics. The result is not CURRENT_CLAIM_CONTRADICTED because no fair scored comparison ran, and it is not SUPPORTED_ADVANTAGE because no eligible target, denominator, or transformation-stable advantage exists.",
+  "publication_claims": "No novelty, security, generality, prevalence, transfer, safety, precision, recall, or time-saving claim is supported. Research verdict remains UNKNOWN."
+}

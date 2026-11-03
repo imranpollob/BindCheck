@@ -1,0 +1,317 @@
+{
+  "schema": "bindcheck.manuscript-claim-map.v1",
+  "claim_map_version": "D2-18-v1",
+  "as_of": "2026-11-02",
+  "manuscript": {
+    "path": "paper/d2-status-draft.md",
+    "sha256": "a1c906e19a3cc8fddf2ffd66afb4f49d95dd7476832e55671223b20b3e2660d7",
+    "status": "EVIDENCE_LED_STATUS_DRAFT_NOT_SUBMISSION_READY"
+  },
+  "ledger": {
+    "path": "docs/d2/claim-ledger-v2.json",
+    "version": "D2-18-v2"
+  },
+  "interpretation": [
+    "Every entry identifies the exact evidence stratum and grade used in the manuscript.",
+    "A supported documentary statement may describe a negative, missing, or inconclusive result; it does not imply capability success.",
+    "Internal paths are author traceability references and must be replaced or anonymized before submission.",
+    "UNKNOWN, unsupported, no-score, and mechanical-only outcomes are never converted to safety or misses."
+  ],
+  "entries": [
+    {
+      "map_id": "MAP-001",
+      "ledger_claim_ids": [
+        "D2-CLM-001"
+      ],
+      "manuscript_section": "Abstract; 1. Problem and research posture",
+      "claim_text": "For some effects, deciding whether a proof authorizes execution requires relating producer constraints, decoded identities, consumer reliance, and reviewed policy.",
+      "evidence_refs": [
+        "docs/research-contract.md",
+        "reports/D2-03.md"
+      ],
+      "evidence_stratum": "framing",
+      "evidence_grade": "N/A-framing",
+      "disposition": "SUPPORTED_QUALIFIED",
+      "reader_qualification": "Does not say all defects are invisible to one-sided analysis."
+    },
+    {
+      "map_id": "MAP-002",
+      "ledger_claim_ids": [
+        "D2-CLM-002",
+        "D2-CLM-003"
+      ],
+      "manuscript_section": "Abstract; 3.1 Integrated development interface; 4.1 Current development benchmark",
+      "claim_text": "The current exposed-development benchmark records 17 detected, 13 unsupported, 0 misses, 26 warning objects, and 23 associated warning objects; all current results are E1.",
+      "evidence_refs": [
+        "reports/D2-01.md",
+        "results/raw/D2-01-recovery-01/run-summary.json"
+      ],
+      "evidence_stratum": "exposed-development",
+      "evidence_grade": "E1",
+      "disposition": "SUPPORTED",
+      "reader_qualification": "Two known lineages; zero misses is a frozen exposed association disposition, not recall."
+    },
+    {
+      "map_id": "MAP-003",
+      "ledger_claim_ids": [
+        "D2-CLM-003"
+      ],
+      "manuscript_section": "4.1 Current development benchmark",
+      "claim_text": "Historical v1.1, corrected static-only, and current integrated benchmark rows are separate versions with 16/14/0/53, 11/19/0/13, and 17/13/0/26 respectively.",
+      "evidence_refs": [
+        "reports/D1P-34.md",
+        "reports/D1P-42.md",
+        "reports/D2-01.md"
+      ],
+      "evidence_stratum": "historical-and-exposed-development",
+      "evidence_grade": "E1",
+      "disposition": "SUPPORTED_VERSIONED",
+      "reader_qualification": "Changed analyzers prevent pooling or trend inference."
+    },
+    {
+      "map_id": "MAP-004",
+      "ledger_claim_ids": [
+        "D2-CLM-004",
+        "D2-CLM-005"
+      ],
+      "manuscript_section": "Abstract; 4.2 Separate ablation versions",
+      "claim_text": "The historical preliminary ablation was union 6/8 and full 6/8; the corrected successor was union 5/7 and full 7/7 with one UNKNOWN positive and one matching control.",
+      "evidence_refs": [
+        "reports/D1P-41-ablation-preliminary.md",
+        "reports/D1P-43.md",
+        "reports/D2-01.md"
+      ],
+      "evidence_stratum": "historical-and-exposed-development",
+      "evidence_grade": "E1",
+      "disposition": "SUPPORTED_VERSIONED_MOTIVATION",
+      "reader_qualification": "Known cases and no fair external comparison; does not establish novelty."
+    },
+    {
+      "map_id": "MAP-005",
+      "ledger_claim_ids": [
+        "D2-CLM-006",
+        "D2-CLM-007"
+      ],
+      "manuscript_section": "4.3 Payy evidence layers",
+      "claim_text": "The exact earlier Payy pair has current E1 diagnostics, all 12 Payy mutants remain unsupported, and T15-T19 preserve separate historical E4 evidence for the disclosed earlier mechanism.",
+      "evidence_refs": [
+        "reports/D2-01.md",
+        "reports/T15.md",
+        "reports/T18.md",
+        "reports/T19.md"
+      ],
+      "evidence_stratum": "historical-development-and-exposed-development",
+      "evidence_grade": "E1-current-plus-E4-historical",
+      "disposition": "SUPPORTED_SEPARATE_LAYERS",
+      "reader_qualification": "Historical E4 is not current-warning validation or independent discovery."
+    },
+    {
+      "map_id": "MAP-006",
+      "ledger_claim_ids": [
+        "D2-CLM-010"
+      ],
+      "manuscript_section": "4.4 Construction and smoke",
+      "claim_text": "The internal-arm, transformation, comparator, and Foundry records are construction/smoke evidence and not scores.",
+      "evidence_refs": [
+        "reports/D2-06A.md",
+        "reports/D2-06B.md"
+      ],
+      "evidence_stratum": "construction-smoke",
+      "evidence_grade": "E0/E1-smoke",
+      "disposition": "SUPPORTED_NO_SCORE",
+      "reader_qualification": "A passing fuzz smoke is not safety and an E1 stub failure is not E4."
+    },
+    {
+      "map_id": "MAP-007",
+      "ledger_claim_ids": [
+        "D2-CLM-009"
+      ],
+      "manuscript_section": "Abstract; 4.5 Gate A; 9. Conclusion",
+      "claim_text": "Gate A stopped before scoring and is INCONCLUSIVE, with no scientific tool or human scorer run and every scored denominator equal to zero.",
+      "evidence_refs": [
+        "reports/D2-07.md",
+        "results/raw/D2-07-recovery-01/seal-verification.json"
+      ],
+      "evidence_stratum": "gate-decision",
+      "evidence_grade": "NO-SCORE",
+      "disposition": "SUPPORTED_INCONCLUSIVE",
+      "reader_qualification": "Zero rows are not zero misses, zero false warnings, or a tie."
+    },
+    {
+      "map_id": "MAP-008",
+      "ledger_claim_ids": [
+        "D2-CLM-011"
+      ],
+      "manuscript_section": "3.2 Compiler-backed identity prototype",
+      "claim_text": "The identity prototype passes bounded mechanical reference, mapping, and name-independence controls on five exposed fixtures.",
+      "evidence_refs": [
+        "reports/D2-08.md",
+        "results/raw/D2-08/run-summary.json",
+        "results/raw/D2-08/content-seal-v1.json"
+      ],
+      "evidence_stratum": "mechanical-fixture",
+      "evidence_grade": "E0-mechanical",
+      "disposition": "SUPPORTED_MECHANICAL_ONLY",
+      "reader_qualification": "Does not prove authenticity, policy correctness, or general equivalence."
+    },
+    {
+      "map_id": "MAP-009",
+      "ledger_claim_ids": [
+        "D2-CLM-012"
+      ],
+      "manuscript_section": "3.3 Authorization-boundary prototype",
+      "claim_text": "Both prototype arms consume byte-identical inputs and have equal results across ten synthetic fixtures; every effective result is UNKNOWN.",
+      "evidence_refs": [
+        "reports/D2-09.md",
+        "results/raw/D2-09/summary.json",
+        "results/raw/D2-09/content-seal-v1.json"
+      ],
+      "evidence_stratum": "mechanical-fixture",
+      "evidence_grade": "E0-synthetic-mechanical",
+      "disposition": "SUPPORTED_MECHANICAL_ONLY",
+      "reader_qualification": "Internal ESTABLISHED/MISMATCH_CANDIDATE states are not research verdicts."
+    },
+    {
+      "map_id": "MAP-010",
+      "ledger_claim_ids": [
+        "D2-CLM-013"
+      ],
+      "manuscript_section": "Abstract; 3.4 Typed extraction trust prototype; 9. Conclusion",
+      "claim_text": "Corrected Step 10 emits zero producer_guarantee facts, zero eligible derived consumer_used facts, two annotated MAY over-approximation candidates, and one exact derived extent fact; both arms remain UNKNOWN.",
+      "evidence_refs": [
+        "reports/D2-10.md",
+        "protocols/d2/d2-10-typed-extraction-v2.json",
+        "results/raw/D2-10/run-02/run-summary.json",
+        "results/raw/D2-10/run-02/content-seal-v1.json"
+      ],
+      "evidence_stratum": "mechanical-fixture",
+      "evidence_grade": "E0-mechanical",
+      "disposition": "SUPPORTED_FAIL_CLOSED",
+      "reader_qualification": "Run-01 is superseded; run-02 proves plumbing/controls only and supplies no paper claim."
+    },
+    {
+      "map_id": "MAP-011",
+      "ledger_claim_ids": [
+        "D2-CLM-015"
+      ],
+      "manuscript_section": "4.6 Independent evidence and taxonomy",
+      "claim_text": "The prior independent attempts comprise 12 attempts over eight projects with zero supported analyses and no adjudicated independent-family result.",
+      "evidence_refs": [
+        "reports/D1P-33.md",
+        "reports/D1P-36.md",
+        "reports/D2-01.md",
+        "reports/D2-02.md",
+        "reports/D2-11-14-dependency-audit.md",
+        "reports/D2-15-17-readiness-audit.md"
+      ],
+      "evidence_stratum": "independent-attempt-unsupported",
+      "evidence_grade": "E0/UNKNOWN",
+      "disposition": "SUPPORTED_AS_ABSENCE_OF_TRANSFER_EVIDENCE",
+      "reader_qualification": "Unsupported attempts are not misses or safety evidence."
+    },
+    {
+      "map_id": "MAP-012",
+      "ledger_claim_ids": [
+        "D2-CLM-016"
+      ],
+      "manuscript_section": "4.6 Independent evidence and taxonomy",
+      "claim_text": "The D2 taxonomy human study has not started; preparation and tested blank tooling do not establish an empirical taxonomy contribution.",
+      "evidence_refs": [
+        "reports/D2-04.md"
+      ],
+      "evidence_stratum": "preparation",
+      "evidence_grade": "NO-STUDY",
+      "disposition": "SUPPORTED_AS_MISSING_EVIDENCE",
+      "reader_qualification": "A historical human-versus-AI comparison is not inter-human agreement."
+    },
+    {
+      "map_id": "MAP-013",
+      "ledger_claim_ids": [
+        "D2-CLM-014",
+        "D2-CLM-019"
+      ],
+      "manuscript_section": "5. Claims the evidence does not support",
+      "claim_text": "The current record does not establish novelty, comparative advantage, the capability gate, security, or generality.",
+      "evidence_refs": [
+        "docs/research-contract.md",
+        "reports/D2-07.md",
+        "reports/D2-10.md"
+      ],
+      "evidence_stratum": "cross-stratum-audit",
+      "evidence_grade": "UNKNOWN",
+      "disposition": "UNRESOLVED",
+      "reader_qualification": "Mechanical controls and historical E4 do not fill prospective capability requirements."
+    },
+    {
+      "map_id": "MAP-014",
+      "ledger_claim_ids": [
+        "D2-CLM-017"
+      ],
+      "manuscript_section": "6. Closest related work",
+      "claim_text": "ELSA is an unresolved closest-work item whose official abstract reports LLM-assisted analyzer integration and self-constructed ZKP-based smart contracts.",
+      "evidence_refs": [
+        "https://conf.researchr.org/details/issta-2026/issta-2026-research-papers/131/Augmenting-Multi-Technique-Static-Analysis-with-Large-Language-Models-A-Neuro-Symbol",
+        "https://doi.org/10.1145/3832222"
+      ],
+      "evidence_stratum": "primary-source-related-work",
+      "evidence_grade": "primary-abstract-metadata",
+      "disposition": "UNRESOLVED_SCOPE",
+      "reader_qualification": "No primary full text/artifact was inspected; no non-overlap or novelty inference."
+    },
+    {
+      "map_id": "MAP-015",
+      "ledger_claim_ids": [
+        "D2-CLM-020"
+      ],
+      "manuscript_section": "2.3 Evidence strata; 4. Evidence ledger",
+      "claim_text": "Historical, injected/exposed development, construction/smoke, mechanical, and independent evidence are distinct and use separate denominators.",
+      "evidence_refs": [
+        "docs/research-contract.md",
+        "reports/D2-01.md",
+        "reports/D2-07.md",
+        "reports/D2-08.md"
+      ],
+      "evidence_stratum": "evidence-discipline",
+      "evidence_grade": "N/A",
+      "disposition": "SUPPORTED",
+      "reader_qualification": "Mock, proof, and committed-effect grades remain visible within each stratum."
+    },
+    {
+      "map_id": "MAP-016",
+      "ledger_claim_ids": [
+        "D2-CLM-018"
+      ],
+      "manuscript_section": "Status banner; 8. Submission-readiness disposition; 9. Conclusion",
+      "claim_text": "The manuscript is not submission-ready.",
+      "evidence_refs": [
+        "https://sp2027.ieee-security.org/cfpapers.html",
+        "paper/ieee-sp-2027-readiness-checklist.md",
+        "reports/D2-07.md",
+        "reports/D2-10.md",
+        "reports/D2-11-14-dependency-audit.md",
+        "reports/D2-15-17-readiness-audit.md"
+      ],
+      "evidence_stratum": "venue-readiness",
+      "evidence_grade": "READINESS-AUDIT",
+      "disposition": "SUPPORTED_NOT_READY",
+      "reader_qualification": "No final comparative result, independent transfer, human review, disclosures, anonymous artifact, or formatted PDF."
+    },
+    {
+      "map_id": "MAP-017",
+      "ledger_claim_ids": [
+        "D2-CLM-008"
+      ],
+      "manuscript_section": "2.2 Research outcomes versus mechanical states; 5. Claims the evidence does not support",
+      "claim_text": "E1 warnings, role/name matches, accepted proofs, and mechanical states do not by themselves establish an unauthorized committed effect.",
+      "evidence_refs": [
+        "docs/research-contract.md",
+        "reports/D2-03.md",
+        "reports/D2-09.md"
+      ],
+      "evidence_stratum": "semantic-claim-audit",
+      "evidence_grade": "N/A",
+      "disposition": "SUPPORTED_CORRECTION",
+      "reader_qualification": "Policy-reviewed causal E4 is required for that language."
+    }
+  ]
+}

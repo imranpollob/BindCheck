@@ -1,0 +1,70 @@
+{
+  "schema": "bindcheck.d2.development-boundary/v1",
+  "status": "ACTIVE",
+  "effective_date": "2026-11-02",
+  "purpose": "Prevent reserved-evaluation exposure while D2 development and early comparison proceed.",
+  "development_allowlist": [
+    {
+      "family": "WarpToad",
+      "allowed_material": [
+        "pinned development fixture",
+        "D1P-12R through D1P-43 development artifacts and reports",
+        "WT-C* and WT-S* authored binding mutants"
+      ],
+      "exposure": "EXPOSED_DEVELOPMENT"
+    },
+    {
+      "family": "Payy",
+      "allowed_material": [
+        "pinned earlier and check-added development fixtures",
+        "T15 through T22 and D1P-30 through D1P-43 development evidence",
+        "PY-C* and PY-S* authored binding mutants"
+      ],
+      "exposure": "EXPOSED_DEVELOPMENT"
+    },
+    {
+      "family": "authored synthetic controls",
+      "allowed_material": [
+        "tracked tests and fixtures under tests/ and tests/d1/",
+        "prospectively versioned semantic-transformation controls"
+      ],
+      "exposure": "EXPOSED_DEVELOPMENT"
+    }
+  ],
+  "historical_evidence_boundary": {
+    "allowed": "Tracked reports may be read to reconcile already published historical counts and limitations.",
+    "prohibited": "Developer agents must not open, copy, tune against, or reconstruct reserved-family source, identities, labels, evaluator outputs, or ignored reserved workspaces unless a custodian explicitly releases them for the assigned phase.",
+    "interpretation": "A historical repeated transfer attempt is not a fresh held-out family and UNKNOWN is not safety evidence."
+  },
+  "future_reserved_boundary": {
+    "selection_owner": "custodian",
+    "developer_visibility_before_freeze": "NONE",
+    "required_isolation": [
+      "Keep identities, sources, labels, and evaluator outputs outside developer workspaces and shared conversations.",
+      "Do not use repository-name hashes as a substitute for access isolation.",
+      "Provide no frozen-run feedback that could change analyzer code, policies, labels, or scoring."
+    ]
+  },
+  "handoff": {
+    "integration_lead": [
+      "Freeze the approved code, policies, configurations, inputs, budgets, and scoring files in a versioned seal.",
+      "Verify the seal immediately before handoff and provide the reproduction command."
+    ],
+    "custodian": [
+      "Retain the authoritative seal manifest outside the mutable developer workspace.",
+      "Release only the frozen package and authorized reserved inputs to the evaluator.",
+      "Preserve every attempted target and exclusion."
+    ],
+    "evaluator": [
+      "Verify the authoritative seal before execution.",
+      "Run the frozen protocol without developer feedback or rule changes.",
+      "Return complete build, unsupported, warning, validation, cost, and failure records to the custodian."
+    ],
+    "post_evaluation": "After authorized release, triage and writing may use the evidence; those families are then exposed for future development."
+  },
+  "limitations": [
+    "This file is an operational allowlist, not proof of non-access.",
+    "Local content hashes detect changes relative to a trusted manifest; they do not provide access control or conceal identities.",
+    "The user must name or confirm the custodian before a reserved freeze or release."
+  ]
+}

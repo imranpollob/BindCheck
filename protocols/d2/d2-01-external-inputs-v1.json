@@ -1,0 +1,21 @@
+{
+  "schema": "bindcheck.d2.external-input-manifest/v1",
+  "date": "2026-11-02",
+  "status": "FROZEN_BEFORE_OUTPUT",
+  "root_interpretation": "workspace-relative paths are resolved from the bindcheck-d1-paper checkout; absolute tool paths describe this bounded local run",
+  "files": [
+    {"path": "../BindCheck/tools/cases/payy-c4d2c90/noir/target/agg_agg.json", "sha256": "83b75a4af7434c9c722f19f7638404bd45ddbbd2ec0ff85b779bf89ca31d3b2c", "size_bytes": 1624682, "role": "Payy earlier producer artifact"},
+    {"path": "../BindCheck/tools/cases/payy-c4d2c90/noir/agg_agg/src/main.nr", "sha256": "c44a67e6a2e704cdbae5ebe251a0cb1da19d1e9417cf9b332b86768c0ee8604d", "size_bytes": 3797, "role": "Payy earlier producer source"},
+    {"path": "../BindCheck/build/T09/src-c4d2c90/noir/target/agg_final.json", "sha256": "92f05bfe7190de8ae2f5bdc895277c304c6d51afffaeae411e4f27148c51ffe0", "size_bytes": 17383, "role": "Payy earlier recursive mapping bridge"},
+    {"path": "../BindCheck/tools/cases/payy-history/noir/target/agg_agg.json", "sha256": "866b1800f8ad9a95623cb720a408acd234a7466e13242461b934249724c71f42", "size_bytes": 1702898, "role": "Payy check-added producer artifact"},
+    {"path": "../BindCheck/tools/cases/payy-history/noir/agg_agg/src/main.nr", "sha256": "3fd7c851050853339d7b45a71ed52fb17136202514792739817e2dcab30cfae9", "size_bytes": 4526, "role": "Payy check-added producer source"},
+    {"path": "../BindCheck/build/T09/src-dcd5d96/noir/target/agg_final.json", "sha256": "89c1d5d6732e31df477a8ca7ad4b1f0ed9af0c3b3b75216d9e584526a0eb6d1e", "size_bytes": 17385, "role": "Payy check-added recursive mapping bridge"},
+    {"path": "../BindCheck/tools/cases/payy-history/eth/contracts/rollup3/RollupV1.sol", "sha256": "7062065cc95f447fea8bb28242d51c836c3cf9e39f1625180ecf9c240a5ffd8f", "size_bytes": 26295, "role": "Payy check-added consumer source"},
+    {"path": "results/raw/D1P-35/tools/noir-1.0.0-beta.22/nargo", "sha256": "37f7d55d9795af0da3b471db2306e0296fa34c528386a828ce556fc3ebbf6e7b", "size_bytes": 42540384, "role": "pinned Nargo beta.22 executable"},
+    {"path": "/Users/imranpollob/.solc-select/artifacts/solc-0.8.29/solc-0.8.29", "sha256": "66fabdd17c8c0091311997ec7d17b4d92e1b7b2c2d213dc14e4ff28c3de864d1", "size_bytes": 35837920, "role": "pinned solc 0.8.29 executable"}
+  ],
+  "limits": [
+    "The adjacent BindCheck checkout is preservation input only; the D2 runner verifies these exact files and does not write there.",
+    "This manifest binds bytes for this local run and is not a portable fetch recipe or proof of source/build correspondence."
+  ]
+}

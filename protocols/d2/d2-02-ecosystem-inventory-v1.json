@@ -1,0 +1,480 @@
+{
+  "schema": "bindcheck.d2.ecosystem-inventory/v1",
+  "date": "2026-11-02",
+  "status": "COMPLETE_EXPOSED_DEVELOPMENT_INVENTORY",
+  "research_verdict": "UNKNOWN",
+  "objective": "Audit the eligible exposed-development population and triage reusable compatibility barriers without analyzer changes or reserved discovery.",
+  "development_boundary": "protocols/d2/development-boundary-v1.json",
+  "scope": {
+    "population_definition": "The complete set of pinned application revisions already named by the D2 exposed-development allowlist and supported by tracked pairing evidence: one WarpToad revision and the Payy earlier/check-added pair.",
+    "discovery_permitted": false,
+    "reserved_identity_access_permitted": false,
+    "historical_reports_permitted_use": "Aggregate only already published attempt counts, stopping reasons, build outcomes, and limitations. Do not copy reserved identities or infer family lineage.",
+    "synthetic_controls": "Repository-authored controls are inventoried separately and are not counted as ecosystem projects or independent families.",
+    "selection_limit": "This is a bounded exposed-development census, not an estimate of the wider Noir/EVM ecosystem. Zero observed unavailable, ineligible, or build-failed candidates is not a prevalence estimate."
+  },
+  "compatibility_status_taxonomy": {
+    "UNAVAILABLE": "The approved target identity is known but its source, pinned revision, or required artifact evidence is inaccessible. This is not a build failure.",
+    "INELIGIBLE": "The target is outside the frozen Noir/ACIR producer to Solidity/EVM consumer scope or lacks the required proof-to-execution boundary.",
+    "BUILD_FAILED": "An eligible approved target was attempted but no usable producer and consumer build route was obtained. A failed default route with a successful scoped route is not BUILD_FAILED.",
+    "UNSUPPORTED": "Source/artifacts are available and sufficiently built, but analysis stops fail-closed at a named compiler/schema, semantic opcode, memory, verifier-mapping, or consumer-extraction gate.",
+    "ANALYZABLE": "The approved target has usable producer/consumer evidence and the current interface completes the requested analysis far enough to emit supported facts or warnings. ANALYZABLE is not a safety verdict."
+  },
+  "counting_units": {
+    "candidate_revision": "One pinned application revision with a producer/consumer pairing. This is the primary eligible-population unit.",
+    "repository": "One upstream source repository; multiple revisions do not create multiple repositories.",
+    "architectural_lineage": "A code and proof/consumer architecture lineage. Shared authorship alone is insufficient.",
+    "target_variant": "One authored benchmark mutation. Variants are not projects, revisions, or independent families.",
+    "analysis_attempt": "One frozen invocation against one project at one analyzer version. Reattempts count again here but not as new projects.",
+    "unique_project": "One project identity across attempts. This is not an adjudicated family count.",
+    "blocker_occurrence": "The first fail-closed stopping category for one analysis attempt unless explicitly marked as a nested contributor."
+  },
+  "eligible_population": {
+    "candidate_revision_count": 3,
+    "unique_repository_count": 2,
+    "architectural_lineage_count": 2,
+    "status_counts": {
+      "UNAVAILABLE": 0,
+      "INELIGIBLE": 0,
+      "BUILD_FAILED": 0,
+      "UNSUPPORTED": 0,
+      "ANALYZABLE": 3
+    },
+    "status_count_interpretation": "Counts cover only the three allowlisted pinned revision candidates. They exclude mutants, synthetic controls, and historical transfer attempts.",
+    "candidates": [
+      {
+        "id": "warptoad-973e7d1",
+        "repository": "https://github.com/warptoad/warp-toad.git",
+        "revision": "973e7d1e4b60d0d8a8ca299b0cabd9193b147ef8",
+        "exposure": "EXPOSED_DEVELOPMENT",
+        "compatibility_status": "ANALYZABLE",
+        "producer_consumer_pairing": {
+          "producer": "backend/circuits/withdraw compiled artifact; 11 application public words",
+          "consumer": "backend/contracts/core/WarpToadCore.sol::mint",
+          "mapping": "Compiled ABI order equals the 11-word vector constructed by the unchanged consumer; the generated verifier reproduces the committed verifier bytes.",
+          "mapping_limit": "Verifier reproduction does not establish historical deployment provenance."
+        },
+        "toolchain": {
+          "noir_artifact_compiler": "1.0.0-beta.22+c57152f91260ecdb9faad4efc20abb14b6d2ece7",
+          "noir_runtime": "@noir-lang/noir_js 1.0.0-beta.22",
+          "backend": "@aztec/bb.js 5.0.0"
+        },
+        "verifier": {
+          "proof_system": "UltraHonk",
+          "oracle_or_transcript": "keccakZK:true",
+          "solidity_pairing_evidence": "Locally generated verifier is byte-identical to the verifier committed at the pinned revision."
+        },
+        "protected_effects": [
+          "nullifier absent check followed by committed nullifier consumption",
+          "principal token mint amount and recipient",
+          "relayer fee mint amount and beneficiary",
+          "root-history, chain-domain, fee-cap, and recipient authorization guards"
+        ],
+        "eligibility_rationale": "Pinned Noir/ACIR producer, generated Solidity/EVM verifier, and a concrete Solidity consumer that reconstructs and relies on the public-input vector.",
+        "analysis_evidence": {
+          "current_interface": "D2-01 integrated development analyzer",
+          "current_result": "ANALYZABLE on the pinned pair; benchmark variants are counted separately.",
+          "evidence_grade_limit": "Development evidence only; current warnings remain E1 unless separately validated."
+        },
+        "family_lineage": {
+          "id": "lineage-warptoad-withdraw-mint",
+          "basis": "One pinned withdraw-circuit, UltraHonk verifier, and WarpToadCore.mint architecture.",
+          "uncertainty": "LOW for grouping the pinned target and WT-C*/WT-S* authored derivatives; no independence claim is made among variants."
+        }
+      },
+      {
+        "id": "payy-c4d2c902-earlier",
+        "repository": "https://github.com/polybase/payy.git",
+        "revision": "c4d2c9021b8fb9988816eb6987a734b830bfce15",
+        "exposure": "KNOWN_BUG_EXPOSED_DEVELOPMENT",
+        "compatibility_status": "ANALYZABLE",
+        "producer_consumer_pairing": {
+          "producer": "noir/agg_agg recursively composed into noir/agg_final",
+          "consumer": "eth/contracts/rollup3/RollupV1.sol::verifyRollup and message dispatch",
+          "mapping": "Artifact-specific certificate maps 1,005 outer producer positions as two recursive-verifier configuration words plus 1,003 Solidity-visible words: old_root, new_root, commit_hash, and messages[1000].",
+          "mapping_limit": "The certificate is exact to this artifact and may not be reused for mutant bytes."
+        },
+        "toolchain": {
+          "noir_compiler": "1.0.0-beta.14+60ccd48e18ad8ce50d5ecda9baf813b712145051",
+          "bb": "3.0.0-manual.20251030 in the preserved end-to-end evidence",
+          "consumer_solidity": "0.8.20 via-IR, optimizer 200 in the preserved consumer execution"
+        },
+        "verifier": {
+          "proof_system": "UltraHonk / generated ZK Honk Solidity verifier",
+          "oracle_or_transcript": "keccak for agg_final",
+          "solidity_pairing_evidence": "Revision-specific key/verifier; preserved evidence uses the earlier revision's own verifier and never crosses revision keys."
+        },
+        "protected_effects": [
+          "message-dispatched mint bookkeeping and spent-state transitions",
+          "burn token transfer amount and recipient",
+          "rootHash and blockHeight commits after proof acceptance",
+          "validator/prover, old-root, verifier-registry, and message-grammar guards"
+        ],
+        "eligibility_rationale": "Pinned Noir recursive producer and Solidity/EVM consumer with an exact artifact-specific public-input certificate.",
+        "analysis_evidence": {
+          "current_interface": "D2-01 integrated development analyzer",
+          "current_result": "ANALYZABLE; emits the expected R-EXTENT warning for the uncovered active-count-to-length region plus a separate R-CONSUMER warning.",
+          "evidence_grade_limit": "The current warning is E1 known-case development evidence. The historical T15-T19 E4 chain applies only to the known message-tail mechanism."
+        },
+        "family_lineage": {
+          "id": "lineage-payy-agg-agg-final-rollupv1",
+          "basis": "Same repository, recursive agg_agg to agg_final architecture, and byte-identical RollupV1 consumer across the earlier/check-added revisions.",
+          "uncertainty": "LOW for grouping the two revisions as one code/architectural lineage; they are a before/after pair, not independent families."
+        }
+      },
+      {
+        "id": "payy-dcd5d96e-check-added",
+        "repository": "https://github.com/polybase/payy.git",
+        "revision": "dcd5d96ee15664a59bc24ed0dc2bb78b73ac5e36",
+        "exposure": "KNOWN_REPAIR_EXPOSED_DEVELOPMENT",
+        "compatibility_status": "ANALYZABLE",
+        "producer_consumer_pairing": {
+          "producer": "noir/agg_agg with assert_message_tail_zero, recursively composed into noir/agg_final",
+          "consumer": "eth/contracts/rollup3/RollupV1.sol::verifyRollup and message dispatch; byte-identical to the earlier revision",
+          "mapping": "Artifact-specific certificate maps 1,005 outer producer positions as two recursive-verifier configuration words plus the same 1,003-word consumer vector.",
+          "mapping_limit": "The certificate is exact to this artifact and may not be reused for mutant bytes or the earlier revision."
+        },
+        "toolchain": {
+          "noir_compiler": "1.0.0-beta.14+60ccd48e18ad8ce50d5ecda9baf813b712145051",
+          "bb": "3.0.0-manual.20251030 in the preserved end-to-end evidence",
+          "consumer_solidity": "0.8.20 via-IR, optimizer 200 in the preserved consumer execution"
+        },
+        "verifier": {
+          "proof_system": "UltraHonk / generated ZK Honk Solidity verifier",
+          "oracle_or_transcript": "keccak for agg_final",
+          "solidity_pairing_evidence": "Revision-specific key/verifier; preserved repair evidence uses only check-added-revision artifacts."
+        },
+        "protected_effects": [
+          "message-dispatched mint bookkeeping and spent-state transitions",
+          "burn token transfer amount and recipient",
+          "rootHash and blockHeight commits after proof acceptance",
+          "validator/prover, old-root, verifier-registry, and message-grammar guards"
+        ],
+        "eligibility_rationale": "Pinned Noir recursive producer and Solidity/EVM consumer with an exact artifact-specific public-input certificate.",
+        "analysis_evidence": {
+          "current_interface": "D2-01 integrated development analyzer",
+          "current_result": "ANALYZABLE; no R-EXTENT warning after the tail assertion, with a separate R-CONSUMER warning still reported.",
+          "evidence_grade_limit": "Absence of R-EXTENT is a repair control, not safety evidence."
+        },
+        "family_lineage": {
+          "id": "lineage-payy-agg-agg-final-rollupv1",
+          "basis": "Same repository, recursive agg_agg to agg_final architecture, and byte-identical RollupV1 consumer across the earlier/check-added revisions.",
+          "uncertainty": "LOW for grouping the two revisions as one code/architectural lineage; they are a before/after pair, not independent families."
+        }
+      }
+    ]
+  },
+  "family_definitions": [
+    {
+      "id": "lineage-warptoad-withdraw-mint",
+      "candidate_revisions": 1,
+      "repository_count": 1,
+      "grouping_basis": "Shared withdraw producer, generated UltraHonk verifier, 11-word boundary, and WarpToadCore.mint consumer architecture.",
+      "does_not_count_as_new_families": "WT-C*/WT-S* authored mutations."
+    },
+    {
+      "id": "lineage-payy-agg-agg-final-rollupv1",
+      "candidate_revisions": 2,
+      "repository_count": 1,
+      "grouping_basis": "Same recursive aggregation architecture and byte-identical RollupV1 consumer; the revisions differ at the producer tail assertion and revision-specific keys/verifiers.",
+      "does_not_count_as_new_families": "The earlier/check-added pair, PY-C*/PY-S* authored mutations, or distinct revision-specific artifacts."
+    },
+    {
+      "id": "authored-synthetic-controls",
+      "candidate_revisions": 0,
+      "repository_count": 0,
+      "grouping_basis": "Repository-authored semantic controls used to test bounded conditions and extraction paths.",
+      "uncertainty": "The controls exercise multiple code shapes but are not independent applications or an ecosystem family; no population-family count is assigned."
+    }
+  ],
+  "development_case_collections": [
+    {
+      "id": "d2-01-current-binding-mutants",
+      "counting_unit": "target_variant",
+      "total": 30,
+      "lineage_split": {
+        "lineage-warptoad-withdraw-mint": 18,
+        "lineage-payy-agg-agg-final-rollupv1": 12
+      },
+      "compatibility_status_counts": {
+        "UNAVAILABLE": 0,
+        "INELIGIBLE": 0,
+        "BUILD_FAILED": 0,
+        "UNSUPPORTED": 13,
+        "ANALYZABLE": 17
+      },
+      "research_outcome_counts": {
+        "DETECTED": 17,
+        "UNSUPPORTED": 13,
+        "MISS": 0
+      },
+      "first_stop_reasons": {
+        "UNSUPPORTED_CONSUMER_AST_REQUIRED": 13
+      },
+      "unsupported_split": {
+        "WarpToad": {
+          "target_variants": 1,
+          "ids": [
+            "WT-S04"
+          ]
+        },
+        "Payy": {
+          "target_variants": 12,
+          "id_pattern": "PY-C* and PY-S*"
+        }
+      },
+      "interpretation": "Target variants share two development lineages. They are not 30 projects, 30 revisions, or 30 independent families. Unsupported remains UNKNOWN."
+    },
+    {
+      "id": "d2-01-exact-payy-pair",
+      "counting_unit": "candidate_revision",
+      "total": 2,
+      "compatibility_status_counts": {
+        "UNAVAILABLE": 0,
+        "INELIGIBLE": 0,
+        "BUILD_FAILED": 0,
+        "UNSUPPORTED": 0,
+        "ANALYZABLE": 2
+      },
+      "interpretation": "These are the same two Payy candidate revisions already counted in the eligible population and are not additive to that denominator."
+    },
+    {
+      "id": "d1p42-authored-synthetic-extent-controls",
+      "counting_unit": "authored_control",
+      "analysis_pairs": 3,
+      "execution_controls": 6,
+      "compatibility_status": "ANALYZABLE",
+      "toolchain": {
+        "noir": "1.0.0-beta.22+c57152f91260ecdb9faad4efc20abb14b6d2ece7",
+        "solc": "0.8.29+commit.ab55807c.Darwin.appleclang"
+      },
+      "interpretation": "These nine observations are controls, not nine ecosystem candidates or independent families. No comprehensive count across every historical synthetic fixture is claimed."
+    }
+  ],
+  "historical_transfer_reconciliation": {
+    "identity_policy": "Aggregate only. Reserved project identities and source are not copied into this development inventory.",
+    "attempt_counts": {
+      "analysis_attempts": 12,
+      "unique_projects": 8,
+      "repeat_attempts": 4,
+      "supported_or_analyzable_attempts": 0,
+      "unsupported_attempts": 12,
+      "adjudicated_independent_family_count": null
+    },
+    "build_counts": {
+      "attempts_with_usable_build_evidence": 12,
+      "build_failed_attempts": 0,
+      "note": "Some routes used an evidence-derived or scoped successful build, and D1P-36 Set A reused D1P-33 builds. A failed default route followed by a successful scoped consumer/verifier route is not classified BUILD_FAILED."
+    },
+    "scan_records": [
+      {
+        "report": "reports/D1P-33.md",
+        "analyzer_version": "v1.1",
+        "analysis_attempts": 4,
+        "unique_projects_in_scan": 4,
+        "fresh_projects_in_scan": 4,
+        "repeat_projects_in_scan": 0,
+        "supported_attempts": 0,
+        "unsupported_attempts": 4,
+        "blocker_occurrences": {
+          "compiler_or_schema": 3,
+          "semantic_opcode": 1,
+          "memory_semantics": 0,
+          "verifier_mapping": 0,
+          "consumer_extraction": 0
+        }
+      },
+      {
+        "report": "reports/D1P-36.md",
+        "analyzer_version": "v1.2",
+        "analysis_attempts": 8,
+        "unique_projects_in_scan": 8,
+        "fresh_projects_in_scan": 4,
+        "repeat_projects_in_scan": 4,
+        "supported_attempts": 0,
+        "unsupported_attempts": 8,
+        "blocker_occurrences": {
+          "compiler_or_schema": 2,
+          "semantic_opcode": 3,
+          "memory_semantics": 2,
+          "verifier_mapping": 0,
+          "consumer_extraction": 1
+        }
+      }
+    ],
+    "combined_attempt_occurrences": {
+      "compiler_or_schema": 5,
+      "semantic_opcode": 4,
+      "memory_semantics": 2,
+      "verifier_mapping": 0,
+      "consumer_extraction": 1,
+      "total": 12,
+      "interpretation": "Attempt occurrences include four reattempts and must not be read as unique projects or families."
+    },
+    "latest_unique_project_distribution": [
+      {
+        "category": "compiler_or_schema",
+        "affected_unique_projects": 2,
+        "affected_families": null,
+        "named_observations": [
+          "beta.3 compiler/schema",
+          "beta.25 compiler/schema"
+        ]
+      },
+      {
+        "category": "semantic_opcode",
+        "affected_unique_projects": 3,
+        "affected_families": null,
+        "named_observations": [
+          "MultiScalarMul (2)",
+          "RecursiveAggregation (1)"
+        ]
+      },
+      {
+        "category": "memory_semantics",
+        "affected_unique_projects": 2,
+        "affected_families": null,
+        "named_observations": [
+          "beta.21 MemoryOp encoding (2)"
+        ]
+      },
+      {
+        "category": "consumer_extraction",
+        "affected_unique_projects": 1,
+        "affected_families": null,
+        "named_observations": [
+          "multiple Solidity verifier boundaries / consumer AST ambiguity (1)"
+        ]
+      }
+    ],
+    "family_count_limit": "No code/architectural lineage adjudication exists for these eight projects. The latest project distribution therefore cannot be converted into affected-family counts or used as a family-ranked ecosystem estimate."
+  },
+  "blocker_distribution_and_ranking": {
+    "ranking_rule": "Rank current exposed-development barriers first by affected architectural lineages, then by affected target variants, while reporting implementation risk separately. Historical rows with null family counts are not inserted into this family ranking.",
+    "current_development_ranking": [
+      {
+        "rank": 1,
+        "id": "current-consumer-ast-route",
+        "category": "consumer_extraction",
+        "first_stop_reason": "UNSUPPORTED_CONSUMER_AST_REQUIRED",
+        "affected_architectural_lineages": 2,
+        "affected_target_variants": 13,
+        "lineage_split": {
+          "lineage-warptoad-withdraw-mint": 1,
+          "lineage-payy-agg-agg-final-rollupv1": 12
+        },
+        "implementation_risk": "MEDIUM_HIGH",
+        "risk_basis": "Requires supported compiler-AST boundary selection and relation extraction while preserving fail-closed ambiguity handling. The Payy subset also has an upstream artifact-specific mapping precondition."
+      },
+      {
+        "rank": 2,
+        "id": "payy-mutant-recursive-mapping",
+        "category": "verifier_mapping",
+        "first_stop_reason": null,
+        "affected_architectural_lineages": 1,
+        "affected_target_variants": 12,
+        "implementation_risk": "HIGH",
+        "risk_basis": "A mapping must be derived and certified for each mutated artifact; reusing either exact pinned Payy certificate would be unsound.",
+        "counting_note": "Nested contributor to the 12 Payy cases already counted under the named consumer-AST first stop; do not add these 12 again."
+      }
+    ],
+    "historical_risk_context_not_family_ranked": [
+      {
+        "category": "semantic_opcode",
+        "latest_affected_unique_projects": 3,
+        "affected_families": null,
+        "implementation_risk": "HIGH_TO_VERY_HIGH",
+        "reason": "MultiScalarMul and RecursiveAggregation require sound semantic treatment, not schema-only acceptance."
+      },
+      {
+        "category": "compiler_or_schema",
+        "latest_affected_unique_projects": 2,
+        "affected_families": null,
+        "implementation_risk": "HIGH_AND_VERSION_SPECIFIC",
+        "reason": "beta.3 and beta.25 represent distinct format/version work; a generic new frontend is not evidenced to unlock successful analysis."
+      },
+      {
+        "category": "memory_semantics",
+        "latest_affected_unique_projects": 2,
+        "affected_families": null,
+        "implementation_risk": "MEDIUM_HIGH",
+        "reason": "The observed beta.21 MemoryOp encoding difference still requires semantics-preserving decoding and tests."
+      },
+      {
+        "category": "consumer_extraction",
+        "latest_affected_unique_projects": 1,
+        "affected_families": null,
+        "implementation_risk": "MEDIUM_HIGH",
+        "reason": "Multiple verifier boundaries require explicit selection or multi-boundary modeling rather than a heuristic choice."
+      }
+    ]
+  },
+  "bounded_compatibility_recommendation": [
+    "Preserve the current fail-closed gates and use the two exact application lineages plus the authored controls as anchors; do not relabel unsupported as misses or safe targets.",
+    "For current development coverage, specify and test the consumer-AST relation route at the exact unsupported shapes. Before treating the 12 Payy mutants as analyzable, derive an artifact-bound recursive mapping certificate per mutant and reject certificate/artifact hash mismatch.",
+    "Treat improving 12 Payy variants as depth within one lineage, not ecosystem breadth. Do not claim that this work adds 12 projects or families.",
+    "Do not select beta.3, beta.25, MemoryOp, MultiScalarMul, or RecursiveAggregation work from the historical project counts alone. A custodian would need to provide allowed redacted lineage metadata before those rows can support affected-family ranking.",
+    "No universal family threshold or new-frontend success claim is justified. Revisit compatibility priorities after Gate A or after an approved lineage-aware population expansion."
+  ],
+  "audit_sources": [
+    {
+      "path": "protocols/d2/development-boundary-v1.json",
+      "sha256": "128441e8ab3498216bacb508bc65cd30f2dbf8ed98e619dfdee6586f150f1c7c"
+    },
+    {
+      "path": "metadata/d1/d1p-12r-artifact-manifest.json",
+      "sha256": "de642394280dd8ad584589bd63dc4f16438dc8f820981f92324b4ee0d222d7cc"
+    },
+    {
+      "path": "docs/payy-case-study.md",
+      "sha256": "53b1efe137cf2548ed5f2b1f3477759e0b2161e210b7fa37c712a05496754fae"
+    },
+    {
+      "path": "benchmarks/binding-mutants/manifest.json",
+      "sha256": "1e55bca947b1d0e0bd92a398c4a7c710783e24e7b56e907718536c438e31d69b"
+    },
+    {
+      "path": "reports/D1P-33.md",
+      "sha256": "8dbfb24474e60982170dd91ba56e8e228b31aecde08fdb4b84c19321c31771b8"
+    },
+    {
+      "path": "reports/D1P-36.md",
+      "sha256": "737618c530747e3bea45f0c83d214e05120a5fd5f264a3b4ae4b2a867132ef8d"
+    },
+    {
+      "path": "reports/D1P-40-correctness-audit.md",
+      "sha256": "ba8daf973771300cc72c5b64d85685399bd86b3cccd76f6c9072021ad3d52b0f"
+    },
+    {
+      "path": "reports/D1P-42.md",
+      "sha256": "824e7c75ade496ce461bf0ff577a9c0421f083ff17c5f7b30013a29b6cd2f6d1"
+    },
+    {
+      "path": "reports/D2-01.md",
+      "sha256": "ee13591c20fc4078ac71ce720b53ff2c1af7e51fa50f0a974fe4a2a6a74cba3f"
+    },
+    {
+      "path": "results/raw/D2-01-recovery-01/integrated/benchmark-results.json",
+      "sha256": "c6dba630636d8128cd0b276c8693ce3665295b859469ed478d3cf394a6832ecc"
+    },
+    {
+      "path": "results/raw/D2-01-recovery-01/integrated/payy-results.json",
+      "sha256": "b2048a6d2b12a9fc9ede0852a62e2e9642e5e320ac9c4ec72edee56d6b03f9fa"
+    },
+    {
+      "path": "results/raw/D2-01-recovery-01/development-case-table.json",
+      "sha256": "11eca7ba18d732cd60b87c7033492255004fed06889e49b126220d6d007f8872"
+    },
+    {
+      "path": "results/raw/D2-01-recovery-01/d1p42-rerun/synthetic-results.json",
+      "sha256": "d6e6cb5034c6712c5d25babec332d566fd019be28af351567310c0564709f9ae"
+    }
+  ],
+  "claim_limits": [
+    "The three-candidate census is constructed from already exposed development inputs; it does not measure the wider ecosystem or unbiased discovery.",
+    "Two repositories and two architectural lineages are represented. The two Payy revisions are one lineage, and authored mutants/controls are not independent families.",
+    "The 12 historical attempts are 8 unique projects with 4 repeats and no adjudicated independent family count. Their project blocker distribution is not a family distribution.",
+    "ANALYZABLE, no-warning, and repair-control outcomes are not security verdicts. All research conclusions remain UNKNOWN unless separately supported under the research contract.",
+    "No analyzer, source, rule, protocol label, reserved identity, or private artifact was changed or inspected for this inventory."
+  ]
+}

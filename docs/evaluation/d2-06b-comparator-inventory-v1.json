@@ -1,0 +1,421 @@
+{
+  "schema": "bindcheck.d2.external-comparator-inventory/v1",
+  "version": "1.0.0",
+  "as_of": "2026-11-02",
+  "status": "CONSTRUCTION_INVENTORY_UNSEALED_DO_NOT_SCORE",
+  "research_verdict": "UNKNOWN",
+  "selection_rule": "Inventory precedes Step 7. Native frontend or architecture mismatch is unsupported/not applicable, artifact or build failure is unavailable/unresolved, and neither is an algorithmic miss.",
+  "case_groups": [
+    "GA-PAYY-TAIL",
+    "GA-WARPTOAD-MDOM",
+    "GA-WARPTOAD-MSRC",
+    "GA-WARPTOAD-RELATIONSHIP"
+  ],
+  "construction_status_vocabulary": [
+    "NATIVE_READY",
+    "NATIVE_HISTORICAL_OUTPUT_AVAILABLE",
+    "ADAPTED_SMOKE_READY_UNREVIEWED",
+    "ADAPTER_NOT_CONSTRUCTED",
+    "NATIVE_INPUT_UNSUPPORTED",
+    "ARCHITECTURE_NOT_APPLICABLE",
+    "ARTIFACT_UNAVAILABLE",
+    "BUILD_UNAVAILABLE",
+    "RUN_UNRESOLVED",
+    "PROTOCOL_UNAVAILABLE",
+    "NOT_SELECTED"
+  ],
+  "comparators": [
+    {
+      "id": "CMP-NOIR",
+      "name": "Noir compiler/default checks",
+      "class": "native_producer_compiler",
+      "primary_sources": [
+        "https://github.com/noir-lang/noir",
+        "https://noir-lang.org/docs/"
+      ],
+      "pin": {
+        "beta14": {
+          "version": "nargo 1.0.0-beta.14",
+          "path": "results/raw/D1P-22/tools/noir-beta14/nargo",
+          "sha256": "a0528f1c7a070f51addcefc707f889f2f9cbd85b17261e43f4b8dcf3d1d81eb8"
+        },
+        "beta22": {
+          "version": "nargo 1.0.0-beta.22",
+          "path": "results/raw/D1P-22/tools/noir-beta22/nargo",
+          "sha256": "37f7d55d9795af0da3b471db2306e0296fa34c528386a828ce556fc3ebbf6e7b"
+        }
+      },
+      "native_scope": "Compile/check the pinned Noir producer packages and emit compiler diagnostics; no consumer-effect or user-policy interface.",
+      "applicability": {
+        "GA-PAYY-TAIL": "native producer/default arm at the revision-compatible pin",
+        "GA-WARPTOAD-MDOM": "native producer/default arm at beta.22",
+        "GA-WARPTOAD-MSRC": "native producer/default arm, but producer bytes are unchanged by the consumer-only mutation",
+        "GA-WARPTOAD-RELATIONSHIP": "native only for producer-side mutants; not applicable to consumer-only rows"
+      },
+      "arms": {
+        "generic_default": "NATIVE_HISTORICAL_OUTPUT_AVAILABLE",
+        "same_policy": "NATIVE_INPUT_UNSUPPORTED"
+      },
+      "historical_native_evidence": [
+        {
+          "path": "results/raw/D1P-22/generic-noir-warptoad-m-dom/default.json",
+          "sha256": "4cb19cd155394894e372c720e377934586a0dfbbebb4a1397a3ac75057091410"
+        },
+        {
+          "path": "docs/baselines/d1p-22-results.md",
+          "role": "Pinned commands, default/lookback outputs, and bounded interpretation."
+        },
+        {
+          "path": "docs/baselines/d1p-32-benchmark.md",
+          "role": "Extended exposed-mutant native results and effort."
+        }
+      ],
+      "claim_limit": "A compiler warning is an E1 producer-side lint at most and does not supply a proof-to-execution authorization diagnosis."
+    },
+    {
+      "id": "CMP-SLITHER",
+      "name": "Slither",
+      "class": "native_consumer_static_analysis",
+      "primary_sources": [
+        "https://github.com/crytic/slither",
+        "https://github.com/crytic/slither/wiki/Detector-Documentation"
+      ],
+      "pin": {
+        "version": "0.11.6",
+        "path": "results/raw/D1P-22/tools/slither/venv/bin/slither",
+        "sha256": "78a29c91f594f79e15d4c6ed310104b14f75bac3e444b2b080511bd79058f87b"
+      },
+      "native_scope": "Generic/default Solidity and EVM-consumer detectors over pinned archived compiler inputs.",
+      "applicability": {
+        "GA-PAYY-TAIL": "native generic/default consumer arm",
+        "GA-WARPTOAD-MDOM": "native generic/default consumer arm; consumer is byte-identical to the control",
+        "GA-WARPTOAD-MSRC": "native generic/default consumer arm",
+        "GA-WARPTOAD-RELATIONSHIP": "native for consumer-source rows; unsupported for producer-only rows"
+      },
+      "arms": {
+        "generic_default": "NATIVE_HISTORICAL_OUTPUT_AVAILABLE",
+        "same_policy": "ADAPTER_NOT_CONSTRUCTED"
+      },
+      "same_policy_adapter_boundary": "A custom detector is an adapted arm, not a default Slither result. No frozen custom detector exists; its property lines and construction effort must be charged if Step 7 includes it.",
+      "historical_native_evidence": [
+        {
+          "path": "results/raw/D1P-22/generic-slither-warptoad-m-src/default.json",
+          "sha256": "2cc9cf9205ec56a5286894284ed94fb91cf24fe785956b287a14c8dc388be90a"
+        },
+        {
+          "path": "results/raw/D1P-22/generic-slither-warptoad-m-src/default.stdout.txt",
+          "sha256": "125a5c16e41b5d370f1780d8d4f9d549e53466a662d373d95a28ccc0d2bb5d51"
+        }
+      ],
+      "claim_limit": "Historical naming/reentrancy lints are E1 consumer-side signals only; they do not relate a producer word to an admitted state or protected effect."
+    },
+    {
+      "id": "CMP-MYTHRIL",
+      "name": "Mythril",
+      "class": "native_consumer_symbolic_execution",
+      "primary_sources": [
+        "https://github.com/ConsensysDiligence/mythril"
+      ],
+      "pin": {
+        "version": "0.24.8",
+        "path": "results/raw/D1P-22/tools/mythril/venv/bin/myth",
+        "sha256": "3488e3a390b03631913975f66806a5c6759d81c485aaeef9f1ec88b7da73284a"
+      },
+      "native_scope": "Generic/default symbolic execution of archived EVM runtime bytecode.",
+      "applicability": {
+        "GA-PAYY-TAIL": "native consumer-bytecode arm",
+        "GA-WARPTOAD-MDOM": "native consumer-bytecode arm; bytecode is identical to the control",
+        "GA-WARPTOAD-MSRC": "native consumer-bytecode arm",
+        "GA-WARPTOAD-RELATIONSHIP": "native for consumer bytecode; producer-only mutations are unsupported unless they change supplied bytecode"
+      },
+      "arms": {
+        "generic_default": "RUN_UNRESOLVED",
+        "same_policy": "ADAPTER_NOT_CONSTRUCTED"
+      },
+      "same_policy_adapter_boundary": "A Solidity assertion wrapper is possible but is an adapted property arm. None was frozen or built for these cases.",
+      "historical_native_evidence": [
+        {
+          "path": "results/raw/D1P-22/generic-mythril-warptoad-m-src/default.json",
+          "sha256": "9176753773229cc8fd546da44507886b8545a675ffe7006844431074d7908ee4"
+        },
+        {
+          "path": "docs/baselines/d1p-32-benchmark.md",
+          "role": "Sequential fairness retries and unresolved disposition."
+        }
+      ],
+      "claim_limit": "Timeouts, crashes, partial generic reports, and an absent assertion wrapper remain unresolved and are not misses."
+    },
+    {
+      "id": "CMP-FOUNDRY",
+      "name": "Foundry invariant testing",
+      "class": "native_consumer_property_testing",
+      "primary_sources": [
+        "https://github.com/foundry-rs/foundry",
+        "https://getfoundry.sh/forge/invariant-testing"
+      ],
+      "pin": {
+        "version": "1.8.6",
+        "commit": "6bad0a66de7c83f7b33695044138f0f5fa4c5990",
+        "path": "results/raw/D1P-22/tools/foundry/forge",
+        "sha256": "f63f468bdeb5ea66b0379722657ddfacdd0141f1fab80fe542da345eb2961f07"
+      },
+      "native_scope": "Stateful invariant testing of the actual pinned or mutated Solidity consumer through a handwritten direct property harness.",
+      "applicability": {
+        "GA-PAYY-TAIL": "applicable only if a revision-specific policy wrapper is constructed; historical check-added control alone is insufficient",
+        "GA-WARPTOAD-MDOM": "consumer same-policy arm runs, but the current policy does not encode producer application-domain binding",
+        "GA-WARPTOAD-MSRC": "native same-policy root-admission arm",
+        "GA-WARPTOAD-RELATIONSHIP": "native for expressible consumer state/effect properties; unsupported for purely producer relations unless a charged producer adapter is supplied"
+      },
+      "arms": {
+        "generic_default": "NATIVE_HISTORICAL_OUTPUT_AVAILABLE",
+        "same_policy": "ADAPTED_SMOKE_READY_UNREVIEWED"
+      },
+      "adaptation": "The property itself is handwritten and must be counted; Foundry is native to the Solidity harness, not a native proof-to-execution analyzer.",
+      "historical_native_evidence": [
+        {
+          "path": "results/raw/D1P-32/foundry-policy-pinned/invariant-g4-final.stdout.txt",
+          "sha256": "99dbb4e732273062883ed0d3a9ee004497c4265b1c3e9d8c6f23725c488db22b"
+        },
+        {
+          "path": "results/raw/D1P-32/foundry-policy-m-src/invariant-g4-final.stdout.txt",
+          "sha256": "dee0226f349eaf054941c483e7a8d489ea3126a1764e3920c5ea3d526bef6b5b"
+        }
+      ],
+      "fresh_smoke_namespace": "results/raw/D2-06B",
+      "evidence_ceiling": "E1",
+      "claim_limit": "The relational verifier stub checks exact words but is not a real proof/verifier execution. A passing campaign is not safety evidence, and human policy review is unresolved."
+    },
+    {
+      "id": "CMP-ECHIDNA",
+      "name": "Echidna",
+      "class": "native_consumer_property_fuzzing",
+      "primary_sources": [
+        "https://github.com/crytic/echidna"
+      ],
+      "pin": {
+        "version": "2.3.3",
+        "path": "results/raw/D1P-22/tools/echidna/echidna",
+        "sha256": "377218aea1c1980e471f4020c238957a84fb1651b582d4e635e50f40dc9a6fcb"
+      },
+      "native_scope": "Property fuzzing over Solidity contracts; there is no meaningful property-free default detector arm.",
+      "applicability": {
+        "GA-PAYY-TAIL": "same-policy only after a compatible wrapper replaces unsupported cheatcodes",
+        "GA-WARPTOAD-MDOM": "same-policy in principle, but historical ports stopped before fuzzing",
+        "GA-WARPTOAD-MSRC": "same-policy in principle, but historical ports stopped before fuzzing",
+        "GA-WARPTOAD-RELATIONSHIP": "only for properties expressible in a compatible Solidity harness"
+      },
+      "arms": {
+        "generic_default": "ARCHITECTURE_NOT_APPLICABLE",
+        "generic_invariants": "RUN_UNRESOLVED",
+        "same_policy": "RUN_UNRESOLVED"
+      },
+      "historical_native_evidence": [
+        {
+          "path": "results/raw/D1P-32/echidna-policy-m-src/final.json",
+          "sha256": "f5bc2ef9cdc5d85e4fb678f2bcbac33a2db4988fbca20173772a6555dde21ce2"
+        },
+        {
+          "path": "docs/baselines/d1p-32-benchmark.md",
+          "role": "Nine retained setup attempts; all stopped on unlinked libraries before fuzzing."
+        }
+      ],
+      "claim_limit": "Setup failures before fuzzing are unresolved construction cells, not misses."
+    },
+    {
+      "id": "CMP-ZKAP",
+      "name": "ZKAP",
+      "class": "producer_circuit_static_analysis",
+      "primary_sources": [
+        "https://www.usenix.org/system/files/usenixsecurity24-wen_1.pdf",
+        "https://github.com/whbjzzwjxq/ZKAP"
+      ],
+      "pin": {
+        "status": "NO_LOCAL_PIN"
+      },
+      "native_scope": "Circom Circuit Dependence Graph and query-based vulnerability patterns, including unused public inputs.",
+      "applicability": {
+        "GA-PAYY-TAIL": "native input unsupported because the exposed producer is Noir; a Circom translation would be a charged adaptation",
+        "GA-WARPTOAD-MDOM": "native input unsupported because the exposed producer is Noir; a Circom translation would be a charged adaptation",
+        "GA-WARPTOAD-MSRC": "consumer-only mutation is outside the native circuit scope",
+        "GA-WARPTOAD-RELATIONSHIP": "possible only for producer-side rows after an independently validated Circom adaptation"
+      },
+      "arms": {
+        "generic_default": "NATIVE_INPUT_UNSUPPORTED",
+        "same_policy": "ADAPTER_NOT_CONSTRUCTED"
+      },
+      "claim_limit": "No ZKAP target run exists. Language mismatch cannot be scored as a ZKAP failure, and unused-public-input detection is established prior work."
+    },
+    {
+      "id": "CMP-CIVER",
+      "name": "CIVER",
+      "class": "producer_modular_verification",
+      "primary_sources": [
+        "https://ieeexplore.ieee.org/document/10646792/",
+        "https://github.com/costa-group/circom_civer"
+      ],
+      "pin": {
+        "status": "NO_LOCAL_PIN"
+      },
+      "native_scope": "Circom modular verification with weak-safety/determinism, tags, preconditions, postconditions, and spec facts.",
+      "applicability": {
+        "GA-PAYY-TAIL": "native Noir/ACIR input unsupported by the inspected artifact; a Circom/spec translation would be charged",
+        "GA-WARPTOAD-MDOM": "native Noir/ACIR input unsupported; rich same-policy specification is possible only after adaptation",
+        "GA-WARPTOAD-MSRC": "consumer-only mutation is outside native circuit scope",
+        "GA-WARPTOAD-RELATIONSHIP": "producer properties only after a validated translation; consumer relation requires an additional adapted join"
+      },
+      "arms": {
+        "generic_default": "NATIVE_INPUT_UNSUPPORTED",
+        "same_policy": "ADAPTER_NOT_CONSTRUCTED"
+      },
+      "claim_limit": "CIVER's expressive specifications make manual information and property effort part of any future fair comparison; no result is claimed here."
+    },
+    {
+      "id": "CMP-CCC-CHECK",
+      "name": "CCC-Check",
+      "class": "producer_computation_constraint_consistency",
+      "primary_sources": [
+        "https://vdb.space/papers/zkp2026.pdf",
+        "https://github.com/ArmanKolozyan/CCC-Check"
+      ],
+      "pin": {
+        "revision": "7ed87b8c17d8fc882cd42e86ad784eb68c1442e5",
+        "source_identity_path": "results/raw/D1P-22/tools/ccc-check/repo/ccc-check.cabal",
+        "source_identity_sha256": "49330babd468f856f2dddd0b315d18dc00c8f5a3e6efb3c421d6245d653d9dfe",
+        "binary": null
+      },
+      "native_scope": "CirC IR value inference over prover computation and verifier constraints; the paper reports Noir, Circom, and ZoKrates frontends.",
+      "applicability": {
+        "GA-PAYY-TAIL": "potential producer comparator, but exact pinned Noir compatibility and build remain unresolved",
+        "GA-WARPTOAD-MDOM": "potential producer comparator, but exact pinned Noir compatibility and build remain unresolved",
+        "GA-WARPTOAD-MSRC": "consumer-only mutation lies outside its documented computation/constraint relation",
+        "GA-WARPTOAD-RELATIONSHIP": "potential for producer rows; consumer relationship requires a separately charged adapter"
+      },
+      "arms": {
+        "generic_default": "BUILD_UNAVAILABLE",
+        "same_policy": "BUILD_UNAVAILABLE"
+      },
+      "historical_native_evidence": [
+        {
+          "path": "results/raw/D1P-22/install-ccc-build/cabal-build-retry.json",
+          "sha256": "0002a83cd27c3c6753ff49688bc5a7465c310555fe198f559cec628221ee7fa7"
+        }
+      ],
+      "claim_limit": "The bounded local build failure and absence of an admitted exact-version adapter are construction limitations, not evidence about CCC-Check's analysis."
+    },
+    {
+      "id": "CMP-PICUS",
+      "name": "Picus",
+      "class": "producer_constraint_verification",
+      "primary_sources": [
+        "https://github.com/Veridise/Picus"
+      ],
+      "pin": {
+        "revision": "138b151d3a388e5b6c040c163e0a1db04f2ceda6",
+        "path": "results/raw/D1P-22/tools/picus/repo/run-picus",
+        "sha256": "b34c0b65494be0a45f541a568c1cd7812e67c686988164d2c1e869448402d113"
+      },
+      "native_scope": "Circom, iden3 R1CS, and gnark SR1CS constraint checking in the pinned artifact; not Noir ACIR.",
+      "applicability": {
+        "GA-PAYY-TAIL": "native input unsupported; an ACIR-to-supported-R1CS adapter would require independent semantic validation",
+        "GA-WARPTOAD-MDOM": "native input unsupported",
+        "GA-WARPTOAD-MSRC": "consumer-only mutation is outside native circuit scope",
+        "GA-WARPTOAD-RELATIONSHIP": "possible only for producer rows after a charged validated input adaptation"
+      },
+      "arms": {
+        "generic_default": "NATIVE_INPUT_UNSUPPORTED",
+        "same_policy": "NATIVE_INPUT_UNSUPPORTED"
+      },
+      "historical_native_evidence": [
+        {
+          "path": "results/raw/D1P-22/selfcheck-picus/bundled-r1cs-nosolve.json",
+          "sha256": "f986003f687320ade9b5fc2acf1a019b05f0e7dbf6b2c7b0987dec5d169cbd08"
+        },
+        {
+          "path": "results/raw/D1P-22/selfcheck-picus/bundled-r1cs-nosolve.stdout.txt",
+          "sha256": "7e4ca1ab4458b0006bbcfb56aa4961fd23591a3a2a32d6d98057a898d609c0ed"
+        }
+      ],
+      "claim_limit": "The successful bundled self-check establishes tool availability only; it is not a target analysis."
+    },
+    {
+      "id": "CMP-SMARTAXE",
+      "name": "SmartAxe",
+      "class": "cross_program_bridge_static_analysis",
+      "primary_sources": [
+        "https://people.cs.umass.edu/~juanzhai/papers/fse24liao.pdf",
+        "https://github.com/InPlusLab/FSE24-SmartAxe"
+      ],
+      "pin": {
+        "repository_revision": "7ca21f72",
+        "downloadable_artifact": null
+      },
+      "native_scope": "Paired source/destination bridge-contract EVM bytecode with cross-chain data/control-flow alignment.",
+      "applicability": {
+        "GA-PAYY-TAIL": "architecture not applicable: not a paired deposit/withdraw bridge fixture",
+        "GA-WARPTOAD-MDOM": "native bridge-pair applicability unresolved and downloadable artifact unavailable",
+        "GA-WARPTOAD-MSRC": "native bridge-pair applicability unresolved and downloadable artifact unavailable",
+        "GA-WARPTOAD-RELATIONSHIP": "requires a true paired bridge case; a same-chain consumer row is not a native SmartAxe miss"
+      },
+      "arms": {
+        "generic_default": "ARTIFACT_UNAVAILABLE",
+        "same_policy": "ARCHITECTURE_NOT_APPLICABLE"
+      },
+      "historical_native_evidence": [
+        {
+          "path": "results/raw/D1P-22/install-smartaxe-page/figshare-headers.json",
+          "sha256": "8835e3e2b35af7541fd5062878784473a1997bfc96aa8a36a4a7d2a768893b17"
+        }
+      ],
+      "claim_limit": "The historical WAF-blocked artifact and uncertain bridge pairing are unresolved availability/applicability, not a tool result."
+    },
+    {
+      "id": "CMP-ELSA",
+      "name": "ELSA",
+      "class": "llm_assisted_analyzer_ensemble",
+      "primary_sources": [
+        "https://conf.researchr.org/details/issta-2026/issta-2026-research-papers/131/Augmenting-Multi-Technique-Static-Analysis-with-Large-Language-Models-A-Neuro-Symbol"
+      ],
+      "pin": {
+        "paper": null,
+        "artifact": null,
+        "model": null,
+        "prompt": null
+      },
+      "native_scope": "The official abstract reports an LLM-assisted analyzer ensemble and evaluation on self-constructed ZKP-based smart contracts; exact circuit inputs and protocol are unresolved.",
+      "applicability": {
+        "GA-PAYY-TAIL": "unresolved until full paper, artifact, models, prompts, labels, and inputs are available",
+        "GA-WARPTOAD-MDOM": "unresolved",
+        "GA-WARPTOAD-MSRC": "unresolved",
+        "GA-WARPTOAD-RELATIONSHIP": "unresolved"
+      },
+      "arms": {
+        "generic_default": "PROTOCOL_UNAVAILABLE",
+        "same_policy": "PROTOCOL_UNAVAILABLE",
+        "llm_supplement": "NOT_SELECTED"
+      },
+      "selection_reason": "Step 6b does not select or fabricate an LLM baseline. A future optional arm requires a pinned artifact, model, prompt, context, stochastic settings, cost cap, and scoring protocol before any run.",
+      "claim_limit": "The accessible abstract is insufficient to assert either overlap or non-overlap with circuit-to-consumer reasoning."
+    }
+  ],
+  "equal_treatment_requirements": {
+    "information_parity": "Every included same-policy comparator receives the exact same frozen artifacts, admitted state, policy fields, bounds, and honest seeds that its interface can consume; unavailable interface fields remain explicit rather than synthesized.",
+    "normalization": "Retain native output and missing fields. Never infer a producer relation, consumer effect, source location, or two-sided explanation absent from native output.",
+    "validation": "Every unique comparator candidate follows the Step 5 draft common E2-E4 route and budgets; this inventory authorizes no validation run.",
+    "effort": "Count source adaptation, property/specification lines, annotations, setup, corrections, proof seeds, runtime, human review, and adjudication separately.",
+    "outcomes": "Step 7 alone may freeze eligible/unsupported/not-applicable/build-failed/unresolved classifications and score completed arms."
+  },
+  "historical_bundle": {
+    "plan_path": "results/raw/D1P-22/plan.json",
+    "plan_sha256": "0580cbad39a5d43740fc72db9525847b5df1e4dbf55c2b665d56733c42afa0c4",
+    "outcomes_path": "results/raw/D1P-22/outcomes.json",
+    "outcomes_sha256": "032e1cd59c86b5fdfd71150f4683cfe149f1aaec63fe67ead72e37e090ee4ee8",
+    "reuse_rule": "Historical outputs retain their original versions, exposure, evidence grades, limits, and unresolved/unsupported dispositions; they are citations, not fresh Step 6b results."
+  },
+  "step_7_open_items": [
+    "Freeze exact applicability per finalized case byte set before output.",
+    "Decide prospectively whether any charged ZKAP, CIVER, CCC-Check, Picus, Slither, Mythril, or Echidna adaptation is feasible and necessary; an absent adapter is not a miss.",
+    "Resolve or exclude SmartAxe using a genuine paired bridge case and an available pinned artifact.",
+    "Keep ELSA out unless its full reproducible protocol is obtained and frozen; the core comparison must not wait for it.",
+    "Record human policy author/adopter, distinct reviewer, and any overlap/exposure before the Foundry same-policy arm can enter a sealed score packet."
+  ]
+}

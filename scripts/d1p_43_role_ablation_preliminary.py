@@ -9,6 +9,7 @@ D1P-43 target protocol.
 
 from __future__ import annotations
 
+import argparse
 from collections import Counter
 from datetime import datetime, timezone
 import hashlib
@@ -99,8 +100,7 @@ def is_related(
         return False
     if warning["rule"] in {"R-POLARITY"}:
         return True
-    expected_indices = set(expected["public_indices"])
-    return not expected_indices or bool(expected_indices.intersection(warning_indices(warning)))
+    return True
 
 
 def effect_named(warning: dict[str, Any]) -> bool:
@@ -138,10 +138,20 @@ def score_arm(
             "related_warning_ids": [],
             "irrelevant_warning_ids": [],
         }
-    related = [
+    related_candidates = [
         warning for warning in warnings
         if is_related(warning, example, expected_role_kind)
     ]
+    expected_indices = set(example["expected_boundary"]["public_indices"])
+    observed_indices: set[int] = set()
+    for warning in related_candidates:
+        observed_indices.update(warning_indices(warning))
+    index_coverage = (
+        not expected_indices
+        or any(warning["rule"] == "R-POLARITY" for warning in related_candidates)
+        or expected_indices.issubset(observed_indices)
+    )
+    related = related_candidates if index_coverage else []
     if example.get("clean_control", False):
         detected = not warnings
         matches_expected = not warnings
@@ -511,7 +521,19 @@ def aggregate_ablation(examples: list[dict[str, Any]], arms: list[str]) -> dict[
     return aggregate
 
 
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
+    global OUTPUT_DIR, RESULT_PATH
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--output", type=Path, default=OUTPUT_DIR)
+    parser.add_argument(
+        "--status", choices=("PRELIMINARY", "FINAL_DEVELOPMENT"),
+        default="PRELIMINARY",
+    )
+    args = parser.parse_args(argv)
+    OUTPUT_DIR = args.output.resolve()
+    RESULT_PATH = OUTPUT_DIR / "ablation-and-role-target-results.json"
+    if OUTPUT_DIR.exists():
+        raise SystemExit(f"refusing to overwrite evidence: {OUTPUT_DIR}")
     base_protocol = json.loads(BASE_PROTOCOL_PATH.read_text())
     role_protocol = json.loads(ROLE_PROTOCOL_PATH.read_text())
     expected_masks = {
@@ -525,7 +547,7 @@ def main() -> int:
     observed_masks = {arm: set(rules) for arm, rules in role_protocol["arms"].items()}
     if observed_masks != expected_masks:
         raise ValueError(f"D1P-43 arm masks changed: {observed_masks!r}")
-    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=False)
     examples = run_base_examples(base_protocol, role_protocol)
     targets = run_role_targets(role_protocol)
     aggregate = aggregate_ablation(examples, list(role_protocol["arms"]))
@@ -538,10 +560,18 @@ def main() -> int:
         ),
     }
     result = {
-        "schema": "bindcheck.d1p43.preliminary-results/v1",
-        "status": "PRELIMINARY",
+        "schema": (
+            "bindcheck.d1p43.results/v2"
+            if args.status == "FINAL_DEVELOPMENT"
+            else "bindcheck.d1p43.preliminary-results/v1"
+        ),
+        "status": args.status,
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
-        "command": COMMAND,
+        "command": (
+            f"{COMMAND} --output {args.output} --status {args.status}"
+            if args.output != Path("results/raw/D1P-43") or args.status != "PRELIMINARY"
+            else COMMAND
+        ),
         "environment": {
             "python": sys.version,
             "platform": platform.platform(),
@@ -588,7 +618,16 @@ def main() -> int:
                 for target in targets
             ),
         },
-        "claim_limits": role_protocol["claim_limits"],
+        "claim_limits": (
+            [
+                limit for limit in role_protocol["claim_limits"]
+                if "preliminary run will be repeated" not in limit
+            ] + [
+                "This is the hash-sealed corrected development rerun requested by the preliminary protocol; it remains exposed E1 evidence, not held-out transfer or a security verdict."
+            ]
+            if args.status == "FINAL_DEVELOPMENT"
+            else role_protocol["claim_limits"]
+        ),
     }
     RESULT_PATH.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n")
     print(json.dumps({

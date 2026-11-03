@@ -1,0 +1,418 @@
+{
+  "schema": "bindcheck.d2.steps15-17-readiness/v1",
+  "version": "1.0.0",
+  "date": "2026-11-02",
+  "status": "READ_ONLY_AUDIT_COMPLETE",
+  "execution_status": "STEPS_15_17_NOT_EXECUTED",
+  "gate_c_status": "GATE_C_NOT_REACHED",
+  "task_kind": "PUBLIC_NON_EXECUTION_AND_READINESS_RECORD",
+  "research_verdict": "UNKNOWN",
+  "objective": "Record the public prerequisites, absences, human dependencies, custody boundary, and exact unblock conditions for Steps 15 through 17 without executing them or accessing reserved or private material.",
+  "authority": [
+    {
+      "path": "docs/research-contract.md",
+      "role": "research semantics and evidence rules"
+    },
+    {
+      "path": "../bindcheck-agent-playbook.md",
+      "role": "Steps 15 through 17 procedure and ownership"
+    },
+    {
+      "path": "protocols/d2/d2-11-14-dependency-disposition-v1.json",
+      "sha256": "d2acbf45720baf425fc7b71847b75de1db48195b1ca4a4604aaa0e069c6fdf78",
+      "role": "controlling public Gate B readiness audit"
+    },
+    {
+      "path": "reports/D2-11-14-dependency-audit.md",
+      "sha256": "b2210759f71ed4a2fb323d933d7e517a1043d20f94c5b5150cb84a2baff52b96",
+      "role": "controlling public Steps 11 through 14 non-execution report"
+    }
+  ],
+  "audit_boundary": {
+    "public_workspace_metadata_only": true,
+    "reserved_or_private_access": false,
+    "candidate_identity_access": false,
+    "candidate_label_value_access": false,
+    "bundle_content_access": false,
+    "analyzer_or_baseline_execution": false,
+    "proof_or_replay_execution": false,
+    "scoring_or_adjudication": false,
+    "blank_human_judgments_created": false,
+    "raw_namespace_created": false,
+    "shared_status_edited": false,
+    "commit_or_push": false,
+    "authorized_edits": [
+      "protocols/d2/d2-15-17-readiness-v1.json",
+      "reports/D2-15-17-readiness-audit.md"
+    ]
+  },
+  "public_content_safety": {
+    "candidate_identities_included": false,
+    "candidate_label_values_included": false,
+    "private_locations_included": false,
+    "reserved_bundle_contents_included": false,
+    "custodian_secret_or_pseudonym_map_included": false,
+    "permitted_content": "Aggregate status, public hashes, public prerequisite categories, role definitions, and unblock conditions only."
+  },
+  "verified_upstream_seals": [
+    {
+      "id": "D2-07-AUTHORITATIVE-RECOVERY",
+      "report_sha256": "fcdff01dbadade6f7f28116e46ee2c6016fb2945767492c822acaef87a60f07a",
+      "seal_sha256": "b9f0f1eb6b9aa1bb3ea8aaf1fba3c3939b3d70a787a57be92f3c4154fad50558",
+      "replayed_files": 623,
+      "mismatches": 0,
+      "verification_status": "PASS",
+      "scientific_disposition": "GATE_A_INCONCLUSIVE_BOUNDED_PROTOTYPE_ONLY"
+    },
+    {
+      "id": "D2-08-COMPILER-IDENTITY",
+      "report_sha256": "aaca4aa036a0604febd6869604e8dfcfc3709a72a15c8fa588717309316fd2cd",
+      "seal_sha256": "d2195d93fc6e51458a994ecc63838935fb36bad275379ef15e43ca2f9c112343",
+      "replayed_files": 92,
+      "mismatches": 0,
+      "verification_status": "PASS",
+      "scientific_disposition": "MECHANICAL_DEVELOPMENT_FIXTURE_ONLY"
+    },
+    {
+      "id": "D2-09-AUTHORIZATION-BOUNDARY",
+      "report_sha256": "f7254e4ccb510a8ccfea9954cfd341c81620084147159a81dfa52c3f6595cf03",
+      "seal_sha256": "c678085afa6a73d0f8115d10055fb753bd024a174a38618cb0e5e6943661e8bd",
+      "replayed_files": 40,
+      "mismatches": 0,
+      "verification_status": "PASS",
+      "scientific_disposition": "E0_EFFECTIVE_UNKNOWN_FIXTURES_ONLY"
+    },
+    {
+      "id": "D2-10-CORRECTED-TYPED-EXTRACTION",
+      "report_sha256": "848acceef83d32d5054e37686ff5bc3b94baa45c5618490a0fe8e41bb9db018a",
+      "seal_sha256": "c5bb3163283c7b16a0d341067c6f2c3f8fa9965d85ab13dc761d4e948fcf21e6",
+      "replayed_files": 9,
+      "mismatches": 0,
+      "verification_status": "PASS",
+      "scientific_disposition": "ZERO_ELIGIBLE_PRODUCER_GUARANTEES_ZERO_ELIGIBLE_CONSUMER_RELIANCE"
+    }
+  ],
+  "public_absence_checks": [
+    {
+      "id": "GATE_B_OFFICIAL_DECISION",
+      "observed_state": "NOT_EVALUATED",
+      "basis": "The controlling Steps 11 through 14 audit states that readiness is incomplete and no official Gate B run occurred."
+    },
+    {
+      "id": "GATE_B_PASS_AND_FROZEN_RELEASE",
+      "observed_state": "ABSENT",
+      "basis": "No public Step 14 final report, development result namespace, release manifest, or Gate B release artifact was present."
+    },
+    {
+      "id": "NAMED_OR_CONFIRMED_CUSTODIAN",
+      "observed_state": "ABSENT",
+      "basis": "No public appointment or confirmation record establishes a custodian for reserved selection, custody, release, and authoritative seal retention."
+    },
+    {
+      "id": "OPAQUE_RESERVED_COMMITMENT",
+      "observed_state": "ABSENT",
+      "basis": "No public opaque commitment suitable for a frozen Step 15 release was present."
+    },
+    {
+      "id": "EXECUTABLE_RESERVED_PROTOCOL",
+      "observed_state": "ABSENT",
+      "basis": "No current executable protocol binds reviewed policies, independently checked benchmark judgments, validation rules, budgets, denominators, and the corrected identity and extraction interfaces."
+    },
+    {
+      "id": "STEP_15_PRIMARY_OUTPUTS_AND_SEAL",
+      "observed_state": "ABSENT",
+      "basis": "No public Step 15 report, result namespace, primary-output seal, or permitted-change inventory was present."
+    },
+    {
+      "id": "STEP_16_TRIAGE_AND_ADJUDICATION",
+      "observed_state": "ABSENT",
+      "basis": "No public Step 16 report, immutable triage namespace, independent human responses, adjudication, denominators, or cost record was present."
+    },
+    {
+      "id": "STEP_17_SEPARATE_AUTHORIZATION",
+      "observed_state": "ABSENT",
+      "basis": "No public approval record establishes a finite exploratory scope, budget, private-boundary confirmation, or disclosure-review authority."
+    },
+    {
+      "id": "GATE_C_DECISION",
+      "observed_state": "GATE_C_NOT_REACHED",
+      "basis": "Step 15 has no immutable primary output and Step 16 has no independent human triage or adjudication."
+    }
+  ],
+  "prerequisite_matrices": {
+    "step_15": [
+      {
+        "id": "S15-P01",
+        "requirement": "An official Gate B PASS under criteria approved before the Step 14 run.",
+        "state": "ABSENT_NOT_EVALUATED",
+        "satisfied": false,
+        "unblock_evidence": "A versioned Step 14 report and authoritative seal recording Gate B PASS."
+      },
+      {
+        "id": "S15-P02",
+        "requirement": "A reconstructible frozen release manifest covering code, baselines, tools, protocol, policies, configuration, seeds, scoring, and stop rules.",
+        "state": "ABSENT",
+        "satisfied": false,
+        "unblock_evidence": "A hash-bound release manifest plus independently verified authoritative seal."
+      },
+      {
+        "id": "S15-P03",
+        "requirement": "A current executable reserved protocol with fixed eligibility, sampling, factual setup, policies, validation, budgets, retries, and outcome definitions.",
+        "state": "ABSENT",
+        "satisfied": false,
+        "unblock_evidence": "A pre-outcome frozen protocol approved under the research contract."
+      },
+      {
+        "id": "S15-P04",
+        "requirement": "A named or confirmed custodian holding an opaque reserved commitment and authoritative copy outside developer access.",
+        "state": "ABSENT",
+        "satisfied": false,
+        "unblock_evidence": "A user-approved custody record and commitment verification procedure that reveals no reserved identity publicly."
+      },
+      {
+        "id": "S15-P05",
+        "requirement": "Human-authored or explicitly adopted policy bytes with primary provenance and a different human reviewer before outputs.",
+        "state": "ABSENT",
+        "satisfied": false,
+        "unblock_evidence": "Hash-bound author/adopter and distinct-review attestations retained by the evaluation process."
+      },
+      {
+        "id": "S15-P06",
+        "requirement": "Working current-interface causal validation and exact rules for evidence grades, admitted state, attacker capability, and repaired-target contrast.",
+        "state": "ABSENT_CURRENT_CHAIN",
+        "satisfied": false,
+        "unblock_evidence": "A completed Step 13 driver and sealed development controls tied to the corrected identity and extraction interfaces."
+      },
+      {
+        "id": "S15-P07",
+        "requirement": "A fresh evaluator and an actual isolated release procedure separating reserved material from development agents.",
+        "state": "ABSENT",
+        "satisfied": false,
+        "unblock_evidence": "Custodian release record, commitment match, evaluator isolation attestation, and opening check."
+      },
+      {
+        "id": "S15-P08",
+        "requirement": "Predeclared per-case continuation, failure preservation, immutable primary-output, and permitted-write procedures.",
+        "state": "ABSENT",
+        "satisfied": false,
+        "unblock_evidence": "Frozen run instructions and change-inventory schema included in the release."
+      },
+      {
+        "id": "S15-P09",
+        "requirement": "Step 8 through Step 10 integrity controls remain reproducible.",
+        "state": "AVAILABLE_BUT_INSUFFICIENT",
+        "satisfied": true,
+        "unblock_evidence": "Already verified public seals; these do not substitute for any missing Step 14 or custody prerequisite."
+      }
+    ],
+    "step_16": [
+      {
+        "id": "S16-P01",
+        "requirement": "Immutable Step 14 release evidence and immutable Step 15 primary outputs.",
+        "state": "ABSENT",
+        "satisfied": false,
+        "unblock_evidence": "Verified Step 14 and Step 15 seals with zero mismatches."
+      },
+      {
+        "id": "S16-P02",
+        "requirement": "A frozen inclusion rule, randomized tool-masking procedure, equal context policy, and preserved randomization record.",
+        "state": "ABSENT",
+        "satisfied": false,
+        "unblock_evidence": "A preregistered packet generator and custodian-held decoding map."
+      },
+      {
+        "id": "S16-P03",
+        "requirement": "Independent human triagers using frozen response forms without prefilled judgments.",
+        "state": "ABSENT",
+        "satisfied": false,
+        "unblock_evidence": "Human assignment record and sealed initial responses created only after Step 15 packet freeze."
+      },
+      {
+        "id": "S16-P04",
+        "requirement": "A distinct human adjudicator and a documented adjudication procedure preserving initial responses.",
+        "state": "ABSENT",
+        "satisfied": false,
+        "unblock_evidence": "Adjudicator assignment and append-only adjudication record."
+      },
+      {
+        "id": "S16-P05",
+        "requirement": "Frozen definitions and denominators for correctness, policy relevance, exploitability, causal attribution, duplicates, unresolved units, precision bounds, and resolution coverage.",
+        "state": "ABSENT_CURRENT_PROTOCOL",
+        "satisfied": false,
+        "unblock_evidence": "Step 12 protocol and Step 14 release manifest binding the exact forms and formulas."
+      },
+      {
+        "id": "S16-P06",
+        "requirement": "Prospective human, AI, computational, runtime, memory, timeout, and wall-clock records.",
+        "state": "ABSENT_FOR_STEPS_15_16",
+        "satisfied": false,
+        "unblock_evidence": "Sealed prospective logs; missing measurements must remain explicitly missing."
+      },
+      {
+        "id": "S16-P07",
+        "requirement": "Validation evidence remains separate from primary outputs and preserves E3 versus E4.",
+        "state": "ABSENT_STEP_15_INPUT",
+        "satisfied": false,
+        "unblock_evidence": "Sealed Step 15 validation records and unchanged primary-output hashes."
+      },
+      {
+        "id": "S16-P08",
+        "requirement": "Advisor or research-lead review of all three Gate C dimensions after reproducible scoring and adjudication.",
+        "state": "NOT_REACHED",
+        "satisfied": false,
+        "unblock_evidence": "Reproducible applicability, comparative-utility, and confirmed-impact records followed by documented human decision."
+      }
+    ],
+    "step_17": [
+      {
+        "id": "S17-P01",
+        "requirement": "Step 15 primary outputs are sealed before exploration begins.",
+        "state": "ABSENT",
+        "satisfied": false,
+        "unblock_evidence": "Verified Step 15 primary-output seal."
+      },
+      {
+        "id": "S17-P02",
+        "requirement": "A separate explicit approval for exploration that does not alter the reserved evaluation.",
+        "state": "ABSENT",
+        "satisfied": false,
+        "unblock_evidence": "User-approved exploratory charter recorded after Step 15 sealing."
+      },
+      {
+        "id": "S17-P03",
+        "requirement": "A finite candidate set with exposure history and exact revisions fixed before analysis.",
+        "state": "ABSENT_AND_NOT_INSPECTED",
+        "satisfied": false,
+        "unblock_evidence": "Researcher-approved private manifest retained outside public and synchronized roots."
+      },
+      {
+        "id": "S17-P04",
+        "requirement": "A finite human, machine, run, and wall-clock budget with stop rules.",
+        "state": "ABSENT",
+        "satisfied": false,
+        "unblock_evidence": "Approved budget and stop record fixed before the first exploratory run."
+      },
+      {
+        "id": "S17-P05",
+        "requirement": "A researcher-confirmed private destination outside public and automatically synchronized repositories.",
+        "state": "ABSENT_AND_NO_LOCATION_REQUESTED",
+        "satisfied": false,
+        "unblock_evidence": "Private-boundary attestation retained without publishing the destination."
+      },
+      {
+        "id": "S17-P06",
+        "requirement": "The exact frozen release and local-only investigation procedure are available.",
+        "state": "ABSENT_RELEASE",
+        "satisfied": false,
+        "unblock_evidence": "Gate B release manifest and verified local execution instructions."
+      },
+      {
+        "id": "S17-P07",
+        "requirement": "External disclosure remains a separate human decision under the applicable process.",
+        "state": "NO_DISCLOSURE_AUTHORITY",
+        "satisfied": false,
+        "unblock_evidence": "Researcher review of any private draft and separate authorization before contact or publication."
+      }
+    ]
+  },
+  "human_and_custodian_roles": [
+    {
+      "role": "RESEARCH_LEAD_OR_ADVISOR",
+      "required_action": "Approve Gate B criteria before Step 14 and decide the three Gate C dimensions only after Step 16 evidence."
+    },
+    {
+      "role": "RESERVED_CUSTODIAN",
+      "required_action": "Hold reserved identities, sources, judgments, policy materials, pseudonym map, commitments, releases, and authoritative seals outside developer access."
+    },
+    {
+      "role": "INDEPENDENT_POLICY_AUTHOR",
+      "required_action": "Author project-specific policy and permitted semantic annotations from primary sources before reserved outcomes."
+    },
+    {
+      "role": "DISTINCT_POLICY_REVIEWER",
+      "required_action": "Review the exact policy bytes, assumptions, permissions, obligations, and transformations before outputs."
+    },
+    {
+      "role": "FRESH_RESERVED_EVALUATOR",
+      "required_action": "Verify commitments and execute the frozen release in an actually isolated environment without changing analysis or policy."
+    },
+    {
+      "role": "INDEPENDENT_HUMAN_TRIAGERS",
+      "required_action": "Provide initial judgments under the same rubric for every method after randomized packet freeze."
+    },
+    {
+      "role": "DISTINCT_HUMAN_ADJUDICATOR",
+      "required_action": "Resolve disagreements only after initial judgments are sealed and preserve every original response."
+    },
+    {
+      "role": "EXPLORATION_APPROVER_AND_DISCLOSURE_REVIEWER",
+      "required_action": "Approve Step 17 scope and budget, verify private findings, and separately decide whether any external contact is authorized."
+    }
+  ],
+  "non_substitution_rules": [
+    "A prompt authorization marker is not an access-control mechanism or custodian release.",
+    "An AI agent cannot substitute for a human policy author, reviewer, triager, adjudicator, advisor, or disclosure decision-maker.",
+    "A public hash or local seal is not custody, isolation, authorship, policy review, or an authoritative off-workspace copy.",
+    "Development, synthetic, historical, or exploratory evidence is not fresh reserved evidence.",
+    "A draft protocol or runnable script is not a Gate B PASS or frozen release.",
+    "Unfilled response forms or agent-generated judgments are not independent human responses.",
+    "Step 15 completion is provisional and cannot substitute for Step 16 triage, adjudication, costs, or final Gate C decisions.",
+    "A warning, accepted proof, or new bug alone does not establish E4, broad accuracy, or comparative utility.",
+    "UNKNOWN, unsupported, timeout, crash, missing output, or no warning is not safety evidence.",
+    "Step 17 findings cannot be relabeled as untouched held-out or Step 15 reserved results.",
+    "Ignoring a location in version control is not a privacy boundary.",
+    "This readiness audit does not authorize reserved access or any Step 15 through Step 17 execution."
+  ],
+  "private_boundary_safeguards": [
+    "Do not place candidate identities, judgment values, source contents, policy contents, pseudonym maps, release bundles, or evaluator outputs in public or synchronized roots.",
+    "Do not inspect, reconstruct, enumerate, or infer reserved membership during readiness work.",
+    "The custodian releases only the minimum frozen material to the fresh evaluator after Gate B PASS and commitment verification.",
+    "Step 16 packets are randomized and tool-masked while preserving substantive information; the decoding map stays under custody.",
+    "Step 17 evidence and disclosure drafts remain in a researcher-confirmed private destination; public reporting is aggregate or explicitly approved and redacted.",
+    "No maintainer contact, public issue, third-party pull request, transaction, or live-system test occurs without separate explicit authorization.",
+    "Public readiness records contain only aggregate state, public hashes, role requirements, and unblock conditions."
+  ],
+  "exact_unblock_conditions": {
+    "step_15": [
+      "Complete and seal Steps 11 through 13 under new explicit authorization.",
+      "Run Step 14 under criteria approved beforehand and obtain an official Gate B PASS.",
+      "Freeze and independently verify the complete release manifest and executable reserved protocol.",
+      "Have the user name or confirm a custodian who retains the opaque commitment and authoritative copy outside developer access.",
+      "Freeze human-authored or adopted and distinctly reviewed policies and permitted annotations before outcomes.",
+      "Have the custodian verify and release the committed material to a fresh isolated evaluator with a recorded opening check.",
+      "Issue explicit Step 15 access authorization only after every preceding condition is recorded."
+    ],
+    "step_16": [
+      "Seal all Step 15 primary outputs and permitted-change inventory without analyzer or policy changes.",
+      "Freeze randomized tool-masked packets, inclusion rules, forms, formulas, denominators, and the custodian-held decoding map.",
+      "Assign independent human triagers and a distinct adjudicator before responses.",
+      "Seal initial responses before adjudication and retain unresolved judgments visibly.",
+      "Reproduce scores, costs, precision bounds, resolution coverage, and evidence grades from retained records.",
+      "Obtain documented human decisions for applicability, comparative utility, and confirmed impact; only then is Gate C reached."
+    ],
+    "step_17": [
+      "Verify the Step 15 primary-output seal.",
+      "Obtain a separate user-approved exploratory charter, finite private candidate manifest, exact revisions, budget, and stop rules.",
+      "Have a researcher confirm a private destination outside public and synchronized roots without publishing it.",
+      "Use only the frozen release and local execution, preserving exposure history and uncertainty.",
+      "Keep all exploratory evidence separate from Step 15 and stop at the approved budget.",
+      "Require separate researcher review and authorization for any external disclosure."
+    ]
+  },
+  "execution_accounting": {
+    "steps_15_16_17_runs": 0,
+    "reserved_or_private_reads": 0,
+    "analyzer_or_baseline_runs": 0,
+    "proof_or_replay_runs": 0,
+    "scored_units": 0,
+    "human_judgments_collected": 0,
+    "gate_c_decisions": 0,
+    "raw_namespaces_created": 0
+  },
+  "conclusion": {
+    "step_15": "BLOCKED_BY_GATE_B_RELEASE_CUSTODY_PROTOCOL_AND_VALIDATION_PREREQUISITES",
+    "step_16": "BLOCKED_BY_ABSENT_STEP_15_OUTPUTS_AND_HUMAN_TRIAGE_PREREQUISITES",
+    "step_17": "BLOCKED_BY_ABSENT_STEP_15_SEAL_SEPARATE_APPROVAL_BUDGET_AND_PRIVATE_BOUNDARY",
+    "gate_c": "GATE_C_NOT_REACHED"
+  }
+}

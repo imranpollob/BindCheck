@@ -1,0 +1,414 @@
+{
+  "schema": "bindcheck.d2.gate-a-early-comparison-draft/v1",
+  "version": "1.0.0-draft",
+  "date": "2026-11-02",
+  "status": "DRAFT_UNSEALED_DO_NOT_SCORE",
+  "research_verdict": "UNKNOWN",
+  "objective": "Prepare, but do not execute, a fair exposed-development comparison that tests whether BindCheck adds a predeclared proof-to-execution diagnosis or validation capability over credible one-sided, simple-composition, same-policy, and applicable external baselines.",
+  "authority": [
+    "docs/research-contract.md revision 3",
+    "../bindcheck-agent-playbook.md Step 5",
+    "paper/baselines.md D1P-D02/D03 draft",
+    "docs/d2/step3-claim-audit-and-positioning.md",
+    "docs/d2/step3-related-work-and-distinguishing-experiments.md"
+  ],
+  "execution_boundary": {
+    "scored_execution_authorized": false,
+    "construction_authorized_by_this_document": false,
+    "case_manifest_status": "DRAFT_PENDING_STEP_6_ARTIFACTS_AND_STEP_7_SEAL",
+    "allowed_material": "Exposed development cases and controls only until Step 7 seals exact bytes.",
+    "forbidden": [
+      "opening reserved or private evaluation material",
+      "using analyzer output to create or revise a target label, policy, warning match, or safe-control claim",
+      "running a scored comparison before the Step 7 timestamped seal",
+      "treating UNKNOWN, unsupported, build failure, timeout, silence, or a repair contrast as safety evidence",
+      "inventing a file, hash, label, policy judgment, tool result, human judgment, or completed artifact"
+    ]
+  },
+  "research_questions": [
+    {
+      "id": "GA-RQ1",
+      "question": "On exposed cases with output-independent, provenance-recorded development labels, which arms produce a predeclared target match at E1 or higher?",
+      "primary_outcome": "case-by-arm target detection with highest evidence grade and exact eligible denominator"
+    },
+    {
+      "id": "GA-RQ2",
+      "question": "Does the full arm add a relationship-specific diagnosis beyond producer-only, consumer-only, their unjoined union, basic structural composition, and strong simple composition under explicit information budgets?",
+      "primary_outcome": "predeclared semantic diagnosis match and transformation stability, reported per case rather than as one pooled score"
+    },
+    {
+      "id": "GA-RQ3",
+      "question": "Do target candidates progress through the common E1-to-E4 validation process, and which steps are automatic, assisted, or manual?",
+      "primary_outcome": "highest evidence grade, validation-stage completion vector, and counted manual inputs per unique candidate"
+    },
+    {
+      "id": "GA-RQ4",
+      "question": "What non-target and property-specific safe-control reports occur?",
+      "primary_outcome": "adjudicated non-target report distribution and false-warning count only on controls whose exact property is positively verified"
+    },
+    {
+      "id": "GA-RQ5",
+      "question": "What human, agent, machine, setup, specification, annotation, correction, validation, and elapsed effort does each arm require?",
+      "primary_outcome": "descriptive effort ledger with shared and arm-specific costs separated"
+    }
+  ],
+  "primary_outcomes": [
+    "target detections at E1 or higher by eligible case and arm",
+    "predeclared diagnosis-field coverage by eligible case and arm",
+    "highest E0-E4 grade and automatic/assisted/manual validation-stage vector per unique candidate",
+    "false warnings on property-specific positively verified safe controls",
+    "non-target reports classified as false alarm, real out-of-scope issue, new candidate, or unresolved",
+    "human minutes, agent activity, machine compute, wall time, specification size, correction count, and manual-input count"
+  ],
+  "exploratory_outcomes": [
+    "warning wording quality",
+    "repair suggestion usefulness",
+    "secondary warning coverage",
+    "case-specific runtime profiles",
+    "new mechanism hypotheses",
+    "unplanned baseline observations"
+  ],
+  "candidate_case_groups": [
+    {
+      "id": "GA-PAYY-TAIL",
+      "family": "Payy agg_agg to agg_final to RollupV1",
+      "candidates": ["Payy earlier c4d2c902", "Payy check-added dcd5d96e"],
+      "exposure": "KNOWN_DISCLOSED_AND_REPAIR_DEVELOPMENT",
+      "label_provenance": [
+        "public disclosure and pinned primary project history",
+        "T15-T19 historical real-proof and committed-effect chain",
+        "D1P-42 exact recursive mapping certificates",
+        "D2-01 exact-pair E1 analysis"
+      ],
+      "permitted_target": "The earlier revision's active message tail can reach consumer message effects without the missing outer tail constraint.",
+      "control_limit": "The check-added revision is a repair contrast for the exact tail property and witness, not a global safe negative.",
+      "finalization_requirement": "Step 7 must bind exact producer, bridge, verifier, consumer, policy, proof/seed, and relation bytes and preserve the historical-versus-new evidence distinction."
+    },
+    {
+      "id": "GA-WARPTOAD-MDOM",
+      "family": "WarpToad withdraw to WarpToadCore.mint",
+      "candidates": ["pinned WarpToad", "INJECTED M-DOM"],
+      "exposure": "INJECTED_KNOWN_DEVELOPMENT",
+      "label_provenance": [
+        "D1P-15/D1P-19/D1P-21A mutation and provenance records",
+        "D1P-30 fresh E4 development validation"
+      ],
+      "permitted_target": "The injected producer no longer binds the executing application domain while the consumer commits the protected mint effect.",
+      "control_limit": "Pinned WarpToad is an honest development control for the exercised relation, not a proven globally safe target.",
+      "finalization_requirement": "Step 7 must bind variant-specific artifact, key, verifier, consumer, admitted state, policy, and validation route."
+    },
+    {
+      "id": "GA-WARPTOAD-MSRC",
+      "family": "WarpToad withdraw to WarpToadCore.mint",
+      "candidates": ["pinned WarpToad", "INJECTED M-SRC"],
+      "exposure": "INJECTED_KNOWN_DEVELOPMENT",
+      "label_provenance": [
+        "D1P-19/D1P-21A/D1P-21B mutation and provenance records",
+        "D1P-30 fresh E4 development validation"
+      ],
+      "permitted_target": "The injected consumer accepts a root under the wrong source-state admission relationship before committing the protected mint effect.",
+      "control_limit": "Pinned WarpToad is an honest development control for the exercised relation, not a proven globally safe target.",
+      "finalization_requirement": "Step 7 must bind variant-specific artifact, key, verifier, consumer, admitted state, policy, and validation route."
+    },
+    {
+      "id": "GA-WARPTOAD-RELATIONSHIP",
+      "family": "WarpToad authored binding mutants",
+      "candidates": ["D1P-43 E1", "D1P-43 E2", "D1P-43 E3", "D1P-43 E4", "D1P-43 E5", "D1P-43 E6", "D1P-43 E7", "D1P-43 E8", "D1P-43 E9"],
+      "exposure": "SEEDED_EXPOSED_DEVELOPMENT",
+      "label_provenance": [
+        "mutation operator and authored intent",
+        "protocols/d1/d1p-43-role-binding-preliminary.json associations",
+        "D2-01 benchmark association ledger"
+      ],
+      "permitted_target": "Compare one-sided, union, basic-composition, strong-composition, and full relationship diagnoses without presenting the nine rows as nine independent families.",
+      "control_limit": "E8 is UNKNOWN and E9 is an honest matching control, not a proven safe negative.",
+      "finalization_requirement": "Step 7 must choose and hash the exact nonduplicated candidate rows, keep E8 in applicability accounting, and prohibit post-output association changes."
+    }
+  ],
+  "case_manifest_rules": {
+    "status_until_step_7": "DRAFT",
+    "unit": "one exact producer-consumer-policy configuration; family and derivative lineage recorded separately",
+    "deduplication": "Do not count repeated case appearances, warning objects, revisions, or transformations as independent families.",
+    "required_fields": [
+      "case and family identity",
+      "exposure class",
+      "original and variant paths, revisions, hashes, and sizes",
+      "producer, decoder/bridge, key/verifier, consumer, state, policy, and validation identities",
+      "label and policy provenance",
+      "positive target associations",
+      "property-specific control justification",
+      "applicable arms and reasons",
+      "construction status and every failure"
+    ],
+    "selection_rule": "Freeze every included case and exclusion before any scored arm runs. Selection must not depend on observed tool output.",
+    "no_prevalence_claim": "The purposive exposed case set cannot estimate ecosystem incidence, prevalence, precision, recall, or transfer."
+  },
+  "policy_and_label_provenance": {
+    "policy_author": "A human policy author writes sigma from primary project sources without inspecting scored analyzer or baseline output.",
+    "policy_review": "A different human reviewer accepts, rejects, or marks each policy unresolved before Step 7 sealing.",
+    "unresolved_policy": "The affected row remains in construction/applicability accounting and is UNRESOLVED rather than target-scored; it does not block unrelated rows whose policies and targets are fully frozen.",
+    "label_sources": [
+      "public disclosure plus primary artifact evidence",
+      "authored mutation operator plus source diff and semantic control",
+      "historical E2-E4 evidence with its original exposure and automation status",
+      "property-specific repair or safe-control validation"
+    ],
+    "prohibited_label_sources": [
+      "the output being scored",
+      "warning names such as effect-authorization",
+      "AI judgment without human adoption and provenance",
+      "silence or unsupported analysis",
+      "an audit label alone"
+    ],
+    "authorization_rule": "A target label must state compatible identity, asset, beneficiary, domain, quantity, state/version, activation, and discharge fields where applicable. Occurrence or role-name agreement alone is not authorization."
+  },
+  "comparison_arms": {
+    "step_6a_required": [
+      {
+        "id": "producer-only",
+        "information": "producer artifact/source facts only",
+        "output_limit": "producer-side candidates; no effect authorization claim"
+      },
+      {
+        "id": "consumer-only",
+        "information": "consumer source/compiled facts only",
+        "output_limit": "consumer-side candidates; no proof relation claim"
+      },
+      {
+        "id": "unjoined-union",
+        "information": "set union of producer-only and consumer-only reports",
+        "output_limit": "no synthesized relationship beyond either report"
+      },
+      {
+        "id": "basic-structural-composition",
+        "information": "exact public-input mapping plus occurrence/dataflow facts",
+        "output_limit": "structural candidates, not established authorization failures"
+      },
+      {
+        "id": "strong-simple-composition",
+        "information": "the same extracted conditional facts, identities, policies, assumptions, and annotations available to full BindCheck",
+        "method": "straightforward propagation, equality/identity joins, and direct P/O/E obligation checks"
+      },
+      {
+        "id": "full-bindcheck",
+        "information": "the exact same frozen implementation facts, policy, assumptions, and bounds given to strong simple composition",
+        "method": "frozen evaluated BindCheck; no post-output feature or rule change"
+      }
+    ],
+    "step_6b_required": [
+      "a same-policy direct property harness where the policy is expressible",
+      "relevant pinned Noir compiler/default checks",
+      "applicable native generic/default circuit and consumer tools",
+      "generic/default and same-policy arms for every tool with a property interface",
+      "an applicability record for ZKAP, CCC-Check, CIVER, SmartAxe, Slither, Mythril, Foundry invariants, Echidna, Picus, and ELSA",
+      "clearly labeled and fully charged adaptations when a native frontend is absent"
+    ],
+    "external_baseline_rules": [
+      "Frontend or architecture mismatch is unsupported or not applicable, never an algorithmic miss.",
+      "No tool is omitted after its output is seen; Step 7 freezes applicability and reasons.",
+      "Every applicable baseline receives the same artifacts, admitted states, policy information, bounds, seeds, and candidate-validation process.",
+      "A generic arm uses documented defaults plus at most one prospectively declared non-default configuration.",
+      "An optional LLM baseline is supplementary and cannot block the core comparison; model, prompt, context, runs, stochastic settings, token/cost cap, and scoring must be frozen first."
+    ]
+  },
+  "transformation_controls": {
+    "required_classes": [
+      "seeded identifier renaming",
+      "helper extraction",
+      "equivalent expression rewriting",
+      "matched public-input reordering with producer-consumer correspondence preserved"
+    ],
+    "construction_requirements": [
+      "preserve original and transformed bytes, mappings, source revisions, and hashes",
+      "compile/build every accepted variant",
+      "supply a transformation argument and focused semantic, proof, and execution controls appropriate to the changed layer",
+      "retain every rejected or failed transformation and reason",
+      "never use compilation or existing tests alone as semantic-equivalence proof"
+    ],
+    "scoring": "Compare semantic warning identities and diagnosis fields, never source-line equality. Report construction yield separately from scored stability."
+  },
+  "warning_matching": {
+    "freeze_before_output": true,
+    "target_definition": "A target is a predeclared set of semantic associations derived from label provenance, not from a tool report.",
+    "required_match_fields": [
+      "case and revision identity",
+      "affected producer relation/configuration or explicitly permitted producer-only locus",
+      "decoded public identity/index set where applicable",
+      "consumer state/effect/obligation locus where applicable",
+      "property kind and direction",
+      "evidence grade"
+    ],
+    "multi_report_rule": "Multiple normalized reports may jointly satisfy one target only when the frozen target permits union coverage; all required identities or indices must be covered.",
+    "duplicate_rule": "Cluster reports with the same tool, arm, case, rule family, normalized semantic locus, effect/property, and evidence identity; warning ordinal and source line do not create independent findings.",
+    "locations": "Missing or approximate locations are allowed and scored as missing localization rather than fabricated.",
+    "target_detection": "DETECTED requires all frozen mandatory target fields at E1 or higher. A partial or ambiguous report is a non-target report until adjudicated.",
+    "non_target_reports": [
+      "false_alarm",
+      "real_out_of_scope_issue",
+      "new_candidate",
+      "unresolved"
+    ],
+    "new_candidate_rule": "Apply the same validation budget and responsible-disclosure boundary; report separately and never retrofit it into the frozen target denominator."
+  },
+  "scoring_and_humans": {
+    "objective_scoring": "A deterministic matcher applies frozen structured associations where the normalized tool output contains the required fields.",
+    "subjective_scoring": "Two humans independently score ambiguous diagnosis/localization and non-target reports from randomized tool-neutral packets.",
+    "adjudication": "A distinct third human adjudicates only after original score files are sealed; originals are retained.",
+    "policy_independence": "Policy author and reviewer act before scored output; actual prior exposure and overlapping roles are disclosed.",
+    "ai_limit": "AI may normalize formats or run checks but is not an independent scorer, policy reviewer, or adjudicator.",
+    "missing_humans": "If required humans are unavailable, the affected subjective rows remain UNRESOLVED and no agreement or independent-review claim is made; unrelated rows eligible for fully objective frozen scoring may proceed."
+  },
+  "outcome_classes": {
+    "DETECTED": "Eligible completed arm emits a report satisfying every frozen mandatory target field at E1 or higher.",
+    "MISSED": "Eligible completed arm supports the required input and emits no target match for a positively established target.",
+    "UNSUPPORTED": "A named documented frontend, semantic, or architecture gate prevents the arm from accepting the case.",
+    "UNRESOLVED": "Timeout, crash, resource stop, incomplete output, policy ambiguity, scoring ambiguity, or candidate not resolved within budget.",
+    "NOT_APPLICABLE": "The arm has no relevant property/interface by design; reason is frozen before output.",
+    "BUILD_FAILED": "Construction did not produce a runnable arm/case artifact; retained in construction accounting and never scored as a miss."
+  },
+  "evidence_and_validation": {
+    "levels": {
+      "E0": "no target report",
+      "E1": "tool warning or abstract candidate",
+      "E2": "model satisfying the actual compiled producer relation, decoder, consumer model, and policy violation",
+      "E3": "real proof accepted by the pinned variant-specific verifier",
+      "E4": "that proof accepted by the unchanged variant-specific consumer from an admitted or reachable state with a checked incompatible committed effect or undischarged obligation"
+    },
+    "common_pipeline": "All tools' unique candidates receive the same E2-to-E4 route, limits, state checks, and adjudication.",
+    "automation_states": ["automatic", "agent_assisted", "human_assisted", "manual", "not_attempted", "unsupported", "unresolved"],
+    "historical_evidence": "Preserved E4 may establish case provenance but does not become automatic validation by the current arm.",
+    "no_warning": "E0 and UNKNOWN unless complete VERIFIED_WITHIN_SCOPE obligations are separately met."
+  },
+  "denominators": {
+    "construction": "Every planned case-arm, including build failures, rejected transformations, and unavailable dependencies.",
+    "applicability": "Every finalized case-arm, partitioned into eligible, unsupported, not applicable, build failed, and unresolved.",
+    "target_detection": "Only eligible completed positively established targets; exact IDs listed. Unsupported, not applicable, build failed, and unresolved remain visible outside the denominator.",
+    "diagnosis": "Detected target reports requiring the declared diagnosis fields; exact missing fields reported.",
+    "safe_control_false_warning": "Only property-specific controls with a positive semantic/proof/execution justification for the exact target property. Honest fixtures and repair contrasts are excluded unless that property is verified.",
+    "non_target_reports": "Every normalized non-target report, including duplicates before and after clustering.",
+    "validation": "Every unique target or new candidate selected by the frozen candidate-identity rule, not every warning object.",
+    "transformation_stability": "Every successfully constructed and semantically verified transformation; rejected/failed variants reported as construction yield.",
+    "effort": "Every attempted construction, setup, run, normalization, scoring, correction, validation, and adjudication session, including failures."
+  },
+  "uncertainty_reporting": {
+    "design": "Purposive exposed development comparison with two known application lineages; no independence or random-sampling assumption.",
+    "primary_report": "Exact case tables, numerators, denominators, and missingness; no p-values, confidence intervals, pooled precision/recall, or prevalence estimate.",
+    "stochastic_tools": "Freeze seeds and run count before output; report every seed result and range without treating repeats as independent cases.",
+    "small_counts": "A difference of one or two cases is descriptive and cannot support a population claim."
+  },
+  "resource_budget": {
+    "scope": "DRAFT caps to be accepted or prospectively amended before the Step 7 seal",
+    "per_case_arm_analysis_wall_seconds": {
+      "bindcheck_and_deterministic_internal_arms": 1800,
+      "static_compiler_and_default_tools": 1800,
+      "symbolic_execution": 1800,
+      "stochastic_fuzzers_aggregate_across_frozen_seeds": 3600,
+      "same_policy_harness": 3600
+    },
+    "candidate_validation_wall_seconds_per_unique_candidate": {
+      "E2_model": 1800,
+      "E3_proof": 3600,
+      "E4_consumer_replay": 1800
+    },
+    "memory_mib_per_process": 16384,
+    "scored_parallelism": 1,
+    "network_calls_during_scored_execution": 0,
+    "scientific_retries": 0,
+    "stochastic_seed_count": 3,
+    "human_construction_cap_researcher_hours": 24,
+    "human_scoring_and_adjudication_cap_researcher_hours": 8,
+    "rule": "No baseline effective analysis cap may be below the full BindCheck cap for the same case. Setup, proving, and validation are timed separately and also included in total end-to-end cost."
+  },
+  "retry_and_stop_rules": [
+    "No scientific retry, changed seed, changed timeout, changed configuration, or tuned rule after a scored output.",
+    "One separately labeled infrastructure recovery is allowed only when failure occurs before any scored tool output and exact sealed bytes/configuration remain unchanged; preserve the failed attempt.",
+    "Stop the affected row on a case-specific hash, version, policy, label, mapping, transformation-control, or scoring mismatch; mark it UNRESOLVED without blocking unrelated objectively scoreable rows.",
+    "Stop the affected arm on an arm-wide environment, implementation, information-budget, or resource-enforcement mismatch.",
+    "Stop the entire comparison if the sealed case manifest, scoring rules, information budgets, or output namespace do not verify.",
+    "Retain partial outputs and classify unresolved; never erase or overwrite them.",
+    "Do not substitute a newly built baseline, repaired case, or changed policy after outputs are visible."
+  ],
+  "effort_logging": {
+    "human": [
+      "actor and role",
+      "start, stop, and active minutes",
+      "setup, source review, policy, specification, adapter, harness, annotation, scoring, correction, validation, adjudication, and reporting categories",
+      "shared versus arm-specific allocation",
+      "artifact/version affected and correction reason"
+    ],
+    "agent": [
+      "system/model/version when available",
+      "task and prompt/evidence reference",
+      "start/stop, tool calls, generated artifact, and human inspection minutes",
+      "never convert agent activity into saved human time"
+    ],
+    "machine": [
+      "exact command/configuration and tool hashes",
+      "host, CPU, memory cap and observed peak, elapsed and CPU time",
+      "seed, exit status, timeout/resource stop, and output identities"
+    ],
+    "summary": "Report setup and annotation, correction, proving, scoring, validation, and adjudication separately plus total human minutes and end-to-end elapsed time. Manual-step counts are proxies, not measured time savings."
+  },
+  "step_6a_deliverables": [
+    "runnable producer-only, consumer-only, unjoined-union, basic-composition, strong-simple-composition, and full-arm adapters",
+    "an information-budget matrix proving equal facts for strong composition and full BindCheck",
+    "originals, transformations, mapping records, hashes, equivalence arguments, controls, failures, and rejection reasons",
+    "normalized output adapters that retain absent diagnoses/locations rather than inventing them",
+    "smoke results only, clearly excluded from final scoring"
+  ],
+  "step_6b_deliverables": [
+    "reviewed policy files and same-policy property harnesses",
+    "external comparator inventory with native, adapted, unsupported, not-applicable, or unavailable status and source-backed reason",
+    "pinned tools/configurations and generic/default plus same-policy arms where applicable",
+    "identical candidate-validation routing and budgets for every comparator",
+    "all setup, adapter, property, proof-seed, and adjudication effort"
+  ],
+  "step_7_finalization_checklist": [
+    "exact case IDs, family/lineage, exposure class, inclusions, exclusions, and duplicates",
+    "original and variant source, artifact, ABI, decoder/bridge, key, verifier, consumer, deployment/state, policy, and validation-route paths with real hashes and sizes",
+    "all construction failures and rejected transformations",
+    "property-specific positive labels and safe-control justifications with primary provenance",
+    "human policy author/reviewer records and unresolved-policy disposition",
+    "exact semantic warning targets, required fields, union rules, duplicate signatures, and non-target handling",
+    "every arm's information budget, implementation, native/adapted status, version, binary hash, configuration, bounds, seed, and resource cap",
+    "generic invariants justified from target documentation and same-policy properties frozen independently of output",
+    "transformation mappings, compilation/build checks, equivalence arguments, proof/execution controls, and accepted/rejected status",
+    "blank case, measurement, effort, and scoring form hashes",
+    "scorer packet construction, randomization, two independent human scorer identities, exposure disclosures, and third adjudicator",
+    "common E2-E4 validation routes, candidate deduplication, variant-specific key/verifier rule, admitted/reachable state, and state-effect checks",
+    "environment, runner, dependency, network, memory, time, retry, stop, output namespace, and completion-check definitions",
+    "a retained timestamped complete manifest and content seal created before any scored execution"
+  ],
+  "gate_a_decisions": {
+    "SUPPORTED_ADVANTAGE": {
+      "condition": "At least one predeclared relationship target receives a valid, transformation-stable diagnosis or higher evidence grade from full BindCheck that strong simple composition and every applicable equal-information comparator do not produce within budget; the distinction does not rely on extra information, frontend inapplicability, a false safe-control report, or post-output judgment.",
+      "permits": "A bounded claim about that exposed case and mechanism, and a separately prespecified prototype/transfer test; the overall capability, novelty, security, and generality claims remain open."
+    },
+    "INCONCLUSIVE": {
+      "condition": "No eligible discriminating target exists, critical policies/controls/scoring remain unresolved, credible arms are unsupported or time out, results tie without validating the intended capability, or evidence cannot distinguish method from information advantage.",
+      "permits": "Resolve infrastructure or policy prospectively, narrow the question, or run one bounded missing-mechanism prototype if the mechanism and test are specified before implementation."
+    },
+    "CURRENT_CLAIM_CONTRADICTED": {
+      "condition": "Strong simple composition or another applicable equal-information comparator matches or exceeds full BindCheck on every eligible relationship target and evidence grade at no greater required information, or full BindCheck's apparent advantage disappears under transformations/controls or depends on bug-specific information.",
+      "permits": "Narrow the contribution to a supported implementation or validation component, or stop; do not claim a relational-analysis advantage."
+    },
+    "missing_mechanism_prototype": {
+      "eligibility": "A failure trace or baseline result identifies one concrete absent, generalizable mechanism rather than merely two missed defects.",
+      "preconditions": "Freeze the mechanism, one primary test, controls, success/failure criterion, and a maximum two researcher-day plus eight machine-hour budget before editing.",
+      "limit": "Development evidence only; no automatic SoK pivot and no retroactive Gate A rescore."
+    }
+  },
+  "blank_artifacts": [
+    "docs/evaluation/d2-gate-a-case-manifest-template-v1.json",
+    "docs/evaluation/d2-gate-a-measurement-form-v1.json",
+    "docs/evaluation/d2-gate-a-effort-log-template-v1.json",
+    "docs/evaluation/d2-gate-a-scoring-form-v1.json"
+  ],
+  "claim_limits": [
+    "This is a protocol draft, not a preregistered or sealed experiment.",
+    "No case manifest, baseline, transformation, safe control, policy review, human score, tool output, comparison, or Gate A decision is complete.",
+    "Exposed development results cannot establish transfer, unbiased discovery, prevalence, generality, security, or novelty.",
+    "Only E4 is an end-to-end validated mismatch; E1 and E2 still receive detection credit at their actual level.",
+    "Research verdict remains UNKNOWN."
+  ]
+}

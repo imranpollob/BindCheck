@@ -1,0 +1,54 @@
+{
+  "schema": "bindcheck.d2.gate-a-scoring/v1",
+  "template_status": "BLANK_NO_JUDGMENT_OR_PREDICTION",
+  "protocol_version": "1.0.0-draft",
+  "score_id": null,
+  "sealed_manifest_id": null,
+  "scoring_packet_id": null,
+  "scorer": {
+    "human_id": null,
+    "role": null,
+    "prior_exposure_summary": null,
+    "independence_attestation": null,
+    "tool_identity_blinded": null
+  },
+  "case_id": null,
+  "tool_arm_anonymized_id": null,
+  "policy_and_target_frozen": null,
+  "objective_matcher_applicable": null,
+  "applicability_status": null,
+  "target_result": null,
+  "mandatory_target_fields": {
+    "case_and_revision": null,
+    "producer_relation_or_permitted_locus": null,
+    "decoded_identity_or_indices": null,
+    "consumer_effect_state_or_obligation": null,
+    "property_kind_and_direction": null,
+    "minimum_evidence_grade": null
+  },
+  "highest_evidence_grade": null,
+  "diagnosis_field_coverage": {},
+  "localization_status": null,
+  "non_target_report_scores": [],
+  "safe_control_property_id": null,
+  "safe_control_false_warning": null,
+  "transformation_stability": null,
+  "evidence_pinpoints": [],
+  "rationale": null,
+  "uncertainty_or_missingness": null,
+  "completed_at": null,
+  "score_file_sha256": null,
+  "allowed_values": {
+    "applicability_status": ["ELIGIBLE", "UNSUPPORTED", "UNRESOLVED", "NOT_APPLICABLE", "BUILD_FAILED"],
+    "target_result": ["DETECTED", "MISSED", "UNSUPPORTED", "UNRESOLVED", "NOT_APPLICABLE", "BUILD_FAILED"],
+    "evidence_grade": ["E0", "E1", "E2", "E3", "E4", "UNRESOLVED"],
+    "non_target_report": ["false_alarm", "real_out_of_scope_issue", "new_candidate", "unresolved"]
+  },
+  "instructions": [
+    "Create one independent score file per scorer; never overwrite this template or another scorer's record.",
+    "If required policy, target, or human judgment is unresolved, score the affected row UNRESOLVED; do not block unrelated objective rows.",
+    "Missing locations or diagnosis fields remain missing and are never inferred from tool identity or another arm.",
+    "A new candidate is reported separately and never added to the frozen target denominator.",
+    "Adjudication occurs only after original score files are sealed and never overwrites them."
+  ]
+}

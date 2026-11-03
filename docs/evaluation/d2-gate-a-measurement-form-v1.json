@@ -1,0 +1,67 @@
+{
+  "schema": "bindcheck.d2.gate-a-measurement/v1",
+  "template_status": "BLANK_NO_OUTPUT_OR_JUDGMENT",
+  "protocol_version": "1.0.0-draft",
+  "measurement_id": null,
+  "sealed_manifest_id": null,
+  "case_id": null,
+  "family_id": null,
+  "transformation_id": null,
+  "tool_id": null,
+  "arm_id": null,
+  "run_identity": {
+    "attempt": null,
+    "seed": null,
+    "command_id": null,
+    "configuration_id": null,
+    "started_at": null,
+    "ended_at": null
+  },
+  "input_identity": {
+    "producer_sha256": null,
+    "decoder_or_bridge_sha256": null,
+    "verifier_or_key_sha256": null,
+    "consumer_sha256": null,
+    "policy_sha256": null,
+    "state_or_fixture_sha256": null
+  },
+  "support_and_execution": {
+    "construction_status": null,
+    "applicability_status": null,
+    "first_stop_reason": null,
+    "exit_status": null,
+    "timed_out": null,
+    "memory_stopped": null,
+    "partial_output_retained": null,
+    "scientific_retry_count": null,
+    "infrastructure_recovery_id": null
+  },
+  "resources": {
+    "wall_seconds": null,
+    "cpu_seconds": null,
+    "peak_rss_mib": null,
+    "memory_cap_mib": null,
+    "network_calls": null,
+    "proof_calls": null,
+    "solver_calls": null,
+    "compiler_or_execution_calls": null
+  },
+  "information_budget": {
+    "implementation_fact_ids": [],
+    "policy_fact_ids": [],
+    "assumption_ids": [],
+    "manual_input_ids": [],
+    "adapter_ids": [],
+    "shared_input_matrix_verified": null
+  },
+  "raw_outputs": [],
+  "normalized_reports": [],
+  "validation_stage_records": [],
+  "output_hashes": [],
+  "notes": [],
+  "instructions": [
+    "This form records observations only; target matching and judgments belong in a separately sealed scoring form.",
+    "Retain absent locations, diagnoses, unsupported behavior, failures, timeouts, and partial outputs exactly as observed.",
+    "Do not infer safety, a target label, or an evidence grade from silence."
+  ]
+}

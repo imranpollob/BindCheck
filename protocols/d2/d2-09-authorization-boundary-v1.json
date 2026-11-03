@@ -1,0 +1,348 @@
+{
+  "schema": "bindcheck.d2.authorization-boundary-protocol/v1",
+  "version": "1.0.0",
+  "date": "2026-11-02",
+  "status": "AUTHORIZED_MECHANICAL_FIXTURE_ONLY_UNSCORED",
+  "research_verdict": "UNKNOWN",
+  "objective": "Mechanically exercise a common versioned policy/obligation/effect authorization-boundary interface over exact compiler object/context identities, without running or rescoring the Gate A experiment.",
+  "authority": [
+    "docs/research-contract.md revision 3",
+    "../bindcheck-agent-playbook.md Steps 7-10",
+    "reports/D2-07.md",
+    "results/raw/D2-07-recovery-01/seal-verification.json",
+    "protocols/d2/d2-08-compiler-identity-v1.json"
+  ],
+  "gate_authorization": {
+    "gate_a_decision": "INCONCLUSIVE",
+    "scope_recommendation": "BOUNDED_PROTOTYPE",
+    "authoritative_seal_sha256": "b9f0f1eb6b9aa1bb3ea8aaf1fba3c3939b3d70a787a57be92f3c4154fad50558",
+    "authoritative_verification_status": "PASS",
+    "primary_experiment_status": "BLOCKED_PENDING_HUMAN_POLICY_ROLES",
+    "authorized_now": "Schema, exact-hash, finite-query, negative-control, and common-interface mechanical work over exposed synthetic development fixtures only."
+  },
+  "execution_boundary": {
+    "fixture_label": "UNREVIEWED_DEVELOPMENT_FIXTURE",
+    "scored_execution_authorized": false,
+    "reserved_data_authorized": false,
+    "retroactive_gate_a_rescore_authorized": false,
+    "integrated_analyzer_dispatch_authorized": false,
+    "baseline_dispatch_authorized": false,
+    "proof_or_replay_authorized": false,
+    "network_access_authorized": false,
+    "human_policy_role_imputation_authorized": false,
+    "effective_state_required": "UNKNOWN",
+    "evidence_grade": "E0",
+    "score_rows": 0,
+    "claim_limit": "Mechanical fixture states are known-answer implementation checks only. They are not policy-reviewed findings, target outcomes, Gate A scores, concrete validation, transfer evidence, or comparative-advantage evidence."
+  },
+  "budget": {
+    "researcher_days": 2,
+    "machine_hours": 8,
+    "scope": "Combined Steps 8-10 bounded prototype cap inherited from D2-07.",
+    "human_time_accounting": "No independently timed human session exists. Researcher-day consumption remains unresolved and zero must not be imputed.",
+    "machine_time_accounting": "Record runner wall time and exact test commands."
+  },
+  "public_interface": {
+    "module": "bindcheck_d1.core.authorization_boundary_v1",
+    "schemas": {
+      "policy": "bindcheck.poe-policy/v1",
+      "obligation": "bindcheck.authorization-obligation/v1",
+      "effect": "bindcheck.protected-effect/v1",
+      "input": "bindcheck.authorization-boundary-input/v1",
+      "result": "bindcheck.authorization-boundary-result/v1",
+      "equal_arms": "bindcheck.authorization-boundary-equal-input-arms/v1"
+    },
+    "types": [
+      "PolicyRecord",
+      "PermissionRecord",
+      "AuthorizationObligation",
+      "ProtectedEffect",
+      "BoundedQuery",
+      "BoundaryInput",
+      "ObligationResult",
+      "BoundaryResult"
+    ],
+    "entry_points": [
+      "validate_boundary_input",
+      "evaluate_boundary",
+      "evaluate_equal_input_arms"
+    ],
+    "states": [
+      "ESTABLISHED",
+      "MISMATCH_CANDIDATE",
+      "UNKNOWN"
+    ],
+    "research_verdicts_not_emitted": [
+      "VIOLATION",
+      "VERIFIED_WITHIN_SCOPE"
+    ]
+  },
+  "identity_contract": {
+    "source_module": "bindcheck_d1.roles.compiler_identity_v1",
+    "opaque_reference_schema": "bindcheck.compiler-object-context-identity-ref/v1",
+    "opaque_reference_fields_exact": [
+      "schema",
+      "semantic_hash",
+      "canonical_bytes_sha256"
+    ],
+    "producer_subject": "Required authorizing object and context.",
+    "producer_object": "Exact producer/public value identity governed by the conditional relation.",
+    "reliance_subject": "Protected effect occurrence.",
+    "reliance_object": "The same exact producer/public value identity.",
+    "required_chain": [
+      "producer subject equals obligation authorization identity",
+      "reliance subject equals obligation and effect protected-effect identity",
+      "producer object equals reliance object",
+      "all comparisons use exact opaque references, not display labels"
+    ],
+    "broken_chain_state": "UNKNOWN"
+  },
+  "supported_fragment": {
+    "execution": "One finite, single-transition protected effect occurrence.",
+    "multiplicity": "ONE_TO_ONE",
+    "fields": [
+      "action",
+      "asset",
+      "quantity",
+      "beneficiary",
+      "domain",
+      "state_version"
+    ],
+    "terms": "Declared finite-domain variables or JSON constants.",
+    "conditions": [
+      "ALWAYS",
+      "NEVER",
+      "UNKNOWN",
+      "PREDICATE(eq, ne, lt, le, gt, ge, and, or, not)"
+    ],
+    "unsupported_to_unknown": [
+      "aggregation",
+      "splitting",
+      "deferral",
+      "unbounded history or domains",
+      "field/integer/byte reinterpretation",
+      "unreviewed alternative authorization",
+      "unbound mapping certificate or assumption",
+      "empty or vacuous obligation set",
+      "query cap exhaustion"
+    ]
+  },
+  "fact_admissibility": {
+    "producer_discharge": {
+      "fact_kind": "producer_guarantee",
+      "quantifier": "MUST",
+      "approximation": "EXACT",
+      "derivation_class": "DERIVED",
+      "support": "SUPPORTED",
+      "provenance_required": true
+    },
+    "consumer_reliance": {
+      "fact_kind": "consumer_used",
+      "quantifier": "MAY",
+      "approximation": [
+        "EXACT",
+        "OVER_APPROXIMATION"
+      ],
+      "derivation_class": "DERIVED",
+      "support": "SUPPORTED",
+      "provenance_required": true,
+      "claim_limit": "A MAY reliance fact covers possible relevant uses but never discharges a MUST producer obligation."
+    },
+    "cannot_discharge_must": [
+      "MAY producer fact",
+      "UNDER_APPROXIMATION producer fact",
+      "ANNOTATED, ASSUMED, or UNKNOWN derivation",
+      "UNKNOWN or unsupported fact",
+      "undischarged assumption",
+      "unbound mapping reference",
+      "identity-chain mismatch"
+    ]
+  },
+  "common_arm_contract": {
+    "arms": [
+      "full-bindcheck",
+      "strong-simple-composition"
+    ],
+    "required_equal_hashes": [
+      "input_sha256",
+      "policy_sha256",
+      "fact_set_sha256",
+      "identity_bundle_sha256"
+    ],
+    "arm_specific_enrichment": false,
+    "semantic_parity_required_for_fixture": true,
+    "comparative_claim_authorized": false
+  },
+  "finite_query": {
+    "variables": {
+      "p": [
+        0,
+        1
+      ],
+      "private_x": [
+        0,
+        1
+      ]
+    },
+    "attacker_controlled": [
+      "p",
+      "private_x"
+    ],
+    "fixed_authenticated_context": {
+      "authorized_x": 0
+    },
+    "max_assignments_per_case": 4,
+    "solver": "Deterministic exhaustive finite enumeration; no SMT service or network dependency."
+  },
+  "fixture_plan": [
+    {
+      "id": "private-equality-counterexample",
+      "producer_relation": "p == private_x",
+      "expected_mechanical_state": "MISMATCH_CANDIDATE",
+      "required_preserved_assignment": {
+        "authorized_x": 0,
+        "p": 1,
+        "private_x": 1
+      },
+      "effective_state": "UNKNOWN"
+    },
+    {
+      "id": "matched-positive-control",
+      "producer_relation": "p == authorized_x",
+      "expected_mechanical_state": "ESTABLISHED",
+      "nonvacuity_required": true,
+      "effective_state": "UNKNOWN"
+    },
+    {
+      "id": "annotation-only-negative-control",
+      "expected_mechanical_state": "UNKNOWN",
+      "reason": "ANNOTATED does not discharge DERIVED MUST"
+    },
+    {
+      "id": "may-producer-negative-control",
+      "expected_mechanical_state": "UNKNOWN",
+      "reason": "MAY producer does not discharge MUST"
+    },
+    {
+      "id": "underapprox-producer-negative-control",
+      "expected_mechanical_state": "UNKNOWN",
+      "reason": "UNDER_APPROXIMATION does not establish a universal producer guarantee"
+    },
+    {
+      "id": "unknown-producer-negative-control",
+      "expected_mechanical_state": "UNKNOWN",
+      "reason": "UNKNOWN extraction support fails closed"
+    },
+    {
+      "id": "unsupported-condition-negative-control",
+      "expected_mechanical_state": "UNKNOWN",
+      "reason": "A Step 8 extraction condition outside the Step 9 allowlist remains explicit UNKNOWN rather than raising or being coerced"
+    },
+    {
+      "id": "context-mismatch-negative-control",
+      "expected_mechanical_state": "MISMATCH_CANDIDATE",
+      "reason": "Exact field values do not replace the required authorizing context"
+    },
+    {
+      "id": "inactive-path-negative-control",
+      "expected_mechanical_state": "UNKNOWN",
+      "reason": "No relying assignment is not nonvacuous establishment"
+    },
+    {
+      "id": "alternative-authorization-negative-control",
+      "expected_mechanical_state": "UNKNOWN",
+      "reason": "The checker must not infer an unreviewed two-sided authorization mechanism"
+    }
+  ],
+  "adversarial_regressions": [
+    "same display name, different logical object",
+    "same logical object, different context",
+    "swapped protected-effect identity",
+    "tampered opaque reference digest",
+    "absent policy",
+    "HUMAN_REVIEWED label without human roles",
+    "assignment limit below the finite domain",
+    "empty obligation set"
+  ],
+  "policy_record": {
+    "review_status": "UNREVIEWED_DEVELOPMENT_FIXTURE",
+    "policy_author_ref": null,
+    "policy_reviewer_ref": null,
+    "different_human_reviewer": false,
+    "score_eligible": false,
+    "effective_state": "UNKNOWN"
+  },
+  "stopping_rule": "Stop without a raw run if any bound hash changes, exact identity-chain validation fails on the matched fixture, either arm consumes a different hash, a known-answer mechanical state changes, effective state escapes UNKNOWN, a scored/research tool is dispatched, reserved data is accessed, or the combined budget is reached.",
+  "test_plan": [
+    "PYTHONPATH=src python3 -m unittest tests.test_d2_step9_authorization_boundary -v",
+    "PYTHONPATH=src python3 scripts/d2_step9_authorization_boundary.py --validate-only",
+    "PYTHONPATH=src python3 -m unittest discover -s tests"
+  ],
+  "outputs": {
+    "raw_namespace": "results/raw/D2-09",
+    "overwrite": false,
+    "per_fixture": [
+      "boundary-input.json",
+      "validation.json",
+      "equal-arms-result.json"
+    ],
+    "run_level": [
+      "summary.json",
+      "run-manifest.json",
+      "checksums.sha256"
+    ],
+    "report": "reports/D2-09.md"
+  },
+  "artifact_bindings": [
+    {
+      "role": "gate_a_report",
+      "path": "reports/D2-07.md",
+      "sha256": "fcdff01dbadade6f7f28116e46ee2c6016fb2945767492c822acaef87a60f07a"
+    },
+    {
+      "role": "gate_a_authoritative_seal",
+      "path": "results/raw/D2-07-recovery-01/content-seal-v1.json",
+      "sha256": "b9f0f1eb6b9aa1bb3ea8aaf1fba3c3939b3d70a787a57be92f3c4154fad50558"
+    },
+    {
+      "role": "gate_a_authoritative_verification",
+      "path": "results/raw/D2-07-recovery-01/seal-verification.json",
+      "sha256": "c6191d8f2baa5817eb875c4287cbe8e73e23ebb8e55b6c6cb7f5364cf8cbb1d5"
+    },
+    {
+      "role": "step8_protocol",
+      "path": "protocols/d2/d2-08-compiler-identity-v1.json",
+      "sha256": "b529f9c12ca695cf4737a0f01f10f9f357216fea0f7505a42fc381614c6b04ba"
+    },
+    {
+      "role": "step8_identity_module",
+      "path": "src/bindcheck_d1/roles/compiler_identity_v1.py",
+      "sha256": "7ef3e330d7e3b4ee93a00340c3aeb2ff43d6860ebd11b6620e0f6ba2a85314a2"
+    },
+    {
+      "role": "step9_public_exports",
+      "path": "src/bindcheck_d1/core/__init__.py",
+      "sha256": "749dcbb58f0860cc022bd801d52f0ebb09d665e620c0ceb3670d49cb9982d58d"
+    },
+    {
+      "role": "step9_implementation",
+      "path": "src/bindcheck_d1/core/authorization_boundary_v1.py",
+      "sha256": "5c275ebb77f9373cc13dbee81c2fa3809ea04f02e7e2af70fa278e88b2fc31ec"
+    },
+    {
+      "role": "step9_formal_specification",
+      "path": "docs/formal/d2-09-authorization-boundary-v1.md",
+      "sha256": "bc86c7dab16e9be895ce896f87200a036d7d241598b0dacb882fc436a8504b1f"
+    },
+    {
+      "role": "step9_runner",
+      "path": "scripts/d2_step9_authorization_boundary.py",
+      "sha256": "bcc0394ccd2c7bfc283ef36d431231a16c41c0e086e7270882ad10882817633b"
+    },
+    {
+      "role": "step9_tests",
+      "path": "tests/test_d2_step9_authorization_boundary.py",
+      "sha256": "0301d9895600b29cf988f45ed30c8ed01307e13b0dc5cb8949401c97dde8d9b1"
+    }
+  ]
+}

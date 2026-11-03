@@ -1,0 +1,49 @@
+{
+  "schema": "bindcheck.d2.gate-a-effort-log/v1",
+  "template_status": "BLANK_NO_EFFORT_CLAIM",
+  "protocol_version": "1.0.0-draft",
+  "log_id": null,
+  "sealed_manifest_id": null,
+  "human_entries": [],
+  "agent_entries": [],
+  "machine_entries": [],
+  "summary": {
+    "human_active_minutes_total": null,
+    "human_minutes_shared": null,
+    "human_minutes_by_arm": {},
+    "human_minutes_by_category": {},
+    "human_correction_count": null,
+    "agent_activity_count": null,
+    "agent_human_inspection_minutes": null,
+    "machine_wall_seconds_sum": null,
+    "machine_cpu_seconds_sum": null,
+    "machine_compute_by_arm": {},
+    "end_to_end_elapsed_seconds": null,
+    "manual_step_count": null,
+    "manual_step_interpretation": "proxy_only_not_time_saved"
+  },
+  "allowed_human_categories": [
+    "setup",
+    "source_review",
+    "policy_authoring",
+    "policy_review",
+    "specification",
+    "adapter",
+    "harness",
+    "transformation",
+    "annotation",
+    "normalization",
+    "scoring",
+    "correction",
+    "validation",
+    "adjudication",
+    "reporting"
+  ],
+  "instructions": [
+    "A human entry records actor, role, active start/stop minutes, category, shared or arm-specific allocation, artifact, and correction reason if applicable.",
+    "An agent entry records system/model/version when available, task or prompt reference, tool activity, generated artifact, and human inspection minutes.",
+    "A machine entry records exact command/configuration, tool hashes, host, seed, caps, observed elapsed/CPU/memory, exit, and output identities.",
+    "Count setup, annotation, failed work, corrections, proving, validation, scoring, and adjudication.",
+    "Do not convert agent activity or manual-step counts into saved human time."
+  ]
+}

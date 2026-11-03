@@ -1,0 +1,148 @@
+{
+  "schema": "bindcheck.d2.partial-artifact-expected-results/v1",
+  "status": "PARTIAL_DEVELOPMENT_ARTIFACT / FINAL_ARTIFACT_BLOCKED",
+  "research_verdict": "UNKNOWN",
+  "comparison_policy": {
+    "retained_evidence": "Exact path, SHA-256 and size verification applies to retained sealed bytes.",
+    "fresh_reruns": "Compare only the categorical and count fields enumerated below.",
+    "not_compared_for_fresh_reruns": [
+      "created_at_utc",
+      "generated_at_utc",
+      "started_at_utc",
+      "ended_at_utc",
+      "elapsed_seconds",
+      "runtime_seconds",
+      "machine_wall_seconds",
+      "human_minutes",
+      "absolute paths",
+      "temporary working directories",
+      "platform and Python version strings",
+      "repository branch, dirty flag and commit metadata",
+      "raw stdout or stderr byte hashes containing compiler timing or paths",
+      "fresh content-seal hashes that transitively contain nondeterministic metadata"
+    ],
+    "stochastic_policy": "No stochastic scientific score is reproduced. The Step 6B fixed-seed smoke is retained evidence only in this package."
+  },
+  "steps": {
+    "D2-00": {
+      "self_test_status": "PASS",
+      "focused_unittest_count": 5
+    },
+    "D2-01": {
+      "authoritative_namespace": "results/raw/D2-01-recovery-01",
+      "status": "COMPLETE",
+      "research_verdict": "UNKNOWN",
+      "case_rows": 49,
+      "static_benchmark": {"targets": 30, "detected": 11, "unsupported": 19, "misses": 0, "warning_objects": 13},
+      "integrated_benchmark": {"targets": 30, "detected": 17, "unsupported": 13, "misses": 0, "warning_objects": 26, "associated_warning_objects": 23},
+      "ablation_detections": {"producer-only": 3, "consumer-only": 2, "unjoined-union": 5, "full-bindcheck": 7},
+      "ablation_unknown_example_ids": ["E8"],
+      "payy_extent": {"earlier": true, "check-added": false},
+      "completion_checks_all_true": true,
+      "sealed_input_files": 8134,
+      "live_current_replay": "EXPECTED_FAIL",
+      "live_mismatch_count": 1,
+      "historical_overlay_replay": "PASS",
+      "historical_overlay_checked_files": 8134,
+      "current_checkout_equivalence": false,
+      "d2_00_retention_gap": "UNAVAILABLE_RETENTION_GAP_NOT_RECONSTRUCTED"
+    },
+    "D2-02": {
+      "research_verdict": "UNKNOWN",
+      "candidate_revisions": 3,
+      "repositories": 2,
+      "architectural_lineages": 2,
+      "current_variants": 30,
+      "consumer_ast_blocked_variants": 13,
+      "nested_mapping_variants": 12,
+      "historical_attempts": 12,
+      "historical_unique_projects": 8,
+      "historical_repeat_attempts": 4
+    },
+    "D2-03": {"research_verdict": "UNKNOWN", "claims": 22, "closest_works": 5},
+    "D2-04": {"status": "FROZEN_PRE_ANNOTATION", "research_verdict": "UNKNOWN", "human_ratings": 0, "agreement_result": false},
+    "D2-05": {"status": "DRAFT_UNSEALED_DO_NOT_SCORE", "research_verdict": "UNKNOWN", "scored_rows": 0},
+    "D2-06A": {
+      "status": "COMPLETE_CONSTRUCTION_SMOKE_ONLY",
+      "research_verdict": "UNKNOWN",
+      "scored": false,
+      "baseline_case_arms": 78,
+      "construction_status_counts": {"SUPPORTED": 72, "UNKNOWN": 6},
+      "transformations": {"planned": 6, "attempted": 4, "preconstruction_rejected": 2, "semantically_controlled": 4, "stability_eligible": 4},
+      "equal_policy_information": "UNRESOLVED_EQUAL_POLICY_INTERFACE"
+    },
+    "D2-06B": {
+      "status": "CONSTRUCTION_SMOKE_ONLY_UNSEALED_DO_NOT_SCORE",
+      "research_verdict": "UNKNOWN",
+      "scored": false,
+      "case_count": 2,
+      "adapter_smoke_status": "PASS",
+      "native_exit_codes": {"D2-06B-WT-PINNED-SMOKE": 0, "D2-06B-WT-MSRC-SMOKE": 1},
+      "target_detection_denominator": null,
+      "safe_control_denominator": null
+    },
+    "D2-07": {
+      "status": "BLOCKED_BEFORE_SCORE",
+      "research_verdict": "UNKNOWN",
+      "gate_a_decision": "INCONCLUSIVE",
+      "candidate_case_count": 13,
+      "internal_arm_count": 6,
+      "external_inventory_count": 11,
+      "scored_arm_count": 0,
+      "blocker_codes": [
+        "DISTINCT_HUMAN_POLICY_REVIEW_MISSING",
+        "FAIR_SAME_POLICY_ARM_INCOMPLETE",
+        "HUMAN_POLICY_AUTHOR_OR_ADOPTION_MISSING",
+        "STRONG_FULL_POE_INTERFACE_NOT_EQUAL"
+      ]
+    },
+    "D2-08": {
+      "status": "PASS_MECHANICAL_ONLY",
+      "research_verdict": "UNKNOWN",
+      "scored": false,
+      "bundle_count": 5,
+      "identities_per_bundle": 5,
+      "facts_per_bundle": 10,
+      "mapping_count": 4,
+      "negative_fixture_count": 5,
+      "name_influence_audit": "PASS"
+    },
+    "D2-09": {
+      "status": "COMPLETE_MECHANICAL_FIXTURE_ONLY",
+      "research_verdict": "UNKNOWN",
+      "case_count": 10,
+      "equal_input_arm_parity_count": 10,
+      "mechanical_state_counts": {"ESTABLISHED": 1, "MISMATCH_CANDIDATE": 2, "UNKNOWN": 7},
+      "effective_state_counts": {"UNKNOWN": 10},
+      "score_rows": 0
+    },
+    "D2-10": {
+      "authoritative_namespace": "results/raw/D2-10/run-02",
+      "status": "PASS",
+      "research_verdict": "UNKNOWN",
+      "fact_rows": 16,
+      "producer_guarantee": 0,
+      "derived_eligible_consumer_used": 0,
+      "effective_result": "UNKNOWN_UNREVIEWED_DEVELOPMENT_FIXTURE",
+      "identity_chain_status": "PASS",
+      "semantic_controls": 7,
+      "adversarial_controls": 3,
+      "d1p40_regressions": 5,
+      "equal_input_semantic_parity": true
+    }
+  },
+  "downstream": {
+    "steps_11_14": "READ_ONLY_AUDIT_COMPLETE / STEPS_11_14_NOT_EXECUTED / GATE_B_NOT_EVALUATED",
+    "steps_15_17": "READ_ONLY_AUDIT_COMPLETE / STEPS_15_17_NOT_EXECUTED / GATE_C_NOT_REACHED"
+  },
+  "step18": {
+    "research_verdict": "UNKNOWN",
+    "gate_a": "INCONCLUSIVE",
+    "submission_readiness": "NOT_SUBMISSION_READY",
+    "ledger_claims": 20,
+    "claim_status_counts": {"supported": 13, "contradicted": 3, "unresolved": 4},
+    "claim_map_entries": 17,
+    "closest_works": 5,
+    "primary_source_records": 11
+  }
+}

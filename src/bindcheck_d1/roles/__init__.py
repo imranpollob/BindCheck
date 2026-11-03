@@ -1,0 +1,43 @@
+"""Versioned semantic identity types for the bounded D2 prototype."""
+
+from .compiler_identity_v1 import (
+    BUNDLE_SCHEMA,
+    FACT_SCHEMA,
+    FIXTURE_LABEL,
+    IDENTITY_REFERENCE_SCHEMA,
+    IDENTITY_SCHEMA,
+    MAPPING_SCHEMA,
+    PROVENANCE_SCHEMA,
+    CompilerProvenance,
+    ContextIdentity,
+    IdentityBundle,
+    IdentityFact,
+    IdentityRecord,
+    MappingCertificate,
+    MappingEntry,
+    ObjectIdentity,
+    identity_reference,
+    validate_bundle,
+    validate_mapping_certificate,
+)
+
+__all__ = [
+    "BUNDLE_SCHEMA",
+    "FACT_SCHEMA",
+    "FIXTURE_LABEL",
+    "IDENTITY_REFERENCE_SCHEMA",
+    "IDENTITY_SCHEMA",
+    "MAPPING_SCHEMA",
+    "PROVENANCE_SCHEMA",
+    "CompilerProvenance",
+    "ContextIdentity",
+    "IdentityBundle",
+    "IdentityFact",
+    "IdentityRecord",
+    "MappingCertificate",
+    "MappingEntry",
+    "ObjectIdentity",
+    "identity_reference",
+    "validate_bundle",
+    "validate_mapping_certificate",
+]

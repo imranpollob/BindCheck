@@ -1,0 +1,803 @@
+{
+  "schema": "bindcheck.d2.review-concerns/v1",
+  "audit_version": "D2-20-v1",
+  "as_of": "2026-11-02",
+  "status": "EVIDENCE_AUDIT_COMPLETE_NO_NEW_EXPERIMENT",
+  "research_verdict": "UNKNOWN",
+  "gate_a_result": "INCONCLUSIVE",
+  "gate_b_result": "NOT_EVALUATED",
+  "gate_c_result": "NOT_REACHED",
+  "manuscript_correction_decision": "NO_VERSIONED_STEP18_MANUSCRIPT_OR_PDF_CORRECTION_JUSTIFIED",
+  "reviewed_bytes_preserved": true,
+  "classification_values": [
+    "WRITING_CORRECTION",
+    "EXISTING_DATA_ANALYSIS",
+    "NEW_EXPERIMENT",
+    "ENDURING_LIMITATION"
+  ],
+  "classification_counts": {
+    "WRITING_CORRECTION": 1,
+    "EXISTING_DATA_ANALYSIS": 4,
+    "NEW_EXPERIMENT": 5,
+    "ENDURING_LIMITATION": 2
+  },
+  "evidence_interpretation": [
+    "Missing evidence is not a contradiction of a manuscript that explicitly reports UNKNOWN, INCONCLUSIVE, unsupported, or not evaluated.",
+    "Affirmative contrary evidence is recorded only against a stronger inference, unless contradicts_current_status_manuscript is true.",
+    "A PDF-only verification gap may be partly resolved by repository evidence without making the PDF self-contained or independently replicated.",
+    "Integrity and reproduction evidence establishes byte/categorical reproducibility within its declared profile, not semantic correctness.",
+    "No concern changes primary results, exposure classes, evidence grades, or denominators."
+  ],
+  "source_bindings": [
+    {
+      "path": "docs/mock-reviews/d2-contract-security-pdf-review.md",
+      "sha256": "218697c92f7d3aa27c76f232b1c9cf040acbbc3883055678500c5509572c3e2f",
+      "size_bytes": 20496
+    },
+    {
+      "path": "docs/mock-reviews/d2-empirical-validity-pdf-review.md",
+      "sha256": "d399bec88bd4f26cb115f7e2e2a6b8b67c9ba26ff0b97518d9796f57820bfba4",
+      "size_bytes": 26229
+    },
+    {
+      "path": "docs/mock-reviews/d2-zk-methodology-pdf-review.md",
+      "sha256": "751643b672fecafeebd1ad9372202066d25e0dd385828734412c4ff45715d2ec",
+      "size_bytes": 25315
+    },
+    {
+      "path": "output/pdf/bindcheck-d2-evidence-status.pdf",
+      "sha256": "1697834e0c47de365ad04f8a1108dfd21555af5c7af9e697759d44e5b9f1e12d",
+      "size_bytes": 37509
+    },
+    {
+      "path": "paper/d2-status-draft.md",
+      "sha256": "a1c906e19a3cc8fddf2ffd66afb4f49d95dd7476832e55671223b20b3e2660d7",
+      "size_bytes": 33356
+    },
+    {
+      "path": "docs/d2/claim-ledger-v2.json",
+      "sha256": "78ec90b4e0c6f2e68fb8f43237b372b8a8dbcd723680ec5dceacd0ee6ce219a9",
+      "size_bytes": 27061
+    },
+    {
+      "path": "paper/d2-status-claim-map-v1.json",
+      "sha256": "c3cfa1ea2acce7635ca8f67ff8d980044ae21d8c6097daa085254fdc30be3567",
+      "size_bytes": 13524
+    },
+    {
+      "path": "docs/research-contract.md",
+      "sha256": "956985e6da44ddc85f80fc0bc8f0bf93b02ca926e35dad27beb3ed6d3d576eae",
+      "size_bytes": 24100
+    },
+    {
+      "path": "reports/D2-00.md",
+      "sha256": "171e628a5b677a6ee85ad980c62b1634693f716bf98d164f113ecdd94851b3e9",
+      "size_bytes": 8705
+    },
+    {
+      "path": "reports/D2-01.md",
+      "sha256": "ee13591c20fc4078ac71ce720b53ff2c1af7e51fa50f0a974fe4a2a6a74cba3f",
+      "size_bytes": 11494
+    },
+    {
+      "path": "reports/D2-02.md",
+      "sha256": "e8f9630bbeef1d2b32b22ea260352a004e1bbaf0ad4d8c15b3019cadbde0d476",
+      "size_bytes": 8858
+    },
+    {
+      "path": "reports/D2-03.md",
+      "sha256": "4b053390b1269dd7d1a47c7c374c768ee58c8fc532cc5f524f4f3ac9f6d844f3",
+      "size_bytes": 12788
+    },
+    {
+      "path": "reports/D2-04.md",
+      "sha256": "09d62d959c1a35be1eae515f0d23f18db73a6c59d0f5e324a716fcd36c93e811",
+      "size_bytes": 10376
+    },
+    {
+      "path": "reports/D2-05.md",
+      "sha256": "5ad70b193db32c0e42ddce1e33a9a371ee7f27e69f3210785db4db1fab55ddfd",
+      "size_bytes": 10635
+    },
+    {
+      "path": "reports/D2-06A.md",
+      "sha256": "daf6fbe1c00c2184f541b09d4cf5cbe6eadb1aaf2903a742c53113d7d364c321",
+      "size_bytes": 7254
+    },
+    {
+      "path": "reports/D2-06B.md",
+      "sha256": "465ae8a9e91ee5008ef1ac00dfe2fcf48dd33d2768db81e909cabc4bf6fe4240",
+      "size_bytes": 13078
+    },
+    {
+      "path": "reports/D2-07.md",
+      "sha256": "fcdff01dbadade6f7f28116e46ee2c6016fb2945767492c822acaef87a60f07a",
+      "size_bytes": 10847
+    },
+    {
+      "path": "reports/D2-08.md",
+      "sha256": "aaca4aa036a0604febd6869604e8dfcfc3709a72a15c8fa588717309316fd2cd",
+      "size_bytes": 7388
+    },
+    {
+      "path": "reports/D2-09.md",
+      "sha256": "f7254e4ccb510a8ccfea9954cfd341c81620084147159a81dfa52c3f6595cf03",
+      "size_bytes": 12481
+    },
+    {
+      "path": "reports/D2-10.md",
+      "sha256": "848acceef83d32d5054e37686ff5bc3b94baa45c5618490a0fe8e41bb9db018a",
+      "size_bytes": 14573
+    },
+    {
+      "path": "reports/D2-11-14-dependency-audit.md",
+      "sha256": "b2210759f71ed4a2fb323d933d7e517a1043d20f94c5b5150cb84a2baff52b96",
+      "size_bytes": 14507
+    },
+    {
+      "path": "reports/D2-15-17-readiness-audit.md",
+      "sha256": "4734b3f269999e2042779b091c069eac1813f86281a1314d19a48a62debf7cdd",
+      "size_bytes": 16325
+    },
+    {
+      "path": "reports/D2-18-paper.md",
+      "sha256": "76ca55612b55d8beb4859c5024c228236ec5d03a20f4efdbb9eb18dd8517b24c",
+      "size_bytes": 14143
+    },
+    {
+      "path": "reports/D2-19-artifact.md",
+      "sha256": "5130a31fa4bee267013e1cfd43a058fbac833e45cd3511fb59e75e84396bdf63",
+      "size_bytes": 9275
+    },
+    {
+      "path": "reports/D2-19-fresh-reproduction.md",
+      "sha256": "61b6f8a78363c32c626d0e582d673cce2dcaa9c455af565ac61826028bc0e444",
+      "size_bytes": 16461
+    },
+    {
+      "path": "reports/D2-01-post-step8-replay.md",
+      "sha256": "1a05bcdbd6d16afb7f3db7cfb1fc5fbd96daa0355b4bd755bb6527739677f433",
+      "size_bytes": 6515
+    },
+    {
+      "path": "reports/T15.md",
+      "sha256": "9627a02aa24d1e62abd14e7f6f6f9b02fe53cb6bb7a4a0b3f9e1b4563ce76367",
+      "size_bytes": 9658
+    },
+    {
+      "path": "reports/T18.md",
+      "sha256": "720b04277afe52cef68b98bf2a99ecebbb626f27b7da271bb3ff388a7a007a6f",
+      "size_bytes": 12123
+    },
+    {
+      "path": "reports/T19.md",
+      "sha256": "fcedf3b8010a7807d9a1a159a0528a09f2ddf0d66ac837ef50ad8e55a93ab53b",
+      "size_bytes": 6851
+    },
+    {
+      "path": "docs/validation/policy-review-2026-10-30.md",
+      "sha256": "ca821c23c84ecd3c435f72acd5f1217e39184be8ca513b9f6147d7b59571a0cf",
+      "size_bytes": 4012
+    },
+    {
+      "path": "protocols/d2/d2-01-integrated-development-v1.json",
+      "sha256": "36879d073c112eafbb67c4b21958c22a763feed3699cc26a3099ac43534b084d",
+      "size_bytes": 6372
+    },
+    {
+      "path": "protocols/d2/d2-01-post-step8-replay-v1.json",
+      "sha256": "cbb4208d84885e54f2fbb77331000713aed9953dc2db6950ef94a38e3250200c",
+      "size_bytes": 3923
+    },
+    {
+      "path": "protocols/d2/d2-04-taxonomy-preparation-v1.json",
+      "sha256": "64c9ac66845e4db87c066c058e2e809e6641f3b1e7ff892b639108219ff0536c",
+      "size_bytes": 9395
+    },
+    {
+      "path": "protocols/d2/d2-05-early-comparison-draft-v1.json",
+      "sha256": "c397edaf46bfa703d4aae813502b73b71fc9a3a3fc4933e6a1d707640881a4b2",
+      "size_bytes": 28761
+    },
+    {
+      "path": "protocols/d2/d2-06a-construction-v1.json",
+      "sha256": "92a7c46af25f5fa575969f49d4c06ec9806ae45e7a883fc0717f38f95299cf5b",
+      "size_bytes": 10919
+    },
+    {
+      "path": "protocols/d2/d2-06b-comparator-smoke-v1.json",
+      "sha256": "c669939a14c19a5534cd4a35f54cb7df4ba03dcb67da11ee17ba918f1806d2fe",
+      "size_bytes": 11906
+    },
+    {
+      "path": "protocols/d2/d2-07-gate-a-finalization-v1.json",
+      "sha256": "3aab079da6c441a6a6bb95bc97e6d8e5dbeacf65472fb7902a96b905635303af",
+      "size_bytes": 26629
+    },
+    {
+      "path": "protocols/d2/d2-08-compiler-identity-v1.json",
+      "sha256": "b529f9c12ca695cf4737a0f01f10f9f357216fea0f7505a42fc381614c6b04ba",
+      "size_bytes": 12738
+    },
+    {
+      "path": "protocols/d2/d2-09-authorization-boundary-v1.json",
+      "sha256": "2a833bc150a21bfc82dc9847fe36c0f6e92e85a592cac771836bb9b0a717b04a",
+      "size_bytes": 12432
+    },
+    {
+      "path": "protocols/d2/d2-10-typed-extraction-v2.json",
+      "sha256": "910ce6464a947fa552be08d34a596d97b179669401305adc577676d5172ce3ec",
+      "size_bytes": 9290
+    },
+    {
+      "path": "protocols/d2/d2-11-14-dependency-disposition-v1.json",
+      "sha256": "d2acbf45720baf425fc7b71847b75de1db48195b1ca4a4604aaa0e069c6fdf78",
+      "size_bytes": 24786
+    },
+    {
+      "path": "protocols/d2/d2-15-17-readiness-v1.json",
+      "sha256": "15406a13e1f3a03f58e4788d75445f1cc5e665afa63fd3a36a5d9e59fd8f4d54",
+      "size_bytes": 21121
+    },
+    {
+      "path": "results/raw/D2-01-recovery-01/run-summary.json",
+      "sha256": "874c264972eeb870d78d95b48266dd5fdc61b1e9e72d6ba81f00cbe6e5f427ca",
+      "size_bytes": 17132
+    },
+    {
+      "path": "results/raw/D2-06A/construction-03/run-summary.json",
+      "sha256": "853af59f1d071e6234aa1a031c9f17fc488b8ba6e28eb880d2b05889934393f6",
+      "size_bytes": 2380
+    },
+    {
+      "path": "results/raw/D2-06B/recovery-01/smoke-summary.json",
+      "sha256": "1df2373fe3c371dc6c3f29553090a0fc471c66876340b315d44afc070884cfa1",
+      "size_bytes": 1288
+    },
+    {
+      "path": "results/raw/D2-07-recovery-01/finalization-summary.json",
+      "sha256": "53daa2a248adcd59d9c87b50c4416bce1c851ad2bc9ec486a594a177dd41f21e",
+      "size_bytes": 2655
+    },
+    {
+      "path": "results/raw/D2-07-recovery-01/seal-verification.json",
+      "sha256": "c6191d8f2baa5817eb875c4287cbe8e73e23ebb8e55b6c6cb7f5364cf8cbb1d5",
+      "size_bytes": 774
+    },
+    {
+      "path": "results/raw/D2-08/run-summary.json",
+      "sha256": "e3f4e58a36bd697bf7c848af1dccc3f0d9c1b8e41739c53e53a60931b800d6c2",
+      "size_bytes": 5029
+    },
+    {
+      "path": "results/raw/D2-08/content-seal-v1.json",
+      "sha256": "d2195d93fc6e51458a994ecc63838935fb36bad275379ef15e43ca2f9c112343",
+      "size_bytes": 20641
+    },
+    {
+      "path": "results/raw/D2-09/summary.json",
+      "sha256": "3eda2929bc4a1bf192054f809a8d506137941fe7af3ef8b76bbf2be136448922",
+      "size_bytes": 7847
+    },
+    {
+      "path": "results/raw/D2-09/content-seal-v1.json",
+      "sha256": "c678085afa6a73d0f8115d10055fb753bd024a174a38618cb0e5e6943661e8bd",
+      "size_bytes": 8752
+    },
+    {
+      "path": "results/raw/D2-10/run-02/run-summary.json",
+      "sha256": "0ebf8ca1f555701a6cbc942b0140df1440e7e5e60eb4daec87fd4bffb1dc42ab",
+      "size_bytes": 786
+    },
+    {
+      "path": "results/raw/D2-10/run-02/content-seal-v1.json",
+      "sha256": "c5bb3163283c7b16a0d341067c6f2c3f8fa9965d85ab13dc761d4e948fcf21e6",
+      "size_bytes": 2020
+    },
+    {
+      "path": "artifact/.gitignore",
+      "sha256": "b35a1dd0e22e99659e9765055021476e5b0625b2816b7b7f2f8887e31677dd8c",
+      "size_bytes": 17
+    },
+    {
+      "path": "artifact/README.md",
+      "sha256": "4847c92b149e87921683446d8f5caf586f9c6264928d75cdf93910c06c7caa41",
+      "size_bytes": 5761
+    },
+    {
+      "path": "artifact/STATUS.json",
+      "sha256": "240186165c38cf7670e7d6d4387a7916f82bb712bfa1ac575ad76665dd3edb1c",
+      "size_bytes": 1080
+    },
+    {
+      "path": "artifact/THIRD_PARTY.md",
+      "sha256": "52b2f6424e92cce6f325f6a28db34e4e57d6fd0ebdb83edeb71fc72dd9c09938",
+      "size_bytes": 2000
+    },
+    {
+      "path": "artifact/expected-results-v1.json",
+      "sha256": "c2e63a5a44bd05242a2c270c3f2737c94a2fd6a3e42fa245650ea7b5c67897b0",
+      "size_bytes": 5925
+    },
+    {
+      "path": "artifact/input-inventory-v1.json",
+      "sha256": "bdff015329cdf27750f7329fb979062ae92b9132eb06e8ee5be35f9d63c9fda7",
+      "size_bytes": 7943
+    },
+    {
+      "path": "artifact/manifest-v1.json",
+      "sha256": "b0ecbd8d90df73a008915cd2234fa9ebc12bb03bc85975af00ef2570efe34a02",
+      "size_bytes": 9748
+    },
+    {
+      "path": "artifact/platform-matrix-v1.json",
+      "sha256": "d6ee6834075f2c7d4e2db7c152fbfc599669c0529ad62e161c3a80cb0963c4c9",
+      "size_bytes": 2605
+    },
+    {
+      "path": "artifact/reproduce.py",
+      "sha256": "1973a850466aee837fbd05c14bac216f424c95db3fa0eb6c0c1d3f3bbe9d6d91",
+      "size_bytes": 44651
+    },
+    {
+      "path": "artifact/test_reproduce.py",
+      "sha256": "d7947206721d1d88668d5d3bd694bd60ed1876785c4464c248af7abce0cf573b",
+      "size_bytes": 5241
+    },
+    {
+      "path": "artifact/SHA256SUMS",
+      "sha256": "7d11a8d8f646f0f08c756ab58f193c9ce52e8c3b16efd9f53ce790847081dc38",
+      "size_bytes": 919
+    }
+  ],
+  "review_concerns": [
+    {
+      "concern_id": "D2-RC-001",
+      "title": "Formal authorization semantics, extraction soundness, and negative-verdict completeness",
+      "review_refs": [
+        "contract-security §3.1 and §3.9",
+        "zk-methodology §1"
+      ],
+      "primary_class": "NEW_EXPERIMENT",
+      "evidence_relation": {
+        "missing_from_reviewed_pdf": true,
+        "missing_from_repository_record": true,
+        "contradicts_current_status_manuscript": false,
+        "contradicts_only_a_stronger_inference": true
+      },
+      "verified_existing_evidence": [
+        "The research contract defines the P/O/E target and E0-E4 ladder, but no bounded formal authorization theorem or source-to-fact soundness/completeness result exists.",
+        "Corrected Step 10 is fail-closed: producer_guarantee=0, eligible derived consumer_used=0, and the effective result is UNKNOWN."
+      ],
+      "exact_consequence": "No current VIOLATION or VERIFIED_WITHIN_SCOPE result can rest on the prototype; assuming sound extraction would be circular.",
+      "disposition": "Open. Missing evidence, not a contradiction of the status manuscript, which expressly says the theorem and extraction proof do not exist.",
+      "exact_unblock_experiment_or_action": "Freeze a supported fragment; define the authorization judgment and MUST/EXACT/DERIVED/SUPPORTED inference rules; prove or translation-validate every producer, decode, control-flow, and effect rule; and add adversarial compiler/runtime differential tests in which any unproved case becomes UNKNOWN.",
+      "manuscript_action": "NO_VERSIONED_CORRECTION_TO_STEP18"
+    },
+    {
+      "concern_id": "D2-RC-002",
+      "title": "Human-reviewed policy, exact protected-effect grounding, and independent semantic oracle",
+      "review_refs": [
+        "contract-security §3.2",
+        "empirical-validity §10",
+        "zk-methodology §3"
+      ],
+      "primary_class": "NEW_EXPERIMENT",
+      "evidence_relation": {
+        "missing_from_reviewed_pdf": true,
+        "missing_from_repository_record": true,
+        "contradicts_current_status_manuscript": false,
+        "contradicts_only_a_stronger_inference": true
+      },
+      "verified_existing_evidence": [
+        "Gate A records no human policy author/adopter and no distinct human reviewer.",
+        "Steps 8-10 use UNREVIEWED_DEVELOPMENT_FIXTURE; no human scorer or adjudicator ran."
+      ],
+      "exact_consequence": "Current mechanical matches cannot become authorization judgments or scored rows, and Gate A remains INCONCLUSIVE.",
+      "disposition": "Open. The absence is explicitly reported and therefore is not a contradiction of the manuscript.",
+      "exact_unblock_experiment_or_action": "Before output access, have an accountable human author or adopt exact policy bytes and a different human review them; bind each P/O/E item to an exact runtime effect; then use blinded independent scorers, preserve disagreement, and adjudicate under the frozen protocol.",
+      "manuscript_action": "NO_VERSIONED_CORRECTION_TO_STEP18"
+    },
+    {
+      "concern_id": "D2-RC-003",
+      "title": "End-to-end artifact identity and byte-level proof/public-input/ABI decoding",
+      "review_refs": [
+        "contract-security §3.3 and §3.4",
+        "zk-methodology §4 and §5"
+      ],
+      "primary_class": "NEW_EXPERIMENT",
+      "evidence_relation": {
+        "missing_from_reviewed_pdf": true,
+        "missing_from_repository_record": true,
+        "contradicts_current_status_manuscript": false,
+        "contradicts_only_a_stronger_inference": true
+      },
+      "verified_existing_evidence": [
+        "Step 8 establishes bounded opaque-reference and mapping mechanics only.",
+        "The current record has no complete source/compiler/constraint/key/ABI/deployment identity chain or executable D_v validation for a scored application."
+      ],
+      "exact_consequence": "Source-level roles and matching hashes cannot establish that the analyzed fields are the exact verifier-accepted and consumer-decoded values.",
+      "disposition": "Open. Evidence supports only the narrow mechanical identity claim.",
+      "exact_unblock_experiment_or_action": "Pin source, compiler build/flags, constraints, proving and verification keys, ABI, verifier and consumer bytecode, deployment context, and canonical serialization; execute negative controls for substitution, wrong key/domain, non-canonical field encodings, limb/width changes, duplicated indices, and reorderings.",
+      "manuscript_action": "NO_VERSIONED_CORRECTION_TO_STEP18"
+    },
+    {
+      "concern_id": "D2-RC-004",
+      "title": "No current automatic E1-to-E4 causal chain",
+      "review_refs": [
+        "empirical-validity §1",
+        "zk-methodology §7",
+        "contract-security strongest-evidence discussion"
+      ],
+      "primary_class": "NEW_EXPERIMENT",
+      "evidence_relation": {
+        "missing_from_reviewed_pdf": true,
+        "missing_from_repository_record": true,
+        "contradicts_current_status_manuscript": false,
+        "contradicts_only_a_stronger_inference": true
+      },
+      "verified_existing_evidence": [
+        "Gate A dispatched no scientific arm and has zero score rows.",
+        "The corrected extractor ran no compiler or prover and produced zero eligible producer guarantees and zero eligible consumer-use relations.",
+        "Historical Payy E4 is a known, post-disclosure chain separated from current discovery."
+      ],
+      "exact_consequence": "The proposed capability gate remains unresolved; current E1 warnings cannot be promoted to reachability, causation, or unauthorized effects.",
+      "disposition": "Affirmative evidence contradicts any stronger claim that current capability already exists, but the status manuscript makes no such claim and remains accurate.",
+      "exact_unblock_experiment_or_action": "Freeze one supported application and paired repair; automatically extract the exact relations, generate and accept a real proof, execute the unchanged consumer from a declared state, observe the exact committed policy violation, and show that repairing only the binding prevents it while preserving a legitimate control.",
+      "manuscript_action": "NO_VERSIONED_CORRECTION_TO_STEP18"
+    },
+    {
+      "concern_id": "D2-RC-005",
+      "title": "Conditional coverage, lineage-structured abstention, clustering, and exposure",
+      "review_refs": [
+        "contract-security §3.7",
+        "empirical-validity §2-§4",
+        "zk-methodology §8"
+      ],
+      "primary_class": "EXISTING_DATA_ANALYSIS",
+      "evidence_relation": {
+        "missing_from_reviewed_pdf": false,
+        "missing_from_repository_record": false,
+        "contradicts_current_status_manuscript": false,
+        "contradicts_only_a_stronger_inference": true
+      },
+      "verified_existing_evidence": [
+        "D2-01 has 30 exposed targets: 17 supported/detected and 13 unsupported/UNKNOWN.",
+        "Derived support coverage is 56.7%; unsupported coverage is 43.3%.",
+        "All 17 supported/detected targets are WarpToad; all 12 Payy mutants plus WT-S04 are unsupported, so the supported result spans one effective lineage.",
+        "No reserved or held-out supported family exists."
+      ],
+      "exact_consequence": "Zero misses is conditional on supported predeclared associations; it is not recall, and no family-level generalization or independent transfer estimate exists.",
+      "disposition": "Existing evidence permits the coverage and clustering analysis but not an accuracy estimate. This contradicts only a stronger two-lineage-performance interpretation.",
+      "exact_unblock_experiment_or_action": "Publish the frozen target-level support/reason/outcome table and derived coverage by lineage; a scientific transfer claim additionally requires multiple independent supported families with one reserved before rule/label access and family-level analysis.",
+      "manuscript_action": "FUTURE_READER_CLARIFICATION_ONLY"
+    },
+    {
+      "concern_id": "D2-RC-006",
+      "title": "Warning multiplicity and association counts are not precision",
+      "review_refs": [
+        "empirical-validity §5",
+        "contract-security §3.7"
+      ],
+      "primary_class": "EXISTING_DATA_ANALYSIS",
+      "evidence_relation": {
+        "missing_from_reviewed_pdf": false,
+        "missing_from_repository_record": false,
+        "contradicts_current_status_manuscript": false,
+        "contradicts_only_a_stronger_inference": true
+      },
+      "verified_existing_evidence": [
+        "D2-01 records 26 warning objects, 23 matched/associated warning objects, 17 detected targets, and 3 unassociated warnings.",
+        "Matched warning multiplicity is 23 warning objects over 17 target detections; the raw target rows preserve which targets have multiple and unassociated warnings."
+      ],
+      "exact_consequence": "Neither 23/26 nor 17/30 is precision or recall because association is not semantic correctness and no safe-effect denominator or adjudicated confusion matrix exists.",
+      "disposition": "Existing raw evidence resolves the count arithmetic and multiplicity, but accuracy evidence remains missing.",
+      "exact_unblock_experiment_or_action": "Publish the complete warning-to-target/effect mapping, deduplication rule, and unassociated-warning disposition; then evaluate unique protected-effect occurrences on frozen positive and safe controls with independent adjudication and a common E1-to-E4 route.",
+      "manuscript_action": "FUTURE_READER_CLARIFICATION_ONLY"
+    },
+    {
+      "concern_id": "D2-RC-007",
+      "title": "Equal-information comparative advantage and total cost are unevaluated",
+      "review_refs": [
+        "contract-security §3.8",
+        "empirical-validity §8 and §9",
+        "zk-methodology §2 and §9"
+      ],
+      "primary_class": "NEW_EXPERIMENT",
+      "evidence_relation": {
+        "missing_from_reviewed_pdf": true,
+        "missing_from_repository_record": true,
+        "contradicts_current_status_manuscript": false,
+        "contradicts_only_a_stronger_inference": false
+      },
+      "verified_existing_evidence": [
+        "Gate A objective_subset and score_rows are empty; scored_arm_count=0.",
+        "The four blockers are missing human policy adoption, missing distinct review, unequal strong/full policy consumption, and incomplete fair same-policy/applicable-comparator arms.",
+        "Human time and total research/deployment cost were not measured."
+      ],
+      "exact_consequence": "No superiority, tie, cost advantage, or closest-work delta can be inferred from 7/7 versus 5/7 exposed ablation or from equal input hashes.",
+      "disposition": "Open. Gate A is correctly INCONCLUSIVE rather than negative.",
+      "exact_unblock_experiment_or_action": "Under one frozen version and policy, run producer-only, consumer-only, union, strongest-simple, full, same-policy, and applicable closest-work arms with equal semantic facts and validation route; preregister applicability/scoring and record adapters, annotations, prompts, failures, human minutes, compute, proof cost, and triage.",
+      "manuscript_action": "NO_VERSIONED_CORRECTION_TO_STEP18"
+    },
+    {
+      "concern_id": "D2-RC-008",
+      "title": "Historical Payy E4 is not self-contained in the reviewed PDF",
+      "review_refs": [
+        "contract-security §3.6",
+        "zk-methodology §3 and §7"
+      ],
+      "primary_class": "EXISTING_DATA_ANALYSIS",
+      "evidence_relation": {
+        "missing_from_reviewed_pdf": true,
+        "missing_from_repository_record": false,
+        "contradicts_current_status_manuscript": false,
+        "contradicts_only_a_stronger_inference": false
+      },
+      "verified_existing_evidence": [
+        "Repository evidence binds T15's accepted real proof, T18's unchanged local consumer settlement and 7-token state delta, T19's repair rejection and legitimate control, and the author policy review at docs/validation/policy-review-2026-10-30.md.",
+        "The policy review identifies the forged-burn payout as violating Payy's withdrawal policy and preserves the known/post-disclosure and owned-local-identity limits.",
+        "The case is not current automated discovery, independent validation, mutant coverage, or transfer."
+      ],
+      "exact_consequence": "The E4 grade can be retained as historical known-case evidence, but a PDF-only reader cannot independently check the policy, proof, pre-state, transaction, effect, or repair packet.",
+      "disposition": "Resolved for the repository-level historical grade; unresolved for a self-contained/public independent replay and for the primary current capability claim. No factual contradiction requiring Step18 correction was found.",
+      "exact_unblock_experiment_or_action": "Package the pinned policy source/review status, attacker roles, artifacts/keys, public inputs, pre-state, proof, receipt, state delta, causal explanation, and repair-only control in an approved reader-accessible archive; obtain independent replay if used beyond historical mechanism evidence.",
+      "manuscript_action": "NO_VERSIONED_CORRECTION_TO_STEP18"
+    },
+    {
+      "concern_id": "D2-RC-009",
+      "title": "One-transition fragment and practical contract/ZK scope exclusions",
+      "review_refs": [
+        "contract-security §3.5",
+        "zk-methodology §10"
+      ],
+      "primary_class": "ENDURING_LIMITATION",
+      "evidence_relation": {
+        "missing_from_reviewed_pdf": false,
+        "missing_from_repository_record": false,
+        "contradicts_current_status_manuscript": false,
+        "contradicts_only_a_stronger_inference": true
+      },
+      "verified_existing_evidence": [
+        "The manuscript explicitly leaves aggregation, splitting, deferral, unbounded history, proxies, delegate calls, inline assembly, reentrancy, general external calls, and arbitrary token behavior unsupported or UNKNOWN."
+      ],
+      "exact_consequence": "The present fragment cannot support claims about those common behaviors or quantify practical deployment coverage.",
+      "disposition": "Declared limitation, not contradictory evidence. It remains enduring until separately expanded and validated.",
+      "exact_unblock_experiment_or_action": "Publish a machine-checkable supported-fragment specification and corpus coverage report; add fail-closed tests for each excluded construct before any incremental multi-transition, proxy, callback, external-call, or token semantic rule is admitted.",
+      "manuscript_action": "NO_VERSIONED_CORRECTION_TO_STEP18"
+    },
+    {
+      "concern_id": "D2-RC-010",
+      "title": "Integrity seals and partial reproduction do not establish semantic correctness",
+      "review_refs": [
+        "empirical-validity §7",
+        "zk-methodology §6",
+        "all three reviews' PDF-only verification boundary"
+      ],
+      "primary_class": "EXISTING_DATA_ANALYSIS",
+      "evidence_relation": {
+        "missing_from_reviewed_pdf": true,
+        "missing_from_repository_record": false,
+        "contradicts_current_status_manuscript": false,
+        "contradicts_only_a_stronger_inference": true
+      },
+      "verified_existing_evidence": [
+        "The superseded Step 10 run-01 shows that a verifying content seal can preserve semantically permissive validation.",
+        "Step 19's package is PARTIAL_DEVELOPMENT_ARTIFACT / FINAL_ARTIFACT_BLOCKED.",
+        "The fresh same-host AI evaluator report, SHA-256 61b6f8a78363c32c626d0e582d673cce2dcaa9c455af565ac61826028bc0e444, records metadata, retained verification, recompute, and mechanical rerun all PASS with no unexpected mismatches.",
+        "The fresh evaluator did not run the sidecar, a fresh container/machine, a human replication, generic D2-01/D2-06 reruns, scoring, or semantic validation."
+      ],
+      "exact_consequence": "Current byte integrity and selected categorical reproduction are stronger than the PDF-only reviewers could verify, but they do not prove semantics, portability, independence, or a final artifact.",
+      "disposition": "Partially resolved by Step 19 reproduction; semantic and portability concerns remain open.",
+      "exact_unblock_experiment_or_action": "Publish approved bytes and canonical manifests; run the sidecar route after review, then clean-container/fresh-machine and independent human replication; separately use independent semantic replay or differential validators rather than treating seal PASS as correctness.",
+      "manuscript_action": "NO_VERSIONED_CORRECTION_TO_STEP18"
+    },
+    {
+      "concern_id": "D2-RC-011",
+      "title": "Novelty and closest-work delta remain unresolved",
+      "review_refs": [
+        "zk-methodology §9",
+        "contract-security contribution boundary",
+        "empirical-validity comparative concern"
+      ],
+      "primary_class": "ENDURING_LIMITATION",
+      "evidence_relation": {
+        "missing_from_reviewed_pdf": true,
+        "missing_from_repository_record": true,
+        "contradicts_current_status_manuscript": false,
+        "contradicts_only_a_stronger_inference": true
+      },
+      "verified_existing_evidence": [
+        "The manuscript already acknowledges overlap with ZKAP, CIVER, CCC-Check, SmartAxe, and unresolved ELSA scope.",
+        "No applicable closest-work arm ran under equal facts/policy/cost."
+      ],
+      "exact_consequence": "Broad claims that joining, unused-input analysis, specification, or cross-program association are novel are unsupported; the narrow contribution delta cannot yet be stated.",
+      "disposition": "Unresolved and correctly withheld. Existing overlap contradicts broad novelty formulations, not the status manuscript.",
+      "exact_unblock_experiment_or_action": "Inspect primary full text and artifacts, freeze exact overlap dimensions and adapters, run native or transparently adapted same-policy comparisons, and state only the residual delta supported by those results.",
+      "manuscript_action": "NO_VERSIONED_CORRECTION_TO_STEP18"
+    },
+    {
+      "concern_id": "D2-RC-012",
+      "title": "Reader-facing denominator, version, packet, and reproduction clarity",
+      "review_refs": [
+        "empirical-validity units/denominators and §7",
+        "contract-security verification limits",
+        "zk-methodology unsupported-inference list"
+      ],
+      "primary_class": "WRITING_CORRECTION",
+      "evidence_relation": {
+        "missing_from_reviewed_pdf": false,
+        "missing_from_repository_record": false,
+        "contradicts_current_status_manuscript": false,
+        "contradicts_only_a_stronger_inference": false
+      },
+      "verified_existing_evidence": [
+        "The Step18 manuscript already separates tool versions, ablation versions, evidence strata, historical Payy E4, construction/smoke, and zero-score Gate A.",
+        "The exact derived coverage percentages, effective one-lineage supported result, full warning multiplicity, reader-accessible Payy packet, and Step19 fresh-reproduction boundary are not all surfaced because Step19/reviews postdate the bound Step18 PDF."
+      ],
+      "exact_consequence": "A future manuscript version could be easier to audit and harder to misread without changing any primary result.",
+      "disposition": "Writing-only correction plan. No silent edit or versioned correction to the reviewed Step18 manuscript/PDF is justified because its stated facts are accurate and its conclusions already remain UNKNOWN/INCONCLUSIVE/not submission-ready.",
+      "exact_unblock_experiment_or_action": "In the next explicitly versioned manuscript, add 17/30=56.7% support and 13/30=43.3% UNKNOWN, state that supported detections span one lineage, tabulate warning multiplicity and three unassociated warnings without calling them false positives, link the historical E4 packet and Step19 reproduction, and retain every exposure/version/evidence-grade qualifier.",
+      "manuscript_action": "DEFER_TO_NEXT_EXPLICIT_MANUSCRIPT_VERSION"
+    }
+  ],
+  "central_claim_audit": [
+    {
+      "claim": "Qualified proof-to-execution relation thesis",
+      "verified_status": "SUPPORTED_AS_FRAMING",
+      "evidence_grade": "N/A-framing",
+      "exposure": "framing",
+      "denominator": null,
+      "consequence": "Not a capability or novelty result."
+    },
+    {
+      "claim": "Current integrated development interface",
+      "verified_status": "SUPPORTED_NARROWLY",
+      "evidence_grade": "E1",
+      "exposure": "exposed-development",
+      "denominator": {
+        "targets": 30,
+        "detected": 17,
+        "unsupported_unknown": 13,
+        "misses_within_supported": 0,
+        "warning_objects": 26,
+        "associated_warning_objects": 23,
+        "unassociated_warning_objects": 3,
+        "support_coverage_percent": 56.7,
+        "unsupported_percent": 43.3,
+        "supported_detected_lineages": [
+          "WarpToad"
+        ]
+      },
+      "consequence": "No precision, recall, prevalence, transfer, or security inference."
+    },
+    {
+      "claim": "Versioned 30-target rows",
+      "verified_status": "SUPPORTED_VERSIONED",
+      "evidence_grade": "E1",
+      "exposure": "historical/exposed development",
+      "denominator": {
+        "historical_v1_1": "16/14/0/53",
+        "corrected_static_successor": "11/19/0/13",
+        "current_integrated": "17/13/0/26 with 23 associated"
+      },
+      "consequence": "Versions are not a trend."
+    },
+    {
+      "claim": "Corrected exposed ablation",
+      "verified_status": "SUPPORTED_AS_MOTIVATION",
+      "evidence_grade": "E1",
+      "exposure": "exposed-development",
+      "denominator": {
+        "producer": "3/7",
+        "consumer": "2/7",
+        "unjoined": "5/7",
+        "full": "7/7",
+        "unknown_positive": "E8",
+        "matching_control": 1
+      },
+      "consequence": "No fair-comparison or novelty inference."
+    },
+    {
+      "claim": "Historical Payy tail chain",
+      "verified_status": "SUPPORTED_HISTORICAL_KNOWN_CASE",
+      "evidence_grade": "E4-historical",
+      "exposure": "historical post-disclosure development",
+      "denominator": {
+        "candidate_chains": 1,
+        "repair_contrast": 1
+      },
+      "consequence": "Not current discovery, current-warning validation, independent transfer, or prevalence."
+    },
+    {
+      "claim": "Step 6 construction/smoke",
+      "verified_status": "SUPPORTED_AS_UNSCORED_CONSTRUCTION",
+      "evidence_grade": "E0/E1-smoke",
+      "exposure": "construction-smoke",
+      "denominator": {
+        "arm_rows": 78,
+        "supported": 72,
+        "unknown": 6
+      },
+      "consequence": "No score or safety result."
+    },
+    {
+      "claim": "Gate A",
+      "verified_status": "INCONCLUSIVE_NO_SCORE",
+      "evidence_grade": "NO-SCORE",
+      "exposure": "gate decision",
+      "denominator": {
+        "candidate_cases": 13,
+        "internal_arms": 6,
+        "external_inventory_entries": 11,
+        "scored_arms": 0,
+        "score_rows": 0
+      },
+      "consequence": "Neither advantage nor contradiction; all scientific denominators zero."
+    },
+    {
+      "claim": "Steps 8-10",
+      "verified_status": "SUPPORTED_MECHANICAL_ONLY",
+      "evidence_grade": "E0-mechanical",
+      "exposure": "UNREVIEWED_DEVELOPMENT_FIXTURE",
+      "denominator": {
+        "step8_bundles": 5,
+        "step9_cases": 10,
+        "step9_effective_unknown": 10,
+        "step10_producer_guarantees": 0,
+        "step10_eligible_derived_consumer_use": 0
+      },
+      "consequence": "No E2-E4, policy verdict, or scored analyzer claim."
+    },
+    {
+      "claim": "Independent transfer and taxonomy",
+      "verified_status": "ABSENT",
+      "evidence_grade": "E0/UNKNOWN and NO-STUDY",
+      "exposure": "independent attempts unsupported",
+      "denominator": {
+        "attempts": 12,
+        "projects": 8,
+        "repeats": 4,
+        "supported_analyses": 0,
+        "human_taxonomy_ratings": 0
+      },
+      "consequence": "No transfer, generality, or human-study claim."
+    },
+    {
+      "claim": "Downstream gates",
+      "verified_status": "NOT_EVALUATED",
+      "evidence_grade": "NO-RUN",
+      "exposure": "read-only dependency audit",
+      "denominator": {
+        "gate_b_score_rows": 0,
+        "gate_c_runs": 0
+      },
+      "consequence": "Gate B not evaluated; Gate C not reached."
+    },
+    {
+      "claim": "Step 19 reproduction",
+      "verified_status": "PASS_WITHIN_PARTIAL_SAME_HOST_SCOPE",
+      "evidence_grade": "engineering-reproduction",
+      "exposure": "fresh AI evaluator, same host/workspace",
+      "denominator": {
+        "profiles": 4,
+        "profiles_passed": 4,
+        "unexpected_mismatches": 0,
+        "sidecar_runs": 0
+      },
+      "consequence": "Reproduces selected metadata, retained evidence, tables, and mechanical fixtures; not semantics, fresh-machine portability, independent human replication, or a final artifact."
+    }
+  ],
+  "aggregate_disposition": {
+    "current_status_manuscript_factual_contradictions": 0,
+    "versioned_step18_corrections_required": 0,
+    "primary_results_changed": 0,
+    "evidence_grades_promoted": 0,
+    "scored_rows_added": 0,
+    "new_experiments_run": 0,
+    "next_manuscript_writing_corrections": 1,
+    "existing_data_analyses": 4,
+    "new_experiment_dependencies": 5,
+    "enduring_limitations": 2
+  }
+}

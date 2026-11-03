@@ -1,0 +1,217 @@
+{
+  "schema": "bindcheck.d2.step6a-construction/v1",
+  "version": "1.0.0",
+  "date": "2026-11-02",
+  "status": "FROZEN_FOR_UNSCORED_CONSTRUCTION",
+  "research_verdict": "UNKNOWN",
+  "objective": "Construct and smoke-test the six Step 5 internal arms plus four seeded semantic-transformation classes without running or scoring Gate A.",
+  "step5": {
+    "protocol": {
+      "path": "protocols/d2/d2-05-early-comparison-draft-v1.json",
+      "sha256": "c397edaf46bfa703d4aae813502b73b71fc9a3a3fc4933e6a1d707640881a4b2"
+    },
+    "narrative": {
+      "path": "docs/evaluation/d2-gate-a-draft-v1.md",
+      "sha256": "0c79eaf3bcf31b50675ad6399e421904ea91c19f78dec084965814705201a5d9"
+    },
+    "interpretation": "DRAFT_UNSEALED_DO_NOT_SCORE construction requirements only; Step 7 owns final cases, policies, hashes, controls, scoring, and seal."
+  },
+  "implementation": {
+    "composition_module": {
+      "path": "src/bindcheck_d1/composition_baselines_v1.py",
+      "sha256": "5f9ad35a7f501c93ba9117b0a7e15446686789eb662cfd7d3a56f4b0a8046e07"
+    },
+    "runner": "scripts/d2_step6a_construct.py",
+    "analyzer_changed": false
+  },
+  "tools": {
+    "nargo_beta22": {
+      "path": "results/raw/D1P-35/tools/noir-1.0.0-beta.22/nargo",
+      "sha256": "37f7d55d9795af0da3b471db2306e0296fa34c528386a828ce556fc3ebbf6e7b"
+    },
+    "solc_0_8_29": {
+      "path": "/Users/imranpollob/.solc-select/artifacts/solc-0.8.29/solc-0.8.29",
+      "sha256": "66fabdd17c8c0091311997ec7d17b4d92e1b7b2c2d213dc14e4ff28c3de864d1"
+    }
+  },
+  "inputs": {
+    "synthetic_nargo_toml": {
+      "path": "tests/d1/fixtures/d1p42/noir/bound_prefix/Nargo.toml",
+      "sha256": "d8fd4d4d969dc3b04ffa0894243f0daf6e7090e014f7779b1e301521931db737"
+    },
+    "synthetic_producer_source": {
+      "path": "tests/d1/fixtures/d1p42/noir/bound_prefix/src/main.nr",
+      "sha256": "0cb74f94442f994e7302247ad877c82e77afcedad6c5798d51c247821ea4e158"
+    },
+    "synthetic_consumer_source": {
+      "path": "tests/d1/fixtures/d1p42/solidity/ConsumerAll.sol",
+      "sha256": "50781563708f3fe1d47df1ee9939886fbafbc247ac9dfc7a3c150d1faa88159d"
+    },
+    "d1p43_ablation_result": {
+      "path": "results/raw/D2-01-recovery-01/d1p43-rerun/ablation-and-role-target-results.json",
+      "sha256": "a1b9ac5e9377424a59988e009514f8ace1edbc9adc0d2956af52c4b9069b4ea4"
+    },
+    "payy_earlier_integrated": {
+      "path": "results/raw/D2-01-recovery-01/integrated/payy/earlier.json",
+      "sha256": "7f7abbb0629f201e36bb18bd1d5cff7c5696b5139b33ee495c7290d945240d2e"
+    },
+    "payy_check_added_integrated": {
+      "path": "results/raw/D2-01-recovery-01/integrated/payy/check-added.json",
+      "sha256": "4c338cca385e471c23159763ca14a0ef7607968a6de5079123ccc62bff4ab2ba"
+    },
+    "relationship_e1": {
+      "path": "results/raw/D2-01-recovery-01/integrated/benchmark/WT-C08.json",
+      "sha256": "8fce08cd77d65611170e39f8c9f9e22d997da84429d07a02889ae3b57cd25dc8"
+    },
+    "relationship_e2": {
+      "path": "results/raw/D2-01-recovery-01/integrated/benchmark/WT-C03.json",
+      "sha256": "9fce4fbc16299bac61986da138a8fa7bd8cfd4c82356fbe9f3c75976df32e2fd"
+    },
+    "relationship_e3": {
+      "path": "results/raw/D2-01-recovery-01/integrated/benchmark/WT-S03.json",
+      "sha256": "dffbb1f0b2f982c62d9f5484efd7c7e55c76ca8fd18cf3efc49475bb9c22f057"
+    },
+    "relationship_e4": {
+      "path": "results/raw/D2-01-recovery-01/integrated/benchmark/WT-S09.json",
+      "sha256": "07707968db5a9809d1c053175cadf0b132269b3b7a4c3e75340aad5c29eb5ce0"
+    },
+    "relationship_e5": {
+      "path": "results/raw/D2-01-recovery-01/integrated/benchmark/WT-S05.json",
+      "sha256": "6d19285f740357f8b7787bd6819eb49727ea5e4fe6c0bc4320b3cd7043648aad"
+    },
+    "relationship_e6": {
+      "path": "results/raw/D2-01-recovery-01/integrated/benchmark/WT-C05.json",
+      "sha256": "5f6fc2d7a0535e06aff120d037e9656d961fa875f0d5b3f76b34a441974b4863"
+    },
+    "relationship_e7": {
+      "path": "results/raw/D2-01-recovery-01/integrated/benchmark/WT-C07.json",
+      "sha256": "7737ebafa837e974bb59b8d2906be2e2a31c73f95037bb4c378b73ad6d650b54"
+    },
+    "relationship_e8": {
+      "path": "results/raw/D2-01-recovery-01/integrated/benchmark/PY-S01.json",
+      "sha256": "5e37132492dd3c38ff8bc6c06dd24b48a934bc3a42fc52342fc538646d034b6f"
+    },
+    "m_dom_artifact": {
+      "path": "results/raw/D1P-15/artifacts/m-dom-withdraw.json",
+      "sha256": "db1a0a17b2717cce2fe9a9a01e114632634fcf43f0f813d062dfa9c660aa7f2f"
+    },
+    "pinned_consumer": {
+      "path": "results/raw/D1P-19/workspace/pinned-source/backend/contracts/core/WarpToadCore.sol",
+      "sha256": "323a1cf26c7449f67cf277ff0a46c31e12f725c555f9fa165d5a60011e122c39"
+    },
+    "pinned_relation": {
+      "path": "results/raw/D1P-18/relation.json",
+      "sha256": "301ce67b6148bd889082f67b7c484cac55a52981d540917c21ac67f421293fd7"
+    },
+    "m_dom_source": {
+      "path": "results/raw/D1P-21A/workspace/m-dom-sdom/backend/circuits/withdraw/src/main.nr",
+      "sha256": "7822230702064890e7543a713828066ead3a46f728c88b22548facebf6c6b654"
+    },
+    "m_dom_support": {
+      "path": "results/raw/D1P-21A/workspace/m-dom-sdom/backend/circuits/nargo_hashing/src/lib.nr",
+      "sha256": "00e94cf438669c54ad458493a444296aecb56549faf43aa8f06e6806bcfd8b3c"
+    },
+    "pinned_artifact": {
+      "path": "results/raw/D1P-13/workspace/source/backend/circuits/withdraw/target/withdraw.json",
+      "sha256": "7190813f623967b79ba80a1635536fcc9c8524c1d1cb9f00696832f644b38327"
+    },
+    "m_src_consumer": {
+      "path": "results/raw/D1P-19/workspace/source/backend/contracts/core/WarpToadCore.sol",
+      "sha256": "64ec0efd0df934afc46f06be76764b74b97b9ac554e1bd72add7ce0a630373e3"
+    },
+    "m_src_relation": {
+      "path": "results/raw/D1P-21B/m-src-relation.json",
+      "sha256": "91929f0953313f05d67f3539edf8e7ef69cf51c423a83dfe941af1eb8cdce969"
+    },
+    "warptoad_producer_source": {
+      "path": "benchmarks/binding-mutants/baselines/warptoad-withdraw-main.nr",
+      "sha256": "ce4bf56bb44e2e1106560251f3ff28dc8545fc9b7b7256c9d7695f6e28de192f"
+    },
+    "warptoad_producer_support": {
+      "path": "benchmarks/binding-mutants/baselines/warptoad-nargo-hashing-lib.nr",
+      "sha256": "ec0ad211ff92580652244a7b6871db8874222e3928c8b25934ef8ac2882871d3"
+    }
+  },
+  "baseline_construction": {
+    "required_arms": [
+      "producer-only",
+      "consumer-only",
+      "unjoined-union",
+      "basic-structural-composition",
+      "strong-simple-composition",
+      "full-bindcheck"
+    ],
+    "case_appearances": 13,
+    "planned_case_arms": 78,
+    "groups": {
+      "GA-PAYY-TAIL": 2,
+      "GA-WARPTOAD-MDOM": 1,
+      "GA-WARPTOAD-MSRC": 1,
+      "GA-WARPTOAD-RELATIONSHIP": 9
+    },
+    "counting_limit": "These are construction appearances, not deduplicated scored cases or independent families.",
+    "policy_status": "No human-authored/reviewed sigma is supplied in Step 6a; direct P/O/E and equal-policy scored readiness must remain unresolved."
+  },
+  "transformations": [
+    {
+      "id": "TR-IDENTIFIER-RENAME",
+      "class": "seeded identifier renaming",
+      "construction": "ATTEMPT",
+      "transformation_argument": "Capture-avoiding alpha-renaming changes source identifiers and ABI field names but not parameter types/order, loop bounds, equality constraints, positional consumer mapping, or XOR effect."
+    },
+    {
+      "id": "TR-HELPER-EXTRACTION",
+      "class": "helper extraction",
+      "construction": "ATTEMPT",
+      "transformation_argument": "The exact prefix loop is moved into a single helper called once with unchanged value arguments; there are no side effects outside constraints and the public ABI is unchanged."
+    },
+    {
+      "id": "TR-EQUIVALENT-EXPRESSION",
+      "class": "equivalent expression rewriting",
+      "construction": "ATTEMPT",
+      "transformation_argument": "Field equality is symmetric, so expected[i] == values[i] and values[i] == expected[i] define the same constraint at every executed loop index."
+    },
+    {
+      "id": "TR-MATCHED-PUBLIC-REORDER",
+      "class": "matched public-input reordering with producer-consumer correspondence preserved",
+      "construction": "ATTEMPT",
+      "transformation_argument": "Move active_count from physical word 4 to 0 and payload words from 0..3 to 1..4 on both producer ABI and consumer reads; logical types, values, prefix condition, and four-word XOR are preserved by the explicit bijection."
+    },
+    {
+      "id": "TR-REJECT-PAYY-APPLICATION-REORDER",
+      "class": "matched public-input reordering with producer-consumer correspondence preserved",
+      "construction": "REJECTED_PRECONSTRUCTION",
+      "reason": "A Payy reorder would require rebuilding both recursive layers, artifact-specific mapping certificate, revision-specific key/verifier, proof, and consumer execution controls. Reusing pinned certificates or keys would be unsound, and that proof campaign is outside this construction smoke budget."
+    },
+    {
+      "id": "TR-REJECT-WARPTOAD-APPLICATION-HELPER",
+      "class": "helper extraction",
+      "construction": "REJECTED_PRECONSTRUCTION",
+      "reason": "An application-level WarpToad helper refactor would change compiled artifacts and require a new correspondence, key/verifier, proof, and original-consumer execution chain. The authored D1P-42 control is used instead; no application equivalence is assumed."
+    }
+  ],
+  "resource_budget": {
+    "wall_seconds": 600,
+    "memory_mib": null,
+    "external_compiler_or_execution_calls": 30,
+    "proof_calls": 0,
+    "network_calls": 0,
+    "retries": 0,
+    "memory_limit": "No hard memory cap is asserted for this construction runner; this prevents a resource-enforcement claim."
+  },
+  "stop_rules": [
+    "Refuse to overwrite any D2-06A output namespace.",
+    "Stop on a Step 5, source, tool, or composition-module hash mismatch.",
+    "Preserve unsupported transformation analysis and preconstruction rejection reasons; do not replace them after output.",
+    "Do not run a scored comparison, proof generation, reserved input, network query, or live consumer action.",
+    "Keep research verdict UNKNOWN."
+  ],
+  "claim_limits": [
+    "This is construction and smoke-test evidence only; no target was scored and no Gate A decision was made.",
+    "Authored transformations and focused controls do not prove general semantic equivalence.",
+    "Compilation and existing tests are not treated as sufficient equivalence evidence.",
+    "Candidate counts are not detections, misses, false warnings, precision, recall, transfer, or prevalence.",
+    "The absent human-reviewed sigma and unequal generic-policy consumption leave strong-simple versus full equal-policy scoring unresolved.",
+    "Step 7 must independently finalize and seal exact bytes before any scored execution."
+  ]
+}

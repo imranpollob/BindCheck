@@ -1,0 +1,47 @@
+{
+  "schema": "bindcheck.d2.benchmark-associations/v1",
+  "date": "2026-11-02",
+  "status": "FROZEN_BEFORE_OUTPUT",
+  "source_boundary": [
+    "reports/D1P-42.md section 9 and its preserved final-01 benchmark ledger",
+    "protocols/d1/d1p-43-role-binding-preliminary.json new_targets"
+  ],
+  "scoring_rule": "A DETECTED target must satisfy every required association. For a multi-index association, the union of matching warnings must cover every expected public index. A fresh warning never defines its own expected association.",
+  "targets": {
+    "WT-C01": {"expected_outcome": "DETECTED", "required_associations": [{"rule": "R-BIND", "kinds": [], "public_indices": [0]}]},
+    "WT-C02": {"expected_outcome": "DETECTED", "required_associations": [{"rule": "R-BIND", "kinds": [], "public_indices": [8]}]},
+    "WT-C03": {"expected_outcome": "DETECTED", "required_associations": [{"rule": "R-BIND", "kinds": [], "public_indices": [5]}]},
+    "WT-C04": {"expected_outcome": "DETECTED", "required_associations": [{"rule": "R-BIND", "kinds": [], "public_indices": [3, 4]}]},
+    "WT-C05": {"expected_outcome": "DETECTED", "required_associations": [{"rule": "R-ROLE", "kinds": ["producer-state-membership"], "public_indices": [4]}]},
+    "WT-C06": {"expected_outcome": "DETECTED", "required_associations": [{"rule": "R-ROLE", "kinds": ["effect-authorization"], "public_indices": [2]}]},
+    "WT-C07": {"expected_outcome": "DETECTED", "required_associations": [{"rule": "R-BIND", "kinds": [], "public_indices": [1]}]},
+    "WT-C08": {"expected_outcome": "DETECTED", "required_associations": [{"rule": "R-BIND", "kinds": [], "public_indices": [10]}, {"rule": "R-EFFECT", "kinds": [], "public_indices": [10]}]},
+    "WT-C09": {"expected_outcome": "DETECTED", "required_associations": [{"rule": "R-ROLE", "kinds": ["boundary-role"], "public_indices": [2, 8]}]},
+    "WT-S01": {"expected_outcome": "DETECTED", "required_associations": [{"rule": "R-CONSUMER", "kinds": [], "public_indices": [4]}]},
+    "WT-S02": {"expected_outcome": "DETECTED", "required_associations": [{"rule": "R-CONSUMER", "kinds": [], "public_indices": [3]}]},
+    "WT-S03": {"expected_outcome": "DETECTED", "required_associations": [{"rule": "R-CONSUMER", "kinds": [], "public_indices": [0]}]},
+    "WT-S04": {"expected_outcome": "UNKNOWN", "required_associations": []},
+    "WT-S05": {"expected_outcome": "DETECTED", "required_associations": [{"rule": "R-ROLE", "kinds": ["state-identity"], "public_indices": [3, 4]}]},
+    "WT-S06": {"expected_outcome": "DETECTED", "required_associations": [{"rule": "R-CONSUMER", "kinds": [], "public_indices": [8]}]},
+    "WT-S07": {"expected_outcome": "DETECTED", "required_associations": [{"rule": "R-ROLE", "kinds": ["effect-beneficiary"], "public_indices": [9, 10]}]},
+    "WT-S08": {"expected_outcome": "DETECTED", "required_associations": [{"rule": "R-ROLE", "kinds": ["boundary-role"], "public_indices": [2, 8]}]},
+    "WT-S09": {"expected_outcome": "DETECTED", "required_associations": [{"rule": "R-POLARITY", "kinds": [], "public_indices": []}]},
+    "PY-C01": {"expected_outcome": "UNKNOWN", "required_associations": []},
+    "PY-C02": {"expected_outcome": "UNKNOWN", "required_associations": []},
+    "PY-C03": {"expected_outcome": "UNKNOWN", "required_associations": []},
+    "PY-C04": {"expected_outcome": "UNKNOWN", "required_associations": []},
+    "PY-C05": {"expected_outcome": "UNKNOWN", "required_associations": []},
+    "PY-C06": {"expected_outcome": "UNKNOWN", "required_associations": []},
+    "PY-C07": {"expected_outcome": "UNKNOWN", "required_associations": []},
+    "PY-S01": {"expected_outcome": "UNKNOWN", "required_associations": []},
+    "PY-S02": {"expected_outcome": "UNKNOWN", "required_associations": []},
+    "PY-S03": {"expected_outcome": "UNKNOWN", "required_associations": []},
+    "PY-S04": {"expected_outcome": "UNKNOWN", "required_associations": []},
+    "PY-S05": {"expected_outcome": "UNKNOWN", "required_associations": []}
+  },
+  "claim_limits": [
+    "These are seeded development labels and associations, not independent human judgments.",
+    "UNKNOWN is not a miss and is not safety evidence.",
+    "The ledger fixes scoring before D2 output; it does not establish that the policy or defect is independently valid."
+  ]
+}

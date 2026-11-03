@@ -1,0 +1,69 @@
+{
+  "schema": "bindcheck.d2.artifact-platform-matrix/v1",
+  "status": "PARTIAL_DEVELOPMENT_ARTIFACT / FINAL_ARTIFACT_BLOCKED",
+  "rows": [
+    {
+      "profile": "metadata",
+      "python": ">=3.10 standard library",
+      "platform": "portable",
+      "network": false,
+      "retained_sidecar": false,
+      "writes": false,
+      "availability": "AVAILABLE"
+    },
+    {
+      "profile": "verify-retained",
+      "python": ">=3.10 standard library; Git required for the current-workspace historical overlay wrapper",
+      "platform": "portable once the exact byte sidecar is present",
+      "network": false,
+      "retained_sidecar": true,
+      "writes": false,
+      "availability": "AVAILABLE_CURRENT_WORKSPACE_OR_EXPLICIT_SIDECAR"
+    },
+    {
+      "profile": "recompute",
+      "python": ">=3.10 standard library",
+      "platform": "portable once the exact byte sidecar is present",
+      "network": false,
+      "retained_sidecar": true,
+      "writes": false,
+      "availability": "AVAILABLE"
+    },
+    {
+      "profile": "rerun-mechanical",
+      "python": "recorded with CPython 3.14.7; source uses standard library",
+      "platform": "current exact source workspace with Git metadata",
+      "network": false,
+      "retained_sidecar": true,
+      "writes": "artifact/work/<run-id> only",
+      "availability": "AVAILABLE_CURRENT_WORKSPACE_ONLY"
+    },
+    {
+      "profile": "rerun-d2-01-d2-06",
+      "python": "3.13/3.14 plus pycryptodome==3.23.0",
+      "platform": "recorded Darwin arm64 with pinned Nargo, solc, Forge and Rosetta-dependent solc use",
+      "network": false,
+      "retained_sidecar": true,
+      "writes": "would require a separately versioned artifact workspace",
+      "availability": "BLOCKED_NOT_IMPLEMENTED"
+    },
+    {
+      "profile": "final-artifact-or-reserved-evaluation",
+      "python": null,
+      "platform": null,
+      "network": false,
+      "retained_sidecar": null,
+      "writes": false,
+      "availability": "PROHIBITED_AND_BLOCKED"
+    }
+  ],
+  "portability_blockers": [
+    "D2-01 and D2-06A protocols bind /Users/imranpollob solc paths.",
+    "D2-06B binds /Users/imranpollob SVM solc and a Darwin arm64 Forge binary.",
+    "D2-01 external inputs include sibling ../BindCheck paths.",
+    "Authoritative raw evidence is ignored by Git and absent from an ordinary clone.",
+    "Retained manifests contain absolute provenance paths, timestamps, platform strings and dirty-worktree metadata that are not rerun equality fields.",
+    "No reviewed Linux-equivalent compiler/prover toolchain or offline container image digest exists."
+  ]
+}
+

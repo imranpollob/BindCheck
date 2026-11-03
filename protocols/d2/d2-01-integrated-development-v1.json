@@ -1,0 +1,114 @@
+{
+  "schema": "bindcheck.d2.integrated-development-protocol/v1",
+  "date": "2026-11-02",
+  "status": "FROZEN_BEFORE_OUTPUT",
+  "objective": "Integrate the audited static/extent analysis, typed role correspondence, and validation-facing warning identity without adding a detection rule; rerun exposed development evidence and reconcile versioned results.",
+  "research_verdict": "UNKNOWN",
+  "development_boundary": "protocols/d2/development-boundary-v1.json",
+  "components": {
+    "static_and_extent": "src/bindcheck_d1/static_analyzer_v1.py",
+    "role_correspondence": "src/bindcheck_d1/role_binding.py",
+    "integrated_interface": "src/bindcheck_d1/integrated_analyzer_v1.py",
+    "validation": "src/bindcheck_d1/validation_v1.py",
+    "public_cli": "src/bindcheck_d1/cli.py",
+    "benchmark_associations": "protocols/d2/d2-01-benchmark-associations-v1.json",
+    "external_inputs": "protocols/d2/d2-01-external-inputs-v1.json"
+  },
+  "datasets": [
+    {
+      "id": "mutant-benchmark-current",
+      "cases": 30,
+      "source": "benchmarks/binding-mutants/manifest.json",
+      "exposure": "EXPOSED_DEVELOPMENT",
+      "scoring": "Preserve the named mutation and predeclared association. Unsupported is UNKNOWN, not a miss. R-ROLE may support the six prospectively specified D1P-43 WarpToad targets; no other label changes are permitted.",
+      "regression_context": "D1P-42 static-only current result was 11 detected, 19 unsupported, 0 misses, 13 warning objects. This is not the expected integrated count."
+    },
+    {
+      "id": "d1p41-discriminating-rerun",
+      "cases": 9,
+      "source": "protocols/d1/d1p-41-ablation-preliminary.json",
+      "exposure": "EXPOSED_DEVELOPMENT",
+      "scoring": "Keep the D1P-41 examples and denominators versioned. Use the corrected analyzer facts and D1P-43 arm masks; UNKNOWN examples are excluded only from supported denominators and remain reported."
+    },
+    {
+      "id": "d1p43-role-target-rerun",
+      "cases": 8,
+      "source": "protocols/d1/d1p-43-role-binding-preliminary.json",
+      "exposure": "EXPOSED_DEVELOPMENT",
+      "scoring": "Use the frozen warning kind and public-index associations. No post-output label change is permitted."
+    },
+    {
+      "id": "payy-extent-pair",
+      "cases": 2,
+      "source": "reports/D1P-42.md",
+      "exposure": "KNOWN_BUG_AND_REPAIR_DEVELOPMENT",
+      "scoring": "Earlier must emit R-EXTENT for active_messages_count <= word_offset < messages_length. Check-added must not emit R-EXTENT because all message words are proof-bound. Other warnings are reported separately and silence is not VERIFIED_WITHIN_SCOPE."
+    }
+  ],
+  "warning_identity": {
+    "legacy_ids": "Preserve WNNN and ROLENNN as source IDs for historical compatibility.",
+    "stable_id": "Hash target artifact/consumer identity, rule, and normalized semantic evidence; exclude list ordinal and source line location.",
+    "validation_routing": "A route may match stable_id in addition to the historical target identity."
+  },
+  "outcomes": {
+    "allowed_research_verdicts": [
+      "VIOLATION",
+      "VERIFIED_WITHIN_SCOPE",
+      "UNKNOWN"
+    ],
+    "this_run": "Static warnings remain E1 and UNKNOWN unless a separately applicable preserved validation is cited as historical evidence. No warning is promoted by this rerun.",
+    "no_warning": "UNKNOWN; not safety evidence",
+    "unsupported": "UNKNOWN with a named reason"
+  },
+  "historical_reconciliation": {
+    "current_vs_v1_1": "Do not merge the corrected current benchmark with the historical D1P-34 16/14/0/53 result.",
+    "payy": "Report the current R-EXTENT warning as E1 known-case development evidence separately from the preserved T15-T19 real-proof committed-effect chain.",
+    "transfer": "Report project attempts and unique projects separately; do not invent family counts without lineage adjudication.",
+    "validation": "The historical 53-warning ledger grades v1.1 warnings and is not a validation of the current integrated warning set; E1+mock is not E2."
+  },
+  "frozen_ablation_vector": {
+    "positive_case_ids": ["E1", "E2", "E3", "E4", "E5", "E6", "E7", "E8"],
+    "unknown_case_ids": ["E8"],
+    "clean_control_ids": ["E9"],
+    "arms": {
+      "producer-only": {"detected_case_ids": ["E1", "E2", "E7"]},
+      "consumer-only": {"detected_case_ids": ["E3", "E4"]},
+      "unjoined-union": {"detected_case_ids": ["E1", "E2", "E3", "E4", "E7"]},
+      "full-bindcheck": {"detected_case_ids": ["E1", "E2", "E3", "E4", "E5", "E6", "E7"]}
+    },
+    "role_target_ids": ["R1", "R2", "R3", "R4", "R5", "R6", "R7", "R8"],
+    "note": "This full per-case vector prevents equal-count case swaps from passing the completion gate."
+  },
+  "resource_budget": {
+    "wall_seconds": 1800,
+    "memory_mib": null,
+    "memory_policy": "No hard memory cap is asserted by this local runner; platform observations are descriptive only.",
+    "external_compiler_or_execution_calls": 20,
+    "solver_calls": 0,
+    "proof_calls": 0,
+    "network_calls": 0,
+    "retries": 0
+  },
+  "stop_rules": [
+    "Stop before scored execution if the D2-01 content seal does not verify.",
+    "Reject environment path overrides that differ from the frozen Nargo, solc, or Payy roots; child processes receive the frozen paths explicitly.",
+    "Stop on an input hash mismatch, compiler failure outside the frozen expected negative controls, or a duplicate stable warning ID.",
+    "Preserve any partial output and report UNKNOWN; do not change rules, labels, protocols, or associations after output.",
+    "Do not open or reconstruct private reserved material."
+  ],
+  "required_outputs": [
+    "results/raw/D2-01/run-manifest.json",
+    "results/raw/D2-01/d1p42-rerun/",
+    "results/raw/D2-01/d1p43-rerun/",
+    "results/raw/D2-01/integrated/",
+    "results/raw/D2-01/development-case-table.json",
+    "results/raw/D2-01/reconciliation.json",
+    "results/raw/D2-01/run-summary.json"
+  ],
+  "claim_limits": [
+    "Every input is exposed development material; this run does not establish transfer, unbiased discovery, prevalence, or security.",
+    "R-ROLE remains bounded source-derived semantic evidence rather than a compiler proof.",
+    "The exact Payy certificate is artifact-specific and does not transfer to mutant bytes.",
+    "No solver, proof, consumer replay, live chain, maintainer contact, or disclosure is authorized."
+  ]
+}

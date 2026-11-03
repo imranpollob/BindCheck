@@ -1,0 +1,953 @@
+{
+  "schema": "bindcheck.claim-ledger.v3",
+  "ledger_version": "D2-20-v3",
+  "as_of": "2026-11-02",
+  "research_verdict": "UNKNOWN",
+  "gate_a_result": "INCONCLUSIVE",
+  "submission_readiness": "NOT_SUBMISSION_READY",
+  "controlling_snapshot": {
+    "historical_paper_path": "paper/draft.md",
+    "historical_paper_sha256": "d8aa536992f9391b19405836796e4620a639dc79d191c404eb99140de6b77217",
+    "prior_ledger_sha256": "203138460143fd31446e2550c93142cf0874fbc24feed1ae9f57d2d23f13a405",
+    "d2_01_report_sha256": "ee13591c20fc4078ac71ce720b53ff2c1af7e51fa50f0a974fe4a2a6a74cba3f",
+    "d2_03_report_sha256": "4b053390b1269dd7d1a47c7c374c768ee58c8fc532cc5f524f4f3ac9f6d844f3",
+    "d2_07_report_sha256": "fcdff01dbadade6f7f28116e46ee2c6016fb2945767492c822acaef87a60f07a",
+    "d2_08_report_sha256": "aaca4aa036a0604febd6869604e8dfcfc3709a72a15c8fa588717309316fd2cd",
+    "d2_09_report_sha256": "f7254e4ccb510a8ccfea9954cfd341c81620084147159a81dfa52c3f6595cf03",
+    "d2_10_report_sha256": "848acceef83d32d5054e37686ff5bc3b94baa45c5618490a0fe8e41bb9db018a",
+    "d2_10_protocol_v2_sha256": "910ce6464a947fa552be08d34a596d97b179669401305adc577676d5172ce3ec",
+    "d2_10_run_02_summary_sha256": "0ebf8ca1f555701a6cbc942b0140df1440e7e5e60eb4daec87fd4bffb1dc42ab",
+    "d2_10_run_02_seal_sha256": "c5bb3163283c7b16a0d341067c6f2c3f8fa9965d85ab13dc761d4e948fcf21e6",
+    "d2_11_14_dependency_report_sha256": "b2210759f71ed4a2fb323d933d7e517a1043d20f94c5b5150cb84a2baff52b96",
+    "d2_11_14_dependency_protocol_sha256": "d2acbf45720baf425fc7b71847b75de1db48195b1ca4a4604aaa0e069c6fdf78",
+    "d2_15_17_readiness_report_sha256": "4734b3f269999e2042779b091c069eac1813f86281a1314d19a48a62debf7cdd",
+    "d2_15_17_readiness_protocol_sha256": "15406a13e1f3a03f58e4788d75445f1cc5e665afa63fd3a36a5d9e59fd8f4d54",
+    "d2_18_manuscript_sha256": "a1c906e19a3cc8fddf2ffd66afb4f49d95dd7476832e55671223b20b3e2660d7",
+    "d2_18_claim_map_sha256": "c3cfa1ea2acce7635ca8f67ff8d980044ae21d8c6097daa085254fdc30be3567",
+    "d2_18_report_sha256": "76ca55612b55d8beb4859c5024c228236ec5d03a20f4efdbb9eb18dd8517b24c",
+    "reviewed_pdf_sha256": "1697834e0c47de365ad04f8a1108dfd21555af5c7af9e697759d44e5b9f1e12d",
+    "contract_security_review_sha256": "218697c92f7d3aa27c76f232b1c9cf040acbbc3883055678500c5509572c3e2f",
+    "empirical_validity_review_sha256": "d399bec88bd4f26cb115f7e2e2a6b8b67c9ba26ff0b97518d9796f57820bfba4",
+    "zk_methodology_review_sha256": "751643b672fecafeebd1ad9372202066d25e0dd385828734412c4ff45715d2ec",
+    "review_concerns_v1_sha256": "d66a84c01dbdfb683c6610a0d090d4313e977723826ca600c8875c711941775f",
+    "d2_19_report_sha256": "5130a31fa4bee267013e1cfd43a058fbac833e45cd3511fb59e75e84396bdf63",
+    "d2_19_reproducer_sha256": "1973a850466aee837fbd05c14bac216f424c95db3fa0eb6c0c1d3f3bbe9d6d91",
+    "d2_19_checksums_sha256": "7d11a8d8f646f0f08c756ab58f193c9ce52e8c3b16efd9f53ce790847081dc38",
+    "d2_19_fresh_reproduction_report_sha256": "61b6f8a78363c32c626d0e582d673cce2dcaa9c455af565ac61826028bc0e444",
+    "historical_payy_policy_review_sha256": "ca821c23c84ecd3c435f72acd5f1217e39184be8ca513b9f6147d7b59571a0cf"
+  },
+  "status_values": [
+    "supported",
+    "overstated",
+    "contradicted",
+    "unresolved"
+  ],
+  "exposure_values": [
+    "framing",
+    "historical-development",
+    "injected-development",
+    "exposed-development",
+    "construction-smoke",
+    "mechanical-fixture",
+    "independent-attempt-unsupported",
+    "proposed",
+    "venue-readiness"
+  ],
+  "interpretation_rules": [
+    "UNKNOWN is not safe and INCONCLUSIVE is not a negative score.",
+    "D1P-41 and D1P-43 are separate versioned experiments with different analyzer assumptions and denominators.",
+    "D1P-34, D1P-42, and D2-01 benchmark counts are separate tool versions and are not pooled or treated as a trend.",
+    "Historical and injected E4 evidence is not relabeled as validation of current warnings, automated discovery, or independent transfer.",
+    "Construction, smoke, and mechanical fixture results are not score rows and do not establish security, novelty, or capability.",
+    "Mechanical ESTABLISHED and MISMATCH_CANDIDATE states are internal interface outcomes; the effective research result remains UNKNOWN without reviewed policy and eligible facts.",
+    "Unsupported analysis, silence, a passing fuzz campaign, and a matching control are not safety evidence.",
+    "A MAY, over-approximated, annotated, assumed, or unresolved producer relation cannot discharge a MUST authorization obligation.",
+    "Independent evidence requires a frozen supported run with separated access and human triage; no such result exists in the current record.",
+    "The three PDF-only reviews identify predominantly missing evidence, not a contradiction of the status manuscript's UNKNOWN/INCONCLUSIVE disposition.",
+    "D2-01 support coverage is 17/30 (56.7%) and unsupported/UNKNOWN is 13/30 (43.3%); all supported detections are from WarpToad, so current supported results span one effective lineage.",
+    "The 26 warning objects include 23 matched/associated and three unassociated objects; neither 23/26 nor 17/30 is an accuracy estimate.",
+    "Step 19's four-profile same-host PASS strengthens byte and selected categorical reproducibility only; it is not semantic validation, clean-machine portability, or independent human replication."
+  ],
+  "claims": [
+    {
+      "id": "D2-CLM-001",
+      "wording": "For some protected effects, deciding whether an accepted proof authorizes execution requires relating producer constraints, decoded identities, consumer reliance, and reviewed policy.",
+      "location": [
+        {
+          "path": "paper/d2-status-draft.md",
+          "section": "Abstract; 1. Problem and research posture"
+        }
+      ],
+      "supporting_result_or_source": [
+        {
+          "path": "docs/research-contract.md",
+          "detail": "Defines the producer relation, decoding, consumer transition, reviewed policy, and P/O/E compatibility."
+        },
+        {
+          "path": "reports/D2-03.md",
+          "detail": "Corrects categorical claims that every mismatch is invisible to one-sided analysis."
+        }
+      ],
+      "version": {
+        "claim": "D2-18-qualified-thesis",
+        "evidence": "research-contract-r3 and D2-03"
+      },
+      "exposure": "framing",
+      "evidence_grade": "N/A-framing",
+      "status": "supported",
+      "claim_limit": "This is an information requirement for some cases, not a claim that one-sided tools cannot diagnose any proof-to-execution defect.",
+      "paper_action": "Use the qualified wording in the abstract and introduction.",
+      "review_disposition": {
+        "d2_20_disposition": "RETAIN_SUPPORTED_QUALIFIED",
+        "concern_ids": [
+          "D2-RC-001"
+        ],
+        "current_manuscript_contradiction": false,
+        "review_effect": "NO_VERSIONED_CORRECTION"
+      }
+    },
+    {
+      "id": "D2-CLM-002",
+      "wording": "The current integrated development interface emits provenance-carrying E1 diagnostics that associate bounded producer extent or role facts with modeled consumer facts.",
+      "location": [
+        {
+          "path": "paper/d2-status-draft.md",
+          "section": "3. Current D2 system boundary"
+        }
+      ],
+      "supporting_result_or_source": [
+        {
+          "path": "reports/D2-01.md",
+          "detail": "Content-sealed integrated development interface, support gates, stable warning identities, and exposed case table."
+        }
+      ],
+      "version": {
+        "claim": "D2-01-integrated-v1",
+        "evidence": "D2-01 report and sealed recovery run"
+      },
+      "exposure": "exposed-development",
+      "evidence_grade": "E1",
+      "status": "supported",
+      "claim_limit": "It does not establish authorization failure, exploitability, precision, recall, transfer, or a security verdict.",
+      "paper_action": "Use as the bounded current implementation claim.",
+      "review_disposition": {
+        "d2_20_disposition": "RETAIN_SUPPORTED_NARROWLY",
+        "concern_ids": [
+          "D2-RC-005",
+          "D2-RC-006"
+        ],
+        "current_manuscript_contradiction": false,
+        "review_effect": "NO_VERSIONED_CORRECTION"
+      }
+    },
+    {
+      "id": "D2-CLM-003",
+      "wording": "The D1P-34, D1P-42, and D2-01 benchmark rows are separate historical/current versions: 16/14/0/53, 11/19/0/13, and 17/13/0/26 respectively, with 23 associated warning objects in D2-01.",
+      "location": [
+        {
+          "path": "paper/d2-status-draft.md",
+          "section": "4.2 Versioned development results"
+        }
+      ],
+      "supporting_result_or_source": [
+        {
+          "path": "reports/D2-01.md",
+          "detail": "Reconciles the three benchmark versions and current association count."
+        },
+        {
+          "path": "reports/D2-03.md",
+          "detail": "Prohibits pooling or replacing these versioned rows."
+        }
+      ],
+      "version": {
+        "claim": "D2-18-versioned-counts",
+        "evidence": "D1P-34, D1P-42, D2-01"
+      },
+      "exposure": "exposed-development",
+      "evidence_grade": "E1",
+      "status": "supported",
+      "claim_limit": "The rows use changed analyzers and cannot support a trend; zero misses is only the frozen association disposition on exposed mutants.",
+      "paper_action": "Report all count fields in a versioned table.",
+      "review_disposition": {
+        "d2_20_disposition": "RETAIN_WITH_DERIVED_COVERAGE_CLARIFICATION",
+        "concern_ids": [
+          "D2-RC-005",
+          "D2-RC-012"
+        ],
+        "current_manuscript_contradiction": false,
+        "review_effect": "NEXT_VERSION_WRITING_ONLY"
+      }
+    },
+    {
+      "id": "D2-CLM-004",
+      "wording": "The historical D1P-41 preliminary ablation reported 6/8 detections for both the unjoined union and full arm.",
+      "location": [
+        {
+          "path": "paper/d2-status-draft.md",
+          "section": "4.3 Separate ablation versions"
+        }
+      ],
+      "supporting_result_or_source": [
+        {
+          "path": "reports/D1P-41-ablation-preliminary.md",
+          "detail": "Immutable historical preliminary result."
+        }
+      ],
+      "version": {
+        "claim": "D1P-41-preliminary",
+        "evidence": "pre-D1P-42/D1P-43 analyzer assumptions"
+      },
+      "exposure": "historical-development",
+      "evidence_grade": "E1",
+      "status": "supported",
+      "claim_limit": "This is not the current ablation and does not establish a null result for the successor analyzer.",
+      "paper_action": "Retain only as versioned history.",
+      "review_disposition": {
+        "d2_20_disposition": "RETAIN_VERSIONED_HISTORY",
+        "concern_ids": [
+          "D2-RC-012"
+        ],
+        "current_manuscript_contradiction": false,
+        "review_effect": "NO_VERSIONED_CORRECTION"
+      }
+    },
+    {
+      "id": "D2-CLM-005",
+      "wording": "The D1P-43 successor ablation reported producer 3/7, consumer 2/7, union 5/7, and full 7/7 on supported exposed positives, plus one UNKNOWN positive and one matching control.",
+      "location": [
+        {
+          "path": "paper/d2-status-draft.md",
+          "section": "4.3 Separate ablation versions"
+        }
+      ],
+      "supporting_result_or_source": [
+        {
+          "path": "reports/D1P-43.md",
+          "detail": "Corrected successor result on typed relationship cases."
+        },
+        {
+          "path": "reports/D2-01.md",
+          "detail": "Sealed reconciliation of the complete per-case/per-arm vector."
+        }
+      ],
+      "version": {
+        "claim": "D1P-43-successor",
+        "evidence": "reconciled by D2-01"
+      },
+      "exposure": "exposed-development",
+      "evidence_grade": "E1",
+      "status": "supported",
+      "claim_limit": "Known cases, source-derived roles, and no fair external comparison make this motivation rather than novelty evidence.",
+      "paper_action": "Report beside, not merged with, D1P-41.",
+      "review_disposition": {
+        "d2_20_disposition": "RETAIN_EXPOSED_MOTIVATION_ONLY",
+        "concern_ids": [
+          "D2-RC-007",
+          "D2-RC-012"
+        ],
+        "current_manuscript_contradiction": false,
+        "review_effect": "NO_VERSIONED_CORRECTION"
+      }
+    },
+    {
+      "id": "D2-CLM-006",
+      "wording": "For the exact Payy earlier/check-added pair, the earlier revision emits R-EXTENT and R-CONSUMER at E1; the check-added revision emits no R-EXTENT and retains R-CONSUMER, while all 12 Payy benchmark mutants remain unsupported.",
+      "location": [
+        {
+          "path": "paper/d2-status-draft.md",
+          "section": "4.4 Payy evidence layers"
+        }
+      ],
+      "supporting_result_or_source": [
+        {
+          "path": "reports/D2-01.md",
+          "detail": "Exact pair and unsupported benchmark dispositions."
+        }
+      ],
+      "version": {
+        "claim": "D2-01-exact-Payy-pair",
+        "evidence": "artifact-specific mapping certificates"
+      },
+      "exposure": "historical-development",
+      "evidence_grade": "E1",
+      "status": "supported",
+      "claim_limit": "The check-added contrast is property-specific, not global safety; exact certificates do not transfer to mutant bytes.",
+      "paper_action": "Keep exact pair, mutants, and historical E4 separate.",
+      "review_disposition": {
+        "d2_20_disposition": "RETAIN_EXACT_PAIR_AND_UNSUPPORTED_MUTANTS",
+        "concern_ids": [
+          "D2-RC-005",
+          "D2-RC-008"
+        ],
+        "current_manuscript_contradiction": false,
+        "review_effect": "NO_VERSIONED_CORRECTION"
+      }
+    },
+    {
+      "id": "D2-CLM-007",
+      "wording": "T15-T19 preserve historical E4 evidence for the publicly disclosed earlier Payy tail mechanism and its repair contrast.",
+      "location": [
+        {
+          "path": "paper/d2-status-draft.md",
+          "section": "4.4 Payy evidence layers"
+        }
+      ],
+      "supporting_result_or_source": [
+        {
+          "path": "reports/T15.md",
+          "detail": "Historical producer witness and proof."
+        },
+        {
+          "path": "reports/T18.md",
+          "detail": "Committed local consumer effect."
+        },
+        {
+          "path": "reports/T19.md",
+          "detail": "Repair rejects the witness and retains an honest control."
+        }
+      ],
+      "version": {
+        "claim": "historical-Payy-chain",
+        "evidence": "T15-T19"
+      },
+      "exposure": "historical-development",
+      "evidence_grade": "E4",
+      "status": "supported",
+      "claim_limit": "The mechanism was known before the rules and evidence chain; it is not independent discovery or validation of current warnings.",
+      "paper_action": "Place the known-case and post-disclosure qualifiers adjacent to every use.",
+      "review_disposition": {
+        "d2_20_disposition": "RETAIN_HISTORICAL_E4_WITH_PACKET_LIMIT",
+        "concern_ids": [
+          "D2-RC-008"
+        ],
+        "current_manuscript_contradiction": false,
+        "review_effect": "NO_VERSIONED_CORRECTION"
+      }
+    },
+    {
+      "id": "D2-CLM-008",
+      "wording": "A current warning, a role or name match, or a mechanical ESTABLISHED state establishes an unauthorized committed effect.",
+      "location": [
+        {
+          "path": "paper/draft.md",
+          "lines": "341-357, 2837-2839"
+        }
+      ],
+      "supporting_result_or_source": [
+        {
+          "path": "docs/research-contract.md",
+          "detail": "Authorization requires complete compatible policy records and E4 requires a committed policy-violating effect."
+        },
+        {
+          "path": "reports/D2-09.md",
+          "detail": "Mechanical states are separated from effective UNKNOWN under an unreviewed fixture."
+        }
+      ],
+      "version": {
+        "claim": "prohibited-authorization-inference",
+        "evidence": "contract-r3 and D2-09"
+      },
+      "exposure": "framing",
+      "evidence_grade": "N/A-semantic-audit",
+      "status": "contradicted",
+      "claim_limit": "E1 associations and mechanical states are candidates or interface results only.",
+      "paper_action": "Use candidate-diagnostic wording and reserve unauthorized committed effect for reviewed E4 evidence.",
+      "review_disposition": {
+        "d2_20_disposition": "RETAIN_PROHIBITED_INFERENCE",
+        "concern_ids": [
+          "D2-RC-001",
+          "D2-RC-002",
+          "D2-RC-004"
+        ],
+        "current_manuscript_contradiction": false,
+        "review_effect": "NO_VERSIONED_CORRECTION"
+      }
+    },
+    {
+      "id": "D2-CLM-009",
+      "wording": "Gate A ended INCONCLUSIVE before scoring, with no analyzer, baseline, proof system, fuzzer, or human scorer run and every scored denominator equal to zero.",
+      "location": [
+        {
+          "path": "paper/d2-status-draft.md",
+          "section": "4.6 Gate A"
+        }
+      ],
+      "supporting_result_or_source": [
+        {
+          "path": "reports/D2-07.md",
+          "detail": "Authoritative recovery records the four global blockers, empty objective subset, and zero score rows."
+        }
+      ],
+      "version": {
+        "claim": "D2-07-Gate-A",
+        "evidence": "authoritative recovery seal"
+      },
+      "exposure": "construction-smoke",
+      "evidence_grade": "NO-SCORE",
+      "status": "supported",
+      "claim_limit": "Zero denominators do not mean zero misses, zero false warnings, perfect coverage, or safety.",
+      "paper_action": "Make INCONCLUSIVE and zero-score semantics central in abstract, evaluation, and conclusion.",
+      "review_disposition": {
+        "d2_20_disposition": "RETAIN_ZERO_SCORE_INCONCLUSIVE",
+        "concern_ids": [
+          "D2-RC-007"
+        ],
+        "current_manuscript_contradiction": false,
+        "review_effect": "NO_VERSIONED_CORRECTION"
+      }
+    },
+    {
+      "id": "D2-CLM-010",
+      "wording": "The Step 6 composition and external-comparator records are construction and smoke evidence only.",
+      "location": [
+        {
+          "path": "paper/d2-status-draft.md",
+          "section": "4.5 Construction and smoke evidence"
+        }
+      ],
+      "supporting_result_or_source": [
+        {
+          "path": "reports/D2-06A.md",
+          "detail": "Six internal arms and transformations constructed without scoring."
+        },
+        {
+          "path": "reports/D2-06B.md",
+          "detail": "External inventory and two-case Foundry smoke with unresolved human policy roles."
+        }
+      ],
+      "version": {
+        "claim": "D2-06-construction",
+        "evidence": "D2-06A/D2-06B"
+      },
+      "exposure": "construction-smoke",
+      "evidence_grade": "E0/E1-smoke",
+      "status": "supported",
+      "claim_limit": "Passing construction or fuzz output is not safety, comparator advantage, or a Gate score.",
+      "paper_action": "Keep construction denominators outside evaluation denominators.",
+      "review_disposition": {
+        "d2_20_disposition": "RETAIN_CONSTRUCTION_ONLY",
+        "concern_ids": [
+          "D2-RC-007"
+        ],
+        "current_manuscript_contradiction": false,
+        "review_effect": "NO_VERSIONED_CORRECTION"
+      }
+    },
+    {
+      "id": "D2-CLM-011",
+      "wording": "The compiler-backed identity prototype mechanically separates semantic object/context identity from display names and preserves exact opaque references on five exposed transformation fixtures.",
+      "location": [
+        {
+          "path": "paper/d2-status-draft.md",
+          "section": "3.2 Compiler-backed identity prototype"
+        }
+      ],
+      "supporting_result_or_source": [
+        {
+          "path": "reports/D2-08.md",
+          "detail": "PASS_MECHANICAL_ONLY over five bundles, four mappings, and negative identity controls."
+        }
+      ],
+      "version": {
+        "claim": "D2-08-identity-v1",
+        "evidence": "sealed mechanical run"
+      },
+      "exposure": "mechanical-fixture",
+      "evidence_grade": "E0-mechanical",
+      "status": "supported",
+      "claim_limit": "Identity hashes do not prove object authenticity, authorization, policy correctness, or general transformation equivalence.",
+      "paper_action": "Describe as a bounded mechanical interface, not a security contribution.",
+      "review_disposition": {
+        "d2_20_disposition": "RETAIN_MECHANICAL_ONLY",
+        "concern_ids": [
+          "D2-RC-003",
+          "D2-RC-009"
+        ],
+        "current_manuscript_contradiction": false,
+        "review_effect": "NO_VERSIONED_CORRECTION"
+      }
+    },
+    {
+      "id": "D2-CLM-012",
+      "wording": "The authorization-boundary prototype gives full and strong-simple arms byte-identical inputs and explicit ESTABLISHED, MISMATCH_CANDIDATE, and UNKNOWN mechanical states, while every effective fixture result remains UNKNOWN.",
+      "location": [
+        {
+          "path": "paper/d2-status-draft.md",
+          "section": "3.3 Authorization-boundary prototype"
+        }
+      ],
+      "supporting_result_or_source": [
+        {
+          "path": "reports/D2-09.md",
+          "detail": "Ten synthetic fixtures, exact input parity, zero score rows, and unreviewed fixture policy."
+        }
+      ],
+      "version": {
+        "claim": "D2-09-boundary-v1",
+        "evidence": "sealed synthetic mechanical run"
+      },
+      "exposure": "mechanical-fixture",
+      "evidence_grade": "E0-synthetic-mechanical",
+      "status": "supported",
+      "claim_limit": "The internal states are not VIOLATION or VERIFIED_WITHIN_SCOPE and cannot distinguish future extraction capability.",
+      "paper_action": "Always pair mechanical state with effective UNKNOWN and fixture class.",
+      "review_disposition": {
+        "d2_20_disposition": "RETAIN_MECHANICAL_UNKNOWN",
+        "concern_ids": [
+          "D2-RC-001",
+          "D2-RC-002"
+        ],
+        "current_manuscript_contradiction": false,
+        "review_effect": "NO_VERSIONED_CORRECTION"
+      }
+    },
+    {
+      "id": "D2-CLM-013",
+      "wording": "The corrected typed-extraction prototype emits zero producer_guarantee facts and zero eligible derived consumer_used facts; it emits two annotated MAY over-approximation candidates and one exact derived extent fact in the exact fixture.",
+      "location": [
+        {
+          "path": "paper/d2-status-draft.md",
+          "section": "3.4 Typed extraction trust prototype"
+        }
+      ],
+      "supporting_result_or_source": [
+        {
+          "path": "reports/D2-10.md",
+          "detail": "Corrected authoritative protocol v2 and run-02 preserve fail-closed typing and UNKNOWN."
+        },
+        {
+          "path": "results/raw/D2-10/run-02/run-summary.json",
+          "detail": "Authoritative summary SHA-256 0ebf8ca1f555701a6cbc942b0140df1440e7e5e60eb4daec87fd4bffb1dc42ab."
+        }
+      ],
+      "version": {
+        "claim": "D2-10-protocol-v2-run-02",
+        "evidence": "report 848acceef83d32d5054e37686ff5bc3b94baa45c5618490a0fe8e41bb9db018a; seal c5bb3163283c7b16a0d341067c6f2c3f8fa9965d85ab13dc761d4e948fcf21e6"
+      },
+      "exposure": "mechanical-fixture",
+      "evidence_grade": "E0-mechanical",
+      "status": "supported",
+      "claim_limit": "The controls establish fail-closed interface behavior only; no compiler/prover run, policy result, relational guarantee, E2-E4 result, or paper claim follows.",
+      "paper_action": "Use as the central negative/mechanical finding and bind only corrected run-02.",
+      "review_disposition": {
+        "d2_20_disposition": "RETAIN_FAIL_CLOSED_NEGATIVE_RESULT",
+        "concern_ids": [
+          "D2-RC-001",
+          "D2-RC-004",
+          "D2-RC-010"
+        ],
+        "current_manuscript_contradiction": false,
+        "review_effect": "NO_VERSIONED_CORRECTION"
+      }
+    },
+    {
+      "id": "D2-CLM-014",
+      "wording": "BindCheck's novelty is established by the automated circuit-to-consumer join.",
+      "location": [
+        {
+          "path": "paper/draft.md",
+          "lines": "202-208, 383-402, 1883-2110, 2837-2839, 2950-2955"
+        }
+      ],
+      "supporting_result_or_source": [
+        {
+          "path": "reports/D2-07.md",
+          "detail": "No fair eligible Gate A comparison ran."
+        },
+        {
+          "path": "docs/d2/related-work-matrix-v2.json",
+          "detail": "Closest-work overlap and access gaps remain unresolved."
+        }
+      ],
+      "version": {
+        "claim": "candidate-contribution",
+        "evidence": "through D2-10"
+      },
+      "exposure": "proposed",
+      "evidence_grade": "UNKNOWN",
+      "status": "unresolved",
+      "claim_limit": "A within-tool exposed ablation and mechanical interfaces do not establish novelty or comparative advantage.",
+      "paper_action": "Call automated artifact-derived discovery plus E4 validation a candidate contribution only.",
+      "review_disposition": {
+        "d2_20_disposition": "RETAIN_NOVELTY_UNRESOLVED",
+        "concern_ids": [
+          "D2-RC-007",
+          "D2-RC-011"
+        ],
+        "current_manuscript_contradiction": false,
+        "review_effect": "NO_VERSIONED_CORRECTION"
+      }
+    },
+    {
+      "id": "D2-CLM-015",
+      "wording": "The current evidence establishes independent transfer or generality.",
+      "location": [
+        {
+          "path": "paper/draft.md",
+          "lines": "210-214, 403-412, 2110-2262, 2958-2964"
+        }
+      ],
+      "supporting_result_or_source": [
+        {
+          "path": "reports/D2-01.md",
+          "detail": "Twelve attempts over eight projects, four repeats, zero supported analyses, and no adjudicated independent-family result."
+        },
+        {
+          "path": "reports/D2-02.md",
+          "detail": "Historical barrier distribution without permitted family adjudication."
+        },
+        {
+          "path": "reports/D2-11-14-dependency-audit.md",
+          "detail": "Read-only audit records Steps 11-14 not executed and Gate B not evaluated."
+        },
+        {
+          "path": "reports/D2-15-17-readiness-audit.md",
+          "detail": "Read-only public audit records Steps 15-17 not executed and Gate C not reached."
+        }
+      ],
+      "version": {
+        "claim": "independent-transfer",
+        "evidence": "D1P-33/D1P-36 reconciled by D2-01/D2-02"
+      },
+      "exposure": "independent-attempt-unsupported",
+      "evidence_grade": "E0/UNKNOWN",
+      "status": "unresolved",
+      "claim_limit": "Unsupported attempts are applicability observations, not misses, safety, or transfer.",
+      "paper_action": "State that no supported independent result exists.",
+      "review_disposition": {
+        "d2_20_disposition": "RETAIN_TRANSFER_UNRESOLVED",
+        "concern_ids": [
+          "D2-RC-005",
+          "D2-RC-009"
+        ],
+        "current_manuscript_contradiction": false,
+        "review_effect": "NO_VERSIONED_CORRECTION"
+      }
+    },
+    {
+      "id": "D2-CLM-016",
+      "wording": "The D2 taxonomy has completed an independent human study.",
+      "location": [
+        {
+          "path": "paper/draft.md",
+          "lines": "216-219, 2386-2550, 2966-2968"
+        }
+      ],
+      "supporting_result_or_source": [
+        {
+          "path": "reports/D2-04.md",
+          "detail": "Preparation complete; no human staffing, draw, packets, ratings, agreement result, or validity result."
+        }
+      ],
+      "version": {
+        "claim": "D2-taxonomy-preparation",
+        "evidence": "D2-04"
+      },
+      "exposure": "exposed-development",
+      "evidence_grade": "NO-STUDY",
+      "status": "contradicted",
+      "claim_limit": "Historical one-human-versus-AI agreement is not inter-human agreement or independent validation.",
+      "paper_action": "Keep taxonomy to a short framing/limitation note, not a current contribution section.",
+      "review_disposition": {
+        "d2_20_disposition": "RETAIN_NO_STUDY_PROHIBITION",
+        "concern_ids": [
+          "D2-RC-002"
+        ],
+        "current_manuscript_contradiction": false,
+        "review_effect": "NO_VERSIONED_CORRECTION"
+      }
+    },
+    {
+      "id": "D2-CLM-017",
+      "wording": "ELSA is a closest-work obligation whose official abstract reports an ensemble of LLM-assisted static analyzers and evaluation on self-constructed ZKP-based smart contracts, but its exact ZKP boundary scope remains unresolved.",
+      "location": [
+        {
+          "path": "paper/d2-status-draft.md",
+          "section": "6. Related work"
+        }
+      ],
+      "supporting_result_or_source": [
+        {
+          "url": "https://conf.researchr.org/details/issta-2026/issta-2026-research-papers/131/Augmenting-Multi-Technique-Static-Analysis-with-Large-Language-Models-A-Neuro-Symbol",
+          "detail": "Official ISSTA 2026 title, authors, and abstract."
+        },
+        {
+          "url": "https://doi.org/10.1145/3832222",
+          "detail": "DOI supplied for the proceedings record; resolver/full text was not accessible during this audit."
+        }
+      ],
+      "version": {
+        "claim": "D2-18-related-work-refresh",
+        "evidence": "official abstract only"
+      },
+      "exposure": "framing",
+      "evidence_grade": "primary-abstract-metadata",
+      "status": "unresolved",
+      "claim_limit": "Do not say ELSA is contract-only, lacks circuit semantics, misses the target, or establishes novelty/non-novelty without primary full text and artifact inspection.",
+      "paper_action": "Cite the official abstract and DOI, disclose the access gap, and keep the comparison unresolved.",
+      "review_disposition": {
+        "d2_20_disposition": "RETAIN_CLOSEST_WORK_UNRESOLVED",
+        "concern_ids": [
+          "D2-RC-011"
+        ],
+        "current_manuscript_contradiction": false,
+        "review_effect": "NO_VERSIONED_CORRECTION"
+      }
+    },
+    {
+      "id": "D2-CLM-018",
+      "wording": "The current manuscript package is ready for IEEE S&P 2027 submission.",
+      "location": [
+        {
+          "path": "paper/d2-status-draft.md",
+          "section": "Status banner; 8. Submission-readiness disposition"
+        }
+      ],
+      "supporting_result_or_source": [
+        {
+          "url": "https://sp2027.ieee-security.org/cfpapers.html",
+          "detail": "Official deadlines, format, anonymity, ethics, authorship, artifact, and generative-AI requirements."
+        },
+        {
+          "path": "reports/D2-07.md",
+          "detail": "Gate A is INCONCLUSIVE with no scored comparison."
+        },
+        {
+          "path": "reports/D2-10.md",
+          "detail": "Current prototype supplies no relational guarantee or paper claim."
+        }
+      ],
+      "version": {
+        "claim": "D2-18-readiness-audit",
+        "evidence": "official CFP plus current ledger"
+      },
+      "exposure": "venue-readiness",
+      "evidence_grade": "READINESS-AUDIT",
+      "status": "contradicted",
+      "claim_limit": "The status draft is Markdown, not a final IEEEtran paper; final claims, human review, disclosures, anonymous artifact, and independent evidence are missing.",
+      "paper_action": "State NOT_SUBMISSION_READY prominently and do not create a final-results abstract or LaTeX submission package.",
+      "review_disposition": {
+        "d2_20_disposition": "RETAIN_NOT_SUBMISSION_READY",
+        "concern_ids": [
+          "D2-RC-001",
+          "D2-RC-002",
+          "D2-RC-004",
+          "D2-RC-005",
+          "D2-RC-007",
+          "D2-RC-009",
+          "D2-RC-010",
+          "D2-RC-011"
+        ],
+        "current_manuscript_contradiction": false,
+        "review_effect": "NO_VERSIONED_CORRECTION"
+      }
+    },
+    {
+      "id": "D2-CLM-019",
+      "wording": "BindCheck currently satisfies the research contract's capability gate.",
+      "location": [
+        {
+          "path": "paper/d2-status-draft.md",
+          "section": "5. Claims the evidence does not support"
+        }
+      ],
+      "supporting_result_or_source": [
+        {
+          "path": "docs/research-contract.md",
+          "detail": "Requires automatic discovery, E4 validation, fair comparisons, and supported independent transfer."
+        },
+        {
+          "path": "reports/D2-07.md",
+          "detail": "No scored Gate A result."
+        },
+        {
+          "path": "reports/D2-10.md",
+          "detail": "No derived relational producer or effect-reliance relation."
+        }
+      ],
+      "version": {
+        "claim": "capability-gate-r3",
+        "evidence": "through corrected D2-10"
+      },
+      "exposure": "proposed",
+      "evidence_grade": "UNKNOWN",
+      "status": "unresolved",
+      "claim_limit": "Mechanical controls and historical E4 do not satisfy the prospective four-part gate.",
+      "paper_action": "Do not use final capability, security, or success language.",
+      "review_disposition": {
+        "d2_20_disposition": "RETAIN_CAPABILITY_UNRESOLVED",
+        "concern_ids": [
+          "D2-RC-001",
+          "D2-RC-002",
+          "D2-RC-003",
+          "D2-RC-004",
+          "D2-RC-007"
+        ],
+        "current_manuscript_contradiction": false,
+        "review_effect": "NO_VERSIONED_CORRECTION"
+      }
+    },
+    {
+      "id": "D2-CLM-020",
+      "wording": "Historical, injected/exposed development, construction/smoke, mechanical fixture, and independent evidence must be reported as distinct strata.",
+      "location": [
+        {
+          "path": "paper/d2-status-draft.md",
+          "section": "2.3 Evidence strata; 4. Evidence ledger"
+        }
+      ],
+      "supporting_result_or_source": [
+        {
+          "path": "docs/research-contract.md",
+          "detail": "Controls exposure, evidence grades, and held-out separation."
+        },
+        {
+          "path": "reports/D2-01.md",
+          "detail": "Reconciles current, historical, and independent-attempt evidence."
+        },
+        {
+          "path": "reports/D2-07.md",
+          "detail": "Separates construction evidence from score rows."
+        },
+        {
+          "path": "reports/D2-08.md",
+          "detail": "Defines mechanical-only fixture evidence."
+        }
+      ],
+      "version": {
+        "claim": "D2-18-evidence-strata",
+        "evidence": "contract-r3 through D2-10"
+      },
+      "exposure": "framing",
+      "evidence_grade": "N/A-evidence-discipline",
+      "status": "supported",
+      "claim_limit": "Mock, real-proof, and committed-effect grades are orthogonal and must also remain visible.",
+      "paper_action": "Use one central evidence-strata table and never pool denominators across strata.",
+      "review_disposition": {
+        "d2_20_disposition": "RETAIN_EVIDENCE_STRATA",
+        "concern_ids": [
+          "D2-RC-005",
+          "D2-RC-008",
+          "D2-RC-010"
+        ],
+        "current_manuscript_contradiction": false,
+        "review_effect": "NO_VERSIONED_CORRECTION"
+      }
+    },
+    {
+      "id": "D2-CLM-021",
+      "wording": "The D2-19 partial development artifact reproduced all four requested profiles on a fresh AI evaluator session in the same host and checkout, with no unexpected mismatch.",
+      "location": [
+        {
+          "path": "reports/D2-19-fresh-reproduction.md",
+          "section": "Reproduction judgment; Commands and runtimes"
+        }
+      ],
+      "supporting_result_or_source": [
+        {
+          "path": "reports/D2-19-fresh-reproduction.md",
+          "detail": "Metadata, current-workspace retained verification, recompute, and fresh mechanical rerun all returned PASS."
+        },
+        {
+          "path": "reports/D2-19-artifact.md",
+          "detail": "Defines PARTIAL_DEVELOPMENT_ARTIFACT / FINAL_ARTIFACT_BLOCKED and the supported profiles."
+        }
+      ],
+      "version": {
+        "claim": "D2-19-fresh-evaluator-02",
+        "evidence": "fresh reproduction report SHA-256 61b6f8a78363c32c626d0e582d673cce2dcaa9c455af565ac61826028bc0e444"
+      },
+      "exposure": "mechanical-fixture",
+      "evidence_grade": "engineering-reproduction",
+      "status": "supported",
+      "claim_limit": "Same host and checkout; no sidecar, clean container, fresh machine, independent human, generic D2-01/D2-06 rerun, scoring, or semantic validation.",
+      "paper_action": "Use only as partial artifact reproducibility evidence and retain FINAL_ARTIFACT_BLOCKED.",
+      "review_disposition": {
+        "d2_20_disposition": "ADD_POST_STEP18_REPRODUCTION_CLAIM",
+        "concern_ids": [
+          "D2-RC-010"
+        ],
+        "current_manuscript_contradiction": false,
+        "review_effect": "NEXT_VERSION_WRITING_ONLY"
+      }
+    },
+    {
+      "id": "D2-CLM-022",
+      "wording": "On the current exposed 30-target benchmark, support coverage is 17/30 (56.7%) and unsupported/UNKNOWN is 13/30 (43.3%); all 17 supported/detected targets are WarpToad, so supported outcomes span one effective lineage.",
+      "location": [
+        {
+          "path": "results/raw/D2-01-recovery-01/integrated/benchmark-results.json",
+          "section": "counts and target rows"
+        },
+        {
+          "path": "reports/D2-20-review.md",
+          "section": "Central claim and denominator audit"
+        }
+      ],
+      "supporting_result_or_source": [
+        {
+          "path": "results/raw/D2-01-recovery-01/run-summary.json",
+          "detail": "Records 30 targets, 17 detected, 13 unsupported, and zero misses within the supported frozen association disposition."
+        },
+        {
+          "path": "results/raw/D2-01-recovery-01/integrated/benchmark-results.json",
+          "detail": "All Payy mutant rows are unsupported; WT-S04 is unsupported; all detected rows are WarpToad."
+        }
+      ],
+      "version": {
+        "claim": "D2-20-derived-coverage-analysis",
+        "evidence": "D2-01 authoritative recovery, unchanged primary rows"
+      },
+      "exposure": "exposed-development",
+      "evidence_grade": "E1-derived-descriptive",
+      "status": "supported",
+      "claim_limit": "This is coverage/abstention reporting, not precision, recall, transfer, or a two-lineage performance result.",
+      "paper_action": "Add only in the next explicit manuscript version; do not silently edit the reviewed Step18 bytes.",
+      "review_disposition": {
+        "d2_20_disposition": "ADD_DERIVED_EXISTING_DATA_ANALYSIS",
+        "concern_ids": [
+          "D2-RC-005",
+          "D2-RC-012"
+        ],
+        "current_manuscript_contradiction": false,
+        "review_effect": "NEXT_VERSION_WRITING_ONLY"
+      }
+    }
+  ],
+  "prior_ledger": {
+    "path": "docs/d2/claim-ledger-v2.json",
+    "schema": "bindcheck.claim-ledger.v2",
+    "ledger_version": "D2-18-v2",
+    "sha256": "78ec90b4e0c6f2e68fb8f43237b372b8a8dbcd723680ec5dceacd0ee6ce219a9",
+    "preserved_unchanged": true
+  },
+  "review_audit": {
+    "status": "EVIDENCE_AUDIT_COMPLETE_NO_NEW_EXPERIMENT",
+    "concerns_path": "docs/mock-reviews/d2-review-concerns-v1.json",
+    "concerns_sha256": "d66a84c01dbdfb683c6610a0d090d4313e977723826ca600c8875c711941775f",
+    "deduplicated_concern_count": 12,
+    "classification_counts": {
+      "WRITING_CORRECTION": 1,
+      "EXISTING_DATA_ANALYSIS": 4,
+      "NEW_EXPERIMENT": 5,
+      "ENDURING_LIMITATION": 2
+    },
+    "current_status_manuscript_factual_contradictions": 0,
+    "manuscript_or_pdf_correction_required": false,
+    "reviewed_step18_bytes_changed": false,
+    "primary_results_changed": false,
+    "evidence_grades_promoted": false,
+    "fresh_reproduction": {
+      "path": "reports/D2-19-fresh-reproduction.md",
+      "sha256": "61b6f8a78363c32c626d0e582d673cce2dcaa9c455af565ac61826028bc0e444",
+      "result": "PASS_ALL_FOUR_PROFILES",
+      "scope": "fresh AI evaluator session on the same host and checkout; no sidecar, fresh-container, fresh-machine, or independent-human claim"
+    }
+  },
+  "claim_status_counts": {
+    "supported": 15,
+    "contradicted": 3,
+    "unresolved": 4,
+    "total": 22
+  }
+}

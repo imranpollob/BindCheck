@@ -1,0 +1,452 @@
+{
+  "schema": "bindcheck.d2.steps11-14-dependency-disposition/v1",
+  "version": "1.0.0",
+  "date": "2026-11-02",
+  "status": "READ_ONLY_AUDIT_COMPLETE / STEPS_11_14_NOT_EXECUTED / GATE_B_NOT_EVALUATED",
+  "task_kind": "READ_ONLY_DOWNSTREAM_DEPENDENCY_AUDIT",
+  "research_verdict": "UNKNOWN",
+  "objective": "Determine what Steps 11 through 14 could do mechanically, what the D2-07 BOUNDED_PROTOTYPE scope prohibits or defers, which human and custodian dependencies remain, and whether Gate B is ready to be evaluated, without executing any of those steps.",
+  "authority": [
+    "docs/research-contract.md revision 3",
+    "../bindcheck-agent-playbook.md Steps 11-14",
+    "protocols/d2/development-boundary-v1.json",
+    "protocols/d2/d2-07-gate-a-finalization-v1.json",
+    "reports/D2-07.md"
+  ],
+  "execution_boundary": {
+    "steps_executed": [],
+    "raw_namespace_created": false,
+    "analyzer_runs": 0,
+    "baseline_runs": 0,
+    "proof_or_replay_runs": 0,
+    "scored_rows": 0,
+    "freeze_created": false,
+    "reserved_data_accessed": false,
+    "network_calls": 0,
+    "repository_edits_authorized": [
+      "this disposition protocol",
+      "reports/D2-11-14-dependency-audit.md"
+    ],
+    "prohibited": [
+      "analyzer, baseline, compiler, proof, replay, or scored evaluation execution",
+      "reserved identity, source, label, annotation, or evaluator-output access",
+      "Gate A rescore or reinterpretation",
+      "Gate B decision or release freeze",
+      "analyzer or baseline feature changes",
+      "README.md or docs/project-status.md edits",
+      "commit or push"
+    ]
+  },
+  "controlling_evidence": [
+    {
+      "step": 7,
+      "report": {
+        "path": "reports/D2-07.md",
+        "sha256": "fcdff01dbadade6f7f28116e46ee2c6016fb2945767492c822acaef87a60f07a"
+      },
+      "protocol": {
+        "path": "protocols/d2/d2-07-gate-a-finalization-v1.json",
+        "sha256": "3aab079da6c441a6a6bb95bc97e6d8e5dbeacf65472fb7902a96b905635303af"
+      },
+      "seal": {
+        "path": "results/raw/D2-07-recovery-01/content-seal-v1.json",
+        "sha256": "b9f0f1eb6b9aa1bb3ea8aaf1fba3c3939b3d70a787a57be92f3c4154fad50558",
+        "verification_path": "results/raw/D2-07-recovery-01/seal-verification.json",
+        "verification_sha256": "c6191d8f2baa5817eb875c4287cbe8e73e23ebb8e55b6c6cb7f5364cf8cbb1d5",
+        "verification_status": "PASS",
+        "checked_files": 623,
+        "mismatches": 0
+      },
+      "decision": "INCONCLUSIVE",
+      "scope_recommendation": "BOUNDED_PROTOTYPE"
+    },
+    {
+      "step": 8,
+      "report": {
+        "path": "reports/D2-08.md",
+        "sha256": "aaca4aa036a0604febd6869604e8dfcfc3709a72a15c8fa588717309316fd2cd"
+      },
+      "protocol": {
+        "path": "protocols/d2/d2-08-compiler-identity-v1.json",
+        "sha256": "b529f9c12ca695cf4737a0f01f10f9f357216fea0f7505a42fc381614c6b04ba"
+      },
+      "seal": {
+        "path": "results/raw/D2-08/content-seal-v1.json",
+        "sha256": "d2195d93fc6e51458a994ecc63838935fb36bad275379ef15e43ca2f9c112343",
+        "verification_path": "results/raw/D2-08/seal-verification.json",
+        "verification_sha256": "227b3f38fb4e4b2a742f5a9830445e612f6b09c04d4c31a294d18ccc8b917406",
+        "verification_status": "PASS",
+        "checked_files": 92,
+        "mismatches": 0
+      },
+      "status": "COMPLETE_MECHANICAL_ONLY"
+    },
+    {
+      "step": 9,
+      "report": {
+        "path": "reports/D2-09.md",
+        "sha256": "f7254e4ccb510a8ccfea9954cfd341c81620084147159a81dfa52c3f6595cf03"
+      },
+      "protocol": {
+        "path": "protocols/d2/d2-09-authorization-boundary-v1.json",
+        "sha256": "2a833bc150a21bfc82dc9847fe36c0f6e92e85a592cac771836bb9b0a717b04a"
+      },
+      "seal": {
+        "path": "results/raw/D2-09/content-seal-v1.json",
+        "sha256": "c678085afa6a73d0f8115d10055fb753bd024a174a38618cb0e5e6943661e8bd",
+        "verification_path": "results/raw/D2-09/seal-verification.json",
+        "verification_sha256": "e7bf4373b5255bb4feda70e8c130e1250169b747b608739726524cdf1375d274",
+        "verification_status": "PASS",
+        "checked_files": 40,
+        "mismatches": 0
+      },
+      "status": "COMPLETE_MECHANICAL_FIXTURE_ONLY",
+      "effective_unknown_rows": 10,
+      "evidence_grade": "E0"
+    },
+    {
+      "step": 10,
+      "report": {
+        "path": "reports/D2-10.md",
+        "sha256": "848acceef83d32d5054e37686ff5bc3b94baa45c5618490a0fe8e41bb9db018a"
+      },
+      "protocol": {
+        "path": "protocols/d2/d2-10-typed-extraction-v2.json",
+        "sha256": "910ce6464a947fa552be08d34a596d97b179669401305adc577676d5172ce3ec"
+      },
+      "module": {
+        "path": "src/bindcheck_d1/typed_extraction_v1.py",
+        "sha256": "03251cd3b865a97c0c64736e6358749f786ad9d72c4983c8b9256d46acf8c373"
+      },
+      "seal": {
+        "path": "results/raw/D2-10/run-02/content-seal-v1.json",
+        "sha256": "c5bb3163283c7b16a0d341067c6f2c3f8fa9965d85ab13dc761d4e948fcf21e6",
+        "verification_method": "Independent replay of every recorded path, SHA-256, and size",
+        "verification_status": "PASS",
+        "checked_files": 9,
+        "mismatches": 0
+      },
+      "status": "COMPLETE_FOR_AUTHORIZED_BOUNDED_STEP10_PROTOTYPE",
+      "relational_producer_guarantee_count": 0,
+      "derived_eligible_consumer_used_count": 0,
+      "superseded_history": {
+        "raw_namespace": "results/raw/D2-10/run-01",
+        "protocol_path": "protocols/d2/d2-10-typed-extraction-v1.json",
+        "protocol_sha256": "b057811d25defc527353f0af78c10bfb4502ceff4ec0d51e359a5684f9ea8373",
+        "seal_sha256": "77b120f2a53c866e847a3650103b4626e63c4a70493823826bf15044e6a4ef2b",
+        "disposition": "PRESERVED_PASS_BUT_SUPERSEDED_AFTER_POST_HANDOFF_SELF_AUDIT"
+      }
+    }
+  ],
+  "scope_determination": {
+    "d2_07_authorized_scope": "Steps 8-10 development of the shared compiler-backed object/context identity representation and common versioned P/O/E obligation interface, using exposed development material only.",
+    "required_fixture_label": "UNREVIEWED_DEVELOPMENT_FIXTURE",
+    "reserved_data_authorized": false,
+    "retroactive_gate_a_rescore_authorized": false,
+    "audit_conclusion": "The named authorization ends at Step 10. Any Step 11-13 implementation or scientific execution and every Step 14 comparison or freeze require new explicit authorization. This audit permits only read-only planning and these two documentary outputs."
+  },
+  "current_evidence_constraints": [
+    "Step 8 establishes deterministic object/context identity, provenance, and bounded mappings only; its logical slots are unreviewed annotations.",
+    "Step 9 records ten E0 synthetic rows with effective state UNKNOWN and no score-eligible result. Its two arms intentionally share one mechanical interpretation and do not establish comparative advantage.",
+    "Corrected Step 10 emits zero producer_guarantee facts and zero derived eligible consumer_used facts. Caller-linked authorization and consumer-effect relations are both MAY, OVER_APPROXIMATION, and ANNOTATED candidates.",
+    "Dynamic memory/address semantics, disjunctive paths, ambiguous or unbound mappings, unsupported external calls, aggregation, splitting, and deferral remain UNKNOWN.",
+    "Historical exposed E3/E4 evidence predates the Step 8-10 identity/P/O/E chain and is not automatically relabeled as current-interface causal validation."
+  ],
+  "per_step_dispositions": [
+    {
+      "step": 11,
+      "title": "Frontend compatibility",
+      "status": "DEFERRED_OUTSIDE_AUTHORIZED_SCOPE",
+      "mechanically_possible_now": [
+        "read the existing D2-02 blocker ranking",
+        "prepare a non-executing prioritization and budget proposal"
+      ],
+      "mechanically_possible_after_new_authorization": [
+        "address the exposed UNSUPPORTED_CONSUMER_AST_REQUIRED barrier affecting 13 variants across two exposed lineages",
+        "derive and validate artifact-bound Payy mutant mappings affecting 12 nested variants in one lineage",
+        "exercise operation-specific conservative summaries and targeted regressions while propagating uncertainty"
+      ],
+      "constraints": [
+        "The 12 Payy mapping rows are nested inside the 13 consumer-AST variants and are not additive.",
+        "Pinned certificates cannot be reused for different mutant bytes.",
+        "Historical compiler/schema/opcode/memory observations are not family-ranked priorities without permitted lineage adjudication.",
+        "Compatibility must not turn unresolved semantics, occurrence, or either caller-linked identity relation into a supported guarantee or reliance fact."
+      ],
+      "new_dependencies": [
+        "explicit exposed-development implementation authorization",
+        "numeric machine, human, retry, dependency, and network budgets",
+        "user approval for any unavailable dependency or additional compute"
+      ]
+    },
+    {
+      "step": 12,
+      "title": "Evaluation protocol and benchmarks",
+      "status": "BLOCKED_HUMAN_CUSTODIAN_AND_OUTSIDE_AUTHORIZED_SCOPE",
+      "mechanically_possible_now": [
+        "read the D2-04 blank annotation materials and D2-05 draft protocol",
+        "list unresolved protocol fields without filling them"
+      ],
+      "mechanically_possible_after_new_authorization": [
+        "version protocol v3, benchmark manifests, blank measurement forms, denominator rules, and evidence-grade rules using exposed metadata",
+        "prepare an opaque custodian-handoff schema without inspecting reserved identities, sources, or labels"
+      ],
+      "cannot_be_finalized_until": [
+        "a human authors or explicitly adopts exact policy bytes with provenance and exposure recorded",
+        "a different human reviews those bytes before comparison output",
+        "commitHash and other policy ambiguities are resolved from documented intended policy",
+        "historical labels and substantive safe-control arguments receive independent checking",
+        "the user names or confirms a custodian",
+        "the custodian arranges isolated reserved selection, independent policy/annotation authorship, preservation, and an opaque commitment",
+        "methods for deriving both producer guarantees and consumer reliance from actual supported semantics are preregistered",
+        "the Step 13 validation interface and exact Gate B criteria are prospectively frozen"
+      ],
+      "prohibitions": [
+        "do not inspect or reconstruct reserved material",
+        "do not invent policy, ground truth, safe labels, scorers, or adjudication",
+        "do not call a post-development decision preregistered"
+      ]
+    },
+    {
+      "step": 13,
+      "title": "Causal validation",
+      "status": "DEFERRED_OUTSIDE_AUTHORIZED_SCOPE_AND_INPUT_BLOCKED",
+      "mechanically_possible_now": [
+        "read and reconcile existing exposed validation records without rerunning or relabeling them",
+        "describe the required object/context/value/effect evidence chain"
+      ],
+      "mechanically_possible_after_new_authorization": [
+        "build an exposed-development causal driver with stage traces and legitimate controls",
+        "challenge attacker-controlled paired witnesses while holding authenticated context fixed",
+        "attempt version-matched construction, proving, verification, consumer execution, repair contrast, and state-effect checks within a frozen protocol"
+      ],
+      "blocking_inputs": [
+        "at least one hash-bound, independently reviewed derivation of a MUST, EXACT, DERIVED, SUPPORTED producer guarantee from actual supported producer semantics",
+        "at least one hash-bound, conservatively justified DERIVED consumer reliance fact tied to the actual protected effect",
+        "a human-authored or adopted and distinctly reviewed policy",
+        "the frozen Step 12 evidence, scoring, validation, and admissible-state rules",
+        "human confirmation of ambiguous attacker capability, admissible initialization, or policy",
+        "legitimate pinned local proving, verifier, key, consumer, and state resources"
+      ],
+      "claim_limit": "Historical exposed E3/E4 evidence is useful development evidence but does not itself validate the new Step 8-10 chain or satisfy Step 13."
+    },
+    {
+      "step": 14,
+      "title": "Final comparisons and release freeze",
+      "status": "NOT_READY_NOT_EVALUATED",
+      "mechanically_possible_now": [
+        "read-only readiness and hash preflight"
+      ],
+      "execution_preconditions": [
+        "Steps 8-13 are merged, independently checked, and reconciled",
+        "Gate B criteria are versioned and approved before output",
+        "the integrated analyzer and every applicable baseline consume frozen equal information and policies",
+        "working causal validation and an executable reserved protocol exist",
+        "the custodian supplies an opaque reserved-boundary commitment without revealing reserved identities",
+        "a separate Step 14 execution authorization freezes budgets, tools, code, policies, forms, seeds, and stop rules"
+      ],
+      "prohibitions": [
+        "no analyzer feature changes during Step 14",
+        "no run under the current BOUNDED_PROTOTYPE scope",
+        "no retroactive Gate A score",
+        "no release freeze or Gate B result from the present audit"
+      ]
+    }
+  ],
+  "preliminary_gate_b_readiness": {
+    "official_gate_b_decision": "NOT_EVALUATED",
+    "overall_readiness": "INCOMPLETE_NOT_READY",
+    "criteria": [
+      {
+        "criterion": "reproducible integration",
+        "status": "INCOMPLETE",
+        "basis": "D2-01 is sealed historical integration, but Steps 8-10 are separate mechanical prototypes and have not been rerun through a current integrated application pipeline."
+      },
+      {
+        "criterion": "defensible extraction",
+        "status": "INCOMPLETE",
+        "basis": "Identity, integrity, and permanent regression controls pass, but actual producer-guarantee and consumer-reliance derivations and a general extraction-soundness result do not exist."
+      },
+      {
+        "criterion": "meaningful property coverage",
+        "status": "NOT_DEMONSTRATED",
+        "basis": "Step 9 has ten E0 synthetic effective UNKNOWN rows; corrected Step 10 exports neither an eligible producer guarantee nor eligible consumer reliance, and no project policy is human-reviewed."
+      },
+      {
+        "criterion": "fair comparisons",
+        "status": "BLOCKED",
+        "basis": "Common byte-parity plumbing exists, but no reviewed-policy scored comparison or complete generic/default and same-policy baseline set exists."
+      },
+      {
+        "criterion": "working causal validation",
+        "status": "INCOMPLETE_HISTORICAL_ONLY",
+        "basis": "Historical exposed E3/E4 evidence and validation infrastructure exist, but no Step 13 driver has validated the current identity/P/O/E chain."
+      },
+      {
+        "criterion": "fully executable reserved protocol",
+        "status": "BLOCKED",
+        "basis": "Protocol v3, checked policies/labels/controls, a named custodian, isolated reserved inputs, and an opaque commitment do not exist."
+      }
+    ],
+    "interpretation": "These are readiness findings, not a Gate B PASS, FAIL, or INCOMPLETE run. An official result requires preapproved criteria and a separately authorized Step 14 execution."
+  },
+  "human_and_custodian_dependencies": [
+    {
+      "id": "HUMAN_POLICY_AUTHOR_OR_ADOPTER",
+      "scope": "global for policy-bearing comparison and validation",
+      "requirement": "A human authors or explicitly adopts exact P/O/E policy bytes with primary-source provenance and prior exposure recorded before outputs."
+    },
+    {
+      "id": "DISTINCT_HUMAN_POLICY_REVIEWER",
+      "scope": "global for policy-bearing comparison and validation",
+      "requirement": "A different human reviews every permission, obligation, transformation, and assumption before comparison output."
+    },
+    {
+      "id": "FORMAL_METHOD_PROPERTY_REVIEW",
+      "scope": "Step 9/12 readiness",
+      "requirement": "An advisor or coauthor familiar with formal methods reviews the property, supported fragment, and material assumptions."
+    },
+    {
+      "id": "INDEPENDENT_LABEL_AND_CONTROL_CHECK",
+      "scope": "benchmark and safe-control rows",
+      "requirement": "Historical labels and each substantive safe-control argument receive primary-evidence-based independent checking."
+    },
+    {
+      "id": "SUBJECTIVE_SCORERS_AND_ADJUDICATOR",
+      "scope": "row-local for ambiguous diagnosis, localization, non-target, and taxonomy judgments",
+      "requirement": "Two humans score independently and a distinct third human adjudicates only after original records are sealed."
+    },
+    {
+      "id": "NAMED_RESERVED_CUSTODIAN",
+      "scope": "global for reserved selection, freeze, release, and authoritative seal retention",
+      "requirement": "The user names or confirms a custodian who keeps reserved identities, sources, labels, annotations, and evaluator output outside developer access."
+    },
+    {
+      "id": "ISOLATED_RESERVED_POLICY_AUTHOR",
+      "scope": "reserved families",
+      "requirement": "The custodian assigns an independent author in the isolated environment and freezes project-specific policies and allowed annotations before reserved outcomes."
+    },
+    {
+      "id": "STEP13_CASE_CONFIRMATION",
+      "scope": "case-specific",
+      "requirement": "A human confirms ambiguous attacker capability, admissible initialization, policy, and legitimate local test resources."
+    },
+    {
+      "id": "GATE_B_CRITERIA_APPROVAL",
+      "scope": "global before Step 14",
+      "requirement": "The user or designated research lead approves exact Gate B criteria, budgets, retries, denominators, and stop rules before the run."
+    },
+    {
+      "id": "AUTHOR_INSPECTION",
+      "scope": "all generated research artifacts",
+      "requirement": "Authors inspect AI-generated code, packets, labels, citations, and claims; agent review is not independent human review."
+    }
+  ],
+  "budget_gap": {
+    "d2_07_combined_step8_10_and_primary_cap": {
+      "researcher_days": 2,
+      "machine_hours": 8
+    },
+    "observed_authoritative_raw_runner_seconds": {
+      "step8": 0.13739,
+      "step9": 0.0723160419947817,
+      "step10_run02": 0.080048,
+      "sum": 0.2897540419947817
+    },
+    "interpretation": [
+      "The sum covers only recorded authoritative raw runner intervals, not total setup, tests, specification, review, or superseded-run time.",
+      "Step 8 leaves human minutes null; Step 9 records NOT_MEASURED_DO_NOT_INFER; Step 10 does not supply an independently timed human log.",
+      "The researcher-day cap therefore cannot be audited by imputing zero.",
+      "The Step 7 cap does not authorize or budget Steps 11-14, and any unused numerical capacity is not transferable authority."
+    ],
+    "required_before_future_execution": "Each new phase needs prospectively frozen human, machine, dependency, network, retry, and storage budgets plus a reconciliation of any inherited cap it claims to use."
+  },
+  "stop_rules": [
+    "Stop before any Step 11-14 implementation or scientific run unless its named future authorization phase is explicit and effective.",
+    "Stop if a task would inspect, copy, reconstruct, or reveal reserved identities, sources, labels, annotations, or evaluator output outside custodian isolation.",
+    "Stop if an UNKNOWN, unsupported, build failure, timeout, empty obligation set, or unreviewed policy would be counted as safe, missed, established, or score-eligible.",
+    "Stop if occurrence, a dependency edge, identifier spelling, or a caller-supplied authorization/effect link would be promoted to a derived guarantee or reliance without an independently reviewed derivation.",
+    "Stop if full and comparison arms do not consume byte-identical frozen facts, identities, policies, bounds, and validation opportunities.",
+    "Stop if human roles, exposure, effort, or budget consumption would be imputed rather than recorded.",
+    "Stop Step 14 if any feature, policy, label, scoring rule, criterion, or denominator changes after output inspection.",
+    "Stop before release freeze if Gate B criteria, causal validation, the reserved protocol, custodian commitment, or authoritative external seal retention is missing."
+  ],
+  "future_authorization_phases": [
+    {
+      "phase_id": "PHASE_A_EXPOSED_COMPATIBILITY_AUTHORIZATION",
+      "covers": [
+        "Step 11"
+      ],
+      "required_authorization": "Explicit permission to modify and test frontend compatibility on the existing development allowlist only, with numeric resource/dependency budgets and no scoring or reserved access.",
+      "entry_conditions": [
+        "selected barrier and affected exposed lineages are named",
+        "semantic footprint and fail-closed behavior are preregistered",
+        "positive, negative, mapping, and regression controls are fixed"
+      ],
+      "exit_evidence": "A versioned compatibility matrix and report that separate pipeline completion from decisive supported coverage and retain all UNKNOWN outcomes."
+    },
+    {
+      "phase_id": "PHASE_B_PROTOCOL_HUMAN_CUSTODIAN_FINALIZATION",
+      "covers": [
+        "Step 12",
+        "Step 13 interface draft only"
+      ],
+      "required_authorization": "Explicit documentation/benchmark preparation authority plus named human and custodian roles; developer agents remain blind to reserved identities and contents.",
+      "entry_conditions": [
+        "Step 11 scope is known or its unresolved cells are frozen",
+        "policy author/adopter and distinct reviewer are assigned",
+        "custodian and isolated reserved workflow are named",
+        "historical-label, safe-control, scoring, adjudication, and effort procedures are fixed"
+      ],
+      "exit_evidence": "Executable protocol v3, blank forms, checked exposed manifests, opaque reserved commitment, frozen validation interface, and prospectively approved Gate B criteria."
+    },
+    {
+      "phase_id": "PHASE_C_EXPOSED_CAUSAL_VALIDATION_AUTHORIZATION",
+      "covers": [
+        "Step 13"
+      ],
+      "required_authorization": "Explicit permission for local exposed-development construction, proving, verifier/consumer replay, repair contrasts, and state-effect recording under frozen case and resource limits.",
+      "entry_conditions": [
+        "at least one actual producer guarantee derivation and one actual consumer-reliance derivation are independently reviewed and hash-bound",
+        "reviewed policy and exact identity/effect chain are frozen",
+        "admissible state, attacker capability, versions, keys, verifier, consumer, and legitimate controls are fixed",
+        "Step 12 validation and evidence-grade rules are final"
+      ],
+      "exit_evidence": "Stage-complete causal records that preserve failures and lower grades, plus a driver ready for independently produced findings."
+    },
+    {
+      "phase_id": "PHASE_D_GATE_B_FINAL_DEVELOPMENT_RUN_AUTHORIZATION",
+      "covers": [
+        "Step 14"
+      ],
+      "required_authorization": "Separate approval for a no-feature-change final development comparison and release-freeze attempt under preapproved Gate B criteria.",
+      "entry_conditions": [
+        "Steps 8-13 are merged, independently checked, and hash-frozen",
+        "fair full, union, basic, strong, generic/default, and same-policy arms are executable where applicable",
+        "working causal validation and executable reserved protocol exist",
+        "custodian provides the opaque reserved commitment and agrees to retain the authoritative seal externally",
+        "tools, environments, policies, inputs, seeds, budgets, retry rules, denominators, forms, and PASS/FAIL/INCOMPLETE criteria are sealed"
+      ],
+      "exit_evidence": "A new immutable Step 14 report with an official PASS, FAIL, or INCOMPLETE Gate B result and, only on PASS, a reconstructible frozen release."
+    }
+  ],
+  "report_plan": {
+    "path": "reports/D2-11-14-dependency-audit.md",
+    "raw_namespace": null,
+    "required_sections": [
+      "authority and evidence bindings",
+      "scope determination",
+      "per-step disposition",
+      "preliminary Gate B readiness",
+      "human and custodian dependencies",
+      "budget gap and stop rules",
+      "future authorization phases",
+      "verification and limits"
+    ]
+  },
+  "claim_limits": [
+    "This is a read-only readiness audit, not execution of Steps 11-14.",
+    "No official Gate B result is produced.",
+    "No reserved, transfer, capability, security, safety, prevalence, precision, recall, comparative, or venue-readiness claim follows.",
+    "The research verdict remains UNKNOWN."
+  ]
+}

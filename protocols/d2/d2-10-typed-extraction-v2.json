@@ -1,0 +1,208 @@
+{
+  "schema": "bindcheck.d2.step10-protocol/v2",
+  "protocol_status": "FROZEN_BEFORE_CORRECTED_RUN",
+  "fixture_label": "UNREVIEWED_DEVELOPMENT_FIXTURE",
+  "research_verdict": "UNKNOWN",
+  "score_enabled": false,
+  "reserved_data_allowed": false,
+  "network_allowed": false,
+  "supersedes": {
+    "protocol_path": "protocols/d2/d2-10-typed-extraction-v1.json",
+    "protocol_sha256": "b057811d25defc527353f0af78c10bfb4502ceff4ec0d51e359a5684f9ea8373",
+    "raw_namespace": "results/raw/D2-10/run-01",
+    "raw_seal_sha256": "77b120f2a53c866e847a3650103b4626e63c4a70493823826bf15044e6a4ef2b",
+    "preservation": "RUN_01_BYTES_RETAINED_UNCHANGED_NON_AUTHORITATIVE",
+    "reason": [
+      "The v1 inventory validator accepted a predicate operator without replaying its exact operand shape.",
+      "The v1 inventory validator did not replay the declared mapping IDs against serialized mapping certificates.",
+      "The caller-linked protected-effect identity was represented as DERIVED consumer_used even though this adapter had not proven the identity-to-AST-occurrence correspondence."
+    ]
+  },
+  "authority": {
+    "gate_result": "INCONCLUSIVE",
+    "authorized_scope": "BOUNDED_PROTOTYPE",
+    "step7_report_sha256": "fcdff01dbadade6f7f28116e46ee2c6016fb2945767492c822acaef87a60f07a",
+    "step7_recovery_seal_sha256": "b9f0f1eb6b9aa1bb3ea8aaf1fba3c3939b3d70a787a57be92f3c4154fad50558",
+    "step8_module_sha256": "7ef3e330d7e3b4ee93a00340c3aeb2ff43d6860ebd11b6620e0f6ba2a85314a2",
+    "step8_seal_sha256": "d2195d93fc6e51458a994ecc63838935fb36bad275379ef15e43ca2f9c112343",
+    "step9_module_sha256": "5c275ebb77f9373cc13dbee81c2fa3809ea04f02e7e2af70fa278e88b2fc31ec",
+    "step9_seal_sha256": "c678085afa6a73d0f8115d10055fb753bd024a174a38618cb0e5e6943661e8bd"
+  },
+  "budget": {
+    "shared_steps_8_to_10_researcher_days_cap": 2,
+    "shared_steps_8_to_10_machine_hours_cap": 8,
+    "step10_external_compiler_or_prover_calls_cap": 0,
+    "step10_runner_wall_seconds_cap": 600,
+    "memory_cap": "NOT_ENFORCED_NO_RESOURCE_CLAIM"
+  },
+  "input_files": [
+    {
+      "path": "reports/D2-07.md",
+      "role": "gate_authority",
+      "sha256": "fcdff01dbadade6f7f28116e46ee2c6016fb2945767492c822acaef87a60f07a",
+      "size_bytes": 10847
+    },
+    {
+      "path": "results/raw/D2-07-recovery-01/content-seal-v1.json",
+      "role": "gate_authoritative_seal",
+      "sha256": "b9f0f1eb6b9aa1bb3ea8aaf1fba3c3939b3d70a787a57be92f3c4154fad50558",
+      "size_bytes": 136541
+    },
+    {
+      "path": "src/bindcheck_d1/roles/compiler_identity_v1.py",
+      "role": "step8_public_interface",
+      "sha256": "7ef3e330d7e3b4ee93a00340c3aeb2ff43d6860ebd11b6620e0f6ba2a85314a2",
+      "size_bytes": 35082
+    },
+    {
+      "path": "results/raw/D2-08/content-seal-v1.json",
+      "role": "step8_seal",
+      "sha256": "d2195d93fc6e51458a994ecc63838935fb36bad275379ef15e43ca2f9c112343",
+      "size_bytes": 20641
+    },
+    {
+      "path": "src/bindcheck_d1/core/authorization_boundary_v1.py",
+      "role": "step9_public_interface",
+      "sha256": "5c275ebb77f9373cc13dbee81c2fa3809ea04f02e7e2af70fa278e88b2fc31ec",
+      "size_bytes": 45497
+    },
+    {
+      "path": "results/raw/D2-09/content-seal-v1.json",
+      "role": "step9_seal",
+      "sha256": "c678085afa6a73d0f8115d10055fb753bd024a174a38618cb0e5e6943661e8bd",
+      "size_bytes": 8752
+    },
+    {
+      "path": "reports/D1P-40-correctness-audit.md",
+      "role": "five_defect_source",
+      "sha256": "ba8daf973771300cc72c5b64d85685399bd86b3cccd76f6c9072021ad3d52b0f",
+      "size_bytes": 15012
+    },
+    {
+      "path": "src/bindcheck_d1/static_analyzer_v1.py",
+      "role": "audited_fact_producer",
+      "sha256": "005f45dd5a8f4a1c4850afdd095f441d8c1aaf557563a0db7aefe7bc7af054ca",
+      "size_bytes": 46513
+    },
+    {
+      "path": "src/bindcheck_d1/frontends/solidity_ast_v1_1.py",
+      "role": "audited_consumer_fact_producer",
+      "sha256": "77d7d52404d5c952fc1e2d67b72dc94af95142f03ecaf6811edc3756f2d2140c",
+      "size_bytes": 38221
+    },
+    {
+      "path": "src/bindcheck_d1/integrated_analyzer_v1.py",
+      "role": "audited_fact_composer",
+      "sha256": "c61c2f3aa41806e6404cd7bd4ae81552c80338a7e7d1bb2c3a4cfce1b386da77",
+      "size_bytes": 14087
+    },
+    {
+      "path": "src/bindcheck_d1/role_binding.py",
+      "role": "audited_role_annotation_producer",
+      "sha256": "5bb3012b7d192e75e266cc3f5265e024046e8614c0cb63891c7acd5271eeaa71",
+      "size_bytes": 43263
+    },
+    {
+      "path": "src/bindcheck_d1/composition_baselines_v1.py",
+      "role": "audited_fact_consumer",
+      "sha256": "5f9ad35a7f501c93ba9117b0a7e15446686789eb662cfd7d3a56f4b0a8046e07",
+      "size_bytes": 39922
+    },
+    {
+      "path": "protocols/d2/d2-10-typed-extraction-v1.json",
+      "role": "preserved_fact_inventory_base_and_superseded_protocol",
+      "sha256": "b057811d25defc527353f0af78c10bfb4502ceff4ec0d51e359a5684f9ea8373",
+      "size_bytes": 16916
+    },
+    {
+      "path": "results/raw/D2-10/run-01/content-seal-v1.json",
+      "role": "preserved_superseded_raw_seal",
+      "sha256": "77b120f2a53c866e847a3650103b4626e63c4a70493823826bf15044e6a4ef2b",
+      "size_bytes": 2020
+    },
+    {
+      "path": "src/bindcheck_d1/typed_extraction_v1.py",
+      "role": "corrected_step10_adapter",
+      "sha256": "03251cd3b865a97c0c64736e6358749f786ad9d72c4983c8b9256d46acf8c373",
+      "size_bytes": 34927
+    },
+    {
+      "path": "scripts/d2_step10_typed_extraction.py",
+      "role": "corrected_step10_runner",
+      "sha256": "be3ebaa41a26349a1621288a4808102ddd27da6e612f72ec86910b8c418ed7ac",
+      "size_bytes": 20814
+    },
+    {
+      "path": "tests/test_d2_step10_typed_extraction.py",
+      "role": "corrected_step10_regressions",
+      "sha256": "e7359b2afe9d0366dc296573589e3006ee3ee16f575782d3e0eeeaba15b46d9b",
+      "size_bytes": 20965
+    }
+  ],
+  "fact_type_inventory_base": {
+    "path": "protocols/d2/d2-10-typed-extraction-v1.json",
+    "sha256": "b057811d25defc527353f0af78c10bfb4502ceff4ec0d51e359a5684f9ea8373",
+    "size_bytes": 16916
+  },
+  "fact_type_inventory_corrections": [
+    {
+      "id": "FT-08-CONSUMER-RELIANCE",
+      "replace": {
+        "declared_type": "annotation-over-may-reachability",
+        "quantifier": "MAY",
+        "approximation": "OVER_APPROXIMATION_OR_UNKNOWN",
+        "derivation_class": "ANNOTATED_OR_UNKNOWN",
+        "step10_rule": "the structural may-use remains source evidence, but the caller-linked protected-effect identity is a consumer_reliance_candidate and cannot discharge until compiler/AST provenance binds that exact occurrence"
+      }
+    },
+    {
+      "id": "FT-14-IDENTITY-MAPPING-CERTIFICATE",
+      "replace": {
+        "step10_rule": "serialized certificates and declared IDs are replayed exactly; total, injective, surjective, semantic-identity preserving required; Step9 remains UNKNOWN until the mapping is bound to both relevant bundles"
+      }
+    }
+  ],
+  "validator_corrections": [
+    "Replay exact Step9 predicate and term shapes recursively, not only the operator name.",
+    "Replay every mapping certificate and require exact equality with the declared mapping-ID list and external mapping registry.",
+    "Require the source-analysis hash in the augmented bundle inputs.",
+    "Replay external registries, UNKNOWN rows, unmapped indices, summary counters, and COMPLETE status.",
+    "Record unresolved extent rows in the UNKNOWN ledger."
+  ],
+  "required_controls": [
+    "five D1P-40 permanent regressions",
+    "Payy corrected unsupported dispositions",
+    "dynamic memory alias fail-closed",
+    "compiler-backed versus surface-only prefix condition",
+    "inactive padding non-vacuity",
+    "unjoined multiple verifier paths",
+    "semantic mapping retained but not silently discharged",
+    "mapping-list and certificate-ID replay",
+    "exact recursive Step9 condition-shape validation",
+    "field/integer encoding mismatch rejection",
+    "same display name/different object and same object/different context",
+    "swapped protected-effect identity"
+  ],
+  "known_unsupported": [
+    "No current static occurrence is promoted to a relational producer_guarantee.",
+    "No caller-linked protected-effect identity is promoted to a derived consumer_used fact without exact AST/compiler provenance binding.",
+    "Dynamic memory addresses without an address/path proof remain UNKNOWN.",
+    "Disjunctive reliance conditions are not normalized and remain UNKNOWN.",
+    "Mappings carried by facts are not discharged by Step9 until explicitly bound to both bundles.",
+    "Aggregation, splitting, deferral, unbounded paths, and unsupported external calls remain outside the bounded prototype.",
+    "The evidence is synthetic/compiler-free construction plus regressions, not a scored or primary case result."
+  ],
+  "completion_criteria": {
+    "focused_tests_pass": true,
+    "focused_test_count": 10,
+    "d1p40_rows_pass": 5,
+    "semantic_controls_pass": 7,
+    "adversarial_controls_pass": 3,
+    "identity_chain_exact_fixture": "PASS",
+    "equal_input_semantic_parity": true,
+    "effective_result": "UNKNOWN_UNREVIEWED_DEVELOPMENT_FIXTURE",
+    "authoritative_raw_namespace": "results/raw/D2-10/run-02",
+    "superseded_raw_namespace": "results/raw/D2-10/run-01",
+    "overwrite_allowed": false
+  }
+}

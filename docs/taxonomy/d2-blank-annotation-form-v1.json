@@ -1,0 +1,56 @@
+{
+  "schema": "bindcheck.d2.taxonomy-annotation-form/v1",
+  "template_status": "BLANK_NO_JUDGMENTS",
+  "codebook_version": "0.3.0",
+  "packet_id": null,
+  "family_id": null,
+  "rater": {
+    "human_id": null,
+    "prior_exposure_summary": null,
+    "independence_attestation": null
+  },
+  "relevance": null,
+  "relevance_rationale": "",
+  "causes": {
+    "C_RELATION_GAP": null,
+    "C_FIELD_MAPPING": null,
+    "C_REPRESENTATION": null,
+    "C_ACTIVATION_EXTENT": null,
+    "C_CONTEXT_IDENTITY": null,
+    "C_VERIFICATION_CONFIG": null,
+    "C_OCCURRENCE_ACCOUNTING": null,
+    "C_DISCHARGE_TRANSFORMATION": null,
+    "C_OTHER_BINDING": null
+  },
+  "consequences": {
+    "K_AUTHORIZATION": null,
+    "K_COVERAGE": null,
+    "K_MISDIRECTED": null,
+    "K_QUANTITY": null,
+    "K_DUPLICATE_REPLAY": null,
+    "K_OMITTED_DISCHARGE": null,
+    "K_STATE_INCONSISTENCY": null,
+    "K_OTHER_EFFECT": null
+  },
+  "roles": {
+    "A_PUBLIC_CALLER": null,
+    "A_WITNESS_PROVER": null,
+    "A_RELAYER": null,
+    "A_REGISTERED_PROVER": null,
+    "A_OPERATOR_ORDERER": null,
+    "A_PRIVILEGED_CONFIGURATOR": null,
+    "A_OTHER_ROLE": null
+  },
+  "role_path_conjunctions_or_alternatives": "",
+  "evidence_pinpoints_and_rationales": {},
+  "other_label_descriptions_and_review_flags": {},
+  "clarification_ids_seen": [],
+  "completed_at": null,
+  "rating_file_sha256": null,
+  "instructions": [
+    "Allowed category states are present, absent, uncertain, and unassessed.",
+    "Null is blank and must not be interpreted as absent.",
+    "Cite a packet pinpoint and rationale for every present, absent, or uncertain decision.",
+    "Do not consult another rater, analyzer output, AI suggestion, prior judgment, or adjudication."
+  ]
+}

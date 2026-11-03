@@ -13,6 +13,10 @@ Status labels mean:
 - `[WAITING]` — depends on earlier work; and
 - `[UNKNOWN]` — the research verdict is not established.
 
+Result and disposition qualifiers such as `INCONCLUSIVE`, `NOT_EVALUATED`,
+`NOT_REACHED`, `NOT_EXECUTED`, and `NOT_SUBMISSION_READY` refine those progress
+labels; they are not synonyms for failure, safety, or a negative result.
+
 ```mermaid
 flowchart TD
     submit(["Submit paper [WAITING]"])
@@ -92,10 +96,29 @@ flowchart TD
     d1p40 --> d1p43["D1P-43 typed role correspondence [DONE]"]
     d1p41 --> d1p43
     d1p42 --> payyFidelity["Payy exact mapping + extent fidelity [DONE]"]
-    d1p43 --> plannerReview
-    payyFidelity --> plannerReview["Capability baselines + supported transfer review [WAITING]"]
+    d1paper --> d200["D2-00 coordination foundation [DONE]"]
+    d200 --> d201["D2-01 integrated development run [DONE]"]
+    d1p43 --> d201
+    payyFidelity --> d201
+    d201 --> d202["D2-02 exposed ecosystem inventory [DONE]"]
+    d201 --> d203["D2-03 claim + related-work ledger [DONE]"]
+    d201 --> d204["D2-04 taxonomy preparation [DONE]"]
+    d202 --> d205["D2-05 protocol draft [DONE] — UNSCORED"]
+    d203 --> d205
+    d204 -.-> taxonomyHumans["Fresh human taxonomy study [WAITING]"]
+    d205 --> d206["D2-06A/B construction + smoke [DONE] — UNSCORED"]
+    d206 --> d207["D2-07 Gate A finalization [DONE] — INCONCLUSIVE"]
+    d207 --> d20810["D2-08–10 bounded prototypes [DONE] — UNKNOWN"]
+    d20810 --> d21114["D2-11–14 read-only audit [DONE] — NOT EXECUTED"]
+    d21114 --> gateB["Gate B [WAITING] — NOT_EVALUATED"]
+    d21114 --> d21517["D2-15–17 readiness audit [DONE] — NOT EXECUTED"]
+    d21517 --> gateC["Gate C [WAITING] — NOT_REACHED"]
+    d21517 --> d218["D2-18 status manuscript [DONE] — NOT_SUBMISSION_READY"]
+    d218 --> d219["D2-19 partial artifact [DONE] — FINAL_ARTIFACT_BLOCKED"]
+    d219 --> d220["D2-20 evidence audit [DONE] — 12 concerns / UNKNOWN"]
+    d220 --> manuscript
     d1paper --> lanex["Lane-X exploratory, benchmark, auto-validation v1+v1.1 [DONE]"]
-    plannerReview --> capabilityGate["Automated discovery + E4 capability gate [WAITING]"]
+    d207 --> capabilityGate["Automated discovery + E4 capability gate [WAITING]"]
     d1p10 --> d1p10result["Transformed-arm eligibility [UNKNOWN]"]
     d1p10result --> d1p10decision["Selected-cone backend reconsideration [WAITING]"]
     d1p09 -.-> d1p09decision["Full-relation/forwarding decision [WAITING]"]
@@ -134,9 +157,9 @@ flowchart TD
     evaluation --> heldOut["Held-out support + transfer [WAITING]"]
     evaluation --> baselines["Equal-info baselines [WAITING]"]
 
-    manuscript --> claims["Claims and limits [WAITING]"]
-    manuscript --> artifacts["Artifact package [WAITING]"]
-    manuscript --> draft["Write and revise [WAITING]"]
+    manuscript --> claims["Final claims + substantive coauthor review [WAITING]"]
+    manuscript --> artifacts["Final portable artifact [WAITING]"]
+    manuscript --> draft["Submission manuscript revision [WAITING]"]
 
     tracking --> livingTree["Living tree added [DONE]"]
 
@@ -146,10 +169,10 @@ flowchart TD
     classDef waiting fill:#D9D9D9,stroke:#B3B3B3
     classDef unknown fill:#FFE0C2,stroke:#FF9E42
 
-    class foundation,fixture,payy,sourceCheck,coneGate,nineCases,failureAnalysis,v3Rerun,generalGate,tracking,livingTree,d100,d101,d102,d103preflight,d103review,d103typed,d103boundary,d103guards,d103guardreview,d103concrete,d103replayreview,d103recovery,d1p00,d1p01,d1p01artifact,d1p02,d1p03,d1p04,d1p05,d1p04elig,d1p07,d1p08,d1p09,d1p10,d1p11,d1p12,warptoadRecovery,d1p12r,d1p13,d1p14a,d1p14b,d1p14c,d1p14d,d1p17,d1pint1,d1p16,d1p18,d1p15,d1p19,d1p20,d1p21a,d1p21b,d1p30,d1p31,d1p34,d1p33,d1p35,d1p36,d1p40,d1p41,d1p42,payyFidelity,lanex,d1p43 done
+    class foundation,fixture,payy,sourceCheck,coneGate,nineCases,failureAnalysis,v3Rerun,generalGate,tracking,livingTree,d100,d101,d102,d103preflight,d103review,d103typed,d103boundary,d103guards,d103guardreview,d103concrete,d103replayreview,d103recovery,d1p00,d1p01,d1p01artifact,d1p02,d1p03,d1p04,d1p05,d1p04elig,d1p07,d1p08,d1p09,d1p10,d1p11,d1p12,warptoadRecovery,d1p12r,d1p13,d1p14a,d1p14b,d1p14c,d1p14d,d1p17,d1pint1,d1p16,d1p18,d1p15,d1p19,d1p20,d1p21a,d1p21b,d1p30,d1p31,d1p34,d1p33,d1p35,d1p36,d1p40,d1p41,d1p42,payyFidelity,lanex,d1p43,d200,d201,d202,d203,d204,d205,d206,d207,d20810,d21114,d21517,d218,d219,d220 done
     class analysis,d1,d1paper,d103,d103impl,d103consumer,d103effects active
     class d103linkreview next
-    class evaluation,history,heldOut,baselines,manuscript,claims,artifacts,draft,transferCase,sensitivity,submit,t22,acirSummary,d104,d105,d106,d107,d108,d103symbolic,d1p09decision,d1p10decision,warptoadJoint,plannerReview,capabilityGate waiting
+    class evaluation,history,heldOut,baselines,manuscript,claims,artifacts,draft,transferCase,sensitivity,submit,t22,acirSummary,d104,d105,d106,d107,d108,d103symbolic,d1p09decision,d1p10decision,warptoadJoint,capabilityGate,taxonomyHumans,gateB,gateC waiting
     class contribution,primaryResult,generalResult,d103gate,d103recoveryresult,d1p06,d1p10result,d1p14bresult,d1p14cresult,d1p14dresult,d1p17result unknown
 ```
 
@@ -462,11 +485,29 @@ detected, 19 unsupported and zero misses, while the exact Payy selector mapping
 and 999 dynamic message-tail dependencies remain UNKNOWN. D1P-43 adds a
 separate typed state/domain/effect correspondence rule: the preliminary
 supported D1P-41 denominator changes from union 5/7 to full 7/7, while two
-Payy role targets remain fail-closed UNKNOWN. Exact Payy fidelity,
-baseline comparison and supported held-out transfer remain open, so
-the campaign still does not complete the capability gate. Neither screen, blocker,
-development fixture nor component check is a method-evaluation,
-cross-chain, policy or security result. D1
+Payy role targets remain fail-closed UNKNOWN. D2-01 then freezes the integrated
+development interface and reproduces 17 detected / 13 unsupported / 0 misses
+on the 30 exposed mutants, the full per-case ablation vector, and the exact
+Payy earlier/check-added extent contrast. Every row remains E1/UNKNOWN.
+D2-02 then bounds the exposed inventory to three revisions in two lineages;
+D2-03 separates current, historical, and proposed claims and refreshes the
+closest primary related work; and D2-04 freezes taxonomy preparation without
+inventing human labels. D2-05 and D2-06 complete only unscored protocol and
+construction work. D2-07 ends Gate A `INCONCLUSIVE` before score; D2-08–10
+complete only bounded `UNREVIEWED_DEVELOPMENT_FIXTURE` prototypes and leave the
+research verdict `UNKNOWN`. Steps 11–17 have completed read-only dependency
+audits but were not scientifically executed: Gate B is `NOT_EVALUATED` and
+Gate C is `NOT_REACHED`. D2-18 supplies a documentary status manuscript that
+is `NOT_SUBMISSION_READY`. D2-19 supplies only a
+`PARTIAL_DEVELOPMENT_ARTIFACT / FINAL_ARTIFACT_BLOCKED`: a same-host fresh AI
+session reproduced four of four profiles, while sidecar and portable-container
+execution remain blocked. D2-20 completes an evidence audit with 12 concerns,
+zero factual contradiction to the qualified status manuscript, and no
+manuscript correction or new experiment. Baseline comparison and supported
+held-out transfer remain open, so the campaign still does not complete the
+capability gate. Neither screen, blocker, development fixture, artifact profile,
+nor component check is a method-evaluation, cross-chain, policy, or security
+result. D1
 preparation and reporting closure are complete; three missing historical query
 slots were executed.
 
@@ -475,6 +516,9 @@ slots were executed.
 
 | Date | Checkpoint | Status | Evidence and meaning |
 | --- | --- | --- | --- |
+| 2026-11-02 | D2-05 through D2-20 bounded finalization, partial artifact, and evidence audit | `[DONE]` Steps 0–10 only within bounded scopes; Steps 11–17 read-only audits done but scientific steps `NOT_EXECUTED`; Gate A `INCONCLUSIVE`; Gate B `NOT_EVALUATED`; Gate C `NOT_REACHED`; Step 18 `[DONE]` documentary status manuscript / `NOT_SUBMISSION_READY`; Step 19 `[DONE]` partial development artifact / final artifact `[WAITING]`; Step 20 `[DONE]` evidence audit; research `[UNKNOWN]` | [D2-07](../reports/D2-07.md) stops before scoring with an empty objective subset. [D2-10](../reports/D2-10.md) corrected run-02 has zero producer guarantees and zero eligible derived consumer-use facts. The [Steps 11–14](../reports/D2-11-14-dependency-audit.md) and [Steps 15–17](../reports/D2-15-17-readiness-audit.md) reports are non-execution dispositions only. [D2-18](../reports/D2-18-paper.md) produces a qualified status manuscript, not a submission-ready paper. [D2-19](../reports/D2-19-artifact.md) and its [fresh reproduction](../reports/D2-19-fresh-reproduction.md) record four of four same-host profiles `PASS` with zero unexpected mismatch, but no sidecar/container/fresh-machine or independent-human replication. [D2-20](../reports/D2-20-review.md) records 12 concerns, zero factual contradiction to the current qualified manuscript, no manuscript correction, no new experiment, and no changed score, grade, gate, or verdict. |
+| 2026-11-02 | D2-02 through D2-04 inventory, claim audit, and taxonomy preparation | `[DONE]` bounded preparation / `[ACTIVE]` D2-05 Gate A protocol / `[UNKNOWN]` capability, taxonomy validity, and security | [D2-02](../reports/D2-02.md) records three allowlisted revisions, two repositories and two exposed lineages while keeping 30 variants and 12 historical attempts out of the population denominator. [D2-03](../reports/D2-03.md) versions 22 claims, preserves D1P-41/D1P-43 and tool-version denominators, and positions five closest works without an absence claim. [D2-04](../reports/D2-04.md) freezes codebook v0.3.0, blank packets/forms and a tested agreement procedure; it creates no labels or reliability result. Step 5 is active. No reserved access, analyzer run/change, proof, replay, human judgment, novelty, transfer, capability, security, or D1 verdict follows. |
+| 2026-11-02 | D2-00 foundation and D2-01 integrated development run | `[DONE]` Steps 0–1 exposed development scope / `[NEXT]` Steps 2–4 / `[UNKNOWN]` capability and security | [D2-00](../reports/D2-00.md) adds ownership, development-boundary, run-manifest and content-seal controls. [D2-01](../reports/D2-01.md) freezes 8,134 result-affecting files plus nine external inputs, preserves an initial sandbox cache-lock stop as `PARTIAL/UNKNOWN`, and completes a separately named identical-seal recovery. The current 30-mutant result is 17 detected / 13 unsupported / 0 misses / 26 warnings; the full ablation is 7/7 versus union 5/7; six role targets detect and two remain expected UNKNOWN; both Payy extent outcomes match while check-added retains a separate R-CONSUMER warning. The 49-row table is entirely `UNKNOWN`; no reserved data, solver, proof, replay, live chain, capability, security, or D1 verdict follows. |
 | 2026-10-30 | D1P-40 extraction-correctness audit | `[DONE]` bounded audit and repairs / `[UNKNOWN]` Payy fidelity, capability and security | [Report](../reports/D1P-40-correctness-audit.md) and ignored `results/raw/D1P-40/final-04/` evidence: compile five synthetic Noir and six Solidity controls; confirm and repair dynamic-memory, selector-prefix, token-effect, loop-widening and R-ANCHOR reachability defects. Nested ABI order and constant/write-only memory controls are correct. The 30-mutant rerun changes 16 detected / 14 unsupported / 0 misses / 53 warnings to 11 / 19 / 0 / 13; all 12 Payy mutants fail closed at exact mapping, while all 13 remaining WarpToad warning identities persist. Payy `messages[1..999]` remain UNKNOWN under dynamic addressing. No held-out source, solver, proof, validation, live chain, capability, security or D1 verdict. |
 | 2026-10-20 | T22-v2 single-case feasibility gate | `[DONE]` | [T22](../reports/T22.md): the known vulnerable Payy case produced a counterexample in 4.1 seconds after exact specialization reduced the probe from 587 opcodes and 523 witnesses to 0 opcodes and 1 witness. This is not the nine-case result. |
 | 2026-10-20 | Living project checkpoint tree | `[DONE]` | This page and the corresponding `AGENTS.md` update establish the visual checkpoint routine. No research verdict changed. |

@@ -1,15 +1,14 @@
-"""Typed producer/consumer role correspondence over checked BindCheck facts.
+"""Legacy surface-role annotations and the fail-closed public role boundary.
 
-The public entry point is :func:`analyze_role_binding`.  It consumes a
-successful ``static_analyzer_v1.analyze`` result, reopens the exact checked
-consumer relation named (and hashed) by that result, and supplements those
-facts with bounded semantic facts extracted from the matching Noir source and
-the explicitly supplied Noir support sources.
+The historical D1P-43 implementation inferred roles such as ``local root`` or
+``recipient`` from identifier spelling. D2-08 preserves that implementation as
+``_analyze_legacy_name_roles`` for auditability but removes it from the public
+security-conclusion path. Surface tokens are annotations only.
 
-This is deliberately a separate rule module.  It neither imports nor changes a
-frontend and it does not weaken analyzer fail-closed gates.  Callers must run
-the analyzer first; if the analyzer cannot establish a public-input mapping,
-there is no role result to compute.
+The public :func:`analyze_role_binding` now requires a validated compiler-
+backed identity bundle and still returns ``UNKNOWN`` until Step 9 supplies the
+separate reviewed P/O/E authorization-boundary check. This prevents names,
+source lines, or display labels from influencing a security warning.
 """
 
 from __future__ import annotations
@@ -24,6 +23,7 @@ from typing import Any, Iterable, Mapping, Sequence
 
 SCHEMA = "bindcheck.role-binding.v1"
 RULE = "R-ROLE"
+LEGACY_SURFACE_ROLE_STATUS = "ANNOTATION_ONLY_QUARANTINED"
 
 
 class RoleBindingUnsupported(ValueError):
@@ -131,7 +131,11 @@ def _tokens(value: str) -> list[str]:
 
 
 def canonical_role(value: str) -> str:
-    """Return the bounded semantic role carried by an identifier/expression."""
+    """Return a legacy display annotation inferred from surface spelling.
+
+    This value is prohibited from security identities and conclusions. It is
+    retained only to audit historical D1/D2 evidence.
+    """
     tokens = _tokens(value)
     token_set = set(tokens)
     if "nullifier" in token_set or "nullifiers" in token_set:
@@ -434,13 +438,13 @@ def _producer_facts(
     return facts, calls, computation_pairs
 
 
-def analyze_role_binding(
+def _analyze_legacy_name_roles(
     analysis: Mapping[str, Any],
     *,
     producer_source: Path,
     producer_support_sources: Sequence[Path] = (),
 ) -> dict[str, Any]:
-    """Infer typed roles and return correspondence warnings.
+    """Historical name-derived diagnostic retained behind a quarantine.
 
     Preconditions are intentionally strict:
 
@@ -936,3 +940,38 @@ def analyze_role_binding(
             "R-ROLE is an E1 diagnostic and does not establish reachability, exploitability, or a VIOLATION verdict.",
         ],
     }
+
+
+def analyze_role_binding(
+    analysis: Mapping[str, Any],
+    *,
+    producer_source: Path,
+    producer_support_sources: Sequence[Path] = (),
+    compiler_identity_bundle: Mapping[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Fail closed until compiler identities feed a reviewed P/O/E checker.
+
+    ``compiler_identity_bundle`` is validated structurally when present, but
+    Step 8 deliberately implements no authorization policy or security
+    matcher. Missing compiler identities and the missing Step 9 policy check
+    are both ``UNKNOWN`` conditions, represented by
+    :class:`RoleBindingUnsupported` for the integrated analyzer.
+    """
+    del analysis, producer_source, producer_support_sources
+    if compiler_identity_bundle is None:
+        raise RoleBindingUnsupported(
+            "COMPILER_BACKED_IDENTITY_REQUIRED:"
+            "legacy identifier roles are annotation-only"
+        )
+    from .roles.compiler_identity_v1 import validate_bundle
+
+    try:
+        validate_bundle(compiler_identity_bundle)
+    except (KeyError, TypeError, ValueError) as error:
+        raise RoleBindingUnsupported(
+            f"COMPILER_IDENTITY_BUNDLE_INVALID:{error}"
+        ) from error
+    raise RoleBindingUnsupported(
+        "AUTHORIZATION_BOUNDARY_CHECK_REQUIRED_STEP9:"
+        "validated identities alone do not establish a security conclusion"
+    )
