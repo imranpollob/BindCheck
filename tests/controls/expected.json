@@ -60,6 +60,7 @@
     {"id":"P3-06-dynamic-key-expression","fixture":"p3_dynamic_key","pattern":"P3","verdict":"UNKNOWN","reason":"REPLAY_KEY_EXPRESSION_UNRESOLVED"},
     {"id":"P3-07-plonk-reduction-alias","fixture":"p3_plonk_alias","pattern":"P3","verdict":"VIOLATION","reason":"FIELD_ALIAS_REPLAY_KEY"},
     {"id":"P3-08-state-helper-opaque","fixture":"p3_opaque_helper","pattern":"P3","verdict":"UNKNOWN","reason":"REPLAY_BARRIER_HELPER_UNRESOLVED"},
+    {"id":"P3-09-hashed-key-alias-clean","fixture":"p3_hashed_alias","pattern":"P3","verdict":"VERIFIED_WITHIN_SCOPE","reason":"REPLAY_KEY_CANONICAL_AND_CONSUMED"},
 
     {"id":"P4-01-distinct-gamma-delta-clean","fixture":"p4_distinct","pattern":"P4","verdict":"VERIFIED_WITHIN_SCOPE","reason":"VERIFICATION_KEY_CHECKS_PASS"},
     {"id":"P4-02-default-gamma-delta-source","fixture":"p4_default_key","pattern":"P4","verdict":"UNKNOWN","reason":"DEFAULT_G2_GAMMA_DELTA_SOURCE_WARNING"},
@@ -69,6 +70,7 @@
     {"id":"P4-06-runtime-default-key","fixture":"p4_runtime_default","pattern":"P4","verdict":"UNKNOWN","reason":"DEFAULT_G2_RUNTIME_SIGNATURE"},
     {"id":"P4-07-runtime-library-generator-only","fixture":"p4_runtime_library","pattern":"P4","verdict":"VERIFIED_WITHIN_SCOPE","reason":"PAIRING_LIBRARY_GENERATOR_EXCLUDED"},
     {"id":"P4-08-runtime-truncated-push","fixture":"p4_runtime_truncated","pattern":"P4","verdict":"UNKNOWN","reason":"RUNTIME_BYTECODE_PARSE_INCOMPLETE"},
+    {"id":"P4-09-interface-only","fixture":"p4_interface_only","pattern":"P4","verdict":"UNKNOWN","reason":"VERIFIER_IMPLEMENTATION_ARTIFACT_MISSING"},
 
     {"id":"P5-01-fixed-count-clean","fixture":"p5_fixed_clean","pattern":"P5","verdict":"VERIFIED_WITHIN_SCOPE","reason":"PUBLIC_INPUT_COUNT_AND_ORDER_MATCH"},
     {"id":"P5-02-fixed-count-mismatch","fixture":"p5_count_bad","pattern":"P5","verdict":"VIOLATION","reason":"PUBLIC_INPUT_COUNT_MISMATCH"},
