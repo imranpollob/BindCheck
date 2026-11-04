@@ -43,8 +43,39 @@ The [research guide](BindCheck_Research_Guide.md) and [16 October progress updat
 
 The principal directories are `circuits/` and `contracts/` for the small fixture, `bindcheck/` for the checker and specification, `payy-harness/` and `payy-consumer/` for the Payy experiment, `scripts/` for task runners, and `reports/` for evidence reviews. Generated proof data and raw logs are normally under the ignored `results/raw/` tree and are absent from a fresh checkout unless separately retained. Preserve and verify existing sealed namespaces; never overwrite them or describe missing bytes as regenerated evidence. Only a task-documented command may create a new, separately named namespace.
 
+## `bindcheck-zk` CLI
+
+The unified Circom/Noir and Solidity development analyzer is documented in
+[TOOL-REPORT.md](TOOL-REPORT.md). It operates on local inputs only and emits
+one JSON document per command:
+
+```text
+./bindcheck-zk analyze <repo-dir> [--circuit <path>]... [--consumer <path>]...
+./bindcheck-zk analyze-bundle <sourcify-or-artifact-directory>
+./bindcheck-zk baseline {slither,circomspect,picus,zkap} <repo-dir> ...
+./freeze.sh
+```
+
+Missing artifacts, unsupported constructs, ambiguous matches, build failures,
+and timeouts are `UNKNOWN`. `VERIFIED_WITHIN_SCOPE` names only the recorded
+property and parsed artifacts; it is not an application safety verdict. The
+current analyzer content hash is
+`60211ab6e92d89c1361f56a89fe6f7769876702f1c3e0a0fbacdfb3ec0d2b54c`.
+It has been validated on controls and the three declared DEV cases only. EVAL
+remains unopened and no freeze tag has been created.
+
 ## Current status
 
+- [T23](reports/T23.md) completes the unified `bindcheck-zk` construction and
+  DEV validation task. All 74 prospective development controls pass (24
+  inherited Track B plus 50 new P1--P5 controls), and the fixed three-case DEV
+  run matches the declared P1 outcomes: SPSC `VERIFIED_WITHIN_SCOPE`, RacePass
+  `VIOLATION`, and ZKredential `VIOLATION`, all E1 in this run. Slither,
+  Circomspect, and Picus retain native diagnostics in the same JSON envelope;
+  ZKAP is explicitly unavailable, and no baseline diagnostic is promoted to a
+  cross-layer verdict. The held-out corpus was not read or run. Independent
+  author review, exact-hash operational freeze, and one held-out execution are
+  next; capability and ecosystem security remain `UNKNOWN`.
 - [Integration dataset v1](dataset/REPORT.md) freezes a 897-row source ledger
   (890 repositories; 56 DEV and 841 inventory-only EVAL), 774 conservative
   families, and a 40-case public recall set. No analyzer read an EVAL row.

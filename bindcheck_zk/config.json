@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "max_files": 2500,
+  "max_file_bytes": 5000000,
+  "max_triples": 64,
+  "run_timeout_seconds": 120,
+  "build_timeout_seconds": 30,
+  "max_circuit_builds": 2,
+  "excluded_directories": [
+    ".git", ".hg", ".svn", "node_modules", "out", "cache",
+    "artifacts", "build", "target", "vendor", ".venv", "venv"
+  ],
+  "scalar_field": "21888242871839275222246405745257275088548364400416034343698204186575808495617"
+}
