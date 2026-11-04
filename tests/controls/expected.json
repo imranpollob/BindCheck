@@ -38,6 +38,7 @@
     {"id":"P1-06-generated-verifier-absent","fixture":"p1_missing_verifier","pattern":"P1","verdict":"UNKNOWN","reason":"VERIFIER_ARTIFACT_MISSING"},
     {"id":"P1-07-uncompiled-commitment","fixture":"p1_commitment_uncompiled","pattern":"P1","verdict":"UNKNOWN","reason":"COMPILED_RELATION_UNAVAILABLE"},
     {"id":"P1-08-inline-assembly-effect","fixture":"p1_assembly","pattern":"P1","verdict":"UNKNOWN","reason":"UNSUPPORTED_CONSUMER_ASSEMBLY"},
+    {"id":"P1-09-internal-verifier-helper","fixture":"p1_internal_helper","pattern":"P1","verdict":"VIOLATION","reason":"UNBOUND_EFFECT_AMOUNT"},
 
     {"id":"P2-01-chain-id-direct-clean","fixture":"p2_chainid","pattern":"P2","verdict":"VERIFIED_WITHIN_SCOPE","reason":"CONTEXT_BOUND_IN_PUBLIC_INPUTS"},
     {"id":"P2-02-contract-address-clean","fixture":"p2_contract","pattern":"P2","verdict":"VERIFIED_WITHIN_SCOPE","reason":"CONTEXT_BOUND_IN_PUBLIC_INPUTS"},
