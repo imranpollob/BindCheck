@@ -42,6 +42,7 @@
     {"id":"P1-10-erc721-safe-mint-recipient","fixture":"p1_erc721_safe_mint","pattern":"P1","verdict":"VIOLATION","reason":"UNBOUND_EFFECT_RECIPIENT"},
     {"id":"P1-11-helper-copied-public-vector","fixture":"p1_internal_copy_helper","pattern":"P1","verdict":"VIOLATION","reason":"UNBOUND_EFFECT_AMOUNT"},
     {"id":"P1-12-explicit-consumer-over-inventory-cap","fixture":"p1_explicit_over_cap","explicit_consumer":"zz/Consumer.sol","pattern":"P1","verdict":"UNKNOWN","reason":"VERIFIER_ARTIFACT_MISSING"},
+    {"id":"P1-13-contract-self-recipient","fixture":"p1_contract_self","pattern":"P1","verdict":"VERIFIED_WITHIN_SCOPE","reason":"RECIPIENT_BOUND_TO_CONTRACT_SELF"},
 
     {"id":"P2-01-chain-id-direct-clean","fixture":"p2_chainid","pattern":"P2","verdict":"VERIFIED_WITHIN_SCOPE","reason":"CONTEXT_BOUND_IN_PUBLIC_INPUTS"},
     {"id":"P2-02-contract-address-clean","fixture":"p2_contract","pattern":"P2","verdict":"VERIFIED_WITHIN_SCOPE","reason":"CONTEXT_BOUND_IN_PUBLIC_INPUTS"},
@@ -61,6 +62,7 @@
     {"id":"P3-07-plonk-reduction-alias","fixture":"p3_plonk_alias","pattern":"P3","verdict":"VIOLATION","reason":"FIELD_ALIAS_REPLAY_KEY"},
     {"id":"P3-08-state-helper-opaque","fixture":"p3_opaque_helper","pattern":"P3","verdict":"UNKNOWN","reason":"REPLAY_BARRIER_HELPER_UNRESOLVED"},
     {"id":"P3-09-hashed-key-alias-clean","fixture":"p3_hashed_alias","pattern":"P3","verdict":"VERIFIED_WITHIN_SCOPE","reason":"REPLAY_KEY_CANONICAL_AND_CONSUMED"},
+    {"id":"P3-10-indexed-array-replay-key","fixture":"p3_indexed_array","pattern":"P3","verdict":"VERIFIED_WITHIN_SCOPE","reason":"REPLAY_KEY_CANONICAL_AND_CONSUMED"},
 
     {"id":"P4-01-distinct-gamma-delta-clean","fixture":"p4_distinct","pattern":"P4","verdict":"VERIFIED_WITHIN_SCOPE","reason":"VERIFICATION_KEY_CHECKS_PASS"},
     {"id":"P4-02-default-gamma-delta-source","fixture":"p4_default_key","pattern":"P4","verdict":"UNKNOWN","reason":"DEFAULT_G2_GAMMA_DELTA_SOURCE_WARNING"},
@@ -80,5 +82,6 @@
     {"id":"P5-06-dynamic-array-unguarded","fixture":"p5_dynamic_unknown","pattern":"P5","verdict":"UNKNOWN","reason":"DYNAMIC_PUBLIC_INPUT_LENGTH_UNRESOLVED"},
     {"id":"P5-07-plonk-array-clean","fixture":"p5_plonk_clean","pattern":"P5","verdict":"VERIFIED_WITHIN_SCOPE","reason":"PUBLIC_INPUT_COUNT_AND_ORDER_MATCH"},
     {"id":"P5-08-multiple-verifier-ambiguity","fixture":"p5_ambiguous","pattern":"P5","verdict":"UNKNOWN","reason":"VERIFIER_MATCH_AMBIGUOUS"}
+    ,{"id":"P5-09-compiled-public-metadata","fixture":"p5_compiled_symbolic","pattern":"P5","verdict":"VERIFIED_WITHIN_SCOPE","reason":"PUBLIC_INPUT_COUNT_AND_ORDER_MATCH"}
   ]
 }
