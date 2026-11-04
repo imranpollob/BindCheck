@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "frozen_before_implementation": true,
+  "scope": "DEV only; EVAL source-corpus rows must not be passed to Track B",
+  "rule": "An effect parameter is bound when it is directly present in the verifier public vector, is msg.sender for a recipient, or is included in a locally recomputed commitment that is equated to a verifier public value and whose matching compiled circuit connects the corresponding private signal to that public commitment.",
+  "controls": [
+    {"id": "C01-direct-amount", "expected_p1_roles": [], "kind": "synthetic-clean"},
+    {"id": "C02-direct-recipient", "expected_p1_roles": [], "kind": "synthetic-clean"},
+    {"id": "C03-direct-both-array-literal", "expected_p1_roles": [], "kind": "synthetic-clean"},
+    {"id": "C04-direct-both-indexed", "expected_p1_roles": [], "kind": "synthetic-clean"},
+    {"id": "C05-neither-bound", "expected_p1_roles": ["amount", "recipient"], "kind": "synthetic-violation"},
+    {"id": "C06-msg-sender-recipient", "expected_p1_roles": [], "kind": "synthetic-clean"},
+    {"id": "C07-msg-sender-unbound-amount", "expected_p1_roles": ["amount"], "kind": "synthetic-violation"},
+    {"id": "C08-commit-recipient", "expected_p1_roles": [], "kind": "synthetic-clean"},
+    {"id": "C09-commit-recipient-and-amount", "expected_p1_roles": [], "kind": "synthetic-clean"},
+    {"id": "C10-commit-only-recipient", "expected_p1_roles": ["amount"], "kind": "synthetic-violation"},
+    {"id": "C11-commit-only-amount", "expected_p1_roles": ["recipient"], "kind": "synthetic-violation"},
+    {"id": "C12-commit-not-public", "expected_p1_roles": ["recipient"], "kind": "synthetic-violation"},
+    {"id": "C13-public-commit-no-local-guard", "expected_p1_roles": ["recipient"], "kind": "synthetic-violation"},
+    {"id": "C14-local-guard-wrong-parameter", "expected_p1_roles": ["recipient"], "kind": "synthetic-violation"},
+    {"id": "C15-local-hash-function-mismatch", "expected_p1_roles": ["recipient"], "kind": "synthetic-violation"},
+    {"id": "C16-local-hash-order-mismatch", "expected_p1_roles": ["amount", "recipient"], "kind": "synthetic-violation"},
+    {"id": "C17-local-domain-mismatch", "expected_p1_roles": ["recipient"], "kind": "synthetic-violation"},
+    {"id": "C18-cast-wrapped-direct-values", "expected_p1_roles": [], "kind": "synthetic-clean"},
+    {"id": "C19-alias-public-vector", "expected_p1_roles": [], "kind": "synthetic-clean"},
+    {"id": "C20-arbitrary-calldata-vector", "expected_p1_roles": ["amount", "recipient"], "kind": "synthetic-violation"},
+    {"id": "C21-two-separate-commitments", "expected_p1_roles": [], "kind": "synthetic-clean"},
+    {"id": "C22-commit-private-signal-absent", "expected_p1_roles": ["recipient"], "kind": "synthetic-violation"},
+    {"id": "C23-constant-equality-not-binding", "expected_p1_roles": ["recipient"], "kind": "synthetic-violation"},
+    {"id": "C24-direct-amount-hashed-recipient", "expected_p1_roles": [], "kind": "synthetic-clean"}
+  ],
+  "development_cases": [
+    {"id": "DEV-SPSC", "repository": "NethermindEth/spsc", "expected_p1_roles": [], "reason": "publicAmountOut is direct public input; recipient is tied through extDataHash in consumer and compiled circuit"},
+    {"id": "DEV-RACEPASS", "repository": "Servesh21/RacePass", "expected_p1_roles": ["recipient"], "reason": "effect recipient is absent from both real verifier vectors and no commitment guard binds it"},
+    {"id": "DEV-ZKREDENTIAL", "repository": "ethpanda-org/ETHShanghai-2025", "expected_p1_roles": ["amount"], "reason": "mint amount is absent from the PropertyFy proof public vector"}
+  ]
+}

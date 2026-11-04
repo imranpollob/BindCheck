@@ -45,6 +45,17 @@ The principal directories are `circuits/` and `contracts/` for the small fixture
 
 ## Current status
 
+- [Integration dataset v1](dataset/REPORT.md) freezes a 897-row source ledger
+  (890 repositories; 56 DEV and 841 inventory-only EVAL), 774 conservative
+  families, and a 40-case public recall set. No analyzer read an EVAL row.
+  DEV-only Track B matches 24/24 prospectively declared controls, clears the
+  SPSC recipient commitment false positive using a compiled-R1CS path, and
+  retains the two prior E4 `VIOLATION` results. A passive Sourcify census finds
+  1,027 exact-runtime verifier deployments; 43 have the default-G2-twice
+  bytecode signature associated with `gamma == delta`. Their consumers and TVL
+  are unresolved, so they remain private E1/`UNKNOWN` and deployment-specific
+  work stopped without proof calls or transactions. This is dataset/tool
+  feasibility, not EVAL performance or ecosystem prevalence.
 - [Feasibility v2](feasibility/v2/REPORT.md) replaces the earlier zero-hit
   interpretation with a working Solidity-first screen and targeted real-proof
   validation. Across 50 exact repository revisions it screens 4,251 Solidity

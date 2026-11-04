@@ -15,6 +15,10 @@ tools/circom-src/
 tools/circom-2.1.9/
 tools/circomspect-src/
 
+# Dataset acquisition: committed ledgers/scripts, regenerable raw responses and clones.
+dataset/raw/
+dataset/clones/
+
 # T02: regenerable by `bash scripts/t02.sh`
 out/
 cache/

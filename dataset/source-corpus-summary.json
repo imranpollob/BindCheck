@@ -1,0 +1,43 @@
+{
+  "dev_maturity_counts": {
+    "audited-production": 14,
+    "deployed-address-in-docs": 15,
+    "hackathon-student": 4,
+    "unclassified": 23
+  },
+  "eval_analyzer_runs": 0,
+  "eval_disposition_counts": {
+    "dup": 119,
+    "in-scope": 7,
+    "no consumer": 69,
+    "no verifier": 638,
+    "unavailable": 8
+  },
+  "eval_families": 722,
+  "eval_maturity_counts": {
+    "audited-production": 136,
+    "deployed-address-in-docs": 63,
+    "hackathon-student": 50,
+    "unclassified": 592
+  },
+  "families": 774,
+  "generated_utc": "2026-11-03T20:38:28.259387+00:00",
+  "maturity_counts": {
+    "audited-production": 150,
+    "deployed-address-in-docs": 78,
+    "hackathon-student": 54,
+    "unclassified": 615
+  },
+  "output_sha256": "7031b6a7302220163e9818b0065bef3a6e964f7085da147619479dd8f4466309",
+  "query_config_sha256": "95b655f7f4e35c40c16234acbcfc4cbb970c8d38265b12ab10023e4cd2d1e54a",
+  "raw_directory": "dataset/raw/source-corpus-2026-11-03-v1",
+  "rows": 897,
+  "schema_version": 1,
+  "scope": "inventory and metadata only for EVAL; no BindCheck/static vulnerability checks run on EVAL",
+  "snapshot_id": "source-corpus-2026-11-03-v1",
+  "split_counts": {
+    "DEV": 56,
+    "EVAL": 841
+  },
+  "unique_repositories": 890
+}

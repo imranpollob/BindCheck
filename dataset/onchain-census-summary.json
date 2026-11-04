@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "generated_utc": "2026-11-03T22:09:49.271572+00:00",
+  "snapshot_date": "2026-11-03",
+  "data_source": "https://export.sourcify.dev/v2/",
+  "selection": "Sourcify runtime_match=true and runtime_metadata_match=true; verifier-like ABI signature and verifier-like compiled name",
+  "chains": {
+    "1": "ethereum",
+    "10": "optimism",
+    "137": "polygon",
+    "324": "zksync-era",
+    "8453": "base",
+    "42161": "arbitrum-one",
+    "59144": "linea"
+  },
+  "rpc_block_tags": {
+    "1": "0x191df94",
+    "10": "0x97b40f4",
+    "137": "0x5c367f7",
+    "324": "0x455f6bb",
+    "8453": "0x32fff5f",
+    "42161": "0x1f0dc6f4",
+    "59144": "0x1f0140b"
+  },
+  "parquet_object_counts": {
+    "signatures": 11,
+    "compiled_contracts_signatures": 184,
+    "compiled_contracts": 596,
+    "verified_contracts": 59,
+    "contract_deployments": 59
+  },
+  "signature_rows": 389,
+  "compilation_ids": 4923,
+  "verifier_named_compilations": 4189,
+  "exact_deployment_rows": 1049,
+  "unique_deployments": 1027,
+  "unique_runtime_hashes": 561,
+  "rpc_code_available": 1049,
+  "default_g2_gamma_delta_signature_deployments": 43,
+  "default_g2_gamma_delta_signature_runtime_hashes": 37,
+  "default_g2_gamma_delta_signature_unique_deployments": 43,
+  "missing_scalar_guard_heuristic_deployments": 228,
+  "duplicate_ic_heuristic_deployments": 158,
+  "flagged_verifier_positive_native_balance": 0,
+  "flagged_verifier_balance_reads_available": 260,
+  "flagged_verifier_balance_reads_unavailable": 0,
+  "default_key_verifier_zero_native_balance": 43,
+  "default_key_verifier_positive_native_balance": 0,
+  "default_key_verifier_balance_reads_unavailable": 0,
+  "source_confirmed_consumer_links": 0,
+  "funded_vulnerable_consumer_instances": 0,
+  "safety_stop_triggered": false,
+  "limitations": [
+    "absence of the scalar-field PUSH32 is only a missing-guard heuristic",
+    "duplicate PUSH32 pairs are not a source-confirmed duplicate-IC result",
+    "verifier balance is not consumer TVL; no consumer link is inferred",
+    "PLONK and non-snarkjs ABI/template variants may be missed"
+  ],
+  "elapsed_seconds": 11.282
+}

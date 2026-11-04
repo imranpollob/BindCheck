@@ -161,6 +161,22 @@ def public_vector(body: str, args: list[str]) -> tuple[str | None, set[str], int
         return expression, set().union(*(identifiers(value) for value in values)), len(values)
     if re.fullmatch(r"[A-Za-z_]\w*", expression):
         name = expression
+        # Solidity permits fixed-size memory arrays to be initialized with an
+        # array literal.  The original feasibility screen only recovered
+        # indexed assignments, which made values in e.g.
+        # `uint256[13] memory pubSignals = [...]` look unbound.
+        initializer = re.search(
+            rf"\buint(?:256)?\s*\[\s*(\d+)\s*\]\s+"
+            rf"(?:memory|calldata|storage)?\s*{re.escape(name)}\s*=\s*\[",
+            body,
+        )
+        if initializer:
+            opening = body.find("[", initializer.end() - 1)
+            parsed = balanced(body, opening, "[", "]") if opening >= 0 else None
+            if parsed is not None:
+                values = split_top_level(parsed[0])
+                sources |= set().union(*(identifiers(value) for value in values))
+                count = len(values)
         assignments: dict[int, str] = {}
         for index, value in re.findall(rf"\b{re.escape(name)}\s*\[\s*(\d+)\s*\]\s*=\s*([^;]+);", body):
             assignments[int(index)] = value.strip()

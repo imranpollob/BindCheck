@@ -1,0 +1,7 @@
+{
+  "candidates_read": 1,
+  "testnet_candidates": 1,
+  "default_g2_bytecode_signatures": 1,
+  "production_funded_vulnerable_instances": 0,
+  "safety_stop_triggered": false
+}

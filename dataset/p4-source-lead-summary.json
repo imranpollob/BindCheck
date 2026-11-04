@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "source_leads": 16,
+  "unique_repositories": 8,
+  "leads_with_candidate_reference": 6,
+  "candidate_addresses": 14,
+  "source_correspondence_confirmed": 0,
+  "live_funded_vulnerable_instances": 0,
+  "safety_stop_triggered": false,
+  "sovereignwave": {
+    "repository": "SovereignWave/qwer",
+    "commit": "d588661d8e803000c1390a65911c7f0e805ec69d",
+    "source_path": "privatecrypmix/packages/contracts/contracts/Verifier.sol",
+    "source_sha256": "5862a2f431cb8720dccf85b3a456d1e3cdfe9dad0f821247767ac76afaa7a2db",
+    "source_warning": "gamma-equals-delta|delta-is-default-bn254-g2|no-public-input-canonicality-guard-detected",
+    "deployment_disposition": "unavailable; no verifier/consumer deployment reference in fixed evidence paths",
+    "candidate_addresses": "",
+    "candidate_networks": "",
+    "reference_relations": "",
+    "evidence_locations": "",
+    "correspondence": "UNKNOWN",
+    "verdict": "UNKNOWN"
+  }
+}

@@ -1,0 +1,28 @@
+id,kind,repository,commit,expected_p1_roles,observed_p1_roles,match,evidence_grade,verdict,evidence
+C01-direct-amount,control,synthetic,,,,true,E0,UNKNOWN,"{""amount"":[""direct-public-input""],""recipient"":[""msg.sender""]}"
+C02-direct-recipient,control,synthetic,,,,true,E0,UNKNOWN,"{""amount"":[""direct-public-input""],""recipient"":[""direct-public-input""]}"
+C03-direct-both-array-literal,control,synthetic,,,,true,E0,UNKNOWN,"{""amount"":[""direct-public-input""],""recipient"":[""direct-public-input""]}"
+C04-direct-both-indexed,control,synthetic,,,,true,E0,UNKNOWN,"{""amount"":[""direct-public-input""],""recipient"":[""direct-public-input""]}"
+C05-neither-bound,control,synthetic,,amount|recipient,amount|recipient,true,E0,UNKNOWN,"{""amount"":[],""recipient"":[]}"
+C06-msg-sender-recipient,control,synthetic,,,,true,E0,UNKNOWN,"{""amount"":[""direct-public-input""],""recipient"":[""msg.sender""]}"
+C07-msg-sender-unbound-amount,control,synthetic,,amount,amount,true,E0,UNKNOWN,"{""amount"":[],""recipient"":[""msg.sender""]}"
+C08-commit-recipient,control,synthetic,,,,true,E0,UNKNOWN,"{""amount"":[""direct-public-input"",""commitment-0""],""recipient"":[""commitment-0""]}"
+C09-commit-recipient-and-amount,control,synthetic,,,,true,E0,UNKNOWN,"{""amount"":[""commitment-0""],""recipient"":[""commitment-0""]}"
+C10-commit-only-recipient,control,synthetic,,amount,amount,true,E0,UNKNOWN,"{""amount"":[],""recipient"":[""commitment-0""]}"
+C11-commit-only-amount,control,synthetic,,recipient,recipient,true,E0,UNKNOWN,"{""amount"":[""commitment-0""],""recipient"":[]}"
+C12-commit-not-public,control,synthetic,,recipient,recipient,true,E0,UNKNOWN,"{""amount"":[""direct-public-input""],""recipient"":[]}"
+C13-public-commit-no-local-guard,control,synthetic,,recipient,recipient,true,E0,UNKNOWN,"{""amount"":[""direct-public-input""],""recipient"":[]}"
+C14-local-guard-wrong-parameter,control,synthetic,,recipient,recipient,true,E0,UNKNOWN,"{""amount"":[""direct-public-input""],""recipient"":[]}"
+C15-local-hash-function-mismatch,control,synthetic,,recipient,recipient,true,E0,UNKNOWN,"{""amount"":[""direct-public-input""],""recipient"":[]}"
+C16-local-hash-order-mismatch,control,synthetic,,amount|recipient,amount|recipient,true,E0,UNKNOWN,"{""amount"":[],""recipient"":[]}"
+C17-local-domain-mismatch,control,synthetic,,recipient,recipient,true,E0,UNKNOWN,"{""amount"":[""direct-public-input""],""recipient"":[]}"
+C18-cast-wrapped-direct-values,control,synthetic,,,,true,E0,UNKNOWN,"{""amount"":[""direct-public-input""],""recipient"":[""direct-public-input""]}"
+C19-alias-public-vector,control,synthetic,,,,true,E0,UNKNOWN,"{""amount"":[""direct-public-input""],""recipient"":[""direct-public-input""]}"
+C20-arbitrary-calldata-vector,control,synthetic,,amount|recipient,amount|recipient,true,E0,UNKNOWN,"{""amount"":[],""recipient"":[]}"
+C21-two-separate-commitments,control,synthetic,,,,true,E0,UNKNOWN,"{""amount"":[""commitment-1""],""recipient"":[""commitment-0""]}"
+C22-commit-private-signal-absent,control,synthetic,,recipient,recipient,true,E0,UNKNOWN,"{""amount"":[""direct-public-input""],""recipient"":[]}"
+C23-constant-equality-not-binding,control,synthetic,,recipient,recipient,true,E0,UNKNOWN,"{""amount"":[""direct-public-input""],""recipient"":[]}"
+C24-direct-amount-hashed-recipient,control,synthetic,,,,true,E0,UNKNOWN,"{""amount"":[""direct-public-input""],""recipient"":[""commitment-0""]}"
+DEV-SPSC,development,NethermindEth/spsc,6d07155ecf295e6d68936bf424557621d0c66456,,,true,E1,VERIFIED_WITHIN_SCOPE,source correspondence + compiled R1CS path; no deployment/zkey correspondence claimed
+DEV-RACEPASS,development,Servesh21/RacePass,abd54b5c541ac9d26f938a6bdbd78545526249e5,recipient,recipient,true,E4,VIOLATION,feasibility/v2 RacePass unchanged-consumer local reproduction
+DEV-ZKREDENTIAL,development,ethpanda-org/ETHShanghai-2025,23917814522bac494150c7e99a123aa15a448155,amount,amount,true,E4,VIOLATION,feasibility/v2 ZKredential unchanged-consumer local reproduction

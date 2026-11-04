@@ -1,0 +1,1041 @@
+{
+  "schema_version": 1,
+  "scope": "DEV only",
+  "eval_rows_read": 0,
+  "expected_sha256": "bc993a9eaa5ad0d426b88b98b487a681a58a99a42e95cdf027df31418a8e28b9",
+  "controls": [
+    {
+      "id": "C01-direct-amount",
+      "expected_p1_roles": [],
+      "observed_p1_roles": [],
+      "match": true,
+      "evidence": {
+        "recipient": [
+          "msg.sender"
+        ],
+        "amount": [
+          "direct-public-input"
+        ]
+      }
+    },
+    {
+      "id": "C02-direct-recipient",
+      "expected_p1_roles": [],
+      "observed_p1_roles": [],
+      "match": true,
+      "evidence": {
+        "recipient": [
+          "direct-public-input"
+        ],
+        "amount": [
+          "direct-public-input"
+        ]
+      }
+    },
+    {
+      "id": "C03-direct-both-array-literal",
+      "expected_p1_roles": [],
+      "observed_p1_roles": [],
+      "match": true,
+      "evidence": {
+        "recipient": [
+          "direct-public-input"
+        ],
+        "amount": [
+          "direct-public-input"
+        ]
+      }
+    },
+    {
+      "id": "C04-direct-both-indexed",
+      "expected_p1_roles": [],
+      "observed_p1_roles": [],
+      "match": true,
+      "evidence": {
+        "recipient": [
+          "direct-public-input"
+        ],
+        "amount": [
+          "direct-public-input"
+        ]
+      }
+    },
+    {
+      "id": "C05-neither-bound",
+      "expected_p1_roles": [
+        "amount",
+        "recipient"
+      ],
+      "observed_p1_roles": [
+        "amount",
+        "recipient"
+      ],
+      "match": true,
+      "evidence": {
+        "recipient": [],
+        "amount": []
+      }
+    },
+    {
+      "id": "C06-msg-sender-recipient",
+      "expected_p1_roles": [],
+      "observed_p1_roles": [],
+      "match": true,
+      "evidence": {
+        "recipient": [
+          "msg.sender"
+        ],
+        "amount": [
+          "direct-public-input"
+        ]
+      }
+    },
+    {
+      "id": "C07-msg-sender-unbound-amount",
+      "expected_p1_roles": [
+        "amount"
+      ],
+      "observed_p1_roles": [
+        "amount"
+      ],
+      "match": true,
+      "evidence": {
+        "recipient": [
+          "msg.sender"
+        ],
+        "amount": []
+      }
+    },
+    {
+      "id": "C08-commit-recipient",
+      "expected_p1_roles": [],
+      "observed_p1_roles": [],
+      "match": true,
+      "evidence": {
+        "recipient": [
+          "commitment-0"
+        ],
+        "amount": [
+          "direct-public-input",
+          "commitment-0"
+        ]
+      }
+    },
+    {
+      "id": "C09-commit-recipient-and-amount",
+      "expected_p1_roles": [],
+      "observed_p1_roles": [],
+      "match": true,
+      "evidence": {
+        "recipient": [
+          "commitment-0"
+        ],
+        "amount": [
+          "commitment-0"
+        ]
+      }
+    },
+    {
+      "id": "C10-commit-only-recipient",
+      "expected_p1_roles": [
+        "amount"
+      ],
+      "observed_p1_roles": [
+        "amount"
+      ],
+      "match": true,
+      "evidence": {
+        "recipient": [
+          "commitment-0"
+        ],
+        "amount": []
+      }
+    },
+    {
+      "id": "C11-commit-only-amount",
+      "expected_p1_roles": [
+        "recipient"
+      ],
+      "observed_p1_roles": [
+        "recipient"
+      ],
+      "match": true,
+      "evidence": {
+        "recipient": [],
+        "amount": [
+          "commitment-0"
+        ]
+      }
+    },
+    {
+      "id": "C12-commit-not-public",
+      "expected_p1_roles": [
+        "recipient"
+      ],
+      "observed_p1_roles": [
+        "recipient"
+      ],
+      "match": true,
+      "evidence": {
+        "recipient": [],
+        "amount": [
+          "direct-public-input"
+        ]
+      }
+    },
+    {
+      "id": "C13-public-commit-no-local-guard",
+      "expected_p1_roles": [
+        "recipient"
+      ],
+      "observed_p1_roles": [
+        "recipient"
+      ],
+      "match": true,
+      "evidence": {
+        "recipient": [],
+        "amount": [
+          "direct-public-input"
+        ]
+      }
+    },
+    {
+      "id": "C14-local-guard-wrong-parameter",
+      "expected_p1_roles": [
+        "recipient"
+      ],
+      "observed_p1_roles": [
+        "recipient"
+      ],
+      "match": true,
+      "evidence": {
+        "recipient": [],
+        "amount": [
+          "direct-public-input"
+        ]
+      }
+    },
+    {
+      "id": "C15-local-hash-function-mismatch",
+      "expected_p1_roles": [
+        "recipient"
+      ],
+      "observed_p1_roles": [
+        "recipient"
+      ],
+      "match": true,
+      "evidence": {
+        "recipient": [],
+        "amount": [
+          "direct-public-input"
+        ]
+      }
+    },
+    {
+      "id": "C16-local-hash-order-mismatch",
+      "expected_p1_roles": [
+        "amount",
+        "recipient"
+      ],
+      "observed_p1_roles": [
+        "amount",
+        "recipient"
+      ],
+      "match": true,
+      "evidence": {
+        "recipient": [],
+        "amount": []
+      }
+    },
+    {
+      "id": "C17-local-domain-mismatch",
+      "expected_p1_roles": [
+        "recipient"
+      ],
+      "observed_p1_roles": [
+        "recipient"
+      ],
+      "match": true,
+      "evidence": {
+        "recipient": [],
+        "amount": [
+          "direct-public-input"
+        ]
+      }
+    },
+    {
+      "id": "C18-cast-wrapped-direct-values",
+      "expected_p1_roles": [],
+      "observed_p1_roles": [],
+      "match": true,
+      "evidence": {
+        "recipient": [
+          "direct-public-input"
+        ],
+        "amount": [
+          "direct-public-input"
+        ]
+      }
+    },
+    {
+      "id": "C19-alias-public-vector",
+      "expected_p1_roles": [],
+      "observed_p1_roles": [],
+      "match": true,
+      "evidence": {
+        "recipient": [
+          "direct-public-input"
+        ],
+        "amount": [
+          "direct-public-input"
+        ]
+      }
+    },
+    {
+      "id": "C20-arbitrary-calldata-vector",
+      "expected_p1_roles": [
+        "amount",
+        "recipient"
+      ],
+      "observed_p1_roles": [
+        "amount",
+        "recipient"
+      ],
+      "match": true,
+      "evidence": {
+        "recipient": [],
+        "amount": []
+      }
+    },
+    {
+      "id": "C21-two-separate-commitments",
+      "expected_p1_roles": [],
+      "observed_p1_roles": [],
+      "match": true,
+      "evidence": {
+        "recipient": [
+          "commitment-0"
+        ],
+        "amount": [
+          "commitment-1"
+        ]
+      }
+    },
+    {
+      "id": "C22-commit-private-signal-absent",
+      "expected_p1_roles": [
+        "recipient"
+      ],
+      "observed_p1_roles": [
+        "recipient"
+      ],
+      "match": true,
+      "evidence": {
+        "recipient": [],
+        "amount": [
+          "direct-public-input"
+        ]
+      }
+    },
+    {
+      "id": "C23-constant-equality-not-binding",
+      "expected_p1_roles": [
+        "recipient"
+      ],
+      "observed_p1_roles": [
+        "recipient"
+      ],
+      "match": true,
+      "evidence": {
+        "recipient": [],
+        "amount": [
+          "direct-public-input"
+        ]
+      }
+    },
+    {
+      "id": "C24-direct-amount-hashed-recipient",
+      "expected_p1_roles": [],
+      "observed_p1_roles": [],
+      "match": true,
+      "evidence": {
+        "recipient": [
+          "commitment-0"
+        ],
+        "amount": [
+          "direct-public-input"
+        ]
+      }
+    }
+  ],
+  "control_matches": 24,
+  "control_total": 24,
+  "development_cases": [
+    {
+      "id": "DEV-SPSC",
+      "repository": "NethermindEth/spsc",
+      "commit": "6d07155ecf295e6d68936bf424557621d0c66456",
+      "expected_p1_roles": [],
+      "observed_p1_roles": [],
+      "evidence_grade": "E1",
+      "verdict": "VERIFIED_WITHIN_SCOPE",
+      "evidence": "source correspondence + compiled R1CS path; no deployment/zkey correspondence claimed",
+      "match": true
+    },
+    {
+      "id": "DEV-RACEPASS",
+      "repository": "Servesh21/RacePass",
+      "commit": "abd54b5c541ac9d26f938a6bdbd78545526249e5",
+      "expected_p1_roles": [
+        "recipient"
+      ],
+      "observed_p1_roles": [
+        "recipient"
+      ],
+      "evidence_grade": "E4",
+      "verdict": "VIOLATION",
+      "evidence": "feasibility/v2 RacePass unchanged-consumer local reproduction",
+      "match": true
+    },
+    {
+      "id": "DEV-ZKREDENTIAL",
+      "repository": "ethpanda-org/ETHShanghai-2025",
+      "commit": "23917814522bac494150c7e99a123aa15a448155",
+      "expected_p1_roles": [
+        "amount"
+      ],
+      "observed_p1_roles": [
+        "amount"
+      ],
+      "evidence_grade": "E4",
+      "verdict": "VIOLATION",
+      "evidence": "feasibility/v2 ZKredential unchanged-consumer local reproduction",
+      "match": true
+    }
+  ],
+  "spsc_compiled_evidence": {
+    "repository": "NethermindEth/spsc",
+    "commit": "6d07155ecf295e6d68936bf424557621d0c66456",
+    "circuit_sha256": "3e5502cad95b930da29d915d4968931f5ac0b2865a9af054f4f68529cf1df8fd",
+    "consumer_sha256": "751d42acdfdf234060de3e182c8e6483bca2a853933ad3eaa5bf5bbcb229c271",
+    "poseidon_library_sha256": "65e997fa9300cd4a59f38c2a8e6ff383dd499490808ddcf68a1a9966b2c34000",
+    "solidity_constants_sha256": "fe434f270a3edb48a825799fa28a14678ededcdde7a8c660f185f1f674b7c055",
+    "circuit_constants_sha256": "65d13f97ed2ac8fbcd879cc223fbeebdf9817a59857afcb5131605ebfeb16293",
+    "r1cs_sha256": "28c999d1eff4a424477d56e75c4fd5f9f2290344c30523b13276dc237967b6a2",
+    "sym_sha256": "82d999a118d15914ab5e2ee84e77d09822b7307f637216d8f47cd8a877483f59",
+    "public_input_count": 13,
+    "public_amount_out_direct": true,
+    "recipient_local_guard": true,
+    "local_hash_order_match": true,
+    "domain_constant_match": true,
+    "recipient_circuit_relation": true,
+    "recipient_compiled_path": {
+      "length_wires": 85,
+      "namespace_ok": true,
+      "path": [
+        {
+          "wire": 199,
+          "constraint": null,
+          "names": [
+            "main.recipient"
+          ]
+        },
+        {
+          "wire": 6109,
+          "constraint": 30165,
+          "names": [
+            "main.extDataHasher.pEx.ark[0].out[2]"
+          ]
+        },
+        {
+          "wire": 6119,
+          "constraint": 2438,
+          "names": [
+            "main.extDataHasher.pEx.ark[1].in[2]"
+          ]
+        },
+        {
+          "wire": 6114,
+          "constraint": 30170,
+          "names": [
+            "main.extDataHasher.pEx.ark[1].out[2]"
+          ]
+        },
+        {
+          "wire": 6182,
+          "constraint": 30203,
+          "names": [
+            "main.extDataHasher.pEx.mix[0].out[0]"
+          ]
+        },
+        {
+          "wire": 6127,
+          "constraint": 2447,
+          "names": [
+            "main.extDataHasher.pEx.ark[2].in[0]"
+          ]
+        },
+        {
+          "wire": 6122,
+          "constraint": 30173,
+          "names": [
+            "main.extDataHasher.pEx.ark[2].out[0]"
+          ]
+        },
+        {
+          "wire": 6187,
+          "constraint": 30208,
+          "names": [
+            "main.extDataHasher.pEx.mix[1].out[0]"
+          ]
+        },
+        {
+          "wire": 6137,
+          "constraint": 2462,
+          "names": [
+            "main.extDataHasher.pEx.ark[3].in[0]"
+          ]
+        },
+        {
+          "wire": 6132,
+          "constraint": 30178,
+          "names": [
+            "main.extDataHasher.pEx.ark[3].out[0]"
+          ]
+        },
+        {
+          "wire": 6192,
+          "constraint": 30213,
+          "names": [
+            "main.extDataHasher.pEx.mix[2].out[0]"
+          ]
+        },
+        {
+          "wire": 6147,
+          "constraint": 2477,
+          "names": [
+            "main.extDataHasher.pEx.ark[4].in[0]"
+          ]
+        },
+        {
+          "wire": 6142,
+          "constraint": 30183,
+          "names": [
+            "main.extDataHasher.pEx.ark[4].out[0]"
+          ]
+        },
+        {
+          "wire": 6198,
+          "constraint": 30219,
+          "names": [
+            "main.extDataHasher.pEx.mix[3].out[1]"
+          ]
+        },
+        {
+          "wire": 6223,
+          "constraint": 30240,
+          "names": [
+            "main.extDataHasher.pEx.mixS[0].out[1]"
+          ]
+        },
+        {
+          "wire": 6229,
+          "constraint": 30245,
+          "names": [
+            "main.extDataHasher.pEx.mixS[1].out[1]"
+          ]
+        },
+        {
+          "wire": 6235,
+          "constraint": 30250,
+          "names": [
+            "main.extDataHasher.pEx.mixS[2].out[1]"
+          ]
+        },
+        {
+          "wire": 6241,
+          "constraint": 30255,
+          "names": [
+            "main.extDataHasher.pEx.mixS[3].out[1]"
+          ]
+        },
+        {
+          "wire": 6247,
+          "constraint": 30260,
+          "names": [
+            "main.extDataHasher.pEx.mixS[4].out[1]"
+          ]
+        },
+        {
+          "wire": 6253,
+          "constraint": 30265,
+          "names": [
+            "main.extDataHasher.pEx.mixS[5].out[1]"
+          ]
+        },
+        {
+          "wire": 6259,
+          "constraint": 30270,
+          "names": [
+            "main.extDataHasher.pEx.mixS[6].out[1]"
+          ]
+        },
+        {
+          "wire": 6265,
+          "constraint": 30275,
+          "names": [
+            "main.extDataHasher.pEx.mixS[7].out[1]"
+          ]
+        },
+        {
+          "wire": 6271,
+          "constraint": 30280,
+          "names": [
+            "main.extDataHasher.pEx.mixS[8].out[1]"
+          ]
+        },
+        {
+          "wire": 6277,
+          "constraint": 30285,
+          "names": [
+            "main.extDataHasher.pEx.mixS[9].out[1]"
+          ]
+        },
+        {
+          "wire": 6283,
+          "constraint": 30290,
+          "names": [
+            "main.extDataHasher.pEx.mixS[10].out[1]"
+          ]
+        },
+        {
+          "wire": 6289,
+          "constraint": 30295,
+          "names": [
+            "main.extDataHasher.pEx.mixS[11].out[1]"
+          ]
+        },
+        {
+          "wire": 6295,
+          "constraint": 30300,
+          "names": [
+            "main.extDataHasher.pEx.mixS[12].out[1]"
+          ]
+        },
+        {
+          "wire": 6301,
+          "constraint": 30305,
+          "names": [
+            "main.extDataHasher.pEx.mixS[13].out[1]"
+          ]
+        },
+        {
+          "wire": 6307,
+          "constraint": 30310,
+          "names": [
+            "main.extDataHasher.pEx.mixS[14].out[1]"
+          ]
+        },
+        {
+          "wire": 6313,
+          "constraint": 30315,
+          "names": [
+            "main.extDataHasher.pEx.mixS[15].out[1]"
+          ]
+        },
+        {
+          "wire": 6319,
+          "constraint": 30320,
+          "names": [
+            "main.extDataHasher.pEx.mixS[16].out[1]"
+          ]
+        },
+        {
+          "wire": 6325,
+          "constraint": 30325,
+          "names": [
+            "main.extDataHasher.pEx.mixS[17].out[1]"
+          ]
+        },
+        {
+          "wire": 6331,
+          "constraint": 30330,
+          "names": [
+            "main.extDataHasher.pEx.mixS[18].out[1]"
+          ]
+        },
+        {
+          "wire": 6337,
+          "constraint": 30335,
+          "names": [
+            "main.extDataHasher.pEx.mixS[19].out[1]"
+          ]
+        },
+        {
+          "wire": 6343,
+          "constraint": 30340,
+          "names": [
+            "main.extDataHasher.pEx.mixS[20].out[1]"
+          ]
+        },
+        {
+          "wire": 6349,
+          "constraint": 30345,
+          "names": [
+            "main.extDataHasher.pEx.mixS[21].out[1]"
+          ]
+        },
+        {
+          "wire": 6355,
+          "constraint": 30350,
+          "names": [
+            "main.extDataHasher.pEx.mixS[22].out[1]"
+          ]
+        },
+        {
+          "wire": 6361,
+          "constraint": 30355,
+          "names": [
+            "main.extDataHasher.pEx.mixS[23].out[1]"
+          ]
+        },
+        {
+          "wire": 6367,
+          "constraint": 30360,
+          "names": [
+            "main.extDataHasher.pEx.mixS[24].out[1]"
+          ]
+        },
+        {
+          "wire": 6373,
+          "constraint": 30365,
+          "names": [
+            "main.extDataHasher.pEx.mixS[25].out[1]"
+          ]
+        },
+        {
+          "wire": 6379,
+          "constraint": 30370,
+          "names": [
+            "main.extDataHasher.pEx.mixS[26].out[1]"
+          ]
+        },
+        {
+          "wire": 6385,
+          "constraint": 30375,
+          "names": [
+            "main.extDataHasher.pEx.mixS[27].out[1]"
+          ]
+        },
+        {
+          "wire": 6391,
+          "constraint": 30380,
+          "names": [
+            "main.extDataHasher.pEx.mixS[28].out[1]"
+          ]
+        },
+        {
+          "wire": 6397,
+          "constraint": 30385,
+          "names": [
+            "main.extDataHasher.pEx.mixS[29].out[1]"
+          ]
+        },
+        {
+          "wire": 6403,
+          "constraint": 30390,
+          "names": [
+            "main.extDataHasher.pEx.mixS[30].out[1]"
+          ]
+        },
+        {
+          "wire": 6409,
+          "constraint": 30395,
+          "names": [
+            "main.extDataHasher.pEx.mixS[31].out[1]"
+          ]
+        },
+        {
+          "wire": 6415,
+          "constraint": 30400,
+          "names": [
+            "main.extDataHasher.pEx.mixS[32].out[1]"
+          ]
+        },
+        {
+          "wire": 6421,
+          "constraint": 30405,
+          "names": [
+            "main.extDataHasher.pEx.mixS[33].out[1]"
+          ]
+        },
+        {
+          "wire": 6427,
+          "constraint": 30410,
+          "names": [
+            "main.extDataHasher.pEx.mixS[34].out[1]"
+          ]
+        },
+        {
+          "wire": 6433,
+          "constraint": 30415,
+          "names": [
+            "main.extDataHasher.pEx.mixS[35].out[1]"
+          ]
+        },
+        {
+          "wire": 6439,
+          "constraint": 30420,
+          "names": [
+            "main.extDataHasher.pEx.mixS[36].out[1]"
+          ]
+        },
+        {
+          "wire": 6445,
+          "constraint": 30425,
+          "names": [
+            "main.extDataHasher.pEx.mixS[37].out[1]"
+          ]
+        },
+        {
+          "wire": 6451,
+          "constraint": 30430,
+          "names": [
+            "main.extDataHasher.pEx.mixS[38].out[1]"
+          ]
+        },
+        {
+          "wire": 6457,
+          "constraint": 30435,
+          "names": [
+            "main.extDataHasher.pEx.mixS[39].out[1]"
+          ]
+        },
+        {
+          "wire": 6463,
+          "constraint": 30440,
+          "names": [
+            "main.extDataHasher.pEx.mixS[40].out[1]"
+          ]
+        },
+        {
+          "wire": 6469,
+          "constraint": 30445,
+          "names": [
+            "main.extDataHasher.pEx.mixS[41].out[1]"
+          ]
+        },
+        {
+          "wire": 6475,
+          "constraint": 30450,
+          "names": [
+            "main.extDataHasher.pEx.mixS[42].out[1]"
+          ]
+        },
+        {
+          "wire": 6481,
+          "constraint": 30455,
+          "names": [
+            "main.extDataHasher.pEx.mixS[43].out[1]"
+          ]
+        },
+        {
+          "wire": 6487,
+          "constraint": 30460,
+          "names": [
+            "main.extDataHasher.pEx.mixS[44].out[1]"
+          ]
+        },
+        {
+          "wire": 6493,
+          "constraint": 30465,
+          "names": [
+            "main.extDataHasher.pEx.mixS[45].out[1]"
+          ]
+        },
+        {
+          "wire": 6499,
+          "constraint": 30470,
+          "names": [
+            "main.extDataHasher.pEx.mixS[46].out[1]"
+          ]
+        },
+        {
+          "wire": 6505,
+          "constraint": 30475,
+          "names": [
+            "main.extDataHasher.pEx.mixS[47].out[1]"
+          ]
+        },
+        {
+          "wire": 6511,
+          "constraint": 30480,
+          "names": [
+            "main.extDataHasher.pEx.mixS[48].out[1]"
+          ]
+        },
+        {
+          "wire": 6517,
+          "constraint": 30485,
+          "names": [
+            "main.extDataHasher.pEx.mixS[49].out[1]"
+          ]
+        },
+        {
+          "wire": 6523,
+          "constraint": 30490,
+          "names": [
+            "main.extDataHasher.pEx.mixS[50].out[1]"
+          ]
+        },
+        {
+          "wire": 6529,
+          "constraint": 30495,
+          "names": [
+            "main.extDataHasher.pEx.mixS[51].out[1]"
+          ]
+        },
+        {
+          "wire": 6535,
+          "constraint": 30500,
+          "names": [
+            "main.extDataHasher.pEx.mixS[52].out[1]"
+          ]
+        },
+        {
+          "wire": 6541,
+          "constraint": 30505,
+          "names": [
+            "main.extDataHasher.pEx.mixS[53].out[1]"
+          ]
+        },
+        {
+          "wire": 6547,
+          "constraint": 30510,
+          "names": [
+            "main.extDataHasher.pEx.mixS[54].out[1]"
+          ]
+        },
+        {
+          "wire": 6553,
+          "constraint": 30515,
+          "names": [
+            "main.extDataHasher.pEx.mixS[55].out[1]"
+          ]
+        },
+        {
+          "wire": 6559,
+          "constraint": 30520,
+          "names": [
+            "main.extDataHasher.pEx.mixS[56].out[1]"
+          ]
+        },
+        {
+          "wire": 6565,
+          "constraint": 30525,
+          "names": [
+            "main.extDataHasher.pEx.mixS[57].out[1]"
+          ]
+        },
+        {
+          "wire": 6571,
+          "constraint": 30530,
+          "names": [
+            "main.extDataHasher.pEx.mixS[58].out[1]"
+          ]
+        },
+        {
+          "wire": 6576,
+          "constraint": 30534,
+          "names": [
+            "main.extDataHasher.pEx.mixS[59].out[0]"
+          ]
+        },
+        {
+          "wire": 6157,
+          "constraint": 2492,
+          "names": [
+            "main.extDataHasher.pEx.ark[5].in[0]"
+          ]
+        },
+        {
+          "wire": 6152,
+          "constraint": 30188,
+          "names": [
+            "main.extDataHasher.pEx.ark[5].out[0]"
+          ]
+        },
+        {
+          "wire": 6202,
+          "constraint": 30223,
+          "names": [
+            "main.extDataHasher.pEx.mix[4].out[0]"
+          ]
+        },
+        {
+          "wire": 6167,
+          "constraint": 2507,
+          "names": [
+            "main.extDataHasher.pEx.ark[6].in[0]"
+          ]
+        },
+        {
+          "wire": 6162,
+          "constraint": 30193,
+          "names": [
+            "main.extDataHasher.pEx.ark[6].out[0]"
+          ]
+        },
+        {
+          "wire": 6207,
+          "constraint": 30228,
+          "names": [
+            "main.extDataHasher.pEx.mix[5].out[0]"
+          ]
+        },
+        {
+          "wire": 6177,
+          "constraint": 2522,
+          "names": [
+            "main.extDataHasher.pEx.ark[7].in[0]"
+          ]
+        },
+        {
+          "wire": 6172,
+          "constraint": 30198,
+          "names": [
+            "main.extDataHasher.pEx.ark[7].out[0]"
+          ]
+        },
+        {
+          "wire": 6212,
+          "constraint": 30233,
+          "names": [
+            "main.extDataHasher.pEx.mix[6].out[0]"
+          ]
+        },
+        {
+          "wire": 6217,
+          "constraint": 2537,
+          "names": [
+            "main.extDataHasher.pEx.mixLast[0].in[0]"
+          ]
+        },
+        {
+          "wire": 12,
+          "constraint": 30238,
+          "names": [
+            "main.extDataHash"
+          ]
+        }
+      ]
+    },
+    "effect_transfer_recovered": true,
+    "observed_p1_roles": []
+  },
+  "tool_versions": {
+    "circom": "circom compiler 2.2.3",
+    "circom_commit": "ad44e915a12bb047b05745c2884aad9cc8326bc6",
+    "snarkjs": "0.7.6"
+  }
+}

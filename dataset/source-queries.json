@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "snapshot_id": "source-corpus-2026-11-03-v1",
+  "split_policy": {
+    "DEV": "The 50 feasibility candidates plus exact historical revisions named here.",
+    "EVAL": "Every newly collected repository. Inventory and metadata only until a later explicit authorization opens the frozen evaluation set."
+  },
+  "github_code_queries": [
+    {"id": "circom-main", "q": "\"component main\" extension:circom", "pages": 10, "role": "circuit"},
+    {"id": "circom-pragma", "q": "\"pragma circom\" extension:circom", "pages": 3, "role": "circuit"},
+    {"id": "noir-main", "q": "\"fn main\" extension:nr", "pages": 5, "role": "circuit"},
+    {"id": "tornado-forks", "q": "tornado extension:circom", "pages": 1, "role": "circuit"},
+    {"id": "semaphore-forks", "q": "semaphore extension:circom", "pages": 1, "role": "circuit"},
+    {"id": "zkdrops-forks", "q": "zkdrops extension:circom", "pages": 1, "role": "circuit"},
+    {"id": "ethglobal-circom", "q": "ETHGlobal extension:circom", "pages": 1, "role": "circuit"},
+    {"id": "devfolio-circom", "q": "Devfolio extension:circom", "pages": 1, "role": "circuit"},
+    {"id": "solidity-verify-proof", "q": "verifyProof extension:sol", "pages": 5, "role": "consumer"},
+    {"id": "solidity-verify-tx", "q": "verifyTx extension:sol", "pages": 3, "role": "consumer"},
+    {"id": "solidity-groth16", "q": "Groth16Verifier extension:sol", "pages": 3, "role": "verifier"},
+    {"id": "solidity-plonk", "q": "PlonkVerifier extension:sol", "pages": 3, "role": "verifier"},
+    {"id": "solidity-ultra", "q": "UltraVerifier extension:sol", "pages": 3, "role": "verifier"},
+    {"id": "solidity-honk", "q": "HonkVerifier extension:sol", "pages": 3, "role": "verifier"}
+  ],
+  "github_repository_queries": [],
+  "awesome_lists": [
+    {"id": "awesome-zkp", "url": "https://raw.githubusercontent.com/matter-labs/awesome-zero-knowledge-proofs/master/README.md"},
+    {"id": "awesome-circom", "url": "https://raw.githubusercontent.com/arnaucube/awesome-circom/master/README.md"},
+    {"id": "awesome-zk", "url": "https://raw.githubusercontent.com/ventali/awesome-zk/main/README.md"}
+  ],
+  "historical_dev": [
+    {"repository": "a16z/zkdrops", "commit": "4002962fb632578dd12477346d2e5c4159ffb2ef", "variant": "vulnerable", "source": "https://github.com/a16z/zkdrops/pull/2"},
+    {"repository": "a16z/zkdrops", "commit": "f6f58020911cd2a19e1639f0dc93ec9fca2a9e17", "variant": "fixed", "source": "https://github.com/a16z/zkdrops/pull/2"},
+    {"repository": "semaphore-protocol/semaphore", "commit": "8d703c124c663537966d6fc35cfec84146e236b2", "variant": "vulnerable", "source": "https://github.com/semaphore-protocol/semaphore/issues/16"},
+    {"repository": "semaphore-protocol/semaphore", "commit": "3dcf79f6a095397352f71384e3dc6889c640a50f", "variant": "fixed", "source": "https://github.com/semaphore-protocol/semaphore/issues/16"},
+    {"repository": "polybase/payy", "commit": "c4d2c9021b8fb9988816eb6987a734b830bfce15", "variant": "vulnerable", "source": "https://github.com/polybase/payy/security/advisories/GHSA-fhxc-63vg-9gwr"},
+    {"repository": "polybase/payy", "commit": "dcd5d96ee15664a59bc24ed0dc2bb78b73ac5e36", "variant": "fixed", "source": "https://github.com/polybase/payy/security/advisories/GHSA-fhxc-63vg-9gwr"}
+  ]
+}

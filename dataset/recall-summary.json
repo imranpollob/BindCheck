@@ -1,0 +1,16 @@
+{
+  "cases": 40,
+  "config_sha256": "0814c130d17e7ef2dfe5ff4b47e619419d7c469c4315563aca83fa3059806b74",
+  "evidence_grade": "E0",
+  "generated_utc": "2026-11-03T22:02:11.349883+00:00",
+  "integration_or_execution_semantics_candidates": 20,
+  "output_sha256": "77d5e0ff7b682e925b52d4188b21182d988c04dca176a13d8a346fbc868a0f14",
+  "recall_executed": 0,
+  "schema_version": 1,
+  "snapshot_id": "integration-recall-2026-11-03-v1",
+  "strict_integration_cases": 20,
+  "verdict": "UNKNOWN",
+  "with_resolved_fixed_commit": 28,
+  "with_resolved_vulnerable_commit": 31,
+  "zkbugs_commit": "ee4eb3ab693adc14acb9a6e1842b1794e481e9f9"
+}
