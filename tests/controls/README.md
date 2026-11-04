@@ -1,7 +1,7 @@
 # BindCheck-ZK development controls
 
 `expected.json` is the frozen oracle for analyzer development. It contains the
-24 previously frozen Track B outcomes plus 49 new P1–P5 controls. Analyzer code
+24 previously frozen Track B outcomes plus 50 new P1–P5 controls. Analyzer code
 must not read this file outside the test runner, and the oracle must not be
 packaged as runtime configuration.
 

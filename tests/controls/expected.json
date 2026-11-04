@@ -83,5 +83,6 @@
     {"id":"P5-07-plonk-array-clean","fixture":"p5_plonk_clean","pattern":"P5","verdict":"VERIFIED_WITHIN_SCOPE","reason":"PUBLIC_INPUT_COUNT_AND_ORDER_MATCH"},
     {"id":"P5-08-multiple-verifier-ambiguity","fixture":"p5_ambiguous","pattern":"P5","verdict":"UNKNOWN","reason":"VERIFIER_MATCH_AMBIGUOUS"}
     ,{"id":"P5-09-compiled-public-metadata","fixture":"p5_compiled_symbolic","pattern":"P5","verdict":"VERIFIED_WITHIN_SCOPE","reason":"PUBLIC_INPUT_COUNT_AND_ORDER_MATCH"}
+    ,{"id":"P5-10-test-mock-not-preferred","fixture":"p5_test_mock","pattern":"P5","verdict":"VERIFIED_WITHIN_SCOPE","reason":"PUBLIC_INPUT_COUNT_AND_ORDER_MATCH"}
   ]
 }
