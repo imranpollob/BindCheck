@@ -1,0 +1,3 @@
+# Runtime is Python 3.11+ standard library only.
+# Optional offline circuit fallback: npm circomlib@2.0.5, pinned in
+# bindcheck_zk/vendor-lock.json and fetched by the documented setup step.

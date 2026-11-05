@@ -14,6 +14,8 @@ build/
 tools/circom-src/
 tools/circom-2.1.9/
 tools/circomspect-src/
+tools/picus-src/
+tools/picus-racket/
 
 # Dataset acquisition: committed ledgers/scripts, regenerable raw responses and clones.
 dataset/raw/

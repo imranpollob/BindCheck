@@ -43,8 +43,51 @@ The [research guide](BindCheck_Research_Guide.md) and [16 October progress updat
 
 The principal directories are `circuits/` and `contracts/` for the small fixture, `bindcheck/` for the checker and specification, `payy-harness/` and `payy-consumer/` for the Payy experiment, `scripts/` for task runners, and `reports/` for evidence reviews. Generated proof data and raw logs are normally under the ignored `results/raw/` tree and are absent from a fresh checkout unless separately retained. Preserve and verify existing sealed namespaces; never overwrite them or describe missing bytes as regenerated evidence. Only a task-documented command may create a new, separately named namespace.
 
+## `bindcheck-zk` CLI
+
+The unified Circom/Noir and Solidity development analyzer is documented in
+[TOOL-REPORT.md](TOOL-REPORT.md). It operates on local inputs only and emits
+one JSON document per command:
+
+```text
+./bindcheck-zk analyze <repo-dir> [--circuit <path>]... [--consumer <path>]...
+./bindcheck-zk analyze-bundle <sourcify-or-artifact-directory>
+./bindcheck-zk baseline {slither,circomspect,picus,zkap} <repo-dir> ...
+./freeze.sh
+```
+
+Missing artifacts, unsupported constructs, ambiguous matches, build failures,
+and timeouts are `UNKNOWN`. `VERIFIED_WITHIN_SCOPE` names only the recorded
+property and parsed artifacts; it is not an application safety verdict. The
+current analyzer content hash is
+`d8510859b918a5166d0f1629cf0d883e965fa0acb1be92a34987c24f1967ae13`.
+It has been validated on 105 prospective controls and all 56 DEV rows without
+path hints. EVAL remains unopened and no freeze tag has been created.
+
 ## Current status
 
+- [T24](reports/T24.md) completes the unhinted full-DEV coverage and warning
+  adjudication task. All 56 rows complete with zero crashes; rows with at least
+  one discovered triple rise from 11/56 to 46/56, and circuit-build success
+  rises from 19/88 to 45/76. All 105 controls pass. The final 15 grouped
+  warnings are author-reviewed as 13 true source properties and two unclear,
+  with zero retained false positives; failures, caps, unsupported paths, and
+  ambiguous correspondence remain `UNKNOWN`. The tracked
+  [per-row ledger](reports/T24-full-dev-ledger.csv) and
+  [adjudication table](reports/T24-warning-adjudication.csv) preserve the exact
+  evidence. No EVAL/recall case, RPC, P4 address, transaction, contact,
+  disclosure, or tag was used. Independent author review and the one-shot
+  unchanged-hash held-out run are next.
+- [T23](reports/T23.md) completes the unified `bindcheck-zk` construction and
+  DEV validation task. All 74 prospective development controls pass (24
+  inherited Track B plus 50 new P1--P5 controls), and the fixed three-case DEV
+  run matches the declared P1 outcomes: SPSC `VERIFIED_WITHIN_SCOPE`, RacePass
+  `VIOLATION`, and ZKredential `VIOLATION`, all E1 in this run. Slither,
+  Circomspect, and Picus retain native diagnostics in the same JSON envelope;
+  ZKAP is explicitly unavailable, and no baseline diagnostic is promoted to a
+  cross-layer verdict. The held-out corpus was not read or run. Independent
+  author review, exact-hash operational freeze, and one held-out execution are
+  next; capability and ecosystem security remain `UNKNOWN`.
 - [Integration dataset v2](dataset/REPORT-v2.md) completes the bounded,
   consumer-first, data-only inventory at revision `7353297`: 5,024 rows
   preserve all 897 v1 rows and add 4,127 EVAL rows, yielding 1,384 in-scope
