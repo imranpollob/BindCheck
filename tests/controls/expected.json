@@ -97,6 +97,7 @@
     ,{"id":"D-02-test-only-consumer-excluded","fixture":"discovery_test_consumer","pattern":"P1","verdict":"UNKNOWN","reason":"NO_APPLICABLE_TRIPLE","expected_triples":0}
     ,{"id":"D-03-non-entry-circuit-excluded","fixture":"discovery_non_entry_circuit","pattern":"P5","verdict":"VERIFIED_WITHIN_SCOPE","reason":"PUBLIC_INPUT_COUNT_AND_ORDER_MATCH","expected_triples":1}
     ,{"id":"D-04-verify-only-consumer-retained","fixture":"discovery_verify_only_consumer","pattern":"P1","verdict":"UNKNOWN","reason":"PROTECTED_EFFECT_NOT_RECOVERED","expected_triples":1}
+    ,{"id":"D-05-verifier-wrapper-not-consumer","fixture":"discovery_verifier_wrapper","pattern":"P1","verdict":"VERIFIED_WITHIN_SCOPE","reason":"EFFECT_VALUES_DIRECT_PUBLIC_INPUTS","expected_triples":1}
     ,{"id":"COV-01-vendored-circom-include","fixture":"coverage_vendored_include","pattern":"P5","verdict":"VERIFIED_WITHIN_SCOPE","reason":"PUBLIC_INPUT_COUNT_AND_ORDER_MATCH","expected_build":"compile","expected_include_source":"vendored-pinned"}
     ,{"id":"COV-02-prioritized-file-cap","fixture":"coverage_prioritized_cap","pattern":"P1","verdict":"VERIFIED_WITHIN_SCOPE","reason":"EFFECT_VALUES_DIRECT_PUBLIC_INPUTS","expected_triples":1,"expected_cap_skips":1}
     ,{"id":"COV-03-generated-verifier-undefined","fixture":"coverage_no_generation_recipe","pattern":"P1","verdict":"UNKNOWN","reason":"VERIFIER_ARTIFACT_MISSING","expected_generation_reason":"REPOSITORY_GENERATION_RECIPE_NOT_FOUND"}
