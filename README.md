@@ -45,6 +45,20 @@ The principal directories are `circuits/` and `contracts/` for the small fixture
 
 ## Current status
 
+- [Integration dataset v2](dataset/REPORT-v2.md) completes the bounded,
+  consumer-first, data-only inventory at revision `7353297`: 5,024 rows
+  preserve all 897 v1 rows and add 4,127 EVAL rows, yielding 1,384 in-scope
+  EVAL-only families after family deduplication. Exact consumer-source matches
+  to the passive Sourcify export identify 277 verified deployments linked to
+  86 GitHub repositories and make `verified-deployed` the strongest maturity
+  stratum for 38 canonical EVAL families. The public recall inventory grows
+  from 20 to 27 strict integration cases (47 total), and the greater-than-300
+  threshold triggers a preregistered maturity-stratified sample plan. The
+  append-only check preserves all old columns and all three duplicated v1
+  `(repository, commit)` keys caused by repository renames; new family labels
+  live only in `v2_*` columns. No analyzer, RPC, transaction, P4-seeded trace,
+  or vulnerability search ran. Human label review and the EVAL tag remain
+  pending, so this is not performance, prevalence, or security evidence.
 - [Integration dataset v1](dataset/REPORT.md) freezes a 897-row source ledger
   (890 repositories; 56 DEV and 841 inventory-only EVAL), 774 conservative
   families, and a 40-case public recall set. No analyzer read an EVAL row.
