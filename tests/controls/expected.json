@@ -79,6 +79,7 @@
     {"id":"P4-08-runtime-truncated-push","fixture":"p4_runtime_truncated","pattern":"P4","verdict":"UNKNOWN","reason":"RUNTIME_BYTECODE_PARSE_INCOMPLETE"},
     {"id":"P4-09-interface-only","fixture":"p4_interface_only","pattern":"P4","verdict":"UNKNOWN","reason":"VERIFIER_IMPLEMENTATION_ARTIFACT_MISSING"},
     {"id":"P4-10-honk-layout-unsupported","fixture":"p4_honk_unsupported","pattern":"P4","verdict":"UNKNOWN","reason":"UNSUPPORTED_VERIFIER_KEY_LAYOUT"},
+    {"id":"P4-11-unknown-layout-unsupported","fixture":"p4_unknown_layout","pattern":"P4","verdict":"UNKNOWN","reason":"UNSUPPORTED_VERIFIER_KEY_LAYOUT"},
 
     {"id":"P5-01-fixed-count-clean","fixture":"p5_fixed_clean","pattern":"P5","verdict":"VERIFIED_WITHIN_SCOPE","reason":"PUBLIC_INPUT_COUNT_AND_ORDER_MATCH"},
     {"id":"P5-02-fixed-count-mismatch","fixture":"p5_count_bad","pattern":"P5","verdict":"VIOLATION","reason":"PUBLIC_INPUT_COUNT_MISMATCH"},
