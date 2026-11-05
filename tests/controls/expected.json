@@ -71,6 +71,7 @@
     {"id":"P3-12-nested-mapping-key","fixture":"p3_nested_mapping","pattern":"P3","verdict":"UNKNOWN","reason":"REPLAY_KEY_EXPRESSION_UNRESOLVED"},
     {"id":"P3-13-generic-helper-barrier","fixture":"p3_generic_helper","pattern":"P3","verdict":"UNKNOWN","reason":"REPLAY_BARRIER_HELPER_UNRESOLVED"},
     {"id":"P3-14-verify-only-no-effect","fixture":"discovery_verify_only_consumer","pattern":"P3","verdict":"UNKNOWN","reason":"PROTECTED_EFFECT_NOT_RECOVERED"},
+    {"id":"P3-15-replay-key-not-bound","fixture":"p3_unbound_key","pattern":"P3","verdict":"VIOLATION","reason":"REPLAY_KEY_NOT_BOUND_TO_PROOF"},
 
     {"id":"P4-01-distinct-gamma-delta-clean","fixture":"p4_distinct","pattern":"P4","verdict":"VERIFIED_WITHIN_SCOPE","reason":"VERIFICATION_KEY_CHECKS_PASS"},
     {"id":"P4-02-default-gamma-delta-source","fixture":"p4_default_key","pattern":"P4","verdict":"UNKNOWN","reason":"DEFAULT_G2_GAMMA_DELTA_SOURCE_WARNING"},
