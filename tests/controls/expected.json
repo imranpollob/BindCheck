@@ -91,6 +91,7 @@
     ,{"id":"P5-10-test-mock-not-preferred","fixture":"p5_test_mock","pattern":"P5","verdict":"VERIFIED_WITHIN_SCOPE","reason":"PUBLIC_INPUT_COUNT_AND_ORDER_MATCH"}
     ,{"id":"P5-11-main-template-scope","fixture":"p5_main_template_scope","pattern":"P5","verdict":"VERIFIED_WITHIN_SCOPE","reason":"PUBLIC_INPUT_COUNT_AND_ORDER_MATCH"}
     ,{"id":"P5-12-receiver-type-match","fixture":"p5_receiver_type_match","pattern":"P5","verdict":"VERIFIED_WITHIN_SCOPE","reason":"PUBLIC_INPUT_COUNT_AND_ORDER_MATCH","expected_triples":1}
+    ,{"id":"P5-13-dynamic-array-exact-allocation","fixture":"p5_dynamic_allocated","pattern":"P5","verdict":"VERIFIED_WITHIN_SCOPE","reason":"PUBLIC_INPUT_COUNT_AND_ORDER_MATCH"}
 
     ,{"id":"D-01-merkle-proof-not-zk-verifier","fixture":"discovery_merkle_only","pattern":"P1","verdict":"UNKNOWN","reason":"NO_APPLICABLE_TRIPLE","expected_triples":0}
     ,{"id":"D-02-test-only-consumer-excluded","fixture":"discovery_test_consumer","pattern":"P1","verdict":"UNKNOWN","reason":"NO_APPLICABLE_TRIPLE","expected_triples":0}
