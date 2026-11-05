@@ -398,3 +398,148 @@ exact content hash be frozen operationally and run once on the family-separated
 held-out EVAL corpus. The held-out task is complete only when every scheduled
 case has a schema-valid JSON result, all timeouts/failures remain `UNKNOWN`,
 coverage is reported, and no rule or threshold is changed after EVAL access.
+
+## 12. Full-DEV coverage and adjudication
+
+**Update date:** 2026-11-04 (America/Los_Angeles; controlling evidence dated
+2026-11-05 UTC)
+
+**Task:** T24
+
+This section supersedes the T23 hash, control count, and three-row-only DEV
+coverage statements for freeze readiness. It does not alter or erase the T23
+evidence above. The complete immutable account is [reports/T24.md](reports/T24.md),
+the per-row table is
+[reports/T24-full-dev-ledger.csv](reports/T24-full-dev-ledger.csv), and the
+author warning review is
+[reports/T24-warning-adjudication.csv](reports/T24-warning-adjudication.csv).
+
+### 12.1 Unhinted full-DEV result
+
+`scripts/run_bindcheck_zk_full_dev.py` analyzed every authorized DEV checkout
+without `--circuit` or `--consumer`. It reconstructs the 56-row DEV set without
+opening the mixed source-corpus ledger or recall set. The controlling before
+and after directories are:
+
+```text
+results/raw/T24/before-20261105T020201Z-27822/
+results/raw/T24/after-20261105T023639Z-38427/
+```
+
+| Coverage measure | Before | After |
+| --- | ---: | ---: |
+| completed / crashed | 56 / 0 | 56 / 0 |
+| rows with at least one triple | 11/56 (19.6%) | 46/56 (82.1%) |
+| triples | 105 | 489 |
+| successful circuit builds | 19/88 (21.6%) | 45/76 (59.2%) |
+| cap-affected rows / files | 1 / 4,061 | 1 / 3,503 |
+| P1 `UNKNOWN` | 82.1% | 91.1% |
+| P2 `UNKNOWN` | 100.0% | 98.2% |
+| P3 `UNKNOWN` | 91.1% | 76.8% |
+| P4 `UNKNOWN` | 91.1% | 58.9% |
+| P5 `UNKNOWN` | 94.6% | 92.9% |
+
+The P1 increase is not a safety regression: the analyzer now retains
+verify-only and custom-effect consumers for visible `UNKNOWN` coverage rather
+than silently dropping them. The final run's slowest row took 35.466 seconds,
+within the 120-second repository bound. Remaining build failures are 20
+missing includes/files, six parse/type failures, four other nonzero exits, and
+one timeout. They remain `UNKNOWN`.
+
+All three named DEV expectations hold without hints: RacePass and
+ZKredential are P1 `VIOLATION`; SPSC is P1
+`VERIFIED_WITHIN_SCOPE` through a compiled commitment path.
+
+### 12.2 Coverage architecture changes
+
+The inventory now excludes dependency/frontend/build/vendor/test-fixture
+trees before counting and prioritizes Circom, Noir, Solidity, manifests, and
+lockfiles. Every exclusion and cap effect appears in JSON and the tracked
+ledger. The sole capped row is the F30 hackathon monorepo; its relevant
+ZKredential files survive priority selection.
+
+Circom include resolution now recursively follows circuit-relative,
+dependency-relative, package/lockfile, repository `node_modules`, and common
+monorepo layouts. An absent circomlib dependency may fall back only to the
+locally vendored `circomlib@2.0.5` whose package and 144-file tree hashes are
+pinned in `bindcheck_zk/vendor-lock.json`. The final run records 155 vendored
+resolutions across 27 rows. Other unavailable libraries remain explicit
+unresolved includes.
+
+Generated-verifier recovery is offline and allowlisted. It requires both a
+repository-defined complete fresh setup/export recipe and a compiled R1CS;
+arbitrary repository scripts are never executed. Three final rows had no
+recipe and one had no compiled R1CS, so no verifier was regenerated and those
+paths remain `UNKNOWN`.
+
+Matching now uses uncapped internal scores for pruning and capped scores only
+for JSON display. Entry circuits, main-template scope, receiver types,
+verifier wrappers, test/mock sources, exact dynamic allocations, and generated
+artifacts are handled explicitly. Temporary build artifacts are cleaned after
+each run.
+
+### 12.3 Revised pattern decisions
+
+- P1 distinguishes ERC-721 token IDs, storage/configured values, opaque
+  structs, and derived effects from independently caller-selected transfer
+  roles. Unsupported transformations are `UNKNOWN`, not violations.
+- P3 parses nested mapping keys, recognizes helper barriers and read-only
+  verifier utilities, and follows bounded alias/equality flow from replay keys
+  to verifier inputs. A consumed caller key with no recovered verifier binding
+  is `REPLAY_KEY_NOT_BOUND_TO_PROOF`; unsupported helper/expression flow stays
+  `UNKNOWN`.
+- P4 accepts direct and alias-based rejecting scalar guards, distinguishes
+  delegated helpers and fail-closed placeholders, and returns unsupported-key
+  layout `UNKNOWN` for Honk/custom/STARK families instead of applying a
+  Groth16-specific warning.
+- P5 reports count mismatch only from a complete source interface or compiled
+  relation. An equal-name permutation is a violation; semantic renaming is
+  `UNKNOWN`. Candidate-score saturation no longer retains materially worse
+  circuit matches.
+
+### 12.4 Controls, warnings, and baselines
+
+The prospective oracle now has 105 rows: the unchanged 24 Track B controls
+and 81 analyzer controls covering all five patterns. Oracle-only commits
+precede every new rule. Both plain unittest forms pass, including on this host
+where a site-packages package named `tests` previously shadowed the repository:
+
+```text
+python3 -m unittest tests.test_bindcheck_zk_controls tests.test_bindcheck_zk_cli -v
+# Ran 8 tests; OK
+
+python3 -m unittest discover -s tests -p 'test_bindcheck_zk*.py' -v
+# Ran 8 tests; OK
+```
+
+The final warning inventory contains 15 grouped rows / 49 triple instances:
+13 groups are true positives for the stated source property, two F38
+field-alias groups are unclear because verifier correspondence is ambiguous,
+and none is a retained false positive. The adjudication does not promote E1
+source evidence to an exploit or deployment claim. Every false-positive class
+encountered during DEV review was repaired generally with a prospective
+control; the exact classes and source reasons are recorded in T24.
+
+The T23 equal-envelope Slither/Circomspect/Picus comparison remains the
+baseline evidence; no full-DEV baseline campaign was rerun in T24. ZKAP remains
+unavailable. These consumer-only/circuit-only baselines cannot independently
+decide cross-layer P1–P5 and no superiority claim is made.
+
+### 12.5 Remaining `UNKNOWN` and freeze identity
+
+Fifteen percent of rows still have no triple, only 59.2% of attempted circuit
+builds succeed, P2 policy is usually absent, P5 semantic order is usually
+unrecoverable, custom effects/helpers are bounded, and verifier/key/circuit
+correspondence is often ambiguous. These conditions are `UNKNOWN` by design;
+timeouts, build failures, missing artifacts, unsupported layouts, and caps
+never become passes.
+
+The final content identity includes the analyzer, configuration, pinned
+dependency declaration, and vendor lock:
+
+```text
+BINDCHECK_ZK_CONTENT_SHA256=d8510859b918a5166d0f1629cf0d883e965fa0acb1be92a34987c24f1967ae13
+```
+
+No tag was created. Any subsequent change to the hashed files requires a new
+hash and a new freeze review before the one-shot held-out run.

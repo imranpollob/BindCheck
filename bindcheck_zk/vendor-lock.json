@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "libraries": [
+    {
+      "name": "circomlib",
+      "version": "2.0.5",
+      "install_path": "node_modules/circomlib",
+      "package_json_sha256": "79ed553f89b67cce3aff5ae30027ce1683cbe8b3f8e822be4354ec25b5d7808a",
+      "tree_sha256": "d359bab216fc262b406f468d87774ec1b6661e4438b38851fcd6a0a2e1e8a57a",
+      "files": 144,
+      "source": "npm:circomlib@2.0.5"
+    }
+  ]
+}

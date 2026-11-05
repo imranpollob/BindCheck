@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import dataclasses
+import hashlib
 import json
 import os
 import pathlib
@@ -30,6 +31,7 @@ class Circuit:
     sym: pathlib.Path | None = None
     compiled: bool = False
     build: dict[str, Any] | None = None
+    temporary_artifacts: pathlib.Path | None = None
 
 
 def _expand_circom_name(name: str, declarations: dict[str, int]) -> list[str]:
@@ -39,23 +41,57 @@ def _expand_circom_name(name: str, declarations: dict[str, int]) -> list[str]:
     return [f"{name}[{index}]" for index in range(size)]
 
 
+def is_entry_circuit(path: pathlib.Path) -> bool:
+    """Return whether a source declares an analyzable program entry point."""
+    try:
+        text = path.read_text(encoding="utf-8", errors="replace")
+    except OSError:
+        return False
+    if path.suffix.lower() == ".circom":
+        return bool(re.search(r"\bcomponent\s+main\b", text))
+    if path.suffix.lower() == ".nr":
+        return bool(re.search(r"\bfn\s+main\s*\(", text))
+    return False
+
+
+def _template_body(text: str, name: str) -> str | None:
+    match = re.search(rf"\btemplate\s+{re.escape(name)}\s*\([^)]*\)\s*\{{", text)
+    if not match:
+        return None
+    opening = text.find("{", match.start())
+    depth = 0
+    for index in range(opening, len(text)):
+        if text[index] == "{":
+            depth += 1
+        elif text[index] == "}":
+            depth -= 1
+            if depth == 0:
+                return text[opening + 1:index]
+    return None
+
+
 def parse_circom(path: pathlib.Path, root: pathlib.Path) -> Circuit:
     text = path.read_text(encoding="utf-8", errors="replace")
+    main_decl = re.search(
+        r"\bcomponent\s+main\s*(?:\{\s*public\s*\[(.*?)\]\s*\})?\s*=\s*([A-Za-z_]\w*)\s*\(",
+        text,
+        re.S,
+    )
+    main_template = main_decl.group(2) if main_decl else None
+    scoped = _template_body(text, main_template) if main_template else None
+    declaration_text = scoped if scoped is not None else text
     declarations: dict[str, int] = {}
-    declaration_order: list[str] = []
     outputs: list[str] = []
-    for match in re.finditer(r"\bsignal\s+(input|output)\s+([A-Za-z_]\w*)\s*(?:\[\s*(\d+)\s*\])?\s*;", text):
+    for match in re.finditer(r"\bsignal\s+(?:private\s+)?(input|output)\s+([A-Za-z_]\w*)\s*(?:\[\s*(\d+)\s*\])?\s*;", declaration_text):
         direction, name, raw_size = match.groups()
         declarations[name] = int(raw_size) if raw_size else 0
-        declaration_order.append(name)
         if direction == "output":
             outputs.extend(_expand_circom_name(name, declarations) if raw_size else [name])
-    main = re.search(r"\bcomponent\s+main\s*\{\s*public\s*\[(.*?)\]\s*\}\s*=", text, re.S)
     public_order: list[str] = []
     notes: list[str] = []
     complete = True
-    if main:
-        for name in re.findall(r"\b[A-Za-z_]\w*\b", main.group(1)):
+    if main_decl and main_decl.group(1) is not None:
+        for name in re.findall(r"\b[A-Za-z_]\w*\b", main_decl.group(1)):
             size = declarations.get(name)
             if size is None:
                 public_order.append(name)
@@ -68,18 +104,22 @@ def parse_circom(path: pathlib.Path, root: pathlib.Path) -> Circuit:
     else:
         notes.append("component main public list was not recovered")
         complete = False
+    if main_decl and scoped is None:
+        notes.append(f"main template body {main_template} was not recovered in this source")
+        complete = False
     # Circom outputs precede public inputs in witness/public-signal order.  We
     # keep this explicit rather than silently treating all declarations alike.
     if outputs:
         public_order = outputs + [name for name in public_order if name not in outputs]
         notes.append("declared outputs included before public inputs")
     components: list[dict[str, Any]] = []
-    for output in re.finditer(r"\b([A-Za-z_]\w*)\.out\s*(?:===|==>)\s*([A-Za-z_]\w*)", text):
+    component_text = scoped if scoped is not None else text
+    for output in re.finditer(r"\b([A-Za-z_]\w*)\.out\s*(?:===|==>)\s*([A-Za-z_]\w*)", component_text):
         component, commitment = output.groups()
         inputs = {
             int(index): value
             for index, value in re.findall(
-                rf"\b{re.escape(component)}\.inputs?\s*\[\s*(\d+)\s*\]\s*<==\s*([^;]+);", text
+                rf"\b{re.escape(component)}\.inputs?\s*\[\s*(\d+)\s*\]\s*<==\s*([^;]+);", component_text
             )
         }
         if inputs:
@@ -87,7 +127,7 @@ def parse_circom(path: pathlib.Path, root: pathlib.Path) -> Circuit:
                 "name": component,
                 "commitment": commitment,
                 "inputs": [inputs[index].strip() for index in sorted(inputs)],
-                "line": text.count("\n", 0, output.start()) + 1,
+                "line": component_text.count("\n", 0, output.start()) + 1,
             })
     return Circuit(
         path=path,
@@ -278,6 +318,165 @@ def _circom_binary() -> str | None:
     return str(repository_candidate) if repository_candidate.is_file() else None
 
 
+def _tree_digest(root: pathlib.Path) -> tuple[str, int]:
+    digest = hashlib.sha256()
+    count = 0
+    for path in sorted(item for item in root.rglob("*") if item.is_file()):
+        relative = path.relative_to(root).as_posix()
+        digest.update(sha256_file(path).encode() + b"  " + relative.encode() + b"\n")
+        count += 1
+    return digest.hexdigest(), count
+
+
+def _vendor_libraries() -> dict[str, dict[str, Any]]:
+    tool_root = pathlib.Path(__file__).resolve().parents[1]
+    lock_path = pathlib.Path(__file__).with_name("vendor-lock.json")
+    try:
+        lock = json.loads(lock_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+    output: dict[str, dict[str, Any]] = {}
+    for item in lock.get("libraries", []):
+        installed = tool_root / item["install_path"]
+        if not installed.is_dir():
+            continue
+        observed_tree, observed_files = _tree_digest(installed)
+        if observed_tree != item.get("tree_sha256") or observed_files != item.get("files"):
+            continue
+        output[item["name"]] = {**item, "path": installed}
+    return output
+
+
+def _dependency_versions(root: pathlib.Path) -> dict[str, list[dict[str, str]]]:
+    output: dict[str, list[dict[str, str]]] = defaultdict(list)
+    for manifest in sorted(root.rglob("package.json")):
+        if "node_modules" in manifest.parts:
+            continue
+        try:
+            value = json.loads(manifest.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        for section in ("dependencies", "devDependencies", "peerDependencies"):
+            for name, version in value.get(section, {}).items():
+                output[name].append({
+                    "manifest": manifest.relative_to(root).as_posix(),
+                    "version": str(version),
+                    "section": section,
+                })
+    return output
+
+
+def _include_package(raw: str) -> tuple[str | None, str | None]:
+    normalized = raw.replace("\\", "/")
+    marker = "node_modules/"
+    suffix = normalized.split(marker, 1)[1] if marker in normalized else normalized.lstrip("./")
+    parts = [part for part in suffix.split("/") if part not in {"", ".", ".."}]
+    if not parts:
+        return None, None
+    if parts[0].startswith("@") and len(parts) > 1:
+        return "/".join(parts[:2]), "/".join(parts[2:])
+    return parts[0], "/".join(parts[1:])
+
+
+def resolve_circom_includes(
+    circuit: Circuit, root: pathlib.Path, overlay: pathlib.Path
+) -> tuple[list[pathlib.Path], list[dict[str, Any]]]:
+    dependency_versions = _dependency_versions(root)
+    vendors = _vendor_libraries()
+    include_roots: list[pathlib.Path] = []
+    records: list[dict[str, Any]] = []
+    queue = [circuit.path]
+    visited_files: set[pathlib.Path] = set()
+    visited_edges: set[tuple[pathlib.Path, str]] = set()
+    while queue:
+        source_path = queue.pop(0).resolve()
+        if source_path in visited_files:
+            continue
+        visited_files.add(source_path)
+        try:
+            text = source_path.read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            continue
+        includes = re.findall(r"\binclude\s+[\"']([^\"']+)[\"']\s*;", text)
+        for raw in includes:
+            edge = (source_path, raw)
+            if edge in visited_edges:
+                continue
+            visited_edges.add(edge)
+            direct = (source_path.parent / raw).resolve()
+            try:
+                from_path = source_path.relative_to(root).as_posix()
+            except ValueError:
+                from_path = str(source_path)
+            if direct.is_file():
+                try:
+                    direct.relative_to(root)
+                    direct_source = "circuit-relative"
+                except ValueError:
+                    direct_source = "dependency-relative"
+                records.append({"include": raw, "from": from_path, "source": direct_source, "path": str(direct)})
+                queue.append(direct)
+                continue
+            package, within = _include_package(raw)
+            candidates: list[tuple[pathlib.Path, str, dict[str, Any]]] = []
+            if package:
+                for ancestor in [circuit.path.parent, *circuit.path.parents]:
+                    if ancestor == root.parent:
+                        break
+                    candidates.append((ancestor / "node_modules" / package, "repository-node-modules", {}))
+                    candidates.append((ancestor / package, "repository-library", {}))
+                for base in (root / "lib", root / "libs", root / "circuits", root / "packages"):
+                    candidates.append((base / package, "repository-common-layout", {}))
+                if package in vendors:
+                    vendor = vendors[package]
+                    candidates.append((vendor["path"], "vendored-pinned", {
+                        "version": vendor["version"],
+                        "tree_sha256": vendor["tree_sha256"],
+                        "source_pin": vendor["source"],
+                    }))
+            chosen: tuple[pathlib.Path, pathlib.Path, str, dict[str, Any]] | None = None
+            for package_root, source, metadata in candidates:
+                target = package_root / within if within else package_root
+                if target.is_file():
+                    chosen = (package_root.resolve(), target.resolve(), source, metadata)
+                    break
+            if chosen is None:
+                records.append({
+                    "include": raw,
+                    "from": from_path,
+                    "source": "unresolved",
+                    "package": package,
+                    "declared_dependencies": dependency_versions.get(package or "", []),
+                })
+                continue
+            package_root, target, source, metadata = chosen
+            leading = len(re.match(r"^(?:\.\./)*", raw).group(0).split("../")) - 1
+            base = overlay / f"include-{len(include_roots)}" / pathlib.Path(*(["level"] * leading))
+            base.mkdir(parents=True, exist_ok=True)
+            normalized = raw.replace("\\", "/")
+            remainder = normalized
+            while remainder.startswith("../"):
+                remainder = remainder[3:]
+            package_prefix = remainder.split(package, 1)[0] if package and package in remainder else ""
+            link_parent = (base / pathlib.Path(*([".."] * leading)) / package_prefix).resolve()
+            link_parent.mkdir(parents=True, exist_ok=True)
+            link = link_parent / package if package else link_parent / "library"
+            if not link.exists():
+                link.symlink_to(package_root, target_is_directory=True)
+            include_roots.append(base)
+            records.append({
+                "include": raw,
+                "from": from_path,
+                "source": source,
+                "package": package,
+                "path": str(package_root),
+                "declared_dependencies": dependency_versions.get(package or "", []),
+                **metadata,
+            })
+            queue.append(target)
+    return include_roots, records
+
+
 def apply_compiled_public_metadata(circuit: Circuit) -> None:
     if circuit.r1cs is None or circuit.sym is None:
         return
@@ -326,18 +525,24 @@ def attach_or_build(circuit: Circuit, root: pathlib.Path, budget: Budget, timeou
     with tempfile.TemporaryDirectory(prefix="bindcheck-zk-circom-") as temp_name:
         temp = pathlib.Path(temp_name)
         argv = [binary, str(circuit.path), "--r1cs", "--sym", "-o", str(temp)]
-        include_candidates = [root / "node_modules", circuit.path.parent / "node_modules"]
+        overlay = temp / "includes"
+        include_candidates, include_resolution = resolve_circom_includes(circuit, root, overlay)
+        include_candidates.extend([root / "node_modules", circuit.path.parent / "node_modules"])
+        seen: set[pathlib.Path] = set()
         for include in include_candidates:
-            if include.is_dir():
+            if include.is_dir() and include.resolve() not in seen:
+                seen.add(include.resolve())
                 argv.extend(["-l", str(include)])
         record = run(argv, cwd=root, timeout=min(timeout, budget.remaining))
         circuit.build = record
         circuit.build["kind"] = "compile"
+        circuit.build["include_resolution"] = include_resolution
         if record["exit_status"] == 0 and not record["timed_out"]:
             r1cs = temp / (circuit.path.stem + ".r1cs")
             sym = temp / (circuit.path.stem + ".sym")
             if r1cs.is_file() and sym.is_file():
                 retained = pathlib.Path(tempfile.mkdtemp(prefix="bindcheck-zk-r1cs-"))
+                circuit.temporary_artifacts = retained
                 circuit.r1cs = pathlib.Path(shutil.copy2(r1cs, retained / r1cs.name))
                 circuit.sym = pathlib.Path(shutil.copy2(sym, retained / sym.name))
                 circuit.compiled = True

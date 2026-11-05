@@ -232,6 +232,12 @@ def assignments(body: str) -> dict[str, str]:
         if "==" in match.group(0) or "!=" in match.group(0):
             continue
         result[match.group(1)] = body[match.start(2):match.end(2)].strip()
+    custom_declaration = re.compile(
+        r"\b[A-Za-z_]\w*(?:\s*\.\s*[A-Za-z_]\w*)?(?:\s*\[[^;=]*\])?\s+"
+        r"(?:calldata|memory|storage)\s+([A-Za-z_]\w*)\s*=\s*([^;]+);"
+    )
+    for match in custom_declaration.finditer(masked):
+        result[match.group(1)] = body[match.start(2):match.end(2)].strip()
     return result
 
 
@@ -242,9 +248,11 @@ def public_vector(body: str, call: Call) -> PublicVector:
     declared_count: int | None = None
     dynamic = False
     unresolved: list[str] = []
+    recovered_shape = False
     if expression.startswith("[") and expression.endswith("]"):
         items = split_top_level(expression[1:-1])
         declared_count = len(items)
+        recovered_shape = True
     elif base:
         decl = re.search(
             rf"\b(?:uint(?:256)?|bytes32)\s*\[\s*(\d*)\s*\]\s+"
@@ -254,6 +262,7 @@ def public_vector(body: str, call: Call) -> PublicVector:
         if decl:
             dynamic = decl.group(1) == ""
             declared_count = int(decl.group(1)) if decl.group(1) else None
+            recovered_shape = True
         initializer = re.search(rf"\b{re.escape(base)}\s*=\s*\[", body)
         if initializer:
             opening = body.find("[", initializer.end() - 1)
@@ -261,6 +270,7 @@ def public_vector(body: str, call: Call) -> PublicVector:
             if parsed:
                 items = split_top_level(parsed[0])
                 declared_count = len(items)
+                recovered_shape = True
         indexed = {
             int(index): value.strip()
             for index, value in re.findall(
@@ -273,10 +283,19 @@ def public_vector(body: str, call: Call) -> PublicVector:
             unresolved.extend(item for item in items if item.startswith("<unresolved:"))
             if declared_count is None and not dynamic:
                 declared_count = maximum + 1
+            recovered_shape = True
+        allocation = re.search(
+            rf"\b{re.escape(base)}\s*=\s*new\s+(?:uint(?:256)?|bytes32)\s*\[\s*\]\s*\(\s*(\d+)\s*\)",
+            body,
+        )
+        if allocation:
+            declared_count = int(allocation.group(1))
+            recovered_shape = True
     else:
         cast_array = re.search(r"\[(\d+)\]", expression)
         if cast_array:
             declared_count = int(cast_array.group(1))
+            recovered_shape = True
     guard_match = None
     if base:
         guard_match = re.search(
@@ -285,13 +304,26 @@ def public_vector(body: str, call: Call) -> PublicVector:
             body,
         )
     length_guard = int(next(group for group in guard_match.groups() if group)) if guard_match else None
+    if base and length_guard is None:
+        allocation = re.search(
+            rf"\b{re.escape(base)}\s*=\s*new\s+(?:uint(?:256)?|bytes32)\s*\[\s*\]\s*\(\s*(\d+)\s*\)",
+            body,
+        )
+        if allocation:
+            length_guard = int(allocation.group(1))
+    if not recovered_shape:
+        unresolved.append("public-vector-shape")
     return PublicVector(expression, base, items, declared_count, dynamic, length_guard, unresolved)
 
 
-def effect_roles(call: Call) -> list[tuple[str, str]]:
+def effect_roles(call: Call, source_text: str = "") -> list[tuple[str, str]]:
     name = call.name.lower()
     args = call.args
     if name in {"safemint", "_safemint"} and len(args) == 2:
+        return [("recipient", args[0])]
+    if name in {"mint", "_mint"} and len(args) == 2 and re.search(
+        r"\bcontract\s+[A-Za-z_]\w*\s+is\s+[^\{;]*\bERC721[A-Za-z_0-9]*\b", source_text, re.I
+    ):
         return [("recipient", args[0])]
     if name in {"transfer", "safetransfer", "handletransfer", "mint", "_mint", "safemint", "_safemint"} and len(args) >= 2:
         return [("recipient", args[0]), ("amount", args[1])]
@@ -323,11 +355,14 @@ def verifier_declarations(text: str) -> list[dict[str, Any]]:
             "line": text.count("\n", 0, match.start()) + 1,
             "arity": int(fixed.group(1)) if fixed else None,
             "dynamic": dynamic,
+            "public_input_like": bool(fixed or dynamic),
+            "opaque": not bool(fixed or dynamic),
             "signature": text[match.start():parsed[1]],
         })
     for constant in re.finditer(r"\bNUMBER_OF_PUBLIC_INPUTS\s*=\s*(\d+)", masked):
         output.append({"name": "constant", "line": text.count("\n", 0, constant.start()) + 1,
-                       "arity": int(constant.group(1)), "dynamic": True, "signature": constant.group(0)})
+                       "arity": int(constant.group(1)), "dynamic": True, "public_input_like": True,
+                       "opaque": False, "signature": constant.group(0)})
     return output
 
 

@@ -3,15 +3,19 @@ from __future__ import annotations
 import dataclasses
 import datetime as dt
 import json
+import math
+import os
 import pathlib
 import re
+import shutil
 import subprocess
+import tempfile
 import time
 from collections import defaultdict
 from typing import Any
 
 from . import __version__
-from .circuits import Circuit, attach_or_build, discover as discover_circuits, named_path
+from .circuits import Circuit, attach_or_build, discover as discover_circuits, is_entry_circuit, named_path, parse_r1cs
 from .freeze import freeze_manifest
 from .models import Budget, aggregate, location, result, sha256_file
 from .p4 import analyze_runtime, analyze_source, canonical_guard, runtime_values_from_bundle
@@ -26,11 +30,13 @@ from .solidity import (
     functions,
     has_unsupported_construct,
     identifiers,
+    mask_comments_and_strings,
     normalize_expression,
     public_vector,
     verification_calls,
     verifier_declarations,
 )
+from .subprocesses import run
 
 
 PATTERNS = ("P1", "P2", "P3", "P4", "P5")
@@ -51,6 +57,7 @@ class Verifier:
     interface_only: bool
     family: str
     p4: dict[str, Any]
+    contract_names: set[str]
 
     @property
     def arities(self) -> set[int]:
@@ -64,6 +71,7 @@ class Consumer:
     verify_calls: list[Any]
     effect_calls: list[Any]
     vectors: list[PublicVector]
+    receiver_types: dict[str, str]
 
 
 def load_config() -> dict[str, Any]:
@@ -94,20 +102,55 @@ def _safe_explicit(root: pathlib.Path, raw: str) -> pathlib.Path:
     return resolved
 
 
-def inventory(root: pathlib.Path, config: dict[str, Any], budget: Budget) -> tuple[list[pathlib.Path], list[dict[str, Any]]]:
+def inventory(
+    root: pathlib.Path, config: dict[str, Any], budget: Budget
+) -> tuple[list[pathlib.Path], list[dict[str, Any]], list[dict[str, Any]]]:
     excluded = set(config["excluded_directories"])
-    output: list[pathlib.Path] = []
+    candidates: list[pathlib.Path] = []
     skipped: list[dict[str, Any]] = []
-    for path in sorted(root.rglob("*")):
+    excluded_records: list[dict[str, Any]] = []
+    manifest_names = {
+        "package.json", "package-lock.json", "yarn.lock", "pnpm-lock.yaml",
+        "foundry.toml", "hardhat.config.js", "hardhat.config.ts", "nargo.toml",
+        "makefile", "justfile", "cargo.toml",
+    }
+    for directory, dirnames, filenames in os.walk(root):
+        budget.check()
+        base = pathlib.Path(directory)
+        kept: list[str] = []
+        for name in sorted(dirnames):
+            child = base / name
+            if name in excluded:
+                excluded_records.append({
+                    "path": child.relative_to(root).as_posix(),
+                    "reason": "EXCLUDED_DIRECTORY",
+                    "category": name,
+                })
+            else:
+                kept.append(name)
+        dirnames[:] = kept
+        for name in sorted(filenames):
+            candidates.append(base / name)
+
+    def priority(path: pathlib.Path) -> tuple[int, str]:
+        relative = path.relative_to(root).as_posix()
+        suffix = path.suffix.lower()
+        if suffix in {".circom", ".nr"}:
+            rank = 0
+        elif path.name.lower() in manifest_names or suffix in {".lock", ".toml"}:
+            rank = 1
+        elif suffix == ".sol":
+            rank = 2
+        elif suffix in {".sh", ".js", ".ts", ".mjs", ".cjs"}:
+            rank = 3
+        else:
+            rank = 4
+        return rank, relative
+
+    output: list[pathlib.Path] = []
+    for path in sorted(candidates, key=priority):
         budget.check()
         relative = path.relative_to(root)
-        if excluded & set(relative.parts):
-            continue
-        if not path.is_file():
-            continue
-        if len(output) >= int(config["max_files"]):
-            skipped.append({"path": relative.as_posix(), "reason": "MAX_FILES_EXCEEDED"})
-            continue
         try:
             size = path.stat().st_size
         except OSError as exc:
@@ -116,8 +159,11 @@ def inventory(root: pathlib.Path, config: dict[str, Any], budget: Budget) -> tup
         if size > int(config["max_file_bytes"]):
             skipped.append({"path": relative.as_posix(), "reason": "FILE_TOO_LARGE", "bytes": size})
             continue
+        if len(output) >= int(config["max_files"]):
+            skipped.append({"path": relative.as_posix(), "reason": "MAX_FILES_EXCEEDED"})
+            continue
         output.append(path)
-    return output, skipped
+    return output, skipped, excluded_records
 
 
 def read_sources(root: pathlib.Path, files: list[pathlib.Path], coverage: dict[str, Any]) -> list[Source]:
@@ -134,15 +180,23 @@ def read_sources(root: pathlib.Path, files: list[pathlib.Path], coverage: dict[s
     return output
 
 
+def _semantic_excluded(relative_path: str, config: dict[str, Any]) -> bool:
+    path = pathlib.PurePosixPath(relative_path)
+    parts = {part.lower() for part in path.parts}
+    excluded = set(config.get("semantic_test_directories", [])) | set(config.get("semantic_script_directories", []))
+    return bool(parts & excluded) or path.name.lower().endswith((".t.sol", ".s.sol"))
+
+
 def classify_verifier(source: Source) -> Verifier | None:
     declarations = verifier_declarations(source.text)
-    named = bool(re.search(
-        r"\b(?:contract|library|interface)\s+[A-Za-z_]\w*(?:Verifier|Groth16|Plonk|Honk|Ultra)[A-Za-z_]*\b"
-        r"|\b(?:Pairing|Groth16|Plonk|Honk|Ultra|IVerifier)\b",
-        source.text,
-        re.I,
+    contract_names = set(re.findall(
+        r"\b(?:contract|library|interface)\s+([A-Za-z_]\w*)",
+        mask_comments_and_strings(source.text),
     ))
-    if not declarations or not named:
+    named = any(re.search(r"(?:verifier|groth16|plonk|honk|ultra|snark)", name, re.I) for name in contract_names)
+    strong = any(item["name"].lower() != "verify" and item["name"] != "constant" for item in declarations)
+    generic_array = any(item["name"].lower() == "verify" and item.get("public_input_like") for item in declarations)
+    if not declarations or not named or not (strong or generic_array):
         return None
     interface_only = bool(re.search(r"\binterface\s+[A-Za-z_]\w*", source.text)) and not bool(
         re.search(r"\bfunction\s+(?:verifyProof|verifyTx|verify)\b[^{;]*\{", source.text, re.S | re.I)
@@ -150,13 +204,40 @@ def classify_verifier(source: Source) -> Verifier | None:
     lower = source.text.lower()
     if "honk" in lower or "ultra" in lower:
         family = "Honk"
-    elif "plonk" in lower or "verifyproof(bytes" in re.sub(r"\s+", "", lower):
+    elif "plonk" in lower:
         family = "PLONK"
     elif "pairing" in lower or "groth16" in lower:
         family = "Groth16"
     else:
         family = "unknown"
-    return Verifier(source, declarations, interface_only, family, analyze_source(source.text, source.relative_path))
+    p4 = analyze_source(source.text, source.relative_path)
+    if family not in {"Groth16", "PLONK"}:
+        p4["finding"] = result(
+            "P4",
+            "UNKNOWN",
+            "UNSUPPORTED_VERIFIER_KEY_LAYOUT",
+            f"{family} verifier-key layout is outside the supported Groth16/PLONK source-key subset.",
+            where=location(source.relative_path, 1),
+            limitations=["No Groth16 gamma/delta or canonical-input-guard conclusion is drawn for this verifier family."],
+        )
+    return Verifier(source, declarations, interface_only, family, p4, contract_names)
+
+
+def _receiver_types(text: str) -> dict[str, str]:
+    output: dict[str, str] = {}
+    masked = re.sub(r"//[^\n]*|/\*.*?\*/", " ", text, flags=re.S)
+    for type_name, variable in re.findall(
+        r"\b([A-Za-z_]\w*)\s+(?:(?:public|private|internal|external|immutable|constant)\s+)*([A-Za-z_]\w*)\s*(?:[;=,])",
+        masked,
+    ):
+        output[variable] = type_name
+    return output
+
+
+def _supported_verification_call(call: Call) -> bool:
+    if call.name.lower() != "verify":
+        return True
+    return bool(call.receiver and re.search(r"(?:verifier|groth|plonk|honk|snark|zkp|circuit)", call.receiver, re.I))
 
 
 def discover_consumers(sources: list[Source]) -> list[Consumer]:
@@ -166,7 +247,7 @@ def discover_consumers(sources: list[Source]) -> list[Consumer]:
         helper_vector_parameters: dict[str, list[int]] = defaultdict(list)
         for helper in parsed_functions:
             parameter_names = list(helper.parameters)
-            for direct_call in verification_calls(helper.body):
+            for direct_call in filter(_supported_verification_call, verification_calls(helper.body)):
                 vector = public_vector(helper.body, direct_call)
                 if vector.base in helper.parameters:
                     helper_vector_parameters[helper.name].append(parameter_names.index(vector.base))
@@ -180,7 +261,7 @@ def discover_consumers(sources: list[Source]) -> list[Consumer]:
                         if source_name in helper.parameters and normalize_expression(destination_index) == normalize_expression(source_index):
                             helper_vector_parameters[helper.name].append(parameter_names.index(source_name))
         for function in parsed_functions:
-            verify = verification_calls(function.body)
+            verify = list(filter(_supported_verification_call, verification_calls(function.body)))
             if not verify:
                 for helper_name, vector_indices in helper_vector_parameters.items():
                     helper_calls = calls(
@@ -201,8 +282,6 @@ def discover_consumers(sources: list[Source]) -> list[Consumer]:
             if not verify:
                 continue
             effects = effect_calls(function.body)
-            if not effects:
-                continue
             vectors = [public_vector(function.body, call) for call in verify]
             for vector in vectors:
                 if vector.base and vector.base in function.parameters:
@@ -215,14 +294,20 @@ def discover_consumers(sources: list[Source]) -> list[Consumer]:
                         vector.dynamic = True
                         if not vector.items:
                             vector.unresolved.append("parameter-vector-elements")
-            output.append(Consumer(source, function, verify, effects, vectors))
+            output.append(Consumer(source, function, verify, effects, vectors, _receiver_types(source.text)))
     return output
 
 
 def _tokens(path: str) -> set[str]:
+    expanded = re.sub(r"([A-Z]+)([A-Z][a-z])", r"\1 \2", path)
+    expanded = re.sub(r"([a-z0-9])([A-Z])", r"\1 \2", expanded)
+    ignored = {
+        "main", "circuit", "circuits", "contract", "contracts", "verifier", "verifiers",
+        "consumer", "src", "source", "sources", "package", "packages", "sol", "circom", "nr", "js",
+    }
     return {
-        token.lower() for token in re.findall(r"[A-Za-z][A-Za-z0-9]+", pathlib.Path(path).stem)
-        if token.lower() not in {"main", "circuit", "circuits", "contract", "contracts", "verifier", "consumer"}
+        token.lower() for token in re.findall(r"[A-Za-z][A-Za-z0-9]*", expanded)
+        if token.lower() not in ignored and len(token) > 1
     }
 
 
@@ -231,6 +316,19 @@ def _match_score(circuit: Circuit | None, verifier: Verifier | None, consumer: C
     reasons = ["consumer contains verifier call and protected effect"]
     consumer_tokens = _tokens(consumer.source.relative_path) | {consumer.function.name.lower()}
     if verifier:
+        receiver_names = {call.receiver for call in consumer.verify_calls if call.receiver}
+        receiver_types = {consumer.receiver_types.get(name, "") for name in receiver_names}
+        verifier_names = {name.lower() for name in verifier.contract_names}
+        if any(value.lower() in verifier_names for value in receiver_types if value):
+            score += 0.45
+            reasons.append("verifier contract matches the declared receiver type")
+        elif any(
+            receiver.lower() in name.lower() or name.lower() in receiver.lower()
+            for receiver in receiver_names for name in verifier.contract_names
+            if receiver.lower() not in {"verifier", "zkverifier"}
+        ):
+            score += 0.3
+            reasons.append("verifier contract matches the call receiver name")
         overlap = consumer_tokens & _tokens(verifier.source.relative_path)
         if overlap:
             score += min(0.2, 0.05 * len(overlap))
@@ -247,6 +345,9 @@ def _match_score(circuit: Circuit | None, verifier: Verifier | None, consumer: C
         if overlap:
             score += min(0.2, 0.05 * len(overlap))
             reasons.append("consumer/circuit name tokens overlap")
+        if consumer.function.name.lower() in pathlib.Path(circuit.relative_path).stem.lower():
+            score += 0.25
+            reasons.append("consumer function name matches the circuit entry name")
         vector_counts = {item.declared_count or item.length_guard for item in consumer.vectors}
         if circuit.public_count and circuit.public_count in vector_counts:
             score += 0.2
@@ -254,11 +355,22 @@ def _match_score(circuit: Circuit | None, verifier: Verifier | None, consumer: C
         if verifier and circuit.public_count and circuit.public_count in verifier.arities:
             score += 0.15
             reasons.append("circuit public count matches verifier arity")
+        if verifier:
+            verifier_tokens = _tokens(verifier.source.relative_path)
+            for name in verifier.contract_names:
+                verifier_tokens |= _tokens(name)
+            overlap = verifier_tokens & _tokens(circuit.relative_path)
+            if overlap:
+                score += min(0.35, 0.15 + 0.05 * len(overlap))
+                reasons.append("circuit/verifier name tokens overlap")
     if circuit is None:
         reasons.append("circuit artifact missing")
     if verifier is None:
         reasons.append("verifier implementation artifact missing")
-    return max(0.0, min(score, 0.99)), reasons
+    # Keep the raw score for ranking and ambiguity pruning.  Capping here
+    # collapses materially different candidates (for example, 1.25 and 0.90)
+    # into the same apparent near-perfect score and retains wrong circuits.
+    return max(0.0, score), reasons
 
 
 def make_triples(
@@ -276,7 +388,7 @@ def make_triples(
         candidates.sort(key=lambda item: (-item[0], item[2].relative_path if item[2] else "", item[3].source.relative_path if item[3] else ""))
         best = candidates[0][0] if candidates else 0.0
         for score, reasons, circuit, verifier in candidates:
-            if score + 0.25 < best:
+            if score + 0.19 < best:
                 continue
             triples.append({
                 "id": f"T{len(triples) + 1:03d}",
@@ -284,7 +396,7 @@ def make_triples(
                 "verifier_obj": verifier,
                 "consumer_obj": consumer,
                 "match": {
-                    "score": round(score, 3),
+                    "score": round(min(score, 0.99), 3),
                     "confidence": "high" if score >= 0.75 else "medium" if score >= 0.5 else "low",
                     "reasons": reasons,
                 },
@@ -386,8 +498,13 @@ def analyze_p1(circuit: Circuit | None, verifier: Verifier | None, consumer: Con
     role_facts: list[dict[str, Any]] = []
     violations: list[str] = []
     unknown_reasons: list[str] = []
+    verify_argument_names = set().union(*(
+        identifiers(_resolve_alias(argument, aliases))
+        for call in consumer.verify_calls for argument in call.args
+    )) if consumer.verify_calls else set()
+    vector_sources = set().union(*(vector.sources for vector in consumer.vectors)) if consumer.vectors else set()
     for call in consumer.effect_calls:
-        for role, expression in effect_roles(call):
+        for role, expression in effect_roles(call, consumer.source.text):
             fact: dict[str, Any] = {"provenance": "EXTRACTED", "role": role, "expression": expression, "bound_by": []}
             resolved_expression = normalize_expression(_resolve_alias(expression, aliases))
             if role == "recipient" and resolved_expression == "msg.sender":
@@ -407,12 +524,29 @@ def analyze_p1(circuit: Circuit | None, verifier: Verifier | None, consumer: Con
                         unknown_reasons.append(reason)
                         fact.setdefault("unresolved", []).append({"reason": reason, "evidence": evidence})
             if not fact["bound_by"]:
-                if unknown_reasons:
+                expression_names = identifiers(_resolve_alias(expression, aliases))
+                if fact.get("unresolved"):
                     pass
-                elif role == "recipient":
-                    violations.append("UNBOUND_EFFECT_RECIPIENT")
-                elif role == "amount":
-                    violations.append("UNBOUND_EFFECT_AMOUNT")
+                elif expression_names & vector_sources:
+                    reason = "EFFECT_TRANSFORMATION_UNRESOLVED"
+                    unknown_reasons.append(reason)
+                    fact.setdefault("unresolved", []).append({"reason": reason})
+                elif expression_names & verify_argument_names:
+                    reason = "PUBLIC_INPUT_VECTOR_UNRESOLVED"
+                    unknown_reasons.append(reason)
+                    fact.setdefault("unresolved", []).append({"reason": reason})
+                else:
+                    caller_controlled = bool(expression_names & set(consumer.function.parameters)) or bool(
+                        re.search(r"\b(?:msg\.(?:sender|value)|tx\.origin)\b", _resolve_alias(expression, aliases))
+                    )
+                    if not caller_controlled:
+                        reason = "CALLER_INDEPENDENCE_UNRESOLVED"
+                        unknown_reasons.append(reason)
+                        fact.setdefault("unresolved", []).append({"reason": reason})
+                    elif role == "recipient":
+                        violations.append("UNBOUND_EFFECT_RECIPIENT")
+                    elif role == "amount":
+                        violations.append("UNBOUND_EFFECT_AMOUNT")
             role_facts.append(fact)
     if violations:
         reason = sorted(set(violations))[0]
@@ -479,18 +613,96 @@ def _mapping_uses(body: str, source_text: str) -> list[tuple[str, str]]:
         source_text,
         re.S,
     ))
-    pattern = re.compile(
-        r"\b([A-Za-z_]\w*)\s*\[\s*((?:[A-Za-z_]\w*\s*\[[^\]\n]+\])|[^\]\n]+)\s*\]"
-    )
-    for name, key in pattern.findall(body):
-        if name in declared and any(word in name.lower() for word in ("nullifier", "spent", "used", "replay", "claimed")):
-            output.append((name, key.strip()))
+    for name in declared:
+        if not any(word in name.lower() for word in ("nullifier", "spent", "used", "replay", "claimed")):
+            continue
+        for match in re.finditer(rf"\b{re.escape(name)}\s*\[", body):
+            opening = body.find("[", match.start())
+            depth = 0
+            for index in range(opening, len(body)):
+                if body[index] == "[":
+                    depth += 1
+                elif body[index] == "]":
+                    depth -= 1
+                    if depth == 0:
+                        parts = [body[opening + 1:index].strip()]
+                        cursor = index + 1
+                        while cursor < len(body):
+                            while cursor < len(body) and body[cursor].isspace():
+                                cursor += 1
+                            if cursor >= len(body) or body[cursor] != "[":
+                                break
+                            nested_open = cursor
+                            nested_depth = 0
+                            for nested_end in range(nested_open, len(body)):
+                                if body[nested_end] == "[":
+                                    nested_depth += 1
+                                elif body[nested_end] == "]":
+                                    nested_depth -= 1
+                                    if nested_depth == 0:
+                                        parts.append(body[nested_open + 1:nested_end].strip())
+                                        cursor = nested_end + 1
+                                        break
+                            else:
+                                break
+                        output.append((name, "][".join(parts)))
+                        break
     return output
+
+
+def _key_passed_to_internal_helper(body: str, key: str) -> bool:
+    key_pattern = re.escape(key).replace(r"\ ", r"\s*")
+    for match in re.finditer(r"(?<!\.)\b([A-Za-z_]\w*)\s*\(([^;]*)\)\s*;", body, re.S):
+        name, arguments = match.groups()
+        if name.lower() in {"require", "assert", "revert", "if", "while", "for", "return"}:
+            continue
+        if re.search(key_pattern, arguments):
+            return True
+    return False
+
+
+def _replay_key_bound_to_verifier(consumer: Consumer, resolved_key: str) -> bool:
+    ignored = {"msg", "sender", "block", "timestamp", "chainid", "abi", "encode", "encodepacked", "keccak256", "sha256"}
+    key_ids = {name for name in identifiers(resolved_key) if name.lower() not in ignored}
+    vector_ids: set[str] = set()
+    vector_refs: set[str] = set()
+    aliases = assignments(consumer.function.body)
+    for vector in consumer.vectors:
+        resolved_vector = _resolve_alias(vector.expression, aliases)
+        vector_ids |= vector.sources | identifiers(vector.expression) | identifiers(resolved_vector)
+        if vector.base:
+            vector_refs.add(vector.base)
+        if re.fullmatch(r"[A-Za-z_]\w*(?:\.[A-Za-z_]\w*)*", vector.expression.strip()):
+            vector_refs.add(vector.expression.strip())
+    for call in consumer.verify_calls:
+        for argument in call.args:
+            vector_ids |= identifiers(_resolve_alias(argument, aliases))
+    if key_ids & vector_ids:
+        return True
+    key_pattern = re.escape(resolved_key).replace(r"\ ", r"\s*")
+    for base in vector_refs:
+        base_pattern = re.escape(base).replace(r"\.", r"\s*\.\s*")
+        equality = rf"(?:{base_pattern}\s*\[[^\]]+\][^;]*(?:==)[^;]*{key_pattern}|{key_pattern}[^;]*(?:==)[^;]*{base_pattern}\s*\[[^\]]+\])"
+        if re.search(equality, consumer.function.body, re.S):
+            return True
+    return False
 
 
 def analyze_p3(verifier: Verifier | None, consumer: Consumer) -> dict[str, Any]:
     where = location(consumer.source.relative_path, consumer.function.line)
+    if re.search(r"\b(?:view|pure)\b", consumer.function.header):
+        return result(
+            "P3", "UNKNOWN", "PROTECTED_EFFECT_NOT_RECOVERED",
+            "Replay-key safety is not decided for a read-only verifier utility with no state effect.",
+            where=where,
+        )
     uses = _mapping_uses(consumer.function.body, consumer.source.text)
+    if not uses and not consumer.effect_calls:
+        return result(
+            "P3", "UNKNOWN", "PROTECTED_EFFECT_NOT_RECOVERED",
+            "Replay-key safety is not decided because neither a replay-state access nor a supported protected effect was recovered.",
+            where=where,
+        )
     if not uses:
         return result("P3", "UNKNOWN", "REPLAY_KEY_NOT_RECOVERED", "No supported replay-key mapping access was recovered.", where=where)
     facts: list[dict[str, Any]] = []
@@ -501,17 +713,27 @@ def analyze_p3(verifier: Verifier | None, consumer: Consumer) -> dict[str, Any]:
         write = bool(re.search(rf"{re.escape(mapping)}\s*\[\s*{key_pattern}\s*\]\s*=\s*(?:true|1)\b", consumer.function.body, re.S))
         resolved_key = _resolve_alias(key, aliases)
         resolved_key = re.sub(r"\[\(([^()]+)\)\]", r"[\1]", resolved_key)
-        raw = bool(re.fullmatch(r"[A-Za-z_]\w*(?:\s*\[\s*[A-Za-z_0-9]+\s*\])?", resolved_key))
-        helper = bool(re.search(r"\b(?:check|consume|mark|use)(?:Nullifier|Spent|Replay)\s*\(", consumer.function.body, re.I))
+        proof_bound = _replay_key_bound_to_verifier(consumer, resolved_key)
+        raw = bool(re.fullmatch(
+            r"[A-Za-z_]\w*(?:(?:\s*\.\s*[A-Za-z_]\w*)|(?:\s*\[\s*[A-Za-z_0-9]+\s*\]))*",
+            resolved_key,
+        ))
+        helper = _key_passed_to_internal_helper(consumer.function.body, key)
         fact = {"provenance": "EXTRACTED", "mapping": mapping, "key": key, "resolved_key": resolved_key,
-                "read": read, "write": write, "raw": raw, "helper": helper}
+                "read": read, "write": write, "raw": raw, "helper": helper, "proof_bound": proof_bound}
         facts.append(fact)
-        if helper and not (read or write):
+        if helper and (not read or not write):
             return result("P3", "UNKNOWN", "REPLAY_BARRIER_HELPER_UNRESOLVED", "Replay handling is delegated to a helper outside the supported local mapping subset.", where=where, facts=facts)
         if not read:
             return result("P3", "VIOLATION", "REPLAY_KEY_NOT_CHECKED", "A recovered replay key is written or used without a prior spent check.", where=where, facts=facts)
         if not write:
             return result("P3", "VIOLATION", "REPLAY_KEY_NOT_CONSUMED", "A recovered replay key is checked but not consumed on the accepted path.", where=where, facts=facts)
+        if not proof_bound:
+            return result(
+                "P3", "VIOLATION", "REPLAY_KEY_NOT_BOUND_TO_PROOF",
+                "The consumed replay key is caller-controlled but no supported binding to the verifier public inputs was recovered.",
+                where=where, facts=facts,
+            )
         if not raw and not re.search(r"(?:keccak256|sha256|%|mod)", resolved_key, re.I):
             return result("P3", "UNKNOWN", "REPLAY_KEY_EXPRESSION_UNRESOLVED", "Replay-key expression is outside supported raw/canonicalized forms.", where=where, facts=facts)
         verifier_guard = verifier is not None and canonical_guard(verifier.source.text)
@@ -552,12 +774,24 @@ def analyze_p5(circuit: Circuit | None, verifier: Verifier | None, consumer: Con
     if expected is not None and observed is not None and expected != observed:
         return result("P5", "VIOLATION", "PUBLIC_INPUT_COUNT_MISMATCH", f"Consumer supplies {observed} public inputs but the matched verifier expects {expected}.", where=where, facts=facts)
     if circuit.public_count is not None and observed is not None and circuit.public_count != observed:
+        if not circuit.order_complete and not circuit.compiled:
+            return result(
+                "P5", "UNKNOWN", "CIRCUIT_INTERFACE_INCOMPLETE",
+                "The source-level circuit interface is incomplete and no compiled relation is available to establish its public-input count.",
+                where=where, facts=facts,
+            )
         return result("P5", "VIOLATION", "PUBLIC_INPUT_COUNT_MISMATCH", f"Consumer supplies {observed} public inputs but the circuit exposes {circuit.public_count}.", where=where, facts=facts)
     if vector.items and circuit.public_order and len(vector.items) == len(circuit.public_order):
         observed_order = [_semantic_name(item) for item in vector.items]
         circuit_order = [_semantic_name(item) for item in circuit.public_order]
         if observed_order != circuit_order:
-            return result("P5", "VIOLATION", "PUBLIC_INPUT_ORDER_MISMATCH", "Recovered consumer vector order differs from the circuit public-signal order.", where=where, facts=facts)
+            if sorted(observed_order) == sorted(circuit_order):
+                return result("P5", "VIOLATION", "PUBLIC_INPUT_ORDER_MISMATCH", "Recovered consumer vector contains the circuit's named public signals in a different order.", where=where, facts=facts)
+            return result(
+                "P5", "UNKNOWN", "PUBLIC_INPUT_MEANING_UNRESOLVED",
+                "Counts agree, but differing source-level names do not establish whether consumer and circuit elements have the same meaning.",
+                where=where, facts=facts,
+            )
     elif not vector.items or not circuit.order_complete:
         if vector.dynamic and vector.length_guard and expected == vector.length_guard:
             return result("P5", "VERIFIED_WITHIN_SCOPE", "DYNAMIC_PUBLIC_INPUT_LENGTH_GUARDED", "Dynamic public inputs have an exact length guard matching the verifier declaration.", where=where, facts=facts, limitations=["Element meaning/order was not independently named by the dynamic interface."])
@@ -591,6 +825,7 @@ def _serialize_verifier(verifier: Verifier | None) -> dict[str, Any] | None:
         "path": verifier.source.relative_path,
         "sha256": verifier.source.sha256,
         "family": verifier.family,
+        "contract_names": sorted(verifier.contract_names),
         "interface_only": verifier.interface_only,
         "declarations": verifier.declarations,
     }
@@ -605,10 +840,107 @@ def _serialize_consumer(consumer: Consumer) -> dict[str, Any]:
         "public_vectors": [dataclasses.asdict(vector) for vector in consumer.vectors],
         "effects": [
             {"call": call.name, "line": consumer.function.line + call.line - 1,
-             "roles": [{"role": role, "expression": expression} for role, expression in effect_roles(call)]}
+             "roles": [{"role": role, "expression": expression} for role, expression in effect_roles(call, consumer.source.text)]}
             for call in consumer.effect_calls
         ],
     }
+
+
+def _generation_recipes(root: pathlib.Path, files: list[pathlib.Path]) -> list[dict[str, Any]]:
+    """Find repository-authored fresh-zkey/verifier recipes without executing them."""
+    grouped: dict[pathlib.Path, list[tuple[pathlib.Path, str]]] = defaultdict(list)
+    for path in files:
+        if path.suffix.lower() not in {".json", ".sh", ".js", ".ts", ".mjs", ".cjs"} and path.name.lower() not in {"makefile", "justfile"}:
+            continue
+        try:
+            text = path.read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            continue
+        if not re.search(r"(?:snarkjs|zkey|powersoftau|solidityverifier)", text, re.I):
+            continue
+        grouped[path.parent].append((path, text))
+    recipes: list[dict[str, Any]] = []
+    for directory, records in grouped.items():
+        combined = "\n".join(text for _, text in records)
+        exports = bool(re.search(r"zkey\s+export\s+solidityverifier", combined, re.I))
+        setup = bool(re.search(r"groth16\s+setup", combined, re.I))
+        prepares = bool(re.search(r"powersoftau\s+prepare\s+phase2", combined, re.I))
+        creates = bool(re.search(r"powersoftau\s+new\s+bn128\s+(\d+)", combined, re.I))
+        powers = [int(value) for value in re.findall(r"powersoftau\s+new\s+bn128\s+(\d+)", combined, re.I)]
+        if exports:
+            recipes.append({
+                "directory": directory.relative_to(root).as_posix() or ".",
+                "sources": [path.relative_to(root).as_posix() for path, _ in records],
+                "fresh_zkey_steps": {"powersoftau_new": creates, "prepare_phase2": prepares, "groth16_setup": setup, "solidity_export": exports},
+                "power": max(powers) if powers else None,
+                "complete": bool(creates and prepares and setup and exports and powers),
+            })
+    return recipes
+
+
+def _regenerate_verifier(
+    circuit: Circuit, recipe: dict[str, Any], budget: Budget, timeout: float
+) -> tuple[Verifier | None, dict[str, Any]]:
+    record: dict[str, Any] = {"kind": "fresh-local-zkey", "recipe": recipe, "steps": []}
+    if circuit.r1cs is None or not circuit.r1cs.is_file():
+        record["reason"] = "COMPILED_R1CS_UNAVAILABLE"
+        return None, record
+    power = recipe.get("power")
+    if not recipe.get("complete") or not isinstance(power, int):
+        record["reason"] = "REPOSITORY_GENERATION_RECIPE_INCOMPLETE"
+        return None, record
+    parsed = parse_r1cs(circuit.r1cs)
+    required_power = max(1, math.ceil(math.log2(max(2, parsed["n_constraints"] + parsed["n_public_inputs"] + parsed["n_public_outputs"] + 1))))
+    record["required_power"] = required_power
+    if power < required_power:
+        record["reason"] = "REPOSITORY_RECIPE_POWER_TOO_SMALL"
+        return None, record
+    if power > 18:
+        record["reason"] = "REPOSITORY_RECIPE_EXCEEDS_LOCAL_POWER_BOUND"
+        return None, record
+    tool_root = pathlib.Path(__file__).resolve().parents[1]
+    snarkjs = tool_root / "node_modules" / ".bin" / "snarkjs"
+    if not snarkjs.is_file():
+        record["reason"] = "SNARKJS_NOT_AVAILABLE"
+        return None, record
+    with tempfile.TemporaryDirectory(prefix="bindcheck-zk-verifier-") as temp_name:
+        temp = pathlib.Path(temp_name)
+        pot0, pot_final = temp / "pot_0000.ptau", temp / "pot_final.ptau"
+        zkey0, verifier_path = temp / "circuit_0000.zkey", temp / "Verifier.sol"
+        commands = [
+            [str(snarkjs), "powersoftau", "new", "bn128", str(power), str(pot0)],
+            [str(snarkjs), "powersoftau", "prepare", "phase2", str(pot0), str(pot_final)],
+            [str(snarkjs), "groth16", "setup", str(circuit.r1cs), str(pot_final), str(zkey0)],
+            [str(snarkjs), "zkey", "export", "solidityverifier", str(zkey0), str(verifier_path)],
+        ]
+        started = time.monotonic()
+        for argv in commands:
+            remaining = min(timeout - (time.monotonic() - started), budget.remaining)
+            if remaining <= 0.05:
+                record["reason"] = "VERIFIER_REGENERATION_TIMEOUT"
+                return None, record
+            step = run(argv, cwd=temp, timeout=remaining)
+            record["steps"].append(step)
+            if step["timed_out"] or step["exit_status"] != 0:
+                record["reason"] = "VERIFIER_REGENERATION_TIMEOUT" if step["timed_out"] else "VERIFIER_REGENERATION_FAILED"
+                return None, record
+        if not verifier_path.is_file():
+            record["reason"] = "GENERATED_VERIFIER_MISSING"
+            return None, record
+        text = verifier_path.read_text(encoding="utf-8", errors="replace")
+        source = Source(
+            verifier_path,
+            f"<generated-from-fresh-zkey>/{circuit.path.stem}Verifier.sol",
+            text,
+            sha256_file(verifier_path),
+        )
+        verifier = classify_verifier(source)
+        if verifier is None:
+            record["reason"] = "GENERATED_VERIFIER_UNSUPPORTED"
+            return None, record
+        record["reason"] = "GENERATED_VERIFIER_READY"
+        record["verifier_sha256"] = source.sha256
+        return verifier, record
 
 
 def analyze(
@@ -626,11 +958,13 @@ def analyze(
     coverage: dict[str, Any] = {
         "files_inventoried": 0, "solidity_files_parsed": 0, "circuit_files_parsed": 0,
         "compiled_relations_built_or_loaded": 0, "skipped": [], "builds": [],
-        "timeouts": [], "failures": [], "unsupported": [],
+        "timeouts": [], "failures": [], "unsupported": [], "excluded": [],
+        "generated_verifier": [],
     }
     fatal: str | None = None
     triples_output: list[dict[str, Any]] = []
     runtime_results: list[dict[str, Any]] = []
+    circuits: list[Circuit] = []
     inputs: dict[str, Any] = {
         "root": str(root), "mode": "verified-source-bundle" if bundle else "repository",
         "git_revision": _git_revision(root), "network_policy": "offline/no RPC",
@@ -639,13 +973,19 @@ def analyze(
     try:
         if not root.is_dir():
             raise ValueError(f"analysis root is not a directory: {root}")
-        files, skipped = inventory(root, config, budget)
+        files, skipped, excluded = inventory(root, config, budget)
         coverage["files_inventoried"] = len(files)
         coverage["skipped"].extend(skipped)
+        coverage["excluded"].extend(excluded)
         if explicit_circuits:
             circuit_paths = [_safe_explicit(root, raw) for raw in explicit_circuits]
         else:
-            circuit_paths = [path for path in files if path.suffix.lower() in {".circom", ".nr"}]
+            all_circuit_paths = [path for path in files if path.suffix.lower() in {".circom", ".nr"}]
+            circuit_paths = [path for path in all_circuit_paths if is_entry_circuit(path)]
+            coverage["skipped"].extend({
+                "path": path.relative_to(root).as_posix(),
+                "reason": "NON_ENTRY_CIRCUIT_SOURCE",
+            } for path in all_circuit_paths if path not in circuit_paths)
         explicit_consumer_paths = {_safe_explicit(root, raw) for raw in explicit_consumers or []}
         for explicit_path in [*circuit_paths, *explicit_consumer_paths]:
             if explicit_path not in files:
@@ -665,23 +1005,63 @@ def analyze(
                 })
         inputs["files"] = pinned_files
         coverage["solidity_files_parsed"] = len(sources)
+        semantic_sources = [source for source in sources if not _semantic_excluded(source.relative_path, config)]
         circuits = discover_circuits(root, circuit_paths)
         coverage["circuit_files_parsed"] = len(circuits)
-        for circuit in circuits[: int(config["max_circuit_builds"])]:
-            if circuit.language == "circom":
-                attach_or_build(circuit, root, budget, float(config["build_timeout_seconds"]))
-                coverage["builds"].append({"path": circuit.relative_path, "record": circuit.build})
-                if circuit.compiled:
-                    coverage["compiled_relations_built_or_loaded"] += 1
-                elif circuit.build and circuit.build.get("timed_out"):
-                    coverage["timeouts"].append({"phase": "circom-build", "path": circuit.relative_path})
-                elif circuit.build and circuit.build.get("exit_status") not in (None, 0):
-                    coverage["failures"].append({"phase": "circom-build", "path": circuit.relative_path, "record": circuit.build})
-        verifiers = [item for source in sources if (item := classify_verifier(source)) is not None]
-        consumers = discover_consumers(sources)
+        verifiers = [item for source in semantic_sources if (item := classify_verifier(source)) is not None]
+        consumers = discover_consumers(semantic_sources)
+        verifier_source_paths = {item.source.path for item in verifiers}
+        consumers = [
+            item for item in consumers
+            if item.source.path not in verifier_source_paths
+            or item.effect_calls
+            or (
+                "verifier" not in item.source.path.stem.lower()
+                and not re.match(r"^_?(?:verify|validate)(?:proof|tx|plonk|andconsume)?$", item.function.name, re.I)
+            )
+        ]
         if explicit_consumer_paths:
             consumers = [item for item in consumers if item.source.path in explicit_consumer_paths]
-        repository_solidity = "\n".join(source.text for source in sources)
+        circuit_ranked = sorted(circuits, key=lambda circuit: (
+            -max((
+                _match_score(circuit, verifier, consumer)[0]
+                for verifier in (verifiers or [None]) for consumer in consumers
+            ), default=0.0),
+            circuit.relative_path,
+        ))
+        for circuit in [item for item in circuit_ranked if item.language == "circom"][: int(config["max_circuit_builds"])]:
+            attach_or_build(circuit, root, budget, float(config["build_timeout_seconds"]))
+            coverage["builds"].append({"path": circuit.relative_path, "record": circuit.build})
+            if circuit.compiled:
+                coverage["compiled_relations_built_or_loaded"] += 1
+            elif circuit.build and circuit.build.get("timed_out"):
+                coverage["timeouts"].append({"phase": "circom-build", "path": circuit.relative_path})
+            elif circuit.build and circuit.build.get("exit_status") not in (None, 0):
+                coverage["failures"].append({"phase": "circom-build", "path": circuit.relative_path, "record": circuit.build})
+        implementation_verifiers = [item for item in verifiers if not item.interface_only]
+        if consumers and not implementation_verifiers:
+            recipes = _generation_recipes(root, files)
+            if not recipes:
+                coverage["generated_verifier"].append({"reason": "REPOSITORY_GENERATION_RECIPE_NOT_FOUND"})
+            else:
+                complete = next((item for item in recipes if item["complete"]), None)
+                compiled = next((item for item in circuit_ranked if item.compiled), None)
+                if complete is None:
+                    coverage["generated_verifier"].append({
+                        "reason": "REPOSITORY_GENERATION_RECIPE_INCOMPLETE", "recipes": recipes,
+                    })
+                elif compiled is None:
+                    coverage["generated_verifier"].append({
+                        "reason": "COMPILED_R1CS_UNAVAILABLE", "recipes": recipes,
+                    })
+                else:
+                    regenerated, generation_record = _regenerate_verifier(
+                        compiled, complete, budget, float(config["verifier_generation_timeout_seconds"])
+                    )
+                    coverage["generated_verifier"].append(generation_record)
+                    if regenerated is not None:
+                        verifiers.append(regenerated)
+        repository_solidity = "\n".join(source.text for source in semantic_sources)
         runtime_values = runtime_values_from_bundle(root, files) if bundle else runtime_values_from_bundle(root, [path for path in files if path.name.lower().endswith((".bin-runtime", ".runtime.hex"))])
         source_has_p2 = any(item.p4.get("p2") for item in verifiers)
         for path, value in runtime_values:
@@ -730,6 +1110,9 @@ def analyze(
     except Exception as exc:  # fail closed: malformed/unknown input is JSON UNKNOWN, never a crash/pass
         fatal = "ANALYSIS_FAILED"
         coverage["failures"].append({"phase": "analysis", "type": type(exc).__name__, "detail": str(exc)})
+    for circuit in circuits:
+        if circuit.temporary_artifacts is not None:
+            shutil.rmtree(circuit.temporary_artifacts, ignore_errors=True)
     pattern_summary: dict[str, Any] = {}
     for pattern in PATTERNS:
         results = [triple["patterns"][pattern] for triple in triples_output]

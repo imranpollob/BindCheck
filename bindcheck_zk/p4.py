@@ -94,13 +94,44 @@ def extract_ic(text: str, constants: dict[str, int]) -> dict[int, tuple[int, int
 
 
 def canonical_guard(text: str) -> bool:
-    modulus = rf"(?:{SCALAR_FIELD}|[A-Za-z_]\w*(?:SNARK|SCALAR|FIELD)[A-Za-z_]*)"
-    return any(re.search(pattern, text, re.I) for pattern in (
-        rf"(?:input|pubSignals?|publicInputs?)\s*\[[^\]]+\]\s*<\s*{modulus}",
-        rf"{modulus}\s*<=\s*(?:input|pubSignals?|publicInputs?)\s*\[",
-        rf"\bcheckField\s*\([^;]*(?:input|pubSignals?|publicInputs?)",
-        rf"\b(?:require|assert)\s*\([^;]*(?:input|pubSignals?|publicInputs?)[^;]*<\s*{modulus}",
+    exact_names = [name for name, value in named_constants(text).items() if value == SCALAR_FIELD]
+    semantic_name = r"[A-Za-z_]\w*(?:SNARK|SCALAR|FIELD)[A-Za-z_]*"
+    modulus_parts = [str(SCALAR_FIELD), semantic_name, *(re.escape(name) for name in exact_names)]
+    modulus = rf"(?:{'|'.join(modulus_parts)})"
+    if any(re.search(pattern, text, re.I) for pattern in (
+        rf"(?:inputs?|pubSignals?|publicInputs?)\s*\[[^\]]+\]\s*<\s*{modulus}",
+        rf"{modulus}\s*<=\s*(?:inputs?|pubSignals?|publicInputs?)\s*\[",
+        rf"\bcheckField\s*\([^;]*(?:inputs?|pubSignals?|publicInputs?)",
+        rf"\b(?:require|assert)\s*\([^;]*(?:inputs?|pubSignals?|publicInputs?)[^;]*<\s*{modulus}",
+        rf"\bif\s*\([^)]*(?:inputs?|pubSignals?|publicInputs?)\s*\[[^\]]+\]\s*>=\s*{modulus}[^)]*\)\s*\{{?[^{{}}]*\b(?:return\s+false|revert\b)",
+    )):
+        return True
+    aliases = re.findall(
+        r"\b(?:uint(?:256)?\s+)?([A-Za-z_]\w*)\s*=\s*(?:inputs?|pubSignals?|publicInputs?)\s*\[[^\]]+\]\s*;",
+        text,
+        re.I,
+    )
+    return any(re.search(
+        rf"\bif\s*\([^)]*\b{re.escape(alias)}\b\s*>=\s*{modulus}[^)]*\)\s*\{{?[^{{}}]*\b(?:return\s+false|revert\b)",
+        text,
+        re.I,
+    ) for alias in aliases)
+
+
+def delegates_verification(text: str) -> bool:
+    return bool(re.search(
+        r"\b(?:return\s+)?[A-Za-z_]\w*\s*\.\s*(?:verifyProof|verifyTx|verify)\s*\(",
+        text,
+        re.I,
     ))
+
+
+def fail_closed_verifier(text: str) -> bool:
+    for match in re.finditer(r"\bfunction\s+(?:verifyProof|verifyTx|verify)\s*\([^)]*\)[^\{;]*\{([^{}]*)\}", text, re.S | re.I):
+        body = match.group(1)
+        if re.search(r"\breturn\s+false\s*;", body) and not re.search(r"\breturn\s+true\s*;", body):
+            return True
+    return False
 
 
 def has_pairing_p2(text: str) -> bool:
@@ -123,6 +154,8 @@ def analyze_source(text: str, relative_path: str) -> dict[str, Any]:
     duplicates = sorted(indices for indices in reverse.values() if len(indices) > 1)
     guard = canonical_guard(cleaned)
     p2 = has_pairing_p2(cleaned)
+    delegated = delegates_verification(cleaned)
+    fail_closed = fail_closed_verifier(cleaned)
     verify = bool(re.search(r"\b(?:verifyProof|verifyTx|verify)\s*\(", cleaned, re.I))
     parsed = gamma is not None and delta is not None
     facts = [
@@ -131,6 +164,8 @@ def analyze_source(text: str, relative_path: str) -> dict[str, Any]:
         {"provenance": "EXTRACTED", "name": "pairing_library_p2", "value": p2},
         {"provenance": "EXTRACTED", "name": "duplicate_ic_indices", "value": duplicates},
         {"provenance": "EXTRACTED", "name": "canonical_guard", "value": guard},
+        {"provenance": "EXTRACTED", "name": "delegated_verification", "value": delegated},
+        {"provenance": "EXTRACTED", "name": "fail_closed_verifier", "value": fail_closed},
     ]
     where = location(relative_path, 1)
     if gamma == BN254_G2 and delta == BN254_G2:
@@ -149,6 +184,18 @@ def analyze_source(text: str, relative_path: str) -> dict[str, Any]:
         finding = result(
             "P4", "VERIFIED_WITHIN_SCOPE", "PAIRING_LIBRARY_GENERATOR_EXCLUDED",
             "Default G2 constants occur only in the recognized Pairing.P2 generator helper; no gamma/delta key assignment was parsed.",
+            where=where, facts=facts,
+        )
+    elif fail_closed:
+        finding = result(
+            "P4", "UNKNOWN", "FAIL_CLOSED_VERIFIER_PLACEHOLDER",
+            "The recovered verifier implementation unconditionally rejects proofs; no live verification-key path is available to check.",
+            where=where, facts=facts,
+        )
+    elif delegated and not guard:
+        finding = result(
+            "P4", "UNKNOWN", "VERIFIER_HELPER_GUARD_UNRESOLVED",
+            "Verification is delegated to another source unit whose public-input guard was not analyzed with this verifier artifact.",
             where=where, facts=facts,
         )
     elif verify and not guard:

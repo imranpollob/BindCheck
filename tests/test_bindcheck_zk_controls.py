@@ -204,6 +204,61 @@ contract Consumer {
         order = ["amount"]
         vsource = verifier(1)
         csource = consumer("[amount]", "token.transferFrom(msg.sender, address(this), amount);")
+    elif name == "p1_erc721_mint":
+        order = ["credential"]
+        vsource = verifier(1)
+        csource = """
+contract Consumer is ERC721 {
+  function submit(bytes memory proof, uint256 credential) public {
+    verifier.verifyProof(proof, [credential]);
+    uint256 tokenId = nextTokenId++;
+    _mint(msg.sender, tokenId);
+  }
+}
+"""
+    elif name == "p1_storage_amount":
+        order = ["recipient"]
+        vsource = verifier(1)
+        csource = """
+contract Consumer {
+  uint256 amountPerRedemption;
+  function submit(bytes memory proof) public {
+    verifier.verifyProof(proof, [uint256(uint160(msg.sender))]);
+    token.transfer(msg.sender, amountPerRedemption);
+  }
+}
+"""
+    elif name == "p1_derived_amount":
+        order = ["amount"]
+        vsource = verifier(1)
+        csource = """
+contract Consumer {
+  function submit(bytes memory proof, uint256 amount) public {
+    verifier.verifyProof(proof, [amount]);
+    uint256 fee = amount / 100;
+    uint256 payout = amount - fee;
+    token.transfer(msg.sender, payout);
+  }
+}
+"""
+    elif name == "p1_opaque_struct_input":
+        order = ["amount"]
+        vsource = """
+contract CipherVerifier {
+  function verifyProof(Proof calldata proof, bytes2 kind) public returns (bool) {
+    proof; kind; return true;
+  }
+}
+"""
+        csource = """
+contract Consumer {
+  function submit(Proof calldata proof, bytes2 kind) public {
+    PublicSignals calldata publicSignals = proof.publicSignals;
+    verifier.verifyProof(proof, kind);
+    token.transfer(msg.sender, publicSignals.amount);
+  }
+}
+"""
 
     elif name == "p2_chainid":
         order = ["chainId", "recipient", "amount"]
@@ -261,7 +316,77 @@ contract Consumer {
             after = "spent[nullifiers[i]] = true;"
             vector_expression = "[nullifiers[0], uint256(uint160(recipient)), amount]"
             replay_params = "uint256[1] memory nullifiers, address recipient, uint256 amount"
-        csource = consumer(vector_expression, "token.transfer(recipient, amount);", params=replay_params, extra=before + after)
+        elif name == "p3_nested_index":
+            before = "require(!spent[proof.publicSignals[0]]);"
+            after = "spent[proof.publicSignals[0]] = true;"
+            vector_expression = "proof.publicSignals"
+            replay_params = "Proof calldata proof, address recipient, uint256 amount"
+        elif name == "p3_nested_mapping":
+            csource = """
+contract Consumer {
+  mapping(address => mapping(uint256 => bool)) usedNonces;
+  function submit(bytes memory proof, uint256 proofNonce, address recipient, uint256 amount) public {
+    require(!usedNonces[msg.sender][proofNonce]);
+    usedNonces[msg.sender][proofNonce] = true;
+    verifier.verifyProof(proof, [proofNonce, uint256(uint160(recipient)), amount]);
+    token.transfer(recipient, amount);
+  }
+}
+"""
+        elif name == "p3_generic_helper":
+            csource = """
+contract Consumer {
+  mapping(uint256 => bool) spent;
+  function preflight(uint256 key) internal view { require(!spent[key]); }
+  function submit(bytes memory proof, uint256 nullifier, address recipient, uint256 amount) public {
+    preflight(nullifier);
+    verifier.verifyProof(proof, [nullifier, uint256(uint160(recipient)), amount]);
+    spent[nullifier] = true;
+    token.transfer(recipient, amount);
+  }
+}
+"""
+        elif name == "p3_unbound_key":
+            csource = """
+contract Consumer {
+  mapping(bytes32 => bool) spent;
+  function submit(bytes memory proof, uint256 nullifier, bytes32 replayKey, address recipient, uint256 amount) public {
+    require(!spent[replayKey]);
+    verifier.verifyProof(proof, [nullifier, uint256(uint160(recipient)), amount]);
+    spent[replayKey] = true;
+    token.transfer(recipient, amount);
+  }
+}
+"""
+        elif name == "p3_member_vector_binding":
+            csource = """
+contract Consumer {
+  mapping(uint256 => bool) spent;
+  function submit(Proof calldata proof, uint256 nullifier, address recipient, uint256 amount) public {
+    require(proof.input[0] == nullifier);
+    require(!spent[nullifier]);
+    verifier.verifyProof(proof.data, proof.input);
+    spent[nullifier] = true;
+    token.transfer(recipient, amount);
+  }
+}
+"""
+        elif name == "p3_aliased_vector_binding":
+            csource = """
+contract Consumer {
+  mapping(bytes32 => bool) spent;
+  function submit(bytes memory proof, Receipt calldata receipt, address recipient, uint256 amount) public {
+    bytes32 replayKey = keccak256(abi.encode(receipt.sessionId, receipt.sequence));
+    uint256 leaf = uint256(keccak256(abi.encode(receipt.sessionId, receipt.sequence)));
+    require(!spent[replayKey]);
+    verifier.verifyProof(proof, [leaf, uint256(uint160(recipient)), amount]);
+    spent[replayKey] = true;
+    token.transfer(recipient, amount);
+  }
+}
+"""
+        if name not in {"p3_nested_mapping", "p3_generic_helper", "p3_unbound_key", "p3_member_vector_binding", "p3_aliased_vector_binding"}:
+            csource = consumer(vector_expression, "token.transfer(recipient, amount);", params=replay_params, extra=before + after)
 
     elif name.startswith("p4_"):
         if name == "p4_distinct":
@@ -285,6 +410,36 @@ contract Consumer {
             (root / "Verifier.bin-runtime").write_text("7f12")
         elif name == "p4_interface_only":
             vsource = "interface IVerifier { function verifyProof(bytes memory proof, uint256[2] memory input) external view returns (bool); }"
+        elif name == "p4_honk_unsupported":
+            vsource = key_source(guard=False).replace("Groth16Verifier", "HonkVerifier")
+        elif name == "p4_unknown_layout":
+            vsource = key_source(guard=False).replace("Groth16Verifier", "CustomVerifier")
+        elif name == "p4_direct_reject_guard":
+            vsource = key_source(guard=False).replace(
+                "input[0];", f"if (input[0] >= {R}) return false;"
+            )
+        elif name == "p4_alias_reject_guard":
+            vsource = (
+                key_source(guard=False)
+                .replace(" memory input)", " memory inputs)")
+                .replace("input[0];", f"uint256 publicInput = inputs[0]; if (publicInput >= {R}) revert();")
+            )
+        elif name == "p4_delegated_guard":
+            vsource = """
+contract Groth16Verifier {
+  function verifyProof(bytes memory proof, uint256[2] memory input) public view returns (bool) {
+    return Groth16.verifyProof(proof, input);
+  }
+}
+"""
+        elif name == "p4_fail_closed":
+            vsource = """
+contract Groth16Verifier {
+  function verifyProof(bytes memory proof, uint256[2] memory input) public pure returns (bool) {
+    proof; input; return false;
+  }
+}
+"""
 
     elif name.startswith("p5_"):
         if name == "p5_fixed_clean":
@@ -317,6 +472,131 @@ component main {public [recipient, amount]} = Main();
             mock_dir = root / "contracts" / "test"
             mock_dir.mkdir()
             (mock_dir / "MockVerifier.sol").write_text(verifier(3))
+        elif name == "p5_main_template_scope":
+            circuit_source = ("main.circom", """pragma circom 2.0.0;
+template Helper() { signal input ignored; signal output helperOutput; helperOutput <== ignored; }
+template Main() {
+  signal input recipient;
+  signal input amount;
+  signal squared;
+  squared <== recipient * amount;
+}
+component main {public [recipient, amount]} = Main();
+""")
+        elif name == "p5_receiver_type_match":
+            vsource = ""
+            (root / "contracts" / "ExpectedVerifier.sol").write_text(verifier(2).replace("Groth16Verifier", "ExpectedVerifier"))
+            (root / "contracts" / "OtherVerifier.sol").write_text(verifier(3).replace("Groth16Verifier", "OtherVerifier"))
+            csource = """
+contract Consumer {
+  ExpectedVerifier verifier;
+  OtherVerifier other;
+  function submit(bytes memory proof, address recipient, uint256 amount) public {
+    verifier.verifyProof(proof, [uint256(uint160(recipient)), amount]);
+    token.transfer(recipient, amount);
+  }
+}
+"""
+        elif name == "p5_dynamic_allocated":
+            vsource = verifier(2, dynamic=True)
+            csource = """
+contract Consumer {
+  function submit(bytes memory proof, address recipient, uint256 amount) public {
+    uint256[] memory inputs = new uint256[](2);
+    inputs[0] = uint256(uint160(recipient));
+    inputs[1] = amount;
+    verifier.verifyProof(proof, inputs);
+    token.transfer(recipient, amount);
+  }
+}
+"""
+        elif name == "p5_count_guided_match":
+            circuit_source = ("submit-two.nr", noir(["recipient", "amount"]))
+            (root / "circuits" / "submit-three.nr").write_text(noir(["recipient", "amount", "domain"]))
+            csource = """
+contract Consumer {
+  Groth16Verifier verifier;
+  function submit(bytes memory proof, address recipient, uint256 amount) public {
+    verifier.verifyProof(proof, [uint256(uint160(recipient)), amount]);
+    token.transfer(recipient, amount);
+  }
+}
+"""
+        elif name == "p5_semantic_name_unresolved":
+            csource = consumer(
+                "[uint256(uint160(beneficiary)), amount]",
+                "token.transfer(beneficiary, amount);",
+                params="address beneficiary, uint256 amount",
+            )
+        elif name == "p5_incomplete_interface":
+            vsource = verifier(3)
+            csource = consumer(
+                "[a, b, c]",
+                "token.transfer(recipient, amount);",
+                params="uint256 a, uint256 b, uint256 c, address recipient, uint256 amount",
+            )
+            circuit_source = ("main.circom", """pragma circom 2.0.0;
+include "missing-template.circom";
+component main {public [a, b]} = ImportedMain();
+""")
+
+    elif name == "discovery_merkle_only":
+        csource = """
+contract Consumer {
+  function submit(bytes32[] calldata proof, address recipient, uint256 amount) public {
+    require(MerkleProof.verify(proof, root, leaf));
+    token.transfer(recipient, amount);
+  }
+}
+"""
+    elif name == "discovery_test_consumer":
+        consumer_path = root / "contracts" / "test" / "TestConsumer.t.sol"
+        consumer_path.parent.mkdir()
+    elif name == "discovery_non_entry_circuit":
+        (root / "circuits" / "constants.circom").write_text("pragma circom 2.0.0; var FIELD = 1;\n")
+    elif name == "discovery_verify_only_consumer":
+        csource = consumer(
+            "[uint256(uint160(recipient)), amount]",
+            "recipient; amount;",
+        )
+    elif name == "discovery_verifier_wrapper":
+        (root / "contracts" / "AdapterVerifier.sol").write_text("""
+contract AdapterVerifier {
+  Groth16Verifier core;
+  function verifyProof(bytes memory proof, uint256[2] memory input) public returns (bool) {
+    return core.verifyProof(proof, input);
+  }
+}
+""")
+        csource = """
+contract Consumer {
+  Groth16Verifier verifier;
+  function submit(bytes memory proof, address recipient, uint256 amount) public {
+    verifier.verifyProof(proof, [uint256(uint160(recipient)), amount]);
+    token.transfer(recipient, amount);
+  }
+}
+"""
+    elif name == "coverage_vendored_include":
+        circuit_source = ("main.circom", """pragma circom 2.0.0;
+include "circomlib/circuits/comparators.circom";
+template Main() {
+  signal input recipient;
+  signal input amount;
+  component isZero = IsZero();
+  isZero.in <== amount;
+  signal mixed;
+  mixed <== recipient * amount;
+}
+component main {public [recipient, amount]} = Main();
+""")
+    elif name == "coverage_prioritized_cap":
+        filler = root / "zz-filler"
+        filler.mkdir()
+        for index in range(2501):
+            (filler / f"{index:04d}.txt").write_text("inventory filler\n")
+    elif name == "coverage_no_generation_recipe":
+        vsource = ""
 
     if circuit_source is None:
         (root / "circuits" / "main.nr").write_text(noir(order))
@@ -358,10 +638,34 @@ class BindCheckZKControlTests(unittest.TestCase):
                     explicit = [control["explicit_consumer"]] if control.get("explicit_consumer") else None
                     output = analyze(root, explicit_consumers=explicit)
                 summary = output["patterns"][control["pattern"]]
-                if summary["verdict"] != control["verdict"] or control["reason"] not in summary["reasons"]:
+                extra_failures = []
+                if "expected_triples" in control and output["discovery"]["triples"] != control["expected_triples"]:
+                    extra_failures.append(["triples", output["discovery"]["triples"]])
+                if "expected_cap_skips" in control:
+                    observed = sum(item.get("reason") == "MAX_FILES_EXCEEDED" for item in output["coverage"]["skipped"])
+                    if observed < control["expected_cap_skips"]:
+                        extra_failures.append(["cap_skips", observed])
+                if "expected_build" in control:
+                    kinds = [item.get("record", {}).get("kind") for item in output["coverage"]["builds"]]
+                    if control["expected_build"] not in kinds:
+                        extra_failures.append(["build_kinds", kinds])
+                if "expected_include_source" in control:
+                    sources = [
+                        include.get("source")
+                        for build in output["coverage"]["builds"]
+                        for include in (build.get("record") or {}).get("include_resolution", [])
+                    ]
+                    if control["expected_include_source"] not in sources:
+                        extra_failures.append(["include_sources", sources])
+                if "expected_generation_reason" in control:
+                    reasons = [item.get("reason") for item in output["coverage"]["generated_verifier"]]
+                    if control["expected_generation_reason"] not in reasons:
+                        extra_failures.append(["generation_reasons", reasons])
+                if summary["verdict"] != control["verdict"] or control["reason"] not in summary["reasons"] or extra_failures:
                     failures.append({
                         "id": control["id"], "expected": [control["verdict"], control["reason"]],
                         "observed": [summary["verdict"], summary["reasons"]],
+                        "extra_failures": extra_failures,
                         "coverage": output["coverage"],
                     })
         self.assertEqual(failures, [], json.dumps(failures, indent=2))

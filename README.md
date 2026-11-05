@@ -60,12 +60,24 @@ Missing artifacts, unsupported constructs, ambiguous matches, build failures,
 and timeouts are `UNKNOWN`. `VERIFIED_WITHIN_SCOPE` names only the recorded
 property and parsed artifacts; it is not an application safety verdict. The
 current analyzer content hash is
-`60211ab6e92d89c1361f56a89fe6f7769876702f1c3e0a0fbacdfb3ec0d2b54c`.
-It has been validated on controls and the three declared DEV cases only. EVAL
-remains unopened and no freeze tag has been created.
+`d8510859b918a5166d0f1629cf0d883e965fa0acb1be92a34987c24f1967ae13`.
+It has been validated on 105 prospective controls and all 56 DEV rows without
+path hints. EVAL remains unopened and no freeze tag has been created.
 
 ## Current status
 
+- [T24](reports/T24.md) completes the unhinted full-DEV coverage and warning
+  adjudication task. All 56 rows complete with zero crashes; rows with at least
+  one discovered triple rise from 11/56 to 46/56, and circuit-build success
+  rises from 19/88 to 45/76. All 105 controls pass. The final 15 grouped
+  warnings are author-reviewed as 13 true source properties and two unclear,
+  with zero retained false positives; failures, caps, unsupported paths, and
+  ambiguous correspondence remain `UNKNOWN`. The tracked
+  [per-row ledger](reports/T24-full-dev-ledger.csv) and
+  [adjudication table](reports/T24-warning-adjudication.csv) preserve the exact
+  evidence. No EVAL/recall case, RPC, P4 address, transaction, contact,
+  disclosure, or tag was used. Independent author review and the one-shot
+  unchanged-hash held-out run are next.
 - [T23](reports/T23.md) completes the unified `bindcheck-zk` construction and
   DEV validation task. All 74 prospective development controls pass (24
   inherited Track B plus 50 new P1--P5 controls), and the fixed three-case DEV
