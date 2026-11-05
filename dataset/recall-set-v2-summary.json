@@ -1,0 +1,21 @@
+{
+  "append_only_projection_check": "PASS",
+  "broader_candidates": 20,
+  "cases": 47,
+  "config_sha256": "884d00b529385f0ff3bd6675fa14d875f96fda5c8ae69d14514e73c5a1cbe4c6",
+  "generated_utc": "2026-11-05T01:55:42.622864+00:00",
+  "new_cases": 7,
+  "output_sha256": "709021bc34020e33d22dbb449066435f1a3938da5c148ae666fa9e3aa0a604f9",
+  "recall_executed": 0,
+  "resolved_fixed_commits": 35,
+  "resolved_pairs": 31,
+  "resolved_vulnerable_commits": 38,
+  "schema_version": 2,
+  "snapshot_id": "integration-recall-2026-11-03-v2",
+  "source_v2_sha256": "07210625783a21a6128ea3f99402fc4a48b36922056241649999547a374b0c95",
+  "strict_integration_cases": 27,
+  "v1_cases_preserved": 40,
+  "v1_ledger_sha256": "77d5e0ff7b682e925b52d4188b21182d988c04dca176a13d8a346fbc868a0f14",
+  "verdict": "UNKNOWN",
+  "zkbugs_commit": "ee4eb3ab693adc14acb9a6e1842b1794e481e9f9"
+}

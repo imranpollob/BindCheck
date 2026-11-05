@@ -1,0 +1,58 @@
+{
+  "chain_counts": {
+    "arbitrum-one": 25,
+    "base": 92,
+    "ethereum": 77,
+    "linea": 14,
+    "optimism": 38,
+    "polygon": 31,
+    "zksync-era": 0
+  },
+  "coverage_limit": "targeted exact-source join for GitHub inventory call sites; not a global scan of the 17.082-GiB compressed Sourcify sources table",
+  "data_source": "https://export.sourcify.dev/v2/",
+  "generated_utc": "2026-11-05T01:56:51.711369+00:00",
+  "github_consumer_source_hashes": 3648,
+  "github_consumer_source_rows": 4324,
+  "github_inventory_sha256": "e09124ec5ee53ae2b61c290b241d6000d13d3846a1de1fc2dffec8c850a43c06",
+  "match_output_sha256": "fb29466d660a22f95d55e3851f97b84095553563909461ba4ac4d78ce7c5cada",
+  "matched_repository_deployment_rows": 390,
+  "object_bytes": {
+    "compiled_contracts": 40349377784,
+    "compiled_contracts_sources": 2053815673,
+    "contract_deployments": 6510681494,
+    "verified_contracts": 4855292199
+  },
+  "object_counts": {
+    "compiled_contracts": 596,
+    "compiled_contracts_sources": 40,
+    "contract_deployments": 59,
+    "verified_contracts": 60
+  },
+  "onchain_consumer_rows": 277,
+  "output_pass_elapsed_seconds": 0.037,
+  "output_sha256": "dcf0b7f31d11724dca3d25e80c662e2324e271fe5d1850336cb4e6ed89e0a292",
+  "private_p4_addresses_used_as_seeds": 0,
+  "reused_stages_on_output_pass": [
+    "source_compilations",
+    "relevant_compilations",
+    "exact_verified",
+    "relevant_deployments",
+    "exact_consumer_deployments"
+  ],
+  "rpc_requests": 0,
+  "schema_version": 2,
+  "selection": "GitHub verifier-call-regex source SHA-256 joined to Sourcify compiled target source; runtime_match=true and runtime_metadata_match=true",
+  "snapshot_date": "2026-11-03",
+  "stage_counts": {
+    "exact_consumer_deployments": 390,
+    "exact_verified": 8480,
+    "relevant_compilations": 1030,
+    "relevant_deployments": 609,
+    "source_compilations": 2437
+  },
+  "staged_remote_elapsed_note": "The successful remote stages were committed before a nullable-block formatting failure; the reused output pass cannot reconstruct their in-process timer. Filesystem timestamps bound the staged run from 2026-11-04T16:33:36-0800 to 2026-11-04T17:55:17-0800 (4,901 seconds).",
+  "staged_remote_elapsed_seconds": null,
+  "unique_deployments": 277,
+  "unique_github_repositories": 86,
+  "verdict": "UNKNOWN"
+}

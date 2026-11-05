@@ -1,0 +1,49 @@
+{
+  "schema_version": 2,
+  "snapshot_id": "source-corpus-2026-11-03-v2",
+  "collection_rule": "Consumer-first public GitHub inventory. A row is in scope when its pinned tree has a first-party .circom, .nr, or .zok path and a Solidity source matches one of the documented verifier-call regexes. A committed verifier file is recorded but is not required.",
+  "search_order": "All GitHub code-search pages in declaration order, then repository-search pages in declaration order. Pages are fetched from 1 through the fixed page budget unless a page has fewer than per_page results.",
+  "per_page": 100,
+  "github_code_queries": [
+    {"id": "consumer-member-verifyproof", "q": "\".verifyProof(\" language:Solidity", "pages": 10},
+    {"id": "consumer-member-verifytx", "q": "\".verifyTx(\" language:Solidity", "pages": 10},
+    {"id": "consumer-verifier-verify", "q": "\"verifier.verify(\" language:Solidity", "pages": 10},
+    {"id": "consumer-iverifier-verifyproof", "q": "\"IVerifier\" \"verifyProof\" language:Solidity", "pages": 10},
+    {"id": "consumer-igroth16", "q": "\"IGroth16Verifier\" language:Solidity", "pages": 10},
+    {"id": "consumer-groth16", "q": "\"Groth16Verifier\" \"verifyProof\" language:Solidity", "pages": 10},
+    {"id": "consumer-plonk", "q": "\"PlonkVerifier\" language:Solidity", "pages": 10},
+    {"id": "consumer-ultra", "q": "\"UltraVerifier\" language:Solidity", "pages": 5},
+    {"id": "consumer-honk", "q": "\"HonkVerifier\" language:Solidity", "pages": 5},
+    {"id": "consumer-require-verifyproof", "q": "\"verifyProof(\" \"require(\" language:Solidity", "pages": 10},
+    {"id": "consumer-if-verifyproof", "q": "\"verifyProof(\" \"if (\" language:Solidity", "pages": 10},
+    {"id": "circom-main-circuits", "q": "\"component main\" extension:circom path:circuits", "pages": 10},
+    {"id": "circom-pragma-circuits", "q": "\"pragma circom\" extension:circom path:circuits", "pages": 10}
+  ],
+  "github_repository_queries": [
+    {"id": "repo-circom-solidity", "q": "circom solidity in:readme archived:false", "pages": 10},
+    {"id": "repo-zksnark-circom-solidity", "q": "zk snark circom solidity in:readme archived:false", "pages": 10},
+    {"id": "repo-noir-solidity-verifier", "q": "noir solidity verifier in:readme archived:false", "pages": 10}
+  ],
+  "path_rules": {
+    "circuit_include_regex": "(?i)\\.(circom|nr|zok)$",
+    "solidity_include_regex": "(?i)\\.sol$",
+    "first_party_exclude_regex": "(?i)(^|/)(node_modules|vendor|third[_-]?party|cache|artifacts|out|target)(/|$)|(^|/)lib/(forge-std|openzeppelin-contracts|circomlib)(/|$)",
+    "maximum_solidity_bytes": 2000000,
+    "maximum_solidity_files_per_repository": 2000
+  },
+  "consumer_call_rules": [
+    {"id": "R-CALL-VERIFYPROOF-MEMBER", "regex": "\\b[A-Za-z_][A-Za-z0-9_.\\[\\]]*\\s*\\.\\s*verifyProof\\s*(?:\\{[^}]*\\}\\s*)?\\("},
+    {"id": "R-CALL-VERIFYTX-MEMBER", "regex": "\\b[A-Za-z_][A-Za-z0-9_.\\[\\]]*\\s*\\.\\s*verifyTx\\s*(?:\\{[^}]*\\}\\s*)?\\("},
+    {"id": "R-CALL-NAMED-VERIFIER-VERIFY", "regex": "\\b[A-Za-z_][A-Za-z0-9_]*[Vv]erifier[A-Za-z0-9_]*\\s*\\.\\s*verify\\s*(?:\\{[^}]*\\}\\s*)?\\("},
+    {"id": "R-CAST-VERIFIER-CALL", "regex": "\\b(?:I?Verifier|I?Groth16Verifier|I?PlonkVerifier|I?UltraVerifier|I?HonkVerifier)\\s*\\([^;\\n]+\\)\\s*\\.\\s*(?:verify|verifyProof|verifyTx)\\s*\\("},
+    {"id": "R-DIRECT-VERIFYPROOF-CALL", "regex": "\\bverifyProof\\s*\\(", "line_exclude_regex": "\\b(function|interface)\\b"},
+    {"id": "R-DIRECT-VERIFYTX-CALL", "regex": "\\bverifyTx\\s*\\(", "line_exclude_regex": "\\b(function|interface)\\b"}
+  ],
+  "maturity_rules": {
+    "priority": ["verified-deployed", "deployed-address-in-docs", "audited-production", "hackathon-student", "unclassified"],
+    "verified_deployed": "Exact SHA-256 source-content match between a GitHub consumer call-site file and a Sourcify source joined to a runtime_match=true and runtime_metadata_match=true deployment on a fixed chain list.",
+    "deployed_address_in_docs": "README contains a nonzero 20-byte hex address and deployment/mainnet/contract-address language.",
+    "audited_production": "README or repository metadata contains an audit/auditor term and production/mainnet/protocol language.",
+    "hackathon_student": "README, topics, description, or query provenance contains hackathon, ETHGlobal, Devfolio, student, or university language."
+  }
+}

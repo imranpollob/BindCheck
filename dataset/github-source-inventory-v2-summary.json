@@ -1,0 +1,182 @@
+{
+  "candidate_repositories": 4516,
+  "config_sha256": "546eb122befcaefd7ef6939ffdef81684b7f4f6ffb080c7d5a54fd587157f136",
+  "eval_analyzer_runs": 0,
+  "generated_utc": "2026-11-04T23:53:45.558856+00:00",
+  "output_sha256": "e09124ec5ee53ae2b61c290b241d6000d13d3846a1de1fc2dffec8c850a43c06",
+  "predup_disposition_counts": {
+    "in-scope": 1593,
+    "inventory-incomplete": 39,
+    "no circuit": 1825,
+    "no consumer": 1555,
+    "unavailable": 1
+  },
+  "query_yields": {
+    "circom-main-circuits": {
+      "in_scope_repositories": 215,
+      "items": 1000,
+      "kind": "code",
+      "marginal_new_repositories": 388,
+      "page_budget": 10,
+      "pages_fetched": 10,
+      "query": "\"component main\" extension:circom path:circuits",
+      "unique_repositories": 536
+    },
+    "circom-pragma-circuits": {
+      "in_scope_repositories": 146,
+      "items": 1000,
+      "kind": "code",
+      "marginal_new_repositories": 106,
+      "page_budget": 10,
+      "pages_fetched": 10,
+      "query": "\"pragma circom\" extension:circom path:circuits",
+      "unique_repositories": 436
+    },
+    "consumer-groth16": {
+      "in_scope_repositories": 358,
+      "items": 1000,
+      "kind": "code",
+      "marginal_new_repositories": 306,
+      "page_budget": 10,
+      "pages_fetched": 10,
+      "query": "\"Groth16Verifier\" \"verifyProof\" language:Solidity",
+      "unique_repositories": 577
+    },
+    "consumer-honk": {
+      "in_scope_repositories": 90,
+      "items": 500,
+      "kind": "code",
+      "marginal_new_repositories": 114,
+      "page_budget": 5,
+      "pages_fetched": 5,
+      "query": "\"HonkVerifier\" language:Solidity",
+      "unique_repositories": 182
+    },
+    "consumer-if-verifyproof": {
+      "in_scope_repositories": 140,
+      "items": 1000,
+      "kind": "code",
+      "marginal_new_repositories": 70,
+      "page_budget": 10,
+      "pages_fetched": 10,
+      "query": "\"verifyProof(\" \"if (\" language:Solidity",
+      "unique_repositories": 462
+    },
+    "consumer-igroth16": {
+      "in_scope_repositories": 171,
+      "items": 707,
+      "kind": "code",
+      "marginal_new_repositories": 183,
+      "page_budget": 10,
+      "pages_fetched": 8,
+      "query": "\"IGroth16Verifier\" language:Solidity",
+      "unique_repositories": 236
+    },
+    "consumer-iverifier-verifyproof": {
+      "in_scope_repositories": 230,
+      "items": 1000,
+      "kind": "code",
+      "marginal_new_repositories": 253,
+      "page_budget": 10,
+      "pages_fetched": 10,
+      "query": "\"IVerifier\" \"verifyProof\" language:Solidity",
+      "unique_repositories": 404
+    },
+    "consumer-member-verifyproof": {
+      "in_scope_repositories": 263,
+      "items": 1000,
+      "kind": "code",
+      "marginal_new_repositories": 613,
+      "page_budget": 10,
+      "pages_fetched": 10,
+      "query": "\".verifyProof(\" language:Solidity",
+      "unique_repositories": 613
+    },
+    "consumer-member-verifytx": {
+      "in_scope_repositories": 93,
+      "items": 378,
+      "kind": "code",
+      "marginal_new_repositories": 248,
+      "page_budget": 10,
+      "pages_fetched": 4,
+      "query": "\".verifyTx(\" language:Solidity",
+      "unique_repositories": 262
+    },
+    "consumer-plonk": {
+      "in_scope_repositories": 67,
+      "items": 1000,
+      "kind": "code",
+      "marginal_new_repositories": 128,
+      "page_budget": 10,
+      "pages_fetched": 10,
+      "query": "\"PlonkVerifier\" language:Solidity",
+      "unique_repositories": 217
+    },
+    "consumer-require-verifyproof": {
+      "in_scope_repositories": 198,
+      "items": 1000,
+      "kind": "code",
+      "marginal_new_repositories": 217,
+      "page_budget": 10,
+      "pages_fetched": 10,
+      "query": "\"verifyProof(\" \"require(\" language:Solidity",
+      "unique_repositories": 497
+    },
+    "consumer-ultra": {
+      "in_scope_repositories": 77,
+      "items": 500,
+      "kind": "code",
+      "marginal_new_repositories": 156,
+      "page_budget": 5,
+      "pages_fetched": 5,
+      "query": "\"UltraVerifier\" language:Solidity",
+      "unique_repositories": 205
+    },
+    "consumer-verifier-verify": {
+      "in_scope_repositories": 82,
+      "items": 1000,
+      "kind": "code",
+      "marginal_new_repositories": 550,
+      "page_budget": 10,
+      "pages_fetched": 10,
+      "query": "\"verifier.verify(\" language:Solidity",
+      "unique_repositories": 598
+    },
+    "repo-circom-solidity": {
+      "in_scope_repositories": 186,
+      "items": 397,
+      "kind": "repository",
+      "marginal_new_repositories": 338,
+      "page_budget": 10,
+      "pages_fetched": 4,
+      "query": "circom solidity in:readme archived:false",
+      "unique_repositories": 397
+    },
+    "repo-noir-solidity-verifier": {
+      "in_scope_repositories": 266,
+      "items": 1000,
+      "kind": "repository",
+      "marginal_new_repositories": 772,
+      "page_budget": 10,
+      "pages_fetched": 10,
+      "query": "noir solidity verifier in:readme archived:false",
+      "unique_repositories": 1000
+    },
+    "repo-zksnark-circom-solidity": {
+      "in_scope_repositories": 66,
+      "items": 198,
+      "kind": "repository",
+      "marginal_new_repositories": 74,
+      "page_budget": 10,
+      "pages_fetched": 2,
+      "query": "zk snark circom solidity in:readme archived:false",
+      "unique_repositories": 198
+    }
+  },
+  "scanned_repository_revisions": 5013,
+  "scanner_version": "github-inventory-v2-regex-1",
+  "schema_version": 2,
+  "scope": "path and verifier-call regex inventory only; no BindCheck, screen_consumers.py, scan_p4.py, Track B, or vulnerability analysis",
+  "snapshot_id": "source-corpus-2026-11-03-v2",
+  "v1_ledger_sha256": "7031b6a7302220163e9818b0065bef3a6e964f7085da147619479dd8f4466309"
+}
