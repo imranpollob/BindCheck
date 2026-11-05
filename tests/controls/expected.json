@@ -46,6 +46,7 @@
     {"id":"P1-14-erc721-mint-token-id","fixture":"p1_erc721_mint","pattern":"P1","verdict":"VERIFIED_WITHIN_SCOPE","reason":"RECIPIENT_BOUND_TO_MSG_SENDER"},
     {"id":"P1-15-storage-value-not-proven-caller-controlled","fixture":"p1_storage_amount","pattern":"P1","verdict":"UNKNOWN","reason":"CALLER_INDEPENDENCE_UNRESOLVED"},
     {"id":"P1-16-derived-public-effect","fixture":"p1_derived_amount","pattern":"P1","verdict":"UNKNOWN","reason":"EFFECT_TRANSFORMATION_UNRESOLVED"},
+    {"id":"P1-17-opaque-struct-verifier-input","fixture":"p1_opaque_struct_input","pattern":"P1","verdict":"UNKNOWN","reason":"PUBLIC_INPUT_VECTOR_UNRESOLVED"},
 
     {"id":"P2-01-chain-id-direct-clean","fixture":"p2_chainid","pattern":"P2","verdict":"VERIFIED_WITHIN_SCOPE","reason":"CONTEXT_BOUND_IN_PUBLIC_INPUTS"},
     {"id":"P2-02-contract-address-clean","fixture":"p2_contract","pattern":"P2","verdict":"VERIFIED_WITHIN_SCOPE","reason":"CONTEXT_BOUND_IN_PUBLIC_INPUTS"},
