@@ -68,6 +68,9 @@
     {"id":"P3-09-hashed-key-alias-clean","fixture":"p3_hashed_alias","pattern":"P3","verdict":"VERIFIED_WITHIN_SCOPE","reason":"REPLAY_KEY_CANONICAL_AND_CONSUMED"},
     {"id":"P3-10-indexed-array-replay-key","fixture":"p3_indexed_array","pattern":"P3","verdict":"VERIFIED_WITHIN_SCOPE","reason":"REPLAY_KEY_CANONICAL_AND_CONSUMED"},
     {"id":"P3-11-nested-index-replay-key","fixture":"p3_nested_index","pattern":"P3","verdict":"VERIFIED_WITHIN_SCOPE","reason":"REPLAY_KEY_CANONICAL_AND_CONSUMED"},
+    {"id":"P3-12-nested-mapping-key","fixture":"p3_nested_mapping","pattern":"P3","verdict":"UNKNOWN","reason":"REPLAY_KEY_EXPRESSION_UNRESOLVED"},
+    {"id":"P3-13-generic-helper-barrier","fixture":"p3_generic_helper","pattern":"P3","verdict":"UNKNOWN","reason":"REPLAY_BARRIER_HELPER_UNRESOLVED"},
+    {"id":"P3-14-verify-only-no-effect","fixture":"discovery_verify_only_consumer","pattern":"P3","verdict":"UNKNOWN","reason":"PROTECTED_EFFECT_NOT_RECOVERED"},
 
     {"id":"P4-01-distinct-gamma-delta-clean","fixture":"p4_distinct","pattern":"P4","verdict":"VERIFIED_WITHIN_SCOPE","reason":"VERIFICATION_KEY_CHECKS_PASS"},
     {"id":"P4-02-default-gamma-delta-source","fixture":"p4_default_key","pattern":"P4","verdict":"UNKNOWN","reason":"DEFAULT_G2_GAMMA_DELTA_SOURCE_WARNING"},
