@@ -1,0 +1,43 @@
+{
+  "append_only_projection_check": "PASS",
+  "eval_analyzer_runs": 0,
+  "eval_in_scope_families_including_dev_overlap": 1388,
+  "eval_only_in_scope_families": 1384,
+  "eval_only_in_scope_family_maturity": {
+    "audited-production": 207,
+    "deployed-address-in-docs": 303,
+    "hackathon-student": 81,
+    "unclassified": 755,
+    "verified-deployed": 38
+  },
+  "eval_v2_disposition_counts": {
+    "dup": 352,
+    "in-scope": 1384,
+    "inventory-incomplete": 37,
+    "no circuit": 1825,
+    "no consumer": 1361,
+    "unavailable": 9
+  },
+  "eval_v2_predup_disposition_counts": {
+    "in-scope": 1548,
+    "inventory-incomplete": 38,
+    "no circuit": 1826,
+    "no consumer": 1547,
+    "unavailable": 9
+  },
+  "families": 4668,
+  "generated_utc": "2026-11-05T01:55:21.153786+00:00",
+  "github_inventory_sha256": "e09124ec5ee53ae2b61c290b241d6000d13d3846a1de1fc2dffec8c850a43c06",
+  "new_eval_rows": 4127,
+  "output_sha256": "07210625783a21a6128ea3f99402fc4a48b36922056241649999547a374b0c95",
+  "rows": 5024,
+  "schema_version": 2,
+  "sourcify_matches_sha256": "fb29466d660a22f95d55e3851f97b84095553563909461ba4ac4d78ce7c5cada",
+  "split_counts": {
+    "DEV": 56,
+    "EVAL": 4968
+  },
+  "v1_ledger_sha256": "7031b6a7302220163e9818b0065bef3a6e964f7085da147619479dd8f4466309",
+  "v1_rows_preserved": 897,
+  "verified_deployed_rows": 86
+}

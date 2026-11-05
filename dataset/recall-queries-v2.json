@@ -1,0 +1,18 @@
+{
+  "schema_version": 2,
+  "snapshot_id": "integration-recall-2026-11-03-v2",
+  "v1_ledger": "dataset/recall-set.csv",
+  "zkbugs_repository": "https://github.com/zksecurity/zkbugs",
+  "zkbugs_commit": "ee4eb3ab693adc14acb9a6e1842b1794e481e9f9",
+  "strict_promotion_rule": "A public recall row is a strict integration inventory case when its case_id matches the fixed effect/integration regex and its repository has a v2 row with both a first-party circuit path and a Solidity verifier-call regex. This is inventory evidence only; finding-to-revision correspondence remains unvalidated.",
+  "effect_integration_case_id_regex": "(?i)(double[_ -]?spend|verifier|lock[_ -]?user[_ -]?funds|state[_ -]?update|ownership[_ -]?proof|erc[_ -]?20|register|registration|passport|forbidden[_ -]?countr|membership|calldata|transaction|balance|nonce|execution[_ -]?flow|public[_ -]?input)",
+  "additional_zkbugs_ids": [
+    "circom/succinctlabs/telepathy-circuits/veridise_template_CoreVerifyPubkeyG1_does_not_perform_input_validation_simplified",
+    "circom/succinctlabs/telepathy-circuits/veridise_zero_padding_for_sha256_in_ExpandMessageXMD_is_vulnerable_to_an_overflow",
+    "circom/succinctlabs/telepathy-circuits/veridise_arrayxor_is_under_constrained",
+    "circom/Unirep/Unirep/veridise_missing_range_checks_on_comparison_circuits",
+    "circom/Unirep/Unirep/veridise_underconstrained_circuit_allows_invalid_comparison",
+    "circom/selfxyz/self/zksecurity_missing_boolean_constraints_in_the_merkle_tree_path_leads_to_an_attacker_being_able_to_craft_a_fake_merkle_proof_for_an_arbitrary_leaf",
+    "circom/selfxyz/self/zksecurity_the_registration_and_disclosure_circuits_lack_range_checks_for_the_input_indices"
+  ]
+}
