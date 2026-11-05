@@ -78,6 +78,7 @@
     {"id":"P4-07-runtime-library-generator-only","fixture":"p4_runtime_library","pattern":"P4","verdict":"VERIFIED_WITHIN_SCOPE","reason":"PAIRING_LIBRARY_GENERATOR_EXCLUDED"},
     {"id":"P4-08-runtime-truncated-push","fixture":"p4_runtime_truncated","pattern":"P4","verdict":"UNKNOWN","reason":"RUNTIME_BYTECODE_PARSE_INCOMPLETE"},
     {"id":"P4-09-interface-only","fixture":"p4_interface_only","pattern":"P4","verdict":"UNKNOWN","reason":"VERIFIER_IMPLEMENTATION_ARTIFACT_MISSING"},
+    {"id":"P4-10-honk-layout-unsupported","fixture":"p4_honk_unsupported","pattern":"P4","verdict":"UNKNOWN","reason":"UNSUPPORTED_VERIFIER_KEY_LAYOUT"},
 
     {"id":"P5-01-fixed-count-clean","fixture":"p5_fixed_clean","pattern":"P5","verdict":"VERIFIED_WITHIN_SCOPE","reason":"PUBLIC_INPUT_COUNT_AND_ORDER_MATCH"},
     {"id":"P5-02-fixed-count-mismatch","fixture":"p5_count_bad","pattern":"P5","verdict":"VIOLATION","reason":"PUBLIC_INPUT_COUNT_MISMATCH"},
@@ -92,6 +93,9 @@
     ,{"id":"P5-11-main-template-scope","fixture":"p5_main_template_scope","pattern":"P5","verdict":"VERIFIED_WITHIN_SCOPE","reason":"PUBLIC_INPUT_COUNT_AND_ORDER_MATCH"}
     ,{"id":"P5-12-receiver-type-match","fixture":"p5_receiver_type_match","pattern":"P5","verdict":"VERIFIED_WITHIN_SCOPE","reason":"PUBLIC_INPUT_COUNT_AND_ORDER_MATCH","expected_triples":1}
     ,{"id":"P5-13-dynamic-array-exact-allocation","fixture":"p5_dynamic_allocated","pattern":"P5","verdict":"VERIFIED_WITHIN_SCOPE","reason":"PUBLIC_INPUT_COUNT_AND_ORDER_MATCH"}
+    ,{"id":"P5-14-count-guided-match-no-saturation","fixture":"p5_count_guided_match","pattern":"P5","verdict":"VERIFIED_WITHIN_SCOPE","reason":"PUBLIC_INPUT_COUNT_AND_ORDER_MATCH","expected_triples":1}
+    ,{"id":"P5-15-semantic-name-unresolved","fixture":"p5_semantic_name_unresolved","pattern":"P5","verdict":"UNKNOWN","reason":"PUBLIC_INPUT_MEANING_UNRESOLVED"}
+    ,{"id":"P5-16-incomplete-circuit-interface","fixture":"p5_incomplete_interface","pattern":"P5","verdict":"UNKNOWN","reason":"CIRCUIT_INTERFACE_INCOMPLETE"}
 
     ,{"id":"D-01-merkle-proof-not-zk-verifier","fixture":"discovery_merkle_only","pattern":"P1","verdict":"UNKNOWN","reason":"NO_APPLICABLE_TRIPLE","expected_triples":0}
     ,{"id":"D-02-test-only-consumer-excluded","fixture":"discovery_test_consumer","pattern":"P1","verdict":"UNKNOWN","reason":"NO_APPLICABLE_TRIPLE","expected_triples":0}
