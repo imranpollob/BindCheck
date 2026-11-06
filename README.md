@@ -62,10 +62,24 @@ property and parsed artifacts; it is not an application safety verdict. The
 current analyzer content hash is
 `d8510859b918a5166d0f1629cf0d883e965fa0acb1be92a34987c24f1967ae13`.
 It has been validated on 105 prospective controls and all 56 DEV rows without
-path hints. EVAL remains unopened and no freeze tag has been created.
+path hints. EVAL remains unanalyzed and no dataset/freeze tag has been created;
+the frozen 278-family sample has only passed a commit-metadata availability
+check.
 
 ## Current status
 
+- [T25](reports/T25.md) completes the one-shot evaluation harness without
+  changing `bindcheck_zk/`. Exact preregistered selection yields 278 EVAL-only
+  families; annotated dataset/analyzer/environment gates, at-most-once attempt
+  markers, fixed budgets, shallow SHA fetches, per-family cleanup, four-verdict
+  summaries with family bootstrap intervals, blind adjudication, and strict
+  vulnerable/fixed recall orchestration are tested. A real five-family DEV
+  fetch→analyze→baseline→summarize run completed with one E1 `VIOLATION`, four
+  `UNKNOWN`, and zero retained clones; all baseline outputs remain `UNKNOWN`.
+  A metadata-only pass resolved all 278/278 sampled commits, with zero clone or
+  analysis. Recall expectations, human EVAL review, both tags, and the
+  one-shot held-out run remain pending; capability and security remain
+  `UNKNOWN`. Exact operating commands are in [eval/README.md](eval/README.md).
 - [T24](reports/T24.md) completes the unhinted full-DEV coverage and warning
   adjudication task. All 56 rows complete with zero crashes; rows with at least
   one discovered triple rise from 11/56 to 46/56, and circuit-build success
