@@ -60,12 +60,26 @@ Missing artifacts, unsupported constructs, ambiguous matches, build failures,
 and timeouts are `UNKNOWN`. `VERIFIED_WITHIN_SCOPE` names only the recorded
 property and parsed artifacts; it is not an application safety verdict. The
 current analyzer content hash is
-`d8510859b918a5166d0f1629cf0d883e965fa0acb1be92a34987c24f1967ae13`.
-It has been validated on 105 prospective controls and all 56 DEV rows without
+`2741c40e8acdd86d2a15aca1cfd9f1ef989558c749e25ec4d926c3a483fb94bd`.
+It has been validated on 122 prospective controls and all 56 DEV rows without
 path hints. EVAL remains unopened and no freeze tag has been created.
 
 ## Current status
 
+- [T25](reports/T25.md) completes applicability/decision-rate reporting and
+  the final DEV-only analyzer change before held-out execution. The three
+  research verdicts are unchanged; `NOT_APPLICABLE` is a separate
+  applicability value, and every `UNKNOWN` has a fixed reason code. All 122
+  controls and 56 unhinted DEV rows pass with zero crashes. Among applicable
+  rows, decided rates are P1 47.1%, P2 3.7%, P3 69.6%, P4 50.0%, and P5 8.7%;
+  the low P2/P5 rates remain explicit. One new P1 balance-write warning is a
+  true source property, the only expanded warning is an unchanged ambiguous
+  F38 group, and three diagnostic false positives were removed before the
+  controlling run. The [schema note](SCHEMA.md),
+  [before/after ledger](reports/T25-full-dev-ledger.csv), and
+  [warning changes](reports/T25-warning-adjudication.csv) preserve the exact
+  result. EVAL/private P4 data remained unopened; no RPC, transaction, tag,
+  merge, or push occurred. The exact-hash held-out run is next.
 - [T24](reports/T24.md) completes the unhinted full-DEV coverage and warning
   adjudication task. All 56 rows complete with zero crashes; rows with at least
   one discovered triple rise from 11/56 to 46/56, and circuit-build success
