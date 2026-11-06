@@ -323,8 +323,8 @@ contract Consumer is ERC721 {
         csource = """
 contract Consumer {
   function submit(Proof calldata proof, address recipient, uint256 amount) public {
-    require(proof.input[0] == uint256(uint160(recipient)));
-    require(proof.input[1] == amount);
+    require(proof.input[0] == uint256(uint160(recipient)), "recipient mismatch");
+    require(proof.input[1] == amount, "amount mismatch");
     verifier.verifyProof(proof.data, proof.input);
     (bool ok,) = recipient.call{value: amount}("");
     require(ok);
