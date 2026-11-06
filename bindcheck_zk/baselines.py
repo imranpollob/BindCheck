@@ -67,7 +67,15 @@ def _version(tool: str, executable: str, root: pathlib.Path, timeout: float) -> 
 
 def _unknown_patterns(reason: str, message: str) -> tuple[dict[str, Any], dict[str, Any]]:
     findings = {pattern: result(pattern, "UNKNOWN", reason, message, grade="E0") for pattern in ("P1", "P2", "P3", "P4", "P5")}
-    summary = {pattern: {**aggregate([finding]), "results": 1, "reasons": [reason]} for pattern, finding in findings.items()}
+    summary = {
+        pattern: {
+            **aggregate([finding]),
+            "results": 1,
+            "reasons": [reason],
+            "unknown_reason_codes": [finding["unknown_reason_code"]],
+        }
+        for pattern, finding in findings.items()
+    }
     return findings, summary
 
 

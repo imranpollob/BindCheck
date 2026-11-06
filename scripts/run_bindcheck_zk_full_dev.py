@@ -242,6 +242,14 @@ def summarize(row: dict[str, str], result: dict[str, Any], command: dict[str, An
             pattern: patterns.get(pattern, {}).get("reasons", [])
             for pattern in ("P1", "P2", "P3", "P4", "P5")
         },
+        "applicability": {
+            pattern: patterns.get(pattern, {}).get("applicability", "UNKNOWN")
+            for pattern in ("P1", "P2", "P3", "P4", "P5")
+        },
+        "unknown_reason_codes": {
+            pattern: patterns.get(pattern, {}).get("unknown_reason_codes", [])
+            for pattern in ("P1", "P2", "P3", "P4", "P5")
+        },
         "runtime_seconds": result.get("run", {}).get("elapsed_seconds"),
     }
 
@@ -276,11 +284,14 @@ def main() -> int:
     parser.add_argument("--fetch-jobs", type=int, default=6)
     parser.add_argument("--analyze-jobs", type=int, default=3)
     parser.add_argument("--skip-fetch", action="store_true")
+    parser.add_argument("--raw-task", default="T24")
     args = parser.parse_args()
+    if not re.fullmatch(r"T\d+", args.raw_task):
+        raise ValueError("--raw-task must be a T-number such as T25")
 
     rows = dev_rows()
     run_id = dt.datetime.now(dt.UTC).strftime(f"{args.phase}-%Y%m%dT%H%M%SZ-") + str(os.getpid())
-    output_dir = RAW_ROOT / run_id
+    output_dir = RAW_ROOT.parent / args.raw_task / run_id
     output_dir.mkdir(parents=True)
     acquisitions: list[dict[str, Any]] = []
     if args.skip_fetch:
@@ -331,6 +342,7 @@ def main() -> int:
     manifest = {
         "schema": "bindcheck-zk.full-dev-run/v1",
         "phase": args.phase,
+        "raw_task": args.raw_task,
         "scope": "exactly 56 DEV rows reconstructed without opening mixed source-corpus or recall-set ledgers",
         "run_id": run_id,
         "started_from_revision": run_command(["git", "rev-parse", "HEAD"], cwd=ROOT, timeout=10)["stdout"].strip(),

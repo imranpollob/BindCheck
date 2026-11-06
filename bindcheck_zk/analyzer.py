@@ -24,6 +24,7 @@ from .solidity import (
     Function,
     PublicVector,
     assignments,
+    balanced,
     calls,
     effect_calls,
     effect_roles,
@@ -33,6 +34,7 @@ from .solidity import (
     mask_comments_and_strings,
     normalize_expression,
     public_vector,
+    split_top_level,
     verification_calls,
     verifier_declarations,
 )
@@ -244,6 +246,7 @@ def discover_consumers(sources: list[Source]) -> list[Consumer]:
     output: list[Consumer] = []
     for source in sources:
         parsed_functions = list(functions(source.text))
+        local_function_names = {item.name for item in parsed_functions}
         helper_vector_parameters: dict[str, list[int]] = defaultdict(list)
         for helper in parsed_functions:
             parameter_names = list(helper.parameters)
@@ -261,7 +264,11 @@ def discover_consumers(sources: list[Source]) -> list[Consumer]:
                         if source_name in helper.parameters and normalize_expression(destination_index) == normalize_expression(source_index):
                             helper_vector_parameters[helper.name].append(parameter_names.index(source_name))
         for function in parsed_functions:
-            verify = list(filter(_supported_verification_call, verification_calls(function.body)))
+            verify = [
+                call for call in verification_calls(function.body)
+                if _supported_verification_call(call)
+                and not (call.receiver is None and call.name in local_function_names)
+            ]
             if not verify:
                 for helper_name, vector_indices in helper_vector_parameters.items():
                     helper_calls = calls(
@@ -281,7 +288,7 @@ def discover_consumers(sources: list[Source]) -> list[Consumer]:
                             ))
             if not verify:
                 continue
-            effects = effect_calls(function.body)
+            effects = effect_calls(function.body, source.text)
             vectors = [public_vector(function.body, call) for call in verify]
             for vector in vectors:
                 if vector.base and vector.base in function.parameters:
@@ -435,6 +442,40 @@ def _direct_bound(expression: str, vector: PublicVector, aliases: dict[str, str]
     return False
 
 
+def _guard_bound(expression: str, vector: PublicVector, aliases: dict[str, str], body: str) -> bool:
+    """Recognize an explicit equality between an effect role and a vector member."""
+    resolved = normalize_expression(_resolve_alias(expression, aliases))
+    vector_refs = {
+        normalize_expression(_resolve_alias(value, aliases))
+        for value in (vector.base, vector.expression)
+        if value
+    }
+    if not vector_refs:
+        return False
+    masked = mask_comments_and_strings(body)
+    for match in re.finditer(r"\b(?:require|if)\s*\(", masked):
+        opening = masked.find("(", match.start())
+        condition = balanced(body, opening)
+        if condition is None:
+            continue
+        arguments = split_top_level(condition[0])
+        predicate = arguments[0] if arguments else ""
+        if "==" not in predicate:
+            continue
+        left, right = predicate.split("==", 1)
+        left_norm = normalize_expression(_resolve_alias(left.strip(), aliases))
+        right_norm = normalize_expression(_resolve_alias(right.strip(), aliases))
+
+        def is_vector_member(value: str) -> bool:
+            return any(value == ref or value.startswith(ref + "[") for ref in vector_refs)
+
+        if (left_norm == resolved and is_vector_member(right_norm)) or (
+            right_norm == resolved and is_vector_member(left_norm)
+        ):
+            return True
+    return False
+
+
 def _commitment_binding(
     expression: str,
     vector: PublicVector,
@@ -490,6 +531,12 @@ def analyze_p1(circuit: Circuit | None, verifier: Verifier | None, consumer: Con
     unsupported = has_unsupported_construct(consumer.function.body)
     if unsupported:
         return result("P1", "UNKNOWN", unsupported, "Consumer function uses a construct outside the supported dataflow subset.", where=where)
+    if not consumer.effect_calls:
+        return result(
+            "P1", "UNKNOWN", "PROTECTED_EFFECT_NOT_RECOVERED",
+            "No supported protected effect is committed on the recovered verifier-accepting function path.",
+            where=where, applicability="NOT_APPLICABLE",
+        )
     if verifier is None:
         return result("P1", "UNKNOWN", "VERIFIER_ARTIFACT_MISSING", "Consumer is analyzed, but the verifier implementation artifact is absent.", where=where)
     if circuit is None:
@@ -504,7 +551,12 @@ def analyze_p1(circuit: Circuit | None, verifier: Verifier | None, consumer: Con
     )) if consumer.verify_calls else set()
     vector_sources = set().union(*(vector.sources for vector in consumer.vectors)) if consumer.vectors else set()
     for call in consumer.effect_calls:
-        for role, expression in effect_roles(call, consumer.source.text):
+        roles = effect_roles(call, consumer.source.text)
+        resolved_recipients = [
+            normalize_expression(_resolve_alias(value, aliases))
+            for name, value in roles if name == "recipient"
+        ]
+        for role, expression in roles:
             fact: dict[str, Any] = {"provenance": "EXTRACTED", "role": role, "expression": expression, "bound_by": []}
             resolved_expression = normalize_expression(_resolve_alias(expression, aliases))
             if role == "recipient" and resolved_expression == "msg.sender":
@@ -513,6 +565,14 @@ def analyze_p1(circuit: Circuit | None, verifier: Verifier | None, consumer: Con
                 fact["bound_by"].append("contract-self")
             if any(_direct_bound(expression, vector, aliases) for vector in consumer.vectors):
                 fact["bound_by"].append("direct-public-input")
+            if any(_guard_bound(expression, vector, aliases, consumer.function.body) for vector in consumer.vectors):
+                fact["bound_by"].append("local-public-vector-guard")
+            if (
+                role == "amount"
+                and "msg.sender" in resolved_recipients
+                and re.search(r"\bmsg\s*\.\s*value\b", _resolve_alias(expression, aliases))
+            ):
+                fact["bound_by"].append("caller-funded-refund")
             if not fact["bound_by"]:
                 for vector in consumer.vectors:
                     bound, evidence, reason = _commitment_binding(expression, vector, circuit, consumer, repository_solidity)
@@ -547,6 +607,8 @@ def analyze_p1(circuit: Circuit | None, verifier: Verifier | None, consumer: Con
                         violations.append("UNBOUND_EFFECT_RECIPIENT")
                     elif role == "amount":
                         violations.append("UNBOUND_EFFECT_AMOUNT")
+                    elif role == "identity":
+                        violations.append("UNBOUND_EFFECT_IDENTITY")
             role_facts.append(fact)
     if violations:
         reason = sorted(set(violations))[0]
@@ -560,7 +622,7 @@ def analyze_p1(circuit: Circuit | None, verifier: Verifier | None, consumer: Con
         reason = sorted(set(unknown_reasons))[0] if unknown_reasons else "EFFECT_BINDING_UNRESOLVED"
         return result("P1", "UNKNOWN", reason, "A protected effect role could not be proved bound or unbound in the supported subset.", where=where, facts=role_facts)
     if not role_facts:
-        return result("P1", "UNKNOWN", "PROTECTED_EFFECT_NOT_RECOVERED", "No supported protected effect role was recovered.", where=where)
+        return result("P1", "UNKNOWN", "EFFECT_BINDING_UNRESOLVED", "A protected effect was recovered but its semantic roles were not.", where=where)
     reason = "RECIPIENT_BOUND_TO_MSG_SENDER" if any("msg.sender" in fact["bound_by"] for fact in role_facts) else "EFFECT_VALUES_DIRECT_PUBLIC_INPUTS"
     if any("contract-self" in fact["bound_by"] for fact in role_facts):
         reason = "RECIPIENT_BOUND_TO_CONTRACT_SELF"
@@ -579,20 +641,47 @@ def analyze_p2(circuit: Circuit | None, consumer: Consumer) -> dict[str, Any]:
     unsupported = has_unsupported_construct(consumer.function.body)
     if unsupported == "UNSUPPORTED_DELEGATECALL_CONTEXT":
         return result("P2", "UNKNOWN", unsupported, "Delegatecall makes address/domain context semantics unsupported.", where=where)
-    vector_text = " ".join(vector.expression + " " + " ".join(vector.items) for vector in consumer.vectors)
+    replay_uses = _mapping_uses(consumer.function.body, consumer.source.text)
+    if not consumer.effect_calls and not replay_uses:
+        return result(
+            "P2", "UNKNOWN", "PROTECTED_EFFECT_NOT_RECOVERED",
+            "No protected effect or replay-relevant state mutation was recovered on the verifier-accepting function path.",
+            where=where, applicability="NOT_APPLICABLE",
+        )
+    source_aliases = {
+        normalize_expression(name): value
+        for name, value in assignments(consumer.source.text).items()
+    }
+    body_aliases = {
+        normalize_expression(name): value
+        for name, value in assignments(consumer.function.body).items()
+    }
+    aliases = {**source_aliases, **body_aliases}
+    vector_parts = [
+        _resolve_alias(part, aliases)
+        for vector in consumer.vectors
+        for part in [vector.expression, *vector.items]
+    ]
+    vector_text = " ".join(vector_parts)
     body = consumer.function.body
-    direct = bool(re.search(r"block\s*\.\s*chainid|address\s*\(\s*this\s*\)|\b(?:domain|chain_id|chainId|appId|verifyingContract)\b", vector_text, re.I))
+    context_pattern = r"block\s*\.\s*chainid|address\s*\(\s*this\s*\)|\b(?:domain(?:Separator)?|DOMAIN_SEPARATOR|eip712Domain|chain_id|chainId|appId|verifyingContract)\b"
+    has_context = bool(re.search(context_pattern, vector_text, re.I))
+    committed = has_context and bool(re.search(r"\b(?:keccak256|sha256|poseidon|hash)\b", vector_text, re.I))
+    direct = has_context and not committed
     guarded = bool(re.search(
         r"(?:require|if)\s*\((?=[^;]*(?:block\s*\.\s*chainid|address\s*\(\s*this\s*\)|\b(?:domain|chain_id|chainId|appId)\b))(?=[^;]*(?:==|!=))",
         body,
         re.I | re.S,
     ))
-    computed = bool(re.search(r"block\s*\.\s*chainid|address\s*\(\s*this\s*\)|\b(?:domain|chain_id|chainId|appId)\b", body, re.I))
+    computed = bool(re.search(context_pattern, body, re.I))
     facts = [
         {"provenance": "EXTRACTED", "name": "context_in_public_vector", "value": direct},
+        {"provenance": "EXTRACTED", "name": "context_in_public_commitment", "value": committed},
         {"provenance": "EXTRACTED", "name": "context_local_guard", "value": guarded},
         {"provenance": "EXTRACTED", "name": "context_computation_present", "value": computed},
     ]
+    if committed:
+        return result("P2", "VERIFIED_WITHIN_SCOPE", "CONTEXT_BOUND_IN_PUBLIC_COMMITMENT", "A supported chain or contract context is hashed into a value supplied to the verifier public statement.", where=where, facts=facts)
     if direct:
         return result("P2", "VERIFIED_WITHIN_SCOPE", "CONTEXT_BOUND_IN_PUBLIC_INPUTS", "A supported chain, contract, or explicit domain value is included in the verifier public vector.", where=where, facts=facts)
     if guarded:
@@ -694,17 +783,28 @@ def analyze_p3(verifier: Verifier | None, consumer: Consumer) -> dict[str, Any]:
         return result(
             "P3", "UNKNOWN", "PROTECTED_EFFECT_NOT_RECOVERED",
             "Replay-key safety is not decided for a read-only verifier utility with no state effect.",
-            where=where,
+            where=where, applicability="NOT_APPLICABLE",
         )
     uses = _mapping_uses(consumer.function.body, consumer.source.text)
+    replay_helper = bool(re.search(
+        r"\b[A-Za-z_]\w*(?:nullifier|spent|replay|claim|nonce)[A-Za-z_]*\s*\(",
+        consumer.function.body,
+        re.I,
+    ))
     if not uses and not consumer.effect_calls:
         return result(
             "P3", "UNKNOWN", "PROTECTED_EFFECT_NOT_RECOVERED",
             "Replay-key safety is not decided because neither a replay-state access nor a supported protected effect was recovered.",
-            where=where,
+            where=where, applicability="NOT_APPLICABLE",
         )
     if not uses:
-        return result("P3", "UNKNOWN", "REPLAY_KEY_NOT_RECOVERED", "No supported replay-key mapping access was recovered.", where=where)
+        if replay_helper:
+            return result("P3", "UNKNOWN", "REPLAY_BARRIER_HELPER_UNRESOLVED", "Replay-relevant handling may be delegated to an unsupported helper.", where=where)
+        return result(
+            "P3", "UNKNOWN", "REPLAY_KEY_NOT_RECOVERED",
+            "No replay-relevant state access was recovered; the replay-barrier pattern is not applicable to this function.",
+            where=where, applicability="NOT_APPLICABLE",
+        )
     facts: list[dict[str, Any]] = []
     aliases = {normalize_expression(name): value for name, value in assignments(consumer.function.body).items()}
     for mapping, key in uses:
@@ -771,6 +871,12 @@ def analyze_p5(circuit: Circuit | None, verifier: Verifier | None, consumer: Con
     ]
     if vector.dynamic and vector.length_guard is None:
         return result("P5", "UNKNOWN", "DYNAMIC_PUBLIC_INPUT_LENGTH_UNRESOLVED", "Dynamic verifier inputs have no supported exact length guard.", where=where, facts=facts)
+    if "public-vector-shape" in vector.unresolved and not vector.items and vector.declared_count is None and vector.length_guard is None:
+        return result(
+            "P5", "UNKNOWN", "PUBLIC_INPUT_VECTOR_UNRESOLVED",
+            "A verifier call was recovered, but its public-signal vector shape could not be established.",
+            where=where, facts=facts,
+        )
     if expected is not None and observed is not None and expected != observed:
         return result("P5", "VIOLATION", "PUBLIC_INPUT_COUNT_MISMATCH", f"Consumer supplies {observed} public inputs but the matched verifier expects {expected}.", where=where, facts=facts)
     if circuit.public_count is not None and observed is not None and circuit.public_count != observed:
@@ -1117,8 +1223,27 @@ def analyze(
     for pattern in PATTERNS:
         results = [triple["patterns"][pattern] for triple in triples_output]
         if not results:
-            results = [result(pattern, "UNKNOWN", fatal or "NO_APPLICABLE_TRIPLE", "The pattern had no completed applicable triple.", grade="E0")]
-        pattern_summary[pattern] = {**aggregate(results), "results": len(results), "reasons": sorted({item["reason"] for item in results})}
+            results = [result(
+                pattern, "UNKNOWN", fatal or "NO_APPLICABLE_TRIPLE",
+                "The analyzer could not establish whether an applicable circuit/verifier/consumer triple exists.",
+                grade="E0", applicability="UNKNOWN",
+            )]
+        summary = aggregate(results)
+        applicable_unknowns = [
+            item for item in results
+            if item["verdict"] == "UNKNOWN" and item.get("applicability", "APPLICABLE") == "APPLICABLE"
+        ]
+        if summary["applicability"] != "APPLICABLE":
+            applicable_unknowns = [item for item in results if item["verdict"] == "UNKNOWN"]
+        pattern_summary[pattern] = {
+            **summary,
+            "results": len(results),
+            "reasons": sorted({item["reason"] for item in results}),
+            "unknown_reason_codes": sorted({
+                item["unknown_reason_code"] for item in applicable_unknowns
+                if item.get("unknown_reason_code")
+            }),
+        }
     tool_hash, _ = freeze_manifest(pathlib.Path(__file__).resolve().parents[1])
     return {
         "schema": "bindcheck-zk.result/v1",
