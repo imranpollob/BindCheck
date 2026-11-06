@@ -8,6 +8,7 @@ import tempfile
 import unittest
 
 from bindcheck_zk.analyzer import analyze
+from bindcheck_zk.models import unknown_reason_code
 from bindcheck_zk.p4 import BN254_G2
 
 
@@ -315,6 +316,32 @@ contract Consumer is ERC721 {
   function submit(bytes memory proof, address recipient, uint256 tokenId) public {
     verifier.verifyProof(proof, [uint256(uint160(recipient))]);
     safeTransferFrom(msg.sender, recipient, tokenId);
+  }
+}
+"""
+    elif name == "p1_member_vector_effect":
+        csource = """
+contract Consumer {
+  function submit(Proof calldata proof, address recipient, uint256 amount) public {
+    require(proof.input[0] == uint256(uint160(recipient)));
+    require(proof.input[1] == amount);
+    verifier.verifyProof(proof.data, proof.input);
+    (bool ok,) = recipient.call{value: amount}("");
+    require(ok);
+  }
+}
+"""
+    elif name == "p1_value_refund":
+        order = ["amount"]
+        vsource = verifier(1)
+        csource = """
+contract Consumer {
+  function submit(bytes memory proof, uint256 amount) public payable {
+    require(msg.value >= amount);
+    verifier.verifyProof(proof, [amount]);
+    uint256 surplus = msg.value - amount;
+    (bool ok,) = msg.sender.call{value: surplus}("");
+    require(ok);
   }
 }
 """
@@ -684,6 +711,21 @@ contract Consumer {
   }
 }
 """
+    elif name == "discovery_internal_merkle_verify":
+        csource = """
+contract Consumer {
+  function verifyStorageProof(address provider, bytes32 leaf, bytes32[] calldata proof) public {
+    bytes32 root = verifyProof(leaf, proof);
+    if (root != dataRoots[provider]) {
+      (bool ok,) = payable(provider).call{value: collateral[provider]}("");
+      require(ok);
+    }
+  }
+  function verifyProof(bytes32 leaf, bytes32[] calldata proof) internal pure returns (bytes32) {
+    leaf; proof; return bytes32(0);
+  }
+}
+"""
     elif name == "coverage_vendored_include":
         circuit_source = ("main.circom", """pragma circom 2.0.0;
 include "circomlib/circuits/comparators.circom";
@@ -733,6 +775,17 @@ class BindCheckZKControlTests(unittest.TestCase):
         spec.loader.exec_module(module)
         expected = {item["id"]: sorted(item["expected_p1_roles"]) for item in EXPECTED["legacy_track_b"]}
         observed = {case_id: module.decide(case)[0] for case_id, case in module.CONTROLS.items()}
+        self.assertEqual(observed, expected)
+
+    def test_unknown_reason_codes_use_the_frozen_taxonomy(self):
+        observed = {
+            item["reason"]: unknown_reason_code(item["reason"])
+            for item in EXPECTED["unknown_reason_code_controls"]
+        }
+        expected = {
+            item["reason"]: item["code"]
+            for item in EXPECTED["unknown_reason_code_controls"]
+        }
         self.assertEqual(observed, expected)
 
     def test_all_new_pattern_controls(self):

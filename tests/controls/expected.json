@@ -63,6 +63,8 @@
     {"id":"P1-22-native-call-value-bound","fixture":"p1_native_call_bound","pattern":"P1","verdict":"VERIFIED_WITHIN_SCOPE","reason":"EFFECT_VALUES_DIRECT_PUBLIC_INPUTS","applicability":"APPLICABLE"},
     {"id":"P1-23-external-call-value-unbound","fixture":"p1_value_call_unbound","pattern":"P1","verdict":"VIOLATION","reason":"UNBOUND_EFFECT_AMOUNT","applicability":"APPLICABLE"},
     {"id":"P1-24-erc721-transfer-token-id-not-amount","fixture":"p1_erc721_transfer","pattern":"P1","verdict":"VERIFIED_WITHIN_SCOPE","reason":"EFFECT_VALUES_DIRECT_PUBLIC_INPUTS","applicability":"APPLICABLE"},
+    {"id":"P1-25-member-vector-guard-binds-effect","fixture":"p1_member_vector_effect","pattern":"P1","verdict":"VERIFIED_WITHIN_SCOPE","reason":"EFFECT_VALUES_DIRECT_PUBLIC_INPUTS","applicability":"APPLICABLE"},
+    {"id":"P1-26-caller-funded-refund","fixture":"p1_value_refund","pattern":"P1","verdict":"VERIFIED_WITHIN_SCOPE","reason":"RECIPIENT_BOUND_TO_MSG_SENDER","applicability":"APPLICABLE"},
 
     {"id":"P2-01-chain-id-direct-clean","fixture":"p2_chainid","pattern":"P2","verdict":"VERIFIED_WITHIN_SCOPE","reason":"CONTEXT_BOUND_IN_PUBLIC_INPUTS"},
     {"id":"P2-02-contract-address-clean","fixture":"p2_contract","pattern":"P2","verdict":"VERIFIED_WITHIN_SCOPE","reason":"CONTEXT_BOUND_IN_PUBLIC_INPUTS"},
@@ -136,6 +138,7 @@
     ,{"id":"D-03-non-entry-circuit-excluded","fixture":"discovery_non_entry_circuit","pattern":"P5","verdict":"VERIFIED_WITHIN_SCOPE","reason":"PUBLIC_INPUT_COUNT_AND_ORDER_MATCH","expected_triples":1}
     ,{"id":"D-04-verify-only-consumer-retained","fixture":"discovery_verify_only_consumer","pattern":"P1","verdict":"UNKNOWN","reason":"PROTECTED_EFFECT_NOT_RECOVERED","applicability":"NOT_APPLICABLE","expected_triples":1}
     ,{"id":"D-05-verifier-wrapper-not-consumer","fixture":"discovery_verifier_wrapper","pattern":"P1","verdict":"VERIFIED_WITHIN_SCOPE","reason":"EFFECT_VALUES_DIRECT_PUBLIC_INPUTS","expected_triples":1}
+    ,{"id":"D-06-internal-merkle-verify-not-zk-consumer","fixture":"discovery_internal_merkle_verify","pattern":"P1","verdict":"UNKNOWN","reason":"NO_APPLICABLE_TRIPLE","applicability":"UNKNOWN","expected_triples":0}
     ,{"id":"COV-01-vendored-circom-include","fixture":"coverage_vendored_include","pattern":"P5","verdict":"VERIFIED_WITHIN_SCOPE","reason":"PUBLIC_INPUT_COUNT_AND_ORDER_MATCH","expected_build":"compile","expected_include_source":"vendored-pinned"}
     ,{"id":"COV-02-prioritized-file-cap","fixture":"coverage_prioritized_cap","pattern":"P1","verdict":"VERIFIED_WITHIN_SCOPE","reason":"EFFECT_VALUES_DIRECT_PUBLIC_INPUTS","expected_triples":1,"expected_cap_skips":1}
     ,{"id":"COV-03-generated-verifier-undefined","fixture":"coverage_no_generation_recipe","pattern":"P1","verdict":"UNKNOWN","reason":"VERIFIER_ARTIFACT_MISSING","expected_generation_reason":"REPOSITORY_GENERATION_RECIPE_NOT_FOUND"}
