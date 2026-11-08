@@ -1,0 +1,17 @@
+case_id,expected_pattern,expected_location_regex,review_status,reviewer,reviewed_date,notes
+circom/privacy-scaling-explorations/maci/hashcloak_data_are_not_fully_verified_during_state_update,,,UNREVIEWED,,,Must be independently mapped to P1-P5 and a vulnerable-revision source location before freeze
+circom/selfxyz/self/zksecurity_an_attacker_can_craft_a_fake_non_inclusion_proof_for_a_given_key_due_to_an_aliasing_bug_in_the_smt_verifier,,,UNREVIEWED,,,Must be independently mapped to P1-P5 and a vulnerable-revision source location before freeze
+circom/tangle-network/protocol-solidity/veridise_incorrect_initialization_in_membership_circuits,,,UNREVIEWED,,,Must be independently mapped to P1-P5 and a vulnerable-revision source location before freeze
+semaphore-nullifier-field-alias,,,UNREVIEWED,,,Must be independently mapped to P1-P5 and a vulnerable-revision source location before freeze
+zkdrops-nullifier-field-alias,,,UNREVIEWED,,,Must be independently mapped to P1-P5 and a vulnerable-revision source location before freeze
+payy-message-tail,,,UNREVIEWED,,,Must be independently mapped to P1-P5 and a vulnerable-revision source location before freeze
+zkemail-zellic-skipped-subject-prefix,,,UNREVIEWED,,,Must be independently mapped to P1-P5 and a vulnerable-revision source location before freeze
+zkemail-zellic-wrong-public-input-field,,,UNREVIEWED,,,Must be independently mapped to P1-P5 and a vulnerable-revision source location before freeze
+zkemail-zellic-stale-zk-regex-artifact,,,UNREVIEWED,,,Must be independently mapped to P1-P5 and a vulnerable-revision source location before freeze
+zkemail-zellic-last-timestamp-zero,,,UNREVIEWED,,,Must be independently mapped to P1-P5 and a vulnerable-revision source location before freeze
+zkemail-zellic-nine-digit-timestamp,,,UNREVIEWED,,,Must be independently mapped to P1-P5 and a vulnerable-revision source location before freeze
+zkemail-zellic-overlapping-masks,,,UNREVIEWED,,,Must be independently mapped to P1-P5 and a vulnerable-revision source location before freeze
+semaphore-audit-root-history-collision,,,UNREVIEWED,,,Must be independently mapped to P1-P5 and a vulnerable-revision source location before freeze
+zkemail-matterlabs-guardian-repeat,,,UNREVIEWED,,,Must be independently mapped to P1-P5 and a vulnerable-revision source location before freeze
+zkemail-matterlabs-proof-coordinate-range,,,UNREVIEWED,,,Must be independently mapped to P1-P5 and a vulnerable-revision source location before freeze
+circom/selfxyz/self/zksecurity_the_registration_and_disclosure_circuits_lack_range_checks_for_the_input_indices,,,UNREVIEWED,,,Must be independently mapped to P1-P5 and a vulnerable-revision source location before freeze
