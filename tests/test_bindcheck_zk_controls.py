@@ -8,6 +8,7 @@ import tempfile
 import unittest
 
 from bindcheck_zk.analyzer import analyze
+from bindcheck_zk.models import unknown_reason_code
 from bindcheck_zk.p4 import BN254_G2
 
 
@@ -259,6 +260,91 @@ contract Consumer {
   }
 }
 """
+    elif name == "p1_balance_write_bound":
+        csource = """
+contract Consumer {
+  mapping(address => uint256) balances;
+  function submit(bytes memory proof, address recipient, uint256 amount) public {
+    verifier.verifyProof(proof, [uint256(uint160(recipient)), amount]);
+    balances[recipient] += amount;
+  }
+}
+"""
+    elif name == "p1_balance_write_unbound":
+        order = ["recipient"]
+        vsource = verifier(1)
+        csource = """
+contract Consumer {
+  mapping(address => uint256) balances;
+  function submit(bytes memory proof, address recipient, uint256 amount) public {
+    verifier.verifyProof(proof, [uint256(uint160(recipient))]);
+    balances[recipient] += amount;
+  }
+}
+"""
+    elif name == "p1_erc1155_transfer_bound":
+        csource = consumer(
+            "[uint256(uint160(recipient)), amount]",
+            'token.safeTransferFrom(msg.sender, recipient, tokenId, amount, "");',
+            params="address recipient, uint256 tokenId, uint256 amount",
+        )
+    elif name == "p1_erc1155_transfer_unbound":
+        order = ["recipient"]
+        vsource = verifier(1)
+        csource = consumer(
+            "[uint256(uint160(recipient))]",
+            'token.safeTransferFrom(msg.sender, recipient, tokenId, amount, "");',
+            params="address recipient, uint256 tokenId, uint256 amount",
+        )
+    elif name == "p1_native_call_bound":
+        csource = consumer(
+            "[uint256(uint160(recipient)), amount]",
+            'payable(recipient).call{value: amount}("");',
+        )
+    elif name == "p1_value_call_unbound":
+        order = ["recipient"]
+        vsource = verifier(1)
+        csource = consumer(
+            "[uint256(uint160(recipient))]",
+            "recipient.execute{value: amount}();",
+        )
+    elif name == "p1_erc721_transfer":
+        order = ["recipient"]
+        vsource = verifier(1)
+        csource = """
+contract Consumer is ERC721 {
+  function submit(bytes memory proof, address recipient, uint256 tokenId) public {
+    verifier.verifyProof(proof, [uint256(uint160(recipient))]);
+    safeTransferFrom(msg.sender, recipient, tokenId);
+  }
+}
+"""
+    elif name == "p1_member_vector_effect":
+        csource = """
+contract Consumer {
+  function submit(Proof calldata proof, address recipient, uint256 amount) public {
+    require(proof.input[0] == uint256(uint160(recipient)), "recipient mismatch");
+    require(proof.input[1] == amount, "amount mismatch");
+    verifier.verifyProof(proof.data, proof.input);
+    (bool ok,) = recipient.call{value: amount}("");
+    require(ok);
+  }
+}
+"""
+    elif name == "p1_value_refund":
+        order = ["amount"]
+        vsource = verifier(1)
+        csource = """
+contract Consumer {
+  function submit(bytes memory proof, uint256 amount) public payable {
+    require(msg.value >= amount);
+    verifier.verifyProof(proof, [amount]);
+    uint256 surplus = msg.value - amount;
+    (bool ok,) = msg.sender.call{value: surplus}("");
+    require(ok);
+  }
+}
+"""
 
     elif name == "p2_chainid":
         order = ["chainId", "recipient", "amount"]
@@ -284,6 +370,21 @@ contract Consumer {
         order = ["chainId", "recipient", "amount"]
         vsource = verifier(3, dynamic=True)
         csource = consumer("inputs", "token.transfer(recipient, amount);", params="uint256[] calldata inputs, address recipient, uint256 amount", extra="require(inputs[0] == block.chainid);")
+    elif name == "p2_hashed_context":
+        order = ["domainSeparator", "recipient", "amount"]
+        vsource = verifier(3)
+        csource = consumer(
+            "[uint256(keccak256(abi.encode(block.chainid, address(this)))), uint256(uint160(recipient)), amount]",
+            "token.transfer(recipient, amount);",
+        )
+    elif name == "p2_domain_separator_alias":
+        order = ["domainSeparator", "recipient", "amount"]
+        vsource = verifier(3)
+        csource = consumer(
+            "[uint256(domainSeparator), uint256(uint160(recipient)), amount]",
+            "token.transfer(recipient, amount);",
+            extra="bytes32 domainSeparator = keccak256(abi.encode(block.chainid, address(this)));",
+        )
 
     elif name.startswith("p3_"):
         order = ["nullifier", "recipient", "amount"]
@@ -539,6 +640,39 @@ contract Consumer {
 include "missing-template.circom";
 component main {public [a, b]} = ImportedMain();
 """)
+        elif name in {"p5_ic_count_clean", "p5_ic_count_bad"}:
+            ic_count = 3 if name == "p5_ic_count_clean" else 4
+            vsource = f"""
+contract Groth16Verifier {{
+  struct VerifyingKey {{ uint256[] IC; }}
+  function verifyingKey() internal pure returns (VerifyingKey memory vk) {{
+    vk.IC = new uint256[]({ic_count});
+  }}
+  function verifyProof(bytes memory proof, uint256[] memory input) public view returns (bool) {{
+    proof; input; return true;
+  }}
+}}
+"""
+            csource = """
+contract Consumer {
+  function submit(bytes memory proof, address recipient, uint256 amount) public {
+    uint256[] memory inputs = new uint256[](2);
+    inputs[0] = uint256(uint160(recipient));
+    inputs[1] = amount;
+    verifier.verifyProof(proof, inputs);
+    token.transfer(recipient, amount);
+  }
+}
+"""
+        elif name == "p5_no_vector":
+            csource = """
+contract Consumer {
+  function submit(bytes memory proof, uint256 opaque, address recipient, uint256 amount) public {
+    verifier.verifyProof(proof, opaque);
+    token.transfer(recipient, amount);
+  }
+}
+"""
 
     elif name == "discovery_merkle_only":
         csource = """
@@ -574,6 +708,21 @@ contract Consumer {
   function submit(bytes memory proof, address recipient, uint256 amount) public {
     verifier.verifyProof(proof, [uint256(uint160(recipient)), amount]);
     token.transfer(recipient, amount);
+  }
+}
+"""
+    elif name == "discovery_internal_merkle_verify":
+        csource = """
+contract Consumer {
+  function verifyStorageProof(address provider, bytes32 leaf, bytes32[] calldata proof) public {
+    bytes32 root = verifyProof(leaf, proof);
+    if (root != dataRoots[provider]) {
+      (bool ok,) = payable(provider).call{value: collateral[provider]}("");
+      require(ok);
+    }
+  }
+  function verifyProof(bytes32 leaf, bytes32[] calldata proof) internal pure returns (bytes32) {
+    leaf; proof; return bytes32(0);
   }
 }
 """
@@ -628,6 +777,17 @@ class BindCheckZKControlTests(unittest.TestCase):
         observed = {case_id: module.decide(case)[0] for case_id, case in module.CONTROLS.items()}
         self.assertEqual(observed, expected)
 
+    def test_unknown_reason_codes_use_the_frozen_taxonomy(self):
+        observed = {
+            item["reason"]: unknown_reason_code(item["reason"])
+            for item in EXPECTED["unknown_reason_code_controls"]
+        }
+        expected = {
+            item["reason"]: item["code"]
+            for item in EXPECTED["unknown_reason_code_controls"]
+        }
+        self.assertEqual(observed, expected)
+
     def test_all_new_pattern_controls(self):
         failures = []
         for control in EXPECTED["analyzer_controls"]:
@@ -639,6 +799,8 @@ class BindCheckZKControlTests(unittest.TestCase):
                     output = analyze(root, explicit_consumers=explicit)
                 summary = output["patterns"][control["pattern"]]
                 extra_failures = []
+                if "applicability" in control and summary.get("applicability") != control["applicability"]:
+                    extra_failures.append(["applicability", summary.get("applicability")])
                 if "expected_triples" in control and output["discovery"]["triples"] != control["expected_triples"]:
                     extra_failures.append(["triples", output["discovery"]["triples"]])
                 if "expected_cap_skips" in control:

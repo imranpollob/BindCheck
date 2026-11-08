@@ -8,6 +8,7 @@ from typing import Any
 
 from .analyzer import analyze
 from .baselines import run_baseline
+from .models import aggregate, result
 
 
 def parser() -> argparse.ArgumentParser:
@@ -49,14 +50,24 @@ def main(argv: list[str] | None = None) -> int:
                 consumer_paths=args.consumer,
             )
     except Exception as exc:
+        findings = {
+            pattern: result(
+                pattern, "UNKNOWN", "CLI_INPUT_ERROR",
+                "The requested input could not be analyzed.", grade="E0", applicability="UNKNOWN",
+            )
+            for pattern in ("P1", "P2", "P3", "P4", "P5")
+        }
         output: dict[str, Any] = {
             "schema": "bindcheck-zk.result/v1",
             "tool": {"name": "bindcheck-zk"},
             "run": {"status": "UNKNOWN", "fatal_reason": "CLI_INPUT_ERROR"},
             "inputs": {}, "discovery": {}, "triples": [], "runtime_bytecode_checks": [],
             "patterns": {
-                pattern: {"verdict": "UNKNOWN", "evidence_grade": "E0", "results": 1, "reasons": ["CLI_INPUT_ERROR"]}
-                for pattern in ("P1", "P2", "P3", "P4", "P5")
+                pattern: {
+                    **aggregate([finding]), "results": 1, "reasons": ["CLI_INPUT_ERROR"],
+                    "unknown_reason_codes": [finding["unknown_reason_code"]],
+                }
+                for pattern, finding in findings.items()
             },
             "coverage": {"failures": [{"type": type(exc).__name__, "detail": str(exc)}]},
             "limitations": ["The requested input could not be analyzed; no safe result is implied."],

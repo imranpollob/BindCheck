@@ -3,6 +3,15 @@
   "frozen_before_analyzer_implementation": true,
   "scope": "Development controls only. Expected outcomes are test oracles and must never be analyzer inputs.",
   "verdicts": ["VIOLATION", "VERIFIED_WITHIN_SCOPE", "UNKNOWN"],
+  "applicability": ["APPLICABLE", "NOT_APPLICABLE", "UNKNOWN"],
+  "unknown_reason_code_controls": [
+    {"reason":"VERIFIER_ARTIFACT_MISSING","code":"MISSING_ARTIFACT"},
+    {"reason":"COMPILED_RELATION_UNAVAILABLE","code":"BUILD_FAILURE"},
+    {"reason":"VERIFIER_MATCH_AMBIGUOUS","code":"AMBIGUOUS_CORRESPONDENCE"},
+    {"reason":"UNSUPPORTED_CONSUMER_ASSEMBLY","code":"UNSUPPORTED_CONSTRUCT"},
+    {"reason":"RUN_TIMEOUT","code":"CAP_OR_TIMEOUT"},
+    {"reason":"NO_CONTEXT_BINDING_RECOVERED","code":"OTHER"}
+  ],
   "legacy_track_b": [
     {"id":"C01-direct-amount","expected_p1_roles":[]},
     {"id":"C02-direct-recipient","expected_p1_roles":[]},
@@ -47,6 +56,15 @@
     {"id":"P1-15-storage-value-not-proven-caller-controlled","fixture":"p1_storage_amount","pattern":"P1","verdict":"UNKNOWN","reason":"CALLER_INDEPENDENCE_UNRESOLVED"},
     {"id":"P1-16-derived-public-effect","fixture":"p1_derived_amount","pattern":"P1","verdict":"UNKNOWN","reason":"EFFECT_TRANSFORMATION_UNRESOLVED"},
     {"id":"P1-17-opaque-struct-verifier-input","fixture":"p1_opaque_struct_input","pattern":"P1","verdict":"UNKNOWN","reason":"PUBLIC_INPUT_VECTOR_UNRESOLVED"},
+    {"id":"P1-18-balance-write-bound","fixture":"p1_balance_write_bound","pattern":"P1","verdict":"VERIFIED_WITHIN_SCOPE","reason":"EFFECT_VALUES_DIRECT_PUBLIC_INPUTS","applicability":"APPLICABLE"},
+    {"id":"P1-19-balance-write-unbound-amount","fixture":"p1_balance_write_unbound","pattern":"P1","verdict":"VIOLATION","reason":"UNBOUND_EFFECT_AMOUNT","applicability":"APPLICABLE"},
+    {"id":"P1-20-erc1155-transfer-bound","fixture":"p1_erc1155_transfer_bound","pattern":"P1","verdict":"VERIFIED_WITHIN_SCOPE","reason":"EFFECT_VALUES_DIRECT_PUBLIC_INPUTS","applicability":"APPLICABLE"},
+    {"id":"P1-21-erc1155-transfer-unbound-amount","fixture":"p1_erc1155_transfer_unbound","pattern":"P1","verdict":"VIOLATION","reason":"UNBOUND_EFFECT_AMOUNT","applicability":"APPLICABLE"},
+    {"id":"P1-22-native-call-value-bound","fixture":"p1_native_call_bound","pattern":"P1","verdict":"VERIFIED_WITHIN_SCOPE","reason":"EFFECT_VALUES_DIRECT_PUBLIC_INPUTS","applicability":"APPLICABLE"},
+    {"id":"P1-23-external-call-value-unbound","fixture":"p1_value_call_unbound","pattern":"P1","verdict":"VIOLATION","reason":"UNBOUND_EFFECT_AMOUNT","applicability":"APPLICABLE"},
+    {"id":"P1-24-erc721-transfer-token-id-not-amount","fixture":"p1_erc721_transfer","pattern":"P1","verdict":"VERIFIED_WITHIN_SCOPE","reason":"EFFECT_VALUES_DIRECT_PUBLIC_INPUTS","applicability":"APPLICABLE"},
+    {"id":"P1-25-member-vector-guard-binds-effect","fixture":"p1_member_vector_effect","pattern":"P1","verdict":"VERIFIED_WITHIN_SCOPE","reason":"EFFECT_VALUES_DIRECT_PUBLIC_INPUTS","applicability":"APPLICABLE"},
+    {"id":"P1-26-caller-funded-refund","fixture":"p1_value_refund","pattern":"P1","verdict":"VERIFIED_WITHIN_SCOPE","reason":"RECIPIENT_BOUND_TO_MSG_SENDER","applicability":"APPLICABLE"},
 
     {"id":"P2-01-chain-id-direct-clean","fixture":"p2_chainid","pattern":"P2","verdict":"VERIFIED_WITHIN_SCOPE","reason":"CONTEXT_BOUND_IN_PUBLIC_INPUTS"},
     {"id":"P2-02-contract-address-clean","fixture":"p2_contract","pattern":"P2","verdict":"VERIFIED_WITHIN_SCOPE","reason":"CONTEXT_BOUND_IN_PUBLIC_INPUTS"},
@@ -56,6 +74,9 @@
     {"id":"P2-06-context-computed-not-checked","fixture":"p2_unchecked","pattern":"P2","verdict":"UNKNOWN","reason":"CONTEXT_COMPUTATION_NOT_GUARDED"},
     {"id":"P2-07-proxy-context","fixture":"p2_delegatecall","pattern":"P2","verdict":"UNKNOWN","reason":"UNSUPPORTED_DELEGATECALL_CONTEXT"},
     {"id":"P2-08-chain-id-guard-clean","fixture":"p2_chainid_guard","pattern":"P2","verdict":"VERIFIED_WITHIN_SCOPE","reason":"CONTEXT_BOUND_BY_LOCAL_GUARD"},
+    {"id":"P2-09-hashed-chain-contract-context","fixture":"p2_hashed_context","pattern":"P2","verdict":"VERIFIED_WITHIN_SCOPE","reason":"CONTEXT_BOUND_IN_PUBLIC_COMMITMENT","applicability":"APPLICABLE"},
+    {"id":"P2-10-domain-separator-alias","fixture":"p2_domain_separator_alias","pattern":"P2","verdict":"VERIFIED_WITHIN_SCOPE","reason":"CONTEXT_BOUND_IN_PUBLIC_COMMITMENT","applicability":"APPLICABLE"},
+    {"id":"P2-11-verify-only-not-applicable","fixture":"discovery_verify_only_consumer","pattern":"P2","verdict":"UNKNOWN","reason":"PROTECTED_EFFECT_NOT_RECOVERED","applicability":"NOT_APPLICABLE"},
 
     {"id":"P3-01-spent-key-guarded-clean","fixture":"p3_guarded","pattern":"P3","verdict":"VERIFIED_WITHIN_SCOPE","reason":"REPLAY_KEY_CANONICAL_AND_CONSUMED"},
     {"id":"P3-02-field-alias-unguarded","fixture":"p3_alias","pattern":"P3","verdict":"VIOLATION","reason":"FIELD_ALIAS_REPLAY_KEY"},
@@ -74,6 +95,7 @@
     {"id":"P3-15-replay-key-not-bound","fixture":"p3_unbound_key","pattern":"P3","verdict":"VIOLATION","reason":"REPLAY_KEY_NOT_BOUND_TO_PROOF"},
     {"id":"P3-16-member-vector-equality-binding","fixture":"p3_member_vector_binding","pattern":"P3","verdict":"VERIFIED_WITHIN_SCOPE","reason":"REPLAY_KEY_CANONICAL_AND_CONSUMED"},
     {"id":"P3-17-aliased-vector-binding","fixture":"p3_aliased_vector_binding","pattern":"P3","verdict":"VERIFIED_WITHIN_SCOPE","reason":"REPLAY_KEY_CANONICAL_AND_CONSUMED"},
+    {"id":"P3-18-no-replay-state-not-applicable","fixture":"p1_fixed_direct","pattern":"P3","verdict":"UNKNOWN","reason":"REPLAY_KEY_NOT_RECOVERED","applicability":"NOT_APPLICABLE"},
 
     {"id":"P4-01-distinct-gamma-delta-clean","fixture":"p4_distinct","pattern":"P4","verdict":"VERIFIED_WITHIN_SCOPE","reason":"VERIFICATION_KEY_CHECKS_PASS"},
     {"id":"P4-02-default-gamma-delta-source","fixture":"p4_default_key","pattern":"P4","verdict":"UNKNOWN","reason":"DEFAULT_G2_GAMMA_DELTA_SOURCE_WARNING"},
@@ -107,12 +129,16 @@
     ,{"id":"P5-14-count-guided-match-no-saturation","fixture":"p5_count_guided_match","pattern":"P5","verdict":"VERIFIED_WITHIN_SCOPE","reason":"PUBLIC_INPUT_COUNT_AND_ORDER_MATCH","expected_triples":1}
     ,{"id":"P5-15-semantic-name-unresolved","fixture":"p5_semantic_name_unresolved","pattern":"P5","verdict":"UNKNOWN","reason":"PUBLIC_INPUT_MEANING_UNRESOLVED"}
     ,{"id":"P5-16-incomplete-circuit-interface","fixture":"p5_incomplete_interface","pattern":"P5","verdict":"UNKNOWN","reason":"CIRCUIT_INTERFACE_INCOMPLETE"}
+    ,{"id":"P5-17-generated-verifier-ic-count","fixture":"p5_ic_count_clean","pattern":"P5","verdict":"VERIFIED_WITHIN_SCOPE","reason":"PUBLIC_INPUT_COUNT_AND_ORDER_MATCH","applicability":"APPLICABLE"}
+    ,{"id":"P5-18-generated-verifier-ic-count-mismatch","fixture":"p5_ic_count_bad","pattern":"P5","verdict":"VIOLATION","reason":"PUBLIC_INPUT_COUNT_MISMATCH","applicability":"APPLICABLE"}
+    ,{"id":"P5-19-vector-unrecoverable-is-unknown","fixture":"p5_no_vector","pattern":"P5","verdict":"UNKNOWN","reason":"PUBLIC_INPUT_VECTOR_UNRESOLVED","applicability":"APPLICABLE"}
 
     ,{"id":"D-01-merkle-proof-not-zk-verifier","fixture":"discovery_merkle_only","pattern":"P1","verdict":"UNKNOWN","reason":"NO_APPLICABLE_TRIPLE","expected_triples":0}
     ,{"id":"D-02-test-only-consumer-excluded","fixture":"discovery_test_consumer","pattern":"P1","verdict":"UNKNOWN","reason":"NO_APPLICABLE_TRIPLE","expected_triples":0}
     ,{"id":"D-03-non-entry-circuit-excluded","fixture":"discovery_non_entry_circuit","pattern":"P5","verdict":"VERIFIED_WITHIN_SCOPE","reason":"PUBLIC_INPUT_COUNT_AND_ORDER_MATCH","expected_triples":1}
-    ,{"id":"D-04-verify-only-consumer-retained","fixture":"discovery_verify_only_consumer","pattern":"P1","verdict":"UNKNOWN","reason":"PROTECTED_EFFECT_NOT_RECOVERED","expected_triples":1}
+    ,{"id":"D-04-verify-only-consumer-retained","fixture":"discovery_verify_only_consumer","pattern":"P1","verdict":"UNKNOWN","reason":"PROTECTED_EFFECT_NOT_RECOVERED","applicability":"NOT_APPLICABLE","expected_triples":1}
     ,{"id":"D-05-verifier-wrapper-not-consumer","fixture":"discovery_verifier_wrapper","pattern":"P1","verdict":"VERIFIED_WITHIN_SCOPE","reason":"EFFECT_VALUES_DIRECT_PUBLIC_INPUTS","expected_triples":1}
+    ,{"id":"D-06-internal-merkle-verify-not-zk-consumer","fixture":"discovery_internal_merkle_verify","pattern":"P1","verdict":"UNKNOWN","reason":"NO_APPLICABLE_TRIPLE","applicability":"UNKNOWN","expected_triples":0}
     ,{"id":"COV-01-vendored-circom-include","fixture":"coverage_vendored_include","pattern":"P5","verdict":"VERIFIED_WITHIN_SCOPE","reason":"PUBLIC_INPUT_COUNT_AND_ORDER_MATCH","expected_build":"compile","expected_include_source":"vendored-pinned"}
     ,{"id":"COV-02-prioritized-file-cap","fixture":"coverage_prioritized_cap","pattern":"P1","verdict":"VERIFIED_WITHIN_SCOPE","reason":"EFFECT_VALUES_DIRECT_PUBLIC_INPUTS","expected_triples":1,"expected_cap_skips":1}
     ,{"id":"COV-03-generated-verifier-undefined","fixture":"coverage_no_generation_recipe","pattern":"P1","verdict":"UNKNOWN","reason":"VERIFIER_ARTIFACT_MISSING","expected_generation_reason":"REPOSITORY_GENERATION_RECIPE_NOT_FOUND"}

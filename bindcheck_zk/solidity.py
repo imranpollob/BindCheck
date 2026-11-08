@@ -14,8 +14,8 @@ TYPE_WORDS = {
 }
 VERIFY_NAME = re.compile(r"\b(verifyProof|verifyTx|verify|validateProof|verifyPlonk)\s*\(", re.I)
 EFFECT_NAME = re.compile(
-    r"(?<![A-Za-z0-9_])(safeTransferFrom|transferFrom|safeTransfer|handleTransfer|"
-    r"_safeMint|safeMint|_mint|mint|transfer|burn)\s*\(", re.I
+    r"(?<![A-Za-z0-9_])(safeBatchTransferFrom|safeTransferFrom|transferFrom|safeTransfer|handleTransfer|"
+    r"_safeMint|safeMint|_mint|mint|transfer|send|burn)\s*\(", re.I
 )
 
 
@@ -217,8 +217,66 @@ def verification_calls(body: str) -> list[Call]:
     return calls(body, VERIFY_NAME)
 
 
-def effect_calls(body: str) -> list[Call]:
-    return calls(body, EFFECT_NAME)
+def _mapping_effect_writes(body: str, source_text: str) -> list[Call]:
+    declared = set(re.findall(
+        r"\bmapping\s*\([^;]+?\)\s*(?:(?:public|private|internal|external)\s+)*([A-Za-z_]\w*)\s*;",
+        source_text,
+        re.S,
+    ))
+    protected = {
+        name for name in declared
+        if any(token in name.lower() for token in ("balance", "claim", "mint"))
+    }
+    masked = mask_comments_and_strings(body)
+    output: list[Call] = []
+    for name in sorted(protected):
+        for match in re.finditer(rf"\b{re.escape(name)}\s*\[", masked):
+            opening = masked.find("[", match.start())
+            parsed = balanced(masked, opening, "[", "]")
+            if parsed is None:
+                continue
+            tail = masked[parsed[1]:]
+            operator = re.match(r"\s*(\+=|-=|=)\s*", tail)
+            if operator is None:
+                continue
+            rhs_start = parsed[1] + operator.end()
+            rhs_end = masked.find(";", rhs_start)
+            if rhs_end < 0:
+                continue
+            output.append(Call(
+                name="__state_write__",
+                receiver=name,
+                args=[body[opening + 1:parsed[1] - 1].strip(), body[rhs_start:rhs_end].strip(), operator.group(1)],
+                line=body.count("\n", 0, match.start()) + 1,
+                offset=match.start(),
+            ))
+    return output
+
+
+def _value_calls(body: str) -> list[Call]:
+    masked = mask_comments_and_strings(body)
+    pattern = re.compile(
+        r"(?P<receiver>payable\s*\([^;{}]+?\)|address\s*\([^;{}]+?\)|[A-Za-z_]\w*(?:\.[A-Za-z_]\w*)*)"
+        r"\s*\.\s*[A-Za-z_]\w*\s*\{\s*value\s*:\s*(?P<value>[^,}]+)",
+        re.S,
+    )
+    return [
+        Call(
+            name="__value_call__",
+            receiver=match.group("receiver").strip(),
+            args=[body[match.start("receiver"):match.end("receiver")].strip(), body[match.start("value"):match.end("value")].strip()],
+            line=body.count("\n", 0, match.start()) + 1,
+            offset=match.start(),
+        )
+        for match in pattern.finditer(masked)
+    ]
+
+
+def effect_calls(body: str, source_text: str = "") -> list[Call]:
+    output = calls(body, EFFECT_NAME)
+    output.extend(_value_calls(body))
+    output.extend(_mapping_effect_writes(body, source_text))
+    return sorted(output, key=lambda item: item.offset)
 
 
 def assignments(body: str) -> dict[str, str]:
@@ -319,14 +377,37 @@ def public_vector(body: str, call: Call) -> PublicVector:
 def effect_roles(call: Call, source_text: str = "") -> list[tuple[str, str]]:
     name = call.name.lower()
     args = call.args
+    if name == "__value_call__" and len(args) == 2:
+        return [("recipient", args[0]), ("amount", args[1])]
+    if name == "__state_write__" and len(args) == 3:
+        key, value, operator = args
+        roles = [("identity", key)]
+        if operator in {"+=", "-="} or normalize_expression(value).lower() not in {"true", "false"}:
+            roles.append(("amount", value))
+        return roles
+    if name in {"transfer", "send"} and len(args) == 1 and call.receiver:
+        return [("recipient", call.receiver), ("amount", args[0])]
     if name in {"safemint", "_safemint"} and len(args) == 2:
         return [("recipient", args[0])]
     if name in {"mint", "_mint"} and len(args) == 2 and re.search(
         r"\bcontract\s+[A-Za-z_]\w*\s+is\s+[^\{;]*\bERC721[A-Za-z_0-9]*\b", source_text, re.I
     ):
         return [("recipient", args[0])]
+    if name in {"mint", "_mint"} and len(args) >= 3:
+        return [("recipient", args[0]), ("amount", args[2])]
     if name in {"transfer", "safetransfer", "handletransfer", "mint", "_mint", "safemint", "_safemint"} and len(args) >= 2:
         return [("recipient", args[0]), ("amount", args[1])]
+    if name == "safebatchtransferfrom" and len(args) >= 4:
+        return [("recipient", args[1]), ("amount", args[3])]
+    if name == "safetransferfrom" and len(args) >= 5:
+        return [("recipient", args[1]), ("amount", args[3])]
+    erc721_source = bool(re.search(
+        r"\b(?:is\s+[^\{;]*\bERC721\w*|(?:I?ERC721\w*)\s+" + re.escape(call.receiver or "") + r"\b)",
+        source_text,
+        re.I,
+    ))
+    if name in {"transferfrom", "safetransferfrom"} and len(args) >= 3 and erc721_source:
+        return [("recipient", args[1])]
     if name in {"transferfrom", "safetransferfrom"} and len(args) >= 3:
         return [("recipient", args[1]), ("amount", args[2])]
     if name == "burn" and args:
@@ -363,6 +444,27 @@ def verifier_declarations(text: str) -> list[dict[str, Any]]:
         output.append({"name": "constant", "line": text.count("\n", 0, constant.start()) + 1,
                        "arity": int(constant.group(1)), "dynamic": True, "public_input_like": True,
                        "opaque": False, "signature": constant.group(0)})
+    ic_counts = {
+        int(value) for value in re.findall(
+            r"\b(?:vk\s*\.\s*)?IC\s*=\s*new\s+[^;()]+\(\s*(\d+)\s*\)",
+            masked,
+            re.I,
+        )
+    }
+    ic_indices = {int(value) for value in re.findall(r"\bvk\s*\.\s*IC\s*\[\s*(\d+)\s*\]\s*=", masked, re.I)}
+    if ic_indices and ic_indices == set(range(max(ic_indices) + 1)):
+        ic_counts.add(max(ic_indices) + 1)
+    for count in sorted(ic_counts):
+        if count > 0:
+            output.append({
+                "name": "generated_verifier_ic_count",
+                "line": 1,
+                "arity": count - 1,
+                "dynamic": True,
+                "public_input_like": True,
+                "opaque": False,
+                "signature": f"IC[{count}]",
+            })
     return output
 
 

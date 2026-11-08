@@ -543,3 +543,149 @@ BINDCHECK_ZK_CONTENT_SHA256=d8510859b918a5166d0f1629cf0d883e965fa0acb1be92a34987
 
 No tag was created. Any subsequent change to the hashed files requires a new
 hash and a new freeze review before the one-shot held-out run.
+
+## 13. Applicability and decision rate
+
+**Update date:** 2026-11-06 (America/Los_Angeles; controlling evidence dated
+2026-11-06 UTC)
+
+**Task:** T25
+
+T25 adds applicability reporting without weakening the research-contract
+verdict semantics. `verdict` remains one of `VIOLATION`,
+`VERIFIED_WITHIN_SCOPE`, or `UNKNOWN`. `NOT_APPLICABLE` is a separate
+`applicability` value, not a safety verdict. This resolves the apparent
+conflict between a requested N/A outcome and the controlling three-verdict
+contract: fully non-applicable results remain research-verdict `UNKNOWN` but
+are excluded from the decided-rate denominator. [SCHEMA.md](SCHEMA.md)
+documents the exact additions.
+
+### 13.1 Pattern preconditions
+
+- **P1:** applicable when the recovered verifier-accepting function path has a
+  supported committed protected effect: token/NFT movement, native-value
+  movement, or a supported balance/claim/mint mapping write. A completed
+  supported parse with no such effect is `NOT_APPLICABLE`. A hidden or
+  unsupported effect is `UNKNOWN`, never N/A.
+- **P2:** applicable when that path has a supported protected effect or a
+  replay-relevant state mutation whose proof may require chain, contract, or
+  application-domain separation. A read-only/verify-only path with neither is
+  `NOT_APPLICABLE`. On an applicable path, absence of a recovered context
+  binding remains `UNKNOWN` because policy/deployment uniqueness is not
+  inferred.
+- **P3:** applicable when a replay-state mapping access or replay-relevant
+  helper is recovered. No replay-relevant state on a completed supported path
+  is `NOT_APPLICABLE`; an opaque replay helper is applicable `UNKNOWN`.
+- **P4:** every retained proof-verifier candidate is applicable. A missing
+  implementation, unsupported key layout, incomplete parse, or ambiguous
+  correspondence is `UNKNOWN`, not N/A. With no retained triple,
+  applicability itself is `UNKNOWN`.
+- **P5:** every retained proof-consuming producer/verifier/consumer candidate
+  is applicable. In particular, a verifier call with no recoverable public
+  vector is `UNKNOWN`, not N/A. With no retained triple, applicability is
+  `UNKNOWN`.
+
+Applicable triples aggregate independently of proven N/A triples. Thus a
+verify-only candidate can no longer force a row to `UNKNOWN` when every
+applicable candidate is decided. N/A is assigned only after the relevant
+consumer path is recovered; missing artifacts, failed builds, caps, timeouts,
+and ambiguous matches do not become N/A.
+
+### 13.2 Fixed `UNKNOWN` reasons
+
+Every detailed `UNKNOWN` has exactly one fixed `unknown_reason_code`:
+`MISSING_ARTIFACT`, `BUILD_FAILURE`, `AMBIGUOUS_CORRESPONDENCE`,
+`UNSUPPORTED_CONSTRUCT`, `CAP_OR_TIMEOUT`, or `OTHER`. Aggregate pattern
+summaries expose the sorted set contributed by their controlling applicable
+unknown triples. The table below counts row/code memberships among applicable
+`UNKNOWN` rows; a row can contribute to more than one code when retained
+candidates fail differently.
+
+| Pattern | Missing artifact | Build failure | Ambiguous correspondence | Unsupported construct | Cap/timeout | Other |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| P1 | 2 | 0 | 0 | 0 | 0 | 7 |
+| P2 | 0 | 0 | 0 | 0 | 0 | 26 |
+| P3 | 0 | 0 | 0 | 7 | 0 | 0 |
+| P4 | 7 | 0 | 0 | 14 | 0 | 3 |
+| P5 | 7 | 4 | 15 | 5 | 0 | 18 |
+
+Zero cap/timeout memberships in this table does not mean those outcomes are
+safe; the controlling run completed within the repository bounds. The fixed
+code exists and is prospectively controlled for runs where a cap or timeout
+does control an `UNKNOWN`.
+
+### 13.3 Full-DEV before/after result
+
+The controlling after run is
+`results/raw/T25/after-20261106T155532Z-23564/`. The before phase is the sealed
+T24 after run, not a reconstructed result. The tracked 112-row table is
+[reports/T25-full-dev-ledger.csv](reports/T25-full-dev-ledger.csv); its before
+rows say `NOT_REPORTED` for fields the old schema did not emit.
+
+| Pattern | T24 `UNKNOWN` | T25 row verdicts V / verified / unknown | Applicable rows | Decided among applicable | N/A | Applicability unknown |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| P1 | 51/56 (91.1%) | 4 / 4 / 48 | 17/56 (30.4%) | 8/17 (47.1%) | 29 | 10 |
+| P2 | 55/56 (98.2%) | 0 / 1 / 55 | 27/56 (48.2%) | 1/27 (3.7%) | 19 | 10 |
+| P3 | 43/56 (76.8%) | 4 / 12 / 40 | 23/56 (41.1%) | 16/23 (69.6%) | 23 | 10 |
+| P4 | 33/56 (58.9%) | 0 / 23 / 33 | 46/56 (82.1%) | 23/46 (50.0%) | 0 | 10 |
+| P5 | 52/56 (92.9%) | 0 / 4 / 52 | 46/56 (82.1%) | 4/46 (8.7%) | 0 | 10 |
+
+The low P2 and P5 decided rates remain visible. T25 does not convert context
+absence, unrecovered vector/order, ambiguous correspondence, or missing
+artifacts into verification. P1 gains one new source-level violation and two
+verified aggregates; P3 gains three verified aggregates by excluding proven
+non-replay candidates. P2, P4, and P5 verdict totals do not improve. This is a
+more accurate decision-rate report, not a claim that every pattern now decides
+often.
+
+### 13.4 General recognition changes
+
+Prospective synthetic controls precede each rule. P1 now recognizes
+balance/claim/mint mapping writes, ERC-20/721/1155 transfer and mint arities,
+native `call{value: ...}` and other value-carrying calls. ERC-721 token IDs are
+not silently treated as fungible amounts. Member-vector equality guards and
+caller-funded refunds are handled without project names. Receiverless local
+helpers named `verifyProof` are not ZK consumers unless they delegate to a
+recovered verifier interface.
+
+P2 follows `block.chainid`, `address(this)`, common domain-separator names,
+and direct or hashed aliases into the public statement. P5 reads public order
+from the circuit main declaration/compiled public metadata and infers a
+generated Groth16 verifier's public-input count from a complete IC allocation
+or contiguous IC assignments (`public inputs = IC count - 1`). These rules are
+controlled even where the final DEV corpus does not contain enough artifacts
+to change a row decision.
+
+The final inventory has 16 grouped warnings / 56 triple instances. Relative
+to T24, DEV-F35 adds one true source-level P1 warning: the proof covers order
+commitments, but calldata sizes and takers drive balance writes. DEV-F38's
+existing unclear field-alias group expands from four to ten candidate
+instances only because removing a false StoragePoR consumer frees six slots
+under the 64-triple cap; the root warning and unclear correspondence judgment
+are unchanged. Three diagnostic-run false positives (internal Merkle helper,
+message-bearing public-vector guards, and caller-funded refund) were removed
+generally before the controlling run. The complete change review is
+[reports/T25-warning-adjudication.csv](reports/T25-warning-adjudication.csv).
+No retained final warning is adjudicated false positive.
+
+### 13.5 Controls, evidence, and freeze identity
+
+The oracle contains the unchanged 24 Track B controls plus 98 analyzer
+controls (122 total). Oracle/fixture commits `a158e6b`, `db9208f`, and
+`b48c476` precede their corresponding analyzer rules. All nine test methods
+pass. The controlling run completes 56/56 rows with zero crashes, 46 rows with
+triples, 45/76 successful circuit builds, 31 explicit build failures, and a
+38.557-second slowest row under the 120-second analyzer budget.
+
+ZKAP remains `BASELINE_TOOL_UNAVAILABLE`: both `docker` and `colima` are absent
+on the arm64 host, so the documented x86-64-emulation route cannot run. The
+host used Python 3.13.9, Circom 2.2.3, and snarkjs 0.7.6.
+
+The final content identity is:
+
+```text
+BINDCHECK_ZK_CONTENT_SHA256=2741c40e8acdd86d2a15aca1cfd9f1ef989558c749e25ec4d926c3a483fb94bd
+```
+
+No EVAL/recall case, private P4 deployment ledger, RPC, live transaction,
+contact, disclosure, tag, merge, or push was used. No freeze tag was created.
