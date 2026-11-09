@@ -32,7 +32,8 @@ STRATA = (
 )
 STRATUM_QUOTA = 60
 PATTERNS = ("P1", "P2", "P3", "P4", "P5")
-VERDICTS = {"VIOLATION", "VERIFIED_WITHIN_SCOPE", "UNKNOWN", "NOT_APPLICABLE"}
+VERDICTS = {"VIOLATION", "VERIFIED_WITHIN_SCOPE", "UNKNOWN"}
+APPLICABILITIES = {"APPLICABLE", "NOT_APPLICABLE", "UNKNOWN"}
 BASELINES = ("slither", "circomspect", "picus", "zkap")
 
 # These are evaluation constants, not command-line tuning knobs. The analyzer
@@ -430,57 +431,81 @@ def check_eval_gate(
     }
 
 
-def aggregate_payload_verdict(payload: Mapping[str, Any]) -> tuple[str, list[str]]:
-    explicit = payload.get("verdict")
-    if explicit in VERDICTS:
-        return str(explicit), [str(item) for item in payload.get("reasons", [])]
+def aggregate_payload_verdict(payload: Mapping[str, Any], pattern: str) -> tuple[str, list[str]]:
+    """Return one pattern's verdict and unresolved reasons, never a cross-pattern verdict."""
+    if pattern not in PATTERNS:
+        raise EvaluationError(f"unknown pattern: {pattern}")
     patterns = payload.get("patterns") or {}
     triples = payload.get("triples") or []
-    values: list[str] = []
+    item = patterns.get(pattern) or {}
+    verdict = item.get("verdict", "UNKNOWN")
     reasons: list[str] = []
-    for pattern in PATTERNS:
-        item = patterns.get(pattern) or {}
-        verdict = item.get("verdict", "UNKNOWN")
-        if verdict not in VERDICTS:
-            verdict = "UNKNOWN"
-            reasons.append(f"INVALID_VERDICT:{item.get('verdict')}")
-        values.append(verdict)
-        if verdict == "UNKNOWN":
-            triple_reasons = {
-                str(result.get("reason", "UNKNOWN_UNSPECIFIED"))
-                for triple in triples
-                for result in [(triple.get("patterns") or {}).get(pattern) or {}]
-                if result.get("verdict") == "UNKNOWN"
-            }
-            reasons.extend(
-                sorted(triple_reasons)
-                if triple_reasons
-                else (str(reason) for reason in item.get("reasons", []) or ["UNKNOWN_UNSPECIFIED"])
-            )
-    if "VIOLATION" in values:
-        verdict = "VIOLATION"
-    elif "UNKNOWN" in values:
+    if verdict not in VERDICTS:
+        reasons.append(f"INVALID_VERDICT:{verdict}")
         verdict = "UNKNOWN"
-    elif "VERIFIED_WITHIN_SCOPE" in values:
-        verdict = "VERIFIED_WITHIN_SCOPE"
-    else:
-        verdict = "NOT_APPLICABLE"
+    if verdict == "UNKNOWN":
+        triple_reasons = {
+            str(result.get("reason") or "UNKNOWN_UNSPECIFIED")
+            for triple in triples
+            for result in [(triple.get("patterns") or {}).get(pattern) or {}]
+            if result.get("verdict") == "UNKNOWN"
+        }
+        reasons.extend(sorted(triple_reasons) if triple_reasons else
+                       (str(reason) for reason in item.get("reasons", []) or ["UNKNOWN_UNSPECIFIED"]))
     fatal = (payload.get("run") or {}).get("fatal_reason")
     if verdict == "UNKNOWN" and fatal:
         reasons.append(str(fatal))
-    return verdict, sorted(set(reasons or (["UNKNOWN_UNSPECIFIED"] if verdict == "UNKNOWN" else [])))
+    return str(verdict), sorted(set(reasons))
 
 
 def normalize_tool_payload(tool: str, payload: Mapping[str, Any], raw_path: str) -> dict[str, Any]:
-    verdict, reasons = aggregate_payload_verdict(payload)
+    if tool == "bindcheck-zk":
+        patterns: dict[str, dict[str, Any]] = {}
+        for pattern in PATTERNS:
+            item = (payload.get("patterns") or {}).get(pattern) or {}
+            verdict, unresolved_reasons = aggregate_payload_verdict(payload, pattern)
+            applicability = item.get("applicability", "UNKNOWN")
+            if applicability not in APPLICABILITIES:
+                applicability = "UNKNOWN"
+                unresolved_reasons.append("INVALID_APPLICABILITY")
+            patterns[pattern] = {
+                "verdict": verdict,
+                "applicability": applicability,
+                "reasons": sorted(set(map(str, item.get("reasons") or unresolved_reasons))),
+                "unknown_reasons": unresolved_reasons if verdict == "UNKNOWN" else [],
+                "unknown_reason_codes": sorted(set(map(str, item.get("unknown_reason_codes") or []))),
+                "evidence_grade": item.get("evidence_grade"),
+                "results": item.get("results"),
+            }
+        # A single verdict has no semantic meaning across P1–P5. This field
+        # only indicates that a repository-level result requires pattern review.
+        verdict, reasons, applicability = "UNKNOWN", ["PER_PATTERN_RESULT"], "UNKNOWN"
+    else:
+        raw_verdict = payload.get("verdict", "UNKNOWN")
+        pattern_summaries = payload.get("patterns") or {}
+        native_reasons = sorted({str(reason) for item in pattern_summaries.values()
+                                 for reason in (item.get("reasons") or [])})
+        reasons = sorted(set(map(str, payload.get("reasons") or [])) | set(native_reasons))
+        if raw_verdict == "NOT_APPLICABLE" or "BASELINE_NOT_APPLICABLE" in reasons:
+            applicability = "NOT_APPLICABLE"
+        elif (payload.get("run") or {}).get("status") == "completed":
+            applicability = "APPLICABLE"
+        else:
+            applicability = "UNKNOWN"
+        verdict = raw_verdict if raw_verdict in VERDICTS else "UNKNOWN"
+        if raw_verdict not in VERDICTS | {"NOT_APPLICABLE"}:
+            applicability = "UNKNOWN"
+            reasons.append(f"INVALID_VERDICT:{raw_verdict}")
+        patterns = {}
     return {
         "schema": "bindcheck-zk.eval-tool-result/v1",
         "tool": tool,
         "verdict": verdict,
+        "applicability": applicability,
         "reasons": reasons,
         "run_status": (payload.get("run") or {}).get("status"),
         "fatal_reason": (payload.get("run") or {}).get("fatal_reason"),
-        "patterns": payload.get("patterns") or {},
+        "patterns": patterns,
         "coverage": payload.get("coverage") or {},
         "raw_result": raw_path,
         "raw_schema": payload.get("schema"),
@@ -492,10 +517,16 @@ def unknown_tool_result(tool: str, reason: str, detail: str | None = None) -> di
         "schema": "bindcheck-zk.eval-tool-result/v1",
         "tool": tool,
         "verdict": "UNKNOWN",
+        "applicability": "UNKNOWN",
         "reasons": [reason],
         "run_status": "UNKNOWN",
         "fatal_reason": reason,
-        "patterns": {},
+        "patterns": {
+            pattern: {"verdict": "UNKNOWN", "applicability": "UNKNOWN",
+                      "reasons": [reason], "unknown_reasons": [reason],
+                      "unknown_reason_codes": [reason]}
+            for pattern in PATTERNS
+        } if tool == "bindcheck-zk" else {},
         "coverage": {"failures": [{"reason": reason, "detail": detail}]},
         "raw_result": None,
         "raw_schema": None,

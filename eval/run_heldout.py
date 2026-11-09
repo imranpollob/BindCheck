@@ -13,6 +13,7 @@ import json
 import pathlib
 import shutil
 import sys
+import tempfile
 from collections import Counter
 from typing import Any, Mapping
 
@@ -24,6 +25,7 @@ from eval.common import (  # noqa: E402
     FETCH_TIMEOUT_SECONDS,
     METADATA_TIMEOUT_SECONDS,
     PLAN_SOURCE_SHA256,
+    PATTERNS,
     ROOT,
     SOURCE_LEDGER,
     EvaluationError,
@@ -181,9 +183,16 @@ def run_tool_once(tool: str, checkout: pathlib.Path, family_dir: pathlib.Path) -
         "timeout_seconds": timeout,
     }
     atomic_write_json(attempt_path, attempt)
-    record = run_command(
-        argv, cwd=ROOT, timeout=timeout, env=scrub_network_environment()
-    )
+    if tool == "picus":
+        with tempfile.TemporaryDirectory(prefix="picus-", dir=family_dir) as temporary:
+            record = run_command(
+                argv, cwd=ROOT, timeout=timeout,
+                env={**scrub_network_environment(), "TMPDIR": temporary},
+            )
+    else:
+        record = run_command(
+            argv, cwd=ROOT, timeout=timeout, env=scrub_network_environment()
+        )
     raw_text = record["stdout"]
     raw_path.write_text(raw_text, encoding="utf-8")
     attempt.update({
@@ -397,7 +406,8 @@ def main(argv: list[str] | None = None) -> int:
         else:
             item = analyze_family(family, output)
             bindcheck = item["tools"]["bindcheck-zk"]
-            print(f"FAMILY\t{family['rank']:03d}\t{bindcheck['verdict']}\t{family['repository']}@{family['commit']}", flush=True)
+            pattern_status = ",".join(f"{pattern}:{bindcheck['patterns'][pattern]['verdict']}/{bindcheck['patterns'][pattern]['applicability']}" for pattern in PATTERNS)
+            print(f"FAMILY\t{family['rank']:03d}\t{pattern_status}\t{family['repository']}@{family['commit']}", flush=True)
         results.append(item)
 
     if args.metadata_only:
@@ -409,11 +419,21 @@ def main(argv: list[str] | None = None) -> int:
         }
         exit_status = 0 if counts.get("EXISTS", 0) == len(results) else 1
     else:
-        verdicts = Counter(item["tools"]["bindcheck-zk"]["verdict"] for item in results)
+        verdicts = {
+            pattern: dict(sorted(Counter(
+                (item["tools"]["bindcheck-zk"]["patterns"][pattern]["verdict"],
+                 item["tools"]["bindcheck-zk"]["patterns"][pattern]["applicability"])
+                for item in results
+            ).items()))
+            for pattern in PATTERNS
+        }
         work_root = output / "work"
         completed = {
             "completed_utc": utc_now(), "families": len(results),
-            "bindcheck_verdicts": dict(sorted(verdicts.items())),
+            "bindcheck_pattern_verdict_applicability": {
+                pattern: {f"{verdict}/{applicability}": count for (verdict, applicability), count in counts.items()}
+                for pattern, counts in verdicts.items()
+            },
             "clones_remaining": len(list(work_root.iterdir())) if work_root.exists() else 0,
         }
         exit_status = 0
