@@ -1,0 +1,112 @@
+{
+  "compiled": {
+    "relations": 57,
+    "rows": 31
+  },
+  "decisions": 3,
+  "dimensions": {
+    "EXTENT": {
+      "applicable_pair_results": 0,
+      "decided_pair_results": 0,
+      "pair_results": 30,
+      "row_applicability": {
+        "NOT_APPLICABLE": 12,
+        "UNKNOWN": 44
+      },
+      "row_verdicts": {
+        "UNKNOWN": 56
+      },
+      "violation_pair_results": 0
+    },
+    "MASK": {
+      "applicable_pair_results": 0,
+      "decided_pair_results": 0,
+      "pair_results": 30,
+      "row_applicability": {
+        "NOT_APPLICABLE": 12,
+        "UNKNOWN": 44
+      },
+      "row_verdicts": {
+        "UNKNOWN": 56
+      },
+      "violation_pair_results": 0
+    },
+    "MULTIPLICITY_SCOPE": {
+      "applicable_pair_results": 0,
+      "decided_pair_results": 0,
+      "pair_results": 30,
+      "row_applicability": {
+        "NOT_APPLICABLE": 12,
+        "UNKNOWN": 44
+      },
+      "row_verdicts": {
+        "UNKNOWN": 56
+      },
+      "violation_pair_results": 0
+    },
+    "REPRESENTATION": {
+      "applicable_pair_results": 0,
+      "decided_pair_results": 0,
+      "pair_results": 30,
+      "row_applicability": {
+        "NOT_APPLICABLE": 12,
+        "UNKNOWN": 44
+      },
+      "row_verdicts": {
+        "UNKNOWN": 56
+      },
+      "violation_pair_results": 0
+    },
+    "ROLE_IDENTITY": {
+      "applicable_pair_results": 30,
+      "decided_pair_results": 3,
+      "pair_results": 30,
+      "row_applicability": {
+        "APPLICABLE": 12,
+        "UNKNOWN": 44
+      },
+      "row_verdicts": {
+        "UNKNOWN": 53,
+        "VERIFIED_WITHIN_SCOPE": 3
+      },
+      "violation_pair_results": 0
+    }
+  },
+  "execution": {
+    "analyzed_rows": 50,
+    "policy_blocked_ids": [
+      "DEV-F02",
+      "DEV-F03",
+      "DEV-F29",
+      "DEV-F44",
+      "DEV-H03",
+      "DEV-H04"
+    ],
+    "policy_blocked_rows": 6,
+    "population_rows": 56
+  },
+  "fatal_rows": 7,
+  "flags": 0,
+  "paired": {
+    "paths": 30,
+    "rows": 12
+  },
+  "rows": 56,
+  "schema": "bindcheck-zk.relational-dev-summary/v1",
+  "source": {
+    "analyzer_content_sha256": "3d5f37430a32a3f9f7b20bc72f272804d175d3afeb6a5322ec275a4578b164d1",
+    "git_revision": "fca569d9e15918cd9daced6492a0a02c39951be3",
+    "manifest": "results/raw/relational/dev-20261109T031624Z-47526/manifest.json",
+    "manifest_sha256": "2ee6ced34165c0a916d3c8a4e40845c5356dae0538a3374bdf5aa255bba5b788",
+    "raw_ledger": "results/raw/relational/dev-20261109T031624Z-47526/per-row-ledger.json",
+    "raw_ledger_sha256": "a043151ae7325a8deb73c90b7e2d3f3c551e6c955a8e59e7e19ec07d53686967",
+    "raw_run": "results/raw/relational/dev-20261109T031624Z-47526"
+  },
+  "tracked_outputs": {
+    "builder_review": "reports/relational/dev-builder-review.csv",
+    "builder_review_sha256": "09cf03b5629a8cc464d9799251c5b64b1492cd45d4998046afea70083e07ba8a",
+    "decisions": "reports/relational/dev-decisions.csv",
+    "flag_adjudication": "reports/relational/dev-flag-adjudication.csv",
+    "ledger": "reports/relational/dev-ledger.csv"
+  }
+}

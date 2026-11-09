@@ -1,0 +1,4 @@
+id,repository,commit,pair_index,dimension,verdict,reason,circuit,consumer,function,result
+DEV-F12,NethermindEth/spsc,6d07155ecf295e6d68936bf424557621d0c66456,0,ROLE_IDENTITY,VERIFIED_WITHIN_SCOPE,ROLE_IDENTITY_COMPATIBLE,circuits/circom/joinsplit.circom,contracts/circom/src/SPSC.sol,transact,results/raw/relational/dev-20261109T031624Z-47526/DEV-F12--result.json
+DEV-H01,a16z/zkdrops,4002962fb632578dd12477346d2e5c4159ffb2ef,0,ROLE_IDENTITY,VERIFIED_WITHIN_SCOPE,ROLE_IDENTITY_COMPATIBLE,circuits/circuit.circom,contracts/PrivateAirdrop.sol,collectAirdrop,results/raw/relational/dev-20261109T031624Z-47526/DEV-H01--result.json
+DEV-H02,a16z/zkdrops,f6f58020911cd2a19e1639f0dc93ec9fca2a9e17,0,ROLE_IDENTITY,VERIFIED_WITHIN_SCOPE,ROLE_IDENTITY_COMPATIBLE,circuits/circuit.circom,contracts/PrivateAirdrop.sol,collectAirdrop,results/raw/relational/dev-20261109T031624Z-47526/DEV-H02--result.json
