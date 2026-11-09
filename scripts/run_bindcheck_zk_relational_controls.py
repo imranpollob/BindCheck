@@ -11,13 +11,14 @@ import os
 import pathlib
 import platform
 import subprocess
+import sys
 import time
-
-from bindcheck_zk.freeze import freeze_manifest
-
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 RAW_ROOT = ROOT / "results" / "raw" / "relational"
+sys.path.insert(0, str(ROOT))
+
+from bindcheck_zk.freeze import freeze_manifest
 
 
 def sha256(path: pathlib.Path) -> str:
