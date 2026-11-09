@@ -17,6 +17,7 @@ import json
 import os
 import pathlib
 import re
+import shutil
 import subprocess
 import sys
 import urllib.error
@@ -34,18 +35,19 @@ from eval.verifier_census import classify_verifier
 
 FIELDS = (
     "corpus_line", "split", "repository", "commit", "verifier_path", "inventory_basis", "source_url",
-    "fetch_status", "source_sha256", "source_cache", "contract", "function",
+    "fetch_status", "acquisition_source", "source_sha256", "source_cache", "contract", "function",
     "line", "generator", "range_class", "public_input_arity", "guarded_positions",
     "behavior", "evidence_json",
 )
 MAX_BYTES = 8 * 1024 * 1024
 
 
-def inventory(path: pathlib.Path, dev_checkouts: pathlib.Path) -> tuple[int, list[dict[str, str]], int]:
+def inventory(path: pathlib.Path, dev_checkouts: pathlib.Path) -> tuple[int, list[dict[str, str]], int, dict[tuple[str, str, str], pathlib.Path]]:
     with path.open(newline="", encoding="utf-8") as handle:
         rows = list(csv.DictReader(handle))
     items: list[dict[str, str]] = []
     supplement_count = 0
+    local_checkouts: dict[tuple[str, str, str], pathlib.Path] = {}
     excluded = {".git", "node_modules", "artifacts", "build", "dist", "out", "cache", "target", "vendor", ".venv", "venv"}
     for line, row in enumerate(rows, 2):
         # v2 paths supersede v1 paths; using the union would double-count
@@ -53,6 +55,7 @@ def inventory(path: pathlib.Path, dev_checkouts: pathlib.Path) -> tuple[int, lis
         paths = (row.get("v2_verifier_paths") or row.get("verifier_paths") or "").split("|")
         recorded = list(dict.fromkeys(path for path in paths if path))
         supplement: list[str] = []
+        checkout = None
         if row["split"] == "DEV":
             index = line - 1
             row_id = f"DEV-F{index:02d}" if index <= 50 else f"DEV-H{index-50:02d}"
@@ -86,25 +89,48 @@ def inventory(path: pathlib.Path, dev_checkouts: pathlib.Path) -> tuple[int, lis
                 "repository": row["repository"], "commit": row["commit"],
                 "verifier_path": verifier_path, "inventory_basis": basis,
             })
-    return len(rows), items, supplement_count
+            if checkout is not None:
+                local_checkouts[(row["repository"], row["commit"], verifier_path)] = checkout
+    return len(rows), items, supplement_count, local_checkouts
 
 
 def source_url(repository: str, commit: str, path: str) -> str:
     return "https://raw.githubusercontent.com/" + urllib.parse.quote(repository, safe="/") + "/" + commit + "/" + urllib.parse.quote(path, safe="/")
 
 
-def fetch(ref: tuple[str, str, str], cache: pathlib.Path) -> dict[str, str]:
+def fetch(ref: tuple[str, str, str], cache: pathlib.Path, local_checkout: pathlib.Path | None) -> dict[str, str]:
     repository, commit, path = ref
     key = hashlib.sha256("\0".join(ref).encode()).hexdigest()
     meta_path = cache / (key + ".json")
     body_path = cache / (key + ".sol.gz")
-    if meta_path.exists():
-        return json.loads(meta_path.read_text())
+    if meta_path.exists() and local_checkout is None:
+        meta = json.loads(meta_path.read_text())
+        if meta.get("status") == "FETCHED":
+            meta["source_cache"] = str(body_path)
+        return meta
     url = source_url(repository, commit, path)
     status = "MISSING"
     detail = ""
     data: bytes | None = None
-    for attempt in range(2):
+    acquisition_source = "DEV_PINNED_GIT" if local_checkout is not None else "RAW_GITHUB"
+    if local_checkout is not None:
+        try:
+            command = subprocess.run(["git", "show", f"{commit}:{path}"], cwd=local_checkout,
+                                     capture_output=True, check=False, timeout=15)
+            if command.returncode == 0:
+                data = command.stdout
+                status = "FETCHED" if len(data) <= MAX_BYTES else "TOO_LARGE"
+                if status == "TOO_LARGE":
+                    data = None
+            else:
+                status, detail = "DEV_GIT_SHOW_FAILED", command.stderr.decode(errors="replace")[-1000:]
+        except (subprocess.TimeoutExpired, OSError) as exc:
+            status, detail = "DEV_GIT_SHOW_FAILED", f"{type(exc).__name__}: {exc}"
+        attempts = 1
+    else:
+        attempts = 0
+    for attempt in range(2 if local_checkout is None else 0):
+        attempts = attempt + 1
         try:
             request = urllib.request.Request(url, headers={"User-Agent": "bindcheck-heldout-passive-census/1"})
             with urllib.request.urlopen(request, timeout=15) as response:
@@ -128,30 +154,35 @@ def fetch(ref: tuple[str, str, str], cache: pathlib.Path) -> dict[str, str]:
         "source_sha256": hashlib.sha256(data).hexdigest() if data is not None else "",
         "source_cache": str(body_path) if data is not None else "",
         "bytes": len(data) if data is not None else None,
-        "attempts": attempt + 1,
+        "attempts": attempts,
+        "acquisition_source": acquisition_source,
     }
     atomic_write_json(meta_path, meta)
     return meta
 
 
-def run(output: pathlib.Path, workers: int, source_cache: pathlib.Path, dev_checkouts: pathlib.Path) -> dict:
+def run(output: pathlib.Path, workers: int, source_cache: pathlib.Path, dev_checkouts: pathlib.Path,
+        reuse_cache: pathlib.Path | None) -> dict:
     if sha256_file(SOURCE_LEDGER) != PLAN_SOURCE_SHA256:
         raise RuntimeError("source corpus hash differs from preregistered bytes")
-    corpus_rows, entries, supplement_count = inventory(SOURCE_LEDGER, dev_checkouts)
+    corpus_rows, entries, supplement_count, local_checkouts = inventory(SOURCE_LEDGER, dev_checkouts)
     output.mkdir(parents=True, exist_ok=True)
     cache = source_cache
+    if reuse_cache is not None and not cache.exists():
+        shutil.copytree(reuse_cache, cache)
     cache.mkdir(exist_ok=True)
     refs = sorted({(item["repository"], item["commit"], item["verifier_path"]) for item in entries})
     fetched: dict[tuple[str, str, str], dict[str, str]] = {}
     with ThreadPoolExecutor(max_workers=workers) as executor:
-        future_refs = {executor.submit(fetch, ref, cache): ref for ref in refs}
+        future_refs = {executor.submit(fetch, ref, cache, local_checkouts.get(ref)): ref for ref in refs}
         for index, future in enumerate(as_completed(future_refs), 1):
             ref = future_refs[future]
             try:
                 fetched[ref] = future.result()
             except Exception as exc:
                 fetched[ref] = {"status": "FETCH_ERROR", "detail": f"{type(exc).__name__}: {exc}",
-                                "url": source_url(*ref), "source_sha256": "", "source_cache": ""}
+                                "url": source_url(*ref), "source_sha256": "", "source_cache": "",
+                                "acquisition_source": "DEV_PINNED_GIT" if ref in local_checkouts else "RAW_GITHUB"}
             if index % 250 == 0:
                 print(f"FETCHED_REFS\t{index}/{len(refs)}", flush=True)
     ledger: list[dict[str, str]] = []
@@ -159,6 +190,7 @@ def run(output: pathlib.Path, workers: int, source_cache: pathlib.Path, dev_chec
         ref = entry["repository"], entry["commit"], entry["verifier_path"]
         meta = fetched[ref]
         base = {**entry, "source_url": meta["url"], "fetch_status": meta["status"],
+                "acquisition_source": meta.get("acquisition_source", "RAW_GITHUB"),
                 "source_sha256": meta["source_sha256"], "source_cache": meta["source_cache"]}
         if meta["status"] != "FETCHED":
             ledger.append({**base, "evidence_json": json.dumps({"fetch_detail": meta.get("detail", "")})})
@@ -220,13 +252,15 @@ def main() -> int:
     parser.add_argument("--output", type=pathlib.Path, default=ROOT / "results/raw/heldout/verifier-census-v1")
     parser.add_argument("--workers", type=int, default=16)
     parser.add_argument("--source-cache", type=pathlib.Path)
+    parser.add_argument("--reuse-source-cache", type=pathlib.Path)
     parser.add_argument("--dev-checkouts", type=pathlib.Path,
                         default=pathlib.Path("/Users/imranpollob/Coding/bc/bindcheck-zk/feasibility/work/full-dev"))
     args = parser.parse_args()
     if not 1 <= args.workers <= 32:
         parser.error("workers must be 1..32")
     cache = args.source_cache.resolve() if args.source_cache else args.output.resolve() / "sources"
-    print(json.dumps(run(args.output.resolve(), args.workers, cache, args.dev_checkouts.resolve()), indent=2, sort_keys=True))
+    reuse = args.reuse_source_cache.resolve() if args.reuse_source_cache else None
+    print(json.dumps(run(args.output.resolve(), args.workers, cache, args.dev_checkouts.resolve(), reuse), indent=2, sort_keys=True))
     return 0
 
 
