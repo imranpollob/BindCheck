@@ -95,6 +95,22 @@ contract Verifier { function verifyProof(uint256[1] calldata input) public view 
         item = self.one('contract Verifier { function verifyProof(uint[1] calldata input) public view returns (bool) { check(input[0]); return pairing(input); } }')
         self.assertEqual(item["range_class"], "UNKNOWN")
 
+    def test_dev_style_dummy_constants_and_conditional_accept(self) -> None:
+        item = self.one('''contract Verifier {
+uint256 constant vk_alpha1 = 0x1234567890123456789012345678901234567890123456789012345678901234;
+function verifyProof(uint[] memory input) public pure returns (bool) {
+  require(input.length == 2); return true;
+}}''')
+        self.assertEqual(item["behavior"], "DUMMY_CONSTANTS")
+
+    def test_named_aggregated_verifier_that_only_reverts(self) -> None:
+        item = self.one('''contract AggregatedVerifier {
+function verifyAggregatedProof(bytes calldata proof) external pure returns (bool) {
+  require(proof.length > 0);
+  revert AggregatedVerificationUnavailable();
+}}''')
+        self.assertEqual(item["behavior"], "REJECT_ALL")
+
 
 if __name__ == "__main__":
     unittest.main()
