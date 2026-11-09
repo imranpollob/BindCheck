@@ -1,0 +1,82 @@
+# Lane C prospective coverage protocol (2026-11-09)
+
+This plan and the control oracle in `tests/coverage/test_rules.py` are committed
+before implementing or running the rules they score. The frozen comparison is
+the 56-row unhinted DEV output at the `8ea6d223` analyzer hash, specifically
+`reports/soundness/full-dev-ledger-2.csv` and the retained raw run named in
+`reports/soundness/REPORT-2.md`. EVAL, recall, gate, review and adversarial
+sets are excluded.
+
+## Bounded rules and exact control outcomes
+
+1. Resolve an exact OpenZeppelin `Pausable` import and direct `Pausable`
+   inheritance for `whenNotPaused`/`whenPaused` only when no same-named local
+   modifier exists. A direct public-vector transfer behind the modifier must
+   be P1 `VERIFIED_WITHIN_SCOPE`. A missing import, unmatched base, or
+   same-named local modifier with an external call must be P1 `UNKNOWN`.
+2. Resolve a local, single-placeholder reentrancy lock only when its full body
+   is an unconditional rejecting status guard, status assignment before the
+   placeholder and reset after it. The two constants must be distinct literal
+   values. A direct public-vector transfer behind this form must be P1
+   `VERIFIED_WITHIN_SCOPE`. A conditional placeholder, multiple placeholders,
+   absent reset, or external call must be P1 `UNKNOWN`.
+3. Resolve exact OpenZeppelin `ERC721Enumerable` import and inheritance for a
+   standard `_mint` effect, with the existing local-override gate. A directly
+   public-bound recipient must be P1 `VERIFIED_WITHIN_SCOPE`. A local `_mint`
+   override must be P1 `UNKNOWN`.
+
+These controls are synthetic and establish source-recognizer behavior, not
+proof acceptance or application security. A positive result cannot use an
+interface-only verifier. No rule may use expected verdicts as analyzer input.
+
+## DEV scoring
+
+After the implementation and control pass, run all 56 rows without path hints
+against the pinned read-only DEV checkouts. Preserve the raw run under a fresh
+`results/raw/coverage/` namespace. Compare each row and pattern to the frozen
+ledger, count `APPLICABLE` decisions separately from `UNKNOWN` and
+`NOT_APPLICABLE`, and publish every changed verdict and reason. Inspect source
+for every new `VIOLATION` and `VERIFIED_WITHIN_SCOPE`; an unreviewed source
+transition is not counted as a validated coverage gain. Do not score a timeout,
+failed build or unsupported artifact as a win or miss. Report the complete
+UNKNOWN inventory, including nonapplicable and no-triple cells, separately.
+
+The intended DEV paths are `DEV-F12`, `DEV-F29`, `DEV-F44`, and `DEV-F48` for
+P1. Their exact resulting verdicts are deliberately not supplied to the tool
+or assumed in advance: the control oracle specifies the added semantics;
+actual DEV outcomes will be adjudicated after the run.
+
+## Addendum A — before the second rule revision
+
+The first unhinted development run exposed two source shapes that the initial
+controls did not cover. The first run is retained under
+`results/raw/coverage/after-20261109T145517Z-95388/` and is not the final
+score. The new expectations below are committed before implementing and
+running their controls or the final DEV campaign.
+
+4. Named OpenZeppelin imports such as `import {Pausable} from
+   "@openzeppelin/contracts/utils/Pausable.sol";` have the same exact-package
+   meaning as bare imports. A direct-vector transfer under `whenNotPaused`
+   must be P1 `VERIFIED_WITHIN_SCOPE`; a similarly named import from a
+   different package must be `UNKNOWN`.
+5. A verifier implementation with an unconditional `return false` cannot
+   establish a non-vacuous P1 positive. A directly bound transfer matched
+   only to that verifier must be P1 `UNKNOWN`, even if its source-level roles
+   appear bound. An actual verifier body with a supported success path keeps
+   the prior source-level P1 result. This avoids promoting a placeholder in
+   DEV-F38 to a positive result.
+6. A dynamic wrapper with an exact length check, position-preserving copy to
+   a fixed raw snarkjs verifier, and scalar guard on every raw position may
+   satisfy P4's guard subcondition. Swapped or missing copies, absent exact
+   length check, or base-field comparison stay P4 `UNKNOWN`.
+
+## Addendum B — exact imported base versus repository name collision
+
+The first final-pass candidate left DEV-F29 P1 at an inheritance blocker:
+the checkout contains a vendored `Pausable`/`ReentrancyGuard`/`Ownable` source,
+while the consumer uses exact `@openzeppelin/contracts/...` named imports.
+Before the resolver change, the control below is committed. When an exact
+supported OpenZeppelin import and direct base name agree, an unrelated source
+file in the repository with the same contract name must not override that
+resolution. A direct-vector transfer still yields P1 `VERIFIED_WITHIN_SCOPE`.
+Without the exact import, the name collision remains P1 `UNKNOWN`.
