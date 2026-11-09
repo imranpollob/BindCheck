@@ -50,6 +50,7 @@ from eval.common import (  # noqa: E402
     utc_now,
     write_selection,
 )
+from eval.adjudicate import P4_WARNING_REASONS
 
 
 TOOLS = ("bindcheck-zk", *BASELINES, "arm-c")
@@ -170,6 +171,61 @@ def _recover_or_unknown(
     return normalized
 
 
+def capture_warning_sources(checkout: pathlib.Path, family_dir: pathlib.Path) -> dict[str, Any]:
+    """Retain code needed for later blind cards before deleting a checkout."""
+    raw_path = family_dir / "bindcheck-zk-raw.json"
+    wanted: dict[str, str | None] = {}
+    if raw_path.is_file():
+        payload = load_json(raw_path)
+        for triple in payload.get("triples", []) or []:
+            warnings = [item for item in (triple.get("patterns") or {}).values()
+                        if item.get("verdict") == "VIOLATION" or item.get("reason") in P4_WARNING_REASONS]
+            if not warnings:
+                continue
+            for item in warnings:
+                path = (item.get("location") or {}).get("path")
+                if path:
+                    wanted[str(path)] = None
+            verifier = triple.get("verifier") or {}
+            if verifier.get("path"):
+                wanted[str(verifier["path"])] = verifier.get("sha256")
+        for check in payload.get("runtime_bytecode_checks", []) or []:
+            item = check.get("finding") or {}
+            if item.get("verdict") == "VIOLATION" or item.get("reason") in P4_WARNING_REASONS:
+                path = (item.get("location") or {}).get("path")
+                if path:
+                    wanted[str(path)] = None
+    source_dir = family_dir / "warning-sources"
+    sources = []
+    for source_path, expected_sha256 in sorted(wanted.items()):
+        candidate = (checkout / source_path).resolve()
+        try:
+            candidate.relative_to(checkout.resolve())
+        except ValueError:
+            sources.append({"source_path": source_path, "status": "UNSAFE_PATH"})
+            continue
+        if not candidate.is_file():
+            sources.append({"source_path": source_path, "status": "MISSING"})
+            continue
+        if candidate.stat().st_size > 8 * 1024 * 1024:
+            sources.append({"source_path": source_path, "status": "TOO_LARGE"})
+            continue
+        source_dir.mkdir(exist_ok=True)
+        destination = source_dir / (sha256_bytes(source_path.encode()) + candidate.suffix)
+        shutil.copy2(candidate, destination)
+        observed = sha256_file(destination)
+        sources.append({
+            "source_path": source_path,
+            "status": "COPIED" if expected_sha256 in (None, observed) else "HASH_MISMATCH",
+            "expected_sha256": expected_sha256,
+            "source_sha256": observed,
+            "retained_path": str(destination.relative_to(family_dir)),
+        })
+    manifest = {"schema": "bindcheck-zk.warning-sources/v1", "sources": sources}
+    atomic_write_json(family_dir / "warning-sources.json", manifest)
+    return manifest
+
+
 def run_tool_once(tool: str, checkout: pathlib.Path, family_dir: pathlib.Path) -> dict[str, Any]:
     normalized_path = family_dir / f"{tool}.json"
     attempt_path = family_dir / f"{tool}-attempt.json"
@@ -263,6 +319,12 @@ def analyze_family(
         else:
             for tool in TOOLS:
                 tools[tool] = run_tool_once(tool, checkout, family_dir)
+            try:
+                capture_warning_sources(checkout, family_dir)
+            except Exception as exc:
+                atomic_write_json(family_dir / "warning-sources-error.json", {
+                    "type": type(exc).__name__, "detail": str(exc), "recorded_utc": utc_now()
+                })
     except Exception as exc:  # one family failure is coverage, not a changed-settings retry
         acquisition = load_json(family_dir / "acquisition.json") if family_dir.joinpath("acquisition.json").exists() else {"status": "harness-error"}
         for tool in TOOLS:
