@@ -452,6 +452,72 @@
         "B": {"verdict": "UNKNOWN", "native_signals": []},
         "C": {"verdict": "VERIFIED_WITHIN_SCOPE", "findings": []}
       }
+    },
+    {
+      "id": "ADV-V21",
+      "label": "VULNERABLE",
+      "family": "safe-transfer-record-amount",
+      "summary": "A SafeERC20-style safeTransfer uses a record amount that is separate from the proof public amount.",
+      "expected": {
+        "A": {"verdict": "VIOLATION", "findings": ["A_EFFECT_AMOUNT_UNBOUND"], "expected_false_alarm": false},
+        "B": {"verdict": "UNKNOWN", "native_signals": []},
+        "C": {"verdict": "VIOLATION", "findings": ["C_EFFECT_NOT_PROOF_BOUND"]}
+      }
+    },
+    {
+      "id": "ADV-L21",
+      "label": "LEGITIMATE",
+      "family": "safe-transfer-record-amount",
+      "summary": "A SafeERC20-style safeTransfer uses the amount decoded from the proof public vector.",
+      "expected": {
+        "A": {"verdict": "VERIFIED_WITHIN_SCOPE", "findings": [], "expected_false_alarm": false},
+        "B": {"verdict": "UNKNOWN", "native_signals": []},
+        "C": {"verdict": "VERIFIED_WITHIN_SCOPE", "findings": []}
+      }
+    },
+    {
+      "id": "ADV-V22",
+      "label": "VULNERABLE",
+      "family": "nested-replay-key",
+      "summary": "The final key of a nested replay mapping is a caller nonce absent from the verifier public vector.",
+      "expected": {
+        "A": {"verdict": "VIOLATION", "findings": ["A_REPLAY_KEY_UNBOUND"], "expected_false_alarm": false},
+        "B": {"verdict": "UNKNOWN", "native_signals": []},
+        "C": {"verdict": "VIOLATION", "findings": ["A_REPLAY_KEY_UNBOUND"]}
+      }
+    },
+    {
+      "id": "ADV-L22",
+      "label": "LEGITIMATE",
+      "family": "nested-replay-key",
+      "summary": "The final key of a nested replay mapping is decoded from its guarded verifier public position.",
+      "expected": {
+        "A": {"verdict": "VERIFIED_WITHIN_SCOPE", "findings": [], "expected_false_alarm": false},
+        "B": {"verdict": "UNKNOWN", "native_signals": []},
+        "C": {"verdict": "VERIFIED_WITHIN_SCOPE", "findings": []}
+      }
+    },
+    {
+      "id": "ADV-V23",
+      "label": "VULNERABLE",
+      "family": "erc721-safe-mint-recipient",
+      "summary": "An ERC-721 _safeMint recipient is independent calldata and absent from every verifier public vector.",
+      "expected": {
+        "A": {"verdict": "VIOLATION", "findings": ["A_EFFECT_RECIPIENT_UNBOUND"], "expected_false_alarm": false},
+        "B": {"verdict": "UNKNOWN", "native_signals": []},
+        "C": {"verdict": "VIOLATION", "findings": ["C_EFFECT_NOT_PROOF_BOUND"]}
+      }
+    },
+    {
+      "id": "ADV-L23",
+      "label": "LEGITIMATE",
+      "family": "erc721-safe-mint-recipient",
+      "summary": "An ERC-721 _safeMint recipient is decoded from a verifier public input.",
+      "expected": {
+        "A": {"verdict": "VERIFIED_WITHIN_SCOPE", "findings": [], "expected_false_alarm": false},
+        "B": {"verdict": "UNKNOWN", "native_signals": []},
+        "C": {"verdict": "VERIFIED_WITHIN_SCOPE", "findings": []}
+      }
     }
   ]
 }
