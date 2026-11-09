@@ -121,7 +121,7 @@ def classify_verifier(source: str) -> list[dict[str, Any]]:
         if contract_end is None:
             continue
         contract_body = clean[contract.end():contract_end]
-        for function in re.finditer(r"\bfunction\s+(verifyProof|verify|Verify)\s*\(", contract_body):
+        for function in re.finditer(r"\bfunction\s+(verify\w*Proof|verify|Verify)\s*\(", contract_body):
             start = contract.end() + function.start()
             open_paren = contract.end() + function.end() - 1
             close_paren = _matched_end(clean, open_paren, "(", ")")
@@ -148,8 +148,10 @@ def classify_verifier(source: str) -> list[dict[str, Any]]:
                 behavior = "ACCEPT_ALL"
             elif re.fullmatch(r"return\s+false\s*;", stripped):
                 behavior = "REJECT_ALL"
-            elif re.search(r"\b(?:vk\w*|IC\d+[xy]?)\s*=\s*0x1234\b", clean[contract.start():contract_end], re.I):
+            elif re.search(r"\b(?:vk\w*|IC\d+[xy]?)\s*=\s*(?:0x1234\b|0x1234567890[0-9a-fA-F]*)", clean[contract.start():contract_end], re.I):
                 behavior = "DUMMY_CONSTANTS"
+            elif "return" not in stripped and re.search(r"\brevert\s+\w+(?:\([^;]*\))?\s*;\s*$", stripped):
+                behavior = "REJECT_ALL"
             elif re.search(r"\b(mock|stub|simplified|stand[ -]?in)\b", source[max(0, contract.start()-200):min(len(source), contract_end+1)], re.I) and not re.search(r"\bpairingProd\d*\s*\(|\bstaticcall\s*\([^\n]*?,\s*8\s*,", body):
                 behavior = "SIMPLIFIED"
             elif re.search(r"\bpairingProd\d*\s*\(|\bstaticcall\s*\([^\n]*?,\s*8\s*,", body):

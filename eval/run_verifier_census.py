@@ -14,7 +14,10 @@ import datetime as dt
 import gzip
 import hashlib
 import json
+import os
 import pathlib
+import re
+import subprocess
 import sys
 import urllib.error
 import urllib.parse
@@ -30,7 +33,7 @@ from eval.verifier_census import classify_verifier
 
 
 FIELDS = (
-    "corpus_line", "split", "repository", "commit", "verifier_path", "source_url",
+    "corpus_line", "split", "repository", "commit", "verifier_path", "inventory_basis", "source_url",
     "fetch_status", "source_sha256", "source_cache", "contract", "function",
     "line", "generator", "range_class", "public_input_arity", "guarded_positions",
     "behavior", "evidence_json",
@@ -38,21 +41,52 @@ FIELDS = (
 MAX_BYTES = 8 * 1024 * 1024
 
 
-def inventory(path: pathlib.Path) -> tuple[int, list[dict[str, str]]]:
+def inventory(path: pathlib.Path, dev_checkouts: pathlib.Path) -> tuple[int, list[dict[str, str]], int]:
     with path.open(newline="", encoding="utf-8") as handle:
         rows = list(csv.DictReader(handle))
     items: list[dict[str, str]] = []
+    supplement_count = 0
+    excluded = {".git", "node_modules", "artifacts", "build", "dist", "out", "cache", "target", "vendor", ".venv", "venv"}
     for line, row in enumerate(rows, 2):
         # v2 paths supersede v1 paths; using the union would double-count
         # known superseded candidate names on preserved DEV rows.
         paths = (row.get("v2_verifier_paths") or row.get("verifier_paths") or "").split("|")
-        for verifier_path in dict.fromkeys(path for path in paths if path):
+        recorded = list(dict.fromkeys(path for path in paths if path))
+        supplement: list[str] = []
+        if row["split"] == "DEV":
+            index = line - 1
+            row_id = f"DEV-F{index:02d}" if index <= 50 else f"DEV-H{index-50:02d}"
+            matches = list(dev_checkouts.glob(f"{row_id}--*--{row['commit'][:12]}"))
+            if len(matches) != 1:
+                raise RuntimeError(f"DEV checkout missing or ambiguous: {row_id}")
+            checkout = matches[0]
+            observed = subprocess.run(["git", "rev-parse", "HEAD"], cwd=checkout,
+                                      capture_output=True, text=True, check=False)
+            if observed.returncode != 0 or observed.stdout.strip() != row["commit"]:
+                raise RuntimeError(f"DEV checkout revision mismatch: {row_id}")
+            for directory, subdirs, files in os.walk(checkout):
+                subdirs[:] = [name for name in subdirs if name not in excluded]
+                for filename in files:
+                    if not filename.lower().endswith(".sol"):
+                        continue
+                    source = pathlib.Path(directory) / filename
+                    try:
+                        if source.is_symlink() or source.stat().st_size > MAX_BYTES:
+                            continue
+                        text = source.read_text(encoding="utf-8", errors="replace")
+                    except OSError:
+                        continue
+                    if re.search(r"\bcontract\s+\w+", text) and re.search(r"\bfunction\s+(?:verify\w*Proof|verify|Verify)\s*\(", text):
+                        supplement.append(source.relative_to(checkout).as_posix())
+        for verifier_path in [*recorded, *(path for path in sorted(set(supplement)) if path not in recorded)]:
+            basis = "RECORDED" if verifier_path in recorded else "DEV_SOURCE_SUPPLEMENT"
+            supplement_count += basis == "DEV_SOURCE_SUPPLEMENT"
             items.append({
                 "corpus_line": str(line), "split": row["split"],
                 "repository": row["repository"], "commit": row["commit"],
-                "verifier_path": verifier_path,
+                "verifier_path": verifier_path, "inventory_basis": basis,
             })
-    return len(rows), items
+    return len(rows), items, supplement_count
 
 
 def source_url(repository: str, commit: str, path: str) -> str:
@@ -100,12 +134,12 @@ def fetch(ref: tuple[str, str, str], cache: pathlib.Path) -> dict[str, str]:
     return meta
 
 
-def run(output: pathlib.Path, workers: int) -> dict:
+def run(output: pathlib.Path, workers: int, source_cache: pathlib.Path, dev_checkouts: pathlib.Path) -> dict:
     if sha256_file(SOURCE_LEDGER) != PLAN_SOURCE_SHA256:
         raise RuntimeError("source corpus hash differs from preregistered bytes")
-    corpus_rows, entries = inventory(SOURCE_LEDGER)
+    corpus_rows, entries, supplement_count = inventory(SOURCE_LEDGER, dev_checkouts)
     output.mkdir(parents=True, exist_ok=True)
-    cache = output / "sources"
+    cache = source_cache
     cache.mkdir(exist_ok=True)
     refs = sorted({(item["repository"], item["commit"], item["verifier_path"]) for item in entries})
     fetched: dict[tuple[str, str, str], dict[str, str]] = {}
@@ -159,6 +193,7 @@ def run(output: pathlib.Path, workers: int) -> dict:
         "source_corpus_sha256": PLAN_SOURCE_SHA256,
         "corpus_rows": corpus_rows,
         "verifier_path_entries": len(entries),
+        "dev_supplement_path_entries": supplement_count,
         "distinct_source_refs": len(refs),
         "ledger_rows": len(ledger),
         "classified_verifier_functions": len(classified),
@@ -184,10 +219,14 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", type=pathlib.Path, default=ROOT / "results/raw/heldout/verifier-census-v1")
     parser.add_argument("--workers", type=int, default=16)
+    parser.add_argument("--source-cache", type=pathlib.Path)
+    parser.add_argument("--dev-checkouts", type=pathlib.Path,
+                        default=pathlib.Path("/Users/imranpollob/Coding/bc/bindcheck-zk/feasibility/work/full-dev"))
     args = parser.parse_args()
     if not 1 <= args.workers <= 32:
         parser.error("workers must be 1..32")
-    print(json.dumps(run(args.output.resolve(), args.workers), indent=2, sort_keys=True))
+    cache = args.source_cache.resolve() if args.source_cache else args.output.resolve() / "sources"
+    print(json.dumps(run(args.output.resolve(), args.workers, cache, args.dev_checkouts.resolve()), indent=2, sort_keys=True))
     return 0
 
 
