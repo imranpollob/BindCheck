@@ -4,10 +4,7 @@
 from __future__ import annotations
 
 import argparse
-import csv
-import hashlib
 import json
-import os
 import pathlib
 import shutil
 import sys
@@ -18,8 +15,8 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 if __package__ in {None, ""}:
     sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
 
-from bindcheck_zk.circuits import Circuit, is_entry_circuit, resolve_circom_includes
-from eval.common import ROOT, SOURCE_LEDGER, atomic_write_json, read_csv, select_families, sha256_file, run_command, summarize_command, utc_now
+from bindcheck_zk.circuits import Circuit, _tree_digest, is_entry_circuit, resolve_circom_includes
+from eval.common import PLAN_SOURCE_SHA256, ROOT, SOURCE_LEDGER, atomic_write_json, read_csv, select_families, sha256_file, run_command, utc_now
 from eval.run_heldout import acquire_once
 
 
@@ -28,9 +25,12 @@ SAMPLE_SHA256 = "cf1b64bc68d90a790e63d965a3e3c607dc6f27e5250ba58d5968d4f792972d8
 EXPOSED_RANK = 259
 MAX_BUILDS = 2
 BUILD_TIMEOUT = 30.0
+VENDOR_TREE_SHA256 = "d359bab216fc262b406f468d87774ec1b6661e4438b38851fcd6a0a2e1e8a57a"
 
 
 def selected() -> list[dict[str, str]]:
+    if sha256_file(SOURCE_LEDGER) != PLAN_SOURCE_SHA256:
+        raise RuntimeError("source corpus bytes differ from frozen selection")
     if sha256_file(SAMPLE) != SAMPLE_SHA256:
         raise RuntimeError("selected-family bytes differ from preregistration")
     frozen = read_csv(SAMPLE)
@@ -122,6 +122,9 @@ def main() -> int:
     args = parser.parse_args()
     if not args.circom.is_file() or not 1 <= args.jobs <= 2:
         parser.error("circom must exist and jobs must be 1 or 2")
+    vendor = ROOT / "node_modules/circomlib"
+    if not vendor.is_dir() or _tree_digest(vendor) != (VENDOR_TREE_SHA256, 144):
+        parser.error("pinned circomlib@2.0.5 tree is missing or does not match vendor-lock.json")
     output = args.output.resolve()
     output.mkdir(parents=True, exist_ok=True)
     families = selected()
@@ -139,6 +142,7 @@ def main() -> int:
         "source_corpus_sha256": sha256_file(SOURCE_LEDGER),
         "circom": str(args.circom.resolve()), "circom_sha256": sha256_file(args.circom),
         "jobs": args.jobs, "max_builds_per_family": MAX_BUILDS,
+        "circomlib_tree_sha256": VENDOR_TREE_SHA256,
         "build_timeout_seconds": BUILD_TIMEOUT,
         "families": len(records),
         "status_counts": dict(sorted(Counter(item["status"] for item in records).items())),
