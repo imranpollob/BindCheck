@@ -17,7 +17,7 @@ if __package__ in {None, ""}:
 
 from bindcheck_zk.circuits import Circuit, _tree_digest, is_entry_circuit, resolve_circom_includes
 from eval.common import PLAN_SOURCE_SHA256, ROOT, SOURCE_LEDGER, atomic_write_json, read_csv, select_families, sha256_file, run_command, utc_now
-from eval.run_heldout import acquire_once
+from eval.run_heldout import acquire_once, prepare_pinned_vendor
 
 
 SAMPLE = ROOT / "reports/heldout/selected-families.csv"
@@ -67,6 +67,7 @@ def prebuild_family(family: dict[str, str], output: pathlib.Path, circom: pathli
         if acquisition.get("status") != "ready":
             base["status"] = "ACQUISITION_FAILED"
             return base
+        base["dependency_setup"] = prepare_pinned_vendor(checkout, family_dir, ROOT / "node_modules/circomlib")
         paths = [checkout / path for path in family["circuit_paths"].split("|") if path.endswith(".circom")]
         entries = [path for path in paths if path.is_file() and is_entry_circuit(path)]
         base["recorded_circom_paths"] = len(paths)

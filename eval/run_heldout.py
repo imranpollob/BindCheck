@@ -51,11 +51,13 @@ from eval.common import (  # noqa: E402
     write_selection,
 )
 from eval.adjudicate import P4_WARNING_REASONS
+from bindcheck_zk.circuits import _tree_digest
 
 
 TOOLS = ("bindcheck-zk", *BASELINES, "arm-c")
 ARM_C_TIMEOUT_SECONDS = 390.0
 EXPOSED_RANK = 259
+PINNED_VENDOR_TREE = ("d359bab216fc262b406f468d87774ec1b6661e4438b38851fcd6a0a2e1e8a57a", 144)
 
 
 def execution_families(selected: list[dict[str, Any]], split: str) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
@@ -226,6 +228,39 @@ def capture_warning_sources(checkout: pathlib.Path, family_dir: pathlib.Path) ->
     return manifest
 
 
+def prepare_pinned_vendor(
+    checkout: pathlib.Path, family_dir: pathlib.Path, vendor: pathlib.Path,
+    expected_tree: tuple[str, int] = PINNED_VENDOR_TREE,
+) -> dict[str, Any]:
+    """Expose pinned circomlib to repository-relative imports in a temporary checkout."""
+    if not vendor.is_dir() or _tree_digest(vendor) != expected_tree:
+        raise EvaluationError("pinned local circomlib is missing or differs from vendor lock")
+    modules = checkout / "node_modules"
+    if modules.is_symlink() and not modules.resolve().is_relative_to(checkout.resolve()):
+        raise EvaluationError("repository node_modules symlink escapes checkout")
+    if modules.exists() and not modules.is_dir():
+        raise EvaluationError("repository node_modules is not a directory")
+    modules.mkdir(exist_ok=True)
+    target = modules / "circomlib"
+    if target.is_symlink() and target.resolve() != vendor.resolve() and not target.resolve().is_relative_to(checkout.resolve()):
+        raise EvaluationError("repository circomlib symlink escapes checkout")
+    if target.exists() or target.is_symlink():
+        if not target.is_dir():
+            raise EvaluationError("repository circomlib path is not a directory")
+        status = "EXISTING_VENDOR"
+        digest, files = _tree_digest(target)
+    else:
+        target.symlink_to(vendor.resolve(), target_is_directory=True)
+        status = "LINKED_PINNED_VENDOR"
+        digest, files = expected_tree
+    result = {"schema": "bindcheck-zk.dependency-setup/v1", "status": status,
+              "vendor_path": str(target.relative_to(checkout)), "tree_sha256": digest,
+              "files": files, "pinned_tree_sha256": expected_tree[0],
+              "pinned_files": expected_tree[1]}
+    atomic_write_json(family_dir / "dependency-setup.json", result)
+    return result
+
+
 def run_tool_once(tool: str, checkout: pathlib.Path, family_dir: pathlib.Path) -> dict[str, Any]:
     normalized_path = family_dir / f"{tool}.json"
     attempt_path = family_dir / f"{tool}-attempt.json"
@@ -317,6 +352,7 @@ def analyze_family(
             for tool in TOOLS:
                 tools[tool] = _recover_or_unknown(tool, family_dir, reason)
         else:
+            prepare_pinned_vendor(checkout, family_dir, ROOT / "node_modules/circomlib")
             for tool in TOOLS:
                 tools[tool] = run_tool_once(tool, checkout, family_dir)
             try:
