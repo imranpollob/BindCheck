@@ -93,29 +93,61 @@ def extract_ic(text: str, constants: dict[str, int]) -> dict[int, tuple[int, int
     return output
 
 
-def canonical_guard(text: str) -> bool:
+def canonical_guard_positions(text: str) -> dict[str, Any]:
+    """Return the exact public-input positions covered by recognized guards."""
     exact_names = [name for name, value in named_constants(text).items() if value == SCALAR_FIELD]
     semantic_name = r"[A-Za-z_]\w*(?:SNARK|SCALAR|FIELD)[A-Za-z_]*"
     modulus_parts = [str(SCALAR_FIELD), semantic_name, *(re.escape(name) for name in exact_names)]
     modulus = rf"(?:{'|'.join(modulus_parts)})"
-    if any(re.search(pattern, text, re.I) for pattern in (
-        rf"(?:inputs?|pubSignals?|publicInputs?)\s*\[[^\]]+\]\s*<\s*{modulus}",
-        rf"{modulus}\s*<=\s*(?:inputs?|pubSignals?|publicInputs?)\s*\[",
-        rf"\bcheckField\s*\([^;]*(?:inputs?|pubSignals?|publicInputs?)",
-        rf"\b(?:require|assert)\s*\([^;]*(?:inputs?|pubSignals?|publicInputs?)[^;]*<\s*{modulus}",
-        rf"\bif\s*\([^)]*(?:inputs?|pubSignals?|publicInputs?)\s*\[[^\]]+\]\s*>=\s*{modulus}[^)]*\)\s*\{{?[^{{}}]*\b(?:return\s+false|revert\b)",
-    )):
-        return True
+    vector = r"(?:inputs?|pubSignals?|publicInputs?)"
+    indices: set[int] = set()
+    symbolic: set[str] = set()
+    all_positions = False
+    index_pattern = r"(?P<index>\d+|[A-Za-z_]\w*)"
+    for pattern in (
+        rf"{vector}\s*\[\s*{index_pattern}\s*\]\s*<\s*{modulus}",
+        rf"{modulus}\s*<=\s*{vector}\s*\[\s*{index_pattern}\s*\]",
+        rf"\bif\s*\([^)]*{vector}\s*\[\s*{index_pattern}\s*\]\s*>=\s*{modulus}[^)]*\)\s*\{{?[^{{}}]*\b(?:return\s+false|revert\b)",
+    ):
+        for match in re.finditer(pattern, text, re.I):
+            index = match.group("index")
+            if index.isdigit():
+                indices.add(int(index))
+            else:
+                symbolic.add(index)
     aliases = re.findall(
-        r"\b(?:uint(?:256)?\s+)?([A-Za-z_]\w*)\s*=\s*(?:inputs?|pubSignals?|publicInputs?)\s*\[[^\]]+\]\s*;",
+        rf"\b(?:uint(?:256)?\s+)?([A-Za-z_]\w*)\s*=\s*{vector}\s*\[\s*(\d+)\s*\]\s*;",
         text,
         re.I,
     )
-    return any(re.search(
-        rf"\bif\s*\([^)]*\b{re.escape(alias)}\b\s*>=\s*{modulus}[^)]*\)\s*\{{?[^{{}}]*\b(?:return\s+false|revert\b)",
-        text,
-        re.I,
-    ) for alias in aliases)
+    for alias, index in aliases:
+        if re.search(
+            rf"\bif\s*\([^)]*\b{re.escape(alias)}\b\s*>=\s*{modulus}[^)]*\)\s*\{{?[^{{}}]*\b(?:return\s+false|revert\b)",
+            text,
+            re.I,
+        ):
+            indices.add(int(index))
+    for index in symbolic:
+        if re.search(
+            rf"\bfor\s*\([^;]*\b{re.escape(index)}\b[^;]*;[^;]*(?:<|!=)\s*{vector}\.length[^;]*;[^)]*\)",
+            text,
+            re.I | re.S,
+        ):
+            all_positions = True
+    generic = bool(re.search(rf"\bcheckField\s*\([^;]*{vector}", text, re.I))
+    return {
+        "all_positions": all_positions,
+        "indices": sorted(indices),
+        "symbolic_indices": sorted(symbolic),
+        "generic_guard": generic,
+    }
+
+
+def canonical_guard(text: str, positions: set[int] | None = None) -> bool:
+    coverage = canonical_guard_positions(text)
+    if positions is None:
+        return bool(coverage["all_positions"] or coverage["indices"] or coverage["generic_guard"])
+    return bool(coverage["all_positions"] or positions.issubset(set(coverage["indices"])))
 
 
 def delegates_verification(text: str) -> bool:

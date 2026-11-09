@@ -227,6 +227,7 @@ def parse_r1cs(path: pathlib.Path) -> dict[str, Any]:
         raise ValueError("R1CS header or constraints section missing")
     header = sections[1]
     field_size = struct.unpack_from("<I", header, 0)[0]
+    prime = int.from_bytes(header[4:4 + field_size], "little")
     cursor = 4 + field_size
     n_wires, n_pub_out, n_pub_in, n_prv_in = struct.unpack_from("<IIII", header, cursor)
     cursor += 16
@@ -236,24 +237,34 @@ def parse_r1cs(path: pathlib.Path) -> dict[str, Any]:
     constraints_raw = sections[2]
     cursor = 0
     constraints: list[set[int]] = []
+    constraint_terms: list[list[list[dict[str, int]]]] = []
     for _ in range(n_constraints):
         wires: set[int] = set()
+        linear_combinations: list[list[dict[str, int]]] = []
         for _lc in range(3):
             if cursor + 4 > len(constraints_raw):
                 raise ValueError("truncated R1CS linear combination")
             terms = struct.unpack_from("<I", constraints_raw, cursor)[0]
             cursor += 4
+            parsed_terms: list[dict[str, int]] = []
             for _term in range(terms):
                 if cursor + 4 + field_size > len(constraints_raw):
                     raise ValueError("truncated R1CS term")
                 wire = struct.unpack_from("<I", constraints_raw, cursor)[0]
+                coefficient = int.from_bytes(
+                    constraints_raw[cursor + 4:cursor + 4 + field_size], "little"
+                )
                 cursor += 4 + field_size
-                if wire:
+                parsed_terms.append({"wire": wire, "coefficient": coefficient})
+                if wire and coefficient % prime:
                     wires.add(wire)
+            linear_combinations.append(parsed_terms)
         constraints.append(wires)
+        constraint_terms.append(linear_combinations)
     return {
         "version": version,
         "field_size": field_size,
+        "prime": prime,
         "n_wires": n_wires,
         "n_public_outputs": n_pub_out,
         "n_public_inputs": n_pub_in,
@@ -261,6 +272,7 @@ def parse_r1cs(path: pathlib.Path) -> dict[str, Any]:
         "n_labels": n_labels,
         "n_constraints": n_constraints,
         "constraints": constraints,
+        "constraint_terms": constraint_terms,
     }
 
 
@@ -303,7 +315,10 @@ def named_path(r1cs: pathlib.Path, sym: pathlib.Path, start: str, end: str, name
         "namespace": qualified,
         "namespace_ok": bool(interior) and all(name.startswith(qualified + ".") for name in interior),
         "path": steps,
-        "r1cs": {key: value for key, value in parsed.items() if key != "constraints"},
+        "r1cs": {
+            key: value for key, value in parsed.items()
+            if key not in {"constraints", "constraint_terms"}
+        },
     }
 
 

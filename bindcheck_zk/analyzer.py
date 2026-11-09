@@ -35,6 +35,7 @@ from .solidity import (
     normalize_expression,
     public_vector,
     split_top_level,
+    unresolved_function_context,
     verification_calls,
     verifier_declarations,
 )
@@ -442,38 +443,129 @@ def _direct_bound(expression: str, vector: PublicVector, aliases: dict[str, str]
     return False
 
 
-def _guard_bound(expression: str, vector: PublicVector, aliases: dict[str, str], body: str) -> bool:
-    """Recognize an explicit equality between an effect role and a vector member."""
-    resolved = normalize_expression(_resolve_alias(expression, aliases))
+def _brace_intervals(masked: str) -> list[tuple[int, int]]:
+    stack: list[int] = []
+    output: list[tuple[int, int]] = []
+    for index, character in enumerate(masked):
+        if character == "{":
+            stack.append(index)
+        elif character == "}" and stack:
+            output.append((stack.pop(), index + 1))
+    return output
+
+
+def _guard_scope_dominates(
+    guard_offset: int,
+    effect_offset: int,
+    intervals: list[tuple[int, int]],
+) -> bool:
+    containing = [interval for interval in intervals if interval[0] < guard_offset < interval[1]]
+    if not containing:
+        return guard_offset < effect_offset
+    innermost = max(containing, key=lambda interval: interval[0])
+    return guard_offset < effect_offset < innermost[1]
+
+
+def _binding_equality(
+    predicate: str,
+    resolved: str,
+    vector: PublicVector,
+    aliases: dict[str, str],
+    *,
+    equality_required: bool,
+) -> bool:
+    operator = "==" if equality_required else "!="
+    if operator not in predicate:
+        return False
+    left, right = predicate.split(operator, 1)
+    left_norm = normalize_expression(_resolve_alias(left.strip(), aliases))
+    right_norm = normalize_expression(_resolve_alias(right.strip(), aliases))
     vector_refs = {
         normalize_expression(_resolve_alias(value, aliases))
-        for value in (vector.base, vector.expression)
+        for value in (vector.base, vector.expression, *vector.items)
         if value
     }
-    if not vector_refs:
-        return False
+
+    def is_vector_member(value: str) -> bool:
+        return any(value == ref or value.startswith(ref + "[") for ref in vector_refs)
+
+    return (left_norm == resolved and is_vector_member(right_norm)) or (
+        right_norm == resolved and is_vector_member(left_norm)
+    )
+
+
+def _guard_bound(
+    expression: str,
+    vector: PublicVector,
+    aliases: dict[str, str],
+    body: str,
+    effect_offset: int,
+) -> bool:
+    """Recognize equality enforced before/on every path reaching one effect."""
+    resolved = normalize_expression(_resolve_alias(expression, aliases))
     masked = mask_comments_and_strings(body)
-    for match in re.finditer(r"\b(?:require|if)\s*\(", masked):
+    intervals = _brace_intervals(masked)
+    for match in re.finditer(r"\b(?:require|assert)\s*\(", masked):
+        opening = masked.find("(", match.start())
+        condition = balanced(body, opening)
+        if condition is None or condition[1] > effect_offset:
+            continue
+        arguments = split_top_level(condition[0])
+        predicate = arguments[0] if arguments else ""
+        if not _binding_equality(predicate, resolved, vector, aliases, equality_required=True):
+            continue
+        if _guard_scope_dominates(match.start(), effect_offset, intervals):
+            return True
+    for match in re.finditer(r"\bif\s*\(", masked):
         opening = masked.find("(", match.start())
         condition = balanced(body, opening)
         if condition is None:
             continue
-        arguments = split_top_level(condition[0])
-        predicate = arguments[0] if arguments else ""
-        if "==" not in predicate:
+        cursor = condition[1]
+        while cursor < len(masked) and masked[cursor].isspace():
+            cursor += 1
+        if _binding_equality(condition[0], resolved, vector, aliases, equality_required=True):
+            if cursor < len(masked) and masked[cursor] == "{":
+                branch = next((interval for interval in intervals if interval[0] == cursor), None)
+                if branch and branch[0] < effect_offset < branch[1]:
+                    return True
+            else:
+                statement_end = masked.find(";", cursor)
+                if cursor <= effect_offset <= statement_end:
+                    return True
+        if condition[1] > effect_offset or not _guard_scope_dominates(match.start(), effect_offset, intervals):
             continue
-        left, right = predicate.split("==", 1)
-        left_norm = normalize_expression(_resolve_alias(left.strip(), aliases))
-        right_norm = normalize_expression(_resolve_alias(right.strip(), aliases))
-
-        def is_vector_member(value: str) -> bool:
-            return any(value == ref or value.startswith(ref + "[") for ref in vector_refs)
-
-        if (left_norm == resolved and is_vector_member(right_norm)) or (
-            right_norm == resolved and is_vector_member(left_norm)
-        ):
+        if not _binding_equality(condition[0], resolved, vector, aliases, equality_required=False):
+            continue
+        if cursor < len(masked) and masked[cursor] == "{":
+            branch = next((interval for interval in intervals if interval[0] == cursor), None)
+            branch_text = masked[branch[0]:branch[1]] if branch else ""
+        else:
+            statement_end = masked.find(";", cursor)
+            branch_text = masked[cursor:statement_end + 1]
+        if re.search(r"\b(?:revert|return\s+false)\b", branch_text):
             return True
     return False
+
+
+def _hash_preimage_order(body: str) -> list[str] | None:
+    masked = mask_comments_and_strings(body)
+    for match in re.finditer(r"\b(?:poseidon(?:\.[A-Za-z_]\w*)?|compute[A-Za-z_]*hash|keccak256)\s*\(", masked, re.I):
+        opening = masked.find("(", match.start())
+        parsed = balanced(body, opening)
+        if parsed is None:
+            continue
+        arguments = split_top_level(parsed[0])
+        if len(arguments) == 1:
+            nested = re.search(r"\babi\s*\.\s*encode(?:Packed)?\s*\(", arguments[0], re.I)
+            if nested:
+                nested_open = arguments[0].find("(", nested.start())
+                nested_parsed = balanced(arguments[0], nested_open)
+                if nested_parsed:
+                    arguments = split_top_level(nested_parsed[0])
+        if arguments:
+            return [normalize_expression(argument) for argument in arguments]
+    return None
 
 
 def _commitment_binding(
@@ -482,6 +574,7 @@ def _commitment_binding(
     circuit: Circuit,
     consumer: Consumer,
     repository_solidity: str,
+    effect_offset: int,
 ) -> tuple[bool, dict[str, Any] | None, str | None]:
     expression_names = identifiers(expression)
     circuit_source = circuit.path.read_text(encoding="utf-8", errors="replace")
@@ -493,16 +586,32 @@ def _commitment_binding(
         public_has_commitment = any(commitment in identifiers(item) for item in vector.items) or commitment in vector.sources
         if not public_has_commitment:
             continue
-        guard = bool(re.search(
-            rf"(?:require\s*\((?=[^;]*\b{re.escape(commitment)}\b)(?=[^;]*(?:==|!=))|"
-            rf"if\s*\((?=[^;]*\b{re.escape(commitment)}\b)(?=[^;]*(?:==|!=))[^;]*\)\s*revert)",
+        consumer_assignments = assignments(consumer.function.body)
+        computed_name = next(
+            (
+                name for name, value in consumer_assignments.items()
+                if re.search(r"\b(?:poseidon|compute[A-Za-z_]*hash|keccak256)\b", value, re.I)
+            ),
+            commitment,
+        )
+        guard = _guard_bound(
+            computed_name,
+            vector,
+            {normalize_expression(name): value for name, value in consumer_assignments.items()},
             consumer.function.body,
-            re.S,
-        ))
-        has_hash = bool(re.search(r"poseidon|compute\w*hash|keccak256", repository_solidity, re.I))
-        order_ok = all(name in repository_solidity for name in input_names if name.lower() not in {"domain", "ds"})
-        if not (guard and has_hash and order_ok):
+            effect_offset,
+        )
+        preimage_order = _hash_preimage_order(consumer.function.body)
+        if not (guard and preimage_order):
             return False, None, "LOCAL_COMMITMENT_GUARD_UNESTABLISHED"
+        circuit_order = [normalize_expression(value) for value in component["inputs"]]
+        if preimage_order != circuit_order:
+            return False, {
+                "component": component,
+                "circuit_preimage_order": circuit_order,
+                "consumer_preimage_order": preimage_order,
+                "status": "SCREEN_ONLY",
+            }, "COMMITMENT_PREIMAGE_ORDER_UNRESOLVED"
         if not circuit.compiled or circuit.r1cs is None or circuit.sym is None:
             return False, None, "COMPILED_RELATION_UNAVAILABLE"
         signal = next((name for name in input_names if name in expression_names), None)
@@ -513,24 +622,43 @@ def _commitment_binding(
         except (OSError, ValueError) as exc:
             return False, {"error": str(exc)}, "COMPILED_RELATION_PARSE_FAILED"
         if path and path["namespace_ok"]:
-            return True, {
+            return False, {
                 "component": component,
                 "compiled_path": path,
                 "consumer_guard": True,
-                "algorithm_evidence": "hash helper recovered in consumer sources",
-                "order_evidence": sorted(input_names),
+                "algorithm_evidence": "hash invocation and ordered arguments recovered in consumer function",
+                "order_evidence": circuit_order,
                 "circuit_source_sha256": circuit.sha256,
                 "r1cs_sha256": sha256_file(circuit.r1cs),
-            }, None
-        return False, path, "COMPILED_COMMITMENT_PATH_UNESTABLISHED"
+                "status": "SCREEN_ONLY",
+                "does_not_establish": "algebraic or cryptographic commitment binding",
+            }, "COMMITMENT_BINDING_SCREEN_ONLY"
+        return False, {
+            "component": component,
+            "compiled_path": path,
+            "status": "SCREEN_ONLY",
+        }, "COMMITMENT_BINDING_SCREEN_ONLY"
     return False, None, None
 
 
-def analyze_p1(circuit: Circuit | None, verifier: Verifier | None, consumer: Consumer, repository_solidity: str) -> dict[str, Any]:
+def analyze_p1(
+    circuit: Circuit | None,
+    verifier: Verifier | None,
+    consumer: Consumer,
+    repository_solidity: str,
+    policy: dict[str, bool] | None = None,
+) -> dict[str, Any]:
     where = location(consumer.source.relative_path, consumer.function.line)
     unsupported = has_unsupported_construct(consumer.function.body)
     if unsupported:
         return result("P1", "UNKNOWN", unsupported, "Consumer function uses a construct outside the supported dataflow subset.", where=where)
+    unresolved_context = unresolved_function_context(consumer.function, consumer.source.text)
+    if unresolved_context:
+        return result(
+            "P1", "UNKNOWN", unresolved_context,
+            "The effect-bearing consumer path depends on modifier or inherited semantics outside the supported frontend.",
+            where=where,
+        )
     if not consumer.effect_calls:
         return result(
             "P1", "UNKNOWN", "PROTECTED_EFFECT_NOT_RECOVERED",
@@ -559,14 +687,29 @@ def analyze_p1(circuit: Circuit | None, verifier: Verifier | None, consumer: Con
         for role, expression in roles:
             fact: dict[str, Any] = {"provenance": "EXTRACTED", "role": role, "expression": expression, "bound_by": []}
             resolved_expression = normalize_expression(_resolve_alias(expression, aliases))
-            if role == "recipient" and resolved_expression == "msg.sender":
-                fact["bound_by"].append("msg.sender")
+            if (
+                role == "recipient"
+                and resolved_expression == "msg.sender"
+                and (policy or {}).get("any_caller_may_receive", False)
+            ):
+                fact["bound_by"].append("policy:any-caller-may-receive")
             if role == "recipient" and resolved_expression == "this":
                 fact["bound_by"].append("contract-self")
             if any(_direct_bound(expression, vector, aliases) for vector in consumer.vectors):
                 fact["bound_by"].append("direct-public-input")
-            if any(_guard_bound(expression, vector, aliases, consumer.function.body) for vector in consumer.vectors):
+            guard_bound = any(
+                _guard_bound(expression, vector, aliases, consumer.function.body, call.offset)
+                for vector in consumer.vectors
+            )
+            if guard_bound:
                 fact["bound_by"].append("local-public-vector-guard")
+            elif any(
+                _guard_bound(expression, vector, aliases, consumer.function.body, len(consumer.function.body) + 1)
+                for vector in consumer.vectors
+            ):
+                reason = "POST_EFFECT_GUARD_SEMANTICS_UNRESOLVED"
+                unknown_reasons.append(reason)
+                fact.setdefault("unresolved", []).append({"reason": reason})
             if (
                 role == "amount"
                 and "msg.sender" in resolved_recipients
@@ -575,7 +718,9 @@ def analyze_p1(circuit: Circuit | None, verifier: Verifier | None, consumer: Con
                 fact["bound_by"].append("caller-funded-refund")
             if not fact["bound_by"]:
                 for vector in consumer.vectors:
-                    bound, evidence, reason = _commitment_binding(expression, vector, circuit, consumer, repository_solidity)
+                    bound, evidence, reason = _commitment_binding(
+                        expression, vector, circuit, consumer, repository_solidity, call.offset
+                    )
                     if bound:
                         fact["bound_by"].append("compiled-commitment")
                         fact["commitment_evidence"] = evidence
@@ -623,14 +768,18 @@ def analyze_p1(circuit: Circuit | None, verifier: Verifier | None, consumer: Con
         return result("P1", "UNKNOWN", reason, "A protected effect role could not be proved bound or unbound in the supported subset.", where=where, facts=role_facts)
     if not role_facts:
         return result("P1", "UNKNOWN", "EFFECT_BINDING_UNRESOLVED", "A protected effect was recovered but its semantic roles were not.", where=where)
-    reason = "RECIPIENT_BOUND_TO_MSG_SENDER" if any("msg.sender" in fact["bound_by"] for fact in role_facts) else "EFFECT_VALUES_DIRECT_PUBLIC_INPUTS"
+    reason = (
+        "RECIPIENT_ALLOWED_BY_ANY_CALLER_POLICY"
+        if any("policy:any-caller-may-receive" in fact["bound_by"] for fact in role_facts)
+        else "EFFECT_VALUES_DIRECT_PUBLIC_INPUTS"
+    )
     if any("contract-self" in fact["bound_by"] for fact in role_facts):
         reason = "RECIPIENT_BOUND_TO_CONTRACT_SELF"
     if any("compiled-commitment" in fact["bound_by"] for fact in role_facts):
         reason = "EFFECT_VALUES_BOUND_BY_COMPILED_COMMITMENT"
     return result(
         "P1", "VERIFIED_WITHIN_SCOPE", reason,
-        "Every recovered protected effect role is bound by a direct verifier input, msg.sender, or a checked compiled commitment path.",
+        "Every recovered protected effect role is bound by a direct verifier input, an enforcing local guard, contract self, or an explicit recipient policy.",
         where=where, facts=role_facts,
         limitations=["Result is limited to the recovered function, effects, matched artifacts, and supported dataflow forms."],
     )
@@ -750,15 +899,24 @@ def _key_passed_to_internal_helper(body: str, key: str) -> bool:
     return False
 
 
-def _replay_key_bound_to_verifier(consumer: Consumer, resolved_key: str) -> bool:
+def _replay_key_binding_to_verifier(
+    consumer: Consumer,
+    resolved_key: str,
+) -> tuple[bool, set[int] | None]:
     ignored = {"msg", "sender", "block", "timestamp", "chainid", "abi", "encode", "encodepacked", "keccak256", "sha256"}
     key_ids = {name for name in identifiers(resolved_key) if name.lower() not in ignored}
     vector_ids: set[str] = set()
     vector_refs: set[str] = set()
     aliases = assignments(consumer.function.body)
+    positions: set[int] = set()
     for vector in consumer.vectors:
         resolved_vector = _resolve_alias(vector.expression, aliases)
         vector_ids |= vector.sources | identifiers(vector.expression) | identifiers(resolved_vector)
+        for index, item in enumerate(vector.items):
+            resolved_item = _resolve_alias(item, aliases)
+            item_ids = {name for name in identifiers(resolved_item) if name.lower() not in ignored}
+            if normalize_expression(resolved_item) == normalize_expression(resolved_key) or key_ids & item_ids:
+                positions.add(index)
         if vector.base:
             vector_refs.add(vector.base)
         if re.fullmatch(r"[A-Za-z_]\w*(?:\.[A-Za-z_]\w*)*", vector.expression.strip()):
@@ -766,15 +924,19 @@ def _replay_key_bound_to_verifier(consumer: Consumer, resolved_key: str) -> bool
     for call in consumer.verify_calls:
         for argument in call.args:
             vector_ids |= identifiers(_resolve_alias(argument, aliases))
-    if key_ids & vector_ids:
-        return True
+    proof_bound = bool(key_ids & vector_ids)
     key_pattern = re.escape(resolved_key).replace(r"\ ", r"\s*")
     for base in vector_refs:
         base_pattern = re.escape(base).replace(r"\.", r"\s*\.\s*")
-        equality = rf"(?:{base_pattern}\s*\[[^\]]+\][^;]*(?:==)[^;]*{key_pattern}|{key_pattern}[^;]*(?:==)[^;]*{base_pattern}\s*\[[^\]]+\])"
-        if re.search(equality, consumer.function.body, re.S):
-            return True
-    return False
+        equality = rf"(?:{base_pattern}\s*\[\s*(\d+)\s*\][^;]*(?:==)[^;]*{key_pattern}|{key_pattern}[^;]*(?:==)[^;]*{base_pattern}\s*\[\s*(\d+)\s*\])"
+        for match in re.finditer(equality, consumer.function.body, re.S):
+            positions.add(int(next(group for group in match.groups() if group is not None)))
+            proof_bound = True
+        direct = re.fullmatch(rf"{base_pattern}\s*\[\s*(\d+)\s*\]", resolved_key)
+        if direct:
+            positions.add(int(direct.group(1)))
+            proof_bound = True
+    return proof_bound, positions or None
 
 
 def analyze_p3(verifier: Verifier | None, consumer: Consumer) -> dict[str, Any]:
@@ -813,14 +975,15 @@ def analyze_p3(verifier: Verifier | None, consumer: Consumer) -> dict[str, Any]:
         write = bool(re.search(rf"{re.escape(mapping)}\s*\[\s*{key_pattern}\s*\]\s*=\s*(?:true|1)\b", consumer.function.body, re.S))
         resolved_key = _resolve_alias(key, aliases)
         resolved_key = re.sub(r"\[\(([^()]+)\)\]", r"[\1]", resolved_key)
-        proof_bound = _replay_key_bound_to_verifier(consumer, resolved_key)
+        proof_bound, proof_positions = _replay_key_binding_to_verifier(consumer, resolved_key)
         raw = bool(re.fullmatch(
             r"[A-Za-z_]\w*(?:(?:\s*\.\s*[A-Za-z_]\w*)|(?:\s*\[\s*[A-Za-z_0-9]+\s*\]))*",
             resolved_key,
         ))
         helper = _key_passed_to_internal_helper(consumer.function.body, key)
         fact = {"provenance": "EXTRACTED", "mapping": mapping, "key": key, "resolved_key": resolved_key,
-                "read": read, "write": write, "raw": raw, "helper": helper, "proof_bound": proof_bound}
+                "read": read, "write": write, "raw": raw, "helper": helper, "proof_bound": proof_bound,
+                "proof_positions": sorted(proof_positions) if proof_positions is not None else None}
         facts.append(fact)
         if helper and (not read or not write):
             return result("P3", "UNKNOWN", "REPLAY_BARRIER_HELPER_UNRESOLVED", "Replay handling is delegated to a helper outside the supported local mapping subset.", where=where, facts=facts)
@@ -836,7 +999,17 @@ def analyze_p3(verifier: Verifier | None, consumer: Consumer) -> dict[str, Any]:
             )
         if not raw and not re.search(r"(?:keccak256|sha256|%|mod)", resolved_key, re.I):
             return result("P3", "UNKNOWN", "REPLAY_KEY_EXPRESSION_UNRESOLVED", "Replay-key expression is outside supported raw/canonicalized forms.", where=where, facts=facts)
-        verifier_guard = verifier is not None and canonical_guard(verifier.source.text)
+        if raw and verifier is not None and proof_positions is None:
+            return result(
+                "P3", "UNKNOWN", "REPLAY_KEY_POSITION_UNRESOLVED",
+                "The replay key is proof-related, but its exact public-input position was not recovered.",
+                where=where, facts=facts,
+            )
+        verifier_guard = (
+            verifier is not None
+            and proof_positions is not None
+            and canonical_guard(verifier.source.text, proof_positions)
+        )
         local_guard = bool(re.search(rf"\b{re.escape(key)}\b\s*<\s*(?:{load_config()['scalar_field']}|[A-Za-z_]\w*(?:FIELD|SCALAR|SNARK))", consumer.function.body, re.I)) if raw else True
         reduces = verifier is not None and bool(re.search(r"\b(?:mod|addmod|mulmod)\b|%\s*(?:q|r|FIELD|SCALAR)", verifier.source.text, re.I))
         if raw and not (verifier_guard or local_guard) and (reduces or verifier is not None):
@@ -1055,6 +1228,7 @@ def analyze(
     explicit_circuits: list[str] | None = None,
     explicit_consumers: list[str] | None = None,
     bundle: bool = False,
+    policy: dict[str, bool] | None = None,
 ) -> dict[str, Any]:
     started_utc = dt.datetime.now(dt.UTC).isoformat()
     started = time.monotonic()
@@ -1075,6 +1249,7 @@ def analyze(
         "root": str(root), "mode": "verified-source-bundle" if bundle else "repository",
         "git_revision": _git_revision(root), "network_policy": "offline/no RPC",
         "explicit_circuits": explicit_circuits or [], "explicit_consumers": explicit_consumers or [],
+        "policy": {"any_caller_may_receive": bool((policy or {}).get("any_caller_may_receive", False))},
     }
     try:
         if not root.is_dir():
@@ -1194,7 +1369,7 @@ def analyze(
             if significant_runtime is not None:
                 p4_result = significant_runtime
             pattern_results = {
-                "P1": analyze_p1(circuit, verifier, consumer, repository_solidity),
+                "P1": analyze_p1(circuit, verifier, consumer, repository_solidity, policy),
                 "P2": analyze_p2(circuit, consumer),
                 "P3": analyze_p3(verifier, consumer),
                 "P4": p4_result,

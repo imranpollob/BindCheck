@@ -477,3 +477,31 @@ def has_unsupported_construct(body: str) -> str | None:
     if re.search(r"\bselfdestruct\s*\(", masked):
         return "UNSUPPORTED_SELFDESTRUCT"
     return None
+
+
+def unresolved_function_context(function: Function, source_text: str) -> str | None:
+    """Fail closed on consumer context that this frontend does not resolve."""
+    masked_header = mask_comments_and_strings(function.header)
+    opening = masked_header.find("(")
+    parameters = balanced(masked_header, opening)
+    suffix = masked_header[parameters[1]:] if parameters is not None else ""
+    suffix = re.sub(r"\breturns\s*\([^)]*\)", " ", suffix, flags=re.I | re.S)
+    suffix = re.sub(r"\boverride\s*(?:\([^)]*\))?", " ", suffix, flags=re.I | re.S)
+    standard = {
+        "public", "external", "internal", "private", "view", "pure",
+        "payable", "virtual",
+    }
+    modifiers = [token for token in IDENT.findall(suffix) if token.lower() not in standard]
+    if modifiers:
+        return "UNRESOLVED_CONSUMER_MODIFIER"
+
+    masked_source = mask_comments_and_strings(source_text)
+    for match in re.finditer(r"\b(?:abstract\s+)?contract\s+[A-Za-z_]\w*([^\{]*)\{", masked_source):
+        opening = masked_source.find("{", match.start())
+        parsed = balanced(masked_source, opening, "{", "}")
+        if parsed is None or not (opening < function.start < parsed[1]):
+            continue
+        if re.search(r"\bis\b", match.group(1)):
+            return "UNRESOLVED_CONSUMER_INHERITANCE"
+        break
+    return None
