@@ -1,0 +1,68 @@
+{
+  "by_split": {
+    "DEV": {
+      "behavior": {
+        "ACCEPT_ALL": 17,
+        "DUMMY_CONSTANTS": 2,
+        "PAIRING_VERIFIER": 101,
+        "REJECT_ALL": 4,
+        "SIMPLIFIED": 18,
+        "UNKNOWN": 141
+      },
+      "denominator": 283,
+      "generator": {
+        "GNARK": 1,
+        "OTHER": 197,
+        "SNARKJS_CURRENT_STYLE": 82,
+        "SNARKJS_LEGACY_STYLE": 3
+      },
+      "range_class": {
+        "NONE": 90,
+        "Q_ALL": 44,
+        "R_ALL": 38,
+        "UNKNOWN": 111
+      }
+    },
+    "EVAL": {
+      "behavior": {
+        "ACCEPT_ALL": 254,
+        "PAIRING_VERIFIER": 4272,
+        "REJECT_ALL": 54,
+        "SIMPLIFIED": 299,
+        "UNKNOWN": 3248
+      },
+      "denominator": 8127,
+      "generator": {
+        "GNARK": 235,
+        "OTHER": 5297,
+        "SNARKJS_CURRENT_STYLE": 2570,
+        "SNARKJS_LEGACY_STYLE": 25
+      },
+      "range_class": {
+        "NONE": 1967,
+        "Q_ALL": 346,
+        "R_ALL": 1931,
+        "R_PARTIAL": 1,
+        "UNKNOWN": 3882
+      }
+    }
+  },
+  "classified_verifier_functions": 8410,
+  "corpus_rows": 5024,
+  "dev_supplement_path_entries": 316,
+  "distinct_source_refs": 11139,
+  "ledger_rows": 12264,
+  "ledger_sha256": "336c411710386fcc147bf34551658d24b75e71eaccda042e03a18fedee903e09",
+  "max_source_bytes": 8388608,
+  "recorded_utc": "2026-11-09T15:20:36.574141+00:00",
+  "schema": "bindcheck-zk.passive-verifier-census/v1",
+  "source_corpus_sha256": "07210625783a21a6128ea3f99402fc4a48b36922056241649999547a374b0c95",
+  "status_counts": {
+    "DEV_GIT_SHOW_FAILED": 51,
+    "FETCHED": 8410,
+    "HTTP_404": 7,
+    "NO_VERIFIER_FUNCTION": 3796
+  },
+  "verifier_path_entries": 11250,
+  "workers": 24
+}
