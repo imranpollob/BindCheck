@@ -95,9 +95,10 @@ def extract_ic(text: str, constants: dict[str, int]) -> dict[int, tuple[int, int
 
 def canonical_guard_positions(text: str) -> dict[str, Any]:
     """Return the exact public-input positions covered by recognized guards."""
-    exact_names = [name for name, value in named_constants(text).items() if value == SCALAR_FIELD]
-    semantic_name = r"[A-Za-z_]\w*(?:SNARK|SCALAR|FIELD)[A-Za-z_]*"
-    modulus_parts = [str(SCALAR_FIELD), semantic_name, *(re.escape(name) for name in exact_names)]
+    exact_names = re.findall(
+        rf"\b([A-Za-z_]\w*)\s*=\s*{SCALAR_FIELD}\s*;", text, re.I,
+    )
+    modulus_parts = [str(SCALAR_FIELD), *(rf"\b{re.escape(name)}\b" for name in exact_names)]
     modulus = rf"(?:{'|'.join(modulus_parts)})"
     vector = r"(?:inputs?|pubSignals?|publicInputs?)"
     indices: set[int] = set()
@@ -134,7 +135,33 @@ def canonical_guard_positions(text: str) -> dict[str, Any]:
             re.I | re.S,
         ):
             all_positions = True
-    generic = bool(re.search(rf"\bcheckField\s*\([^;]*{vector}", text, re.I))
+    # snarkjs emits one Yul call per public word.  A helper name alone is not
+    # evidence: inspect its rejecting comparison against the exact scalar r.
+    generic = False
+    helper = re.search(r"\bfunction\s+checkField\s*\(\s*(?:uint(?:256)?\s+)?(\w+)\s*\)[^{}]*\{", text, re.I)
+    if helper:
+        opening = text.find("{", helper.start())
+        depth = 0
+        ending = opening
+        for ending in range(opening, len(text)):
+            depth += (text[ending] == "{") - (text[ending] == "}")
+            if depth == 0:
+                break
+        body = text[opening + 1:ending]
+        parameter = re.escape(helper.group(1))
+        valid_comparison = bool(
+            re.search(rf"\b{parameter}\s*>=\s*{modulus}\b", body, re.I)
+            or re.search(rf"\biszero\s*\(\s*lt\s*\(\s*{parameter}\s*,\s*{modulus}\s*\)\s*\)", body, re.I)
+        )
+        rejects = bool(re.search(r"\brevert\s*\(|\brevert\b|\breturn\s*\(\s*0\s*,\s*0x20\s*\)", body, re.I))
+        if valid_comparison and rejects:
+            for match in re.finditer(
+                rf"\bcheckField\s*\(\s*calldataload\s*\(\s*add\s*\(\s*(_?{vector})\s*,\s*(\d+)\s*\)\s*\)\s*\)",
+                text, re.I,
+            ):
+                offset = int(match.group(2))
+                if offset % 32 == 0:
+                    indices.add(offset // 32)
     return {
         "all_positions": all_positions,
         "indices": sorted(indices),

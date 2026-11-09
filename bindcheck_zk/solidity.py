@@ -15,7 +15,7 @@ TYPE_WORDS = {
 VERIFY_NAME = re.compile(r"\b(verifyProof|verifyTx|verify|validateProof|verifyPlonk)\s*\(", re.I)
 EFFECT_NAME = re.compile(
     r"(?<![A-Za-z0-9_])(safeBatchTransferFrom|safeTransferFrom|transferFrom|safeTransfer|handleTransfer|"
-    r"_safeMint|safeMint|_mint|mint|transfer|send|burn)\s*\(", re.I
+    r"_safeMint|safeMint|_mint|mint|_safeTransfer|_transfer|transfer|send|_burn|burn)\s*\(", re.I
 )
 
 
@@ -377,6 +377,20 @@ def public_vector(body: str, call: Call) -> PublicVector:
 def effect_roles(call: Call, source_text: str = "") -> list[tuple[str, str]]:
     name = call.name.lower()
     args = call.args
+    erc721_base = bool(re.search(r"\bcontract\s+[A-Za-z_]\w*\s+is\s+[^\{;]*\bERC721\w*\b", source_text, re.I))
+    erc20_base = bool(re.search(r"\bcontract\s+[A-Za-z_]\w*\s+is\s+[^\{;]*\bERC20\w*\b", source_text, re.I))
+    if name in {"_transfer", "_safetransfer"} and len(args) >= 3:
+        if erc721_base:
+            return [("recipient", args[1])]
+        if erc20_base:
+            return [("recipient", args[1]), ("amount", args[2])]
+        return []
+    if name == "_burn" and args:
+        if erc20_base and len(args) >= 2:
+            return [("identity", args[0]), ("amount", args[1])]
+        if erc721_base:
+            return [("identity", args[0])]
+        return []
     if name == "__value_call__" and len(args) == 2:
         return [("recipient", args[0]), ("amount", args[1])]
     if name == "__state_write__" and len(args) == 3:
@@ -479,7 +493,9 @@ def has_unsupported_construct(body: str) -> str | None:
     return None
 
 
-def unresolved_function_context(function: Function, source_text: str) -> str | None:
+def unresolved_function_context(
+    function: Function, source_text: str, repository_contracts: dict[str, str] | None = None,
+) -> str | None:
     """Fail closed on consumer context that this frontend does not resolve."""
     masked_header = mask_comments_and_strings(function.header)
     opening = masked_header.find("(")
@@ -492,8 +508,31 @@ def unresolved_function_context(function: Function, source_text: str) -> str | N
         "payable", "virtual",
     }
     modifiers = [token for token in IDENT.findall(suffix) if token.lower() not in standard]
-    if modifiers:
-        return "UNRESOLVED_CONSUMER_MODIFIER"
+    for modifier in modifiers:
+        declarations = list(re.finditer(rf"\bmodifier\s+{re.escape(modifier)}\s*(?:\([^)]*\))?\s*\{{", source_text))
+        if not declarations:
+            known_oz = (
+                modifier == "nonReentrant"
+                and re.search(r'import\s+["\']@openzeppelin/contracts/(?:utils|security)/ReentrancyGuard\.sol["\']', source_text)
+            )
+            if not known_oz:
+                return "UNRESOLVED_CONSUMER_MODIFIER"
+            continue
+        if len(declarations) != 1:
+            return "UNRESOLVED_CONSUMER_MODIFIER"
+        opening = source_text.find("{", declarations[0].start())
+        parsed_modifier = balanced(source_text, opening, "{", "}")
+        if parsed_modifier is None:
+            return "UNRESOLVED_CONSUMER_MODIFIER"
+        modifier_body = mask_comments_and_strings(parsed_modifier[0])
+        if len(re.findall(r"\b_\s*;", modifier_body)) != 1:
+            return "UNRESOLVED_CONSUMER_MODIFIER"
+        before, after = re.split(r"\b_\s*;", modifier_body, maxsplit=1)
+        if after.strip() or re.search(r"\b(?:if|for|while|try|assembly|return|break|continue)\b|\b[A-Za-z_]\w*\s*\.\s*[A-Za-z_]\w*\s*\(", before):
+            return "UNRESOLVED_CONSUMER_MODIFIER"
+        statements = [item.strip() for item in before.split(";") if item.strip()]
+        if any(not re.fullmatch(r"(?:require|assert)\s*\([^;]*\)", item, re.S) for item in statements):
+            return "UNRESOLVED_CONSUMER_MODIFIER"
 
     masked_source = mask_comments_and_strings(source_text)
     for match in re.finditer(r"\b(?:abstract\s+)?contract\s+[A-Za-z_]\w*([^\{]*)\{", masked_source):
@@ -501,7 +540,34 @@ def unresolved_function_context(function: Function, source_text: str) -> str | N
         parsed = balanced(masked_source, opening, "{", "}")
         if parsed is None or not (opening < function.start < parsed[1]):
             continue
-        if re.search(r"\bis\b", match.group(1)):
-            return "UNRESOLVED_CONSUMER_INHERITANCE"
+        inherited = re.search(r"\bis\s+([^{}]+)", match.group(1))
+        if inherited:
+            bases = [re.match(r"\s*([A-Za-z_]\w*)", part) for part in inherited.group(1).split(",")]
+            invoked = {call.name for call in effect_calls(function.body, source_text)}
+            invoked |= {call.name for call in verification_calls(function.body)}
+            for base_match in bases:
+                if base_match is None:
+                    return "UNRESOLVED_CONSUMER_INHERITANCE"
+                base = base_match.group(1)
+                base_source = (repository_contracts or {}).get(base)
+                if base_source is None:
+                    oz_path = {
+                        "ERC721": "token/ERC721/ERC721.sol",
+                        "ERC20": "token/ERC20/ERC20.sol",
+                        "Ownable": "access/Ownable.sol",
+                        "ReentrancyGuard": "utils/ReentrancyGuard.sol",
+                    }.get(base)
+                    if not oz_path or not re.search(rf'import\s+["\']@openzeppelin/contracts/{re.escape(oz_path)}["\']', source_text):
+                        if base != "ReentrancyGuard" or not re.search(r'import\s+["\']@openzeppelin/contracts/security/ReentrancyGuard\.sol["\']', source_text):
+                            return "UNRESOLVED_CONSUMER_INHERITANCE"
+                else:
+                    base_functions = {item.name for item in functions(base_source)}
+                    if base_functions & invoked:
+                        return "UNRESOLVED_CONSUMER_INHERITANCE"
+            # An override in the derived source can replace a standard
+            # internal token effect; do not apply the library summary then.
+            local_functions = {item.name for item in functions(source_text) if item.start != function.start}
+            if local_functions & {"_mint", "_safeMint", "_transfer", "_safeTransfer", "_update"} & invoked:
+                return "UNRESOLVED_CONSUMER_INHERITANCE"
         break
     return None

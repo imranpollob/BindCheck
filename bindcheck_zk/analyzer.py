@@ -18,7 +18,7 @@ from . import __version__
 from .circuits import Circuit, attach_or_build, discover as discover_circuits, is_entry_circuit, named_path, parse_r1cs
 from .freeze import freeze_manifest
 from .models import Budget, aggregate, location, result, sha256_file
-from .p4 import analyze_runtime, analyze_source, canonical_guard, runtime_values_from_bundle
+from .p4 import SCALAR_FIELD, analyze_runtime, analyze_source, canonical_guard, runtime_values_from_bundle
 from .solidity import (
     Call,
     Function,
@@ -75,6 +75,7 @@ class Consumer:
     effect_calls: list[Any]
     vectors: list[PublicVector]
     receiver_types: dict[str, str]
+    repository_contracts: dict[str, str]
 
 
 def load_config() -> dict[str, Any]:
@@ -245,6 +246,11 @@ def _supported_verification_call(call: Call) -> bool:
 
 def discover_consumers(sources: list[Source]) -> list[Consumer]:
     output: list[Consumer] = []
+    repository_contracts = {
+        name: source.text
+        for source in sources
+        for name in re.findall(r"\b(?:abstract\s+)?contract\s+([A-Za-z_]\w*)\b", source.text)
+    }
     for source in sources:
         parsed_functions = list(functions(source.text))
         local_function_names = {item.name for item in parsed_functions}
@@ -302,7 +308,7 @@ def discover_consumers(sources: list[Source]) -> list[Consumer]:
                         vector.dynamic = True
                         if not vector.items:
                             vector.unresolved.append("parameter-vector-elements")
-            output.append(Consumer(source, function, verify, effects, vectors, _receiver_types(source.text)))
+            output.append(Consumer(source, function, verify, effects, vectors, _receiver_types(source.text), repository_contracts))
     return output
 
 
@@ -655,14 +661,14 @@ def analyze_p1(
             "No supported protected effect is committed on the recovered verifier-accepting function path.",
             where=where, applicability="NOT_APPLICABLE",
         )
-    unresolved_context = unresolved_function_context(consumer.function, consumer.source.text)
+    unresolved_context = unresolved_function_context(consumer.function, consumer.source.text, consumer.repository_contracts)
     if unresolved_context:
         return result(
             "P1", "UNKNOWN", unresolved_context,
             "The effect-bearing consumer path depends on modifier or inherited semantics outside the supported frontend.",
             where=where,
         )
-    if verifier is None:
+    if verifier is None or verifier.interface_only:
         return result("P1", "UNKNOWN", "VERIFIER_ARTIFACT_MISSING", "Consumer is analyzed, but the verifier implementation artifact is absent.", where=where)
     if circuit is None:
         return result("P1", "UNKNOWN", "CIRCUIT_ARTIFACT_MISSING", "Consumer/verifier artifacts are present but no circuit artifact was matched.", where=where)
@@ -780,7 +786,7 @@ def analyze_p1(
     )
 
 
-def analyze_p2(circuit: Circuit | None, consumer: Consumer) -> dict[str, Any]:
+def analyze_p2(circuit: Circuit | None, verifier: Verifier | None, consumer: Consumer) -> dict[str, Any]:
     where = location(consumer.source.relative_path, consumer.function.line)
     unsupported = has_unsupported_construct(consumer.function.body)
     if unsupported == "UNSUPPORTED_DELEGATECALL_CONTEXT":
@@ -792,6 +798,10 @@ def analyze_p2(circuit: Circuit | None, consumer: Consumer) -> dict[str, Any]:
             "No protected effect or replay-relevant state mutation was recovered on the verifier-accepting function path.",
             where=where, applicability="NOT_APPLICABLE",
         )
+    if verifier is None or verifier.interface_only:
+        return result("P2", "UNKNOWN", "VERIFIER_ARTIFACT_MISSING", "Execution-context binding cannot be decided without a matched verifier implementation.", where=where)
+    if circuit is None:
+        return result("P2", "UNKNOWN", "CIRCUIT_ARTIFACT_MISSING", "Execution-context binding cannot be decided without a matched circuit artifact.", where=where)
     source_aliases = {
         normalize_expression(name): value
         for name, value in assignments(consumer.source.text).items()
@@ -942,7 +952,7 @@ def _replay_key_binding_to_verifier(
     return proof_bound, positions or None
 
 
-def analyze_p3(verifier: Verifier | None, consumer: Consumer) -> dict[str, Any]:
+def analyze_p3(circuit: Circuit | None, verifier: Verifier | None, consumer: Consumer) -> dict[str, Any]:
     where = location(consumer.source.relative_path, consumer.function.line)
     if re.search(r"\b(?:view|pure)\b", consumer.function.header):
         return result(
@@ -970,6 +980,10 @@ def analyze_p3(verifier: Verifier | None, consumer: Consumer) -> dict[str, Any]:
             "No replay-relevant state access was recovered; the replay-barrier pattern is not applicable to this function.",
             where=where, applicability="NOT_APPLICABLE",
         )
+    if verifier is None or verifier.interface_only:
+        return result("P3", "UNKNOWN", "VERIFIER_ARTIFACT_MISSING", "Replay-key canonicality cannot be decided without a matched verifier implementation.", where=where)
+    if circuit is None:
+        return result("P3", "UNKNOWN", "CIRCUIT_ARTIFACT_MISSING", "Replay-key canonicality cannot be decided without a matched circuit artifact.", where=where)
     facts: list[dict[str, Any]] = []
     aliases = {normalize_expression(name): value for name, value in assignments(consumer.function.body).items()}
     for mapping, key in uses:
@@ -1013,11 +1027,37 @@ def analyze_p3(verifier: Verifier | None, consumer: Consumer) -> dict[str, Any]:
             and proof_positions is not None
             and canonical_guard(verifier.source.text, proof_positions)
         )
-        local_guard = bool(re.search(rf"\b{re.escape(key)}\b\s*<\s*(?:{load_config()['scalar_field']}|[A-Za-z_]\w*(?:FIELD|SCALAR|SNARK))", consumer.function.body, re.I)) if raw else True
+        local_guard = _local_scalar_guard(consumer, key) if raw else True
         reduces = verifier is not None and bool(re.search(r"\b(?:mod|addmod|mulmod)\b|%\s*(?:q|r|FIELD|SCALAR)", verifier.source.text, re.I))
         if raw and not (verifier_guard or local_guard) and (reduces or verifier is not None):
             return result("P3", "VIOLATION", "FIELD_ALIAS_REPLAY_KEY", "The verifier accepts field representatives while Solidity keys replay state by an unguarded raw integer.", where=where, facts=facts)
     return result("P3", "VERIFIED_WITHIN_SCOPE", "REPLAY_KEY_CANONICAL_AND_CONSUMED", "Recovered replay keys are checked, consumed, and canonicalized or domain-separated in the supported subset.", where=where, facts=facts)
+
+
+def _local_scalar_guard(consumer: Consumer, key: str) -> bool:
+    """Recognize a prior unconditional require on the exact replay-key value."""
+    body = consumer.function.body
+    source = consumer.source.text
+    names = re.findall(rf"\b([A-Za-z_]\w*)\s*=\s*{SCALAR_FIELD}\s*;", source)
+    modulus = rf"(?:{SCALAR_FIELD}|{'|'.join(re.escape(name) for name in names)})" if names else str(SCALAR_FIELD)
+    key_expr = rf"(?:uint256\s*\(\s*{re.escape(key)}\s*\)|{re.escape(key)})"
+    exact_condition = re.compile(rf"{key_expr}\s*<\s*{modulus}", re.I)
+    for match in re.finditer(r"\brequire\s*\(", body):
+        prefix = body[:match.start()]
+        # A conditional single-statement require does not dominate the call.
+        statement_start = max(prefix.rfind(";"), prefix.rfind("{"), prefix.rfind("}")) + 1
+        if prefix[statement_start:].strip():
+            continue
+        if prefix.count("{") != prefix.count("}"):
+            continue
+        first_verify = min((call.offset for call in consumer.verify_calls), default=len(body))
+        parsed = balanced(body, body.find("(", match.start()))
+        if parsed is None:
+            continue
+        condition = split_top_level(parsed[0])[0]
+        if match.start() < first_verify and exact_condition.fullmatch(condition.strip()):
+            return True
+    return False
 
 
 def _semantic_name(expression: str) -> str:
@@ -1372,8 +1412,8 @@ def analyze(
                 p4_result = significant_runtime
             pattern_results = {
                 "P1": analyze_p1(circuit, verifier, consumer, policy),
-                "P2": analyze_p2(circuit, consumer),
-                "P3": analyze_p3(verifier, consumer),
+                "P2": analyze_p2(circuit, verifier, consumer),
+                "P3": analyze_p3(circuit, verifier, consumer),
                 "P4": p4_result,
                 "P5": analyze_p5(circuit, verifier, consumer, ambiguous=len(arities_by_consumer[key]) > 1),
             }
