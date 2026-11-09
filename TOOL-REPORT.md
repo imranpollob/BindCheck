@@ -95,9 +95,10 @@ produce `UNKNOWN`, never a pass.
 The circuit front end recovers Circom public declarations and `main` public
 lists, and Noir `pub` parameters. Where an existing `.r1cs`/`.sym` pair is
 present, or a bounded Circom build succeeds, it parses the binary R1CS header,
-constraint incidence graph, and symbol table. The compiled path is accepted
-only when the named private signal reaches the named commitment through
-constraints inside the expected component namespace.
+every linear-combination coefficient, the nonzero-term constraint incidence
+graph, and the symbol table. A named path inside the expected component
+namespace is retained only as screen evidence; it cannot establish algebraic
+or cryptographic commitment binding.
 
 The Solidity front end supports common Hardhat and Foundry layouts by
 inventory rather than framework assumption. It recognizes implementation and
@@ -132,24 +133,26 @@ For every recovered protected transfer/mint/burn recipient or amount, P1
 resolves local aliases and asks whether the value is:
 
 1. a direct verifier public input;
-2. the caller (`msg.sender`) for a recipient;
+2. equated to a public-vector member by a supported guard that dominates the
+   effect, or nested inside the equality branch;
 3. the consuming contract itself for a recipient; or
-4. covered by a commitment that is public, locally recomputed and guarded,
-   uses a recovered hash helper/order, and has a named path through compiled
-   R1CS constraints from the effect signal to that commitment inside the hash
-   component.
+4. the caller (`msg.sender`) for a recipient only when the result records the
+   explicit `any_caller_may_receive=true` policy.
 
 An independently caller-selectable supported effect role is `VIOLATION`. All
 roles proven by the listed mechanisms are `VERIFIED_WITHIN_SCOPE`. Missing
-artifacts, assembly/delegatecall/selfdestruct, an uncompiled commitment, an
-unsupported helper, or an unresolved path is `UNKNOWN`. Source-level hash
-syntax alone never proves commitment binding.
+artifacts, assembly/delegatecall/selfdestruct, unresolved modifiers or
+inheritance, post-effect guards, an unsupported helper, or unresolved paths
+are `UNKNOWN`. Commitment recognition is screen-only: even matching source
+order, a local guard, and compiled connectivity produce
+`COMMITMENT_BINDING_SCREEN_ONLY`/`UNKNOWN`, never verification.
 
 ### P2 -- execution-context binding
 
 P2 verifies the narrow property when a chain ID, consuming contract address,
 or explicit domain/application identifier is in the public vector, or when a
-supported local guard equates it to the proof-consuming path. Merely computing
+supported local guard equates it to the proof-consuming path and dominates
+every recovered effect. Merely computing
 context without a guard is `UNKNOWN`; total absence is also `UNKNOWN` because
 the protocol policy or deployment may not require cross-context separation.
 P2 therefore does not infer a violation from absence alone.
@@ -158,8 +161,9 @@ P2 therefore does not infer a violation from absence alone.
 
 P3 locates replay-state mappings whose names indicate nullifier/spent/used/
 replay/claimed semantics. A supported accepted path must check the same key,
-consume it, and use either a field-canonical raw value (verifier or local field
-guard) or a supported domain-separated/canonicalized key such as a hash or
+consume it, and use either a field-canonical raw value (a verifier guard on the
+exact recovered replay-key position, or a local field guard) or a supported
+domain-separated/canonicalized key such as a hash or
 modular expression. Missing read or write is `VIOLATION`. An unguarded raw
 integer used as a Solidity replay key when the verifier accepts field
 representatives is `VIOLATION` (`FIELD_ALIAS_REPLAY_KEY`). Opaque helpers and
@@ -172,8 +176,9 @@ Source mode parses named gamma/delta G2 coordinates, IC points, and canonical
 public-input field guards. Equal gamma and delta at the default BN254 G2
 generator, duplicate IC entries, or a missing canonicality guard are E1
 warnings and remain `UNKNOWN`; they are not exploit or deployment claims.
-Distinct parsed gamma/delta, no duplicate IC, and a supported guard verify only
-those source invariants.
+Distinct parsed gamma/delta, no duplicate IC, and supported guards covering
+every fixed public-input position (or an all-position dynamic loop) verify
+only those source invariants.
 
 The old snarkjs/ZoKrates `Pairing.P2()` generator is recognized separately.
 Default-G2 constants inside that library helper do not count as key gamma or
@@ -301,11 +306,10 @@ follows.
   positional roles. Custom wrappers, non-token effects, overloaded semantics,
   authorization policies, and rollback through external calls are outside the
   current proof boundary.
-- Compiled commitment validation checks named constraint connectivity and an
-  expected namespace, not full algebraic equivalence of the circuit and
-  Solidity hash implementation. Compiler-version drift, missing includes, or
-  stripped symbols can cause false `UNKNOWN`; connectivity can still be too
-  weak for adversarially unusual circuits.
+- Compiled commitment handling is deliberately a screen, not validation. It
+  retains coefficients, named connectivity, source preimage order and local
+  guard evidence but always returns `UNKNOWN`; no algebraic equivalence,
+  supported hash construction, domain, or encoding theorem is implemented.
 - P2 recognizes a bounded vocabulary and cannot decide whether a protocol
   policy actually requires chain/contract/application separation.
 - P3 is local to supported mapping reads/writes. Modifier- or helper-mediated

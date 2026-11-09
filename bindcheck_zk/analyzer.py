@@ -573,11 +573,9 @@ def _commitment_binding(
     vector: PublicVector,
     circuit: Circuit,
     consumer: Consumer,
-    repository_solidity: str,
     effect_offset: int,
 ) -> tuple[bool, dict[str, Any] | None, str | None]:
     expression_names = identifiers(expression)
-    circuit_source = circuit.path.read_text(encoding="utf-8", errors="replace")
     for component in circuit.components:
         commitment = component["commitment"]
         input_names = set().union(*(identifiers(item) for item in component["inputs"]))
@@ -645,7 +643,6 @@ def analyze_p1(
     circuit: Circuit | None,
     verifier: Verifier | None,
     consumer: Consumer,
-    repository_solidity: str,
     policy: dict[str, bool] | None = None,
 ) -> dict[str, Any]:
     where = location(consumer.source.relative_path, consumer.function.line)
@@ -719,7 +716,7 @@ def analyze_p1(
             if not fact["bound_by"]:
                 for vector in consumer.vectors:
                     bound, evidence, reason = _commitment_binding(
-                        expression, vector, circuit, consumer, repository_solidity, call.offset
+                        expression, vector, circuit, consumer, call.offset
                     )
                     if bound:
                         fact["bound_by"].append("compiled-commitment")
@@ -775,8 +772,6 @@ def analyze_p1(
     )
     if any("contract-self" in fact["bound_by"] for fact in role_facts):
         reason = "RECIPIENT_BOUND_TO_CONTRACT_SELF"
-    if any("compiled-commitment" in fact["bound_by"] for fact in role_facts):
-        reason = "EFFECT_VALUES_BOUND_BY_COMPILED_COMMITMENT"
     return result(
         "P1", "VERIFIED_WITHIN_SCOPE", reason,
         "Every recovered protected effect role is bound by a direct verifier input, an enforcing local guard, contract self, or an explicit recipient policy.",
@@ -1350,7 +1345,6 @@ def analyze(
                     coverage["generated_verifier"].append(generation_record)
                     if regenerated is not None:
                         verifiers.append(regenerated)
-        repository_solidity = "\n".join(source.text for source in semantic_sources)
         runtime_values = runtime_values_from_bundle(root, files) if bundle else runtime_values_from_bundle(root, [path for path in files if path.name.lower().endswith((".bin-runtime", ".runtime.hex"))])
         source_has_p2 = any(item.p4.get("p2") for item in verifiers)
         for path, value in runtime_values:
@@ -1377,7 +1371,7 @@ def analyze(
             if significant_runtime is not None:
                 p4_result = significant_runtime
             pattern_results = {
-                "P1": analyze_p1(circuit, verifier, consumer, repository_solidity, policy),
+                "P1": analyze_p1(circuit, verifier, consumer, policy),
                 "P2": analyze_p2(circuit, consumer),
                 "P3": analyze_p3(verifier, consumer),
                 "P4": p4_result,
