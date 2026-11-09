@@ -1,0 +1,121 @@
+\section{Benchmark Design}\label{sec:benchmark}
+
+A binding benchmark must pin all three artifacts of every case, include a
+legitimate counterpart for every flaw so that false alarms are measurable, and
+keep development cases separate from held-out ones. Existing ZK bug
+collections satisfy none of these for the integration layer: zkbugs locates 0
+of its 140 entries in Solidity~\cite{zkbugs}, the SoK's 13 integration cases
+are narrative~\cite{sok-snarks}, and ELSA's ``ZKP'' set consists of classic
+SWC faults injected into ZKP-project contracts~\cite{elsa}.%
+% src: RELATED-WORK.md#6a (framing 2 support bullets); reports/related/evidence/zkbugs-census.txt; reports/related/evidence/elsa-artifact-inventory.txt
+\
+Table~\ref{tab:benchmark} summarizes our benchmark's components.
+
+\para{Paired synthetic cases.} Each of 23 families contains one vulnerable
+and one legitimate case that differ in the binding property only; each case
+ships a Circom circuit, a verifier, a consumer and a policy file. The families
+cover recipient and amount binding, native value, burn ownership, state writes,
+ERC-721 safe-mint recipients, guard dominance (irrelevant branch, guard after
+effect), replay-key binding, nesting and position canonicality, chain and
+contract nullifier scope, commitment order and fields, verifier arity,
+decoding order, prefix-versus-full arrays, overlapping masks, array-length
+signals and field-alias decoding. Expectations for every tool arm were frozen
+before any tool was implemented.%
+% src: reports/redteam/REPORT.md#synthetic-comparison (23 vulnerable / 23 legitimate; family list); redteam/adversarial/expected.json#frozen_before_implementation=true
+\
+The cases and labels were authored with an AI assistant and are development
+fixtures; human review of every label is
+\MISSING{signed human adjudication of the 46 synthetic labels, lane redteam}.
+
+\para{Regression controls.} 122 analyzer controls (24 legacy and 98 analyzer
+fixtures) and 18 adversarial soundness cases encode the expected verdict and
+reason for each recognizer, including the negatives that motivated each
+positive-evidence rule. The frozen analyzer passes all of them.%
+% src: reports/soundness/REPORT-2.md#verification-and-exact-provenance (122 controls, 18 soundness cases); docs/FREEZE-2026-11-09.md (34 tests OK)
+\
+They were written with an AI assistant and are not human-validated.%
+% src: reports/groundtruth/CLAIMS.md#A30
+
+\para{Development corpus (DEV).} 56 repository revisions: 50 open-source
+Circom/Solidity applications selected for coverage during feasibility work,
+plus three historical vulnerable/fixed pairs (zkDrops, Semaphore, Payy). DEV is
+a convenience selection, used for tuning; no DEV number is a prevalence or
+transfer estimate.%
+% src: reports/groundtruth/CLAIMS.md#A24; reports/soundness/REPORT-2.md#full-dev-ledger (56 rows)
+
+\para{Recall inventory and gate set.} From audit reports, advisories, issues
+and fix commits we inventoried 47 reported defects; 27 fall in scope under the
+v2 strict-integration rule (20 under the earlier v1 rule). The 16 v2-strict
+cases with resolved vulnerable and fixed commits form the gate set. 5 of the
+16 pairs are \emph{exposed}---their repositories were inspected during
+development---and are reported separately; 2 overlap a sampled held-out
+family.%
+% src: reports/groundtruth/REPORT.md#2-recall-set-counting-rule (47; 27 v2; 20 v1); #5-gate-manifest (16; EXPOSED 5; overlap 2)
+\
+Proposals from source reports alone map 8 of the 16 pairs to no P1--P5
+predicate; we keep them, because a benchmark that drops what a tool cannot
+express overstates recall.%
+% src: reports/groundtruth/REPORT.md#5-gate-manifest (proposed expected pattern NONE: 8)
+\
+Expected pattern and location for each pair await human review: all 16 rows
+are currently \textsf{UNREVIEWED}.%
+% src: reports/groundtruth/CLAIMS.md#A11
+\MISSING{reviewed recall expectations for the 16 gate pairs, human reviewers}
+
+\para{Held-out sample (EVAL).} A source inventory yielded 5,024 repository
+revisions, 56 of them DEV and 4,968 EVAL, grouped into 1,384 eligible EVAL
+families that share no repository with DEV.%
+% src: reports/groundtruth/CLAIMS.md#A20
+\
+We stratified families by the strongest maturity label of any member
+(verified-deployed, deployed-address-in-docs, audited-production,
+hackathon-student, unclassified; populations 38, 303, 210, 82 and 751 under
+the sampler's rule) and drew up to 60 per stratum by a preregistered hash
+order, giving 278 families.%
+% src: reports/groundtruth/CLAIMS.md#A21 (sampler populations 38/303/210/82/751); dataset/EVAL-SAMPLE-PLAN-v2.md (hash rule, quota 60, frozen 2026-11-04)
+% src: reports/groundtruth/REPORT.md#7-maturity-audit-of-the-278-sampled-families (278)
+\
+Maturity labels are keyword heuristics: for the audited-production stratum,
+the preregistered README rubric agreed with the label for 4 of 60 sampled
+families, and all 4 were false on inspection.%
+% src: reports/groundtruth/CLAIMS.md#A22; reports/groundtruth/maturity-summary.json
+\
+We therefore report results per stratum and never weight by stratum
+population before the labels are human-reviewed
+\MISSING{human maturity review of 278 families, review/maturity}.
+
+\para{Deployed verifiers.} A passive census of Sourcify exact-match
+verifiers on seven chains (snapshot 2026-11-03) found 1,049 deployment rows,
+1,027 unique deployments and 561 unique runtime hashes; a separate join matched
+277 consumer deployments to 86 GitHub repositories. No transaction was sent and
+no deployed contract was called.%
+% src: reports/groundtruth/CLAIMS.md#A26, #A27; dataset/onchain-census-summary.json (snapshot_date)
+
+\begin{table}[t]
+\centering
+\caption{Benchmark composition. ``AI'' labels were authored with an AI
+assistant and await human review.}
+\label{tab:benchmark}
+\footnotesize
+\setlength{\tabcolsep}{2.5pt}
+\begin{tabular}{@{}p{1.7cm}p{2.25cm}p{1.35cm}p{2.4cm}@{}}
+\toprule
+\textbf{Component} & \textbf{Size} & \textbf{Labels} & \textbf{Status} \\
+\midrule
+Synthetic pairs & 46 cases, 23 families & AI, frozen & run\textsuperscript{a} \\
+Controls & 122 + 18 soundness & AI & pass at freeze \\
+DEV & 56 revisions (50 + 3 pairs) & none (tuning) & run \\
+Recall inventory & 47; 27 v2-strict (20 v1) & source reports & cards drafted \\
+Gate pairs & 16 (5 exposed) & unreviewed & \MISSING{run} \\
+EVAL & 278 of 1,384 families, 5 strata & heuristic strata & \MISSING{run} \\
+Deployed verifiers & 1,027 unique, 7 chains & signatures & done \\
+Consumer deployments & 277 from 86 repos & none & linkage \UNK{} \\
+\bottomrule
+\end{tabular}
+\\[2pt]{\scriptsize \textsuperscript{a}Baselines and \tool{} at an earlier
+analyzer revision; rerun at the frozen revision is \MISSING{frozen rerun, lane redteam}.}
+% src: rows 1-2: reports/redteam/REPORT.md#synthetic-comparison; reports/soundness/REPORT-2.md#verification-and-exact-provenance
+% src: row 3: reports/soundness/REPORT-2.md#full-dev-ledger; rows 4-5: reports/groundtruth/REPORT.md#2,#5
+% src: row 6: reports/groundtruth/CLAIMS.md#A20,A21; row 7-8: reports/groundtruth/CLAIMS.md#A26,A27
+% src: footnote a: paper/zk/data/redteam-arms.json#analyzer_tree (git tree 56c0b5f3 at redteam revision 011042e = T25 content 2741c40e)
+\end{table}

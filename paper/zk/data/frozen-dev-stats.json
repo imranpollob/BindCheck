@@ -1,0 +1,173 @@
+{
+  "source": "/Users/imranpollob/Coding/bc/bindcheck-zk-soundness/results/raw/soundness/after-20261109T061325Z-77918/per-row-ledger.json",
+  "rows": 56,
+  "crashes": 0,
+  "rows_with_triples": 46,
+  "builds_ok": 45,
+  "builds_failed": 31,
+  "verdicts": {
+    "P1": {
+      "UNKNOWN": 51,
+      "VIOLATION": 5
+    },
+    "P2": {
+      "UNKNOWN": 56
+    },
+    "P3": {
+      "UNKNOWN": 43,
+      "VERIFIED_WITHIN_SCOPE": 7,
+      "VIOLATION": 6
+    },
+    "P4": {
+      "VERIFIED_WITHIN_SCOPE": 17,
+      "UNKNOWN": 39
+    },
+    "P5": {
+      "UNKNOWN": 52,
+      "VERIFIED_WITHIN_SCOPE": 4
+    }
+  },
+  "applicability": {
+    "P1": {
+      "NOT_APPLICABLE": 29,
+      "UNKNOWN": 10,
+      "APPLICABLE": 17,
+      "undecided": 12,
+      "decided": 5
+    },
+    "P2": {
+      "NOT_APPLICABLE": 19,
+      "APPLICABLE": 27,
+      "undecided": 27,
+      "UNKNOWN": 10
+    },
+    "P3": {
+      "NOT_APPLICABLE": 23,
+      "APPLICABLE": 23,
+      "undecided": 10,
+      "UNKNOWN": 10,
+      "decided": 13
+    },
+    "P4": {
+      "APPLICABLE": 46,
+      "decided": 17,
+      "undecided": 29,
+      "UNKNOWN": 10
+    },
+    "P5": {
+      "APPLICABLE": 46,
+      "undecided": 42,
+      "UNKNOWN": 10,
+      "decided": 4
+    }
+  },
+  "violation_rows": [
+    {
+      "id": "DEV-F14",
+      "repository": "RippnerLabs/meridian-link",
+      "pattern": "P1",
+      "reasons": [
+        "UNBOUND_EFFECT_AMOUNT"
+      ]
+    },
+    {
+      "id": "DEV-F25",
+      "repository": "Chidubemkingsley/Shadow-Credit-Network",
+      "pattern": "P3",
+      "reasons": [
+        "PROTECTED_EFFECT_NOT_RECOVERED",
+        "REPLAY_KEY_NOT_BOUND_TO_PROOF"
+      ]
+    },
+    {
+      "id": "DEV-F27",
+      "repository": "Nitya-003/CropChain",
+      "pattern": "P3",
+      "reasons": [
+        "REPLAY_KEY_NOT_BOUND_TO_PROOF"
+      ]
+    },
+    {
+      "id": "DEV-F30",
+      "repository": "ethpanda-org/ETHShanghai-2025",
+      "pattern": "P1",
+      "reasons": [
+        "PROTECTED_EFFECT_NOT_RECOVERED",
+        "UNBOUND_EFFECT_AMOUNT"
+      ]
+    },
+    {
+      "id": "DEV-F34",
+      "repository": "avitenzer/zk_voting",
+      "pattern": "P3",
+      "reasons": [
+        "FIELD_ALIAS_REPLAY_KEY"
+      ]
+    },
+    {
+      "id": "DEV-F35",
+      "repository": "sambitsargam/ShadowSats",
+      "pattern": "P1",
+      "reasons": [
+        "UNBOUND_EFFECT_AMOUNT"
+      ]
+    },
+    {
+      "id": "DEV-F38",
+      "repository": "KanishJebaMathewM/Truxify",
+      "pattern": "P3",
+      "reasons": [
+        "FIELD_ALIAS_REPLAY_KEY",
+        "PROTECTED_EFFECT_NOT_RECOVERED",
+        "REPLAY_KEY_NOT_BOUND_TO_PROOF"
+      ]
+    },
+    {
+      "id": "DEV-F39",
+      "repository": "Servesh21/RacePass",
+      "pattern": "P1",
+      "reasons": [
+        "UNBOUND_EFFECT_RECIPIENT"
+      ]
+    },
+    {
+      "id": "DEV-F48",
+      "repository": "SovereignWave/qwer",
+      "pattern": "P3",
+      "reasons": [
+        "FIELD_ALIAS_REPLAY_KEY"
+      ]
+    },
+    {
+      "id": "DEV-F49",
+      "repository": "KELLERBABG/Planetary-Entropy-Mining",
+      "pattern": "P1",
+      "reasons": [
+        "UNBOUND_EFFECT_RECIPIENT"
+      ]
+    },
+    {
+      "id": "DEV-H01",
+      "repository": "a16z/zkdrops",
+      "pattern": "P3",
+      "reasons": [
+        "FIELD_ALIAS_REPLAY_KEY"
+      ]
+    }
+  ],
+  "violation_reason_codes": [
+    "FIELD_ALIAS_REPLAY_KEY",
+    "PROTECTED_EFFECT_NOT_RECOVERED",
+    "REPLAY_KEY_NOT_BOUND_TO_PROOF",
+    "UNBOUND_EFFECT_AMOUNT",
+    "UNBOUND_EFFECT_RECIPIENT"
+  ],
+  "runtime_seconds": {
+    "n": 56,
+    "median": 0.431605,
+    "max": 53.799863,
+    "min": 0.051847,
+    "sum": "235.450396",
+    "max_row": "DEV-F09"
+  }
+}

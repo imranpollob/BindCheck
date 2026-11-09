@@ -1,0 +1,2169 @@
+{
+  "p4_source_sha256": "ca6029a8ede78a3d278bb2ad85cf24829867b7dcef303423db090017382925e1",
+  "frozen_constant": [
+    "11559732032986387107991004021392285783925812861821192530917403151452391805634",
+    "10857046999023057135944570762232829481370756359578518086990519993285655852781",
+    "4082367875863431332203403145435568316851327593401208105741076214120093531",
+    "8495653923123431417604973247489272438418190587263600148770280649306958101930"
+  ],
+  "eip197_constant": [
+    "11559732032986387107991004021392285783925812861821192530917403151452391805634",
+    "10857046999023057135944570762232829481370756359578518086990519993285655852781",
+    "4082367875863433681332203403145435568316851327593401208105741076214120093531",
+    "8495653923123431417604973247489272438418190587263600148770280649306958101930"
+  ],
+  "differing_coordinates": [
+    2
+  ],
+  "frozen_digit_lengths": [
+    77,
+    77,
+    73,
+    76
+  ],
+  "eip197_digit_lengths": [
+    77,
+    77,
+    76,
+    76
+  ],
+  "frozen_on_twist": false,
+  "eip197_on_twist": true,
+  "files": [
+    {
+      "path": "DEV-F01--0xbow-io__privacy-pools-core--df4bf730214b/packages/contracts/src/contracts/verifiers/CommitmentVerifier.sol",
+      "row": "DEV-F01",
+      "frozen": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "eip197": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F01--0xbow-io__privacy-pools-core--df4bf730214b/packages/contracts/src/contracts/verifiers/WithdrawalVerifier.sol",
+      "row": "DEV-F01",
+      "frozen": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "eip197": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F02--semaphore-protocol__semaphore--dbab5553c486/packages/contracts/contracts/base/SemaphoreVerifier.sol",
+      "row": "DEV-F02",
+      "frozen": [
+        "UNKNOWN",
+        "VERIFICATION_KEY_PARSE_INCOMPLETE"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "VERIFICATION_KEY_PARSE_INCOMPLETE"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F03--privacy-scaling-explorations__maci--919c433d09aa/packages/contracts/contracts/VerifyingKeysRegistry.sol",
+      "row": "DEV-F03",
+      "frozen": [
+        "UNKNOWN",
+        "VERIFICATION_KEY_PARSE_INCOMPLETE"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "VERIFICATION_KEY_PARSE_INCOMPLETE"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F03--privacy-scaling-explorations__maci--919c433d09aa/packages/contracts/contracts/crypto/SnarkCommon.sol",
+      "row": "DEV-F03",
+      "frozen": [
+        "UNKNOWN",
+        "VERIFICATION_KEY_PARSE_INCOMPLETE"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "VERIFICATION_KEY_PARSE_INCOMPLETE"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F03--privacy-scaling-explorations__maci--919c433d09aa/packages/contracts/contracts/crypto/Verifier.sol",
+      "row": "DEV-F03",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F05--dfdao__arena--949c677aa086/eth/contracts/Verifier.sol",
+      "row": "DEV-F05",
+      "frozen": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "eip197": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F06--nocturne-xyz__protocol--b750bc45a87b/packages/contracts/contracts/CanonAddrSigCheckVerifier.sol",
+      "row": "DEV-F06",
+      "frozen": [
+        "UNKNOWN",
+        "VERIFIER_HELPER_GUARD_UNRESOLVED"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "VERIFIER_HELPER_GUARD_UNRESOLVED"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F06--nocturne-xyz__protocol--b750bc45a87b/packages/contracts/contracts/JoinSplitVerifier.sol",
+      "row": "DEV-F06",
+      "frozen": [
+        "UNKNOWN",
+        "VERIFIER_HELPER_GUARD_UNRESOLVED"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "VERIFIER_HELPER_GUARD_UNRESOLVED"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F06--nocturne-xyz__protocol--b750bc45a87b/packages/contracts/contracts/SubtreeUpdateVerifier.sol",
+      "row": "DEV-F06",
+      "frozen": [
+        "UNKNOWN",
+        "VERIFIER_HELPER_GUARD_UNRESOLVED"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "VERIFIER_HELPER_GUARD_UNRESOLVED"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F06--nocturne-xyz__protocol--b750bc45a87b/packages/contracts/contracts/libs/Groth16.sol",
+      "row": "DEV-F06",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F07--anon-aadhaar__anon-aadhaar--4dad918761cf/packages/contracts/src/Verifier.sol",
+      "row": "DEV-F07",
+      "frozen": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "eip197": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F08--zkp2p__zk-p2p--fa4274dbca85/circuits-circom/circuits/garanti/contracts/garanti_body_suffix_hasher_verifier.sol",
+      "row": "DEV-F08",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F08--zkp2p__zk-p2p--fa4274dbca85/circuits-circom/circuits/garanti/contracts/garanti_registration_verifier.sol",
+      "row": "DEV-F08",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F08--zkp2p__zk-p2p--fa4274dbca85/circuits-circom/circuits/garanti/contracts/garanti_send_verifier.sol",
+      "row": "DEV-F08",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F08--zkp2p__zk-p2p--fa4274dbca85/circuits-circom/circuits/hdfc/contracts/hdfc_registration_verifier.sol",
+      "row": "DEV-F08",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F08--zkp2p__zk-p2p--fa4274dbca85/circuits-circom/circuits/hdfc/contracts/hdfc_send_verifier.sol",
+      "row": "DEV-F08",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F08--zkp2p__zk-p2p--fa4274dbca85/circuits-circom/circuits/namecheap/contracts/namecheap_push_verifier.sol",
+      "row": "DEV-F08",
+      "frozen": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "eip197": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F08--zkp2p__zk-p2p--fa4274dbca85/circuits-circom/circuits/paylah/contracts/paylah_registration_verifier.sol",
+      "row": "DEV-F08",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "DEFAULT_G2_GAMMA_DELTA_SOURCE_WARNING"
+      ],
+      "gamma_eq_delta": true
+    },
+    {
+      "path": "DEV-F08--zkp2p__zk-p2p--fa4274dbca85/circuits-circom/circuits/paylah/contracts/paylah_send_verifier.sol",
+      "row": "DEV-F08",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "DEFAULT_G2_GAMMA_DELTA_SOURCE_WARNING"
+      ],
+      "gamma_eq_delta": true
+    },
+    {
+      "path": "DEV-F08--zkp2p__zk-p2p--fa4274dbca85/circuits-circom/circuits/venmo/contracts/venmo_registration_verifier.sol",
+      "row": "DEV-F08",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F08--zkp2p__zk-p2p--fa4274dbca85/circuits-circom/circuits/venmo/contracts/venmo_send_verifier.sol",
+      "row": "DEV-F08",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F08--zkp2p__zk-p2p--fa4274dbca85/circuits-circom/circuits/venmo/contracts/venmo_send_verifier_v1.sol",
+      "row": "DEV-F08",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F08--zkp2p__zk-p2p--fa4274dbca85/circuits-circom/circuits/venmo/contracts/venmo_send_verifier_v2.sol",
+      "row": "DEV-F08",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F08--zkp2p__zk-p2p--fa4274dbca85/contracts-domain/contracts/verifiers/namecheap_transfer_verifier.sol",
+      "row": "DEV-F08",
+      "frozen": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "eip197": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F08--zkp2p__zk-p2p--fa4274dbca85/contracts-ramp/contracts/verifiers/garanti_body_suffix_hasher_verifier.sol",
+      "row": "DEV-F08",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F08--zkp2p__zk-p2p--fa4274dbca85/contracts-ramp/contracts/verifiers/garanti_registration_verifier.sol",
+      "row": "DEV-F08",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F08--zkp2p__zk-p2p--fa4274dbca85/contracts-ramp/contracts/verifiers/garanti_send_verifier.sol",
+      "row": "DEV-F08",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F08--zkp2p__zk-p2p--fa4274dbca85/contracts-ramp/contracts/verifiers/hdfc_registration_verifier.sol",
+      "row": "DEV-F08",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F08--zkp2p__zk-p2p--fa4274dbca85/contracts-ramp/contracts/verifiers/hdfc_send_verifier.sol",
+      "row": "DEV-F08",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F08--zkp2p__zk-p2p--fa4274dbca85/contracts-ramp/contracts/verifiers/paylah_registration_verifier.sol",
+      "row": "DEV-F08",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "DEFAULT_G2_GAMMA_DELTA_SOURCE_WARNING"
+      ],
+      "gamma_eq_delta": true
+    },
+    {
+      "path": "DEV-F08--zkp2p__zk-p2p--fa4274dbca85/contracts-ramp/contracts/verifiers/paylah_send_verifier.sol",
+      "row": "DEV-F08",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "DEFAULT_G2_GAMMA_DELTA_SOURCE_WARNING"
+      ],
+      "gamma_eq_delta": true
+    },
+    {
+      "path": "DEV-F08--zkp2p__zk-p2p--fa4274dbca85/contracts-ramp/contracts/verifiers/venmo_registration_verifier.sol",
+      "row": "DEV-F08",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F08--zkp2p__zk-p2p--fa4274dbca85/contracts-ramp/contracts/verifiers/venmo_send_verifier.sol",
+      "row": "DEV-F08",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F08--zkp2p__zk-p2p--fa4274dbca85/contracts-ramp/contracts/verifiers/venmo_send_verifier_v1.sol",
+      "row": "DEV-F08",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F08--zkp2p__zk-p2p--fa4274dbca85/contracts-ramp/contracts/verifiers/venmo_send_verifier_v2.sol",
+      "row": "DEV-F08",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F09--zk-poll__zk-poll--4a93d9591429/contracts/interfaces/ISemaphoreVerifier.sol",
+      "row": "DEV-F09",
+      "frozen": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "eip197": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F09--zk-poll__zk-poll--4a93d9591429/contracts/verifiers/ECDSASemaphoreVerifier.sol",
+      "row": "DEV-F09",
+      "frozen": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "eip197": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F09--zk-poll__zk-poll--4a93d9591429/contracts/verifiers/ECDSASemaphoreVerifier16.sol",
+      "row": "DEV-F09",
+      "frozen": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "DEFAULT_G2_GAMMA_DELTA_SOURCE_WARNING"
+      ],
+      "gamma_eq_delta": true
+    },
+    {
+      "path": "DEV-F09--zk-poll__zk-poll--4a93d9591429/contracts/verifiers/ECDSASemaphoreVerifier2.sol",
+      "row": "DEV-F09",
+      "frozen": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "DEFAULT_G2_GAMMA_DELTA_SOURCE_WARNING"
+      ],
+      "gamma_eq_delta": true
+    },
+    {
+      "path": "DEV-F09--zk-poll__zk-poll--4a93d9591429/contracts/verifiers/Verifier16.sol",
+      "row": "DEV-F09",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F09--zk-poll__zk-poll--4a93d9591429/contracts/verifiers/Verifier17.sol",
+      "row": "DEV-F09",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F09--zk-poll__zk-poll--4a93d9591429/contracts/verifiers/Verifier18.sol",
+      "row": "DEV-F09",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F09--zk-poll__zk-poll--4a93d9591429/contracts/verifiers/Verifier19.sol",
+      "row": "DEV-F09",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F09--zk-poll__zk-poll--4a93d9591429/contracts/verifiers/Verifier20.sol",
+      "row": "DEV-F09",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F09--zk-poll__zk-poll--4a93d9591429/contracts/verifiers/Verifier21.sol",
+      "row": "DEV-F09",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F09--zk-poll__zk-poll--4a93d9591429/contracts/verifiers/Verifier22.sol",
+      "row": "DEV-F09",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F09--zk-poll__zk-poll--4a93d9591429/contracts/verifiers/Verifier23.sol",
+      "row": "DEV-F09",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F09--zk-poll__zk-poll--4a93d9591429/contracts/verifiers/Verifier24.sol",
+      "row": "DEV-F09",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F09--zk-poll__zk-poll--4a93d9591429/contracts/verifiers/Verifier25.sol",
+      "row": "DEV-F09",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F09--zk-poll__zk-poll--4a93d9591429/contracts/verifiers/Verifier26.sol",
+      "row": "DEV-F09",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F09--zk-poll__zk-poll--4a93d9591429/contracts/verifiers/Verifier27.sol",
+      "row": "DEV-F09",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F09--zk-poll__zk-poll--4a93d9591429/contracts/verifiers/Verifier28.sol",
+      "row": "DEV-F09",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F09--zk-poll__zk-poll--4a93d9591429/contracts/verifiers/Verifier29.sol",
+      "row": "DEV-F09",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F09--zk-poll__zk-poll--4a93d9591429/contracts/verifiers/Verifier30.sol",
+      "row": "DEV-F09",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F09--zk-poll__zk-poll--4a93d9591429/contracts/verifiers/Verifier31.sol",
+      "row": "DEV-F09",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F09--zk-poll__zk-poll--4a93d9591429/contracts/verifiers/Verifier32.sol",
+      "row": "DEV-F09",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F09--zk-poll__zk-poll--4a93d9591429/contracts/verifiers/VerifyPoll.sol",
+      "row": "DEV-F09",
+      "frozen": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "eip197": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F10--0xFableOrg__0xFable--f4aece4c5131/packages/contracts/src/verifiers/DrawHandVerifier.sol",
+      "row": "DEV-F10",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "DEFAULT_G2_GAMMA_DELTA_SOURCE_WARNING"
+      ],
+      "gamma_eq_delta": true
+    },
+    {
+      "path": "DEV-F10--0xFableOrg__0xFable--f4aece4c5131/packages/contracts/src/verifiers/DrawVerifier.sol",
+      "row": "DEV-F10",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "DEFAULT_G2_GAMMA_DELTA_SOURCE_WARNING"
+      ],
+      "gamma_eq_delta": true
+    },
+    {
+      "path": "DEV-F10--0xFableOrg__0xFable--f4aece4c5131/packages/contracts/src/verifiers/PlayVerifier.sol",
+      "row": "DEV-F10",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "DEFAULT_G2_GAMMA_DELTA_SOURCE_WARNING"
+      ],
+      "gamma_eq_delta": true
+    },
+    {
+      "path": "DEV-F11--NebraZKP__upa--2e79b4de2afa/upa/contracts/Groth16Verifier.sol",
+      "row": "DEV-F11",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F11--NebraZKP__upa--2e79b4de2afa/upa/contracts/IGroth16Verifier.sol",
+      "row": "DEV-F11",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F11--NebraZKP__upa--2e79b4de2afa/upa/contracts/UpaInternalLib.sol",
+      "row": "DEV-F11",
+      "frozen": [
+        "UNKNOWN",
+        "VERIFICATION_KEY_PARSE_INCOMPLETE"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "VERIFICATION_KEY_PARSE_INCOMPLETE"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F11--NebraZKP__upa--2e79b4de2afa/upa/contracts/UpaProofReceiver.sol",
+      "row": "DEV-F11",
+      "frozen": [
+        "UNKNOWN",
+        "VERIFICATION_KEY_PARSE_INCOMPLETE"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "VERIFICATION_KEY_PARSE_INCOMPLETE"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F12--NethermindEth__spsc--6d07155ecf29/contracts/circom/src/Groth16Verifier_v2.sol",
+      "row": "DEV-F12",
+      "frozen": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "eip197": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F13--weavedb__zkjson--527775887458/circom/collection/verifier.sol",
+      "row": "DEV-F13",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F13--weavedb__zkjson--527775887458/circom/db/verifier.sol",
+      "row": "DEV-F13",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F13--weavedb__zkjson--527775887458/circom/ipfs/verifier.sol",
+      "row": "DEV-F13",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F13--weavedb__zkjson--527775887458/circom/json/verifier.sol",
+      "row": "DEV-F13",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F13--weavedb__zkjson--527775887458/circom/query/verifier.sol",
+      "row": "DEV-F13",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F13--weavedb__zkjson--527775887458/circom/rollup/verifier.sol",
+      "row": "DEV-F13",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F13--weavedb__zkjson--527775887458/sdk/src/contracts/verifiers/verifier_db.sol",
+      "row": "DEV-F13",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F13--weavedb__zkjson--527775887458/sdk/src/contracts/verifiers/verifier_ipfs.sol",
+      "row": "DEV-F13",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F13--weavedb__zkjson--527775887458/sdk/src/contracts/verifiers/verifier_json.sol",
+      "row": "DEV-F13",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F13--weavedb__zkjson--527775887458/sdk/src/contracts/verifiers/verifier_rollup.sol",
+      "row": "DEV-F13",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F13--weavedb__zkjson--527775887458/solidity/contracts/verifiers/verifier_db.sol",
+      "row": "DEV-F13",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F13--weavedb__zkjson--527775887458/solidity/contracts/verifiers/verifier_ipfs.sol",
+      "row": "DEV-F13",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F13--weavedb__zkjson--527775887458/solidity/contracts/verifiers/verifier_json.sol",
+      "row": "DEV-F13",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F13--weavedb__zkjson--527775887458/solidity/contracts/verifiers/verifier_rollup.sol",
+      "row": "DEV-F13",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F14--RippnerLabs__meridian-link--5a5a9f6eb298/circom/ethDepositProof_js/verifier.sol",
+      "row": "DEV-F14",
+      "frozen": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "DEFAULT_G2_GAMMA_DELTA_SOURCE_WARNING"
+      ],
+      "gamma_eq_delta": true
+    },
+    {
+      "path": "DEV-F14--RippnerLabs__meridian-link--5a5a9f6eb298/circom/verifier.sol",
+      "row": "DEV-F14",
+      "frozen": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "DEFAULT_G2_GAMMA_DELTA_SOURCE_WARNING"
+      ],
+      "gamma_eq_delta": true
+    },
+    {
+      "path": "DEV-F14--RippnerLabs__meridian-link--5a5a9f6eb298/evm-bridge/contracts/SolDepositVerifier.sol",
+      "row": "DEV-F14",
+      "frozen": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "DEFAULT_G2_GAMMA_DELTA_SOURCE_WARNING"
+      ],
+      "gamma_eq_delta": true
+    },
+    {
+      "path": "DEV-F15--ava-labs__EncryptedERC--8dc98cd4d63a/contracts/prod/BurnVerifier.sol",
+      "row": "DEV-F15",
+      "frozen": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "eip197": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F15--ava-labs__EncryptedERC--8dc98cd4d63a/contracts/prod/MintVerifier.sol",
+      "row": "DEV-F15",
+      "frozen": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "eip197": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F15--ava-labs__EncryptedERC--8dc98cd4d63a/contracts/prod/RegistrationVerifier.sol",
+      "row": "DEV-F15",
+      "frozen": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "eip197": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F15--ava-labs__EncryptedERC--8dc98cd4d63a/contracts/prod/TransferVerifier.sol",
+      "row": "DEV-F15",
+      "frozen": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "eip197": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F15--ava-labs__EncryptedERC--8dc98cd4d63a/contracts/prod/WithdrawVerifier.sol",
+      "row": "DEV-F15",
+      "frozen": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "eip197": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F15--ava-labs__EncryptedERC--8dc98cd4d63a/contracts/verifiers/BurnCircuitGroth16Verifier.sol",
+      "row": "DEV-F15",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F15--ava-labs__EncryptedERC--8dc98cd4d63a/contracts/verifiers/MintCircuitGroth16Verifier.sol",
+      "row": "DEV-F15",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F15--ava-labs__EncryptedERC--8dc98cd4d63a/contracts/verifiers/RegistrationCircuitGroth16Verifier.sol",
+      "row": "DEV-F15",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F15--ava-labs__EncryptedERC--8dc98cd4d63a/contracts/verifiers/TransferCircuitGroth16Verifier.sol",
+      "row": "DEV-F15",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F15--ava-labs__EncryptedERC--8dc98cd4d63a/contracts/verifiers/WithdrawCircuitGroth16Verifier.sol",
+      "row": "DEV-F15",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F16--poa-box__POP--fa37b3e7341c/src/zkemail/vendor/Groth16Verifier.sol",
+      "row": "DEV-F16",
+      "frozen": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "eip197": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F16--poa-box__POP--fa37b3e7341c/src/zkemail/vendor/Groth16VerifierV2.sol",
+      "row": "DEV-F16",
+      "frozen": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "eip197": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F16--poa-box__POP--fa37b3e7341c/test/PaymasterHubSolidarity.t.sol",
+      "row": "DEV-F16",
+      "frozen": [
+        "UNKNOWN",
+        "VERIFICATION_KEY_PARSE_INCOMPLETE"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "VERIFICATION_KEY_PARSE_INCOMPLETE"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F17--zeroauth-dev__ZeroAuth--e307919ba447/contracts/Verifier.sol",
+      "row": "DEV-F17",
+      "frozen": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "eip197": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F18--WTCHAI__zkbiown--0b6fc64428a9/ZTIZEN/circuit/circom/artifacts/CircomVerifier.sol",
+      "row": "DEV-F18",
+      "frozen": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "eip197": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F18--WTCHAI__zkbiown--0b6fc64428a9/ZTIZEN/circuit/noir/target/NoirVerifier.sol",
+      "row": "DEV-F18",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F18--WTCHAI__zkbiown--0b6fc64428a9/ZTIZEN/smart-contracts/contracts/CircomVerifier.sol",
+      "row": "DEV-F18",
+      "frozen": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "eip197": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F18--WTCHAI__zkbiown--0b6fc64428a9/ZTIZEN/smart-contracts/contracts/NoirVerifier.sol",
+      "row": "DEV-F18",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F19--raylsnetwork__uniswap-incubator--9d79ae267314/packages/foundry/contracts/PrivateSwapIntentVerifier.sol",
+      "row": "DEV-F19",
+      "frozen": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "eip197": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F19--raylsnetwork__uniswap-incubator--9d79ae267314/packages/foundry/contracts/SuitabilityVerifier.sol",
+      "row": "DEV-F19",
+      "frozen": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "eip197": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F20--raycashxyz__erc-7984-single-tx-unwrap--4cae99814370/contracts/verifiers/UnwrapGroth16Verifier.sol",
+      "row": "DEV-F20",
+      "frozen": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "eip197": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F20--raycashxyz__erc-7984-single-tx-unwrap--4cae99814370/contracts/verifiers/UnwrapHonkVerifier.sol",
+      "row": "DEV-F20",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F21--Chronos-Vault__chronos-vault-security--b6c73cb69d71/contracts/ethereum/Groth16Verifier.sol",
+      "row": "DEV-F21",
+      "frozen": [
+        "UNKNOWN",
+        "VERIFICATION_KEY_PARSE_INCOMPLETE"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "VERIFICATION_KEY_PARSE_INCOMPLETE"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F21--Chronos-Vault__chronos-vault-security--b6c73cb69d71/contracts/ethereum/verification/Groth16Verifier.sol",
+      "row": "DEV-F21",
+      "frozen": [
+        "UNKNOWN",
+        "VERIFICATION_KEY_PARSE_INCOMPLETE"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "VERIFICATION_KEY_PARSE_INCOMPLETE"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F22--Chronos-Vault__chronos-vault-contracts--004ae28b73f0/contracts/ethereum/verification/Groth16Verifier.sol",
+      "row": "DEV-F22",
+      "frozen": [
+        "UNKNOWN",
+        "VERIFICATION_KEY_PARSE_INCOMPLETE"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "VERIFICATION_KEY_PARSE_INCOMPLETE"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F22--Chronos-Vault__chronos-vault-contracts--004ae28b73f0/contracts/verification/Groth16Verifier.sol",
+      "row": "DEV-F22",
+      "frozen": [
+        "UNKNOWN",
+        "VERIFICATION_KEY_PARSE_INCOMPLETE"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "VERIFICATION_KEY_PARSE_INCOMPLETE"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F23--QuantSingularity__Fluxion--2552c0356d0f/code/blockchain/contracts/zk/Groth16Verifier.sol",
+      "row": "DEV-F23",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F24--ramakrishnanhulk20__Z-Tor--63dce70b8fea/packages/contracts/contracts/Groth16Verifier.sol",
+      "row": "DEV-F24",
+      "frozen": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "eip197": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F25--Chidubemkingsley__Shadow-Credit-Network--ac446670d0c0/shadow-credit-network/contracts/CreditDataZKVerifier.sol",
+      "row": "DEV-F25",
+      "frozen": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "eip197": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F25--Chidubemkingsley__Shadow-Credit-Network--ac446670d0c0/shadow-credit-network/contracts/Groth16Verifier.sol",
+      "row": "DEV-F25",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F26--JunaidCD__Credence--570f0a6727b6/backend/contracts/Groth16Verifier.sol",
+      "row": "DEV-F26",
+      "frozen": [
+        "UNKNOWN",
+        "FAIL_CLOSED_VERIFIER_PLACEHOLDER"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "FAIL_CLOSED_VERIFIER_PLACEHOLDER"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F28--rudrakumar07__zkfinance--909f813c3f52/contracts/Verifier.sol",
+      "row": "DEV-F28",
+      "frozen": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "eip197": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F29--Veilpayapp__VEILPAY-APP--955cc7511f4f/packages/contracts-evm/src/Groth16Verifier.sol",
+      "row": "DEV-F29",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F30--ethpanda-org__ETHShanghai-2025--23917814522b/projects/ZKredential/packages/zk-contracts/contracts/core/CompositeProofVerifier.sol",
+      "row": "DEV-F30",
+      "frozen": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "eip197": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F30--ethpanda-org__ETHShanghai-2025--23917814522b/projects/ZKredential/packages/zk-contracts/contracts/verifiers/PropertyFyVerifier.sol",
+      "row": "DEV-F30",
+      "frozen": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "eip197": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F30--ethpanda-org__ETHShanghai-2025--23917814522b/projects/ZKredential/packages/zk-contracts/contracts/verifiers/RealTVerifier.sol",
+      "row": "DEV-F30",
+      "frozen": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "eip197": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F30--ethpanda-org__ETHShanghai-2025--23917814522b/projects/ZKredential/packages/zk-contracts/contracts/verifiers/RealestateVerifier.sol",
+      "row": "DEV-F30",
+      "frozen": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "eip197": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F30--ethpanda-org__ETHShanghai-2025--23917814522b/projects/ZKredential/packages/zk-proof-server/circuits/keys/PropertyFyVerifier.sol",
+      "row": "DEV-F30",
+      "frozen": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "eip197": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F30--ethpanda-org__ETHShanghai-2025--23917814522b/projects/ZKredential/packages/zk-proof-server/circuits/keys/RealTVerifier.sol",
+      "row": "DEV-F30",
+      "frozen": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "eip197": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F30--ethpanda-org__ETHShanghai-2025--23917814522b/projects/ZKredential/packages/zk-proof-server/circuits/keys/RealestateVerifier.sol",
+      "row": "DEV-F30",
+      "frozen": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "eip197": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F30--ethpanda-org__ETHShanghai-2025--23917814522b/projects/luminal/circuits/output/Groth16Verifier.sol",
+      "row": "DEV-F30",
+      "frozen": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "eip197": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F30--ethpanda-org__ETHShanghai-2025--23917814522b/projects/luminal/contracts/src/Groth16Verifier.sol",
+      "row": "DEV-F30",
+      "frozen": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "eip197": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F30--ethpanda-org__ETHShanghai-2025--23917814522b/projects/zk-flex/packages/foundry/contracts/Groth16Verifier.sol",
+      "row": "DEV-F30",
+      "frozen": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "DEFAULT_G2_GAMMA_DELTA_SOURCE_WARNING"
+      ],
+      "gamma_eq_delta": true
+    },
+    {
+      "path": "DEV-F31--emmaguo13__zk-blind--3957b693b1a7/contracts/Verifier.sol",
+      "row": "DEV-F31",
+      "frozen": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "eip197": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F32--a00012025__email2ether--e06fe2080968/contracts/src/email-account/Verifier.sol",
+      "row": "DEV-F32",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F34--avitenzer__zk_voting--18d3a277ccd8/contracts/Verifier.sol",
+      "row": "DEV-F34",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "DEFAULT_G2_GAMMA_DELTA_SOURCE_WARNING"
+      ],
+      "gamma_eq_delta": true
+    },
+    {
+      "path": "DEV-F36--partik03__aieth--8b1bdf45dccd/hardhat/contracts/Verifier.sol",
+      "row": "DEV-F36",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F39--Servesh21__RacePass--abd54b5c541a/contracts/verifiers/AgeVerifier.sol",
+      "row": "DEV-F39",
+      "frozen": [
+        "UNKNOWN",
+        "VERIFIER_HELPER_GUARD_UNRESOLVED"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "VERIFIER_HELPER_GUARD_UNRESOLVED"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F39--Servesh21__RacePass--abd54b5c541a/contracts/verifiers/KYCVerifier.sol",
+      "row": "DEV-F39",
+      "frozen": [
+        "UNKNOWN",
+        "VERIFIER_HELPER_GUARD_UNRESOLVED"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "VERIFIER_HELPER_GUARD_UNRESOLVED"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F39--Servesh21__RacePass--abd54b5c541a/contracts/verifiers/ReputationVerifier.sol",
+      "row": "DEV-F39",
+      "frozen": [
+        "UNKNOWN",
+        "DUPLICATE_IC_SOURCE_WARNING"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "DUPLICATE_IC_SOURCE_WARNING"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F40--Blacksaviour__Undertow--cdfa9138eb41/contracts/src/zk/Groth16Verifier.sol",
+      "row": "DEV-F40",
+      "frozen": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "eip197": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F41--hollow-leaf__tobi--2652bcd4e2e3/packages/zk-circuits/contracts/CircuitsVerifier.sol",
+      "row": "DEV-F41",
+      "frozen": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "eip197": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F42--hollow-leaf__easyeigen--dd59473d55ee/contracts/SlashVerifier.sol",
+      "row": "DEV-F42",
+      "frozen": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "eip197": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F43--metacraft-labs__DendrETH--1707b183808d/beacon-light-client/solidity/contracts/bridge/src/utils/Verifier.sol",
+      "row": "DEV-F43",
+      "frozen": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "DEFAULT_G2_GAMMA_DELTA_SOURCE_WARNING"
+      ],
+      "gamma_eq_delta": true
+    },
+    {
+      "path": "DEV-F44--zkemail__proof-of-twitter--b6d9c2d6a8c9/packages/contracts/src/Verifier.sol",
+      "row": "DEV-F44",
+      "frozen": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "eip197": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F45--MynaWallet__monorepo--85c72bd2e523/packages/contracts/src/base/RsaVerifier.sol",
+      "row": "DEV-F45",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F45--MynaWallet__monorepo--85c72bd2e523/packages/contracts/src/circom-verifier/govSigVerifier.sol",
+      "row": "DEV-F45",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F45--MynaWallet__monorepo--85c72bd2e523/packages/contracts/src/circom-verifier/userSigVerifier.sol",
+      "row": "DEV-F45",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F46--Cipher-Protocol__cipher-core--c8cf762ccee2/contracts/CipherVKeyConst.sol",
+      "row": "DEV-F46",
+      "frozen": [
+        "UNKNOWN",
+        "VERIFICATION_KEY_PARSE_INCOMPLETE"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "VERIFICATION_KEY_PARSE_INCOMPLETE"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F46--Cipher-Protocol__cipher-core--c8cf762ccee2/contracts/CipherVerifier.sol",
+      "row": "DEV-F46",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F47--RayHuang880301__zkUTXO-core--7863d2336655/contracts/CipherVKeyConst.sol",
+      "row": "DEV-F47",
+      "frozen": [
+        "UNKNOWN",
+        "VERIFICATION_KEY_PARSE_INCOMPLETE"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "VERIFICATION_KEY_PARSE_INCOMPLETE"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F47--RayHuang880301__zkUTXO-core--7863d2336655/contracts/CipherVerifier.sol",
+      "row": "DEV-F47",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-F48--SovereignWave__qwer--d588661d8e80/privatecrypmix/packages/contracts/contracts/Verifier.sol",
+      "row": "DEV-F48",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "DEFAULT_G2_GAMMA_DELTA_SOURCE_WARNING"
+      ],
+      "gamma_eq_delta": true
+    },
+    {
+      "path": "DEV-F50--Lucklyric__tallymesh--f3e8920d952b/contracts/src/zk/BatchValidityGroth16Verifier.sol",
+      "row": "DEV-F50",
+      "frozen": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "eip197": [
+        "VERIFIED_WITHIN_SCOPE",
+        "VERIFICATION_KEY_CHECKS_PASS"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-H05--polybase__payy--c4d2c9021b8f/eth/noir/agg_agg.sol",
+      "row": "DEV-H05",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-H05--polybase__payy--c4d2c9021b8f/eth/noir/agg_final.sol",
+      "row": "DEV-H05",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-H05--polybase__payy--c4d2c9021b8f/eth/noir/agg_utxo.sol",
+      "row": "DEV-H05",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-H05--polybase__payy--c4d2c9021b8f/eth/noir/migrate.sol",
+      "row": "DEV-H05",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-H05--polybase__payy--c4d2c9021b8f/eth/noir/mint.sol",
+      "row": "DEV-H05",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-H05--polybase__payy--c4d2c9021b8f/eth/noir/points.sol",
+      "row": "DEV-H05",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-H05--polybase__payy--c4d2c9021b8f/eth/noir/signature.sol",
+      "row": "DEV-H05",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-H05--polybase__payy--c4d2c9021b8f/eth/noir/utxo.sol",
+      "row": "DEV-H05",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-H06--polybase__payy--dcd5d96ee156/eth/noir/agg_agg.sol",
+      "row": "DEV-H06",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-H06--polybase__payy--dcd5d96ee156/eth/noir/agg_final.sol",
+      "row": "DEV-H06",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-H06--polybase__payy--dcd5d96ee156/eth/noir/agg_utxo.sol",
+      "row": "DEV-H06",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-H06--polybase__payy--dcd5d96ee156/eth/noir/migrate.sol",
+      "row": "DEV-H06",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-H06--polybase__payy--dcd5d96ee156/eth/noir/mint.sol",
+      "row": "DEV-H06",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-H06--polybase__payy--dcd5d96ee156/eth/noir/points.sol",
+      "row": "DEV-H06",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-H06--polybase__payy--dcd5d96ee156/eth/noir/signature.sol",
+      "row": "DEV-H06",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    },
+    {
+      "path": "DEV-H06--polybase__payy--dcd5d96ee156/eth/noir/utxo.sol",
+      "row": "DEV-H06",
+      "frozen": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "eip197": [
+        "UNKNOWN",
+        "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+      ],
+      "gamma_eq_delta": false
+    }
+  ],
+  "summary": {
+    "files_examined": 163,
+    "files_gamma_eq_delta": 16,
+    "files_outcome_changed": 16,
+    "files_frozen_verified_eip197_default_warning": 7,
+    "rows_outcome_changed": [
+      "DEV-F08",
+      "DEV-F09",
+      "DEV-F10",
+      "DEV-F14",
+      "DEV-F30",
+      "DEV-F34",
+      "DEV-F43",
+      "DEV-F48"
+    ]
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "controlling_run": "/Users/imranpollob/Coding/bc/bindcheck-zk-soundness/results/raw/soundness/after-20261109T061325Z-77918",
+  "default_key_files": 16,
+  "unsafe_p4_certifications": [
+    {
+      "row": "DEV-F09",
+      "path": "contracts/verifiers/ECDSASemaphoreVerifier16.sol",
+      "verdict": "VERIFIED_WITHIN_SCOPE",
+      "reason": "VERIFICATION_KEY_CHECKS_PASS",
+      "result_file": "/Users/imranpollob/Coding/bc/bindcheck-zk-soundness/results/raw/soundness/after-20261109T061325Z-77918/DEV-F09--result.json"
+    },
+    {
+      "row": "DEV-F09",
+      "path": "contracts/verifiers/ECDSASemaphoreVerifier2.sol",
+      "verdict": "VERIFIED_WITHIN_SCOPE",
+      "reason": "VERIFICATION_KEY_CHECKS_PASS",
+      "result_file": "/Users/imranpollob/Coding/bc/bindcheck-zk-soundness/results/raw/soundness/after-20261109T061325Z-77918/DEV-F09--result.json"
+    },
+    {
+      "row": "DEV-F14",
+      "path": "evm-bridge/contracts/SolDepositVerifier.sol",
+      "verdict": "VERIFIED_WITHIN_SCOPE",
+      "reason": "VERIFICATION_KEY_CHECKS_PASS",
+      "result_file": "/Users/imranpollob/Coding/bc/bindcheck-zk-soundness/results/raw/soundness/after-20261109T061325Z-77918/DEV-F14--result.json"
+    }
+  ],
+  "unsafe_p4_certification_files": 3,
+  "unsafe_p4_certification_rows": [
+    "DEV-F09",
+    "DEV-F14"
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "source_root": "/Users/imranpollob/Coding/bc/bindcheck-zk/feasibility/work/full-dev/DEV-F34--avitenzer__zk_voting--18d3a277ccd8",
+  "vk_nPublic": 1,
+  "vk_IC_points": 2,
+  "vk_gamma_equals_delta": true,
+  "r1cs_nPubInputs": 0,
+  "r1cs_nOutputs": 1,
+  "r1cs_nConstraints": 286,
+  "sym_wire_main.isVoteValid": 1,
+  "sym_wire_main.nullifierHash": -1,
+  "circuit_main_has_public_list": false,
+  "circuit_nullifier_check_is_assert_on_var": true,
+  "consumer_reads_input0_as_nullifier": true,
+  "consumer_checks_isVoteValid": false
+}

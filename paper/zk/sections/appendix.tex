@@ -1,0 +1,31 @@
+\section{Reason codes}\label{app:reasons}
+{\raggedright
+
+\tool{} attaches a reason code to every verdict. Positive codes are those of
+Table~\ref{tab:evidence}. Violation codes on DEV at the frozen revision are
+\reason{UNBOUND\_EFFECT\_AMOUNT}, \reason{UNBOUND\_EFFECT\_RECIPIENT},
+\reason{REPLAY\_KEY\_NOT\_BOUND\_TO\_PROOF} and
+\reason{FIELD\_ALIAS\_REPLAY\_KEY}. Representative \UNK{} codes include
+\reason{PROTECTED\_EFFECT\_NOT\_RECOVERED}, \reason{VERIFIER\_ARTIFACT\_MISSING},
+\reason{VERIFIER\_MATCH\_AMBIGUOUS},
+\reason{UNRESOLVED\_CONSUMER\_MODIFIER},
+\reason{UNRESOLVED\_CONSUMER\_INHERITANCE},
+\reason{POST\_EFFECT\_GUARD\_SEMANTICS\_UNRESOLVED},
+\reason{REPLAY\_KEY\_POSITION\_UNRESOLVED},
+\reason{COMMITMENT\_BINDING\_SCREEN\_ONLY},
+\reason{PUBLIC\_INPUT\_CANONICALITY\_GUARD\_NOT\_FOUND} and
+\reason{DEFAULT\_G2\_GAMMA\_DELTA\_SOURCE\_WARNING}.%
+% src: paper/zk/data/frozen-dev-stats.json#violation_reason_codes; docs/verdict-rules.md; reports/soundness/full-dev-ledger-2.csv
+\
+The full distribution of \UNK{} reasons on DEV and EVAL is
+\MISSING{UNKNOWN reason-code distribution table; lane EVAL}.\par}
+
+\section{Historical lineage}\label{app:lineage}
+
+An earlier relational analyzer for Noir/ACIR producers and Solidity consumers
+was evaluated on author-built mutants of two development projects. Its
+results---including a same-policy Foundry harness that detected 8 of 9
+resolved mutants where the static analyzer detected 5 of 9, and zero supported
+transfers in 12 attempts on 8 further projects---are a different analyzer on different
+inputs and are not pooled with any result in this paper.%
+% src: reports/groundtruth/CLAIMS.md#B5 (Foundry 8 detected; static 5/9), #B6 (12 attempts, 8 projects, 0 supported)

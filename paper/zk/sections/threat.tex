@@ -1,0 +1,53 @@
+\section{Threat Model and Binding}\label{sec:threat}
+
+\para{Adversary.}
+The adversary is any party that can call the consumer's public entry points. It
+chooses witnesses (and may deviate from the honest witness generator), public
+inputs, proof bytes, calldata and transaction order; it may reuse proofs and
+values it observes; and it may select any reachable pre-state. Case-specific
+capabilities are recorded per case: for example, the historical Payy defect
+requires a registered prover identity~\cite{payy-ghsa}, whereas both of our new
+findings need only an unprivileged caller.%
+% src: docs/research-contract.md#51-adversary-capabilities; reports/groundtruth/CLAIMS.md#A32
+
+\para{Trust assumptions.}
+We assume the proof system is sound for the pinned relation and key, the
+analyzed source corresponds to the compiled constraints, key and deployed
+bytecode, stated hash functions are collision resistant, and token contracts
+follow atomic ERC-20/721 semantics. We do not assume a public value is
+constrained because it should be, nor that an effect is bound because it looks
+bound. Breaking the proof system, toxic-waste compromise, compiler or
+consensus faults, and interaction with live deployments are out of scope.%
+% src: docs/research-contract.md#52-trusted-assumptions, #54-initially-out-of-scope
+\
+Default-key ($\gamma=\delta$) verifiers are a trusted-setup failure; we report
+them as a separate verifier-configuration class (P4) and never as evidence that
+joint analysis is needed.%
+% src: reports/groundtruth/CLAIMS.md#A29
+
+\para{Binding.}
+Let $R_v(p,w)$ be the constraint relation of verifier configuration $v$ for
+public statement $p$ and witness $w$, and let a successful consumer execution
+from state $s$ with calldata $d$ commit a multiset $E$ of protected effects.
+A reviewed policy $\sigma$ states which effects require authorization and from
+which proof values. The execution is \emph{authorized} if every effect in $E$ is
+matched by a distinct permission derived from $p$ under $\sigma$, preserving
+identity, asset, recipient, domain and quantity; it is \emph{covered} if every
+obligation the accepted transition creates is discharged.%
+% src: docs/research-contract.md#4-system-model, #41, #42
+\
+A \emph{binding flaw} is a reachable state, witness and calldata such that
+$R_v(p,w)$ holds, the unchanged verifier accepts, the unchanged consumer
+commits, and authorization or coverage fails.
+
+\para{Verdicts and evidence.}
+Every analysis returns \VIOL{}, \VWS{} or \UNK{}. Timeouts, build failures,
+unsupported features and missing artifacts are \UNK{} and never count as safe.
+Each candidate carries an evidence grade: E1, a tool warning; E2, a model of
+the compiled relation, decoder and consumer; E3, a real proof accepted by the
+pinned verifier; and E4, that proof accepted by the unchanged consumer from a
+reachable state, producing an unauthorized committed effect checked on
+state.%
+% src: docs/research-contract.md#8-required-result-categories (evidence ladder)
+\
+Only E4 is an end-to-end validated flaw.

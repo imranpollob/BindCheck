@@ -1,0 +1,14 @@
+% F4: per-row analyzer time, frozen DEV run, sorted ascending.
+% Data: data/runtime-frozen-dev.dat <- scripts/paper_stats.py <- controlling run per-row-ledger.json
+% (bindcheck-zk-soundness/results/raw/soundness/after-20261109T061325Z-77918). EVAL: MISSING.
+\begin{tikzpicture}
+\begin{semilogyaxis}[
+  width=0.95\columnwidth, height=3.8cm,
+  xmin=0, xmax=57,
+  xlabel={DEV row (sorted by time)}, ylabel={seconds},
+  label style={font=\scriptsize}, tick label style={font=\scriptsize},
+  grid=major, grid style={gray!25},
+]
+\addplot[ycomb, thick, blue!60!black] table[x=rank, y=seconds] {data/runtime-frozen-dev.dat};
+\end{semilogyaxis}
+\end{tikzpicture}

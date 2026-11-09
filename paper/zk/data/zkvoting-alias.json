@@ -1,0 +1,10 @@
+{
+  "source": "DEV-F34--avitenzer__zk_voting--18d3a277ccd8/contracts/Verifier.sol:25,27,61-64,158",
+  "r_scalar": "21888242871839275222246405745257275088548364400416034343698204186575808495617",
+  "q_base": "21888242871839275222246405745257275088696311157297823662689037894645226208583",
+  "q_minus_r": "147946756881789318990833708069417712966",
+  "q_minus_r_bit_length": 127,
+  "r_bit_length": 254,
+  "alias_exists_iff": "nullifier n < q - r (then n + r < q passes checkField and maps to the same scalar)",
+  "exponent_of_two_for_uniform_hit": "(q-r)/r < 2^-126  (since q-r < 2^127 and r >= 2^253)"
+}

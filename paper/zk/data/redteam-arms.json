@@ -1,0 +1,57 @@
+{
+  "source": "reports/redteam/metrics.json#synthetic_by_family",
+  "analyzer_tree": "bindcheck_zk tree 56c0b5f3 (content 2741c40e), not the frozen 8ea6d223",
+  "arms": {
+    "A": {
+      "counts": {
+        "LEGITIMATE/FALSE_ALARM": 16,
+        "VULNERABLE/DETECTION": 17,
+        "LEGITIMATE/UNKNOWN": 3,
+        "VULNERABLE/UNKNOWN": 3,
+        "LEGITIMATE/NO_ALARM": 4,
+        "VULNERABLE/MISS": 3
+      },
+      "total": 46,
+      "decided": 40,
+      "warnings": 33,
+      "warnings_on_vulnerable": 17,
+      "unsafe_certifications": 3
+    },
+    "B": {
+      "counts": {
+        "LEGITIMATE/UNKNOWN": 23,
+        "VULNERABLE/UNKNOWN": 23
+      },
+      "total": 46,
+      "decided": 0,
+      "warnings": 0,
+      "warnings_on_vulnerable": 0,
+      "unsafe_certifications": 0
+    },
+    "BindCheck": {
+      "counts": {
+        "LEGITIMATE/UNKNOWN": 20,
+        "VULNERABLE/DETECTION": 12,
+        "VULNERABLE/UNKNOWN": 11,
+        "LEGITIMATE/FALSE_ALARM": 3
+      },
+      "total": 46,
+      "decided": 15,
+      "warnings": 15,
+      "warnings_on_vulnerable": 12,
+      "unsafe_certifications": 0
+    },
+    "C": {
+      "counts": {
+        "LEGITIMATE/FALSE_ALARM": 13,
+        "VULNERABLE/DETECTION": 23,
+        "LEGITIMATE/NO_ALARM": 10
+      },
+      "total": 46,
+      "decided": 46,
+      "warnings": 36,
+      "warnings_on_vulnerable": 23,
+      "unsafe_certifications": 0
+    }
+  }
+}

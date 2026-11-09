@@ -1,0 +1,112 @@
+\section{A Taxonomy of Binding Flaws}\label{sec:taxonomy}
+
+We group binding flaws by \emph{what the accepted proof fails to fix}.
+Table~\ref{tab:taxonomy} lists the classes, real instances from our benchmark
+and from public incidents, and the corresponding SoK~\cite{sok-snarks}
+integration categories. The classes are operational: each corresponds to one
+\tool{} recognizer (P1--P5) with a stated positive-evidence rule
+(\S\ref{sec:design}). The taxonomy refines rather than replaces the SoK:
+P3 and P4 are known classes and we credit them as such; P1 and P2 fall under
+the SoK's ``integration design errors'' without a named category; P5 is
+adjacent to ``passing unchecked data''.%
+% src: RELATED-WORK.md#4-which-p-classes-are-new-by-the-literature-alone; RELATED-WORK.md#6c item 1
+
+\para{Effect (P1).} The consumer commits a transfer, mint, burn, or protected
+state write whose recipient, amount or identity is neither a public input nor
+equated to one by a guard that dominates the effect. ZKredential mints a
+caller-chosen amount to the caller; RacePass mints a pass to a caller-chosen
+recipient and stores a caller-chosen credential hash instead of the one the
+KYC proof exposes (\S\ref{sec:cases}). \code{msg.sender} is execution context,
+not proof authorization: it binds the recipient only if policy explicitly lets
+any caller receive the effect.%
+% src: docs/verdict-rules.md#recipient_allowed_by_any_caller_policy
+
+\para{Context (P2).} The proof does not fix the chain, the consumer address or
+the application domain, so a proof (or nullifier) valid in one deployment is
+valid in another. Protocol designs routinely add \code{chainid} and
+\code{address(this)} to public inputs~\cite{binding-design-2606}; the class is
+a known design requirement, not a new one.
+
+\para{Uniqueness (P3).} The replay key is not bound to the proof, not
+consumed, or not canonical modulo $r$. zkDrops keyed spent nullifiers on raw
+\code{uint256} values behind a verifier that accepted $n+r$, so one claim
+redeemed twice~\cite{zkdrops-pr2}.
+
+\para{Verifier and key configuration (P4).} The verifier itself accepts too
+much: $\gamma=\delta$ equal to the default $G_2$ generator, duplicate $\mathit{IC}$
+points, or no scalar-field guard on a public input. We add two
+\emph{verifier-generation} defects that we repeatedly observed. A
+\emph{wrong-field range check} compares public inputs with the base-field
+modulus $q$ instead of the scalar-field order $r$; since $q>r$, values in
+$[r,q)$ pass and alias. It appears in the zk\_voting verifier
+(\S\ref{sec:case-zkvoting}) and is the entire Solidity difference between the
+vulnerable and fixed revisions of a zk-email pair in our recall set.%
+% src: reports/groundtruth/REPORT.md#4 item 3 (zk-email q-vs-r: lt(v,q) -> lt(v,r)); reports/soundness/REPORT-2.md#case-adjudication-and-limits (DEV-F34)
+\
+\emph{Placeholder verifiers}---stubs returning \code{true}, ``simplified''
+verifiers without a pairing check, dummy constants---sit where a generated
+verifier belongs. Of 16 warning groups retained from development, 7 matched a
+stand-in verifier that accepts without a pairing check and 1 a placeholder with
+dummy constants.%
+% src: reports/groundtruth/REPORT.md#8-warning-groups-verifier-flags-and-blind-sheet (SIMPLIFIED/STAND-IN 7; PLACEHOLDER 1). Verifier kinds are AI judgements.
+\
+These classifications are AI opinion pending human review.
+
+\para{Interface shape (P5).} The consumer's public vector disagrees with the
+verifier arity or the circuit's public signals in count, order or meaning. In
+zk\_voting the consumer reads \code{input[0]} as a nullifier, but the circuit's
+only public signal is the boolean output \code{isVoteValid}
+(\S\ref{sec:case-zkvoting}).
+
+\para{Beyond P1--P5: relational mismatches (R).} The circuit constrains a
+prefix, mask or representation that differs from what the consumer relies on.
+The historical Payy \code{agg\_agg} defect left a message tail unconstrained
+while the consumer acted on the full array~\cite{payy-ghsa}. The SoK's
+``proof composition'' category is the closest match. \tool{} does not
+implement this class and returns \UNK{}.%
+% src: reports/groundtruth/REPORT.md#3 (Payy: no P1-P5 predicate captures the defect); RELATED-WORK.md#4 (R row)
+
+\begin{table*}[t]
+\centering
+\caption{Binding-flaw taxonomy, grouped by what the accepted proof fails to fix.
+Grades follow the evidence ladder of \S\ref{sec:threat}; ``hist.''\ marks
+historical, previously public defects. \aiop{} marks AI-assistant judgements
+awaiting human review.}
+\label{tab:taxonomy}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}p{1.55cm}p{3.3cm}p{6.6cm}p{2.6cm}p{2.6cm}@{}}
+\toprule
+\textbf{Class} & \textbf{Proof fails to fix} & \textbf{Instances (evidence grade)} & \textbf{SoK category} & \textbf{\tool{} rule} \\
+\midrule
+P1 Effect & recipient, amount, or protected state identity of a committed effect &
+ZKredential caller-chosen mint (E4); RacePass caller-chosen recipient and
+credential hash (E4); 3 further development warnings (E1); synthetic
+effect-recipient, effect-amount, native-value, burn-owner, state-write
+families & integration design error (unnamed) & \reason{EFFECT\_VALUES\_DIRECT\_PUBLIC\_INPUTS} \\
+P2 Context & chain ID, consumer address, application domain &
+synthetic chain- and contract-scope nullifier cases; design
+guidance~\cite{binding-design-2606} & integration design error (unnamed) & \reason{CONTEXT\_BOUND\_*} \\
+P3 Uniqueness & replay key: bound, consumed, canonical &
+zkDrops field alias (E4, hist.); Semaphore alias pair (hist.); zk\_voting
+$q$-vs-$r$ guard (E1) & V7 complementary logic; V4 & \reason{REPLAY\_KEY\_CANONICAL\_AND\_CONSUMED} \\
+P4 Verifier/key & key ceremony output, IC points, scalar guards;
+\emph{generation defects}: wrong-field check, placeholder verifier &
+Veil Cash, FoomCash $\gamma=\delta$ (exploited, 2026); 16 default-key
+verifier files in 8 development repositories; 43 deployed default-key
+verifiers; zk-email $q$-vs-$r$ pair; 8 stand-in/placeholder warning
+groups\aiop{} & V10/V12 setup, unsafe verifier & \reason{VERIFICATION\_KEY\_CHECKS\_PASS} \\
+P5 Interface & count, order, meaning of the public vector &
+synthetic arity and decoding-order cases; zk\_voting nullifier read from a
+boolean output\aiop{} & V4 passing unchecked data & \reason{PUBLIC\_INPUT\_COUNT\_AND\_ORDER\_MATCH} \\
+R Relational & extent, prefix, mask, representation & Payy \code{agg\_agg}
+message tail (E4, hist., privileged prover) & V6 proof composition & not
+implemented (\UNK{}) \\
+\bottomrule
+\end{tabular}
+% src (P1 E1 count): paper/zk/data/frozen-dev-stats.json#violation_rows (P1: DEV-F14, F35, F49 besides F30/F39)
+% src (P1 synthetic families): reports/redteam/REPORT.md#synthetic-comparison per-pattern table (family names; family-to-class assignment is the authors' reading, expected.json has no class field)
+% src (P4 16 files / 8 repos): feasibility/v2/REPORT.md#5-p4-census; reproduced in paper/zk/data/p4-g2-constant-check.json#summary.files_gamma_eq_delta
+% src (P4 43 deployed): reports/groundtruth/CLAIMS.md#A26; dataset/onchain-census-summary.json
+% src (P4 8 groups): reports/groundtruth/REPORT.md#8 (7 SIMPLIFIED/STAND-IN + 1 PLACEHOLDER)
+\end{table*}

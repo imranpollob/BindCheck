@@ -1,0 +1,47 @@
+% IEEE S&P 2027 submission draft (Cycle 2). Template rule from the CFP:
+% \documentclass[conference,compsoc]{IEEEtran}, IEEEtran.cls 1.8b, US letter,
+% no margin/font/spacing changes; 13 pages main text, <=5 pages of references
+% and appendices, 18 pages total; anonymous.
+% src: https://sp2027.ieee-security.org/cfpapers.html (fetched 2026-11-09)
+%
+% Provenance convention: every number carries a LaTeX comment
+%   % src: <repo-relative path>#<section or JSON key>
+% Paths under paper/zk/data/ are produced by paper/zk/scripts/ (see STATUS.md).
+\documentclass[conference,compsoc]{IEEEtran}
+
+\input{macros}
+
+\begin{document}
+
+\title{Proven but Not Bound: Measuring Circuit--Contract Binding Flaws in Zero-Knowledge Blockchain Applications}
+% Working title; the final title is chosen by the authors.
+
+\author{\IEEEauthorblockN{Anonymous Submission}}
+
+\maketitle
+
+\begin{abstract}
+\MISSING{Abstract. Written by the authors after the held-out results exist; the
+abstract is locked at HotCRP registration.}
+\end{abstract}
+
+\input{sections/intro}
+\input{sections/background}
+\input{sections/threat}
+\input{sections/taxonomy}
+\input{sections/benchmark}
+\input{sections/design}
+\input{sections/methodology}
+\input{sections/results}
+\input{sections/cases}
+\input{sections/discussion}
+\input{sections/related}
+\input{sections/ethics}
+
+\bibliographystyle{IEEEtran}
+\bibliography{refs}
+
+\appendices
+\input{sections/appendix}
+
+\end{document}

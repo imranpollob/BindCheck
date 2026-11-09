@@ -1,0 +1,50 @@
+\section{Related Work}\label{sec:related}
+
+\para{Studies and benchmarks.} The SNARK SoK~\cite{sok-snarks} defines the
+integration layer, counts 13 of 141 vulnerabilities there, gives the zkDrops
+alias as an example, and proposes combined Circom/Solidity testing as future
+work; we take its problem statement as given and contribute a benchmark,
+a checker and a measurement. A 2026 evaluation of six circuit tools on 70
+Circom bugs defers integration~\cite{zkp-tools-study}. zkbugs~\cite{zkbugs}
+(140 entries, 0 in Solidity) and the 0xPARC tracker~\cite{zkbugtracker} are
+circuit- and narrative-oriented respectively.%
+% src: RELATED-WORK.md#32 (SoK, tools study, zkbugs, 0xPARC rows)
+
+\para{Circuit analysis.} ZKAP~\cite{zkap} detects circuit vulnerability
+patterns including unused public inputs; Picus~\cite{picus} decides output
+uniqueness; Circomspect~\cite{circomspect} lints; zkFuzz~\cite{zkfuzz} and
+zkCraft~\cite{zkcraft} find under- and over-constraint by mutation;
+CCC-Check~\cite{ccccheck} and Zequal~\cite{zequal} check computation--constraint
+consistency; CIVER~\cite{civer} and Coda~\cite{coda} verify circuit
+specifications. All take only the circuit as input. ZKAP's unused-public-input
+pattern is complementary to P1: it sees a public input the circuit ignores,
+whereas P1 concerns an effect value that never enters the public vector.%
+% src: RELATED-WORK.md#31 (tool rows); #6c item 4
+
+\para{Contract analysis.} Slither~\cite{slither} and LLM-assisted analyzers
+see only Solidity. ELSA~\cite{elsa} targets ``ZKP-based smart contracts'' but
+reads no circuit file and evaluates seven injected SWC classes. SmartAxe~\cite{smartaxe}
+is the closest cross-component analog, checking paired bridge contracts.%
+% src: RELATED-WORK.md#31 (ELSA, SmartAxe rows)
+
+\para{Verifier configuration.} The default-key class was exploited against
+Veil Cash and FoomCash in 2026~\cite{veil-poc,foomcash}, and a public scanner
+reported it against all 20 verifiers of another project~\cite{zeto-186};
+current snarkjs templates add per-input field checks~\cite{snarkjs}. P4 is
+therefore prior art that we include for completeness, not a contribution.%
+% src: RELATED-WORK.md#31 (zkjac scanner row: 20 Zeto verifiers); #4 (P4 row)
+
+\para{Toolchains and rollups.} Fuzzing of ZK compilation
+pipelines~\cite{circuzz} and of proving toolchains~\cite{lietome}, formal
+models of rollup contracts~\cite{rollup-formal}, and zkEVM free-input
+checking~\cite{freever} address adjacent layers.
+
+\para{Search method.} Our priority statement rests on a bounded search
+(November 2026) of arXiv, IACR ePrint, DBLP and venue pages, audit-firm sites
+and LLM-audit benchmarks, plus primary-source inspection of the ELSA artifact
+and zkbugs.%
+% src: reports/related/REPORT.md (queries and sources); RELATED-WORK.md#32 (fresh 2024-2026 search)
+\
+Search negatives are not proof of absence; one relevant blog post on Circom
+verifier aliasing~\cite{slowmist} could not be retrieved and is
+\MISSING{read SlowMist aliasing post before submission}.

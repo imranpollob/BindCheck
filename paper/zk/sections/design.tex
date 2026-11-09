@@ -1,0 +1,181 @@
+\section{\tool{} Design}\label{sec:design}
+
+\tool{} is a static checker for the triple (circuit, generated verifier,
+consumer). Its design goal is asymmetric: a \VIOL{} is a warning that later
+validation may confirm or refute, but a \VWS{} is a claim that a named binding
+property holds for the matched artifacts. We therefore attach to each positive
+verdict an explicit evidence requirement, and make every other outcome \UNK{}
+with a reason code.
+
+\subsection{Pipeline}
+
+Fig.~\ref{fig:pipeline} shows the pipeline. \emph{Inventory and matching}
+enumerates Circom sources, compiled R1CS and symbols, Solidity verifiers and
+consumers, and forms candidate triples by matching consumer verifier calls to
+verifier contracts and verifiers to circuits by arity and key. Ambiguous or
+missing matches are recorded, not guessed. \emph{Extraction} recovers, with
+provenance to a file and line: from the circuit, the ordered public signals and
+the R1CS with every coefficient and the prime; from the verifier, the arity,
+the key constants, and each \code{checkField} call with its exact word offset
+and the modulus its helper rejects against; from the consumer, the public
+vector as constructed at the call site, the protected effects (transfers,
+mints, \code{\_safeMint}, value calls, state writes), replay mappings, and every
+guard with its position relative to each effect. A restricted frontend resolves
+local modifiers with a single unconditional placeholder and a pure precondition
+prefix, unique local base contracts, and exact OpenZeppelin imports; anything
+else stays unresolved.%
+% src: docs/verdict-rules.md#p1--protected-effect-binding (modifier/inheritance subset); reports/soundness/REPORT-2.md#what-changed
+\
+\emph{Recognizers} P1--P5 run unconditionally on every retained triple, and
+\emph{aggregation} reports per pattern: any applicable \VIOL{} dominates; any
+applicable \UNK{} blocks \VWS{}; \VWS{} requires at least one applicable result
+and all applicable results verified.%
+% src: docs/verdict-rules.md#aggregation-and-non-vacuity-boundary; reports/groundtruth/CLAIMS.md#A3
+
+\begin{figure}[t]
+\centering
+\input{figures/f2-pipeline}
+\caption{\tool{} pipeline. Solid boxes are implemented in the frozen analyzer;
+the dashed box is the separate validation harness that turns E1 warnings into
+E3/E4 evidence with real proofs on a local chain.}
+\label{fig:pipeline}
+\end{figure}
+
+\subsection{Evidence per verdict}\label{sec:design-evidence}
+
+Table~\ref{tab:evidence} lists the evidence each positive verdict requires.
+Three principles recur.
+\emph{Path sensitivity:} an equality between an effect value and a public input
+counts only if it is enforced on every committing path before the effect---a
+preceding \code{require}/\code{assert}, a rejecting inequality branch, or the
+effect nested in the equality branch. A guard in a sibling branch does not
+count; a guard after the effect is \UNK{} because rollback reasoning is out of
+scope.
+\emph{Position exactness:} a canonicality guard counts only for the exact
+public-vector position from which the replay key derives, only if its helper
+rejects against the exact BN254 scalar-field order, and only if the call lies on
+the verifier path. A guard on position $i$ is no evidence for a key at
+position $j$; a guard against the base field $q$ is no evidence at all.
+\emph{Policy is explicit:} \code{msg.sender} binds a recipient only under an
+analyst-supplied \code{any\_caller\_may\_receive} policy flag, recorded in the
+result.%
+% src: docs/verdict-rules.md (all P1-P5 sections)
+\
+Commitment evidence from R1CS connectivity is recorded but is screen-only: it
+never yields \VWS{}, because connectivity does not establish that a
+constraint implements Poseidon, nor that Solidity and Circom hash the same
+preimage in the same order.
+
+\begin{table}[t]
+\centering
+\caption{Evidence required for each positive verdict. Everything else is
+\UNK{} with a reason code.}
+\label{tab:evidence}
+\footnotesize
+\setlength{\tabcolsep}{2pt}
+\begin{tabular}{@{}p{0.55cm}p{7.75cm}@{}}
+\toprule
+& \textbf{\VWS{} requires} \\
+\midrule
+P1 & every recovered recipient, amount, state identity is a verifier public
+input, or equated to one by a guard dominating the effect; or recipient is
+\code{address(this)}; or \code{msg.sender} under explicit any-caller policy.
+Matched circuit and verifier artifacts. Commitments: never. \\
+P2 & chain ID, consumer address or domain occurs in the public vector, inside
+a hash passed as a public input, or in a guard dominating every effect. \\
+P3 & each replay key is proof-bound, checked, consumed, and canonical:
+exact-position \code{checkField} against $r$ on the verifier path, a
+position-preserving wrapper, or a prior unconditional \code{require(key<r)}. \\
+P4 & parsed $\gamma\neq\delta$ pattern, no duplicate $\mathit{IC}$, every
+public position guarded against $r$. Parsed key and verification function. \\
+P5 & consumer count $=$ verifier arity $=$ circuit public count, and named
+signals agree in order; or an exact length guard for dynamic vectors. \\
+\bottomrule
+\end{tabular}
+% src: docs/verdict-rules.md#p1 ... #p5 (rule properties and justifications)
+\end{table}
+
+\subsection{What goes wrong without evidence}\label{sec:design-failures}
+
+The rules above were not designed in the abstract. Each closes a path by which
+an earlier version of \tool{} certified something it had no evidence for.
+Table~\ref{tab:failures} lists six such mechanisms with the development case
+on which each was observed.
+
+\emph{(i) Unbounded pattern match.} The development version recognized a
+canonicality guard with a regular expression over the verifier source. On the
+vulnerable zkDrops revision, whose double redemption we had reproduced
+end-to-end, the expression matched 19,084 characters of semicolon-free Yul and
+ended on an unrelated call; P3 returned \VWS{} for a revision with a known
+exploit.%
+% src: reports/groundtruth/REPORT.md#4 item 1; reports/groundtruth/CLAIMS.md#A8
+\
+\emph{(ii) Fall-through on a missing artifact.} On both Semaphore alias
+revisions no verifier was matched---P4 said so---yet P3 fell through to \VWS{}.%
+% src: reports/groundtruth/REPORT.md#4 item 2; reports/groundtruth/CLAIMS.md#A7
+\
+\emph{(iii) Path-insensitive guards and caller identity.} Equalities anywhere
+in the function, and \code{msg.sender} as a recipient, counted as binding.
+Requiring dominance and explicit policy moved P1 on DEV from 4 \VWS{} to 0.%
+% src: reports/soundness/REPORT.md#full-dev-unhinted-beforeafter-ledger (P1 4 VERIFIED -> 0)
+\
+\emph{(iv) Connectivity as binding.} An R1CS path from effect values to a
+public commitment certified the SPSC consumer; adversarial controls show that
+zero-coefficient, altered-coefficient and swapped-order constructions are
+equally connected.%
+% src: reports/soundness/REPORT.md#concern-d-commitment-evidence-is-screen-only; #spsc-reassessment
+\
+\emph{(v) Wrong position or wrong field.} A guard on any public position, or
+against $q$, was accepted for a replay key. Making P3 position-exact first
+turned seven positive DEV rows into violations; recognizing the exact snarkjs
+call shape then cleared five of them and kept zk\_voting, whose helper compares
+against $q$.%
+% src: reports/soundness/REPORT.md#full-dev-unhinted-beforeafter-ledger (seven rows to FIELD_ALIAS_REPLAY_KEY)
+% src: reports/soundness/REPORT-2.md#full-dev-ledger transition table (P3 VIOLATION->VERIFIED: F12, F14, F24, F29, H02 = 5; F34 kept)
+\
+\emph{(vi) A wrong constant.} While preparing this paper we re-derived the P4
+default-key check and found that the frozen analyzer's BN254 $G_2$ generator
+has a coordinate missing four digits; the encoded point is not on the twist,
+so the $\gamma=\delta$ check cannot fire on a real verifier. Re-running the P4
+source analysis with the EIP-197 generator changes the outcome for 16 verifier
+files in 8 DEV repositories---exactly the 16 default-key files an independent
+scanner had found---and the controlling frozen run reports
+\reason{VERIFICATION\_KEY\_CHECKS\_PASS} for 3 of those files in 2 rows.%
+% src: paper/zk/data/p4-g2-constant-check.json#differing_coordinates=[2], frozen_digit_lengths, frozen_on_twist=false, eip197_on_twist=true
+% src: paper/zk/data/p4-g2-constant-check.json#summary (files_gamma_eq_delta 16, files_outcome_changed 16, rows_outcome_changed 8 rows)
+% src: feasibility/v2/REPORT.md#5-p4-census (16 default-key files, 8 repositories)
+% src: paper/zk/data/p4-unsafe-certifications.json (3 files; rows DEV-F09, DEV-F14)
+\
+These are unsafe certifications by the frozen version; the corrected
+analyzer requires a new freeze declaration
+\MISSING{P4 constant fix, new freeze, and DEV rerun; lane soundness}.
+
+The lesson is not that \tool{} is now sound---mechanism (vi) shows that a
+fail-closed architecture does not protect against a wrong fact inside a
+recognizer---but that every positive rule needs adversarial negatives that
+exercise it on real artifacts, and that certification counts must be audited
+as carefully as warning counts.
+
+\begin{table}[t]
+\centering
+\caption{Unsafe-certification mechanisms observed during development, the
+case on which each was observed, and the rule that closes it.}
+\label{tab:failures}
+\footnotesize
+\setlength{\tabcolsep}{2pt}
+\begin{tabular}{@{}p{2.3cm}p{2.5cm}p{3.4cm}@{}}
+\toprule
+\textbf{Mechanism} & \textbf{Observed on} & \textbf{Closing rule} \\
+\midrule
+(i) unbounded match & zkDrops vuln.\ (P3) & exact call shape, per position \\
+(ii) missing artifact & Semaphore pair (P3) & artifacts required for P1--P3 \\
+(iii) path/identity & 4 DEV rows (P1) & dominance; explicit policy \\
+(iv) connectivity & SPSC (P1) & commitments screen-only \\
+(v) position/field & 7 DEV rows (P3); zk\_voting (P4) & exact position and $r$ \\
+(vi) wrong constant & 3 files, 2 rows (P4) & \MISSING{fix + refreeze} \\
+\bottomrule
+\end{tabular}
+% src: (i),(ii) reports/groundtruth/REPORT.md#4; (iii) reports/soundness/REPORT.md#full-dev-unhinted-beforeafter-ledger
+% src: (iv) reports/soundness/REPORT.md#spsc-reassessment; (v) reports/soundness/REPORT.md (seven rows), reports/soundness/REPORT-2.md (DEV-F34 P4 VERIFIED->UNKNOWN)
+% src: (vi) paper/zk/data/p4-unsafe-certifications.json
+\end{table}

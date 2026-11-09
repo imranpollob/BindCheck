@@ -1,0 +1,106 @@
+\section{Evaluation Methodology}\label{sec:method}
+
+We ask four questions. \textbf{Q1:} How do single-layer tools, naive
+compositions and \tool{} behave on paired cases---how often do they decide,
+warn, and certify? \textbf{Q2:} Does circuit reasoning change any \tool{}
+verdict? \textbf{Q3:} What do the tools report on a preregistered held-out
+sample and on known vulnerable/fixed pairs? \textbf{Q4:} What does a passive
+census of deployed verifiers show? We make no claim that any tool is
+``better''; we measure what each one can and cannot tell an analyst.%
+% src: docs/FREEZE-2026-11-09.md (framing decision: no comparative claims)
+
+\para{Analyzer freeze.} All \tool{} results reported as frozen use analyzer
+content hash \code{8ea6d223\ldots}, declared before any held-out analysis. Any
+later analyzer change requires a new declaration stating which results it
+invalidates; a change motivated by a held-out or gate outcome marks the
+affected cases \emph{exposed}.%
+% src: docs/FREEZE-2026-11-09.md
+\
+Synthetic-set results in \S\ref{sec:res-benchmark} were produced at the
+earlier development revision \code{2741c40e\ldots}; we label them as such.%
+% src: paper/zk/data/redteam-arms.json#analyzer_tree
+
+\para{Tool arms.} Every applicable baseline runs in a generic/default arm and,
+where it has a property interface, a same-policy arm with the same policy file
+\tool{} receives.%
+% src: docs/research-contract.md#9-evaluation-commitments
+\
+\emph{Arm A (consumer and verifier):} purpose-built Slither~\cite{slither}
+detectors for unbound effect recipients and amounts, unbound replay keys,
+missing per-position field guards and arity mismatches, plus a same-policy
+Foundry property harness with a mock verifier. \emph{Arm B (circuit only):}
+Circom inspection, Circomspect~\cite{circomspect},
+Picus~\cite{picus} with a 60-second per-circuit timeout, and
+ZKAP~\cite{zkap}. A circuit property cannot decide application binding, so B's
+integration verdict is always \UNK{}; we report its native outputs
+separately. \emph{Arm C (straightforward composition):} the union of A and B
+with a source-level join of effect expressions to public inputs---the
+cross-layer check a careful engineer would write first.%
+% src: reports/redteam/REPORT.md#protocol-and-evidence; #synthetic-comparison; reports/redteam/metrics.json#synthetic_subtool_row_statuses
+\
+ZKAP could not be built on our hardware and is \UNK{} throughout.%
+% src: reports/redteam/REPORT.md (ZKAP produced UNKNOWN; preflight)
+\
+Further baselines required by the related-work analysis---zkFuzz~\cite{zkfuzz},
+ELSA in its generic arm~\cite{elsa}, CIVER with charged
+postconditions~\cite{civer}, and \tool{} with circuit inputs removed---are
+\MISSING{zkFuzz, ELSA, CIVER and circuit-ablation runs; lanes redteam/ablation}.%
+% src: RELATED-WORK.md#6b
+
+\para{Scoring.} A \emph{detection} requires the right pattern and the right
+location: the emitted code must address the case's property and its location
+must match the expected \code{path:line} pattern. A \emph{false alarm} is a
+warning on a repaired revision or on a legitimate case. An \emph{unsafe
+certification} is a \VWS{} (or a tool's equivalent ``safe'') on a vulnerable
+case or revision. \UNK{}, timeouts, build failures and unavailable tools are
+neither detections nor misses; we report them in their own columns, and a
+tool that does not support an input is never charged with a miss. On the
+synthetic set, detections are upper bounds: any violation by any pattern counts
+until code-level relevance is adjudicated, for every arm alike.%
+% src: reports/redteam/REPORT.md#synthetic-comparison (upper-bound rule); eval/common.py (pattern_locations, path:line)
+\
+We report, per tool, the \emph{decided rate} (non-\UNK{} outcomes over all
+cases) and \emph{warning precision} (warnings on vulnerable cases over all
+warnings); the latter is computed against AI-authored labels and is a
+screening statistic, not a precision estimate.
+
+\para{Preregistration.} The synthetic expectations were frozen before
+implementation; the held-out sampling rule, quota and hash order were frozen
+on 2026-11-04 before any held-out analysis; and the held-out harness refuses
+to run unless annotated dataset and analyzer tags match the ledger and
+analyzer hashes. Held-out analysis is at most once: an interrupted or failed
+acquisition becomes \UNK{} and is never retried with hints or larger
+budgets.%
+% src: redteam/adversarial/expected.json#frozen_before_implementation; dataset/EVAL-SAMPLE-PLAN-v2.md; eval/README.md
+\
+Recall on the gate pairs runs only after human reviewers record, for each
+pair, the expected predicate and vulnerable-revision location; these labels
+may not be derived from any tool output. Exposed pairs are reported
+separately from unexposed ones.%
+% src: eval/README.md (step 2); reports/groundtruth/CLAIMS.md#A34
+
+\para{Blind human adjudication.} Warnings are adjudicated on cards in seeded
+random order that show the code at the location, the matched verifiers'
+\code{verifyProof} bodies and the rule text, and hide the tool, verdict and
+any prior label. Two raters fill identical sheets independently; we report
+Cohen's $\kappa$ and resolve disagreements by discussion. The 16 development
+warning groups have cards prepared; adjudication itself is
+\MISSING{two-rater blind adjudication and $\kappa$ for the 16 DEV warning
+groups and all held-out warnings; human raters}.%
+% src: reports/groundtruth/REPORT.md#8 (16 cards W01-W16, seed 20261108, two blank sheets, eval/adjudicate.py kappa)
+\
+Labels produced by an AI assistant during development are reported as
+\emph{AI opinion} and never as annotation.
+
+\para{Validation.} For a subset of warnings we attempt E3/E4 validation:
+compile the pinned circuit, generate a real proof with a key whose
+correspondence to the pinned verifier is checked, and submit it to the
+unchanged verifier and consumer on a local Anvil or Hardhat chain with
+synthetic assets, recording committed state. A repair is validated only if it
+rejects the attack \emph{and} a legitimate proof still succeeds.%
+% src: reports/impact/REPORT.md (zkey correspondence logs; repair and legitimate-run rows)
+
+\para{Environment.} Python 3.13.9, Circom 2.2.3 and snarkjs 0.7.6 for the
+frozen DEV run; exact tool hashes, per-row commands and exit statuses are in
+the artifact manifests.%
+% src: reports/soundness/REPORT-2.md#verification-and-exact-provenance

@@ -1,0 +1,44 @@
+\section{Background}\label{sec:background}
+
+\para{Circom and R1CS.}
+Circom~\cite{circom} programs are templates over a prime field $\mathbb{F}_r$,
+where $r$ is the BN254 scalar-field order. Signals are either assigned
+(\code{<--}), constrained (\code{===}), or both (\code{<==}). Compilation
+yields a rank-1 constraint system (R1CS) over the signals and a witness
+generator. Only the R1CS is enforced by the proof: an \code{assert} on a
+witness-time variable, or an \code{<--} assignment without a matching
+constraint, is invisible to the verifier. The \code{main} component declares
+which inputs are public; outputs are always public. Public signals are ordered
+outputs first, then public inputs, in declaration order.
+
+\para{Groth16 and snarkjs verifiers.}
+Groth16~\cite{groth16} proofs are three group elements; verification checks a
+pairing equation involving a verification key $(\alpha,\beta,\gamma,\delta,
+\mathit{IC}_0,\ldots,\mathit{IC}_\ell)$ and the public vector
+$x\in\mathbb{F}_r^\ell$ via $\mathit{IC}_0+\sum_i x_i\,\mathit{IC}_i$. The
+snarkjs toolchain~\cite{snarkjs} emits a Solidity verifier with the key as
+constants, a fixed-length \code{uint[\(\ell\)]} public-input array, and calls to
+the EIP-196/197 precompiles~\cite{eip197}. Because scalar multiplication on the
+curve is modulo $r$, the integers $x_i$ and $x_i+r$ yield the same pairing
+check. Current templates therefore reject any public input $\geq r$ with a
+\code{checkField} helper. The key's $\gamma$ and $\delta$ must come from a
+setup ceremony; if both equal the default $G_2$ generator, proofs can be forged
+for arbitrary public inputs, as exploited in 2026 against Veil Cash and
+FoomCash~\cite{veil-poc,foomcash}.
+
+\para{Consumers.}
+The \emph{consumer} is the application contract that assembles the public
+vector, calls the verifier, and performs effects: token transfers and mints,
+NFT issuance, state-root updates, vote counts. A consumer binds an effect to the
+proof when every effect parameter that policy requires to be authorized is
+either a public input or is equated to one on every path to the effect.
+
+\para{Nullifiers and replay keys.}
+Applications that grant a one-time right (an airdrop claim, a vote, a
+withdrawal) expose a \emph{nullifier}, usually a hash of a secret and a scope,
+as a public signal, and record spent nullifiers in a mapping. The mapping key
+must be bound to the proof, consumed before or atomically with the effect, and
+canonical: if the consumer keys on the raw \code{uint256} and the verifier
+accepts $n+r$, one proof redeems twice. This is the zkDrops field-alias bug
+recorded in the SoK~\cite{sok-snarks} and fixed in a public pull
+request~\cite{zkdrops-pr2}.

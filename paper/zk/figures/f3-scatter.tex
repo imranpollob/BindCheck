@@ -1,0 +1,19 @@
+% F3: decided rate vs warning precision per arm on the 46 synthetic cases.
+% Data: data/redteam-scatter.dat <- scripts/paper_stats.py <- reports/redteam/metrics.json#synthetic_by_family
+% Arm B has no decisions/warnings (warn_precision = nan) and is omitted from the plot.
+% Held-out version: MISSING (lane EVAL).
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.95\columnwidth, height=4.4cm,
+  xmin=0, xmax=1.05, ymin=0, ymax=1.05,
+  xlabel={decided rate (non-\UNK{} / 46)},
+  ylabel={warnings on vuln.\ / warnings},
+  label style={font=\scriptsize}, tick label style={font=\scriptsize},
+  grid=major, grid style={gray!25},
+  nodes near coords, point meta=explicit symbolic,
+  every node near coord/.append style={font=\scriptsize, anchor=south west},
+]
+\addplot[only marks, mark=*, mark size=2pt]
+  table[x=decided_rate, y=warn_precision, meta=arm] {data/redteam-scatter.dat};
+\end{axis}
+\end{tikzpicture}

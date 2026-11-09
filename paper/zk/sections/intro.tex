@@ -1,0 +1,139 @@
+\section{Introduction}\label{sec:intro}
+
+A zero-knowledge proof convinces a smart contract that \emph{some} statement
+holds. It does not tell the contract what to do. Between the moment a verifier
+returns \code{true} and the moment tokens move, the consuming contract decides
+which public values to trust, which caller-supplied values to use, and which
+state to update. If the action depends on a value the proof never fixed, a
+perfectly sound proof authorizes an action nobody intended.
+
+\para{A genuine proof, an unintended mint.}
+Consider the \emph{ZKredential} compliance gateway from a 2025 hackathon
+repository (Fig.~\ref{fig:zkredential}). The circuit proves that a public
+wallet address satisfies a KYC predicate and exports an \code{isCompliant}
+signal. The gateway checks the proof with an unmodified snarkjs-generated
+Groth16 verifier, checks \code{isCompliant==1}, records the proof hash, and
+then executes \code{mint(msg.sender, amount)}. Neither the recipient nor the
+amount is a public input. We generated a real proof for one wallet, submitted
+it from a different account, and chose the amount. On a local chain with
+synthetic assets, the unchanged verifier and gateway accepted the proof and
+minted 123\,456\,789\,012\,345\,678\,901\,234 units to the caller, while the account
+named in the proof received
+0~(\S\ref{sec:case-zkredential}).%
+% src: reports/impact/REPORT.md#zkredential--propertyfy-gateway-mint (Effect row)
+% src: reports/groundtruth/CLAIMS.md#A1
+\
+Every layer behaved correctly in isolation. The circuit is satisfiable only
+for compliant witnesses; the verifier is the standard template; the contract
+calls it. The flaw lives in the \emph{binding} between them.
+
+\begin{figure}[t]
+\centering
+\input{figures/f1-zkredential}
+\caption{ZKredential. The proof fixes the wallet $W$ and compliance; the
+gateway mints a calldata \code{amount} to \code{msg.sender}~$=M\neq W$.
+Neither effect parameter is a public input.}
+\label{fig:zkredential}
+\end{figure}
+
+\para{Binding spans three artifacts.}
+Whether a proof binds an action is a property of the triple (circuit,
+generated verifier, consumer), not of any single file. The circuit fixes which
+signals are public and how they are constrained; the generated verifier fixes
+the arity, order and field-membership checks of the public vector; the
+consumer fixes how that vector is assembled and which effects follow. A
+recipient that is bound in the circuit is unbound if the consumer takes it from
+calldata; a nullifier that is unique in the field is replayable if the verifier
+accepts non-canonical encodings and the consumer keys a mapping on raw
+\code{uint256} values. The SNARK SoK~\cite{sok-snarks} names this the
+\emph{integration layer}, counts 13 of its 141 vulnerabilities there, and
+reports that the layer has ``no specific defenses''.%
+% src: RELATED-WORK.md#32-studies-benchmarks-and-adjacent-work (SoK row); reports/related/evidence/primary-text-greps.txt
+\
+A 2026 evaluation of six circuit tools on 70 Circom bugs explicitly leaves
+integration to future work~\cite{zkp-tools-study}, and the largest executable
+ZK bug collection, zkbugs, has 140 entries of which 0 are located in a
+Solidity file~\cite{zkbugs}.%
+% src: RELATED-WORK.md#32 (tools study row; zkbugs row); reports/related/evidence/zkbugs-census.txt
+\
+Contract analyzers cannot see the circuit; circuit analyzers cannot see the
+consumer. The one published analyzer that targets ``ZKP-based smart contracts''
+reads Solidity only~\cite{elsa}.%
+% src: RELATED-WORK.md#31-tools (ELSA row: 4,086 .sol files, 0 circuit files)
+
+\para{Naive cross-layer checks give false assurance.}
+The obvious remedy is to compose existing checks. We built such compositions
+and measured them. A consumer-and-verifier rule set with a same-policy
+property-test harness certified 3 of 23 vulnerable synthetic cases as
+safe~(\S\ref{sec:res-benchmark}).%
+% src: reports/redteam/REPORT.md#synthetic-comparison (Arm A, vulnerable misses 3/23)
+\
+A circuit tool answered ``properly constrained'' on all 46 synthetic circuits,
+vulnerable or not, because circuit uniqueness says nothing about what the
+consumer does.%
+% src: reports/redteam/REPORT.md#dev-corpus-and-native-tool-outcomes (Picus exit 8 for all 46)
+\
+On the historical zkDrops pair, whose vulnerable revision we reproduced as a
+double redemption, both composed baselines emitted identical warnings on the
+vulnerable and the repaired revision~(\S\ref{sec:res-pairs}).%
+% src: paper/zk/data/pair-discrimination.json#pairs[0] (arm_A/arm_C identical_output)
+\
+Our own checker was not immune: earlier versions certified the vulnerable
+zkDrops revision and a Semaphore revision with no verifier at all as
+\VWS~(\S\ref{sec:design-failures}).%
+% src: reports/groundtruth/REPORT.md#4-verdict-defects-observed-in-retained-dev-output
+
+\para{This paper.}
+We present a benchmark and measurement study of circuit--contract binding
+flaws in Circom/Groth16 applications, and \tool{}, a cross-layer checker
+designed around one rule: \emph{certify a binding only with path-sensitive,
+position-exact evidence, and otherwise fail closed}. \tool{} reads the
+circuit (source and compiled R1CS), the snarkjs-generated verifier and the
+consuming contract, and returns, per binding property, \VIOL{},
+\VWS{} or \UNK{} with a reason code. Every positive verdict names the evidence
+it requires (Table~\ref{tab:evidence}); a missing artifact, an unresolved
+modifier, or a guard that does not dominate the effect yields \UNK{}, never a
+pass.
+
+Our contributions are:
+\begin{itemize}
+\item \textbf{A taxonomy} of binding flaws grouped by what the proof fails to
+  fix---the effect, its context, its uniqueness, the verifier and key
+  configuration, and the interface shape---mapped onto the SoK's
+  integration categories and extended with verifier-generation defects
+  (\S\ref{sec:taxonomy}).
+\item \textbf{A benchmark} that pins all three artifacts per case: 46 paired
+  vulnerable/legitimate synthetic cases in 23 families, 56 development
+  repositories including three historical vulnerable/fixed pairs, a 16-pair
+  gate set, a preregistered 278-family held-out sample drawn from 1,384
+  eligible families, and a passive census of 1,027 deployed verifiers
+  (\S\ref{sec:benchmark}).%
+% src: reports/redteam/REPORT.md#synthetic-comparison (23 vulnerable + 23 legitimate); reports/soundness/REPORT-2.md#full-dev-ledger (56 rows)
+% src: reports/groundtruth/CLAIMS.md#A19,A20,A26; reports/groundtruth/REPORT.md#5-gate-manifest (16 rows)
+\item \textbf{\tool{}}, a fail-closed checker with an explicit evidence
+  contract per verdict, and a record of six distinct mechanisms by which
+  certification went wrong without that contract---including one we found in
+  the frozen version while preparing this paper (\S\ref{sec:design}).
+\item \textbf{A measurement} of how single-layer tools, naive compositions and
+  \tool{} behave on the benchmark: decided rates, warning restraint, unsafe
+  certifications and pair discrimination (\S\ref{sec:results}), with
+  held-out results \MISSING{held-out run, lane EVAL}.
+\item \textbf{Validated findings}: two proof-to-effect violations reproduced
+  end to end with real proofs and unchanged consumers on local chains, each
+  with a repair that rejects the attack and preserves a legitimate run
+  (\S\ref{sec:cases}).%
+% src: reports/impact/REPORT.md (ZKredential and RacePass tables)
+\end{itemize}
+
+To our knowledge (bounded literature search, November 2026; method in
+\S\ref{sec:related}), \tool{} is the first analyzer that takes a Circom
+circuit's compiled constraints, its generated Groth16 verifier and the
+consuming Solidity contract as joint input and reports, for each protected
+effect, whether the accepted proof fixes it, failing closed to \UNK{} with a
+reason code otherwise.%
+% src: RELATED-WORK.md#6a (scoped priority sentence, hedges kept)
+\
+We make no claim that \tool{} detects more flaws than a purpose-built
+contract-only rule: on our development set every \tool{} violation carries a
+consumer- or verifier-level reason code (\S\ref{sec:res-ablation}). Its value,
+as we show, lies in what it refuses to certify.

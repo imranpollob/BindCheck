@@ -1,0 +1,6 @@
+main.log
+*.aux
+*.bbl
+*.blg
+*.xdv
+__pycache__/

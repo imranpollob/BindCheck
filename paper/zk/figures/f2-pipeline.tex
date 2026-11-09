@@ -1,0 +1,31 @@
+% F2: BindCheck pipeline. Source: docs/verdict-rules.md; reports/soundness/REPORT-2.md#what-changed;
+% dashed validation box: reports/impact/REPORT.md (separate local harness).
+\begin{tikzpicture}[
+  font=\scriptsize,
+  box/.style={draw, rounded corners=2pt, align=center, inner sep=2.5pt, minimum height=0.55cm, fill=white},
+  arr/.style={-{Stealth[length=4pt]}, semithick},
+]
+\node[box, text width=1.6cm] (c) {Circom source\\ + R1CS, symbols};
+\node[box, text width=1.6cm, right=0.25cm of c] (v) {snarkjs\\ verifier (.sol)};
+\node[box, text width=1.6cm, right=0.25cm of v] (k) {consumer\\ (.sol)};
+\node[box, text width=1.2cm, right=0.25cm of k] (pol) {policy flags\\ (explicit)};
+\node[box, text width=7.6cm, below=0.35cm of v.south east, anchor=north] (m) {\textbf{Inventory \& triple matching}: verifier calls $\to$ verifier $\to$ circuit (arity, key); ambiguous or missing $\Rightarrow$ recorded};
+\node[box, text width=2.3cm, below=0.35cm of m.south west, anchor=north west] (ec) {\textbf{circuit}\\ public signals (ordered);\\ R1CS terms, prime};
+\node[box, text width=2.3cm, right=0.12cm of ec] (ev) {\textbf{verifier}\\ arity; $\gamma,\delta,\mathit{IC}$;\\ field guard: offset, modulus};
+\node[box, text width=2.3cm, right=0.12cm of ev] (ek) {\textbf{consumer}\\ public vector; effects;\\ replay maps; guards};
+\node[box, text width=7.6cm, below=0.35cm of ev.south, anchor=north] (r) {\textbf{Recognizers P1--P5} (all run) $\to$ per triple: \VIOL{} / \VWS{} only with Table~\ref{tab:evidence} evidence / else \UNK{} + reason};
+\node[box, text width=7.6cm, below=0.25cm of r] (a) {\textbf{Aggregation} per pattern: \VIOL{} dominates; any applicable \UNK{} blocks \VWS{}};
+\node[box, dashed, text width=7.6cm, below=0.45cm of a] (val) {\textbf{Validation} (separate): compile, key correspondence, real proof (E3), unchanged consumer on local chain, committed state (E4), repair + legitimate run};
+\draw[arr] (c.south) -- (c.south |- m.north);
+\draw[arr] (v.south) -- (v.south |- m.north);
+\draw[arr] (k.south) -- (k.south |- m.north);
+\draw[arr] (pol.east) -- ++(0.12,0) |- (r.east);
+\draw[arr] (ec.north |- m.south) -- (ec.north);
+\draw[arr] (ev.north |- m.south) -- (ev.north);
+\draw[arr] (ek.north |- m.south) -- (ek.north);
+\draw[arr] (ec.south) -- (ec.south |- r.north);
+\draw[arr] (ev.south) -- (ev.south |- r.north);
+\draw[arr] (ek.south) -- (ek.south |- r.north);
+\draw[arr] (r) -- (a);
+\draw[arr] (a) -- node[right, font=\tiny, inner sep=1pt]{E1 warnings} (val);
+\end{tikzpicture}

@@ -1,0 +1,30 @@
+% F1: ZKredential flow. Facts: findings/zkredential/policy.md; DEV-F30 ComplianceGateway.sol:130-169
+% (code lines abbreviated: n = pubSignals.length, x = pubSignals, pi = proof);
+% effect values: reports/impact/REPORT.md#zkredential (observation.json); reports/groundtruth/CLAIMS.md#A1.
+{\renewcommand{\code}[1]{\texttt{#1}}%
+\begin{tikzpicture}[
+  font=\scriptsize,
+  box/.style={draw, rounded corners=2pt, align=left, inner sep=3pt, fill=white},
+  bad/.style={draw=red!70!black, thick},
+  arr/.style={-{Stealth[length=4pt]}, semithick},
+  lab/.style={font=\tiny, align=center, fill=white, inner sep=1pt}
+]
+\node[box, text width=3.55cm] (circ) {\textbf{Circuit} (PropertyFy)\\
+public: \code{walletAddress} $=W$\\
+output: \code{isCompliant}\\
+private: KYC and asset values};
+\node[box, text width=3.2cm, right=0.45cm of circ] (ver) {\textbf{Verifier} (snarkjs, unchanged)\\
+pairing check on $(\pi, x)$};
+\node[box, text width=7.6cm, below=0.5cm of circ.south west, anchor=north west] (gw) {\textbf{Gateway} \code{verifyAndExecute(platform, $\pi$, $x$, MINT, amount)}\\[1pt]
+\code{1 require(x.length == expected)}\\
+\code{2 require(verifyProof($\pi$, $x$))} \hfill \textcolor{green!40!black}{fixes $W$, compliance}\\
+\code{3 require(x[2] == 1)}\\
+\code{4 used[keccak256($\pi$, $x$)] = true}\\
+\code{5 mint(\textcolor{red!70!black}{msg.sender}, \textcolor{red!70!black}{amount})} \hfill \textcolor{red!70!black}{neither is a public input}};
+\node[box, bad, text width=3.55cm, below=0.5cm of gw.south west, anchor=north west] (m) {\textbf{Caller} $M\neq W$, balance after:\\ \textbf{123456789012345678901234}};
+\node[box, text width=3.2cm, right=0.45cm of m] (w) {\textbf{Proof wallet} $W$, balance after:\\ \textbf{0}};
+\draw[arr] (circ) -- node[lab, above]{proof} (ver);
+\draw[arr] (ver.south) -- node[lab, right]{accept} (ver.south |- gw.north);
+\draw[arr] (gw.south -| m.north) -- node[lab, right]{mint} (m.north);
+\end{tikzpicture}
+}

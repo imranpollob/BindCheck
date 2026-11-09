@@ -1,0 +1,191 @@
+{
+  "sources": {
+    "redteam_cases": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/results/raw/redteam/dev-20261109-final/cases",
+    "t25": "reports/T25-full-dev-ledger.csv (phase=after)",
+    "frozen": "/Users/imranpollob/Coding/bc/bindcheck-zk-soundness/results/raw/soundness/after-20261109T061325Z-77918/per-row-ledger.json"
+  },
+  "pairs": [
+    {
+      "pair": "zkDrops field-alias nullifier",
+      "vulnerable": "DEV-H01",
+      "fixed": "DEV-H02",
+      "pattern": "P3",
+      "arm_A": {
+        "vulnerable": {
+          "status": "completed",
+          "verdict": "VIOLATION",
+          "codes": [
+            "A_CALLER_NOT_PROVED_IDENTITY",
+            "A_EFFECT_AMOUNT_UNBOUND",
+            "A_REPLAY_KEY_UNBOUND"
+          ]
+        },
+        "fixed": {
+          "status": "completed",
+          "verdict": "VIOLATION",
+          "codes": [
+            "A_CALLER_NOT_PROVED_IDENTITY",
+            "A_EFFECT_AMOUNT_UNBOUND",
+            "A_REPLAY_KEY_UNBOUND"
+          ]
+        },
+        "identical_output": true
+      },
+      "arm_C": {
+        "vulnerable": {
+          "status": "completed",
+          "verdict": "VIOLATION",
+          "codes": [
+            "A_CALLER_NOT_PROVED_IDENTITY",
+            "A_EFFECT_AMOUNT_UNBOUND",
+            "A_REPLAY_KEY_UNBOUND",
+            "C_EFFECT_NOT_PROOF_BOUND"
+          ]
+        },
+        "fixed": {
+          "status": "completed",
+          "verdict": "VIOLATION",
+          "codes": [
+            "A_CALLER_NOT_PROVED_IDENTITY",
+            "A_EFFECT_AMOUNT_UNBOUND",
+            "A_REPLAY_KEY_UNBOUND",
+            "C_EFFECT_NOT_PROOF_BOUND"
+          ]
+        },
+        "identical_output": true
+      },
+      "bindcheck_t25": {
+        "P3": [
+          "VERIFIED_WITHIN_SCOPE",
+          "VERIFIED_WITHIN_SCOPE"
+        ]
+      },
+      "bindcheck_frozen": {
+        "P3": [
+          "VIOLATION",
+          "VERIFIED_WITHIN_SCOPE"
+        ]
+      }
+    },
+    {
+      "pair": "Semaphore alias (snarkjs pin)",
+      "vulnerable": "DEV-H03",
+      "fixed": "DEV-H04",
+      "pattern": "P3",
+      "arm_A": {
+        "vulnerable": {
+          "status": "completed",
+          "verdict": "UNKNOWN",
+          "codes": []
+        },
+        "fixed": {
+          "status": "completed",
+          "verdict": "UNKNOWN",
+          "codes": []
+        },
+        "identical_output": true
+      },
+      "arm_C": {
+        "vulnerable": {
+          "status": "completed",
+          "verdict": "UNKNOWN",
+          "codes": []
+        },
+        "fixed": {
+          "status": "completed",
+          "verdict": "UNKNOWN",
+          "codes": []
+        },
+        "identical_output": true
+      },
+      "bindcheck_t25": {
+        "P3": [
+          "VERIFIED_WITHIN_SCOPE",
+          "VERIFIED_WITHIN_SCOPE"
+        ]
+      },
+      "bindcheck_frozen": {
+        "P3": [
+          "UNKNOWN",
+          "UNKNOWN"
+        ]
+      }
+    },
+    {
+      "pair": "Payy agg_agg message tail",
+      "vulnerable": "DEV-H05",
+      "fixed": "DEV-H06",
+      "pattern": null,
+      "arm_A": {
+        "vulnerable": {
+          "status": "completed",
+          "verdict": "UNKNOWN",
+          "codes": []
+        },
+        "fixed": {
+          "status": "completed",
+          "verdict": "UNKNOWN",
+          "codes": []
+        },
+        "identical_output": true
+      },
+      "arm_C": {
+        "vulnerable": {
+          "status": "completed",
+          "verdict": "UNKNOWN",
+          "codes": []
+        },
+        "fixed": {
+          "status": "completed",
+          "verdict": "UNKNOWN",
+          "codes": []
+        },
+        "identical_output": true
+      },
+      "bindcheck_t25": {
+        "P1": [
+          "UNKNOWN",
+          "UNKNOWN"
+        ],
+        "P2": [
+          "UNKNOWN",
+          "UNKNOWN"
+        ],
+        "P3": [
+          "UNKNOWN",
+          "UNKNOWN"
+        ],
+        "P4": [
+          "UNKNOWN",
+          "UNKNOWN"
+        ],
+        "P5": [
+          "UNKNOWN",
+          "UNKNOWN"
+        ]
+      },
+      "bindcheck_frozen": {
+        "P1": [
+          "UNKNOWN",
+          "UNKNOWN"
+        ],
+        "P2": [
+          "UNKNOWN",
+          "UNKNOWN"
+        ],
+        "P3": [
+          "UNKNOWN",
+          "UNKNOWN"
+        ],
+        "P4": [
+          "UNKNOWN",
+          "UNKNOWN"
+        ],
+        "P5": [
+          "UNKNOWN",
+          "UNKNOWN"
+        ]
+      }
+    }
+  ]
+}

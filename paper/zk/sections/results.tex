@@ -1,0 +1,317 @@
+\section{Results}\label{sec:results}
+
+\subsection{Q1: Tool behaviour on paired cases}\label{sec:res-benchmark}
+
+Table~\ref{tab:toolpattern} gives every arm's outcome on each synthetic
+family, and Fig.~\ref{fig:scatter} plots decided rate against warning
+precision. These are development fixtures with AI-authored labels, and
+\tool{} ran at the pre-freeze revision; the frozen rerun is
+\MISSING{synthetic rerun at 8ea6d223, lane redteam}.
+
+\begin{table}[t]
+\centering
+\caption{Outcome per synthetic family (vulnerable/legitimate case).
+D detection, M unsafe certification (miss with a ``safe'' verdict), FA false
+alarm, N no alarm, U \UNK{}. Detections are upper bounds pending code-level
+adjudication. \tool{} at pre-freeze revision \code{2741c40e}.}
+\label{tab:toolpattern}
+\scriptsize
+\setlength{\tabcolsep}{2.5pt}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+\textbf{Family} & \textbf{A} & \textbf{B} & \textbf{C} & \textbf{\tool{}} \\
+\midrule
+effect-recipient & D/FA & U/U & D/FA & D/U \\
+effect-amount & D/FA & U/U & D/FA & D/U \\
+native-call-value & D/FA & U/U & D/FA & D/U \\
+burn-owner & D/FA & U/U & D/FA & U/U \\
+state-write & D/FA & U/U & D/FA & D/U \\
+erc721-safe-mint-recipient & D/FA & U/U & D/FA & D/U \\
+safe-transfer-record-amount & D/FA & U/U & D/FA & D/U \\
+caller-identity-policy & D/FA & U/U & D/N & U/U \\
+guard-dominance-irrelevant-branch & D/N & U/U & D/N & U/U \\
+guard-dominance-after-effect & D/FA & U/U & D/FA & U/U \\
+nullifier-chain-scope & \textbf{M}/N & U/U & D/N & U/U \\
+nullifier-contract-scope & \textbf{M}/N & U/U & D/N & U/U \\
+replay-key-binding & D/FA & U/U & D/FA & D/U \\
+nested-replay-key & D/FA & U/U & D/FA & D/U \\
+replay-position-canonicality & D/FA & U/U & D/FA & U/U \\
+alias-decoding & D/FA & U/U & D/FA & D/U \\
+commitment-order & D/FA & U/U & D/N & D/FA \\
+commitment-fields & D/FA & U/U & D/N & D/FA \\
+verifier-arity & D/FA & U/U & D/FA & D/FA \\
+decoding-order & \textbf{M}/N & U/U & D/N & U/U \\
+prefix-vs-full-array & U/U & U/U & D/N & U/U \\
+overlapping-masks & U/U & U/U & D/N & U/U \\
+array-length-signal & U/U & U/U & D/N & U/U \\
+\midrule
+D (of 23 vuln.) & 17 & 0 & 23 & 12 \\
+M (of 23 vuln.) & 3 & 0 & 0 & 0 \\
+FA (of 23 legit.) & 16 & 0 & 13 & 3 \\
+U (of 46) & 6 & 46 & 0 & 31 \\
+\bottomrule
+\end{tabular}
+% src: reports/redteam/REPORT.md#synthetic-comparison (per-pattern table and totals); reports/redteam/metrics.json#synthetic_by_family
+% src: totals U: A 3+3, B 23+23, C 0+0, BindCheck 11+20 (reports/redteam/REPORT.md aggregate table)
+\end{table}
+
+\begin{figure}[t]
+\centering
+\input{figures/f3-scatter}
+\caption{Decided rate versus warning precision on the 46 synthetic cases
+(screening statistics against AI-authored labels; \tool{} at pre-freeze
+revision). Arm B decides no case and has no warnings.}
+\label{fig:scatter}
+\end{figure}
+
+\para{Single layers cannot decide binding.} The circuit-only arm decided no
+case: its tools answer questions about the circuit, and the flaw is
+elsewhere. Picus nevertheless returned ``properly constrained'' for all 46
+circuits, including all 23 vulnerable ones.%
+% src: reports/redteam/REPORT.md#dev-corpus-and-native-tool-outcomes (Picus exit 8 for all 46); reports/redteam/metrics.json#synthetic_native_invocation_exits
+\
+That answer is correct for Picus's question and irrelevant to the
+application's; a reader who takes it as assurance is misled.
+
+\para{Naive composition over-warns and can over-certify.} Arm C flagged all 23
+vulnerable cases, 11 of them cases on which \tool{} stayed \UNK{}, but also
+warned on 13 of 23 legitimate cases; arm A warned on 16 of 23 legitimate
+cases and certified 3 vulnerable cases---decoding order and both
+nullifier-scope families---as safe.%
+% src: reports/redteam/REPORT.md#what-the-comparison-supports (C 23/23; 11 BindCheck UNKNOWN; C FA 13/23); #synthetic-comparison (A FA 16/23; A M 3/23)
+\
+Its property harness runs against a mock verifier and provides policy
+screening only.
+
+\para{\tool{} trades coverage for restraint.} \tool{} decided 15 of 46 cases:
+12 vulnerable cases flagged, 3 legitimate cases flagged, 0 vulnerable cases
+certified. It left 20 of 23 legitimate cases \UNK{}, so its 3 false alarms are
+a warning rate, not a precision result.%
+% src: paper/zk/data/redteam-arms.json#arms.BindCheck (decided 15, warnings 15, warnings_on_vulnerable 12, unsafe_certifications 0); reports/redteam/REPORT.md (20/23 legit UNKNOWN)
+\
+All three false alarms are commitment-order, commitment-fields and
+verifier-arity legitimate cases, which we examine in the frozen rerun
+\MISSING{root cause of the 3 synthetic false alarms at the frozen revision}.
+The 11 vulnerable families on which \tool{} is \UNK{} are burn ownership,
+caller-identity policy, both guard-dominance families, both nullifier-scope
+families, replay-position canonicality, decoding order, prefix-versus-full
+arrays, overlapping masks and array-length signals.
+
+\subsection{Pair discrimination}\label{sec:res-pairs}
+
+The DEV corpus contains three historical vulnerable/fixed pairs. A tool
+discriminates a pair if it warns on the vulnerable revision and not on the
+fixed one. Table~\ref{tab:unsafe} shows that neither composed arm
+discriminates any pair: on zkDrops, both emit the identical set of finding codes
+on the vulnerable and the repaired revision. The frozen \tool{} reports
+\VIOL{} on the vulnerable zkDrops revision and \VWS{} on the fixed one; at the
+pre-freeze revision it certified both.%
+% src: paper/zk/data/pair-discrimination.json#pairs[0] (arm_A/arm_C identical_output true; bindcheck_t25 [VWS,VWS]; bindcheck_frozen [VIOLATION,VWS])
+\
+The zkDrops pair is exposed---it motivated the position-exact P3 rule---so
+this is a development result. Semaphore (the fix is a snarkjs version pin, and
+the tracked verifier is a symlink to an untracked build output) and Payy (a
+relational defect) remain \UNK{} for every tool.%
+% src: reports/groundtruth/REPORT.md#3 (exposure; Payy); #4 item 2 (Semaphore symlink, snarkjs pin)
+
+\begin{table}[t]
+\centering
+\caption{Unsafe certifications and pair discrimination. Pairs give
+vulnerable/fixed outcomes: V violation or warning, S certified, U \UNK{};
+$=$ marks identical output on both revisions. BC pre: \tool{} at \code{2741c40e}; BC frozen: at \code{8ea6d223}.}
+\label{tab:unsafe}
+\scriptsize
+\setlength{\tabcolsep}{1.5pt}
+\begin{tabular}{@{}lccccc@{}}
+\toprule
+& \textbf{Syn.\ M} & \textbf{zkDrops} & \textbf{Sema.} & \textbf{Payy} & \textbf{DEV unsafe} \\
+\midrule
+A & 3/23 & V/V $=$ & U/U & U/U & \MISSING{adj.} \\
+B & 0/23\textsuperscript{a} & U/U & U/U & U/U & --- \\
+C & 0/23 & V/V $=$ & U/U & U/U & \MISSING{adj.} \\
+BC pre & 0/23 & S/S & S/S & U/U & 3 rows (P3) \\
+BC frozen & \MISSING{rerun} & V/S & U/U & U/U & 2 rows (P4) \\
+\bottomrule
+\end{tabular}
+\\[2pt]{\scriptsize \textsuperscript{a}Integration verdict always \UNK{};
+natively, Picus reported ``properly constrained'' on 23/23 vulnerable circuits.}
+% src: col 1: reports/redteam/REPORT.md#synthetic-comparison (vulnerable misses: A 3, B 0, C 0, BindCheck 0)
+% src: cols 2-4: paper/zk/data/pair-discrimination.json; B: reports/redteam/metrics.json#dev.B (56/56 UNKNOWN)
+% src: col 5 pre-freeze: reports/groundtruth/REPORT.md#4 (DEV-H01 P3; DEV-H03/H04 P3); frozen: paper/zk/data/p4-unsafe-certifications.json (DEV-F09, DEV-F14)
+\end{table}
+
+\subsection{Development corpus at the frozen revision}\label{sec:res-dev}
+
+The frozen DEV run completed all 56 rows with 0 crashes; 46 rows yielded at
+least one analyzable triple, with 45 successful and 31 failed circuit
+builds.%
+% src: reports/soundness/REPORT-2.md#verification-and-exact-provenance (56 rows, 0 crashes, 46 with triples, 45 ok, 31 failed)
+\
+Table~\ref{tab:dev} gives per-pattern outcomes. Fail-closed has a visible
+price: P2 decided 0 of 27 applicable rows and P5 4 of 46. P3 decided 13 of
+23. Ten rows have \UNK{} applicability for every pattern.%
+% src: paper/zk/data/frozen-dev-stats.json#applicability (P1 5/17, P2 0/27, P3 13/23, P4 17/46, P5 4/46; UNKNOWN applicability 10 each)
+\
+The 17 P4 certifications include the 2 rows affected by mechanism (vi), and
+are not reportable until the constant is fixed.%
+% src: paper/zk/data/p4-unsafe-certifications.json
+
+\begin{table}[t]
+\centering
+\caption{Frozen \tool{} on the 56 DEV rows. Decided counts
+non-\UNK{} outcomes among applicable rows. Development-tuned; not a
+prevalence estimate.}
+\label{tab:dev}
+\footnotesize
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+& \VIOL{} & \textsf{VERIFIED} & \UNK{} & \textbf{Decided/appl.} \\
+\midrule
+P1 & 5 & 0 & 51 & 5/17 \\
+P2 & 0 & 0 & 56 & 0/27 \\
+P3 & 6 & 7 & 43 & 13/23 \\
+P4 & 0 & 17\textsuperscript{b} & 39 & 17/46 \\
+P5 & 0 & 4 & 52 & 4/46 \\
+\bottomrule
+\end{tabular}
+\\[2pt]{\scriptsize \textsuperscript{b}Includes 2 rows certified on default-key verifiers (\S\ref{sec:design-failures}).}
+% src: reports/soundness/REPORT-2.md#full-dev-ledger (V/S/U counts); paper/zk/data/frozen-dev-stats.json#applicability (decided/applicable)
+\end{table}
+
+\para{Warnings are not findings.} Before the soundness revision, 16 warning
+groups (56 instances) were retained from development; the authors' AI
+assistant labelled 14 as matching their stated property. Only 4 of the 16
+involve a real pairing verifier; 12 match only stand-in, placeholder or
+fail-closed verifiers, where no exploit is possible or none is needed.%
+% src: reports/groundtruth/CLAIMS.md#A12, #A13; reports/groundtruth/REPORT.md#8 (REAL 3 + MIXED 1 = 4; only non-REAL 12)
+\
+This is not a precision estimate; blind human adjudication is pending
+(\S\ref{sec:method}).
+
+\subsection{Q2: Does the circuit change a verdict?}\label{sec:res-ablation}
+
+All 11 frozen \VIOL{} pattern-rows carry one of four consumer- or
+verifier-level reason codes (Appendix~\ref{app:reasons}); by construction,
+P1 and P3 violations are decided from the consumer and verifier.%
+% src: paper/zk/data/frozen-dev-stats.json#violation_rows (11 rows), #violation_reason_codes; RELATED-WORK.md#51
+\
+The circuit acts as \emph{evidence gating}: P1--P3 cannot certify without a
+matched circuit artifact, and P5 compares against the compiled public
+signals. Table~\ref{tab:ablation} is the preregistered ablation that
+quantifies this on DEV and EVAL.
+
+\begin{table}[t]
+\centering
+\caption{Circuit ablation: frozen \tool{} with and without circuit inputs.}
+\label{tab:ablation}
+\footnotesize
+\setlength{\tabcolsep}{2pt}
+\begin{tabular}{@{}lccc@{}}
+\toprule
+& \textbf{Full} & \textbf{No circuit} & \textbf{Changed} \\
+\midrule
+DEV & Table~\ref{tab:dev} & \MISSING{DEV} & \MISSING{diff} \\
+EVAL & \MISSING{EVAL} & \MISSING{EVAL} & \MISSING{diff} \\
+\bottomrule
+\end{tabular}
+\\[2pt]{\scriptsize Fill: \MISSING{circuit-ablation run at 8ea6d223, lane ablation}.}
+\end{table}
+
+\subsection{Q3: Held-out sample and gate pairs}\label{sec:res-heldout}
+
+Table~\ref{tab:heldout} is the held-out funnel. Every stage is reported, and
+every failure at any stage is \UNK{} rather than an exclusion.
+\MISSING{held-out run on 278 families; per-stratum decided rates with
+family-resampled 95\% intervals; lane EVAL}
+\MISSING{gate-pair recall, exposed (5) and unexposed (11) separately; lane EVAL after human review}%
+% src: eval/README.md (summary: per-stratum counts, family-resampled 95% intervals); reports/groundtruth/REPORT.md#5 (16 pairs, 5 exposed)
+
+\begin{table}[t]
+\centering
+\caption{Held-out funnel and per-pattern results.}
+\label{tab:heldout}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}lr@{}}
+\toprule
+\textbf{Stage} & \textbf{Count} \\
+\midrule
+EVAL repository revisions in inventory & 4,968 \\
+Eligible EVAL families & 1,384 \\
+Sampled families (5 strata, quota 60) & 278 \\
+Acquired at pinned commit & \MISSING{acq.} \\
+With $\geq 1$ circuit build & \MISSING{builds} \\
+With $\geq 1$ analyzable triple & \MISSING{triples} \\
+\midrule
+P1 / P2 / P3 / P4 / P5: V, S, U & \MISSING{verdicts} \\
+Warnings adjudicated true / false / unclear & \MISSING{adjud.} \\
+Validated to E4 & \MISSING{E4} \\
+\bottomrule
+\end{tabular}
+% src: reports/groundtruth/CLAIMS.md#A20 (4,968; 1,384); reports/groundtruth/REPORT.md#7 (278)
+\end{table}
+
+\subsection{Q4: Deployed-verifier census}\label{sec:res-census}
+
+Table~\ref{tab:census} summarizes the census. 43 unique deployments on four
+of the seven queried chains (37 distinct runtime hashes) carry the
+$\gamma=\delta=G_2$ default-key signature.%
+% src: paper/zk/data/census-by-chain.json#default_key_unique_by_chain; dataset/onchain-census-summary.json#default_g2_gamma_delta_signature_runtime_hashes (37)
+\
+All 43 hold zero native balance, and none is linked to a consumer, so we
+claim no exposure.%
+% src: dataset/onchain-census-summary.json#default_key_verifier_zero_native_balance (43), #source_confirmed_consumer_links (0)
+\
+A public scanner reported the same class against another project's
+verifiers seven months before our snapshot~\cite{zeto-186}; we credit it.%
+% src: reports/groundtruth/CLAIMS.md#A28 (Zeto #186 opened 2026-04-05; snapshot 2026-11-03)
+\
+Two weaker byte-level heuristics flag 228 deployments without a scalar-field
+constant and 158 with repeated constant pairs; neither is source-confirmed.%
+% src: dataset/onchain-census-summary.json#missing_scalar_guard_heuristic_deployments, #duplicate_ic_heuristic_deployments, #limitations
+\
+Consumer linkage and reachability for flagged verifiers are
+\MISSING{consumer linkage for the 43 default-key verifiers; lane census}.
+
+\begin{table}[t]
+\centering
+\caption{Passive census of Sourcify exact-match Groth16 verifiers
+(snapshot 2026-11-03). No transaction was sent.}
+\label{tab:census}
+\footnotesize
+\begin{tabular}{@{}lrr@{}}
+\toprule
+\textbf{Chain} & \textbf{Unique deployments} & \textbf{$\gamma=\delta=G_2$} \\
+\midrule
+Ethereum & 223 & 13 \\
+Optimism & 147 & 7 \\
+Polygon & 117 & 1 \\
+Base & 268 & 22 \\
+Arbitrum One & 212 & 0 \\
+Linea & 60 & 0 \\
+zkSync Era & 0 & 0 \\
+\midrule
+Total & 1,027 & 43 \\
+\bottomrule
+\end{tabular}
+% src: paper/zk/data/census-by-chain.json (unique_by_chain, default_key_unique_by_chain; zkSync Era 324 absent = 0 rows); dataset/onchain-census-summary.json#chains
+% src: reports/groundtruth/CLAIMS.md#A26 (1,027 unique; 43)
+\end{table}
+
+\subsection{Cost}\label{sec:res-cost}
+
+Fig.~\ref{fig:runtime} shows per-row analyzer time on DEV at the frozen
+revision. The median row took 0.431605\,s and the slowest, DEV-F09,
+53.799863\,s; all 56 rows took 235.450396\,s in total.%
+% src: paper/zk/data/frozen-dev-stats.json#runtime_seconds (median, max, max_row, sum); paper/zk/data/runtime-frozen-dev.dat
+\
+These times exclude repository acquisition and validation. Held-out times are
+\MISSING{EVAL runtime distribution; lane EVAL}.
+
+\begin{figure}[t]
+\centering
+\input{figures/f4-runtime}
+\caption{Per-row analyzer time on the 56 DEV rows (frozen revision), sorted;
+log scale.}
+\label{fig:runtime}
+\end{figure}

@@ -1,0 +1,21 @@
+{
+  "source": "dataset/onchain-census.csv",
+  "flag_column": "default_g2_twice_gamma_delta_signature",
+  "rows": 1049,
+  "unique": 1027,
+  "unique_by_chain": {
+    "1": 223,
+    "10": 147,
+    "137": 117,
+    "42161": 212,
+    "59144": 60,
+    "8453": 268
+  },
+  "default_key_unique_by_chain": {
+    "1": 13,
+    "10": 7,
+    "137": 1,
+    "8453": 22
+  },
+  "default_key_unique_total": 43
+}

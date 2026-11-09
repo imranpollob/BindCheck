@@ -1,0 +1,41 @@
+% Packages that do not override compsoc formatting.
+\usepackage[T1]{fontenc}
+\usepackage{cite}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,fit,shapes.geometric,calc}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.17}
+\usepackage{listings}
+\usepackage{url}
+\usepackage[hidelinks]{hyperref}
+
+% ---------------------------------------------------------------------------
+% Placeholder for results that do not exist yet. Every use is listed, with the
+% lane that fills it, in STATUS.md. Never replace one with an estimate.
+\newcommand{\MISSING}[1]{\textcolor{red}{\textbf{[MISSING: #1]}}}
+% Label for judgements produced by an AI assistant (not human annotation).
+\newcommand{\aiop}{\textsuperscript{\textsf{AI}}}
+% ---------------------------------------------------------------------------
+
+\newcommand{\tool}{\textsc{BindCheck}}
+\newcommand{\VIOL}{\mbox{\textsf{VIOLATION}}}
+\newcommand{\VWS}{\textsf{VERIFIED\_\allowbreak WITHIN\_\allowbreak SCOPE}}
+\newcommand{\UNK}{\mbox{\textsf{UNKNOWN}}}
+\newcommand{\reason}[1]{{\sffamily\def\_{\textunderscore\allowbreak}#1}}
+\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\Pone}{P1}
+\newcommand{\para}[1]{\smallskip\noindent\textbf{#1}}
+
+\lstdefinestyle{sol}{
+  basicstyle=\ttfamily\scriptsize,
+  keywordstyle=\bfseries,
+  morekeywords={function,require,external,calldata,uint256,bool,if,emit,mapping,public,memory,returns,view,contract,signal,input,output,template,component,var,assert},
+  numbers=left, numberstyle=\tiny, numbersep=4pt, xleftmargin=10pt,
+  columns=fullflexible, breaklines=true, frame=tb, aboveskip=4pt, belowskip=2pt,
+  escapechar=@
+}
