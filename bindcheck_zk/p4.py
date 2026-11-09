@@ -260,8 +260,8 @@ def analyze_source(text: str, relative_path: str) -> dict[str, Any]:
         )
     elif p2 and not parsed:
         finding = result(
-            "P4", "VERIFIED_WITHIN_SCOPE", "PAIRING_LIBRARY_GENERATOR_EXCLUDED",
-            "Default G2 constants occur only in the recognized Pairing.P2 generator helper; no gamma/delta key assignment was parsed.",
+            "P4", "UNKNOWN", "VERIFICATION_KEY_PARSE_INCOMPLETE",
+            "Only a Pairing.P2 generator helper was recovered; no gamma/delta verification key was parsed.",
             where=where, facts=facts,
         )
     elif fail_closed:
@@ -281,7 +281,7 @@ def analyze_source(text: str, relative_path: str) -> dict[str, Any]:
             "P4", "UNKNOWN", "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND",
             "No supported canonical public-input field guard was recovered.", where=where, facts=facts,
         )
-    elif parsed and (not verify or guard):
+    elif parsed and verify and guard:
         finding = result(
             "P4", "VERIFIED_WITHIN_SCOPE", "VERIFICATION_KEY_CHECKS_PASS",
             "Parsed gamma/delta are distinct from the default-equal-key pattern and no duplicate IC point was found.",
@@ -370,13 +370,13 @@ def analyze_runtime(hex_value: str, relative_path: str, *, source_has_p2: bool =
         )
     elif source_has_p2 and len(groups) == 1:
         finding = result(
-            "P4", "VERIFIED_WITHIN_SCOPE", "PAIRING_LIBRARY_GENERATOR_EXCLUDED",
-            "The only complete default-G2 runtime group corresponds to the source Pairing.P2 generator helper.",
+            "P4", "UNKNOWN", "VERIFICATION_KEY_PARSE_INCOMPLETE",
+            "The only complete default-G2 runtime group may be the Pairing.P2 generator helper, but no key correspondence was established.",
             where=where, facts=facts,
         )
     elif not groups:
         finding = result(
-            "P4", "VERIFIED_WITHIN_SCOPE", "RUNTIME_DEFAULT_G2_SIGNATURE_ABSENT",
+            "P4", "UNKNOWN", "RUNTIME_DEFAULT_G2_SIGNATURE_ABSENT",
             "No complete default-G2 PUSH32 group was recovered from runtime bytecode.",
             where=where, facts=facts,
             limitations=["Absence of this signature does not establish verifier correctness."],

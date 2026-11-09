@@ -246,10 +246,17 @@ def _supported_verification_call(call: Call) -> bool:
 
 def discover_consumers(sources: list[Source]) -> list[Consumer]:
     output: list[Consumer] = []
-    repository_contracts = {
-        name: source.text
+    declarations = [
+        (name, source.text)
         for source in sources
-        for name in re.findall(r"\b(?:abstract\s+)?contract\s+([A-Za-z_]\w*)\b", source.text)
+        for name in re.findall(r"\b(?:abstract\s+)?contract\s+([A-Za-z_]\w*)\b", mask_comments_and_strings(source.text))
+    ]
+    declaration_counts: dict[str, int] = defaultdict(int)
+    for name, _ in declarations:
+        declaration_counts[name] += 1
+    repository_contracts = {
+        name: source_text for name, source_text in declarations
+        if declaration_counts[name] == 1
     }
     for source in sources:
         parsed_functions = list(functions(source.text))
@@ -1069,7 +1076,7 @@ def analyze_p5(circuit: Circuit | None, verifier: Verifier | None, consumer: Con
     where = location(consumer.source.relative_path, consumer.function.line)
     if ambiguous:
         return result("P5", "UNKNOWN", "VERIFIER_MATCH_AMBIGUOUS", "Multiple plausible verifier artifacts expose incompatible public-input shapes.", where=where)
-    if verifier is None:
+    if verifier is None or verifier.interface_only:
         return result("P5", "UNKNOWN", "VERIFIER_ARTIFACT_MISSING", "Verifier arity/order cannot be checked without an implementation artifact.", where=where)
     if circuit is None:
         return result("P5", "UNKNOWN", "CIRCUIT_ARTIFACT_MISSING", "Circuit public order cannot be checked without a matched circuit artifact.", where=where)
