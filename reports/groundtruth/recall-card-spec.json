@@ -1,0 +1,1056 @@
+{
+ "schema": "bindcheck-groundtruth.recall-card-spec/v1",
+ "note": "Hand-authored by the L4 lane. 'files' selects which files to show; proposals are filled in after source inspection and never from analyzer output.",
+ "cases": [
+  {
+   "case_id": "circom/privacy-scaling-explorations/maci/hashcloak_data_are_not_fully_verified_during_state_update",
+   "files": [
+    "circuits/circom/tallyVotes.circom",
+    "circuits/circom/processMessages.circom"
+   ],
+   "source": [
+    {
+     "type": "zkbugs",
+     "file": "results/raw/groundtruth/work/zkbugs/hashcloak_data_are_not_fully_verified_during_state_update/README.md"
+    },
+    {
+     "type": "lines",
+     "file": "results/raw/groundtruth/sources/hashcloak-maci.txt",
+     "ranges": [
+      [
+       94,
+       108
+      ],
+      [
+       110,
+       120
+      ]
+     ],
+     "label": "HashCloak MACI audit PDF (via zkbugs pinned copy)"
+    }
+   ],
+   "anchors": {
+    "circuits/circom/tallyVotes.circom": [
+     255,
+     273
+    ],
+    "circuits/circom/processMessages.circom": [
+     30,
+     36
+    ]
+   },
+   "boundary_value": "yes - currentTallyCommitment is one of the values hashed into the single public inputHash (tallyVotes.circom comment at vulnerable lines 35-40)",
+   "consumer_consequence": "yes - Poll/Tally contract accepts the coordinator's tally commitment; attacker is the privileged coordinator",
+   "fix_locus": "circuit-internal (tallyVotes ResultCommitmentVerifier); the contract-side option (initialise in Poll.sol) was explicitly not taken",
+   "p1p5_mappable": "no - the defect is a missing in-circuit constraint on a hashed public value; no P1-P5 predicate expresses it",
+   "research_scope": "in scope under contract s5.3 (underconstrained circuit with consumer consequence); attacker is a privileged coordinator",
+   "proposal": "DEMOTE",
+   "proposal_rule": "C1: (4)=no",
+   "proposed_expected_pattern": "NONE",
+   "proposed_location_regex": "^circuits/circom/tallyVotes\\.circom(:\\d+)?$",
+   "location_basis": "zkbugs Location: circuits/circom/tallyVotes.circom ResultCommitmentVerifier lines 258-273",
+   "concerns": [
+    "Case identity is ambiguous: zkbugs id/title 'Data are not fully verified during state update' and the ledger fixed commit 6df6a40 ('fix(processmessages.circom): data are not fully verified during state update', touches processMessages.circom + MaciState.ts only) describe a processMessages issue, while the zkbugs description, Location and the HashCloak PDF finding ('Initial Conditions Are Not Properly Enforced', tallyVotes.circom) describe the first-batch tally commitment.",
+    "The hz/isFirstBatch logic described by the source is still present at the ledger fixed commit (fixed tallyVotes.circom lines 263-273), so the pinned pair does not isolate the described defect.",
+    "HashCloak status: 'partially resolved' by e61c684e, 4bc217db, 4892ada0 (not the ledger fixed commit); Poll.sol initialisation deliberately not done.",
+    "Repository is a DEV repository (DEV-F03, privacy-scaling-explorations/maci) - EXPOSED."
+   ],
+   "relational_class": "RELATIONAL-CANDIDATE",
+   "relational_basis": "circuit skips the first-batch check on a value whose correct initial value lives in contract state; HashCloak offers a fix on either layer"
+  },
+  {
+   "case_id": "circom/selfxyz/self/zksecurity_an_attacker_can_craft_a_fake_non_inclusion_proof_for_a_given_key_due_to_an_aliasing_bug_in_the_smt_verifier",
+   "files": [
+    "circuits/circuits/utils/crypto/merkle-trees/smt.circom"
+   ],
+   "source": [
+    {
+     "type": "zkbugs",
+     "file": "results/raw/groundtruth/work/zkbugs/zksecurity_an_attacker_can_craft_a_fake_non_inclusion_proof_for_a_given_key_due_to_an_aliasing_bug_in_the_smt_verifier/README.md"
+    }
+   ],
+   "anchors": {
+    "circuits/circuits/utils/crypto/merkle-trees/smt.circom": [
+     22,
+     32
+    ]
+   },
+   "boundary_value": "no - virtualKey is an internal signal of SMTVerify (OFAC non-inclusion); it is not a public value read by a contract",
+   "consumer_consequence": "indirect - a forged non-inclusion proof lets a sanctioned identity register/disclose; the contract only sees the resulting proof",
+   "fix_locus": "circuit-internal (Num2Bits(254) -> Num2Bits_strict)",
+   "p1p5_mappable": "no",
+   "research_scope": "borderline under s5.3: consequence is a consumer-accepted proof, but no proof-to-execution interpretation mismatch",
+   "proposal": "DEMOTE",
+   "proposal_rule": "C1: (4)=no and fix circuit-internal with (1)=no",
+   "proposed_expected_pattern": "NONE",
+   "proposed_location_regex": "^circuits/circuits/utils/crypto/merkle-trees/smt\\.circom(:\\d+)?$",
+   "location_basis": "zkbugs Location smt.circom SMTVerify lines 18-67",
+   "concerns": [
+    "selfxyz/self is also sampled EVAL family rank 259 (v2-family:b856f5604c150e532d44) - SAMPLE-OVERLAP between the recall gate and the held-out prevalence sample."
+   ],
+   "relational_class": "CIRCUIT-ONLY",
+   "relational_basis": "defect and fix inside SMTVerify"
+  },
+  {
+   "case_id": "circom/selfxyz/self/zksecurity_second_pre_image_attacks_on_packbytesandposeidon_may_be_used_to_register_arbitrary_passports_and_dsc_certificates",
+   "files": [
+    "circuits/circuits/utils/passport/customHashers.circom"
+   ],
+   "source": [
+    {
+     "type": "zkbugs",
+     "file": "results/raw/groundtruth/work/zkbugs/zksecurity_second_pre_image_attacks_on_packbytesandposeidon_may_be_used_to_register_arbitrary_passports_and_dsc_certificates/README.md"
+    }
+   ],
+   "anchors": {
+    "circuits/circuits/utils/passport/customHashers.circom": [
+     50,
+     62
+    ]
+   },
+   "boundary_value": "no - the packed bytes are hashed inside the circuit; the hash output, not the byte array, is public",
+   "consumer_consequence": "indirect - registration of arbitrary passports/DSC certificates via a valid proof",
+   "fix_locus": "circuit-internal (byte range checks inside PackBytesAndPoseidon)",
+   "p1p5_mappable": "no",
+   "research_scope": "borderline under s5.3",
+   "proposal": "DEMOTE",
+   "proposal_rule": "C1: (4)=no and fix circuit-internal with (1)=no",
+   "proposed_expected_pattern": "NONE",
+   "proposed_location_regex": "^circuits/circuits/utils/passport/customHashers\\.circom(:\\d+)?$",
+   "location_basis": "zkbugs Location customHashers.circom PackBytesAndPoseidon lines 54-60",
+   "concerns": [
+    "Fixed commit MISSING (zkbugs 'Fix Commit' is empty; ledger stores the literal '* DSL: Circom').",
+    "SAMPLE-OVERLAP (selfxyz/self, EVAL rank 259)."
+   ],
+   "relational_class": "CIRCUIT-ONLY",
+   "relational_basis": "defect and fix inside PackBytesAndPoseidon"
+  },
+  {
+   "case_id": "circom/selfxyz/self/zksecurity_forbidden_country_check_bypass_via_packed_byte_overflow",
+   "files": [
+    "circuits/circuits/utils/aadhaar/disclose/country_not_in_list.circom"
+   ],
+   "candidate_fixed_commit": "60501d17ee9b339e36c3a2a0d63f24bda65110a8",
+   "source": [
+    {
+     "type": "zkbugs",
+     "file": "results/raw/groundtruth/work/zkbugs/zksecurity_forbidden_country_check_bypass_via_packed_byte_overflow/README.md"
+    }
+   ],
+   "anchors": {
+    "circuits/circuits/utils/aadhaar/disclose/country_not_in_list.circom": [
+     10,
+     20
+    ]
+   },
+   "boundary_value": "partly - the packed forbidden-country list is a public output that a verifier/consumer compares against its configured list",
+   "consumer_consequence": "yes in principle - a disclosure proof can claim a forbidden-country check that a consumer accepts",
+   "fix_locus": "circuit-internal (AssertBytes on forbidden_countries_list)",
+   "p1p5_mappable": "no",
+   "research_scope": "in scope under s5.3 if a consumer compares the packed list; consumer behaviour not inspected here",
+   "proposal": "DEMOTE",
+   "proposal_rule": "C1: (4)=no",
+   "proposed_expected_pattern": "NONE",
+   "proposed_location_regex": "^circuits/circuits/utils/aadhaar/disclose/country_not_in_list\\.circom(:\\d+)?$",
+   "location_basis": "zkbugs Location country_not_in_list.circom CountryNotInList lines 12-29",
+   "candidate_fixed_note": "Ledger marks the fixed commit 'invalid-or-non-git-reference' because the field holds a Python list string. Both listed SHAs are valid commits; 60501d17 ('fix: range check for country not in list') changes exactly this file (+3 lines AssertBytes). Shown below as a CANDIDATE, not a ledger pin.",
+   "concerns": [
+    "Ledger fixed_commit is a list literal; candidate 60501d17ee9b339e36c3a2a0d63f24bda65110a8 resolves (human must accept before it enters any gate).",
+    "SAMPLE-OVERLAP (selfxyz/self, EVAL rank 259)."
+   ],
+   "relational_class": "CIRCUIT-ONLY",
+   "relational_basis": "defect and fix inside CountryNotInList"
+  },
+  {
+   "case_id": "circom/selfxyz/self/zksecurity_exclusion_check_of_forbidden_countries_is_unsound_and_incomplete_due_to_incorrect_indexing",
+   "files": [
+    "circuits/circuits/utils/passport/disclose/proveCountryIsNotInList.circom"
+   ],
+   "source": [
+    {
+     "type": "zkbugs",
+     "file": "results/raw/groundtruth/work/zkbugs/zksecurity_exclusion_check_of_forbidden_countries_is_unsound_and_incomplete_due_to_incorrect_indexing/README.md"
+    }
+   ],
+   "anchors": {
+    "circuits/circuits/utils/passport/disclose/proveCountryIsNotInList.circom": [
+     8,
+     22
+    ]
+   },
+   "boundary_value": "partly - as row 18 (forbidden-country list)",
+   "consumer_consequence": "yes in principle; impact is 'Soundness and Completeness'",
+   "fix_locus": "circuit-internal (index i -> i*3)",
+   "p1p5_mappable": "no",
+   "research_scope": "in scope under s5.3 only if a consumer relies on the exclusion result",
+   "proposal": "DEMOTE",
+   "proposal_rule": "C1: (4)=no",
+   "proposed_expected_pattern": "NONE",
+   "proposed_location_regex": "^circuits/circuits/utils/passport/disclose/proveCountryIsNotInList\\.circom(:\\d+)?$",
+   "location_basis": "zkbugs Location proveCountryIsNotInList.circom lines 12-18",
+   "concerns": [
+    "Fixed commit MISSING (zkbugs 'Fix Commit' empty).",
+    "SAMPLE-OVERLAP (selfxyz/self, EVAL rank 259)."
+   ],
+   "relational_class": "CIRCUIT-ONLY",
+   "relational_basis": "defect and fix inside ProveCountryIsNotInList"
+  },
+  {
+   "case_id": "circom/tangle-network/protocol-solidity/veridise_incorrect_initialization_in_membership_circuits",
+   "files": [
+    "circuits/set/membership.circom"
+   ],
+   "source": [
+    {
+     "type": "zkbugs",
+     "file": "results/raw/groundtruth/work/zkbugs/veridise_incorrect_initialization_in_membership_circuits/README.md"
+    }
+   ],
+   "anchors": {
+    "circuits/set/membership.circom": [
+     14,
+     26
+    ]
+   },
+   "boundary_value": "partly - the set (Merkle roots) is a public input supplied by the anchor contract; element is the computed root",
+   "consumer_consequence": "yes in principle (membership check trivially satisfied when element = 0)",
+   "fix_locus": "circuit-internal (product[0] <== 1)",
+   "p1p5_mappable": "no",
+   "research_scope": "borderline: exploitation needs a computed root equal to 0",
+   "proposal": "DEMOTE",
+   "proposal_rule": "C1: (4)=no",
+   "proposed_expected_pattern": "NONE",
+   "proposed_location_regex": "^circuits/set/membership\\.circom(:\\d+)?$",
+   "location_basis": "zkbugs Location membership.circom SetMembership line 20",
+   "concerns": [
+    "Ledger fixed commit eeb4fc7a is a bulk 'Veridise audit fixes (#350)' commit; other fixes ship in the same revision.",
+    "Repository is an EVAL in-scope family (v2-family:6edc8a55e55ee119f15c) but not in the 278 sample."
+   ],
+   "relational_class": "CIRCUIT-ONLY",
+   "relational_basis": "defect and fix inside SetMembership"
+  },
+  {
+   "case_id": "semaphore-nullifier-field-alias",
+   "files": [
+    "semaphorejs/contracts/Semaphore.sol"
+   ],
+   "source": [
+    {
+     "type": "json",
+     "file": "results/raw/groundtruth/sources/semaphore-issue-16.json",
+     "field": "body",
+     "chars": 700,
+     "url_field": "html_url"
+    }
+   ],
+   "anchors": {
+    "semaphorejs/contracts/Semaphore.sol": [
+     70,
+     98
+    ]
+   },
+   "boundary_value": "yes - nullifier hash is public input[1] and the replay-mapping key",
+   "consumer_consequence": "yes - double signal/spend",
+   "fix_locus": "build dependency: snarkjs pinned to f8ba7cbf whose generated verifier checks input < r; tracked Solidity unchanged at the replay check",
+   "p1p5_mappable": "yes - P3 FIELD_ALIAS_REPLAY_KEY",
+   "research_scope": "in scope",
+   "proposal": "KEEP (v1 strict; not subject to C1)",
+   "proposed_expected_pattern": "P3",
+   "proposed_location_regex": "^semaphorejs/contracts/Semaphore\\.sol(:\\d+)?$",
+   "location_basis": "broadcastSignal at vulnerable Semaphore.sol:70; replay read :83, write :97",
+   "concerns": [
+    "The fix is not visible in tracked Solidity: semaphorejs/contracts/verifier.sol is a symlink to ../build/verifier.sol (untracked build output). Vulnerable and fixed revisions are indistinguishable without generating the verifier with each revision's pinned snarkjs.",
+    "EXPOSED: DEV-H03/DEV-H04 and the lane brief. T25 retained output already shows P3 VERIFIED_WITHIN_SCOPE on both revisions with VERIFIER_ARTIFACT_MISSING (results/raw/T25/after-20261106T155532Z-23564/DEV-H03--result.json)."
+   ],
+   "relational_class": "VERIFIER-CONSUMER",
+   "relational_basis": "consumer raw-integer replay key vs verifier field reduction; no circuit fact needed"
+  },
+  {
+   "case_id": "zkdrops-nullifier-field-alias",
+   "files": [
+    "contracts/PrivateAirdrop.sol"
+   ],
+   "source": [
+    {
+     "type": "json",
+     "file": "results/raw/groundtruth/sources/zkdrops-pr-2.json",
+     "field": "body",
+     "chars": 500,
+     "url_field": "html_url"
+    }
+   ],
+   "anchors": {
+    "contracts/PrivateAirdrop.sol": [
+     35,
+     48
+    ]
+   },
+   "boundary_value": "yes - nullifierHash is public signal [1] and the replay key",
+   "consumer_consequence": "yes - repeated airdrop claim (locally reproduced E4: results/raw/feasibility-v2/zkdrops-alias-e4-20261103T183918Z-54527)",
+   "fix_locus": "consumer (require(uint256(nullifierHash) < SNARK_FIELD))",
+   "p1p5_mappable": "yes - P3 FIELD_ALIAS_REPLAY_KEY",
+   "research_scope": "in scope",
+   "proposal": "KEEP (v1 strict; not subject to C1)",
+   "proposed_expected_pattern": "P3",
+   "proposed_location_regex": "^contracts/PrivateAirdrop\\.sol(:\\d+)?$",
+   "location_basis": "collectAirdrop at vulnerable PrivateAirdrop.sol:36",
+   "concerns": [
+    "EXPOSED: DEV-H01/DEV-H02, feasibility-v2 E4, lane brief.",
+    "Auditor observation (not a decision): T25 retained output gives P3 VERIFIED_WITHIN_SCOPE on the vulnerable revision because p4.canonical_guard's checkField regex spans 19,084 characters of semicolon-free Yul (MerkVerifier.sol lines 183-743) and matches an unrelated 'calculatePl(pMem, pubSignals'. See reports/groundtruth/REPORT.md section 'Verdict defects observed in retained DEV output'."
+   ],
+   "relational_class": "VERIFIER-CONSUMER",
+   "relational_basis": "consumer raw-integer replay key vs verifier field reduction; no circuit fact needed"
+  },
+  {
+   "case_id": "nightfall-nullifier-field-alias",
+   "files": [],
+   "source": [
+    {
+     "type": "missing",
+     "reason": "https://github.com/EYBlockchain/nightfall/issues/95 returns HTTP 404 (repository not found via API or web on 2026-11-08); Wayback availability API returns no snapshot."
+    }
+   ],
+   "anchors": {},
+   "boundary_value": "unclear (source unavailable)",
+   "consumer_consequence": "unclear",
+   "fix_locus": "MISSING",
+   "p1p5_mappable": "unclear (ledger pattern says P3-like field alias)",
+   "research_scope": "unclear",
+   "proposal": "DROP-CANDIDATE (source and pins MISSING)",
+   "proposed_expected_pattern": "P3",
+   "proposed_location_regex": "MISSING",
+   "location_basis": "no pinned revision",
+   "concerns": [
+    "Primary source unreachable; vulnerable/fixed pins not-publicly-pinned; repository family is EVAL 'unavailable' in source-corpus-v2."
+   ],
+   "relational_class": "VERIFIER-CONSUMER",
+   "relational_basis": "as ledger pattern; source MISSING"
+  },
+  {
+   "case_id": "payy-message-tail",
+   "files": [
+    "noir/agg_agg/src/main.nr",
+    "eth/contracts/rollup3/RollupV1.sol"
+   ],
+   "source": [
+    {
+     "type": "json",
+     "file": "results/raw/groundtruth/sources/payy-ghsa.json",
+     "field": "description",
+     "chars": 1100,
+     "url_field": "html_url"
+    }
+   ],
+   "anchors": {
+    "noir/agg_agg/src/main.nr": [
+     95,
+     115
+    ],
+    "eth/contracts/rollup3/RollupV1.sol": [
+     400,
+     415
+    ]
+   },
+   "boundary_value": "yes - messages[1000] is a public output parsed by RollupV1.verifyRollup",
+   "consumer_consequence": "yes - forged burn transfers USDC (locally reproduced E4 in T15-T19 with locally controlled prover identity)",
+   "fix_locus": "circuit (assert_message_tail_zero in agg_agg); consumer RollupV1.sol is byte-identical across the pair",
+   "p1p5_mappable": "no as currently defined - burn values ARE direct public inputs, so P1's 'direct public input' rule is satisfied; the defect is that the circuit leaves the tail unconstrained (prefix/extent relation, historical bindcheck_d1 R-EXTENT)",
+   "research_scope": "in scope (contract s5.4 names agg_agg message tail in scope)",
+   "proposal": "KEEP (v1 strict) but DSL label must be corrected",
+   "proposed_expected_pattern": "NONE (closest P1; see mappability)",
+   "proposed_location_regex": "^noir/agg_agg/src/main\\.nr(:\\d+)?$|^eth/contracts/rollup3/RollupV1\\.sol(:\\d+)?$",
+   "location_basis": "defect: agg_agg/src/main.nr (no tail assertion before line 107 at vulnerable); consumer: RollupV1.sol verifyRollup:314, kind==3 burn at :409",
+   "concerns": [
+    "DSL label 'Circom/Solidity or generated Groth16 verifier' is wrong: the pinned tree has 25 .nr files, 0 .circom files, noir/agg_agg/Nargo.toml and an UltraHonk verifier (eth/contracts/noir/agg_agg_HonkVerifier.bin, eth/noir/agg_agg.sol). Proposed label: 'Noir/Solidity (Barretenberg UltraHonk verifier)'.",
+    "Ledger fixed commit dcd5d96 is a 105-file 'Sync ...' commit; docs/payy-case-study.md documents that it adds assert_message_tail_zero.",
+    "EXPOSED: DEV-H05/DEV-H06, T15-T19, lane brief. Research contract s9: 'Payy and authored fixtures are development cases, not held-out evidence.'",
+    "Attacker capability: registered (allowlisted) prover on the current deployment (GHSA text)."
+   ],
+   "relational_class": "RELATIONAL",
+   "relational_basis": "producer constrains the active prefix; consumer parses the whole 1000-word array (prefix vs extent)"
+  },
+  {
+   "case_id": "foomcash-default-g2-key",
+   "files": [],
+   "source": [
+    {
+     "type": "substr",
+     "file": "results/raw/groundtruth/sources/foomcash.txt",
+     "find": "FoomCash's FoomLottery",
+     "chars": 700,
+     "url": "https://crypto.training/hacks/2026-02-foomcash_groth16/"
+    }
+   ],
+   "anchors": {},
+   "boundary_value": "n/a (verifier key)",
+   "consumer_consequence": "yes - pool drained (reported ~$1.3M)",
+   "fix_locus": "MISSING (no repository/pins)",
+   "p1p5_mappable": "yes - P4 (gamma == delta)",
+   "research_scope": "contract s5.4 lists 'toxic-waste compromise or trusted-setup failures' as initially OUT of scope; P4 checks it anyway",
+   "proposal": "NEEDS-SCOPE-DECISION",
+   "proposed_expected_pattern": "P4",
+   "proposed_location_regex": "MISSING",
+   "location_basis": "no repository in ledger",
+   "concerns": [
+    "repository empty and both pins not-publicly-pinned; deployed bytecode exists but the lane brief forbids interacting with deployed contracts beyond read-only public data, and no source pin is recorded."
+   ],
+   "relational_class": "VERIFIER-ONLY",
+   "relational_basis": "verification-key constants"
+  },
+  {
+   "case_id": "veilcash-default-g2-key",
+   "files": [],
+   "source": [
+    {
+     "type": "substr",
+     "file": "results/raw/groundtruth/sources/veilcash.txt",
+     "find": "Veil Cash \u2014 the verifying key",
+     "chars": 700,
+     "url": "https://onchainattack.org/document/examples/2026-02-veil-cash-groth16-verifying-key-delta-gamma-forgery/"
+    }
+   ],
+   "anchors": {},
+   "boundary_value": "n/a (verifier key)",
+   "consumer_consequence": "yes - 2.9 ETH pool drained then returned (source page)",
+   "fix_locus": "MISSING",
+   "p1p5_mappable": "yes - P4",
+   "research_scope": "contract s5.4 trusted-setup failure: initially OUT of scope",
+   "proposal": "NEEDS-SCOPE-DECISION",
+   "proposed_expected_pattern": "P4",
+   "proposed_location_regex": "MISSING",
+   "location_basis": "no pin",
+   "concerns": [
+    "Ledger repository DK27ss/VeilCash-5K-PoC is a third-party exploit PoC repository ('groth16 verifier had delta2 == gamma2'), not the victim project; a PoC repo is not a vulnerable/fixed revision pair."
+   ],
+   "relational_class": "VERIFIER-ONLY",
+   "relational_basis": "verification-key constants"
+  },
+  {
+   "case_id": "zeto-unrandomized-setup",
+   "files": [],
+   "source": [
+    {
+     "type": "json",
+     "file": "results/raw/groundtruth/sources/zeto-issue-186.json",
+     "field": "body",
+     "chars": 900,
+     "url_field": "html_url"
+    }
+   ],
+   "anchors": {},
+   "boundary_value": "n/a (verifier key)",
+   "consumer_consequence": "claimed (forgery if deployed); no deployment shown",
+   "fix_locus": "MISSING - issue open (opened 2026-04-05)",
+   "p1p5_mappable": "yes - P4 (delta = G2 generator)",
+   "research_scope": "contract s5.4 trusted-setup failure: initially OUT of scope",
+   "proposal": "NEEDS-SCOPE-DECISION",
+   "proposed_expected_pattern": "P4",
+   "proposed_location_regex": "^solidity/contracts/verifiers/impl/[A-Za-z_]+\\.sol(:\\d+)?$",
+   "location_basis": "issue lists 20 files under solidity/contracts/verifiers/impl/",
+   "concerns": [
+    "No fix exists, so no vulnerable/fixed pair can exist yet; a vulnerable-only pin at the issue date could be proposed.",
+    "LFDT-Paladin/zeto is an EVAL in-scope family (v2-family:9a7acbc2cba3d6a8e481), not in the 278 sample."
+   ],
+   "relational_class": "VERIFIER-ONLY",
+   "relational_basis": "verification-key constants"
+  },
+  {
+   "case_id": "zkemail-zellic-skipped-subject-prefix",
+   "files": [
+    "packages/contracts/src/EmailAuth.sol"
+   ],
+   "source": [
+    {
+     "type": "lines",
+     "file": "results/raw/groundtruth/sources/zkemail-zellic.txt",
+     "ranges": [
+      [
+       460,
+       482
+      ],
+      [
+       497,
+       507
+      ]
+     ],
+     "label": "Zellic zk-email audit PDF (docs.zk.email)"
+    }
+   ],
+   "anchors": {
+    "packages/contracts/src/EmailAuth.sol": [
+     200,
+     245
+    ]
+   },
+   "boundary_value": "yes - maskedSubject is a public input; skipedSubjectPrefix is caller-chosen calldata not in the proof",
+   "consumer_consequence": "yes - command/ownership change executed for a subject the proof did not authorise",
+   "fix_locus": "consumer (length bounds on maskedSubject and skipedSubjectPrefix)",
+   "p1p5_mappable": "partial - P1 (effect parameters derived through a caller-chosen, unproven trim offset); P1 as implemented checks effect-argument dataflow, not string trimming",
+   "research_scope": "in scope",
+   "proposal": "KEEP (v1 strict; not subject to C1)",
+   "proposed_expected_pattern": "P1",
+   "proposed_location_regex": "^packages/contracts/src/EmailAuth\\.sol(:\\d+)?$",
+   "location_basis": "authEmail at vulnerable EmailAuth.sol:200; removePrefix call :230-233",
+   "concerns": [
+    "Fixed commit 1455cd22 also fixes the lastTimestamp bug (row 31) in the same revision."
+   ],
+   "relational_class": "RELATIONAL-CANDIDATE",
+   "relational_basis": "consumer trims a public string by a caller-chosen offset; the correct bound is the circuit's SUBJECT_BYTES"
+  },
+  {
+   "case_id": "zkemail-zellic-wrong-public-input-field",
+   "files": [
+    "packages/contracts/src/utils/Groth16Verifier.sol",
+    "packages/contracts/src/EmailAuth.sol"
+   ],
+   "source": [
+    {
+     "type": "lines",
+     "file": "results/raw/groundtruth/sources/zkemail-zellic.txt",
+     "ranges": [
+      [
+       581,
+       591
+      ],
+      [
+       606,
+       626
+      ],
+      [
+       636,
+       646
+      ]
+     ],
+     "label": "Zellic zk-email audit PDF (docs.zk.email)"
+    }
+   ],
+   "anchors": {
+    "packages/contracts/src/utils/Groth16Verifier.sol": [
+     176,
+     186
+    ],
+    "packages/contracts/src/EmailAuth.sol": [
+     205,
+     215
+    ]
+   },
+   "boundary_value": "yes - emailNullifier and timestamp are public inputs used as replay/freshness keys",
+   "consumer_consequence": "yes - nullifier reuse (x and x+r both < q)",
+   "fix_locus": "generated verifier (checkField compares against q at vulnerable, r at fixed)",
+   "p1p5_mappable": "yes - P3 FIELD_ALIAS_REPLAY_KEY (guard uses the wrong modulus)",
+   "research_scope": "in scope",
+   "proposal": "KEEP (v1 strict; not subject to C1)",
+   "proposed_expected_pattern": "P3",
+   "proposed_location_regex": "^packages/contracts/src/EmailAuth\\.sol(:\\d+)?$",
+   "location_basis": "replay key usedNullifiers at EmailAuth.sol:211/243 inside authEmail (:200); the wrong modulus is at Groth16Verifier.sol:181",
+   "concerns": [
+    "The ledger fixed commit e84065db itself only bumps snarkjs in package.json/yarn.lock; the regenerated Groth16Verifier.sol (lt(v, r)) is present at e84065db but was committed earlier. The pair is valid for scoring.",
+    "Auditor note: the only Solidity difference between the pair is the modulus constant inside checkField; a guard recogniser that does not check which modulus is compared cannot distinguish the pair."
+   ],
+   "relational_class": "VERIFIER-CONSUMER",
+   "relational_basis": "verifier compares against q instead of r; consumer keys replay state by raw integer"
+  },
+  {
+   "case_id": "zkemail-zellic-stale-zk-regex-artifact",
+   "files": [
+    "packages/circuits/src/regexes/invitation_code_with_prefix_regex.circom",
+    "packages/circuits/src/regexes/invitation_code_regex.circom"
+   ],
+   "source": [
+    {
+     "type": "lines",
+     "file": "results/raw/groundtruth/sources/zkemail-zellic.txt",
+     "ranges": [
+      [
+       676,
+       703
+      ]
+     ],
+     "label": "Zellic zk-email audit PDF (docs.zk.email)"
+    }
+   ],
+   "anchors": {
+    "packages/circuits/src/regexes/invitation_code_with_prefix_regex.circom": [
+     1,
+     400
+    ]
+   },
+   "boundary_value": "indirect - regex reveal determines the masked subject (public)",
+   "consumer_consequence": "possible - incorrect masking of the subject",
+   "fix_locus": "circuit-internal (regenerated regex circuits)",
+   "p1p5_mappable": "no",
+   "research_scope": "in scope under s5.3 only if an incorrect mask changes an authorised command",
+   "proposal": "ADVISORY: DEMOTE-CANDIDATE (circuit-internal, no P1-P5 mapping)",
+   "proposed_expected_pattern": "NONE",
+   "proposed_location_regex": "^packages/circuits/src/regexes/invitation_code(_with_prefix)?_regex\\.circom(:\\d+)?$",
+   "location_basis": "is_consecutive initialisation in invitation_code_with_prefix_regex.circom",
+   "concerns": [
+    "v1 classified this as strict integration; by the C1 criteria it would be demoted. C1 was pre-registered for the 7 promoted rows only, so this is advisory."
+   ],
+   "relational_class": "CIRCUIT-ONLY",
+   "relational_basis": "stale generated regex circuit"
+  },
+  {
+   "case_id": "zkemail-zellic-last-timestamp-zero",
+   "files": [
+    "packages/contracts/src/EmailAuth.sol"
+   ],
+   "source": [
+    {
+     "type": "lines",
+     "file": "results/raw/groundtruth/sources/zkemail-zellic.txt",
+     "ranges": [
+      [
+       917,
+       933
+      ],
+      [
+       958,
+       961
+      ],
+      [
+       971,
+       974
+      ]
+     ],
+     "label": "Zellic zk-email audit PDF (docs.zk.email)"
+    }
+   ],
+   "anchors": {
+    "packages/contracts/src/EmailAuth.sol": [
+     205,
+     246
+    ]
+   },
+   "boundary_value": "yes - timestamp is a public input",
+   "consumer_consequence": "yes - lastTimestamp freshness state reset to 0; Zellic severity Low",
+   "fix_locus": "consumer (update lastTimestamp only when enabled / non-zero)",
+   "p1p5_mappable": "partial - P3 (replay/freshness state), but P3 as implemented models mapping-keyed replay, not monotone timestamps",
+   "research_scope": "in scope",
+   "proposal": "KEEP (v1 strict; not subject to C1)",
+   "proposed_expected_pattern": "P3",
+   "proposed_location_regex": "^packages/contracts/src/EmailAuth\\.sol(:\\d+)?$",
+   "location_basis": "lastTimestamp = emailAuthMsg.proof.timestamp at vulnerable EmailAuth.sol:244 in authEmail (:200)",
+   "concerns": [
+    "The same fix already ships in row 28's fixed commit 1455cd22."
+   ],
+   "relational_class": "CONSUMER-ONLY",
+   "relational_basis": "contract freshness-state update"
+  },
+  {
+   "case_id": "zkemail-zellic-nine-digit-timestamp",
+   "files": [
+    "packages/circuits/src/utils/digit2int.circom"
+   ],
+   "source": [
+    {
+     "type": "lines",
+     "file": "results/raw/groundtruth/sources/zkemail-zellic.txt",
+     "ranges": [
+      [
+       1064,
+       1068
+      ],
+      [
+       1070,
+       1075
+      ],
+      [
+       1100,
+       1120
+      ]
+     ],
+     "label": "Zellic zk-email audit PDF (docs.zk.email)"
+    }
+   ],
+   "anchors": {
+    "packages/circuits/src/utils/digit2int.circom": [
+     1,
+     20
+    ]
+   },
+   "boundary_value": "yes - timestamp is a public output used by the contract freshness check",
+   "consumer_consequence": "yes - stale (pre-2001) signature treated as fresh, or lastTimestamp pushed to year 2286; Zellic severity Low",
+   "fix_locus": "circuit-internal (digit range check in Digit2Int)",
+   "p1p5_mappable": "no",
+   "research_scope": "in scope under s5.3",
+   "proposal": "ADVISORY: DEMOTE-CANDIDATE (circuit-internal, no P1-P5 mapping)",
+   "proposed_expected_pattern": "NONE",
+   "proposed_location_regex": "^packages/circuits/src/utils/digit2int\\.circom(:\\d+)?$",
+   "location_basis": "Digit2Int template, vulnerable digit2int.circom",
+   "concerns": [
+    "Requires a DKIM signature generated before September 2001 (Zellic)."
+   ],
+   "relational_class": "RELATIONAL-CANDIDATE",
+   "relational_basis": "circuit decoding yields a timestamp that violates the contract's freshness semantics; fix is in the circuit"
+  },
+  {
+   "case_id": "zkemail-zellic-overlapping-masks",
+   "files": [
+    "packages/circuits/src/email_auth_template.circom"
+   ],
+   "source": [
+    {
+     "type": "lines",
+     "file": "results/raw/groundtruth/sources/zkemail-zellic.txt",
+     "ranges": [
+      [
+       1165,
+       1168
+      ],
+      [
+       1178,
+       1186
+      ],
+      [
+       1198,
+       1209
+      ],
+      [
+       1216,
+       1224
+      ]
+     ],
+     "label": "Zellic zk-email audit PDF (docs.zk.email)"
+    }
+   ],
+   "anchors": {
+    "packages/circuits/src/email_auth_template.circom": [
+     108,
+     125
+    ]
+   },
+   "boundary_value": "indirect - masked subject is public",
+   "consumer_consequence": "no demonstrated - Zellic shows no collision is possible; impact 'circuit does not work normally' (completeness)",
+   "fix_locus": "documentation only (comments added in 0096e59b); finding acknowledged, not fixed",
+   "p1p5_mappable": "no",
+   "research_scope": "out of the authorization model (completeness, no unauthorised effect shown)",
+   "proposal": "ADVISORY: DROP-CANDIDATE (no code fix; no unauthorised effect)",
+   "proposed_expected_pattern": "NONE",
+   "proposed_location_regex": "^packages/circuits/src/email_auth_template\\.circom(:\\d+)?$",
+   "location_basis": "masked_subject_bytes computation",
+   "concerns": [
+    "The fixed revision differs only by comments and an equivalent constraint rewrite; there is no fixed behaviour to score against."
+   ],
+   "relational_class": "CIRCUIT-ONLY",
+   "relational_basis": "masking arithmetic inside the circuit"
+  },
+  {
+   "case_id": "semaphore-audit-zero-leaf-field",
+   "files": [
+    "packages/incremental-merkle-tree.sol/contracts/IncrementalBinaryTree.sol"
+   ],
+   "candidate_fixed_commit": "6ea92745423ad3e4104f16a2cec7d4d6c69ade72",
+   "source": [
+    {
+     "type": "lines",
+     "file": "results/raw/groundtruth/sources/semaphore-2.0.0-audit.txt",
+     "ranges": [
+      [
+       187,
+       204
+      ]
+     ],
+     "label": "Semaphore 2.0.0 audit PDF"
+    }
+   ],
+   "anchors": {
+    "packages/incremental-merkle-tree.sol/contracts/IncrementalBinaryTree.sol": [
+     25,
+     40
+    ]
+   },
+   "boundary_value": "yes - zero leaf can appear in proofSiblings passed to verify",
+   "consumer_consequence": "denial of service only - 'verify function will unintentionally fail' (completeness, not an unauthorised effect)",
+   "fix_locus": "consumer library (require(zero < SNARK_SCALAR_FIELD))",
+   "p1p5_mappable": "no - no P1-P5 predicate covers a liveness failure",
+   "research_scope": "contract s5.4 lists unconditional liveness as out of scope; the effect is a DoS",
+   "proposal": "ADVISORY: DROP-CANDIDATE (liveness, not authorization)",
+   "proposed_expected_pattern": "NONE",
+   "proposed_location_regex": "^packages/incremental-merkle-tree\\.sol/contracts/IncrementalBinaryTree\\.sol(:\\d+)?$",
+   "location_basis": "init at vulnerable IncrementalBinaryTree.sol:29 (audit link #L29)",
+   "candidate_fixed_note": "Fix Log names zk-kit issue #23 (closed 2022-03-09T17:10:28Z). Commit 6ea92745 ('fix: add checks to ensure zeroes are valid zk values', 2022-03-09T17:03:26Z) adds exactly the recommended require. CANDIDATE only.",
+   "concerns": [
+    "Fixed pin MISSING in ledger; candidate 6ea92745423ad3e4104f16a2cec7d4d6c69ade72."
+   ],
+   "relational_class": "CONSUMER-ONLY",
+   "relational_basis": "library init range check"
+  },
+  {
+   "case_id": "semaphore-audit-group-id-field",
+   "files": [
+    "contracts/base/SemaphoreGroups.sol"
+   ],
+   "candidate_fixed_commit": "2ffaf28a12ac92d7683cfd4b507defdc0bf51300",
+   "source": [
+    {
+     "type": "lines",
+     "file": "results/raw/groundtruth/sources/semaphore-2.0.0-audit.txt",
+     "ranges": [
+      [
+       206,
+       226
+      ]
+     ],
+     "label": "Semaphore 2.0.0 audit PDF"
+    }
+   ],
+   "anchors": {
+    "contracts/base/SemaphoreGroups.sol": [
+     25,
+     40
+    ]
+   },
+   "boundary_value": "yes - groupId is used as the external nullifier public input",
+   "consumer_consequence": "denial of service only - proofs for that poll always fail",
+   "fix_locus": "consumer (require(groupId < SNARK_SCALAR_FIELD))",
+   "p1p5_mappable": "no - P3 canonicality concerns aliasing that enables replay; here the verifier rejects (liveness)",
+   "research_scope": "liveness: initially out of scope (s5.4)",
+   "proposal": "ADVISORY: DROP-CANDIDATE (liveness, not authorization)",
+   "proposed_expected_pattern": "NONE",
+   "proposed_location_regex": "^contracts/base/SemaphoreGroups\\.sol(:\\d+)?$",
+   "location_basis": "_createGroup at vulnerable SemaphoreGroups.sol:27 (audit link #L27)",
+   "candidate_fixed_note": "Fix Log names semaphore issue #90 (closed 2022-03-09T23:02:11Z). Commit 2ffaf28a ('fix: add check to ensure group id is valid zk value', 2022-03-09T17:43:06Z) adds exactly the recommended require. CANDIDATE only.",
+   "concerns": [
+    "Fixed pin MISSING in ledger; candidate 2ffaf28a12ac92d7683cfd4b507defdc0bf51300.",
+    "Semaphore repository is DEV (DEV-F02) - EXPOSED."
+   ],
+   "relational_class": "VERIFIER-CONSUMER",
+   "relational_basis": "contract accepts a group id that the verifier's public-input range check rejects"
+  },
+  {
+   "case_id": "semaphore-audit-root-history-collision",
+   "files": [
+    "contracts/base/SemaphoreGroups.sol"
+   ],
+   "source": [
+    {
+     "type": "lines",
+     "file": "results/raw/groundtruth/sources/semaphore-2.0.0-audit.txt",
+     "ranges": [
+      [
+       230,
+       246
+      ]
+     ],
+     "label": "Semaphore 2.0.0 audit PDF"
+    }
+   ],
+   "anchors": {
+    "contracts/base/SemaphoreGroups.sol": [
+     40,
+     75
+    ]
+   },
+   "boundary_value": "yes - Merkle root is a public input; rootHistory maps root -> groupId",
+   "consumer_consequence": "possible - a root may be attributed to the wrong group; audit severity 'Warning: does not pose an immediate security threat'",
+   "fix_locus": "consumer (rootHistory mapping removed)",
+   "p1p5_mappable": "partial - P2 (execution-context/group binding of the root)",
+   "research_scope": "in scope only for an application that trusts rootHistory for group membership",
+   "proposal": "KEEP (v1 strict) - human to confirm severity",
+   "proposed_expected_pattern": "P2",
+   "proposed_location_regex": "^contracts/base/SemaphoreGroups\\.sol(:\\d+)?$",
+   "location_basis": "rootHistory[root] = groupId at vulnerable SemaphoreGroups.sol:49 and :71",
+   "concerns": [
+    "SemaphoreGroups.sol at fd3cc6f7 contains no verifier call; a consumer-centred analyzer may not treat it as a proof consumer.",
+    "Semaphore repository is DEV (DEV-F02) - EXPOSED."
+   ],
+   "relational_class": "CONSUMER-ONLY",
+   "relational_basis": "contract root->group mapping"
+  },
+  {
+   "case_id": "semaphore-audit-unbound-verification-key",
+   "files": [
+    "contracts/base/Verifier.sol"
+   ],
+   "source": [
+    {
+     "type": "lines",
+     "file": "results/raw/groundtruth/sources/semaphore-2.0.0-audit.txt",
+     "ranges": [
+      [
+       247,
+       263
+      ]
+     ],
+     "label": "Semaphore 2.0.0 audit PDF"
+    }
+   ],
+   "anchors": {
+    "contracts/base/Verifier.sol": [
+     290,
+     300
+    ]
+   },
+   "boundary_value": "n/a (process/trust warning)",
+   "consumer_consequence": "none shown",
+   "fix_locus": "none - 'Not handled' in the Fix Log",
+   "p1p5_mappable": "no code defect to map",
+   "research_scope": "not a code defect",
+   "proposal": "ADVISORY: DROP-CANDIDATE (no defect, no fix)",
+   "proposed_expected_pattern": "NONE",
+   "proposed_location_regex": "MISSING",
+   "location_basis": "audit Location: N/A",
+   "concerns": [
+    "Semaphore repository is DEV (DEV-F02) - EXPOSED."
+   ],
+   "relational_class": "VERIFIER-ONLY",
+   "relational_basis": "trust in deployed key"
+  },
+  {
+   "case_id": "zkemail-matterlabs-guardian-repeat",
+   "files": [
+    "src/EmailRecoveryManager.sol"
+   ],
+   "source": [
+    {
+     "type": "lines",
+     "file": "results/raw/groundtruth/sources/matterlabs-zkemail.txt",
+     "ranges": [
+      [
+       540,
+       545
+      ],
+      [
+       557,
+       573
+      ]
+     ],
+     "label": "Matter Labs zk-email review PDF (docs.zk.email)"
+    }
+   ],
+   "anchors": {
+    "src/EmailRecoveryManager.sol": [
+     316,
+     365
+    ]
+   },
+   "boundary_value": "yes - email nullifier is a public input; guardian identity is derived from it",
+   "consumer_consequence": "yes - one guardian's weight counted multiple times, bypassing the threshold",
+   "fix_locus": "consumer (guardianVoted set + GuardianAlreadyVoted)",
+   "p1p5_mappable": "partial - P3 (replay scope: key is per-email nullifier, policy requires per-guardian uniqueness)",
+   "research_scope": "in scope",
+   "proposal": "KEEP (v1 strict; not subject to C1)",
+   "proposed_expected_pattern": "P3",
+   "proposed_location_regex": "^src/EmailRecoveryManager\\.sol(:\\d+)?$",
+   "location_basis": "processRecovery at vulnerable EmailRecoveryManager.sol:316; currentWeight += at :361",
+   "concerns": [
+    "Ledger fixed commit c866ecb3 is 'Downgrade modulekit (#62)' and does not itself touch recovery logic; the revision nevertheless contains hasGuardianVoted/GuardianAlreadyVoted (fixed EmailRecoveryManager.sol:184, :440-441, :473) absent at the vulnerable revision. Pair is usable; the fix commit itself is not identified."
+   ],
+   "relational_class": "CONSUMER-ONLY",
+   "relational_basis": "per-guardian uniqueness policy in the recovery manager"
+  },
+  {
+   "case_id": "zkemail-matterlabs-cross-chain-replay",
+   "files": [
+    "contracts/EmailRecoveryModule.sol"
+   ],
+   "source": [
+    {
+     "type": "lines",
+     "file": "results/raw/groundtruth/sources/matterlabs-zkemail.txt",
+     "ranges": [
+      [
+       1003,
+       1012
+      ]
+     ],
+     "label": "Matter Labs zk-email review PDF (docs.zk.email)"
+    }
+   ],
+   "anchors": {
+    "contracts/EmailRecoveryModule.sol": [
+     45,
+     105
+    ]
+   },
+   "boundary_value": "yes - recovery command lacks chain id",
+   "consumer_consequence": "conditional - only when module and account share addresses across chains",
+   "fix_locus": "none - Acknowledged; client chose not to implement",
+   "p1p5_mappable": "yes - P2 (missing chain/domain binding)",
+   "research_scope": "in scope only if the stated policy requires chain binding; the client states the opposite policy",
+   "proposal": "ADVISORY: NEEDS-POLICY-DECISION (acknowledged as intended)",
+   "proposed_expected_pattern": "P2",
+   "proposed_location_regex": "^contracts/EmailRecoveryModule\\.sol(:\\d+)?$",
+   "location_basis": "recover at vulnerable EmailRecoveryModule.sol:96",
+   "concerns": [
+    "No fix will exist; scoring requires a policy decision that contradicts the maintainer's documented policy."
+   ],
+   "relational_class": "CONSUMER-ONLY",
+   "relational_basis": "command lacks chain id"
+  },
+  {
+   "case_id": "zkemail-matterlabs-proof-coordinate-range",
+   "files": [
+    "packages/contracts/src/utils/Groth16Verifier.sol"
+   ],
+   "source": [
+    {
+     "type": "lines",
+     "file": "results/raw/groundtruth/sources/matterlabs-zkemail.txt",
+     "ranges": [
+      [
+       1014,
+       1017
+      ]
+     ],
+     "label": "Matter Labs zk-email review PDF (docs.zk.email)"
+    }
+   ],
+   "anchors": {
+    "packages/contracts/src/utils/Groth16Verifier.sol": [
+     484,
+     492
+    ]
+   },
+   "boundary_value": "n/a (proof encoding)",
+   "consumer_consequence": "unclear - underflow when negating pA",
+   "fix_locus": "claimed 'Resolved'; ledger fixed revision does not add coordinate checks",
+   "p1p5_mappable": "partial - P4 (verifier invariant)",
+   "research_scope": "borderline: proof-encoding validation sits next to the 'proof-system soundness' trusted assumption",
+   "proposal": "ADVISORY: NEEDS-PAIR-REPAIR",
+   "proposed_expected_pattern": "P4",
+   "proposed_location_regex": "^packages/contracts/src/utils/Groth16Verifier\\.sol(:\\d+)?$",
+   "location_basis": "mod(sub(q, calldataload(add(pA, 32))), q) at vulnerable Groth16Verifier.sol:488",
+   "concerns": [
+    "Ledger fixed commit 984b5919 adds updateGroth16Verifier() to Verifier.sol; the fixed Groth16Verifier.sol still has no _pA/_pB/_pC < q check (fixed :273 'mod(sub(q, calldataload(add(pA, 32))), q)'). The pinned fixed revision does not remove the defect as described."
+   ],
+   "relational_class": "VERIFIER-ONLY",
+   "relational_basis": "proof-encoding validation in the verifier"
+  },
+  {
+   "case_id": "circom/selfxyz/self/zksecurity_the_registration_and_disclosure_circuits_lack_range_checks_for_the_input_indices",
+   "files": [
+    "circuits/circuits/register_id/register_id.circom"
+   ],
+   "source": [
+    {
+     "type": "zkbugs",
+     "file": "results/raw/groundtruth/work/zkbugs/zksecurity_the_registration_and_disclosure_circuits_lack_range_checks_for_the_input_indices/README.md"
+    }
+   ],
+   "anchors": {
+    "circuits/circuits/register_id/register_id.circom": [
+     95,
+     110
+    ]
+   },
+   "boundary_value": "no - dsc_pubKey_offset / actual_size are private witness indices",
+   "consumer_consequence": "indirect - registration with a mis-extracted DSC key",
+   "fix_locus": "circuit-internal (Num2Bits(12) range checks before LessEqThan)",
+   "p1p5_mappable": "no",
+   "research_scope": "borderline under s5.3",
+   "proposal": "DEMOTE",
+   "proposal_rule": "C1: (4)=no and fix circuit-internal with (1)=no",
+   "proposed_expected_pattern": "NONE",
+   "proposed_location_regex": "^circuits/circuits/register_id/register_id\\.circom(:\\d+)?$",
+   "location_basis": "zkbugs Location register_id.circom REGISTER_ID lines 101-105",
+   "concerns": [
+    "Ledger fixed commit 49de5496 is a 'merge dev to main (#657)' bulk merge touching app, CI and circuits.",
+    "SAMPLE-OVERLAP (selfxyz/self, EVAL rank 259)."
+   ],
+   "relational_class": "CIRCUIT-ONLY",
+   "relational_basis": "defect and fix inside REGISTER_ID"
+  }
+ ]
+}
