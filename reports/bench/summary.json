@@ -16,6 +16,16 @@
     "MISS": 3,
     "UNKNOWN": 22
   },
+  "AI-PROPOSED/BindCheck-F2": {
+    "CLEAR": 14,
+    "DETECT": 12,
+    "FALSE-ALARM": 1,
+    "MISS": 3,
+    "UNKNOWN": 22
+  },
+  "AI-PROPOSED/BindCheck-F2-no-circuit": {
+    "UNKNOWN": 52
+  },
   "AI-PROPOSED/C": {
     "CLEAR": 23,
     "DETECT": 14,
@@ -41,28 +51,55 @@
   "PENDING/A": {
     "UNKNOWN": 32
   },
+  "PENDING/A-pinned": {
+    "UNKNOWN": 32
+  },
   "PENDING/B": {
+    "UNKNOWN": 32
+  },
+  "PENDING/B-pinned": {
     "UNKNOWN": 32
   },
   "PENDING/BindCheck-F1": {
     "UNKNOWN": 32
   },
+  "PENDING/BindCheck-F2": {
+    "UNKNOWN": 32
+  },
   "PENDING/C": {
+    "UNKNOWN": 32
+  },
+  "PENDING/C-pinned": {
     "UNKNOWN": 32
   },
   "PENDING/Circomspect": {
     "UNKNOWN": 32
   },
+  "PENDING/Circomspect-pinned": {
+    "UNKNOWN": 32
+  },
   "PENDING/Picus": {
+    "UNKNOWN": 32
+  },
+  "PENDING/Picus-pinned": {
     "UNKNOWN": 32
   },
   "PENDING/Slither-default": {
     "UNKNOWN": 32
   },
+  "PENDING/Slither-default-pinned": {
+    "UNKNOWN": 32
+  },
   "PENDING/ZKAP": {
     "UNKNOWN": 32
   },
+  "PENDING/ZKAP-pinned": {
+    "UNKNOWN": 32
+  },
   "PENDING/zkFuzz": {
+    "UNKNOWN": 32
+  },
+  "PENDING/zkFuzz-pinned": {
     "UNKNOWN": 32
   }
 }
