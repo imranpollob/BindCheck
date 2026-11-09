@@ -1,0 +1,888 @@
+{
+  "case_comparison": "case-comparison.csv",
+  "cases_present": 46,
+  "dev": {
+    "A": {
+      "rows": 56,
+      "status_verdict": {
+        "completed/UNKNOWN": 29,
+        "completed/VERIFIED_WITHIN_SCOPE": 1,
+        "completed/VIOLATION": 26
+      },
+      "warning_instances": 135,
+      "warning_instances_by_code": {
+        "A_CALLER_NOT_PROVED_IDENTITY": 14,
+        "A_CALL_VALUE_UNBOUND": 21,
+        "A_EFFECT_AMOUNT_UNBOUND": 31,
+        "A_EFFECT_IDENTITY_UNBOUND": 2,
+        "A_EFFECT_RECIPIENT_UNBOUND": 31,
+        "A_REPLAY_KEY_UNBOUND": 26,
+        "A_REPLAY_POSITION_FIELD_GUARD_MISSING": 7,
+        "A_STATE_WRITE_VALUE_UNBOUND": 1,
+        "A_VERIFIER_ARITY_MISMATCH": 2
+      }
+    },
+    "B": {
+      "rows": 56,
+      "status_verdict": {
+        "UNKNOWN/UNKNOWN": 2,
+        "completed/UNKNOWN": 54
+      },
+      "warning_instances": 0,
+      "warning_instances_by_code": {}
+    },
+    "C": {
+      "rows": 56,
+      "status_verdict": {
+        "completed/UNKNOWN": 29,
+        "completed/VERIFIED_WITHIN_SCOPE": 1,
+        "completed/VIOLATION": 26
+      },
+      "warning_instances": 109,
+      "warning_instances_by_code": {
+        "A_CALLER_NOT_PROVED_IDENTITY": 5,
+        "A_CALL_VALUE_UNBOUND": 5,
+        "A_EFFECT_AMOUNT_UNBOUND": 31,
+        "A_EFFECT_IDENTITY_UNBOUND": 2,
+        "A_EFFECT_RECIPIENT_UNBOUND": 14,
+        "A_REPLAY_KEY_UNBOUND": 26,
+        "A_REPLAY_POSITION_FIELD_GUARD_MISSING": 7,
+        "A_STATE_WRITE_VALUE_UNBOUND": 1,
+        "A_VERIFIER_ARITY_MISMATCH": 2,
+        "C_EFFECT_NOT_PROOF_BOUND": 16
+      }
+    }
+  },
+  "dev_native_invocation_exits": {
+    "circom_inspect": {
+      "0/timeout=False": 42,
+      "1/timeout=False": 95,
+      "None/timeout=True": 2
+    },
+    "circomspect": {
+      "0/timeout=False": 25,
+      "1/timeout=False": 114
+    },
+    "picus": {
+      "0/timeout=False": 4,
+      "8/timeout=False": 26,
+      "None/timeout=True": 11
+    }
+  },
+  "dev_native_tool_row_statuses": {
+    "circom_inspect": {
+      "TIMEOUT": 2,
+      "UNKNOWN": 2,
+      "completed": 52
+    },
+    "circomspect": {
+      "UNKNOWN": 2,
+      "completed": 54
+    },
+    "custom_slither": {
+      "UNKNOWN": 10,
+      "completed": 46
+    },
+    "picus": {
+      "TIMEOUT": 6,
+      "UNKNOWN": 34,
+      "completed": 16
+    },
+    "same_policy_foundry": {
+      "UNKNOWN": 56
+    },
+    "zkap": {
+      "UNKNOWN": 56
+    }
+  },
+  "dev_picus_invocations": [
+    {
+      "exit_status": 8,
+      "id": "DEV-F06",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F06/B.json",
+      "temp_bytes_before_cleanup": 0,
+      "temp_removed": true,
+      "timed_out": false,
+      "timeout_seconds": 60.0
+    },
+    {
+      "exit_status": null,
+      "id": "DEV-F06",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F06/B.json",
+      "temp_bytes_before_cleanup": 13619200,
+      "temp_removed": true,
+      "timed_out": true,
+      "timeout_seconds": 60.0
+    },
+    {
+      "exit_status": null,
+      "id": "DEV-F06",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F06/B.json",
+      "temp_bytes_before_cleanup": 47005696,
+      "temp_removed": true,
+      "timed_out": true,
+      "timeout_seconds": 60.0
+    },
+    {
+      "exit_status": null,
+      "id": "DEV-F09",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F09/B.json",
+      "temp_bytes_before_cleanup": 0,
+      "temp_removed": true,
+      "timed_out": true,
+      "timeout_seconds": 60.0
+    },
+    {
+      "exit_status": 8,
+      "id": "DEV-F10",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F10/B.json",
+      "temp_bytes_before_cleanup": 0,
+      "temp_removed": true,
+      "timed_out": false,
+      "timeout_seconds": 60.0
+    },
+    {
+      "exit_status": 8,
+      "id": "DEV-F10",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F10/B.json",
+      "temp_bytes_before_cleanup": 0,
+      "temp_removed": true,
+      "timed_out": false,
+      "timeout_seconds": 60.0
+    },
+    {
+      "exit_status": 8,
+      "id": "DEV-F10",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F10/B.json",
+      "temp_bytes_before_cleanup": 0,
+      "temp_removed": true,
+      "timed_out": false,
+      "timeout_seconds": 60.0
+    },
+    {
+      "exit_status": 8,
+      "id": "DEV-F11",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F11/B.json",
+      "temp_bytes_before_cleanup": 0,
+      "temp_removed": true,
+      "timed_out": false,
+      "timeout_seconds": 60.0
+    },
+    {
+      "exit_status": 8,
+      "id": "DEV-F12",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F12/B.json",
+      "temp_bytes_before_cleanup": 0,
+      "temp_removed": true,
+      "timed_out": false,
+      "timeout_seconds": 60.0
+    },
+    {
+      "exit_status": null,
+      "id": "DEV-F13",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F13/B.json",
+      "temp_bytes_before_cleanup": 271849872,
+      "temp_removed": true,
+      "timed_out": true,
+      "timeout_seconds": 60.0
+    },
+    {
+      "exit_status": null,
+      "id": "DEV-F13",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F13/B.json",
+      "temp_bytes_before_cleanup": 0,
+      "temp_removed": true,
+      "timed_out": true,
+      "timeout_seconds": 60.0
+    },
+    {
+      "exit_status": null,
+      "id": "DEV-F13",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F13/B.json",
+      "temp_bytes_before_cleanup": 0,
+      "temp_removed": true,
+      "timed_out": true,
+      "timeout_seconds": 60.0
+    },
+    {
+      "exit_status": 8,
+      "id": "DEV-F15",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F15/B.json",
+      "temp_bytes_before_cleanup": 0,
+      "temp_removed": true,
+      "timed_out": false,
+      "timeout_seconds": 60.0
+    },
+    {
+      "exit_status": 8,
+      "id": "DEV-F15",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F15/B.json",
+      "temp_bytes_before_cleanup": 0,
+      "temp_removed": true,
+      "timed_out": false,
+      "timeout_seconds": 60.0
+    },
+    {
+      "exit_status": 8,
+      "id": "DEV-F15",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F15/B.json",
+      "temp_bytes_before_cleanup": 0,
+      "temp_removed": true,
+      "timed_out": false,
+      "timeout_seconds": 60.0
+    },
+    {
+      "exit_status": 8,
+      "id": "DEV-F15",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F15/B.json",
+      "temp_bytes_before_cleanup": 0,
+      "temp_removed": true,
+      "timed_out": false,
+      "timeout_seconds": 60.0
+    },
+    {
+      "exit_status": 8,
+      "id": "DEV-F17",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F17/B.json",
+      "temp_bytes_before_cleanup": 0,
+      "temp_removed": true,
+      "timed_out": false,
+      "timeout_seconds": 60.0
+    },
+    {
+      "exit_status": null,
+      "id": "DEV-F21",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F21/B.json",
+      "temp_bytes_before_cleanup": 26135920,
+      "temp_removed": true,
+      "timed_out": true,
+      "timeout_seconds": 60.0
+    },
+    {
+      "exit_status": null,
+      "id": "DEV-F21",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F21/B.json",
+      "temp_bytes_before_cleanup": 63975712,
+      "temp_removed": true,
+      "timed_out": true,
+      "timeout_seconds": 60.0
+    },
+    {
+      "exit_status": null,
+      "id": "DEV-F22",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F22/B.json",
+      "temp_bytes_before_cleanup": 28749512,
+      "temp_removed": true,
+      "timed_out": true,
+      "timeout_seconds": 60.0
+    },
+    {
+      "exit_status": null,
+      "id": "DEV-F22",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F22/B.json",
+      "temp_bytes_before_cleanup": 47981788,
+      "temp_removed": true,
+      "timed_out": true,
+      "timeout_seconds": 60.0
+    },
+    {
+      "exit_status": 8,
+      "id": "DEV-F22",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F22/B.json",
+      "temp_bytes_before_cleanup": 0,
+      "temp_removed": true,
+      "timed_out": false,
+      "timeout_seconds": 60.0
+    },
+    {
+      "exit_status": 8,
+      "id": "DEV-F24",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F24/B.json",
+      "temp_bytes_before_cleanup": 0,
+      "temp_removed": true,
+      "timed_out": false,
+      "timeout_seconds": 60.0
+    },
+    {
+      "exit_status": 8,
+      "id": "DEV-F25",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F25/B.json",
+      "temp_bytes_before_cleanup": 0,
+      "temp_removed": true,
+      "timed_out": false,
+      "timeout_seconds": 60.0
+    },
+    {
+      "exit_status": 8,
+      "id": "DEV-F27",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F27/B.json",
+      "temp_bytes_before_cleanup": 0,
+      "temp_removed": true,
+      "timed_out": false,
+      "timeout_seconds": 60.0
+    },
+    {
+      "exit_status": 0,
+      "id": "DEV-F30",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F30/B.json",
+      "temp_bytes_before_cleanup": 0,
+      "temp_removed": true,
+      "timed_out": false,
+      "timeout_seconds": 60.0
+    },
+    {
+      "exit_status": 0,
+      "id": "DEV-F30",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F30/B.json",
+      "temp_bytes_before_cleanup": 0,
+      "temp_removed": true,
+      "timed_out": false,
+      "timeout_seconds": 60.0
+    },
+    {
+      "exit_status": 0,
+      "id": "DEV-F30",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F30/B.json",
+      "temp_bytes_before_cleanup": 0,
+      "temp_removed": true,
+      "timed_out": false,
+      "timeout_seconds": 60.0
+    },
+    {
+      "exit_status": 8,
+      "id": "DEV-F30",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F30/B.json",
+      "temp_bytes_before_cleanup": 0,
+      "temp_removed": true,
+      "timed_out": false,
+      "timeout_seconds": 60.0
+    },
+    {
+      "exit_status": 8,
+      "id": "DEV-F34",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F34/B.json",
+      "temp_bytes_before_cleanup": 0,
+      "temp_removed": true,
+      "timed_out": false,
+      "timeout_seconds": 60.0
+    },
+    {
+      "exit_status": 0,
+      "id": "DEV-F38",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F38/B.json",
+      "temp_bytes_before_cleanup": 0,
+      "temp_removed": true,
+      "timed_out": false,
+      "timeout_seconds": 60.0
+    },
+    {
+      "exit_status": 8,
+      "id": "DEV-F39",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F39/B.json",
+      "temp_bytes_before_cleanup": 0,
+      "temp_removed": true,
+      "timed_out": false,
+      "timeout_seconds": 60.0
+    },
+    {
+      "exit_status": 8,
+      "id": "DEV-F39",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F39/B.json",
+      "temp_bytes_before_cleanup": 0,
+      "temp_removed": true,
+      "timed_out": false,
+      "timeout_seconds": 60.0
+    },
+    {
+      "exit_status": 8,
+      "id": "DEV-F39",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F39/B.json",
+      "temp_bytes_before_cleanup": 0,
+      "temp_removed": true,
+      "timed_out": false,
+      "timeout_seconds": 60.0
+    },
+    {
+      "exit_status": 8,
+      "id": "DEV-F42",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F42/B.json",
+      "temp_bytes_before_cleanup": 0,
+      "temp_removed": true,
+      "timed_out": false,
+      "timeout_seconds": 60.0
+    },
+    {
+      "exit_status": 8,
+      "id": "DEV-F42",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F42/B.json",
+      "temp_bytes_before_cleanup": 0,
+      "temp_removed": true,
+      "timed_out": false,
+      "timeout_seconds": 60.0
+    },
+    {
+      "exit_status": 8,
+      "id": "DEV-F49",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F49/B.json",
+      "temp_bytes_before_cleanup": 0,
+      "temp_removed": true,
+      "timed_out": false,
+      "timeout_seconds": 60.0
+    },
+    {
+      "exit_status": 8,
+      "id": "DEV-F49",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F49/B.json",
+      "temp_bytes_before_cleanup": 0,
+      "temp_removed": true,
+      "timed_out": false,
+      "timeout_seconds": 60.0
+    },
+    {
+      "exit_status": null,
+      "id": "DEV-F50",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F50/B.json",
+      "temp_bytes_before_cleanup": 0,
+      "temp_removed": true,
+      "timed_out": true,
+      "timeout_seconds": 60.0
+    },
+    {
+      "exit_status": 8,
+      "id": "DEV-H01",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-H01/B.json",
+      "temp_bytes_before_cleanup": 0,
+      "temp_removed": true,
+      "timed_out": false,
+      "timeout_seconds": 60.0
+    },
+    {
+      "exit_status": 8,
+      "id": "DEV-H02",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-H02/B.json",
+      "temp_bytes_before_cleanup": 0,
+      "temp_removed": true,
+      "timed_out": false,
+      "timeout_seconds": 60.0
+    }
+  ],
+  "dev_warning_opinions": "dev-warning-opinions.csv",
+  "schema": "bindcheck-redteam.report-metrics/v1",
+  "sources": {
+    "bindcheck": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/results/raw/redteam/bindcheck-20261109-circom",
+    "dev": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/results/raw/redteam/dev-20261109-final",
+    "expected": "redteam/adversarial/expected.json",
+    "expected_sha256": "41e3fcebf92f6a03f27998843fd865155d0db4ecfb58d51235f58ec4b3fc9e3e",
+    "synthetic": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/results/raw/redteam/synthetic-20261109-foundry"
+  },
+  "synthetic_by_family": {
+    "A": {
+      "alias-decoding": {
+        "LEGITIMATE/FALSE_ALARM": 1,
+        "VULNERABLE/DETECTION": 1
+      },
+      "array-length-signal": {
+        "LEGITIMATE/UNKNOWN": 1,
+        "VULNERABLE/UNKNOWN": 1
+      },
+      "burn-owner": {
+        "LEGITIMATE/FALSE_ALARM": 1,
+        "VULNERABLE/DETECTION": 1
+      },
+      "caller-identity-policy": {
+        "LEGITIMATE/FALSE_ALARM": 1,
+        "VULNERABLE/DETECTION": 1
+      },
+      "commitment-fields": {
+        "LEGITIMATE/FALSE_ALARM": 1,
+        "VULNERABLE/DETECTION": 1
+      },
+      "commitment-order": {
+        "LEGITIMATE/FALSE_ALARM": 1,
+        "VULNERABLE/DETECTION": 1
+      },
+      "decoding-order": {
+        "LEGITIMATE/NO_ALARM": 1,
+        "VULNERABLE/MISS": 1
+      },
+      "effect-amount": {
+        "LEGITIMATE/FALSE_ALARM": 1,
+        "VULNERABLE/DETECTION": 1
+      },
+      "effect-recipient": {
+        "LEGITIMATE/FALSE_ALARM": 1,
+        "VULNERABLE/DETECTION": 1
+      },
+      "erc721-safe-mint-recipient": {
+        "LEGITIMATE/FALSE_ALARM": 1,
+        "VULNERABLE/DETECTION": 1
+      },
+      "guard-dominance-after-effect": {
+        "LEGITIMATE/FALSE_ALARM": 1,
+        "VULNERABLE/DETECTION": 1
+      },
+      "guard-dominance-irrelevant-branch": {
+        "LEGITIMATE/NO_ALARM": 1,
+        "VULNERABLE/DETECTION": 1
+      },
+      "native-call-value": {
+        "LEGITIMATE/FALSE_ALARM": 1,
+        "VULNERABLE/DETECTION": 1
+      },
+      "nested-replay-key": {
+        "LEGITIMATE/FALSE_ALARM": 1,
+        "VULNERABLE/DETECTION": 1
+      },
+      "nullifier-chain-scope": {
+        "LEGITIMATE/NO_ALARM": 1,
+        "VULNERABLE/MISS": 1
+      },
+      "nullifier-contract-scope": {
+        "LEGITIMATE/NO_ALARM": 1,
+        "VULNERABLE/MISS": 1
+      },
+      "overlapping-masks": {
+        "LEGITIMATE/UNKNOWN": 1,
+        "VULNERABLE/UNKNOWN": 1
+      },
+      "prefix-vs-full-array": {
+        "LEGITIMATE/UNKNOWN": 1,
+        "VULNERABLE/UNKNOWN": 1
+      },
+      "replay-key-binding": {
+        "LEGITIMATE/FALSE_ALARM": 1,
+        "VULNERABLE/DETECTION": 1
+      },
+      "replay-position-canonicality": {
+        "LEGITIMATE/FALSE_ALARM": 1,
+        "VULNERABLE/DETECTION": 1
+      },
+      "safe-transfer-record-amount": {
+        "LEGITIMATE/FALSE_ALARM": 1,
+        "VULNERABLE/DETECTION": 1
+      },
+      "state-write": {
+        "LEGITIMATE/FALSE_ALARM": 1,
+        "VULNERABLE/DETECTION": 1
+      },
+      "verifier-arity": {
+        "LEGITIMATE/FALSE_ALARM": 1,
+        "VULNERABLE/DETECTION": 1
+      }
+    },
+    "B": {
+      "alias-decoding": {
+        "LEGITIMATE/UNKNOWN": 1,
+        "VULNERABLE/UNKNOWN": 1
+      },
+      "array-length-signal": {
+        "LEGITIMATE/UNKNOWN": 1,
+        "VULNERABLE/UNKNOWN": 1
+      },
+      "burn-owner": {
+        "LEGITIMATE/UNKNOWN": 1,
+        "VULNERABLE/UNKNOWN": 1
+      },
+      "caller-identity-policy": {
+        "LEGITIMATE/UNKNOWN": 1,
+        "VULNERABLE/UNKNOWN": 1
+      },
+      "commitment-fields": {
+        "LEGITIMATE/UNKNOWN": 1,
+        "VULNERABLE/UNKNOWN": 1
+      },
+      "commitment-order": {
+        "LEGITIMATE/UNKNOWN": 1,
+        "VULNERABLE/UNKNOWN": 1
+      },
+      "decoding-order": {
+        "LEGITIMATE/UNKNOWN": 1,
+        "VULNERABLE/UNKNOWN": 1
+      },
+      "effect-amount": {
+        "LEGITIMATE/UNKNOWN": 1,
+        "VULNERABLE/UNKNOWN": 1
+      },
+      "effect-recipient": {
+        "LEGITIMATE/UNKNOWN": 1,
+        "VULNERABLE/UNKNOWN": 1
+      },
+      "erc721-safe-mint-recipient": {
+        "LEGITIMATE/UNKNOWN": 1,
+        "VULNERABLE/UNKNOWN": 1
+      },
+      "guard-dominance-after-effect": {
+        "LEGITIMATE/UNKNOWN": 1,
+        "VULNERABLE/UNKNOWN": 1
+      },
+      "guard-dominance-irrelevant-branch": {
+        "LEGITIMATE/UNKNOWN": 1,
+        "VULNERABLE/UNKNOWN": 1
+      },
+      "native-call-value": {
+        "LEGITIMATE/UNKNOWN": 1,
+        "VULNERABLE/UNKNOWN": 1
+      },
+      "nested-replay-key": {
+        "LEGITIMATE/UNKNOWN": 1,
+        "VULNERABLE/UNKNOWN": 1
+      },
+      "nullifier-chain-scope": {
+        "LEGITIMATE/UNKNOWN": 1,
+        "VULNERABLE/UNKNOWN": 1
+      },
+      "nullifier-contract-scope": {
+        "LEGITIMATE/UNKNOWN": 1,
+        "VULNERABLE/UNKNOWN": 1
+      },
+      "overlapping-masks": {
+        "LEGITIMATE/UNKNOWN": 1,
+        "VULNERABLE/UNKNOWN": 1
+      },
+      "prefix-vs-full-array": {
+        "LEGITIMATE/UNKNOWN": 1,
+        "VULNERABLE/UNKNOWN": 1
+      },
+      "replay-key-binding": {
+        "LEGITIMATE/UNKNOWN": 1,
+        "VULNERABLE/UNKNOWN": 1
+      },
+      "replay-position-canonicality": {
+        "LEGITIMATE/UNKNOWN": 1,
+        "VULNERABLE/UNKNOWN": 1
+      },
+      "safe-transfer-record-amount": {
+        "LEGITIMATE/UNKNOWN": 1,
+        "VULNERABLE/UNKNOWN": 1
+      },
+      "state-write": {
+        "LEGITIMATE/UNKNOWN": 1,
+        "VULNERABLE/UNKNOWN": 1
+      },
+      "verifier-arity": {
+        "LEGITIMATE/UNKNOWN": 1,
+        "VULNERABLE/UNKNOWN": 1
+      }
+    },
+    "BindCheck": {
+      "alias-decoding": {
+        "LEGITIMATE/UNKNOWN": 1,
+        "VULNERABLE/DETECTION": 1
+      },
+      "array-length-signal": {
+        "LEGITIMATE/UNKNOWN": 1,
+        "VULNERABLE/UNKNOWN": 1
+      },
+      "burn-owner": {
+        "LEGITIMATE/UNKNOWN": 1,
+        "VULNERABLE/UNKNOWN": 1
+      },
+      "caller-identity-policy": {
+        "LEGITIMATE/UNKNOWN": 1,
+        "VULNERABLE/UNKNOWN": 1
+      },
+      "commitment-fields": {
+        "LEGITIMATE/FALSE_ALARM": 1,
+        "VULNERABLE/DETECTION": 1
+      },
+      "commitment-order": {
+        "LEGITIMATE/FALSE_ALARM": 1,
+        "VULNERABLE/DETECTION": 1
+      },
+      "decoding-order": {
+        "LEGITIMATE/UNKNOWN": 1,
+        "VULNERABLE/UNKNOWN": 1
+      },
+      "effect-amount": {
+        "LEGITIMATE/UNKNOWN": 1,
+        "VULNERABLE/DETECTION": 1
+      },
+      "effect-recipient": {
+        "LEGITIMATE/UNKNOWN": 1,
+        "VULNERABLE/DETECTION": 1
+      },
+      "erc721-safe-mint-recipient": {
+        "LEGITIMATE/UNKNOWN": 1,
+        "VULNERABLE/DETECTION": 1
+      },
+      "guard-dominance-after-effect": {
+        "LEGITIMATE/UNKNOWN": 1,
+        "VULNERABLE/UNKNOWN": 1
+      },
+      "guard-dominance-irrelevant-branch": {
+        "LEGITIMATE/UNKNOWN": 1,
+        "VULNERABLE/UNKNOWN": 1
+      },
+      "native-call-value": {
+        "LEGITIMATE/UNKNOWN": 1,
+        "VULNERABLE/DETECTION": 1
+      },
+      "nested-replay-key": {
+        "LEGITIMATE/UNKNOWN": 1,
+        "VULNERABLE/DETECTION": 1
+      },
+      "nullifier-chain-scope": {
+        "LEGITIMATE/UNKNOWN": 1,
+        "VULNERABLE/UNKNOWN": 1
+      },
+      "nullifier-contract-scope": {
+        "LEGITIMATE/UNKNOWN": 1,
+        "VULNERABLE/UNKNOWN": 1
+      },
+      "overlapping-masks": {
+        "LEGITIMATE/UNKNOWN": 1,
+        "VULNERABLE/UNKNOWN": 1
+      },
+      "prefix-vs-full-array": {
+        "LEGITIMATE/UNKNOWN": 1,
+        "VULNERABLE/UNKNOWN": 1
+      },
+      "replay-key-binding": {
+        "LEGITIMATE/UNKNOWN": 1,
+        "VULNERABLE/DETECTION": 1
+      },
+      "replay-position-canonicality": {
+        "LEGITIMATE/UNKNOWN": 1,
+        "VULNERABLE/UNKNOWN": 1
+      },
+      "safe-transfer-record-amount": {
+        "LEGITIMATE/UNKNOWN": 1,
+        "VULNERABLE/DETECTION": 1
+      },
+      "state-write": {
+        "LEGITIMATE/UNKNOWN": 1,
+        "VULNERABLE/DETECTION": 1
+      },
+      "verifier-arity": {
+        "LEGITIMATE/FALSE_ALARM": 1,
+        "VULNERABLE/DETECTION": 1
+      }
+    },
+    "C": {
+      "alias-decoding": {
+        "LEGITIMATE/FALSE_ALARM": 1,
+        "VULNERABLE/DETECTION": 1
+      },
+      "array-length-signal": {
+        "LEGITIMATE/NO_ALARM": 1,
+        "VULNERABLE/DETECTION": 1
+      },
+      "burn-owner": {
+        "LEGITIMATE/FALSE_ALARM": 1,
+        "VULNERABLE/DETECTION": 1
+      },
+      "caller-identity-policy": {
+        "LEGITIMATE/NO_ALARM": 1,
+        "VULNERABLE/DETECTION": 1
+      },
+      "commitment-fields": {
+        "LEGITIMATE/NO_ALARM": 1,
+        "VULNERABLE/DETECTION": 1
+      },
+      "commitment-order": {
+        "LEGITIMATE/NO_ALARM": 1,
+        "VULNERABLE/DETECTION": 1
+      },
+      "decoding-order": {
+        "LEGITIMATE/NO_ALARM": 1,
+        "VULNERABLE/DETECTION": 1
+      },
+      "effect-amount": {
+        "LEGITIMATE/FALSE_ALARM": 1,
+        "VULNERABLE/DETECTION": 1
+      },
+      "effect-recipient": {
+        "LEGITIMATE/FALSE_ALARM": 1,
+        "VULNERABLE/DETECTION": 1
+      },
+      "erc721-safe-mint-recipient": {
+        "LEGITIMATE/FALSE_ALARM": 1,
+        "VULNERABLE/DETECTION": 1
+      },
+      "guard-dominance-after-effect": {
+        "LEGITIMATE/FALSE_ALARM": 1,
+        "VULNERABLE/DETECTION": 1
+      },
+      "guard-dominance-irrelevant-branch": {
+        "LEGITIMATE/NO_ALARM": 1,
+        "VULNERABLE/DETECTION": 1
+      },
+      "native-call-value": {
+        "LEGITIMATE/FALSE_ALARM": 1,
+        "VULNERABLE/DETECTION": 1
+      },
+      "nested-replay-key": {
+        "LEGITIMATE/FALSE_ALARM": 1,
+        "VULNERABLE/DETECTION": 1
+      },
+      "nullifier-chain-scope": {
+        "LEGITIMATE/NO_ALARM": 1,
+        "VULNERABLE/DETECTION": 1
+      },
+      "nullifier-contract-scope": {
+        "LEGITIMATE/NO_ALARM": 1,
+        "VULNERABLE/DETECTION": 1
+      },
+      "overlapping-masks": {
+        "LEGITIMATE/NO_ALARM": 1,
+        "VULNERABLE/DETECTION": 1
+      },
+      "prefix-vs-full-array": {
+        "LEGITIMATE/NO_ALARM": 1,
+        "VULNERABLE/DETECTION": 1
+      },
+      "replay-key-binding": {
+        "LEGITIMATE/FALSE_ALARM": 1,
+        "VULNERABLE/DETECTION": 1
+      },
+      "replay-position-canonicality": {
+        "LEGITIMATE/FALSE_ALARM": 1,
+        "VULNERABLE/DETECTION": 1
+      },
+      "safe-transfer-record-amount": {
+        "LEGITIMATE/FALSE_ALARM": 1,
+        "VULNERABLE/DETECTION": 1
+      },
+      "state-write": {
+        "LEGITIMATE/FALSE_ALARM": 1,
+        "VULNERABLE/DETECTION": 1
+      },
+      "verifier-arity": {
+        "LEGITIMATE/FALSE_ALARM": 1,
+        "VULNERABLE/DETECTION": 1
+      }
+    }
+  },
+  "synthetic_native_invocation_exits": {
+    "circom_inspect": {
+      "0/timeout=False": 46
+    },
+    "circomspect": {
+      "0/timeout=False": 43,
+      "1/timeout=False": 3
+    },
+    "picus": {
+      "8/timeout=False": 46
+    }
+  },
+  "synthetic_subtool_row_statuses": {
+    "circom_inspect": {
+      "completed": 46
+    },
+    "circomspect": {
+      "completed": 46
+    },
+    "custom_slither": {
+      "completed": 46
+    },
+    "picus": {
+      "completed": 46
+    },
+    "same_policy_foundry": {
+      "completed": 46
+    },
+    "zkap": {
+      "UNKNOWN": 46
+    }
+  }
+}

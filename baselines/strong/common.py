@@ -6,6 +6,7 @@ import json
 import os
 import pathlib
 import shutil
+import signal
 import subprocess
 import tempfile
 import time
@@ -55,6 +56,7 @@ def run_command(
     cwd: pathlib.Path | None = None,
     timeout: float = 120.0,
     env: dict[str, str] | None = None,
+    process_group: bool = False,
 ) -> dict[str, Any]:
     """Run a subprocess without truncating either native output stream."""
     started_utc = utc_now()
@@ -62,29 +64,29 @@ def run_command(
     merged_env = os.environ.copy()
     if env:
         merged_env.update(env)
+    process = subprocess.Popen(
+        argv, cwd=cwd, env=merged_env, text=True,
+        stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+        start_new_session=process_group,
+    )
     try:
-        completed = subprocess.run(
-            argv,
-            cwd=cwd,
-            env=merged_env,
-            text=True,
-            capture_output=True,
-            timeout=timeout,
-            check=False,
-        )
+        stdout, stderr = process.communicate(timeout=timeout)
         return {
             "argv": argv,
             "cwd": str(cwd.resolve()) if cwd else None,
             "started_utc": started_utc,
             "elapsed_seconds": round(time.monotonic() - started, 6),
-            "exit_status": completed.returncode,
+            "exit_status": process.returncode,
             "timed_out": False,
-            "stdout": completed.stdout,
-            "stderr": completed.stderr,
+            "stdout": stdout,
+            "stderr": stderr,
         }
-    except subprocess.TimeoutExpired as exc:
-        stdout = exc.stdout.decode(errors="replace") if isinstance(exc.stdout, bytes) else (exc.stdout or "")
-        stderr = exc.stderr.decode(errors="replace") if isinstance(exc.stderr, bytes) else (exc.stderr or "")
+    except subprocess.TimeoutExpired:
+        if process_group:
+            os.killpg(process.pid, signal.SIGKILL)
+        else:
+            process.kill()
+        stdout, stderr = process.communicate()
         return {
             "argv": argv,
             "cwd": str(cwd.resolve()) if cwd else None,
@@ -94,7 +96,14 @@ def run_command(
             "timed_out": True,
             "stdout": stdout,
             "stderr": stderr,
+            "process_group_killed": process_group,
         }
+    finally:
+        if process_group:
+            try:
+                os.killpg(process.pid, signal.SIGKILL)
+            except ProcessLookupError:
+                pass
 
 
 def retain_native(record: dict[str, Any], directory: pathlib.Path, stem: str) -> dict[str, Any]:

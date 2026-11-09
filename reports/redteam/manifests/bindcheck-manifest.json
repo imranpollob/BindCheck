@@ -1,0 +1,1482 @@
+{
+  "configured_circom": "/Users/imranpollob/Coding/bc/bindcheck-zk/tools/circom-src/target/release/circom",
+  "expected_path": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/redteam/adversarial/expected.json",
+  "expected_sha256": "41e3fcebf92f6a03f27998843fd865155d0db4ecfb58d51235f58ec4b3fc9e3e",
+  "generated_utc": "2026-11-09T05:52:30.013055+00:00",
+  "records": [
+    {
+      "fatal_reason": null,
+      "id": "ADV-V01",
+      "native": {
+        "argv": [
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/bindcheck-zk",
+          "analyze",
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/redteam/adversarial/ADV-V01"
+        ],
+        "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam",
+        "elapsed_seconds": 0.136264,
+        "exit_status": 0,
+        "started_utc": "2026-11-09T05:52:25.489006+00:00",
+        "stderr_bytes": 0,
+        "stderr_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V01/native/bindcheck.stderr",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_bytes": 14116,
+        "stdout_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V01/native/bindcheck.stdout",
+        "stdout_sha256": "d4f0981cd00ddb327a33beadf35a7216f89ed1d54e3a9f75ae5932ecd1084828",
+        "timed_out": false
+      },
+      "pattern_verdicts": {
+        "P1": "VIOLATION",
+        "P2": "UNKNOWN",
+        "P3": "UNKNOWN",
+        "P4": "UNKNOWN",
+        "P5": "UNKNOWN"
+      },
+      "result_path": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V01/result.json",
+      "result_sha256": "d4f0981cd00ddb327a33beadf35a7216f89ed1d54e3a9f75ae5932ecd1084828",
+      "run_status": "completed"
+    },
+    {
+      "fatal_reason": null,
+      "id": "ADV-L01",
+      "native": {
+        "argv": [
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/bindcheck-zk",
+          "analyze",
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/redteam/adversarial/ADV-L01"
+        ],
+        "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam",
+        "elapsed_seconds": 0.093117,
+        "exit_status": 0,
+        "started_utc": "2026-11-09T05:52:25.627686+00:00",
+        "stderr_bytes": 0,
+        "stderr_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L01/native/bindcheck.stderr",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_bytes": 14259,
+        "stdout_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L01/native/bindcheck.stdout",
+        "stdout_sha256": "4ec2603989da5dece5dae255d2dc5c77a3782475faf18e522207a3979797c0d6",
+        "timed_out": false
+      },
+      "pattern_verdicts": {
+        "P1": "VERIFIED_WITHIN_SCOPE",
+        "P2": "UNKNOWN",
+        "P3": "UNKNOWN",
+        "P4": "UNKNOWN",
+        "P5": "UNKNOWN"
+      },
+      "result_path": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L01/result.json",
+      "result_sha256": "4ec2603989da5dece5dae255d2dc5c77a3782475faf18e522207a3979797c0d6",
+      "run_status": "completed"
+    },
+    {
+      "fatal_reason": null,
+      "id": "ADV-V02",
+      "native": {
+        "argv": [
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/bindcheck-zk",
+          "analyze",
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/redteam/adversarial/ADV-V02"
+        ],
+        "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam",
+        "elapsed_seconds": 0.091893,
+        "exit_status": 0,
+        "started_utc": "2026-11-09T05:52:25.722537+00:00",
+        "stderr_bytes": 0,
+        "stderr_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V02/native/bindcheck.stderr",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_bytes": 14108,
+        "stdout_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V02/native/bindcheck.stdout",
+        "stdout_sha256": "3dd4ce6fabdc337ac90f72b9a19ed61741d89833203cac53610dc68967411a79",
+        "timed_out": false
+      },
+      "pattern_verdicts": {
+        "P1": "VIOLATION",
+        "P2": "UNKNOWN",
+        "P3": "UNKNOWN",
+        "P4": "UNKNOWN",
+        "P5": "UNKNOWN"
+      },
+      "result_path": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V02/result.json",
+      "result_sha256": "3dd4ce6fabdc337ac90f72b9a19ed61741d89833203cac53610dc68967411a79",
+      "run_status": "completed"
+    },
+    {
+      "fatal_reason": null,
+      "id": "ADV-L02",
+      "native": {
+        "argv": [
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/bindcheck-zk",
+          "analyze",
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/redteam/adversarial/ADV-L02"
+        ],
+        "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam",
+        "elapsed_seconds": 0.095095,
+        "exit_status": 0,
+        "started_utc": "2026-11-09T05:52:25.816010+00:00",
+        "stderr_bytes": 0,
+        "stderr_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L02/native/bindcheck.stderr",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_bytes": 14259,
+        "stdout_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L02/native/bindcheck.stdout",
+        "stdout_sha256": "dd2b64037012aefa1e90be75d8a3714ef0bdd6885f8264620d98355887d7b2e8",
+        "timed_out": false
+      },
+      "pattern_verdicts": {
+        "P1": "VERIFIED_WITHIN_SCOPE",
+        "P2": "UNKNOWN",
+        "P3": "UNKNOWN",
+        "P4": "UNKNOWN",
+        "P5": "UNKNOWN"
+      },
+      "result_path": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L02/result.json",
+      "result_sha256": "dd2b64037012aefa1e90be75d8a3714ef0bdd6885f8264620d98355887d7b2e8",
+      "run_status": "completed"
+    },
+    {
+      "fatal_reason": null,
+      "id": "ADV-V03",
+      "native": {
+        "argv": [
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/bindcheck-zk",
+          "analyze",
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/redteam/adversarial/ADV-V03"
+        ],
+        "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam",
+        "elapsed_seconds": 0.090417,
+        "exit_status": 0,
+        "started_utc": "2026-11-09T05:52:25.912631+00:00",
+        "stderr_bytes": 0,
+        "stderr_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V03/native/bindcheck.stderr",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_bytes": 14135,
+        "stdout_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V03/native/bindcheck.stdout",
+        "stdout_sha256": "3b47bc638441adb21726de2c5f41b937b66efe73428176293bfa2296cbec490f",
+        "timed_out": false
+      },
+      "pattern_verdicts": {
+        "P1": "VIOLATION",
+        "P2": "UNKNOWN",
+        "P3": "UNKNOWN",
+        "P4": "UNKNOWN",
+        "P5": "UNKNOWN"
+      },
+      "result_path": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V03/result.json",
+      "result_sha256": "3b47bc638441adb21726de2c5f41b937b66efe73428176293bfa2296cbec490f",
+      "run_status": "completed"
+    },
+    {
+      "fatal_reason": null,
+      "id": "ADV-L03",
+      "native": {
+        "argv": [
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/bindcheck-zk",
+          "analyze",
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/redteam/adversarial/ADV-L03"
+        ],
+        "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam",
+        "elapsed_seconds": 0.099508,
+        "exit_status": 0,
+        "started_utc": "2026-11-09T05:52:26.004622+00:00",
+        "stderr_bytes": 0,
+        "stderr_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L03/native/bindcheck.stderr",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_bytes": 14286,
+        "stdout_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L03/native/bindcheck.stdout",
+        "stdout_sha256": "127a7672cd13a7217dda839a5c6f2584a7fe413da85664abaa7012f6994028e5",
+        "timed_out": false
+      },
+      "pattern_verdicts": {
+        "P1": "VERIFIED_WITHIN_SCOPE",
+        "P2": "UNKNOWN",
+        "P3": "UNKNOWN",
+        "P4": "UNKNOWN",
+        "P5": "UNKNOWN"
+      },
+      "result_path": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L03/result.json",
+      "result_sha256": "127a7672cd13a7217dda839a5c6f2584a7fe413da85664abaa7012f6994028e5",
+      "run_status": "completed"
+    },
+    {
+      "fatal_reason": null,
+      "id": "ADV-V04",
+      "native": {
+        "argv": [
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/bindcheck-zk",
+          "analyze",
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/redteam/adversarial/ADV-V04"
+        ],
+        "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam",
+        "elapsed_seconds": 0.101615,
+        "exit_status": 0,
+        "started_utc": "2026-11-09T05:52:26.105718+00:00",
+        "stderr_bytes": 0,
+        "stderr_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V04/native/bindcheck.stderr",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_bytes": 12666,
+        "stdout_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V04/native/bindcheck.stdout",
+        "stdout_sha256": "adc2ddd32d67f4237824986e7cea9d03adfb4893b30bd0006b424ba890d36ff3",
+        "timed_out": false
+      },
+      "pattern_verdicts": {
+        "P1": "UNKNOWN",
+        "P2": "UNKNOWN",
+        "P3": "UNKNOWN",
+        "P4": "UNKNOWN",
+        "P5": "UNKNOWN"
+      },
+      "result_path": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V04/result.json",
+      "result_sha256": "adc2ddd32d67f4237824986e7cea9d03adfb4893b30bd0006b424ba890d36ff3",
+      "run_status": "completed"
+    },
+    {
+      "fatal_reason": null,
+      "id": "ADV-L04",
+      "native": {
+        "argv": [
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/bindcheck-zk",
+          "analyze",
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/redteam/adversarial/ADV-L04"
+        ],
+        "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam",
+        "elapsed_seconds": 0.089109,
+        "exit_status": 0,
+        "started_utc": "2026-11-09T05:52:26.208849+00:00",
+        "stderr_bytes": 0,
+        "stderr_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L04/native/bindcheck.stderr",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_bytes": 12667,
+        "stdout_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L04/native/bindcheck.stdout",
+        "stdout_sha256": "f5d92072b3a04e736f61921b01a5837a1377af7cdd219c89ee9ec8d7851998a4",
+        "timed_out": false
+      },
+      "pattern_verdicts": {
+        "P1": "UNKNOWN",
+        "P2": "UNKNOWN",
+        "P3": "UNKNOWN",
+        "P4": "UNKNOWN",
+        "P5": "UNKNOWN"
+      },
+      "result_path": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L04/result.json",
+      "result_sha256": "f5d92072b3a04e736f61921b01a5837a1377af7cdd219c89ee9ec8d7851998a4",
+      "run_status": "completed"
+    },
+    {
+      "fatal_reason": null,
+      "id": "ADV-V05",
+      "native": {
+        "argv": [
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/bindcheck-zk",
+          "analyze",
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/redteam/adversarial/ADV-V05"
+        ],
+        "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam",
+        "elapsed_seconds": 0.095174,
+        "exit_status": 0,
+        "started_utc": "2026-11-09T05:52:26.299667+00:00",
+        "stderr_bytes": 0,
+        "stderr_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V05/native/bindcheck.stderr",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_bytes": 14118,
+        "stdout_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V05/native/bindcheck.stdout",
+        "stdout_sha256": "1b650c3619aaab9e2027f03e8e79a6dabe76e458d1c960cb1bf198f826edf4d5",
+        "timed_out": false
+      },
+      "pattern_verdicts": {
+        "P1": "VIOLATION",
+        "P2": "UNKNOWN",
+        "P3": "UNKNOWN",
+        "P4": "UNKNOWN",
+        "P5": "UNKNOWN"
+      },
+      "result_path": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V05/result.json",
+      "result_sha256": "1b650c3619aaab9e2027f03e8e79a6dabe76e458d1c960cb1bf198f826edf4d5",
+      "run_status": "completed"
+    },
+    {
+      "fatal_reason": null,
+      "id": "ADV-L05",
+      "native": {
+        "argv": [
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/bindcheck-zk",
+          "analyze",
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/redteam/adversarial/ADV-L05"
+        ],
+        "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam",
+        "elapsed_seconds": 0.093857,
+        "exit_status": 0,
+        "started_utc": "2026-11-09T05:52:26.396357+00:00",
+        "stderr_bytes": 0,
+        "stderr_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L05/native/bindcheck.stderr",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_bytes": 14267,
+        "stdout_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L05/native/bindcheck.stdout",
+        "stdout_sha256": "97e1701eacbe383a2611863a708d29ce2c8b7427c18b39b2ef072d37cee8e4df",
+        "timed_out": false
+      },
+      "pattern_verdicts": {
+        "P1": "VERIFIED_WITHIN_SCOPE",
+        "P2": "UNKNOWN",
+        "P3": "UNKNOWN",
+        "P4": "UNKNOWN",
+        "P5": "UNKNOWN"
+      },
+      "result_path": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L05/result.json",
+      "result_sha256": "97e1701eacbe383a2611863a708d29ce2c8b7427c18b39b2ef072d37cee8e4df",
+      "run_status": "completed"
+    },
+    {
+      "fatal_reason": null,
+      "id": "ADV-V06",
+      "native": {
+        "argv": [
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/bindcheck-zk",
+          "analyze",
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/redteam/adversarial/ADV-V06"
+        ],
+        "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam",
+        "elapsed_seconds": 0.090724,
+        "exit_status": 0,
+        "started_utc": "2026-11-09T05:52:26.491775+00:00",
+        "stderr_bytes": 0,
+        "stderr_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V06/native/bindcheck.stderr",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_bytes": 14252,
+        "stdout_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V06/native/bindcheck.stdout",
+        "stdout_sha256": "3ef453319c774f10ba4aebfba6f76eb210773f316977db9174c0d76ee943f64d",
+        "timed_out": false
+      },
+      "pattern_verdicts": {
+        "P1": "VERIFIED_WITHIN_SCOPE",
+        "P2": "UNKNOWN",
+        "P3": "UNKNOWN",
+        "P4": "UNKNOWN",
+        "P5": "UNKNOWN"
+      },
+      "result_path": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V06/result.json",
+      "result_sha256": "3ef453319c774f10ba4aebfba6f76eb210773f316977db9174c0d76ee943f64d",
+      "run_status": "completed"
+    },
+    {
+      "fatal_reason": null,
+      "id": "ADV-L06",
+      "native": {
+        "argv": [
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/bindcheck-zk",
+          "analyze",
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/redteam/adversarial/ADV-L06"
+        ],
+        "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam",
+        "elapsed_seconds": 0.093576,
+        "exit_status": 0,
+        "started_utc": "2026-11-09T05:52:26.584119+00:00",
+        "stderr_bytes": 0,
+        "stderr_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L06/native/bindcheck.stderr",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_bytes": 14252,
+        "stdout_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L06/native/bindcheck.stdout",
+        "stdout_sha256": "99934ce5266556668dd5c8eb859981ab7e28ba3db8530351aa9612d15e4b60d5",
+        "timed_out": false
+      },
+      "pattern_verdicts": {
+        "P1": "VERIFIED_WITHIN_SCOPE",
+        "P2": "UNKNOWN",
+        "P3": "UNKNOWN",
+        "P4": "UNKNOWN",
+        "P5": "UNKNOWN"
+      },
+      "result_path": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L06/result.json",
+      "result_sha256": "99934ce5266556668dd5c8eb859981ab7e28ba3db8530351aa9612d15e4b60d5",
+      "run_status": "completed"
+    },
+    {
+      "fatal_reason": null,
+      "id": "ADV-V07",
+      "native": {
+        "argv": [
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/bindcheck-zk",
+          "analyze",
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/redteam/adversarial/ADV-V07"
+        ],
+        "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam",
+        "elapsed_seconds": 0.093112,
+        "exit_status": 0,
+        "started_utc": "2026-11-09T05:52:26.679373+00:00",
+        "stderr_bytes": 0,
+        "stderr_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V07/native/bindcheck.stderr",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_bytes": 14253,
+        "stdout_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V07/native/bindcheck.stdout",
+        "stdout_sha256": "c46aedbd372d507ece7521bc0d9c3d881a695c6b1fb1a330de46bcfa2d452361",
+        "timed_out": false
+      },
+      "pattern_verdicts": {
+        "P1": "VERIFIED_WITHIN_SCOPE",
+        "P2": "UNKNOWN",
+        "P3": "UNKNOWN",
+        "P4": "UNKNOWN",
+        "P5": "UNKNOWN"
+      },
+      "result_path": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V07/result.json",
+      "result_sha256": "c46aedbd372d507ece7521bc0d9c3d881a695c6b1fb1a330de46bcfa2d452361",
+      "run_status": "completed"
+    },
+    {
+      "fatal_reason": null,
+      "id": "ADV-L07",
+      "native": {
+        "argv": [
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/bindcheck-zk",
+          "analyze",
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/redteam/adversarial/ADV-L07"
+        ],
+        "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam",
+        "elapsed_seconds": 0.110258,
+        "exit_status": 0,
+        "started_utc": "2026-11-09T05:52:26.774130+00:00",
+        "stderr_bytes": 0,
+        "stderr_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L07/native/bindcheck.stderr",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_bytes": 14253,
+        "stdout_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L07/native/bindcheck.stdout",
+        "stdout_sha256": "a73b68541a77838769861586586e51f14f5885b0fc4547492e152ab7c0879eb2",
+        "timed_out": false
+      },
+      "pattern_verdicts": {
+        "P1": "VERIFIED_WITHIN_SCOPE",
+        "P2": "UNKNOWN",
+        "P3": "UNKNOWN",
+        "P4": "UNKNOWN",
+        "P5": "UNKNOWN"
+      },
+      "result_path": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L07/result.json",
+      "result_sha256": "a73b68541a77838769861586586e51f14f5885b0fc4547492e152ab7c0879eb2",
+      "run_status": "completed"
+    },
+    {
+      "fatal_reason": null,
+      "id": "ADV-V08",
+      "native": {
+        "argv": [
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/bindcheck-zk",
+          "analyze",
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/redteam/adversarial/ADV-V08"
+        ],
+        "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam",
+        "elapsed_seconds": 0.092518,
+        "exit_status": 0,
+        "started_utc": "2026-11-09T05:52:26.885957+00:00",
+        "stderr_bytes": 0,
+        "stderr_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V08/native/bindcheck.stderr",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_bytes": 13598,
+        "stdout_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V08/native/bindcheck.stdout",
+        "stdout_sha256": "8a49c2b2df315bf1afbb250e6311db9039fbcd96f9389173f91c96485ac162a6",
+        "timed_out": false
+      },
+      "pattern_verdicts": {
+        "P1": "UNKNOWN",
+        "P2": "UNKNOWN",
+        "P3": "VIOLATION",
+        "P4": "UNKNOWN",
+        "P5": "UNKNOWN"
+      },
+      "result_path": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V08/result.json",
+      "result_sha256": "8a49c2b2df315bf1afbb250e6311db9039fbcd96f9389173f91c96485ac162a6",
+      "run_status": "completed"
+    },
+    {
+      "fatal_reason": null,
+      "id": "ADV-L08",
+      "native": {
+        "argv": [
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/bindcheck-zk",
+          "analyze",
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/redteam/adversarial/ADV-L08"
+        ],
+        "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam",
+        "elapsed_seconds": 0.090176,
+        "exit_status": 0,
+        "started_utc": "2026-11-09T05:52:26.980044+00:00",
+        "stderr_bytes": 0,
+        "stderr_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L08/native/bindcheck.stderr",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_bytes": 13975,
+        "stdout_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L08/native/bindcheck.stdout",
+        "stdout_sha256": "84a280123a4cadc48504dfd42b7f52d10f15c9079a9975ded55a4d2ce6ee89b3",
+        "timed_out": false
+      },
+      "pattern_verdicts": {
+        "P1": "UNKNOWN",
+        "P2": "UNKNOWN",
+        "P3": "VERIFIED_WITHIN_SCOPE",
+        "P4": "UNKNOWN",
+        "P5": "UNKNOWN"
+      },
+      "result_path": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L08/result.json",
+      "result_sha256": "84a280123a4cadc48504dfd42b7f52d10f15c9079a9975ded55a4d2ce6ee89b3",
+      "run_status": "completed"
+    },
+    {
+      "fatal_reason": null,
+      "id": "ADV-V09",
+      "native": {
+        "argv": [
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/bindcheck-zk",
+          "analyze",
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/redteam/adversarial/ADV-V09"
+        ],
+        "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam",
+        "elapsed_seconds": 0.089724,
+        "exit_status": 0,
+        "started_utc": "2026-11-09T05:52:27.071759+00:00",
+        "stderr_bytes": 0,
+        "stderr_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V09/native/bindcheck.stderr",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_bytes": 13971,
+        "stdout_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V09/native/bindcheck.stdout",
+        "stdout_sha256": "2ccdfde0ca2e89b37fae77a2c8f06d06312b17ace62450406a44ff9ac58d2126",
+        "timed_out": false
+      },
+      "pattern_verdicts": {
+        "P1": "UNKNOWN",
+        "P2": "UNKNOWN",
+        "P3": "VERIFIED_WITHIN_SCOPE",
+        "P4": "UNKNOWN",
+        "P5": "UNKNOWN"
+      },
+      "result_path": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V09/result.json",
+      "result_sha256": "2ccdfde0ca2e89b37fae77a2c8f06d06312b17ace62450406a44ff9ac58d2126",
+      "run_status": "completed"
+    },
+    {
+      "fatal_reason": null,
+      "id": "ADV-L09",
+      "native": {
+        "argv": [
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/bindcheck-zk",
+          "analyze",
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/redteam/adversarial/ADV-L09"
+        ],
+        "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam",
+        "elapsed_seconds": 0.090589,
+        "exit_status": 0,
+        "started_utc": "2026-11-09T05:52:27.163021+00:00",
+        "stderr_bytes": 0,
+        "stderr_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L09/native/bindcheck.stderr",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_bytes": 13975,
+        "stdout_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L09/native/bindcheck.stdout",
+        "stdout_sha256": "68d7f1d5cccd6d0509159568d09bd0dd08690131f67e7c1c58b3545bfc5e3b47",
+        "timed_out": false
+      },
+      "pattern_verdicts": {
+        "P1": "UNKNOWN",
+        "P2": "UNKNOWN",
+        "P3": "VERIFIED_WITHIN_SCOPE",
+        "P4": "UNKNOWN",
+        "P5": "UNKNOWN"
+      },
+      "result_path": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L09/result.json",
+      "result_sha256": "68d7f1d5cccd6d0509159568d09bd0dd08690131f67e7c1c58b3545bfc5e3b47",
+      "run_status": "completed"
+    },
+    {
+      "fatal_reason": null,
+      "id": "ADV-V10",
+      "native": {
+        "argv": [
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/bindcheck-zk",
+          "analyze",
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/redteam/adversarial/ADV-V10"
+        ],
+        "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam",
+        "elapsed_seconds": 0.092068,
+        "exit_status": 0,
+        "started_utc": "2026-11-09T05:52:27.255143+00:00",
+        "stderr_bytes": 0,
+        "stderr_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V10/native/bindcheck.stderr",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_bytes": 13895,
+        "stdout_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V10/native/bindcheck.stdout",
+        "stdout_sha256": "a49c482d5e67acd6b0635c9b7abc104d001119ef0aa6c1f8fcba95d0e63ba4f4",
+        "timed_out": false
+      },
+      "pattern_verdicts": {
+        "P1": "VIOLATION",
+        "P2": "UNKNOWN",
+        "P3": "UNKNOWN",
+        "P4": "UNKNOWN",
+        "P5": "VIOLATION"
+      },
+      "result_path": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V10/result.json",
+      "result_sha256": "a49c482d5e67acd6b0635c9b7abc104d001119ef0aa6c1f8fcba95d0e63ba4f4",
+      "run_status": "completed"
+    },
+    {
+      "fatal_reason": null,
+      "id": "ADV-L10",
+      "native": {
+        "argv": [
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/bindcheck-zk",
+          "analyze",
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/redteam/adversarial/ADV-L10"
+        ],
+        "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam",
+        "elapsed_seconds": 0.091698,
+        "exit_status": 0,
+        "started_utc": "2026-11-09T05:52:27.348892+00:00",
+        "stderr_bytes": 0,
+        "stderr_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L10/native/bindcheck.stderr",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_bytes": 13895,
+        "stdout_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L10/native/bindcheck.stdout",
+        "stdout_sha256": "6ce0e1db55084826d579b7db1ed9096f079a307d67a5911db554d333f32b2779",
+        "timed_out": false
+      },
+      "pattern_verdicts": {
+        "P1": "VIOLATION",
+        "P2": "UNKNOWN",
+        "P3": "UNKNOWN",
+        "P4": "UNKNOWN",
+        "P5": "VIOLATION"
+      },
+      "result_path": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L10/result.json",
+      "result_sha256": "6ce0e1db55084826d579b7db1ed9096f079a307d67a5911db554d333f32b2779",
+      "run_status": "completed"
+    },
+    {
+      "fatal_reason": null,
+      "id": "ADV-V11",
+      "native": {
+        "argv": [
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/bindcheck-zk",
+          "analyze",
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/redteam/adversarial/ADV-V11"
+        ],
+        "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam",
+        "elapsed_seconds": 0.090078,
+        "exit_status": 0,
+        "started_utc": "2026-11-09T05:52:27.442085+00:00",
+        "stderr_bytes": 0,
+        "stderr_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V11/native/bindcheck.stderr",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_bytes": 12671,
+        "stdout_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V11/native/bindcheck.stdout",
+        "stdout_sha256": "d03228944fd80b66c16e1fc83de3356a6d87f47959318f8edc820d03edf0c6aa",
+        "timed_out": false
+      },
+      "pattern_verdicts": {
+        "P1": "UNKNOWN",
+        "P2": "UNKNOWN",
+        "P3": "UNKNOWN",
+        "P4": "UNKNOWN",
+        "P5": "UNKNOWN"
+      },
+      "result_path": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V11/result.json",
+      "result_sha256": "d03228944fd80b66c16e1fc83de3356a6d87f47959318f8edc820d03edf0c6aa",
+      "run_status": "completed"
+    },
+    {
+      "fatal_reason": null,
+      "id": "ADV-L11",
+      "native": {
+        "argv": [
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/bindcheck-zk",
+          "analyze",
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/redteam/adversarial/ADV-L11"
+        ],
+        "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam",
+        "elapsed_seconds": 0.093084,
+        "exit_status": 0,
+        "started_utc": "2026-11-09T05:52:27.533625+00:00",
+        "stderr_bytes": 0,
+        "stderr_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L11/native/bindcheck.stderr",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_bytes": 12670,
+        "stdout_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L11/native/bindcheck.stdout",
+        "stdout_sha256": "dc22510fa72120dbeb68209cdbc5f7f2f00a0380f4b8a2591cfe5b37a53e89a3",
+        "timed_out": false
+      },
+      "pattern_verdicts": {
+        "P1": "UNKNOWN",
+        "P2": "UNKNOWN",
+        "P3": "UNKNOWN",
+        "P4": "UNKNOWN",
+        "P5": "UNKNOWN"
+      },
+      "result_path": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L11/result.json",
+      "result_sha256": "dc22510fa72120dbeb68209cdbc5f7f2f00a0380f4b8a2591cfe5b37a53e89a3",
+      "run_status": "completed"
+    },
+    {
+      "fatal_reason": null,
+      "id": "ADV-V12",
+      "native": {
+        "argv": [
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/bindcheck-zk",
+          "analyze",
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/redteam/adversarial/ADV-V12"
+        ],
+        "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam",
+        "elapsed_seconds": 0.091139,
+        "exit_status": 0,
+        "started_utc": "2026-11-09T05:52:27.628294+00:00",
+        "stderr_bytes": 0,
+        "stderr_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V12/native/bindcheck.stderr",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_bytes": 12675,
+        "stdout_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V12/native/bindcheck.stdout",
+        "stdout_sha256": "ffcc3751442a57f4f1e48dbd06a0df478ad9be4ba58e98e95e17a0471ad37715",
+        "timed_out": false
+      },
+      "pattern_verdicts": {
+        "P1": "UNKNOWN",
+        "P2": "UNKNOWN",
+        "P3": "UNKNOWN",
+        "P4": "UNKNOWN",
+        "P5": "UNKNOWN"
+      },
+      "result_path": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V12/result.json",
+      "result_sha256": "ffcc3751442a57f4f1e48dbd06a0df478ad9be4ba58e98e95e17a0471ad37715",
+      "run_status": "completed"
+    },
+    {
+      "fatal_reason": null,
+      "id": "ADV-L12",
+      "native": {
+        "argv": [
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/bindcheck-zk",
+          "analyze",
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/redteam/adversarial/ADV-L12"
+        ],
+        "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam",
+        "elapsed_seconds": 0.090741,
+        "exit_status": 0,
+        "started_utc": "2026-11-09T05:52:27.721051+00:00",
+        "stderr_bytes": 0,
+        "stderr_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L12/native/bindcheck.stderr",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_bytes": 12675,
+        "stdout_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L12/native/bindcheck.stdout",
+        "stdout_sha256": "06571e4720372863a8a6b1f9f0516d9ddb76c25672a0731d3547159127b324f4",
+        "timed_out": false
+      },
+      "pattern_verdicts": {
+        "P1": "UNKNOWN",
+        "P2": "UNKNOWN",
+        "P3": "UNKNOWN",
+        "P4": "UNKNOWN",
+        "P5": "UNKNOWN"
+      },
+      "result_path": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L12/result.json",
+      "result_sha256": "06571e4720372863a8a6b1f9f0516d9ddb76c25672a0731d3547159127b324f4",
+      "run_status": "completed"
+    },
+    {
+      "fatal_reason": null,
+      "id": "ADV-V13",
+      "native": {
+        "argv": [
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/bindcheck-zk",
+          "analyze",
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/redteam/adversarial/ADV-V13"
+        ],
+        "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam",
+        "elapsed_seconds": 0.091163,
+        "exit_status": 0,
+        "started_utc": "2026-11-09T05:52:27.813366+00:00",
+        "stderr_bytes": 0,
+        "stderr_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V13/native/bindcheck.stderr",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_bytes": 14263,
+        "stdout_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V13/native/bindcheck.stdout",
+        "stdout_sha256": "6cd0d65cbeb1a2e7120aa10b29b4a79a6ef9a2af2504b7cb8cbfec247048dd55",
+        "timed_out": false
+      },
+      "pattern_verdicts": {
+        "P1": "VERIFIED_WITHIN_SCOPE",
+        "P2": "UNKNOWN",
+        "P3": "UNKNOWN",
+        "P4": "UNKNOWN",
+        "P5": "UNKNOWN"
+      },
+      "result_path": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V13/result.json",
+      "result_sha256": "6cd0d65cbeb1a2e7120aa10b29b4a79a6ef9a2af2504b7cb8cbfec247048dd55",
+      "run_status": "completed"
+    },
+    {
+      "fatal_reason": null,
+      "id": "ADV-L13",
+      "native": {
+        "argv": [
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/bindcheck-zk",
+          "analyze",
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/redteam/adversarial/ADV-L13"
+        ],
+        "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam",
+        "elapsed_seconds": 0.092011,
+        "exit_status": 0,
+        "started_utc": "2026-11-09T05:52:27.906239+00:00",
+        "stderr_bytes": 0,
+        "stderr_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L13/native/bindcheck.stderr",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_bytes": 14263,
+        "stdout_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L13/native/bindcheck.stdout",
+        "stdout_sha256": "5f63f2921567ef53f7ea2e1ba866f95b04031cd81963b63419fa08fddb464395",
+        "timed_out": false
+      },
+      "pattern_verdicts": {
+        "P1": "VERIFIED_WITHIN_SCOPE",
+        "P2": "UNKNOWN",
+        "P3": "UNKNOWN",
+        "P4": "UNKNOWN",
+        "P5": "UNKNOWN"
+      },
+      "result_path": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L13/result.json",
+      "result_sha256": "5f63f2921567ef53f7ea2e1ba866f95b04031cd81963b63419fa08fddb464395",
+      "run_status": "completed"
+    },
+    {
+      "fatal_reason": null,
+      "id": "ADV-V14",
+      "native": {
+        "argv": [
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/bindcheck-zk",
+          "analyze",
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/redteam/adversarial/ADV-V14"
+        ],
+        "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam",
+        "elapsed_seconds": 0.094238,
+        "exit_status": 0,
+        "started_utc": "2026-11-09T05:52:27.999920+00:00",
+        "stderr_bytes": 0,
+        "stderr_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V14/native/bindcheck.stderr",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_bytes": 13871,
+        "stdout_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V14/native/bindcheck.stdout",
+        "stdout_sha256": "74fba711f8837a740fa258d348a4ef97f4c98ddedd8f7df4053d86df678972fc",
+        "timed_out": false
+      },
+      "pattern_verdicts": {
+        "P1": "UNKNOWN",
+        "P2": "UNKNOWN",
+        "P3": "VERIFIED_WITHIN_SCOPE",
+        "P4": "UNKNOWN",
+        "P5": "UNKNOWN"
+      },
+      "result_path": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V14/result.json",
+      "result_sha256": "74fba711f8837a740fa258d348a4ef97f4c98ddedd8f7df4053d86df678972fc",
+      "run_status": "completed"
+    },
+    {
+      "fatal_reason": null,
+      "id": "ADV-L14",
+      "native": {
+        "argv": [
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/bindcheck-zk",
+          "analyze",
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/redteam/adversarial/ADV-L14"
+        ],
+        "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam",
+        "elapsed_seconds": 0.089075,
+        "exit_status": 0,
+        "started_utc": "2026-11-09T05:52:28.095741+00:00",
+        "stderr_bytes": 0,
+        "stderr_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L14/native/bindcheck.stderr",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_bytes": 13821,
+        "stdout_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L14/native/bindcheck.stdout",
+        "stdout_sha256": "814868dfe8173291c7a1515e737de2a50b717a8cb5ff380775b787e813ea2242",
+        "timed_out": false
+      },
+      "pattern_verdicts": {
+        "P1": "UNKNOWN",
+        "P2": "UNKNOWN",
+        "P3": "VERIFIED_WITHIN_SCOPE",
+        "P4": "UNKNOWN",
+        "P5": "UNKNOWN"
+      },
+      "result_path": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L14/result.json",
+      "result_sha256": "814868dfe8173291c7a1515e737de2a50b717a8cb5ff380775b787e813ea2242",
+      "run_status": "completed"
+    },
+    {
+      "fatal_reason": null,
+      "id": "ADV-V15",
+      "native": {
+        "argv": [
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/bindcheck-zk",
+          "analyze",
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/redteam/adversarial/ADV-V15"
+        ],
+        "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam",
+        "elapsed_seconds": 0.090623,
+        "exit_status": 0,
+        "started_utc": "2026-11-09T05:52:28.189157+00:00",
+        "stderr_bytes": 0,
+        "stderr_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V15/native/bindcheck.stderr",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_bytes": 13887,
+        "stdout_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V15/native/bindcheck.stdout",
+        "stdout_sha256": "56321a21f0db0933b5499d861f074878da6c32ae1fb2d2a25ad1f2f944597620",
+        "timed_out": false
+      },
+      "pattern_verdicts": {
+        "P1": "UNKNOWN",
+        "P2": "UNKNOWN",
+        "P3": "VERIFIED_WITHIN_SCOPE",
+        "P4": "UNKNOWN",
+        "P5": "UNKNOWN"
+      },
+      "result_path": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V15/result.json",
+      "result_sha256": "56321a21f0db0933b5499d861f074878da6c32ae1fb2d2a25ad1f2f944597620",
+      "run_status": "completed"
+    },
+    {
+      "fatal_reason": null,
+      "id": "ADV-L15",
+      "native": {
+        "argv": [
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/bindcheck-zk",
+          "analyze",
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/redteam/adversarial/ADV-L15"
+        ],
+        "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam",
+        "elapsed_seconds": 0.097712,
+        "exit_status": 0,
+        "started_utc": "2026-11-09T05:52:28.281340+00:00",
+        "stderr_bytes": 0,
+        "stderr_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L15/native/bindcheck.stderr",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_bytes": 13837,
+        "stdout_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L15/native/bindcheck.stdout",
+        "stdout_sha256": "0eb3a75c869d4e99f3b4c2307d3316c8a90d4ac70b2a37e3f0c14d4bb95ff235",
+        "timed_out": false
+      },
+      "pattern_verdicts": {
+        "P1": "UNKNOWN",
+        "P2": "UNKNOWN",
+        "P3": "VERIFIED_WITHIN_SCOPE",
+        "P4": "UNKNOWN",
+        "P5": "UNKNOWN"
+      },
+      "result_path": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L15/result.json",
+      "result_sha256": "0eb3a75c869d4e99f3b4c2307d3316c8a90d4ac70b2a37e3f0c14d4bb95ff235",
+      "run_status": "completed"
+    },
+    {
+      "fatal_reason": null,
+      "id": "ADV-V16",
+      "native": {
+        "argv": [
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/bindcheck-zk",
+          "analyze",
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/redteam/adversarial/ADV-V16"
+        ],
+        "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam",
+        "elapsed_seconds": 0.091968,
+        "exit_status": 0,
+        "started_utc": "2026-11-09T05:52:28.380515+00:00",
+        "stderr_bytes": 0,
+        "stderr_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V16/native/bindcheck.stderr",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_bytes": 13845,
+        "stdout_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V16/native/bindcheck.stdout",
+        "stdout_sha256": "7bdb3de0d76aec6a7d5a9fc9819895f508052f1181be9902aadbcff93cf75725",
+        "timed_out": false
+      },
+      "pattern_verdicts": {
+        "P1": "VIOLATION",
+        "P2": "UNKNOWN",
+        "P3": "UNKNOWN",
+        "P4": "UNKNOWN",
+        "P5": "UNKNOWN"
+      },
+      "result_path": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V16/result.json",
+      "result_sha256": "7bdb3de0d76aec6a7d5a9fc9819895f508052f1181be9902aadbcff93cf75725",
+      "run_status": "completed"
+    },
+    {
+      "fatal_reason": null,
+      "id": "ADV-L16",
+      "native": {
+        "argv": [
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/bindcheck-zk",
+          "analyze",
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/redteam/adversarial/ADV-L16"
+        ],
+        "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam",
+        "elapsed_seconds": 0.092694,
+        "exit_status": 0,
+        "started_utc": "2026-11-09T05:52:28.473953+00:00",
+        "stderr_bytes": 0,
+        "stderr_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L16/native/bindcheck.stderr",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_bytes": 13845,
+        "stdout_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L16/native/bindcheck.stdout",
+        "stdout_sha256": "09634e567c2e409032134aa1e9bdedd61ee4d3a5accb426ddab22398d436630c",
+        "timed_out": false
+      },
+      "pattern_verdicts": {
+        "P1": "VIOLATION",
+        "P2": "UNKNOWN",
+        "P3": "UNKNOWN",
+        "P4": "UNKNOWN",
+        "P5": "UNKNOWN"
+      },
+      "result_path": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L16/result.json",
+      "result_sha256": "09634e567c2e409032134aa1e9bdedd61ee4d3a5accb426ddab22398d436630c",
+      "run_status": "completed"
+    },
+    {
+      "fatal_reason": null,
+      "id": "ADV-V17",
+      "native": {
+        "argv": [
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/bindcheck-zk",
+          "analyze",
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/redteam/adversarial/ADV-V17"
+        ],
+        "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam",
+        "elapsed_seconds": 0.094973,
+        "exit_status": 0,
+        "started_utc": "2026-11-09T05:52:28.568432+00:00",
+        "stderr_bytes": 0,
+        "stderr_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V17/native/bindcheck.stderr",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_bytes": 13894,
+        "stdout_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V17/native/bindcheck.stdout",
+        "stdout_sha256": "ee736b23925d0837cdcab4466ba116f42b57d3456a37232d6bb63bb9acc17627",
+        "timed_out": false
+      },
+      "pattern_verdicts": {
+        "P1": "VIOLATION",
+        "P2": "UNKNOWN",
+        "P3": "UNKNOWN",
+        "P4": "UNKNOWN",
+        "P5": "UNKNOWN"
+      },
+      "result_path": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V17/result.json",
+      "result_sha256": "ee736b23925d0837cdcab4466ba116f42b57d3456a37232d6bb63bb9acc17627",
+      "run_status": "completed"
+    },
+    {
+      "fatal_reason": null,
+      "id": "ADV-L17",
+      "native": {
+        "argv": [
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/bindcheck-zk",
+          "analyze",
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/redteam/adversarial/ADV-L17"
+        ],
+        "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam",
+        "elapsed_seconds": 0.101343,
+        "exit_status": 0,
+        "started_utc": "2026-11-09T05:52:28.664968+00:00",
+        "stderr_bytes": 0,
+        "stderr_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L17/native/bindcheck.stderr",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_bytes": 13845,
+        "stdout_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L17/native/bindcheck.stdout",
+        "stdout_sha256": "8b868bd37a010575f039818bab028f850c7694d0cfcac860e6fee891ca64f26d",
+        "timed_out": false
+      },
+      "pattern_verdicts": {
+        "P1": "VIOLATION",
+        "P2": "UNKNOWN",
+        "P3": "UNKNOWN",
+        "P4": "UNKNOWN",
+        "P5": "UNKNOWN"
+      },
+      "result_path": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L17/result.json",
+      "result_sha256": "8b868bd37a010575f039818bab028f850c7694d0cfcac860e6fee891ca64f26d",
+      "run_status": "completed"
+    },
+    {
+      "fatal_reason": null,
+      "id": "ADV-V18",
+      "native": {
+        "argv": [
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/bindcheck-zk",
+          "analyze",
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/redteam/adversarial/ADV-V18"
+        ],
+        "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam",
+        "elapsed_seconds": 0.102157,
+        "exit_status": 0,
+        "started_utc": "2026-11-09T05:52:28.768418+00:00",
+        "stderr_bytes": 0,
+        "stderr_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V18/native/bindcheck.stderr",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_bytes": 12671,
+        "stdout_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V18/native/bindcheck.stdout",
+        "stdout_sha256": "61687a7539e5f9149bb3790a3cfb9ce2751e0ca7137183c8fd83e86f97f4be94",
+        "timed_out": false
+      },
+      "pattern_verdicts": {
+        "P1": "UNKNOWN",
+        "P2": "UNKNOWN",
+        "P3": "UNKNOWN",
+        "P4": "UNKNOWN",
+        "P5": "UNKNOWN"
+      },
+      "result_path": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V18/result.json",
+      "result_sha256": "61687a7539e5f9149bb3790a3cfb9ce2751e0ca7137183c8fd83e86f97f4be94",
+      "run_status": "completed"
+    },
+    {
+      "fatal_reason": null,
+      "id": "ADV-L18",
+      "native": {
+        "argv": [
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/bindcheck-zk",
+          "analyze",
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/redteam/adversarial/ADV-L18"
+        ],
+        "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam",
+        "elapsed_seconds": 0.094049,
+        "exit_status": 0,
+        "started_utc": "2026-11-09T05:52:28.871965+00:00",
+        "stderr_bytes": 0,
+        "stderr_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L18/native/bindcheck.stderr",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_bytes": 12671,
+        "stdout_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L18/native/bindcheck.stdout",
+        "stdout_sha256": "0bc1dc18396ac82b49b70760c4a751dc168a10dc3cd98622ddeb37fa4760ee02",
+        "timed_out": false
+      },
+      "pattern_verdicts": {
+        "P1": "UNKNOWN",
+        "P2": "UNKNOWN",
+        "P3": "UNKNOWN",
+        "P4": "UNKNOWN",
+        "P5": "UNKNOWN"
+      },
+      "result_path": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L18/result.json",
+      "result_sha256": "0bc1dc18396ac82b49b70760c4a751dc168a10dc3cd98622ddeb37fa4760ee02",
+      "run_status": "completed"
+    },
+    {
+      "fatal_reason": null,
+      "id": "ADV-V19",
+      "native": {
+        "argv": [
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/bindcheck-zk",
+          "analyze",
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/redteam/adversarial/ADV-V19"
+        ],
+        "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam",
+        "elapsed_seconds": 0.096846,
+        "exit_status": 0,
+        "started_utc": "2026-11-09T05:52:28.967735+00:00",
+        "stderr_bytes": 0,
+        "stderr_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V19/native/bindcheck.stderr",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_bytes": 14177,
+        "stdout_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V19/native/bindcheck.stdout",
+        "stdout_sha256": "56bb1c52fda1f0be7b6b4073ccc74cb8d75e241a62e7fd467c4b13da025493de",
+        "timed_out": false
+      },
+      "pattern_verdicts": {
+        "P1": "VIOLATION",
+        "P2": "UNKNOWN",
+        "P3": "UNKNOWN",
+        "P4": "UNKNOWN",
+        "P5": "UNKNOWN"
+      },
+      "result_path": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V19/result.json",
+      "result_sha256": "56bb1c52fda1f0be7b6b4073ccc74cb8d75e241a62e7fd467c4b13da025493de",
+      "run_status": "completed"
+    },
+    {
+      "fatal_reason": null,
+      "id": "ADV-L19",
+      "native": {
+        "argv": [
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/bindcheck-zk",
+          "analyze",
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/redteam/adversarial/ADV-L19"
+        ],
+        "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam",
+        "elapsed_seconds": 0.095946,
+        "exit_status": 0,
+        "started_utc": "2026-11-09T05:52:29.065969+00:00",
+        "stderr_bytes": 0,
+        "stderr_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L19/native/bindcheck.stderr",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_bytes": 14315,
+        "stdout_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L19/native/bindcheck.stdout",
+        "stdout_sha256": "56a674401e433446c76c00163309ae2cc584425ebeff52ac7774e682ad3282af",
+        "timed_out": false
+      },
+      "pattern_verdicts": {
+        "P1": "VERIFIED_WITHIN_SCOPE",
+        "P2": "UNKNOWN",
+        "P3": "UNKNOWN",
+        "P4": "UNKNOWN",
+        "P5": "UNKNOWN"
+      },
+      "result_path": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L19/result.json",
+      "result_sha256": "56a674401e433446c76c00163309ae2cc584425ebeff52ac7774e682ad3282af",
+      "run_status": "completed"
+    },
+    {
+      "fatal_reason": null,
+      "id": "ADV-V20",
+      "native": {
+        "argv": [
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/bindcheck-zk",
+          "analyze",
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/redteam/adversarial/ADV-V20"
+        ],
+        "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam",
+        "elapsed_seconds": 0.096362,
+        "exit_status": 0,
+        "started_utc": "2026-11-09T05:52:29.163382+00:00",
+        "stderr_bytes": 0,
+        "stderr_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V20/native/bindcheck.stderr",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_bytes": 14230,
+        "stdout_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V20/native/bindcheck.stdout",
+        "stdout_sha256": "dd1b89b73932786ff67a90388f1e1721f5e4d13b684eaec820a43efcee1b680d",
+        "timed_out": false
+      },
+      "pattern_verdicts": {
+        "P1": "VERIFIED_WITHIN_SCOPE",
+        "P2": "UNKNOWN",
+        "P3": "UNKNOWN",
+        "P4": "UNKNOWN",
+        "P5": "UNKNOWN"
+      },
+      "result_path": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V20/result.json",
+      "result_sha256": "dd1b89b73932786ff67a90388f1e1721f5e4d13b684eaec820a43efcee1b680d",
+      "run_status": "completed"
+    },
+    {
+      "fatal_reason": null,
+      "id": "ADV-L20",
+      "native": {
+        "argv": [
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/bindcheck-zk",
+          "analyze",
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/redteam/adversarial/ADV-L20"
+        ],
+        "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam",
+        "elapsed_seconds": 0.104063,
+        "exit_status": 0,
+        "started_utc": "2026-11-09T05:52:29.261321+00:00",
+        "stderr_bytes": 0,
+        "stderr_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L20/native/bindcheck.stderr",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_bytes": 14230,
+        "stdout_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L20/native/bindcheck.stdout",
+        "stdout_sha256": "8a0293c9d3e0ea250f61147d56412e4bc6af9b4c971ab7ed64f9d4e92f8d1e97",
+        "timed_out": false
+      },
+      "pattern_verdicts": {
+        "P1": "VERIFIED_WITHIN_SCOPE",
+        "P2": "UNKNOWN",
+        "P3": "UNKNOWN",
+        "P4": "UNKNOWN",
+        "P5": "UNKNOWN"
+      },
+      "result_path": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L20/result.json",
+      "result_sha256": "8a0293c9d3e0ea250f61147d56412e4bc6af9b4c971ab7ed64f9d4e92f8d1e97",
+      "run_status": "completed"
+    },
+    {
+      "fatal_reason": null,
+      "id": "ADV-V21",
+      "native": {
+        "argv": [
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/bindcheck-zk",
+          "analyze",
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/redteam/adversarial/ADV-V21"
+        ],
+        "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam",
+        "elapsed_seconds": 0.096866,
+        "exit_status": 0,
+        "started_utc": "2026-11-09T05:52:29.366918+00:00",
+        "stderr_bytes": 0,
+        "stderr_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V21/native/bindcheck.stderr",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_bytes": 14117,
+        "stdout_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V21/native/bindcheck.stdout",
+        "stdout_sha256": "a05d3eb517458fcab1958cabc045d61c8ea7602fe6a88356ee00f867ef0f6a0b",
+        "timed_out": false
+      },
+      "pattern_verdicts": {
+        "P1": "VIOLATION",
+        "P2": "UNKNOWN",
+        "P3": "UNKNOWN",
+        "P4": "UNKNOWN",
+        "P5": "UNKNOWN"
+      },
+      "result_path": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V21/result.json",
+      "result_sha256": "a05d3eb517458fcab1958cabc045d61c8ea7602fe6a88356ee00f867ef0f6a0b",
+      "run_status": "completed"
+    },
+    {
+      "fatal_reason": null,
+      "id": "ADV-L21",
+      "native": {
+        "argv": [
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/bindcheck-zk",
+          "analyze",
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/redteam/adversarial/ADV-L21"
+        ],
+        "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam",
+        "elapsed_seconds": 0.105,
+        "exit_status": 0,
+        "started_utc": "2026-11-09T05:52:29.465644+00:00",
+        "stderr_bytes": 0,
+        "stderr_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L21/native/bindcheck.stderr",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_bytes": 14266,
+        "stdout_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L21/native/bindcheck.stdout",
+        "stdout_sha256": "af91b1aa88c669869b3a40fc56e7fc9e17bde430a5beb6490560560357271a4b",
+        "timed_out": false
+      },
+      "pattern_verdicts": {
+        "P1": "VERIFIED_WITHIN_SCOPE",
+        "P2": "UNKNOWN",
+        "P3": "UNKNOWN",
+        "P4": "UNKNOWN",
+        "P5": "UNKNOWN"
+      },
+      "result_path": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L21/result.json",
+      "result_sha256": "af91b1aa88c669869b3a40fc56e7fc9e17bde430a5beb6490560560357271a4b",
+      "run_status": "completed"
+    },
+    {
+      "fatal_reason": null,
+      "id": "ADV-V22",
+      "native": {
+        "argv": [
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/bindcheck-zk",
+          "analyze",
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/redteam/adversarial/ADV-V22"
+        ],
+        "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam",
+        "elapsed_seconds": 0.096994,
+        "exit_status": 0,
+        "started_utc": "2026-11-09T05:52:29.572204+00:00",
+        "stderr_bytes": 0,
+        "stderr_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V22/native/bindcheck.stderr",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_bytes": 13632,
+        "stdout_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V22/native/bindcheck.stdout",
+        "stdout_sha256": "8ca3796ec3ccfbeb234c07f4ba42cab7ee7bce9c4e531db623ca64b739c82dc9",
+        "timed_out": false
+      },
+      "pattern_verdicts": {
+        "P1": "UNKNOWN",
+        "P2": "UNKNOWN",
+        "P3": "VIOLATION",
+        "P4": "UNKNOWN",
+        "P5": "UNKNOWN"
+      },
+      "result_path": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V22/result.json",
+      "result_sha256": "8ca3796ec3ccfbeb234c07f4ba42cab7ee7bce9c4e531db623ca64b739c82dc9",
+      "run_status": "completed"
+    },
+    {
+      "fatal_reason": null,
+      "id": "ADV-L22",
+      "native": {
+        "argv": [
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/bindcheck-zk",
+          "analyze",
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/redteam/adversarial/ADV-L22"
+        ],
+        "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam",
+        "elapsed_seconds": 0.108673,
+        "exit_status": 0,
+        "started_utc": "2026-11-09T05:52:29.670658+00:00",
+        "stderr_bytes": 0,
+        "stderr_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L22/native/bindcheck.stderr",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_bytes": 13655,
+        "stdout_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L22/native/bindcheck.stdout",
+        "stdout_sha256": "6e97d0cec924c148086e68eb07728e78f04b46a74aca3d5ffd7b9306d49469a9",
+        "timed_out": false
+      },
+      "pattern_verdicts": {
+        "P1": "UNKNOWN",
+        "P2": "UNKNOWN",
+        "P3": "UNKNOWN",
+        "P4": "UNKNOWN",
+        "P5": "UNKNOWN"
+      },
+      "result_path": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L22/result.json",
+      "result_sha256": "6e97d0cec924c148086e68eb07728e78f04b46a74aca3d5ffd7b9306d49469a9",
+      "run_status": "completed"
+    },
+    {
+      "fatal_reason": null,
+      "id": "ADV-V23",
+      "native": {
+        "argv": [
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/bindcheck-zk",
+          "analyze",
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/redteam/adversarial/ADV-V23"
+        ],
+        "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam",
+        "elapsed_seconds": 0.126944,
+        "exit_status": 0,
+        "started_utc": "2026-11-09T05:52:29.781176+00:00",
+        "stderr_bytes": 0,
+        "stderr_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V23/native/bindcheck.stderr",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_bytes": 13778,
+        "stdout_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V23/native/bindcheck.stdout",
+        "stdout_sha256": "b713bc49a6a893834f073c033c6b2ebbbf099970e797184d5ac59f6a6d8d00be",
+        "timed_out": false
+      },
+      "pattern_verdicts": {
+        "P1": "VIOLATION",
+        "P2": "UNKNOWN",
+        "P3": "UNKNOWN",
+        "P4": "UNKNOWN",
+        "P5": "UNKNOWN"
+      },
+      "result_path": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V23/result.json",
+      "result_sha256": "b713bc49a6a893834f073c033c6b2ebbbf099970e797184d5ac59f6a6d8d00be",
+      "run_status": "completed"
+    },
+    {
+      "fatal_reason": null,
+      "id": "ADV-L23",
+      "native": {
+        "argv": [
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/bindcheck-zk",
+          "analyze",
+          "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/redteam/adversarial/ADV-L23"
+        ],
+        "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam",
+        "elapsed_seconds": 0.101625,
+        "exit_status": 0,
+        "started_utc": "2026-11-09T05:52:29.909887+00:00",
+        "stderr_bytes": 0,
+        "stderr_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L23/native/bindcheck.stderr",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_bytes": 13923,
+        "stdout_path": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L23/native/bindcheck.stdout",
+        "stdout_sha256": "be4a5e482d400e02741b0d73b5654f7a0be0d22ae7db73066414cd5980264b85",
+        "timed_out": false
+      },
+      "pattern_verdicts": {
+        "P1": "VERIFIED_WITHIN_SCOPE",
+        "P2": "UNKNOWN",
+        "P3": "UNKNOWN",
+        "P4": "UNKNOWN",
+        "P5": "UNKNOWN"
+      },
+      "result_path": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L23/result.json",
+      "result_sha256": "be4a5e482d400e02741b0d73b5654f7a0be0d22ae7db73066414cd5980264b85",
+      "run_status": "completed"
+    }
+  ],
+  "schema": "bindcheck-redteam.bindcheck-manifest/v1",
+  "timeout_seconds": 120.0
+}

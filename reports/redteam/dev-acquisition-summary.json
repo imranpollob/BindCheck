@@ -1,0 +1,515 @@
+{
+  "all_pinned_heads_match": true,
+  "all_read_only_reused": true,
+  "row_count": 56,
+  "rows": [
+    {
+      "expected_commit": "df4bf730214bf9d0c717a9258f7a74861758c269",
+      "id": "DEV-F01",
+      "observed_head": "df4bf730214bf9d0c717a9258f7a74861758c269",
+      "read_only_reused": true,
+      "repository": "0xbow-io/privacy-pools-core",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F01/acquisition.json",
+      "status": "ready"
+    },
+    {
+      "expected_commit": "dbab5553c486a09d5e1042e5271e3316224cc176",
+      "id": "DEV-F02",
+      "observed_head": "dbab5553c486a09d5e1042e5271e3316224cc176",
+      "read_only_reused": true,
+      "repository": "semaphore-protocol/semaphore",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F02/acquisition.json",
+      "status": "ready"
+    },
+    {
+      "expected_commit": "919c433d09aa776a05ca2d89a0074324d6199e91",
+      "id": "DEV-F03",
+      "observed_head": "919c433d09aa776a05ca2d89a0074324d6199e91",
+      "read_only_reused": true,
+      "repository": "privacy-scaling-explorations/maci",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F03/acquisition.json",
+      "status": "ready"
+    },
+    {
+      "expected_commit": "fe3a863f9613e1992ffd218fd1e38ea665866738",
+      "id": "DEV-F04",
+      "observed_head": "fe3a863f9613e1992ffd218fd1e38ea665866738",
+      "read_only_reused": true,
+      "repository": "Unirep/Unirep",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F04/acquisition.json",
+      "status": "ready"
+    },
+    {
+      "expected_commit": "949c677aa086b5ea0d53697936c9a332ebb737fb",
+      "id": "DEV-F05",
+      "observed_head": "949c677aa086b5ea0d53697936c9a332ebb737fb",
+      "read_only_reused": true,
+      "repository": "dfdao/arena",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F05/acquisition.json",
+      "status": "ready"
+    },
+    {
+      "expected_commit": "b750bc45a87bb65dfe0a1a3e0ebb0141b63b1138",
+      "id": "DEV-F06",
+      "observed_head": "b750bc45a87bb65dfe0a1a3e0ebb0141b63b1138",
+      "read_only_reused": true,
+      "repository": "nocturne-xyz/protocol",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F06/acquisition.json",
+      "status": "ready"
+    },
+    {
+      "expected_commit": "4dad918761cfb1d7d5ed9918dcd796d0cb23ae82",
+      "id": "DEV-F07",
+      "observed_head": "4dad918761cfb1d7d5ed9918dcd796d0cb23ae82",
+      "read_only_reused": true,
+      "repository": "anon-aadhaar/anon-aadhaar",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F07/acquisition.json",
+      "status": "ready"
+    },
+    {
+      "expected_commit": "fa4274dbca8547963f92364ceacb7f62aecc8fd4",
+      "id": "DEV-F08",
+      "observed_head": "fa4274dbca8547963f92364ceacb7f62aecc8fd4",
+      "read_only_reused": true,
+      "repository": "zkp2p/zk-p2p",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F08/acquisition.json",
+      "status": "ready"
+    },
+    {
+      "expected_commit": "4a93d95914296c2f12ade7d815bc304e92977865",
+      "id": "DEV-F09",
+      "observed_head": "4a93d95914296c2f12ade7d815bc304e92977865",
+      "read_only_reused": true,
+      "repository": "zk-poll/zk-poll",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F09/acquisition.json",
+      "status": "ready"
+    },
+    {
+      "expected_commit": "f4aece4c513161e78d3dd78579687133cfd4f22a",
+      "id": "DEV-F10",
+      "observed_head": "f4aece4c513161e78d3dd78579687133cfd4f22a",
+      "read_only_reused": true,
+      "repository": "0xFableOrg/0xFable",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F10/acquisition.json",
+      "status": "ready"
+    },
+    {
+      "expected_commit": "2e79b4de2afaaf86bd14e3f29014dfe39dee9e87",
+      "id": "DEV-F11",
+      "observed_head": "2e79b4de2afaaf86bd14e3f29014dfe39dee9e87",
+      "read_only_reused": true,
+      "repository": "NebraZKP/upa",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F11/acquisition.json",
+      "status": "ready"
+    },
+    {
+      "expected_commit": "6d07155ecf295e6d68936bf424557621d0c66456",
+      "id": "DEV-F12",
+      "observed_head": "6d07155ecf295e6d68936bf424557621d0c66456",
+      "read_only_reused": true,
+      "repository": "NethermindEth/spsc",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F12/acquisition.json",
+      "status": "ready"
+    },
+    {
+      "expected_commit": "5277758874584bc52e88590303aa072bebfd3b56",
+      "id": "DEV-F13",
+      "observed_head": "5277758874584bc52e88590303aa072bebfd3b56",
+      "read_only_reused": true,
+      "repository": "weavedb/zkjson",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F13/acquisition.json",
+      "status": "ready"
+    },
+    {
+      "expected_commit": "5a5a9f6eb2983ea38fb9475c9cd781514569e166",
+      "id": "DEV-F14",
+      "observed_head": "5a5a9f6eb2983ea38fb9475c9cd781514569e166",
+      "read_only_reused": true,
+      "repository": "RippnerLabs/meridian-link",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F14/acquisition.json",
+      "status": "ready"
+    },
+    {
+      "expected_commit": "8dc98cd4d63ad3aa6d86b70b8f4bbcd70f1e8be1",
+      "id": "DEV-F15",
+      "observed_head": "8dc98cd4d63ad3aa6d86b70b8f4bbcd70f1e8be1",
+      "read_only_reused": true,
+      "repository": "ava-labs/EncryptedERC",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F15/acquisition.json",
+      "status": "ready"
+    },
+    {
+      "expected_commit": "fa37b3e7341c9225bdc1ab6a9ba94ee41a876c8d",
+      "id": "DEV-F16",
+      "observed_head": "fa37b3e7341c9225bdc1ab6a9ba94ee41a876c8d",
+      "read_only_reused": true,
+      "repository": "poa-box/POP",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F16/acquisition.json",
+      "status": "ready"
+    },
+    {
+      "expected_commit": "e307919ba4472fd9493a9ccdbcfe0b537d16e5ad",
+      "id": "DEV-F17",
+      "observed_head": "e307919ba4472fd9493a9ccdbcfe0b537d16e5ad",
+      "read_only_reused": true,
+      "repository": "zeroauth-dev/ZeroAuth",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F17/acquisition.json",
+      "status": "ready"
+    },
+    {
+      "expected_commit": "0b6fc64428a95f0ee35237aaff6aaa9a9d8d7bbd",
+      "id": "DEV-F18",
+      "observed_head": "0b6fc64428a95f0ee35237aaff6aaa9a9d8d7bbd",
+      "read_only_reused": true,
+      "repository": "WTCHAI/zkbiown",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F18/acquisition.json",
+      "status": "ready"
+    },
+    {
+      "expected_commit": "9d79ae267314d9001e6ac0b9657b4698eaff5190",
+      "id": "DEV-F19",
+      "observed_head": "9d79ae267314d9001e6ac0b9657b4698eaff5190",
+      "read_only_reused": true,
+      "repository": "raylsnetwork/uniswap-incubator",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F19/acquisition.json",
+      "status": "ready"
+    },
+    {
+      "expected_commit": "4cae99814370f73a16ba44186cba7022201becfe",
+      "id": "DEV-F20",
+      "observed_head": "4cae99814370f73a16ba44186cba7022201becfe",
+      "read_only_reused": true,
+      "repository": "raycashxyz/erc-7984-single-tx-unwrap",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F20/acquisition.json",
+      "status": "ready"
+    },
+    {
+      "expected_commit": "b6c73cb69d7146c8e6cd8d8946ffd7e1a5f907b7",
+      "id": "DEV-F21",
+      "observed_head": "b6c73cb69d7146c8e6cd8d8946ffd7e1a5f907b7",
+      "read_only_reused": true,
+      "repository": "Chronos-Vault/chronos-vault-security",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F21/acquisition.json",
+      "status": "ready"
+    },
+    {
+      "expected_commit": "004ae28b73f0e096ca66565db64555188eecfd0a",
+      "id": "DEV-F22",
+      "observed_head": "004ae28b73f0e096ca66565db64555188eecfd0a",
+      "read_only_reused": true,
+      "repository": "Chronos-Vault/chronos-vault-contracts",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F22/acquisition.json",
+      "status": "ready"
+    },
+    {
+      "expected_commit": "2552c0356d0f4ac71becf2ee64ca0b21f846090b",
+      "id": "DEV-F23",
+      "observed_head": "2552c0356d0f4ac71becf2ee64ca0b21f846090b",
+      "read_only_reused": true,
+      "repository": "QuantSingularity/Fluxion",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F23/acquisition.json",
+      "status": "ready"
+    },
+    {
+      "expected_commit": "63dce70b8feac7dbc402ec0367feb32fb59f649a",
+      "id": "DEV-F24",
+      "observed_head": "63dce70b8feac7dbc402ec0367feb32fb59f649a",
+      "read_only_reused": true,
+      "repository": "ramakrishnanhulk20/Z-Tor",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F24/acquisition.json",
+      "status": "ready"
+    },
+    {
+      "expected_commit": "ac446670d0c022ab65570ed0d4d6ab2585399934",
+      "id": "DEV-F25",
+      "observed_head": "ac446670d0c022ab65570ed0d4d6ab2585399934",
+      "read_only_reused": true,
+      "repository": "Chidubemkingsley/Shadow-Credit-Network",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F25/acquisition.json",
+      "status": "ready"
+    },
+    {
+      "expected_commit": "570f0a6727b61782cdd4dd953c2c467bbdd98f29",
+      "id": "DEV-F26",
+      "observed_head": "570f0a6727b61782cdd4dd953c2c467bbdd98f29",
+      "read_only_reused": true,
+      "repository": "JunaidCD/Credence",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F26/acquisition.json",
+      "status": "ready"
+    },
+    {
+      "expected_commit": "ae1e95e99c504018b4f43acd2ca7d1c59b3f116d",
+      "id": "DEV-F27",
+      "observed_head": "ae1e95e99c504018b4f43acd2ca7d1c59b3f116d",
+      "read_only_reused": true,
+      "repository": "Nitya-003/CropChain",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F27/acquisition.json",
+      "status": "ready"
+    },
+    {
+      "expected_commit": "909f813c3f52ba6c18d305bc8e61aeeb658ec849",
+      "id": "DEV-F28",
+      "observed_head": "909f813c3f52ba6c18d305bc8e61aeeb658ec849",
+      "read_only_reused": true,
+      "repository": "rudrakumar07/zkfinance",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F28/acquisition.json",
+      "status": "ready"
+    },
+    {
+      "expected_commit": "955cc7511f4f5f4044613c886f10ddb62002b4ac",
+      "id": "DEV-F29",
+      "observed_head": "955cc7511f4f5f4044613c886f10ddb62002b4ac",
+      "read_only_reused": true,
+      "repository": "Veilpayapp/VEILPAY-APP",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F29/acquisition.json",
+      "status": "ready"
+    },
+    {
+      "expected_commit": "23917814522bac494150c7e99a123aa15a448155",
+      "id": "DEV-F30",
+      "observed_head": "23917814522bac494150c7e99a123aa15a448155",
+      "read_only_reused": true,
+      "repository": "ethpanda-org/ETHShanghai-2025",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F30/acquisition.json",
+      "status": "ready"
+    },
+    {
+      "expected_commit": "3957b693b1a7aa42a63be2ccfa734fd40267e415",
+      "id": "DEV-F31",
+      "observed_head": "3957b693b1a7aa42a63be2ccfa734fd40267e415",
+      "read_only_reused": true,
+      "repository": "emmaguo13/zk-blind",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F31/acquisition.json",
+      "status": "ready"
+    },
+    {
+      "expected_commit": "e06fe20809685e45bceb7fc1a2ac980ad0e4d0c7",
+      "id": "DEV-F32",
+      "observed_head": "e06fe20809685e45bceb7fc1a2ac980ad0e4d0c7",
+      "read_only_reused": true,
+      "repository": "a00012025/email2ether",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F32/acquisition.json",
+      "status": "ready"
+    },
+    {
+      "expected_commit": "183fb3d66df2d8e31faf31ea9a4528aee2750e82",
+      "id": "DEV-F33",
+      "observed_head": "183fb3d66df2d8e31faf31ea9a4528aee2750e82",
+      "read_only_reused": true,
+      "repository": "social-tw/social-tw-website",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F33/acquisition.json",
+      "status": "ready"
+    },
+    {
+      "expected_commit": "18d3a277ccd82736757a34ad56690a241ae77744",
+      "id": "DEV-F34",
+      "observed_head": "18d3a277ccd82736757a34ad56690a241ae77744",
+      "read_only_reused": true,
+      "repository": "avitenzer/zk_voting",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F34/acquisition.json",
+      "status": "ready"
+    },
+    {
+      "expected_commit": "c08a9bca6903ece8ebb86090b79d77f6eec56d90",
+      "id": "DEV-F35",
+      "observed_head": "c08a9bca6903ece8ebb86090b79d77f6eec56d90",
+      "read_only_reused": true,
+      "repository": "sambitsargam/ShadowSats",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F35/acquisition.json",
+      "status": "ready"
+    },
+    {
+      "expected_commit": "8b1bdf45dccddfbada274bb12f604486f0b28363",
+      "id": "DEV-F36",
+      "observed_head": "8b1bdf45dccddfbada274bb12f604486f0b28363",
+      "read_only_reused": true,
+      "repository": "partik03/aieth",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F36/acquisition.json",
+      "status": "ready"
+    },
+    {
+      "expected_commit": "387a3da4df53eb4a9904ddd9c78d4025e3ed33f6",
+      "id": "DEV-F37",
+      "observed_head": "387a3da4df53eb4a9904ddd9c78d4025e3ed33f6",
+      "read_only_reused": true,
+      "repository": "Mahadev-05/BlockChain",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F37/acquisition.json",
+      "status": "ready"
+    },
+    {
+      "expected_commit": "21fd7f6587070404257c1528b114fda8ac15dd4b",
+      "id": "DEV-F38",
+      "observed_head": "21fd7f6587070404257c1528b114fda8ac15dd4b",
+      "read_only_reused": true,
+      "repository": "KanishJebaMathewM/Truxify",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F38/acquisition.json",
+      "status": "ready"
+    },
+    {
+      "expected_commit": "abd54b5c541ac9d26f938a6bdbd78545526249e5",
+      "id": "DEV-F39",
+      "observed_head": "abd54b5c541ac9d26f938a6bdbd78545526249e5",
+      "read_only_reused": true,
+      "repository": "Servesh21/RacePass",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F39/acquisition.json",
+      "status": "ready"
+    },
+    {
+      "expected_commit": "cdfa9138eb41505b5097357829120d8857c1a593",
+      "id": "DEV-F40",
+      "observed_head": "cdfa9138eb41505b5097357829120d8857c1a593",
+      "read_only_reused": true,
+      "repository": "Blacksaviour/Undertow",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F40/acquisition.json",
+      "status": "ready"
+    },
+    {
+      "expected_commit": "2652bcd4e2e36bfc0d53af2f38edb65a53eff152",
+      "id": "DEV-F41",
+      "observed_head": "2652bcd4e2e36bfc0d53af2f38edb65a53eff152",
+      "read_only_reused": true,
+      "repository": "hollow-leaf/tobi",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F41/acquisition.json",
+      "status": "ready"
+    },
+    {
+      "expected_commit": "dd59473d55eed29b1605da94c936e6b9dfc057e4",
+      "id": "DEV-F42",
+      "observed_head": "dd59473d55eed29b1605da94c936e6b9dfc057e4",
+      "read_only_reused": true,
+      "repository": "hollow-leaf/easyeigen",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F42/acquisition.json",
+      "status": "ready"
+    },
+    {
+      "expected_commit": "1707b183808d96cad7f67a9229073bfd7bd801d0",
+      "id": "DEV-F43",
+      "observed_head": "1707b183808d96cad7f67a9229073bfd7bd801d0",
+      "read_only_reused": true,
+      "repository": "metacraft-labs/DendrETH",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F43/acquisition.json",
+      "status": "ready"
+    },
+    {
+      "expected_commit": "b6d9c2d6a8c99563411992ae3610ecf2afba1ee5",
+      "id": "DEV-F44",
+      "observed_head": "b6d9c2d6a8c99563411992ae3610ecf2afba1ee5",
+      "read_only_reused": true,
+      "repository": "zkemail/proof-of-twitter",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F44/acquisition.json",
+      "status": "ready"
+    },
+    {
+      "expected_commit": "85c72bd2e523dfbfc22bb13fbe45aae0cfac7843",
+      "id": "DEV-F45",
+      "observed_head": "85c72bd2e523dfbfc22bb13fbe45aae0cfac7843",
+      "read_only_reused": true,
+      "repository": "MynaWallet/monorepo",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F45/acquisition.json",
+      "status": "ready"
+    },
+    {
+      "expected_commit": "c8cf762ccee253d1002acc1150171ddcf1cbacd8",
+      "id": "DEV-F46",
+      "observed_head": "c8cf762ccee253d1002acc1150171ddcf1cbacd8",
+      "read_only_reused": true,
+      "repository": "Cipher-Protocol/cipher-core",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F46/acquisition.json",
+      "status": "ready"
+    },
+    {
+      "expected_commit": "7863d23366550fb2fdd33f4d85b0f1bab4d18209",
+      "id": "DEV-F47",
+      "observed_head": "7863d23366550fb2fdd33f4d85b0f1bab4d18209",
+      "read_only_reused": true,
+      "repository": "RayHuang880301/zkUTXO-core",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F47/acquisition.json",
+      "status": "ready"
+    },
+    {
+      "expected_commit": "d588661d8e803000c1390a65911c7f0e805ec69d",
+      "id": "DEV-F48",
+      "observed_head": "d588661d8e803000c1390a65911c7f0e805ec69d",
+      "read_only_reused": true,
+      "repository": "SovereignWave/qwer",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F48/acquisition.json",
+      "status": "ready"
+    },
+    {
+      "expected_commit": "979468c59d474f1363b9caf065e962ed10901371",
+      "id": "DEV-F49",
+      "observed_head": "979468c59d474f1363b9caf065e962ed10901371",
+      "read_only_reused": true,
+      "repository": "KELLERBABG/Planetary-Entropy-Mining",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F49/acquisition.json",
+      "status": "ready"
+    },
+    {
+      "expected_commit": "f3e8920d952b0beea9273f0c5902b9707e0948ed",
+      "id": "DEV-F50",
+      "observed_head": "f3e8920d952b0beea9273f0c5902b9707e0948ed",
+      "read_only_reused": true,
+      "repository": "Lucklyric/tallymesh",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-F50/acquisition.json",
+      "status": "ready"
+    },
+    {
+      "expected_commit": "4002962fb632578dd12477346d2e5c4159ffb2ef",
+      "id": "DEV-H01",
+      "observed_head": "4002962fb632578dd12477346d2e5c4159ffb2ef",
+      "read_only_reused": true,
+      "repository": "a16z/zkdrops",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-H01/acquisition.json",
+      "status": "ready"
+    },
+    {
+      "expected_commit": "f6f58020911cd2a19e1639f0dc93ec9fca2a9e17",
+      "id": "DEV-H02",
+      "observed_head": "f6f58020911cd2a19e1639f0dc93ec9fca2a9e17",
+      "read_only_reused": true,
+      "repository": "a16z/zkdrops",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-H02/acquisition.json",
+      "status": "ready"
+    },
+    {
+      "expected_commit": "8d703c124c663537966d6fc35cfec84146e236b2",
+      "id": "DEV-H03",
+      "observed_head": "8d703c124c663537966d6fc35cfec84146e236b2",
+      "read_only_reused": true,
+      "repository": "semaphore-protocol/semaphore",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-H03/acquisition.json",
+      "status": "ready"
+    },
+    {
+      "expected_commit": "3dcf79f6a095397352f71384e3dc6889c640a50f",
+      "id": "DEV-H04",
+      "observed_head": "3dcf79f6a095397352f71384e3dc6889c640a50f",
+      "read_only_reused": true,
+      "repository": "semaphore-protocol/semaphore",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-H04/acquisition.json",
+      "status": "ready"
+    },
+    {
+      "expected_commit": "c4d2c9021b8fb9988816eb6987a734b830bfce15",
+      "id": "DEV-H05",
+      "observed_head": "c4d2c9021b8fb9988816eb6987a734b830bfce15",
+      "read_only_reused": true,
+      "repository": "polybase/payy",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-H05/acquisition.json",
+      "status": "ready"
+    },
+    {
+      "expected_commit": "dcd5d96ee15664a59bc24ed0dc2bb78b73ac5e36",
+      "id": "DEV-H06",
+      "observed_head": "dcd5d96ee15664a59bc24ed0dc2bb78b73ac5e36",
+      "read_only_reused": true,
+      "repository": "polybase/payy",
+      "source": "results/raw/redteam/dev-20261109-final/cases/DEV-H06/acquisition.json",
+      "status": "ready"
+    }
+  ],
+  "schema": "bindcheck-redteam.dev-acquisition-summary/v1",
+  "statuses": {
+    "ready": 56
+  }
+}

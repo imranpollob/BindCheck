@@ -18,6 +18,8 @@ from .arm_b import analyze_arm_b
 from .arm_c import analyze_arm_c
 from .common import ROOT, sha256_file, write_json
 
+DEV_CHECKOUTS = pathlib.Path("/Users/imranpollob/Coding/bc/bindcheck-zk/feasibility/work/full-dev")
+
 
 SOURCE_SUFFIXES = ("circom", "sol", "nr", "json", "lock", "toml", "yaml", "yml", "md", "sym", "r1cs", "sh", "js", "ts")
 SPARSE_PATHS = tuple(pattern for suffix in SOURCE_SUFFIXES for pattern in (f"/*.{suffix}", f"/**/*.{suffix}")) + (
@@ -51,18 +53,14 @@ def _run(argv: list[str], *, cwd: pathlib.Path | None = None, timeout: float = 6
 
 def dev_rows() -> list[dict[str, str]]:
     rows: list[dict[str, str]] = []
-    with (ROOT / "feasibility" / "candidate-set.csv").open(newline="", encoding="utf-8") as handle:
-        for index, item in enumerate(csv.DictReader(handle), 1):
-            rows.append({
-                "id": f"DEV-F{index:02d}", "repository": item["repository"],
-                "commit": item["commit"], "source": "feasibility/candidate-set.csv",
-            })
-    query = json.loads((ROOT / "dataset" / "source-queries.json").read_text(encoding="utf-8"))
-    for index, item in enumerate(query["historical_dev"], 1):
-        rows.append({
-            "id": f"DEV-H{index:02d}", "repository": item["repository"],
-            "commit": item["commit"], "source": "dataset/source-queries.json:historical_dev",
-        })
+    with (ROOT / "dataset" / "source-corpus-v2.csv").open(newline="", encoding="utf-8") as handle:
+        for item in csv.DictReader(handle):
+            if item["split"] != "DEV":
+                continue
+            index = len(rows) + 1
+            row_id = f"DEV-F{index:02d}" if index <= 50 else f"DEV-H{index - 50:02d}"
+            rows.append({"id": row_id, "repository": item["repository"],
+                         "commit": item["commit"], "source": "dataset/source-corpus-v2.csv:DEV"})
     if len(rows) != 56 or len({(row["repository"], row["commit"]) for row in rows}) != 56:
         raise ValueError("DEV reconstruction must contain 56 unique pinned repository revisions")
     return rows
@@ -115,6 +113,18 @@ def acquire(work_root: pathlib.Path, row: dict[str, str]) -> tuple[pathlib.Path,
     return destination, {**row, "status": status, "observed_head": head, "steps": steps}
 
 
+def existing_dev_checkout(row: dict[str, str]) -> tuple[pathlib.Path, dict[str, Any]]:
+    matches = list(DEV_CHECKOUTS.glob(f"{row['id']}--*--{row['commit'][:12]}"))
+    if len(matches) != 1:
+        return DEV_CHECKOUTS / row["id"], {**row, "status": "CHECKOUT_MISSING_OR_AMBIGUOUS", "matches": [str(p) for p in matches]}
+    source = matches[0]
+    observed = _run(["git", "rev-parse", "HEAD"], cwd=source, timeout=20)
+    head = observed["stdout"].strip()
+    status = "ready" if observed["exit_status"] == 0 and head == row["commit"] else "REVISION_MISMATCH"
+    return source, {**row, "status": status, "observed_head": head,
+                    "source_accessed": status == "ready", "steps": [observed], "read_only_reused": True}
+
+
 def blocked_result(arm: str, row: dict[str, str], reason: str) -> dict[str, Any]:
     return {
         "schema": "bindcheck-redteam.strong-result/v1",
@@ -149,28 +159,14 @@ def run_row(
 ) -> dict[str, Any]:
     row_output = output / "cases" / row["id"]
     row_output.mkdir(parents=True, exist_ok=True)
-    if campaign == "dev" and data_wall_blocked(row["repository"]):
-        results = {arm: blocked_result(arm, row, "DATA_WALL_BLOCKED") for arm in ("A", "B", "C")}
-        for arm, result in results.items():
-            write_json(row_output / f"{arm}.json", result)
-        acquisition = {**row, "status": "DATA_WALL_BLOCKED", "source_accessed": False}
-        write_json(row_output / "acquisition.json", acquisition)
-        return {"row": row, "acquisition": acquisition, "results": results, "cleanup": None}
     if campaign == "dev":
-        source, acquisition = acquire(work_root, row)
-        try:
-            write_json(row_output / "acquisition.json", acquisition)
-        except Exception:
-            cleanup_clone(source, work_root)
-            raise
+        source, acquisition = existing_dev_checkout(row)
+        write_json(row_output / "acquisition.json", acquisition)
         if acquisition["status"] != "ready":
-            try:
-                results = {arm: blocked_result(arm, row, "ACQUISITION_FAILED") for arm in ("A", "B", "C")}
-                for arm, result in results.items():
-                    write_json(row_output / f"{arm}.json", result)
-            finally:
-                cleanup = cleanup_clone(source, work_root)
-            return {"row": row, "acquisition": acquisition, "results": results, "cleanup": cleanup}
+            results = {arm: blocked_result(arm, row, acquisition["status"]) for arm in ("A", "B", "C")}
+            for arm, result in results.items():
+                write_json(row_output / f"{arm}.json", result)
+            return {"row": row, "acquisition": acquisition, "results": results, "cleanup": None}
     else:
         source = pathlib.Path(row["path"])
         acquisition = {**row, "status": "local-synthetic", "source_accessed": True}
@@ -195,7 +191,7 @@ def run_row(
                     results[arm]["coverage"]["exception_detail"] = str(exc)
                     write_json(path, results[arm])
     finally:
-        cleanup = cleanup_clone(source, work_root) if campaign == "dev" else None
+        cleanup = None
     return {"row": row, "acquisition": acquisition, "results": results, "cleanup": cleanup}
 
 
@@ -240,6 +236,7 @@ def main() -> int:
                 "fatal_reason": result["run"].get("fatal_reason"),
                 "verdict": result["result"]["verdict"],
                 "finding_codes": [finding["code"] for finding in result["result"]["findings"]],
+                "picus_temp_bytes_by_run": [record.get("temp_bytes_before_cleanup") for record in result.get("native", {}).get("tools", {}).get("picus", {}).get("invocations", [])],
                 "cleanup": item["cleanup"],
             })
         manifest = {
@@ -250,9 +247,7 @@ def main() -> int:
             "finished_utc": dt.datetime.now(dt.UTC).isoformat(),
             "started_from_revision": revision,
             "row_count": len(records),
-            "row_sources": ["redteam/adversarial/expected.json"] if args.campaign == "synthetic" else [
-                "feasibility/candidate-set.csv", "dataset/source-queries.json:historical_dev"
-            ],
+            "row_sources": ["redteam/adversarial/expected.json"] if args.campaign == "synthetic" else ["dataset/source-corpus-v2.csv:DEV"],
             "data_wall_tokens": list(DATA_WALL_TOKENS),
             "records": records,
         }

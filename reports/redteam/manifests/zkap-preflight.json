@@ -1,0 +1,64 @@
+{
+  "checks": {
+    "colima_status": {
+      "argv": [
+        "colima",
+        "status"
+      ],
+      "error": "FileNotFoundError: [Errno 2] No such file or directory: 'colima'",
+      "exit_status": null,
+      "timed_out": false
+    },
+    "docker_version": {
+      "argv": [
+        "docker",
+        "version"
+      ],
+      "error": "FileNotFoundError: [Errno 2] No such file or directory: 'docker'",
+      "exit_status": null,
+      "timed_out": false
+    },
+    "host_disk": {
+      "argv": [
+        "df",
+        "-k",
+        "."
+      ],
+      "exit_status": 0,
+      "stderr": "",
+      "stdout": "Filesystem   1024-blocks      Used Available Capacity iused     ifree %iused  Mounted on\n/dev/disk3s5   239362496 183781132  23664692    89% 2813333 236646920    1%   /System/Volumes/Data\n",
+      "timed_out": false
+    },
+    "host_memory": {
+      "argv": [
+        "sysctl",
+        "-n",
+        "hw.memsize"
+      ],
+      "exit_status": 0,
+      "stderr": "",
+      "stdout": "8589934592\n",
+      "timed_out": false
+    }
+  },
+  "cli_paths": {
+    "colima": null,
+    "docker": null
+  },
+  "docker_build_attempted": false,
+  "explanation": "Current Docker/Colima commands are unavailable. The prior x86 Colima/Docker preflight found 8 GiB host RAM and under 100 GiB free disk against the pinned upstream 32 GiB RAM and ~100 GiB free-disk requirement; no ZKAP detector result exists.",
+  "observed_utc": "2026-11-09T05:38:30.887925+00:00",
+  "outcome": "UNKNOWN",
+  "prior_outcome": "UNKNOWN",
+  "prior_reason": "RESOURCE_PREFLIGHT_FAILED",
+  "prior_revision": "fbd1dddad69a695a7fefeb2b6d824a0805ae9e00",
+  "prior_setup_path": "results/raw/redteam/zkap-setup-20261108/setup.json",
+  "prior_setup_sha256": "4caed2a8539b422b07dcb969d809ba3ec7d6aad900fc10193d215e8f3d9301ee",
+  "prior_upstream_declared_requirements": {
+    "architecture": "x86_64",
+    "free_disk_approx_gb": 100,
+    "free_memory_approx_gb": 32
+  },
+  "reason": "DOCKER_COLIMA_UNAVAILABLE_AND_RESOURCE_PREFLIGHT_FAILED",
+  "schema": "bindcheck-redteam.zkap-preflight/v1"
+}

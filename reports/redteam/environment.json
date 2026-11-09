@@ -1,0 +1,115 @@
+{
+  "bindcheck_final_config": {
+    "BINDCHECK_CIRCOM": "/Users/imranpollob/Coding/bc/bindcheck-zk/tools/circom-src/target/release/circom",
+    "cli_args": "analyze <case-directory> (no --circuit or --consumer hints)",
+    "final_run": "results/raw/redteam/bindcheck-20261109-circom",
+    "initial_no_circom_run": "results/raw/redteam/bindcheck-20261109-final"
+  },
+  "commands": {
+    "circom_version": {
+      "argv": [
+        "/Users/imranpollob/Coding/bc/bindcheck-zk/tools/circom-src/target/release/circom",
+        "--version"
+      ],
+      "exit_status": 0,
+      "stderr": "",
+      "stdout": "circom compiler 2.2.3\n"
+    },
+    "circomspect_version": {
+      "argv": [
+        "/Users/imranpollob/Coding/bc/bindcheck-zk/tools/circomspect-src/target/release/circomspect",
+        "--version"
+      ],
+      "exit_status": 2,
+      "stderr": "error: unexpected argument '--version' found\n\n  tip: a similar argument exists: '--verbose'\n\nUsage: circomspect <INPUT|--library <LIBRARIES>|--level <LEVEL>|--sarif-file <OUTPUT>|--allow <ID>|--verbose|--curve <NAME>>\n\nFor more information, try '--help'.\n",
+      "stdout": ""
+    },
+    "forge_version": {
+      "argv": [
+        "forge",
+        "--version"
+      ],
+      "exit_status": 0,
+      "stderr": "",
+      "stdout": "forge Version: 1.4.1-v1.4.1\nCommit SHA: cf7746048646f2ecff48246dd61e265e49ab16f0\nBuild Timestamp: 2025-10-14T13:51:29.003531000Z (1760449889)\nBuild Profile: maxperf\n"
+    },
+    "git_revision": {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit_status": 0,
+      "stderr": "",
+      "stdout": "011042e97de754936ca8a53cfddc2adc6fd7d6aa\n"
+    },
+    "git_status": {
+      "argv": [
+        "git",
+        "status",
+        "--short"
+      ],
+      "exit_status": 0,
+      "stderr": "",
+      "stdout": " M baselines/strong/arm_a.py\n M baselines/strong/arm_b.py\n M baselines/strong/common.py\n M baselines/strong/run_campaign.py\n M tests/test_strong_baseline.py\n?? baselines/strong/make_report_metrics.py\n?? baselines/strong/run_bindcheck.py\n"
+    },
+    "python_version": {
+      "argv": [
+        "python3",
+        "--version"
+      ],
+      "exit_status": 0,
+      "stderr": "",
+      "stdout": "Python 3.13.9\n"
+    },
+    "racket_version": {
+      "argv": [
+        "racket",
+        "--version"
+      ],
+      "exit_status": 0,
+      "stderr": "",
+      "stdout": "Welcome to Racket v9.3 [cs].\n"
+    },
+    "slither_version": {
+      "argv": [
+        "slither",
+        "--version"
+      ],
+      "exit_status": 0,
+      "stderr": "",
+      "stdout": "0.11.3\n"
+    },
+    "solc_version": {
+      "argv": [
+        "/Users/imranpollob/.svm/0.8.20/solc-0.8.20",
+        "--version"
+      ],
+      "exit_status": 0,
+      "stderr": "",
+      "stdout": "solc, the solidity compiler commandline interface\nVersion: 0.8.20+commit.a1b79de6.Darwin.appleclang\n"
+    }
+  },
+  "dev_campaign_arm_a_loaded_from_head_sha256": "f43b15c9522c01eb885d3321e699226aae87a5767442619f73319119f0b9be00",
+  "executables_sha256": {
+    "/Users/imranpollob/.svm/0.8.20/solc-0.8.20": "5d98c9ed892b74ecadc4ab7f93de6211fdde0351ef66f2cb90eb11630e30e2ab",
+    "/Users/imranpollob/Coding/bc/bindcheck-zk/tools/circom-src/target/release/circom": "7d0bd3cc8d0c4942813f5060bd5f9c011f3469e46755a067926101ee74d4e202",
+    "/Users/imranpollob/Coding/bc/bindcheck-zk/tools/circomspect-src/target/release/circomspect": "c45398fcd1a03b51166cf20172593c2280e1e5852d36ee2d4eb6c3e06fd85cb5"
+  },
+  "files_sha256": {
+    "baselines/strong/arm_a.py": "d9e096530ae73eeef9aa5e673495d2a6e9575bceb0b2458fff8ca539a96b6cc2",
+    "baselines/strong/arm_b.py": "6429560828186406acd422929f4fb9a10957e171e8b37c2011528da56cd33307",
+    "baselines/strong/arm_c.py": "b19f5979e06e7f973f263ccc702ca1ddd33928147b735126e10c221374b8ac54",
+    "baselines/strong/common.py": "cc6640527cab86aebc2ff031d5ced0a241d27c2874fa4ce0679ea96be637ac62",
+    "baselines/strong/make_report_metrics.py": "e2b6bee01c638f1b436a5a43c8406d2e3ee38fe25d0080fd602f42a33cdf070d",
+    "baselines/strong/run_bindcheck.py": "0f28537f351fd4388e8b6269b21f9268799fb003b10a070e0d3c9388c6afe488",
+    "baselines/strong/run_campaign.py": "392c545f61d838e554555a82ee49ac818cdd1808b220deab43bc527ff286d8a4",
+    "bindcheck-zk": "d68b0f44c776fe25806c1c5b77fccd5c25d58c799ee039481a98150695d5419c",
+    "dataset/source-corpus-v2.csv": "07210625783a21a6128ea3f99402fc4a48b36922056241649999547a374b0c95",
+    "redteam/adversarial/expected.json": "41e3fcebf92f6a03f27998843fd865155d0db4ecfb58d51235f58ec4b3fc9e3e",
+    "tests/test_strong_baseline.py": "db6e703d23642c542f218dac327bce1c05dd3b439b9a9abbd93aea16c64d9a0f"
+  },
+  "note": "DEV campaign started before the local Foundry compiler pin was applied; DEV has no same-policy harness, so this change does not affect its arm A findings. Final synthetic campaign uses the pinned compiler.",
+  "recorded_utc": "2026-11-09T05:50:32.464919+00:00",
+  "schema": "bindcheck-redteam.environment/v1"
+}

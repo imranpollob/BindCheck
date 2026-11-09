@@ -4,6 +4,7 @@ import os
 import pathlib
 import re
 import tempfile
+import threading
 import time
 from typing import Any
 
@@ -11,6 +12,34 @@ from .common import executable_from_candidates, envelope, finding, retain_native
 
 
 EXTERNAL_TOOLS = pathlib.Path("/Users/imranpollob/Coding/bc/bindcheck-zk/tools")
+PICUS_SLOTS = threading.BoundedSemaphore(2)
+PICUS_TIMEOUT_SECONDS = 60.0
+
+
+def _tree_bytes(root: pathlib.Path) -> int:
+    return sum(path.stat().st_size for path in root.rglob("*") if path.is_file())
+
+
+def _run_picus(picus: str, r1cs: pathlib.Path, root: pathlib.Path, output_dir: pathlib.Path, index: int) -> dict[str, Any]:
+    temp_parent = output_dir / "picus-tmp"
+    temp_parent.mkdir(parents=True, exist_ok=True)
+    with PICUS_SLOTS:
+        with tempfile.TemporaryDirectory(prefix=f"circuit-{index:02d}-", dir=temp_parent) as temp_name:
+            temp_path = pathlib.Path(temp_name)
+            try:
+                record = run_command(
+                    [picus, "--json", "-", str(r1cs)], cwd=root,
+                    timeout=PICUS_TIMEOUT_SECONDS, process_group=True,
+                    env={"PLTUSERHOME": str(EXTERNAL_TOOLS / "picus-racket"),
+                         "TMPDIR": str(temp_path), "TMP": str(temp_path), "TEMP": str(temp_path)},
+                )
+            finally:
+                temp_bytes = _tree_bytes(temp_path)
+            record["temp_bytes_before_cleanup"] = temp_bytes
+            record["timeout_seconds"] = PICUS_TIMEOUT_SECONDS
+            record["temp_path"] = str(temp_path)
+        record["temp_removed"] = not temp_path.exists()
+    return retain_native(record, output_dir / "native" / "picus", f"circuit-{index:02d}")
 
 
 def circuit_files(root: pathlib.Path, cap: int = 4) -> tuple[list[pathlib.Path], bool]:
@@ -162,13 +191,7 @@ def analyze_arm_b(root: pathlib.Path, output_dir: pathlib.Path, budget_seconds: 
             for index, r1cs in r1cs_paths:
                 if remaining() <= 0:
                     break
-                record = run_command(
-                    [picus, "--json", "-", str(r1cs)],
-                    cwd=root,
-                    timeout=min(60.0, max(0.1, remaining())),
-                    env={"PLTUSERHOME": str(EXTERNAL_TOOLS / "picus-racket")},
-                )
-                tools["picus"]["invocations"].append(retain_native(record, output_dir / "native" / "picus", f"circuit-{index:02d}"))
+                tools["picus"]["invocations"].append(_run_picus(picus, r1cs, root, output_dir, index))
     for name, detail in tools.items():
         invocations = detail["invocations"]
         if detail["identity"]["executable"] is None:
@@ -184,7 +207,7 @@ def analyze_arm_b(root: pathlib.Path, output_dir: pathlib.Path, budget_seconds: 
             detail["status"] = "UNKNOWN"
             detail["reason"] = "NO_INVOCATION_WITHIN_BUDGET"
         elif any(item["timed_out"] for item in invocations):
-            detail["status"] = "UNKNOWN"
+            detail["status"] = "TIMEOUT"
             detail["reason"] = "BASELINE_TIMEOUT"
         elif all(item["exit_status"] is not None for item in invocations):
             detail["status"] = "completed"

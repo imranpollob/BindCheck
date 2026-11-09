@@ -4,7 +4,9 @@ import json
 import pathlib
 import tempfile
 import unittest
+from unittest.mock import patch
 
+from baselines.strong.arm_b import _run_picus
 from baselines.strong.arm_c import analyze_arm_c
 from baselines.strong.solidity_scan import scan_repository
 
@@ -23,6 +25,22 @@ def fake_b(root: pathlib.Path) -> dict:
 
 
 class StrongBaselineTests(unittest.TestCase):
+    def test_picus_timeout_kills_group_and_removes_temp(self) -> None:
+        raw_root = ROOT / "results" / "raw" / "redteam"
+        raw_root.mkdir(parents=True, exist_ok=True)
+        with tempfile.TemporaryDirectory(dir=raw_root) as temp:
+            root = pathlib.Path(temp)
+            fake = root / "fake-picus"
+            fake.write_text('#!/bin/sh\nprintf data > "$TMPDIR/file"\nsleep 30 &\nwait\n')
+            fake.chmod(0o700)
+            with patch("baselines.strong.arm_b.PICUS_TIMEOUT_SECONDS", 2.0):
+                result = _run_picus(str(fake), root / "unused.r1cs", root, root / "output", 0)
+            self.assertTrue(result["timed_out"])
+            self.assertTrue(result["process_group_killed"])
+            self.assertEqual(result["temp_bytes_before_cleanup"], 4)
+            self.assertTrue(result["temp_removed"])
+            self.assertEqual(list((root / "output" / "picus-tmp").iterdir()), [])
+
     def test_expectations_are_balanced_and_unique(self) -> None:
         expected = json.loads((ADV / "expected.json").read_text(encoding="utf-8"))
         self.assertEqual(len(expected["cases"]), 46)

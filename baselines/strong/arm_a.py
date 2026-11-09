@@ -114,7 +114,8 @@ def _run_foundry_policy(root: pathlib.Path, native_dir: pathlib.Path, timeout: f
     policy = root / "policy.json"
     harness = root / "test" / "PolicyHarness.t.sol"
     forge = shutil.which("forge")
-    solc = shutil.which("solc")
+    pinned_solc = pathlib.Path.home() / ".svm" / "0.8.20" / "solc-0.8.20"
+    solc = str(pinned_solc) if pinned_solc.is_file() else None
     if not policy.is_file() or not harness.is_file():
         return {"status": "UNKNOWN", "reason": "POLICY_OR_HARNESS_MISSING", "executed": False, "findings": []}
     if not forge or not solc:
