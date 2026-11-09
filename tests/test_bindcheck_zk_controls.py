@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import importlib.util
+import inspect
 import json
 import pathlib
 import struct
@@ -796,7 +797,10 @@ class BindCheckZKControlTests(unittest.TestCase):
                     root = pathlib.Path(name)
                     write_fixture(root, control["fixture"])
                     explicit = [control["explicit_consumer"]] if control.get("explicit_consumer") else None
-                    output = analyze(root, explicit_consumers=explicit)
+                    kwargs = {"explicit_consumers": explicit}
+                    if "policy" in inspect.signature(analyze).parameters:
+                        kwargs["policy"] = control.get("policy", {})
+                    output = analyze(root, **kwargs)
                 summary = output["patterns"][control["pattern"]]
                 extra_failures = []
                 if "applicability" in control and summary.get("applicability") != control["applicability"]:
