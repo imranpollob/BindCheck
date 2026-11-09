@@ -57,6 +57,29 @@ contract Consumer { function submit(bytes memory proof, uint256 domain, uint256 
                 p2 = triple["patterns"]["P2"]
                 self.assertEqual((p2["verdict"], p2["reason"]), ("UNKNOWN", "VERIFIER_ARTIFACT_MISSING"))
 
+    def test_missing_circuit_or_verifier_implementation_never_verifies(self) -> None:
+        for circuit_present, interface_only in [(False, False), (True, True)]:
+            with self.subTest(circuit_present=circuit_present, interface_only=interface_only):
+                with tempfile.TemporaryDirectory() as tmp:
+                    root = pathlib.Path(tmp)
+                    if circuit_present:
+                        (root / "Main.nr").write_text("fn main(domain: pub Field, nullifier: pub Field) {}\n")
+                    verifier = ("interface IVerifier { function verifyProof(bytes memory proof, uint256[2] memory input) external view returns (bool); }"
+                                if interface_only else
+                                "contract Groth16Verifier { function verifyProof(bytes memory proof, uint256[2] memory input) public view returns (bool) { require(input[1] < " + str(SCALAR_FIELD) + "); return true; }}")
+                    (root / "Verifier.sol").write_text(verifier)
+                    (root / "Consumer.sol").write_text("""
+contract Consumer { mapping(uint256 => bool) spent;
+function submit(bytes memory proof, uint256 domain, uint256 nullifier) external {
+ require(!spent[nullifier]); verifier.verifyProof(proof, [domain, nullifier]);
+ spent[nullifier] = true; token.transfer(msg.sender, nullifier);
+}}
+""")
+                    output = analyze(root)
+                    for triple in output["triples"]:
+                        for pattern in ("P1", "P2", "P3"):
+                            self.assertEqual(triple["patterns"][pattern]["verdict"], "UNKNOWN")
+
     def test_local_context_and_overrides(self) -> None:
         cases = [
             ("modifier gate() { require(msg.sender != address(0)); _; }", "gate", "VERIFIED_WITHIN_SCOPE"),
