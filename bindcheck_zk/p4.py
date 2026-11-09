@@ -95,8 +95,9 @@ def extract_ic(text: str, constants: dict[str, int]) -> dict[int, tuple[int, int
 
 def canonical_guard_positions(text: str) -> dict[str, Any]:
     """Return the exact public-input positions covered by recognized guards."""
+    named_bodies: dict[str, tuple[str, str]] = {}
     verify_bodies: list[str] = []
-    for function in re.finditer(r"\bfunction\s+(?:verifyProof|verifyTx|verify)\s*\(", text, re.I):
+    for function in re.finditer(r"\bfunction\s+([A-Za-z_]\w*)\s*\(", text):
         opening = text.find("{", function.end())
         if opening < 0 or ";" in text[function.end():opening]:
             continue
@@ -104,8 +105,43 @@ def canonical_guard_positions(text: str) -> dict[str, Any]:
         for ending in range(opening, len(text)):
             depth += (text[ending] == "{") - (text[ending] == "}")
             if depth == 0:
-                verify_bodies.append(text[opening + 1:ending])
+                body = text[opening + 1:ending]
+                named_bodies[function.group(1)] = (text[function.start():opening], body)
+                if function.group(1).lower() in {"verifyproof", "verifytx", "verify"}:
+                    verify_bodies.append(body)
                 break
+    # A narrow wrapper used by snarkjs post-processing: the public ABI calls
+    # a decoder that copies every public word at the same index into the raw
+    # verifier.  Any missing/ambiguous/reordered copy leaves the path unknown.
+    wrapper = named_bodies.get("verifyProof", ("", ""))[1]
+    decode = named_bodies.get("_decodeAndVerify", ("", ""))[1]
+    raw_header, raw = named_bodies.get("_verifyProofRaw", ("", ""))
+    chain = re.search(r"\btry\s+this\._decodeAndVerify\s*\(\s*\w+\s*,\s*(\w+)\s*\)\s+returns\s*\(\s*bool\s+(\w+)\s*\)\s*\{\s*return\s+\2\s*;\s*\}\s*catch\s*\{\s*return\s+false\s*;\s*\}", wrapper, re.S)
+    raw_call = re.search(r"\breturn\s+this\._verifyProofRaw\s*\(([^;]+)\)\s*;", decode, re.S)
+    raw_arity = re.search(r"\buint(?:256)?\s*\[\s*(\d+)\s*\]\s+calldata\s+_pubSignals\b", raw_header)
+    if chain and raw_call and raw_arity and raw:
+        public_vector = chain.group(1)
+        copied_vector = raw_call.group(1).split(",")[-1].strip()
+        size = int(raw_arity.group(1))
+        copies = re.findall(
+            rf"\b{re.escape(copied_vector)}\s*\[\s*(\d+)\s*\]\s*=\s*uint256\s*\(\s*{re.escape(public_vector)}\s*\[\s*(\d+)\s*\]\s*\)\s*;",
+            decode,
+        )
+        all_writes = re.findall(rf"\b{re.escape(copied_vector)}\s*\[\s*\d+\s*\]\s*=", decode)
+        wrapper_returns = re.findall(r"\breturn\s+([^;]+);", wrapper)
+        decode_returns = re.findall(r"\breturn\s+([^;]+);", decode)
+        length_guard = re.search(rf"\bif\s*\(\s*{re.escape(public_vector)}\.length\s*!=\s*{size}\s*\)\s*return\s+false\s*;", wrapper)
+        clean_decode = strip_comments(decode)
+        vector_occurrences = len(re.findall(rf"\b{re.escape(copied_vector)}\b", clean_decode))
+        decoder_calls = set(re.findall(r"\b([A-Za-z_]\w*)\s*\(", clean_decode))
+        if (length_guard and len(copies) == len(all_writes) == size
+                and {int(dst) for dst, _ in copies} == set(range(size))
+                and all(dst == src for dst, src in copies)
+                and vector_occurrences == size + 2
+                and decoder_calls <= {"decode", "uint256", "_verifyProofRaw"}
+                and all(value.strip() in {"false", chain.group(2)} for value in wrapper_returns)
+                and len(decode_returns) == 1):
+            verify_bodies.append(raw)
     guard_text = "\n".join(verify_bodies)
     exact_names = re.findall(
         rf"\b([A-Za-z_]\w*)\s*=\s*{SCALAR_FIELD}\s*;", text, re.I,
