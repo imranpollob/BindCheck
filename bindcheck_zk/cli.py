@@ -9,6 +9,7 @@ from typing import Any
 from .analyzer import analyze
 from .baselines import run_baseline
 from .models import aggregate, result
+from .relational import DIMENSIONS, analyze_relational
 
 
 def parser() -> argparse.ArgumentParser:
@@ -18,6 +19,24 @@ def parser() -> argparse.ArgumentParser:
     analyze_parser.add_argument("repo_dir", type=pathlib.Path)
     analyze_parser.add_argument("--circuit", action="append", default=[])
     analyze_parser.add_argument("--consumer", action="append", default=[])
+    analyze_parser.add_argument(
+        "--relational", action="store_true",
+        help="enable producer-enforcement/consumer-reliance analysis (all dimensions unless selected below)",
+    )
+    analyze_parser.add_argument("--relational-extent", action="store_true", help="enable the EXTENT relational dimension")
+    analyze_parser.add_argument("--relational-mask", action="store_true", help="enable the MASK relational dimension")
+    analyze_parser.add_argument(
+        "--relational-representation", action="store_true",
+        help="enable the REPRESENTATION relational dimension",
+    )
+    analyze_parser.add_argument(
+        "--relational-multiplicity-scope", action="store_true",
+        help="enable the MULTIPLICITY/SCOPE relational dimension",
+    )
+    analyze_parser.add_argument(
+        "--relational-role-identity", action="store_true",
+        help="enable the ROLE/IDENTITY relational stretch dimension",
+    )
     bundle_parser = subparsers.add_parser("analyze-bundle", help="analyze an offline verified-source bundle")
     bundle_parser.add_argument("directory", type=pathlib.Path)
     baseline_parser = subparsers.add_parser("baseline", help="run an installed baseline through the common envelope")
@@ -39,6 +58,22 @@ def main(argv: list[str] | None = None) -> int:
                 explicit_consumers=args.consumer,
                 bundle=False,
             )
+            dimension_flags = {
+                "EXTENT": args.relational_extent,
+                "MASK": args.relational_mask,
+                "REPRESENTATION": args.relational_representation,
+                "MULTIPLICITY_SCOPE": args.relational_multiplicity_scope,
+                "ROLE_IDENTITY": args.relational_role_identity,
+            }
+            relational_enabled = args.relational or any(dimension_flags.values())
+            if relational_enabled:
+                selected = {name for name, enabled in dimension_flags.items() if enabled}
+                output["relational"] = analyze_relational(
+                    args.repo_dir,
+                    dimensions=selected or set(DIMENSIONS),
+                    explicit_circuits=args.circuit,
+                    explicit_consumers=args.consumer,
+                )
         elif args.command == "analyze-bundle":
             output = analyze(args.directory, bundle=True)
         else:

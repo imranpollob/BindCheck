@@ -6,7 +6,7 @@ import pathlib
 
 def freeze_manifest(root: pathlib.Path) -> tuple[str, list[tuple[str, str]]]:
     paths = [root / "bindcheck-zk", root / "requirements-bindcheck-zk.txt"]
-    paths.extend(sorted((root / "bindcheck_zk").glob("*.py")))
+    paths.extend(sorted((root / "bindcheck_zk").rglob("*.py")))
     paths.append(root / "bindcheck_zk" / "config.json")
     paths.append(root / "bindcheck_zk" / "vendor-lock.json")
     entries: list[tuple[str, str]] = []
