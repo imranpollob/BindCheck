@@ -152,7 +152,7 @@ def classify_verifier(source: str) -> list[dict[str, Any]]:
                 behavior = "DUMMY_CONSTANTS"
             elif "return" not in stripped and re.search(r"\brevert\s+\w+(?:\([^;]*\))?\s*;\s*$", stripped):
                 behavior = "REJECT_ALL"
-            elif re.search(r"\b(mock|stub|simplified|stand[ -]?in)\b", source[max(0, contract.start()-200):min(len(source), contract_end+1)], re.I) and not re.search(r"\bpairingProd\d*\s*\(|\bstaticcall\s*\([^\n]*?,\s*8\s*,", body):
+            elif re.search(r"\b(mock|stub|simplified|stand[ -]?in)\b", source[max(0, contract.start()-1200):min(len(source), contract_end+1)], re.I) and not re.search(r"\bpairingProd\d*\s*\(|\bstaticcall\s*\([^\n]*?,\s*8\s*,", body):
                 behavior = "SIMPLIFIED"
             elif re.search(r"\bpairingProd\d*\s*\(|\bstaticcall\s*\([^\n]*?,\s*8\s*,", body):
                 behavior = "PAIRING_VERIFIER"
