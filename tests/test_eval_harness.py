@@ -23,7 +23,7 @@ from eval.common import (
     select_families,
     sha256_file,
 )
-from eval.run_heldout import run_tool_once
+from eval.run_heldout import execution_families, run_tool_once
 from eval.run_recall import score_pair, strict_resolved_rows
 from eval.summarize import build_summary, summarize_group
 
@@ -74,6 +74,15 @@ class SelectionTests(unittest.TestCase):
             "Blacksaviour/Undertow",
             "Veilpayapp/VEILPAY-APP",
         ])
+
+    def test_exposed_rank_stays_in_draw_but_not_execution(self) -> None:
+        selected = select_families(self.rows, "EVAL")
+        executable, exclusions = execution_families(selected, "EVAL")
+        self.assertEqual(len(selected), 278)
+        self.assertEqual([item["rank"] for item in exclusions], [259])
+        self.assertEqual(exclusions[0]["repository"], "selfxyz/self")
+        self.assertNotIn(259, {item["rank"] for item in executable})
+        self.assertEqual(len(executable) + len(exclusions), len(selected))
 
 
 class GateTests(unittest.TestCase):
@@ -155,6 +164,21 @@ class ResumeTests(unittest.TestCase):
 
 
 class SummaryTests(unittest.TestCase):
+    def test_arm_c_native_warning_keeps_location_and_failed_run_unknown(self) -> None:
+        completed = normalize_tool_payload("arm-c", {
+            "run": {"status": "completed"},
+            "result": {"verdict": "VIOLATION", "findings": [{"code": "C_EFFECT_NOT_PROOF_BOUND", "location": {"path": "Consumer.sol", "line": 42}}]},
+        }, "c.json")
+        self.assertEqual(completed["verdict"], "VIOLATION")
+        self.assertEqual(completed["applicability"], "APPLICABLE")
+        self.assertEqual(completed["native_findings"][0]["location"]["line"], 42)
+        failed = normalize_tool_payload("arm-c", {
+            "run": {"status": "UNKNOWN", "fatal_reason": "BASELINE_TIMEOUT"},
+            "result": {"verdict": "VIOLATION", "findings": []},
+        }, "c.json")
+        self.assertEqual(failed["verdict"], "UNKNOWN")
+        self.assertEqual(failed["applicability"], "UNKNOWN")
+
     def test_pattern_normalization_preserves_applicability_and_reasons(self) -> None:
         payload = {
             "patterns": {
