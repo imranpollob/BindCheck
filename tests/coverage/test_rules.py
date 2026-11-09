@@ -65,6 +65,26 @@ class CoverageRules(unittest.TestCase):
         self.assertEqual(p1("", "contract Consumer is Pausable", body,
                             import_line='import {Pausable} from "other/Pausable.sol";'), "UNKNOWN")
 
+    def test_exact_oz_import_takes_precedence_over_unimported_name_collision(self) -> None:
+        def run(import_line: str) -> str:
+            with tempfile.TemporaryDirectory() as tmp:
+                root = pathlib.Path(tmp)
+                (root / "Main.nr").write_text("fn main(recipient: pub Field, amount: pub Field) {}\n")
+                (root / "Verifier.sol").write_text(
+                    "contract Groth16Verifier { function verifyProof(bytes memory proof, uint256[2] memory input) "
+                    "public view returns (bool) { return true; }}")
+                (root / "Shadow.sol").write_text("contract Pausable { function transfer(address to, uint256 n) external {} }")
+                (root / "Consumer.sol").write_text(import_line + " contract Consumer is Pausable { " +
+                                                   TRANSFER.replace(" public {", " public whenNotPaused {") + " }")
+                output = analyze(root)
+                matches = [t["patterns"]["P1"]["verdict"] for t in output["triples"]
+                           if t["consumer"]["function"] == "submit"]
+                assert len(matches) == 1, matches
+                return matches[0]
+        self.assertEqual(run('import {Pausable} from "@openzeppelin/contracts/utils/Pausable.sol";'),
+                         "VERIFIED_WITHIN_SCOPE")
+        self.assertEqual(run('import {Pausable} from "other/Pausable.sol";'), "UNKNOWN")
+
     def test_oz_pausable_negative_local_override(self) -> None:
         override = "modifier whenNotPaused() { target.call(\"\"); _; }"
         self.assertEqual(p1("", "contract Consumer is Pausable", override + TRANSFER.replace(" public {", " public whenNotPaused {"),

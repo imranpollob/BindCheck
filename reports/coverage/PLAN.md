@@ -69,3 +69,14 @@ running their controls or the final DEV campaign.
    a fixed raw snarkjs verifier, and scalar guard on every raw position may
    satisfy P4's guard subcondition. Swapped or missing copies, absent exact
    length check, or base-field comparison stay P4 `UNKNOWN`.
+
+## Addendum B — exact imported base versus repository name collision
+
+The first final-pass candidate left DEV-F29 P1 at an inheritance blocker:
+the checkout contains a vendored `Pausable`/`ReentrancyGuard`/`Ownable` source,
+while the consumer uses exact `@openzeppelin/contracts/...` named imports.
+Before the resolver change, the control below is committed. When an exact
+supported OpenZeppelin import and direct base name agree, an unrelated source
+file in the repository with the same contract name must not override that
+resolution. A direct-vector transfer still yields P1 `VERIFIED_WITHIN_SCOPE`.
+Without the exact import, the name collision remains P1 `UNKNOWN`.
