@@ -9,7 +9,7 @@ import subprocess
 import tempfile
 import unittest
 
-from eval.adjudicate import cohen_kappa
+from eval.adjudicate import cohen_kappa, extract_warnings
 from eval.render_heldout_cards import render, verifier_body
 from eval.common import (
     PLAN_SOURCE_SHA256,
@@ -314,6 +314,56 @@ class RecallTests(unittest.TestCase):
 
 
 class AdjudicationTests(unittest.TestCase):
+    def test_bindcheck_and_completed_arm_c_get_distinct_blind_cards(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = pathlib.Path(temporary)
+            family_dir, checkout = root / "run/families/001-test", root / "checkout"
+            family_dir.mkdir(parents=True)
+            checkout.mkdir()
+            family = {"family_id": "family-test", "repository": "owner/repo", "commit": "a" * 40,
+                      "verifier_paths": "Verifier.sol"}
+            (family_dir / "family.json").write_text(json.dumps(family))
+            (checkout / "Verifier.sol").write_text("contract Verifier { function verifyProof() public returns(bool) { return true; } }")
+            (checkout / "Consumer.sol").write_text("contract Consumer { function act() public {} }")
+            (family_dir / "bindcheck-zk-raw.json").write_text(json.dumps({"triples": [{
+                "verifier": {"path": "Verifier.sol", "declarations": [{"name": "verifyProof"}]},
+                "patterns": {"P1": {"pattern": "P1", "verdict": "VIOLATION", "reason": "UNBOUND_EFFECT",
+                                    "message": "Effect is unbound", "location": {"path": "Consumer.sol", "line": 1}}},
+            }]}))
+            (family_dir / "arm-c-raw.json").write_text(json.dumps({
+                "run": {"status": "completed"}, "result": {"findings": [{
+                    "code": "A_EFFECT_RECIPIENT_UNBOUND", "message": "Recipient is unbound",
+                    "location": {"path": "Consumer.sol", "line": 1}, "evidence_grade": "E1"}]}}))
+            capture_warning_sources(checkout, family_dir)
+            rows = extract_warnings(root / "run")
+            self.assertEqual({row["tool"] for row in rows}, {"bindcheck-zk", "arm-c"})
+            cards, key = root / "cards", root / "key.csv"
+            result = render(root / "run", cards, key)
+            self.assertEqual(result["cards"], 2)
+            with key.open(newline="") as handle:
+                keyed = list(csv.DictReader(handle))
+            self.assertEqual({row["tool"] for row in keyed}, {"bindcheck-zk", "arm-c"})
+            for card_path in cards.glob("W*.md"):
+                card = card_path.read_text().lower()
+                self.assertIn("contract consumer", card)
+                self.assertIn("function verifyproof", card)
+                self.assertNotIn("arm-c", card)
+                self.assertNotIn("bindcheck-zk", card)
+            for rater in ("a", "b"):
+                with (cards / f"BLIND-SHEET-rater-{rater}.csv").open(newline="") as handle:
+                    sheet = list(csv.DictReader(handle))
+                self.assertEqual(len(sheet), 2)
+                self.assertTrue(all(not row["label"] and not row["reason_code"] for row in sheet))
+
+    def test_incomplete_arm_c_has_no_warning_credit(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            family_dir = pathlib.Path(temporary) / "families/001-test"
+            family_dir.mkdir(parents=True)
+            (family_dir / "family.json").write_text(json.dumps({"family_id": "f"}))
+            (family_dir / "arm-c-raw.json").write_text(json.dumps({
+                "run": {"status": "UNKNOWN"}, "result": {"findings": [{"code": "C_SOMETHING"}]}}))
+            self.assertEqual(extract_warnings(pathlib.Path(temporary)), [])
+
     def test_blind_card_has_source_and_separate_blank_sheets(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             root = pathlib.Path(temporary)
