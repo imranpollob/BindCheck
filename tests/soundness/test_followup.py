@@ -178,6 +178,27 @@ contract Consumer {{
                 if triple["consumer"]["function"] == "submit":
                     self.assertEqual(triple["patterns"]["P1"]["verdict"], "UNKNOWN")
 
+    def test_snarkjs_wrapper_requires_position_preserving_copy(self) -> None:
+        for source_index, expected in [(1, True), (0, False)]:
+            with self.subTest(source_index=source_index):
+                source = f"""
+uint256 constant r = {SCALAR_FIELD};
+function _verifyProofRaw(uint256[2] calldata _pubSignals) public view returns (bool) {{
+ assembly {{ function checkField(v) {{ if iszero(lt(v, r)) {{ mstore(0,0) return(0,0x20) }} }}
+ checkField(calldataload(add(_pubSignals,32))) }} return true;
+}}
+function verifyProof(bytes calldata proof, bytes32[] calldata publicInputs) external view returns (bool) {{
+ if (publicInputs.length != 2) return false;
+ try this._decodeAndVerify(proof, publicInputs) returns (bool ok) {{ return ok; }} catch {{ return false; }}
+}}
+function _decodeAndVerify(bytes calldata proof, bytes32[] calldata publicInputs) external view returns (bool) {{
+ uint256[2] memory pub; pub[0] = uint256(publicInputs[0]);
+ pub[1] = uint256(publicInputs[{source_index}]);
+ return this._verifyProofRaw(pub);
+}}
+"""
+                self.assertEqual(canonical_guard(source, {1}), expected)
+
 
 if __name__ == "__main__":
     unittest.main()
