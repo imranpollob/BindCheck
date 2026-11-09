@@ -1,0 +1,180 @@
+{
+  "acquisition_status": {
+    "ready": 277
+  },
+  "card_audit": "reports/heldout/card-audit.csv",
+  "card_missing": {
+    "location_context_missing": 68,
+    "verifier_body_missing": 413
+  },
+  "families": 277,
+  "family_ledger": "reports/heldout/measurement-family-ledger.csv",
+  "gamma_delta": {
+    "equal_numerator": 56,
+    "matched_artifacts": 654,
+    "parsed_denominator": 344,
+    "status": {
+      "PARSED_DISTINCT": 288,
+      "PARSED_EQUAL": 56,
+      "UNPARSED": 310
+    },
+    "unmatched_verifier_triples": 27
+  },
+  "gamma_delta_ledger": "reports/heldout/gamma-delta-ledger.csv",
+  "native_arm_c_finding_codes": {
+    "A_CALLER_NOT_PROVED_IDENTITY": 30,
+    "A_CALL_VALUE_UNBOUND": 29,
+    "A_EFFECT_AMOUNT_UNBOUND": 90,
+    "A_EFFECT_IDENTITY_UNBOUND": 1,
+    "A_EFFECT_RECIPIENT_UNBOUND": 81,
+    "A_REPLAY_KEY_UNBOUND": 156,
+    "A_REPLAY_POSITION_FIELD_GUARD_MISSING": 18,
+    "A_STATE_WRITE_VALUE_UNBOUND": 12,
+    "A_VERIFIER_ARITY_MISMATCH": 8,
+    "C_EFFECT_NOT_PROOF_BOUND": 68
+  },
+  "prebuild_status": {
+    "BUILD_FAILED": 46,
+    "BUILT": 163,
+    "NO_ENTRY_CIRCOM": 68
+  },
+  "raw_parse_failures": [
+    {
+      "error": "JSONDecodeError",
+      "raw_path": "results/raw/heldout/e2-freeze2-once/families/069-174f9c00bd4f/bindcheck-zk-raw.json"
+    },
+    {
+      "error": "JSONDecodeError",
+      "raw_path": "results/raw/heldout/e2-freeze2-once/families/121-24299faa3e07/bindcheck-zk-raw.json"
+    }
+  ],
+  "runtime": {
+    "acquisition": {
+      "max_seconds": "178.500555",
+      "median_seconds": "1.708417",
+      "min_seconds": "0.670472",
+      "recorded": 277,
+      "timeouts": 0
+    },
+    "arm-c": {
+      "max_seconds": "390.106418",
+      "median_seconds": "6.355762",
+      "min_seconds": "0.161125",
+      "recorded": 277,
+      "timeouts": 1
+    },
+    "bindcheck-zk": {
+      "max_seconds": "150.020694",
+      "median_seconds": "0.884698",
+      "min_seconds": "0.116217",
+      "recorded": 277,
+      "timeouts": 2
+    },
+    "circomspect": {
+      "max_seconds": "61.668751",
+      "median_seconds": "0.265539",
+      "min_seconds": "0.086331",
+      "recorded": 277,
+      "timeouts": 0
+    },
+    "picus": {
+      "max_seconds": "124.356174",
+      "median_seconds": "1.655106",
+      "min_seconds": "0.090571",
+      "recorded": 277,
+      "timeouts": 0
+    },
+    "prebuild_compile": {
+      "max_seconds": "49.215150",
+      "median_seconds": "0.314122",
+      "min_seconds": "0.007083",
+      "recorded": 209,
+      "timeouts": 4
+    },
+    "slither": {
+      "max_seconds": "11.8184",
+      "median_seconds": "1.190119",
+      "min_seconds": "0.5364",
+      "recorded": 277,
+      "timeouts": 0
+    }
+  },
+  "runtime_ledger": "reports/heldout/measurement-runtime-ledger.csv",
+  "source_prebuild_summary": "reports/heldout/prebuild-summary-v3.json",
+  "source_run_manifest": "results/raw/heldout/e2-freeze2-once/run-manifest.json",
+  "source_summary": "results/raw/heldout/e2-freeze2-once/summary.json",
+  "tool_run_status": {
+    "arm-c": {
+      "UNKNOWN": 1,
+      "completed": 276
+    },
+    "bindcheck-zk": {
+      "UNKNOWN": 2,
+      "completed": 275
+    },
+    "circomspect": {
+      "UNKNOWN": 170,
+      "completed": 107
+    },
+    "picus": {
+      "UNKNOWN": 169,
+      "completed": 108
+    },
+    "slither": {
+      "UNKNOWN": 90,
+      "completed": 187
+    },
+    "zkap": {
+      "UNKNOWN": 277
+    }
+  },
+  "tool_verdict": {
+    "arm-c": {
+      "UNKNOWN": 141,
+      "VERIFIED_WITHIN_SCOPE": 4,
+      "VIOLATION": 132
+    },
+    "bindcheck-zk": {
+      "UNKNOWN": 277
+    },
+    "circomspect": {
+      "UNKNOWN": 277
+    },
+    "picus": {
+      "UNKNOWN": 277
+    },
+    "slither": {
+      "UNKNOWN": 277
+    },
+    "zkap": {
+      "UNKNOWN": 277
+    }
+  },
+  "triple_count": {
+    "no_triples": 31,
+    "with_triples": 246
+  },
+  "warning_counts": {
+    "arm-c/": 462,
+    "bindcheck-zk/P1": 21,
+    "bindcheck-zk/P3": 53,
+    "bindcheck-zk/P4": 185,
+    "bindcheck-zk/P5": 72
+  },
+  "warning_key": "reports/heldout/warning-unblind-key.csv",
+  "warning_location": {
+    "arm-c": {
+      "missing_path_or_line": 68,
+      "with_path_and_line": 394
+    },
+    "bindcheck-zk": {
+      "missing_path_or_line": 0,
+      "with_path_and_line": 331
+    },
+    "total": {
+      "missing_path_or_line": 68,
+      "with_path_and_line": 725
+    }
+  },
+  "warnings_total": 793
+}
