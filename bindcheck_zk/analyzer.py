@@ -75,7 +75,7 @@ class Consumer:
     effect_calls: list[Any]
     vectors: list[PublicVector]
     receiver_types: dict[str, str]
-    repository_contracts: dict[str, str]
+    repository_contracts: dict[str, tuple[str, pathlib.Path]]
 
 
 def load_config() -> dict[str, Any]:
@@ -247,15 +247,15 @@ def _supported_verification_call(call: Call) -> bool:
 def discover_consumers(sources: list[Source]) -> list[Consumer]:
     output: list[Consumer] = []
     declarations = [
-        (name, source.text)
+        (name, source.text, source.path)
         for source in sources
         for name in re.findall(r"\b(?:abstract\s+)?contract\s+([A-Za-z_]\w*)\b", mask_comments_and_strings(source.text))
     ]
     declaration_counts: dict[str, int] = defaultdict(int)
-    for name, _ in declarations:
+    for name, _, _ in declarations:
         declaration_counts[name] += 1
     repository_contracts = {
-        name: source_text for name, source_text in declarations
+        name: (source_text, path) for name, source_text, path in declarations
         if declaration_counts[name] == 1
     }
     for source in sources:
@@ -668,7 +668,7 @@ def analyze_p1(
             "No supported protected effect is committed on the recovered verifier-accepting function path.",
             where=where, applicability="NOT_APPLICABLE",
         )
-    unresolved_context = unresolved_function_context(consumer.function, consumer.source.text, consumer.repository_contracts)
+    unresolved_context = unresolved_function_context(consumer.function, consumer.source.text, consumer.repository_contracts, consumer.source.path)
     if unresolved_context:
         return result(
             "P1", "UNKNOWN", unresolved_context,

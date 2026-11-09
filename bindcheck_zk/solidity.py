@@ -494,7 +494,9 @@ def has_unsupported_construct(body: str) -> str | None:
 
 
 def unresolved_function_context(
-    function: Function, source_text: str, repository_contracts: dict[str, str] | None = None,
+    function: Function, source_text: str,
+    repository_contracts: dict[str, tuple[str, pathlib.Path]] | None = None,
+    source_path: pathlib.Path | None = None,
 ) -> str | None:
     """Fail closed on consumer context that this frontend does not resolve."""
     masked_header = mask_comments_and_strings(function.header)
@@ -549,8 +551,8 @@ def unresolved_function_context(
                 if base_match is None:
                     return "UNRESOLVED_CONSUMER_INHERITANCE"
                 base = base_match.group(1)
-                base_source = (repository_contracts or {}).get(base)
-                if base_source is None:
+                base_record = (repository_contracts or {}).get(base)
+                if base_record is None:
                     oz_path = {
                         "ERC721": "token/ERC721/ERC721.sol",
                         "ERC20": "token/ERC20/ERC20.sol",
@@ -561,6 +563,16 @@ def unresolved_function_context(
                         if base != "ReentrancyGuard" or not re.search(r'import\s+["\']@openzeppelin/contracts/security/ReentrancyGuard\.sol["\']', source_text):
                             return "UNRESOLVED_CONSUMER_INHERITANCE"
                 else:
+                    base_source, base_path = base_record
+                    if source_path is None:
+                        return "UNRESOLVED_CONSUMER_INHERITANCE"
+                    imported_paths = re.findall(r'\bimport\s+(?:[^;]*?\bfrom\s+)?["\']([^"\']+)["\']\s*;', source_text)
+                    imported = any(
+                        item.startswith(".") and (source_path.parent / item).resolve() == base_path.resolve()
+                        for item in imported_paths
+                    )
+                    if base_path.resolve() != source_path.resolve() and not imported:
+                        return "UNRESOLVED_CONSUMER_INHERITANCE"
                     base_functions = {item.name for item in functions(base_source)}
                     if base_functions & invoked:
                         return "UNRESOLVED_CONSUMER_INHERITANCE"

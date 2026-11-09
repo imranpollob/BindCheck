@@ -95,6 +95,18 @@ def extract_ic(text: str, constants: dict[str, int]) -> dict[int, tuple[int, int
 
 def canonical_guard_positions(text: str) -> dict[str, Any]:
     """Return the exact public-input positions covered by recognized guards."""
+    verify_bodies: list[str] = []
+    for function in re.finditer(r"\bfunction\s+(?:verifyProof|verifyTx|verify)\s*\(", text, re.I):
+        opening = text.find("{", function.end())
+        if opening < 0 or ";" in text[function.end():opening]:
+            continue
+        depth = 0
+        for ending in range(opening, len(text)):
+            depth += (text[ending] == "{") - (text[ending] == "}")
+            if depth == 0:
+                verify_bodies.append(text[opening + 1:ending])
+                break
+    guard_text = "\n".join(verify_bodies)
     exact_names = re.findall(
         rf"\b([A-Za-z_]\w*)\s*=\s*{SCALAR_FIELD}\s*;", text, re.I,
     )
@@ -110,7 +122,7 @@ def canonical_guard_positions(text: str) -> dict[str, Any]:
         rf"{modulus}\s*<=\s*{vector}\s*\[\s*{index_pattern}\s*\]",
         rf"\bif\s*\([^)]*{vector}\s*\[\s*{index_pattern}\s*\]\s*>=\s*{modulus}[^)]*\)\s*\{{?[^{{}}]*?\b(?:return\s+false|revert\b)",
     ):
-        for match in re.finditer(pattern, text, re.I):
+        for match in re.finditer(pattern, guard_text, re.I):
             index = match.group("index")
             if index.isdigit():
                 indices.add(int(index))
@@ -118,28 +130,29 @@ def canonical_guard_positions(text: str) -> dict[str, Any]:
                 symbolic.add(index)
     aliases = re.findall(
         rf"\b(?:uint(?:256)?\s+)?([A-Za-z_]\w*)\s*=\s*{vector}\s*\[\s*(\d+)\s*\]\s*;",
-        text,
+        guard_text,
         re.I,
     )
     for alias, index in aliases:
         if re.search(
             rf"\bif\s*\([^)]*\b{re.escape(alias)}\b\s*>=\s*{modulus}[^)]*\)\s*\{{?[^{{}}]*?\b(?:return\s+false|revert\b)",
-            text,
+            guard_text,
             re.I,
         ):
             indices.add(int(index))
     for index in symbolic:
         if re.search(
             rf"\bfor\s*\([^;]*\b{re.escape(index)}\b[^;]*;[^;]*(?:<|!=)\s*{vector}\.length[^;]*;[^)]*\)",
-            text,
+            guard_text,
             re.I | re.S,
         ):
             all_positions = True
     # snarkjs emits one Yul call per public word.  A helper name alone is not
     # evidence: inspect its rejecting comparison against the exact scalar r.
     generic = False
-    helper = re.search(r"\bfunction\s+checkField\s*\(\s*(?:uint(?:256)?\s+)?(\w+)\s*\)[^{}]*\{", text, re.I)
-    if helper:
+    helpers = list(re.finditer(r"\bfunction\s+checkField\s*\(\s*(?:uint(?:256)?\s+)?(\w+)\s*\)[^{}]*\{", text, re.I))
+    if len(helpers) == 1:
+        helper = helpers[0]
         opening = text.find("{", helper.start())
         depth = 0
         ending = opening
@@ -149,15 +162,23 @@ def canonical_guard_positions(text: str) -> dict[str, Any]:
                 break
         body = text[opening + 1:ending]
         parameter = re.escape(helper.group(1))
-        valid_comparison = bool(
-            re.search(rf"\b{parameter}\s*>=\s*{modulus}\b", body, re.I)
-            or re.search(rf"\biszero\s*\(\s*lt\s*\(\s*{parameter}\s*,\s*{modulus}\s*\)\s*\)", body, re.I)
+        yul_reject = re.search(
+            rf"\bif\s+iszero\s*\(\s*lt\s*\(\s*{parameter}\s*,\s*{modulus}\s*\)\s*\)\s*\{{([^{{}}]*)\}}",
+            body, re.I | re.S,
         )
-        rejects = bool(re.search(r"\brevert\s*\(|\brevert\b|\breturn\s*\(\s*0\s*,\s*0x20\s*\)", body, re.I))
-        if valid_comparison and rejects:
+        solidity_reject = re.search(
+            rf"\bif\s*\(\s*{parameter}\s*>=\s*{modulus}\s*\)\s*(?:revert\s*\(|\{{[^{{}}]*\brevert\s*\()",
+            body, re.I | re.S,
+        )
+        yul_block = yul_reject.group(1) if yul_reject else ""
+        yul_fails = bool(re.search(r"\brevert\s*\(", yul_block, re.I) or (
+            re.search(r"\bmstore\s*\(\s*0\s*,\s*0\s*\)", yul_block, re.I)
+            and re.search(r"\breturn\s*\(\s*0\s*,\s*0x20\s*\)", yul_block, re.I)
+        ))
+        if solidity_reject or yul_fails:
             for match in re.finditer(
                 rf"\bcheckField\s*\(\s*calldataload\s*\(\s*add\s*\(\s*(_?{vector})\s*,\s*(\d+)\s*\)\s*\)\s*\)",
-                text, re.I,
+                guard_text, re.I,
             ):
                 offset = int(match.group(2))
                 if offset % 32 == 0:
