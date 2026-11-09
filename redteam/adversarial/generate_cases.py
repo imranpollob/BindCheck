@@ -162,6 +162,8 @@ def verifier_for(case: dict) -> str:
         guards = f"        require(input[{position}] < SNARK_SCALAR_FIELD, \"field\");\n"
     elif family == "replay-key-binding":
         guards = "        require(input[2] < SNARK_SCALAR_FIELD, \"field\");\n"
+    elif family == "nested-replay-key":
+        guards = "        require(input[2] < SNARK_SCALAR_FIELD, \"field\");\n"
     elif family in {"nullifier-chain-scope", "nullifier-contract-scope"}:
         guards = "        require(input[1] < SNARK_SCALAR_FIELD, \"field\");\n"
     return f"""// SPDX-License-Identifier: MIT
@@ -264,6 +266,15 @@ def consumer_body(case: dict) -> str:
         return prelude + "        address decodedAlias = recipient;\n        require(decodedAlias == provedRecipient, \"alias\");\n        _mint(decodedAlias, provedAmount);\n"
     if family == "caller-identity-policy":
         return prelude + "        _mint(msg.sender, provedAmount);\n"
+    if family == "safe-transfer-record-amount":
+        value = "amount" if vulnerable else "provedAmount"
+        return prelude + f"        token.safeTransfer(provedRecipient, {value});\n"
+    if family == "nested-replay-key":
+        key = "replayKey" if vulnerable else "provedNullifier"
+        return prelude + f"        require(!usedByCaller[msg.sender][{key}], \"used\");\n        usedByCaller[msg.sender][{key}] = true;\n"
+    if family == "erc721-safe-mint-recipient":
+        target = "recipient" if vulnerable else "provedRecipient"
+        return prelude + f"        _safeMint({target}, provedAmount);\n"
     raise ValueError(f"unhandled family {family}")
 
 
@@ -274,13 +285,20 @@ pragma solidity ^0.8.20;
 
 import "./Verifier.sol";
 
+contract MockToken {{
+    mapping(address => uint256) public balances;
+    function safeTransfer(address recipient, uint256 amount) external {{ balances[recipient] += amount; }}
+}}
+
 contract Consumer {{
     IVerifier public immutable verifier;
+    MockToken public immutable token;
     mapping(address => uint256) public balances;
     mapping(uint256 => bool) public used;
+    mapping(address => mapping(uint256 => bool)) public usedByCaller;
     uint256 public observed;
 
-    constructor(IVerifier verifier_) {{ verifier = verifier_; }}
+    constructor(IVerifier verifier_) {{ verifier = verifier_; token = new MockToken(); }}
 
     function execute(
         uint256[] memory publicInputs,
@@ -299,6 +317,7 @@ contract Consumer {{
     }}
 
     function _mint(address recipient, uint256 amount) internal {{ balances[recipient] += amount; }}
+    function _safeMint(address recipient, uint256 tokenId) internal {{ balances[recipient] += tokenId + 1; }}
     function _burn(address owner, uint256 amount) internal {{ balances[owner] -= amount; }}
 }}
 """

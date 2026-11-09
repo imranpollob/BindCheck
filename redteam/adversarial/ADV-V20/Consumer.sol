@@ -3,13 +3,20 @@ pragma solidity ^0.8.20;
 
 import "./Verifier.sol";
 
+contract MockToken {
+    mapping(address => uint256) public balances;
+    function safeTransfer(address recipient, uint256 amount) external { balances[recipient] += amount; }
+}
+
 contract Consumer {
     IVerifier public immutable verifier;
+    MockToken public immutable token;
     mapping(address => uint256) public balances;
     mapping(uint256 => bool) public used;
+    mapping(address => mapping(uint256 => bool)) public usedByCaller;
     uint256 public observed;
 
-    constructor(IVerifier verifier_) { verifier = verifier_; }
+    constructor(IVerifier verifier_) { verifier = verifier_; token = new MockToken(); }
 
     function execute(
         uint256[] memory publicInputs,
@@ -33,5 +40,6 @@ contract Consumer {
     }
 
     function _mint(address recipient, uint256 amount) internal { balances[recipient] += amount; }
+    function _safeMint(address recipient, uint256 tokenId) internal { balances[recipient] += tokenId + 1; }
     function _burn(address owner, uint256 amount) internal { balances[owner] -= amount; }
 }

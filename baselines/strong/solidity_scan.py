@@ -181,9 +181,10 @@ def _split_args(text: str) -> list[str]:
 def _call_effects(body: str) -> list[dict[str, Any]]:
     output: list[dict[str, Any]] = []
     patterns = [
-        ("mint", re.compile(r"\b(?:_?mint|safeMint)\s*\(([^;]+?)\)")),
+        ("mint", re.compile(r"\b(?:_?mint|_?safeMint)\s*\(([^;]+?)\)")),
         ("burn", re.compile(r"\b(?:_?burn|burnFrom)\s*\(([^;]+?)\)")),
         ("transferFrom", re.compile(r"\.transferFrom\s*\(([^;]+?)\)")),
+        ("transfer", re.compile(r"\.safeTransfer\s*\(([^;]+?)\)")),
         ("transfer", re.compile(r"\.transfer\s*\(([^;]+?)\)")),
     ]
     for kind, pattern in patterns:
@@ -299,7 +300,7 @@ def scan_replay(texts: list[tuple[str, str]]) -> tuple[list[dict[str, Any]], dic
     findings: list[dict[str, Any]] = []
     stats = {"replay_writes": 0, "bound_replay_keys": 0, "guarded_replay_positions": 0}
     guards = _verifier_field_guards(texts)
-    replay_write = re.compile(r"\b([A-Za-z_]\w*)\s*\[\s*([^\]]+)\s*\]\s*=\s*(?:true|1)", re.I)
+    replay_write = re.compile(r"\b([A-Za-z_]\w*)\s*((?:\[\s*[^\]]+\s*\])+?)\s*=\s*(?:true|1)", re.I)
     for relative, text in texts:
         for function in extract_functions(text):
             if not VERIFY_CALL_RE.search(function.body):
@@ -309,7 +310,10 @@ def scan_replay(texts: list[tuple[str, str]]) -> tuple[list[dict[str, Any]], dic
                 if not re.search(r"nullifier|spent|used|consumed", match.group(1), re.I):
                     continue
                 stats["replay_writes"] += 1
-                key = match.group(2).strip()
+                keys = re.findall(r"\[\s*([^\]]+)\s*\]", match.group(2))
+                if not keys:
+                    continue
+                key = keys[-1].strip()
                 index = expression_public_index(key, aliases)
                 line = line_at(text, function.body_start + match.start())
                 if index is None:
@@ -317,7 +321,7 @@ def scan_replay(texts: list[tuple[str, str]]) -> tuple[list[dict[str, Any]], dic
                         "A_REPLAY_KEY_UNBOUND",
                         "The consumed replay key is not derived from a verifier public input.",
                         path=relative, line=line,
-                        facts={"function": function.name, "mapping": match.group(1), "key": key, "source_excerpt": match.group(0).strip()},
+                        facts={"function": function.name, "mapping": match.group(1), "mapping_keys": keys, "key": key, "source_excerpt": match.group(0).strip()},
                     ))
                     continue
                 stats["bound_replay_keys"] += 1
@@ -326,7 +330,7 @@ def scan_replay(texts: list[tuple[str, str]]) -> tuple[list[dict[str, Any]], dic
                         "A_REPLAY_POSITION_FIELD_GUARD_MISSING",
                         "The exact public-input position used as the replay key lacks a scalar-field guard.",
                         path=relative, line=line,
-                        facts={"function": function.name, "key": key, "public_index": index, "guarded_positions": sorted(guards), "source_excerpt": match.group(0).strip()},
+                        facts={"function": function.name, "mapping_keys": keys, "key": key, "public_index": index, "guarded_positions": sorted(guards), "source_excerpt": match.group(0).strip()},
                     ))
                 else:
                     stats["guarded_replay_positions"] += 1

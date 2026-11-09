@@ -25,6 +25,7 @@ SPARSE_PATHS = tuple(pattern for suffix in SOURCE_SUFFIXES for pattern in (f"/*.
 )
 DATA_WALL_TOKENS = (
     "zkemail", "zk-email", "semaphore-protocol", "selfxyz/self", "/maci",
+    "a16z/zkdrops",
     "tangle-network", "nightfall", "zeto", "veil", "foom",
 )
 

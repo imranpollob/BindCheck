@@ -25,10 +25,10 @@ def fake_b(root: pathlib.Path) -> dict:
 class StrongBaselineTests(unittest.TestCase):
     def test_expectations_are_balanced_and_unique(self) -> None:
         expected = json.loads((ADV / "expected.json").read_text(encoding="utf-8"))
-        self.assertEqual(len(expected["cases"]), 40)
-        self.assertEqual(sum(case["label"] == "VULNERABLE" for case in expected["cases"]), 20)
-        self.assertEqual(sum(case["label"] == "LEGITIMATE" for case in expected["cases"]), 20)
-        self.assertEqual(len({case["id"] for case in expected["cases"]}), 40)
+        self.assertEqual(len(expected["cases"]), 46)
+        self.assertEqual(sum(case["label"] == "VULNERABLE" for case in expected["cases"]), 23)
+        self.assertEqual(sum(case["label"] == "LEGITIMATE" for case in expected["cases"]), 23)
+        self.assertEqual(len({case["id"] for case in expected["cases"]}), 46)
 
     def test_policies_do_not_encode_expected_verdicts(self) -> None:
         for path in sorted(ADV.glob("ADV-*/policy.json")):
@@ -60,6 +60,24 @@ class StrongBaselineTests(unittest.TestCase):
         legitimate = scan_repository(ADV / "ADV-L09")
         self.assertIn("A_REPLAY_POSITION_FIELD_GUARD_MISSING", {item["code"] for item in vulnerable["findings"]})
         self.assertNotIn("A_REPLAY_POSITION_FIELD_GUARD_MISSING", {item["code"] for item in legitimate["findings"]})
+
+    def test_safe_transfer_record_amount(self) -> None:
+        vulnerable = scan_repository(ADV / "ADV-V21")
+        legitimate = scan_repository(ADV / "ADV-L21")
+        self.assertIn("A_EFFECT_AMOUNT_UNBOUND", {item["code"] for item in vulnerable["findings"]})
+        self.assertNotIn("A_EFFECT_AMOUNT_UNBOUND", {item["code"] for item in legitimate["findings"]})
+
+    def test_nested_replay_uses_final_key(self) -> None:
+        vulnerable = scan_repository(ADV / "ADV-V22")
+        legitimate = scan_repository(ADV / "ADV-L22")
+        self.assertIn("A_REPLAY_KEY_UNBOUND", {item["code"] for item in vulnerable["findings"]})
+        self.assertNotIn("A_REPLAY_KEY_UNBOUND", {item["code"] for item in legitimate["findings"]})
+
+    def test_erc721_safe_mint_recipient(self) -> None:
+        vulnerable = scan_repository(ADV / "ADV-V23")
+        legitimate = scan_repository(ADV / "ADV-L23")
+        self.assertIn("A_EFFECT_RECIPIENT_UNBOUND", {item["code"] for item in vulnerable["findings"]})
+        self.assertNotIn("A_EFFECT_RECIPIENT_UNBOUND", {item["code"] for item in legitimate["findings"]})
 
     def test_composition_checks_commitment_order(self) -> None:
         for case_id, expected in (("ADV-V16", "VIOLATION"), ("ADV-L16", "VERIFIED_WITHIN_SCOPE")):
