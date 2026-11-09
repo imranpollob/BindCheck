@@ -198,7 +198,7 @@ def _call_effects(body: str) -> list[dict[str, Any]]:
             else:
                 continue
             output.append({"kind": kind, "offset": match.start(), "roles": roles, "text": match.group(0)})
-    for match in re.finditer(r"([A-Za-z_]\w*)\.call\s*\{\s*value\s*:\s*([^}]+)\}", body):
+    for match in re.finditer(r"((?:payable\s*\([^)]*\)|[A-Za-z_]\w*))\.call\s*\{\s*value\s*:\s*([^}]+)\}", body):
         output.append({
             "kind": "native-call", "offset": match.start(),
             "roles": [("recipient", match.group(1)), ("call_value", match.group(2))],

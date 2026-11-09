@@ -49,6 +49,12 @@ class StrongBaselineTests(unittest.TestCase):
         self.assertIn("A_GUARD_NOT_DOMINATING", {item["code"] for item in vulnerable["findings"]})
         self.assertNotIn("A_GUARD_NOT_DOMINATING", {item["code"] for item in legitimate["findings"]})
 
+    def test_native_call_value_is_detected_through_payable_cast(self) -> None:
+        vulnerable = scan_repository(ADV / "ADV-V03")
+        legitimate = scan_repository(ADV / "ADV-L03")
+        self.assertIn("A_CALL_VALUE_UNBOUND", {item["code"] for item in vulnerable["findings"]})
+        self.assertNotIn("A_CALL_VALUE_UNBOUND", {item["code"] for item in legitimate["findings"]})
+
     def test_replay_guard_is_position_specific(self) -> None:
         vulnerable = scan_repository(ADV / "ADV-V09")
         legitimate = scan_repository(ADV / "ADV-L09")

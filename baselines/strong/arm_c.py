@@ -248,7 +248,33 @@ def analyze_arm_c(
         join_findings, suppress, join_facts = _name_heuristic_joins(solidity, circuits, a_findings)
         policy_status = "absent-name-heuristics-only"
     retained_a = [item for item in a_findings if item.get("code") not in suppress]
-    findings = [*retained_a, *join_findings]
+    normalized_join_findings: list[dict[str, Any]] = []
+    effect_codes = {
+        "A_EFFECT_RECIPIENT_UNBOUND", "A_EFFECT_AMOUNT_UNBOUND", "A_EFFECT_IDENTITY_UNBOUND",
+        "A_CALL_VALUE_UNBOUND", "A_STATE_WRITE_VALUE_UNBOUND",
+    }
+    if any(item.get("code") in effect_codes for item in retained_a):
+        normalized_join_findings.append(finding(
+            "C_EFFECT_NOT_PROOF_BOUND",
+            "The composition retains an Arm A protected-effect role with no public-input or declared-commitment binding.",
+            facts={"arm_a_codes": sorted({item["code"] for item in retained_a if item.get("code") in effect_codes})},
+            source="composition-union",
+        ))
+    for item in retained_a:
+        expression = str(item.get("facts", {}).get("expression", ""))
+        if item.get("code") in {"A_EFFECT_ALIAS_UNBOUND", "A_EFFECT_RECIPIENT_UNBOUND"} and re.search(r"alias|decoded", expression, re.I):
+            normalized_join_findings.append(finding(
+                "C_ALIAS_BINDING_MISSING",
+                "A consumer alias used by the effect has no recovered equality to its public role.",
+                facts={"expression": expression}, source="composition-union",
+            ))
+        if item.get("code") == "A_CALLER_NOT_PROVED_IDENTITY" and policy and policy.get("caller_policy") == "proved_identity":
+            normalized_join_findings.append(finding(
+                "C_CALLER_POLICY_MISMATCH",
+                "The caller receives the effect although policy requires the proved identity.",
+                facts={"caller_policy": policy.get("caller_policy")}, source="composition-union",
+            ))
+    findings = [*retained_a, *join_findings, *normalized_join_findings]
     a_verdict = arm_a.get("result", {}).get("verdict", "UNKNOWN")
     if findings:
         verdict = "VIOLATION"

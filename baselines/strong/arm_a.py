@@ -134,7 +134,8 @@ def _run_foundry_policy(root: pathlib.Path, native_dir: pathlib.Path, timeout: f
     findings: list[dict[str, Any]] = []
     statuses: list[str] = []
     reasons: list[str] = []
-    if record["exit_status"] == 0 and not record["timed_out"]:
+    payload: dict[str, Any] = {}
+    if not record["timed_out"]:
         try:
             payload = json.loads(record["stdout"])
         except json.JSONDecodeError:
@@ -154,12 +155,14 @@ def _run_foundry_policy(root: pathlib.Path, native_dir: pathlib.Path, timeout: f
                 "source": "same-policy-foundry-harness",
                 "evidence_grade": "E1",
             })
-        status = "completed"
-        reason = None if statuses else "FOUNDRY_OUTPUT_UNRESOLVED"
+        if statuses:
+            status, reason = "completed", None
+        elif record["exit_status"] == 0:
+            status, reason = "UNKNOWN", "FOUNDRY_OUTPUT_UNRESOLVED"
+        else:
+            status, reason = "UNKNOWN", "FOUNDRY_SETUP_OR_COMPILE_FAILURE"
     elif record["timed_out"]:
         status, reason = "UNKNOWN", "FOUNDRY_TIMEOUT"
-    else:
-        status, reason = "UNKNOWN", "FOUNDRY_SETUP_OR_COMPILE_FAILURE"
     return {
         "status": status,
         "reason": reason,
