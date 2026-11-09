@@ -1,7 +1,7 @@
 {
   "after": {
-    "path": "results/raw/soundness/after-20261109T054620Z-59155/per-row-ledger.json",
-    "sha256": "cc2d230bcebafe9340529458aff295293b3cbee128676a12fba821bf9da5aa82"
+    "path": "results/raw/soundness/after-20261109T061325Z-77918/per-row-ledger.json",
+    "sha256": "cc0aa9dce6a61eb2e11aeb47d3ce38619b8840f20e1030ffdfa427775dbd2fb2"
   },
   "before": {
     "path": "results/raw/T27/after-20261109T030552Z-33270/per-row-ledger.json",
@@ -115,6 +115,18 @@
       "id": "DEV-F16",
       "pattern": "P5",
       "repository": "poa-box/POP"
+    },
+    {
+      "after_applicability": "APPLICABLE",
+      "after_reasons": "PUBLIC_INPUT_VECTOR_UNRESOLVED",
+      "after_verdict": "UNKNOWN",
+      "before_applicability": "APPLICABLE",
+      "before_reasons": "PUBLIC_INPUT_VECTOR_UNRESOLVED;VERIFIER_MATCH_AMBIGUOUS",
+      "before_verdict": "UNKNOWN",
+      "commit": "85c72bd2e523dfbfc22bb13fbe45aae0cfac7843",
+      "id": "DEV-F45",
+      "pattern": "P5",
+      "repository": "MynaWallet/monorepo"
     },
     {
       "after_applicability": "APPLICABLE",
@@ -397,7 +409,7 @@
   ],
   "ledger": {
     "path": "reports/soundness/full-dev-ledger-2.csv",
-    "sha256": "38d7c5f41b5ab5e3a2ba11858ce3db335190889591e8d4c684df8db6a028b0cc"
+    "sha256": "3a64e8eb237cc2b615985986f5fdca457582763dd062e7f2d8b8e53c180cccd8"
   },
   "patterns": {
     "P1": {

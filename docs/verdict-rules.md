@@ -32,8 +32,9 @@ The follow-up frontend resolves a local modifier only when it has exactly one
 unconditional body placeholder, a prefix made solely of `require`/`assert`
 checks, and no external call. It recognizes OpenZeppelin `nonReentrant` only
 with its exact package import. Inheritance resolution requires a unique local
-base declaration or an exact OpenZeppelin ERC20/ERC721/Ownable/ReentrancyGuard
-import; an overridden token effect, ambiguous base, conditional modifier,
+base declaration in the same file, an import resolved to a unique local base
+source, or an exact OpenZeppelin ERC20/ERC721/Ownable/ReentrancyGuard import;
+an overridden token effect, ambiguous base, conditional modifier,
 missing placeholder, or external-call modifier remains `UNKNOWN`. Standard
 ERC20/ERC721 internal token effects are recognized in the stated subset.
 
@@ -145,7 +146,13 @@ Justification: the consumer-vector analysis returns exact numeric positions.
 The verifier guard extractor returns exact guarded indices or an all-position
 loop. It recognizes snarkjs `checkField(calldataload(add(_pubSignals, K)))`
 only when the helper rejects values at or above the exact BN254 scalar field
-and `K` is word-aligned. A guard on position `i` cannot discharge a replay key at position `j`.
+in the rejecting branch, the call appears inside the verifier body, and `K`
+is word-aligned. A guard on position `i` cannot discharge a replay key at
+position `j`.
+A supported wrapper may call a decoder that copies every public input at the
+same index into a raw snarkjs verifier. This path requires an exact length
+guard, a rejecting raw helper, a position-preserving copy, and no extra use of
+the copied vector or decoder call. Other wrapper shapes remain unresolved.
 The local guard recognizer accepts only an unconditional, pre-verification
 `require` whose entire condition compares the replay key with the same scalar
 field. A comparison with the BN254 base field is insufficient.
