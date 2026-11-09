@@ -1,0 +1,62 @@
+{
+ "generated_by": "reports/groundtruth/scripts/check_canonical_guard.py",
+ "file": "https://raw.githubusercontent.com/a16z/zkdrops/4002962fb632578dd12477346d2e5c4159ffb2ef/contracts/compiled/MerkVerifier.sol",
+ "sha256": "2a2e335d51a50e77e9547d4ee0488e7d2bb997cf9daf315e39c6ec32c1cfc84e",
+ "canonical_guard": true,
+ "matching_regex": "\\bcheckField\\s*\\([^;]*(?:inputs?|pubSignals?|publicInputs?)",
+ "match_chars": 19084,
+ "match_start_line": 183,
+ "match_end_line": 743,
+ "match_tail": "ulateLagrange(pMem)\n            calculatePl(pMem, pubSignals",
+ "pubSignals_checkField_calls": 0,
+ "t25_rows": {
+  "DEV-H01": {
+   "verifier_path": "contracts/compiled/MerkVerifier.sol",
+   "P3": [
+    "VERIFIED_WITHIN_SCOPE",
+    "REPLAY_KEY_CANONICAL_AND_CONSUMED"
+   ],
+   "P4": [
+    "UNKNOWN",
+    "VERIFICATION_KEY_PARSE_INCOMPLETE"
+   ],
+   "tool_content_sha256": "2741c40e8acdd86d2a15aca1cfd9f1ef989558c749e25ec4d926c3a483fb94bd"
+  },
+  "DEV-H02": {
+   "verifier_path": "contracts/compiled/MerkVerifier.sol",
+   "P3": [
+    "VERIFIED_WITHIN_SCOPE",
+    "REPLAY_KEY_CANONICAL_AND_CONSUMED"
+   ],
+   "P4": [
+    "UNKNOWN",
+    "VERIFICATION_KEY_PARSE_INCOMPLETE"
+   ],
+   "tool_content_sha256": "2741c40e8acdd86d2a15aca1cfd9f1ef989558c749e25ec4d926c3a483fb94bd"
+  },
+  "DEV-H03": {
+   "verifier_path": null,
+   "P3": [
+    "VERIFIED_WITHIN_SCOPE",
+    "REPLAY_KEY_CANONICAL_AND_CONSUMED"
+   ],
+   "P4": [
+    "UNKNOWN",
+    "VERIFIER_ARTIFACT_MISSING"
+   ],
+   "tool_content_sha256": "2741c40e8acdd86d2a15aca1cfd9f1ef989558c749e25ec4d926c3a483fb94bd"
+  },
+  "DEV-H04": {
+   "verifier_path": null,
+   "P3": [
+    "VERIFIED_WITHIN_SCOPE",
+    "REPLAY_KEY_CANONICAL_AND_CONSUMED"
+   ],
+   "P4": [
+    "UNKNOWN",
+    "VERIFIER_ARTIFACT_MISSING"
+   ],
+   "tool_content_sha256": "2741c40e8acdd86d2a15aca1cfd9f1ef989558c749e25ec4d926c3a483fb94bd"
+  }
+ }
+}

@@ -1,0 +1,98 @@
+{
+  "generated_by": "reports/groundtruth/scripts/maturity_audit.py",
+  "rubric": "reports/groundtruth/PLAN.md section C5 (committed c63cfa1 before READMEs were fetched)",
+  "families": 278,
+  "prereg_counts": {
+    "verified-deployed": 38,
+    "deployed-address-in-docs": 60,
+    "audited-production": 60,
+    "hackathon-student": 60,
+    "unclassified": 60
+  },
+  "proposed_counts_v1_preregistered_rubric": {
+    "verified-deployed": 38,
+    "hackathon-student": 78,
+    "deployed-address-in-docs": 26,
+    "testnet-address-in-docs": 28,
+    "unclassified": 104,
+    "audited-production": 4
+  },
+  "agreement_total_v1_preregistered_rubric": 173,
+  "matrix_prereg_to_v1": {
+    "audited-production -> audited-production": 4,
+    "audited-production -> hackathon-student": 18,
+    "audited-production -> unclassified": 38,
+    "deployed-address-in-docs -> deployed-address-in-docs": 25,
+    "deployed-address-in-docs -> hackathon-student": 4,
+    "deployed-address-in-docs -> testnet-address-in-docs": 27,
+    "deployed-address-in-docs -> unclassified": 4,
+    "hackathon-student -> deployed-address-in-docs": 1,
+    "hackathon-student -> hackathon-student": 51,
+    "hackathon-student -> testnet-address-in-docs": 1,
+    "hackathon-student -> unclassified": 7,
+    "unclassified -> hackathon-student": 5,
+    "unclassified -> unclassified": 55,
+    "verified-deployed -> verified-deployed": 38
+  },
+  "proposed_counts": {
+    "verified-deployed": 38,
+    "deployed-address-in-docs": 13,
+    "testnet-address-in-docs": 28,
+    "hackathon-student": 94,
+    "unclassified": 105
+  },
+  "note": "proposed_label is the post-hoc v1.1 refinement (PLAN.md Addendum A); its agreement figures are descriptive, not pre-registered.",
+  "agreement_total": 162,
+  "agreement_by_prereg_stratum": {
+    "verified-deployed": {
+      "agree": 38,
+      "of": 38
+    },
+    "deployed-address-in-docs": {
+      "agree": 12,
+      "of": 60
+    },
+    "audited-production": {
+      "agree": 0,
+      "of": 60
+    },
+    "hackathon-student": {
+      "agree": 58,
+      "of": 60
+    },
+    "unclassified": {
+      "agree": 54,
+      "of": 60
+    }
+  },
+  "matrix_prereg_to_proposed": {
+    "audited-production -> hackathon-student": 23,
+    "audited-production -> unclassified": 37,
+    "deployed-address-in-docs -> deployed-address-in-docs": 12,
+    "deployed-address-in-docs -> hackathon-student": 7,
+    "deployed-address-in-docs -> testnet-address-in-docs": 27,
+    "deployed-address-in-docs -> unclassified": 14,
+    "hackathon-student -> deployed-address-in-docs": 1,
+    "hackathon-student -> hackathon-student": 58,
+    "hackathon-student -> testnet-address-in-docs": 1,
+    "unclassified -> hackathon-student": 6,
+    "unclassified -> unclassified": 54,
+    "verified-deployed -> verified-deployed": 38
+  },
+  "families_with_flag": {
+    "DOUBTFUL-ADDRESS-CONTEXT": 24,
+    "PROTOTYPE/POC/DEMO": 139,
+    "NOT-AUDITED": 29,
+    "TESTNET-ONLY": 28,
+    "DO-NOT-DEPLOY": 16,
+    "MIXED-NETWORK-CUES": 1,
+    "README-MISSING": 5,
+    "AUDIT-CONTRADICTION": 1
+  },
+  "confidence_counts": {
+    "high": 38,
+    "medium": 95,
+    "low": 145
+  },
+  "maturity_audit_csv_sha256": "ec53b2297ec46d9354918acb47bccb7a5f34ff60ae002b9aeba602f7872ce49d"
+}
