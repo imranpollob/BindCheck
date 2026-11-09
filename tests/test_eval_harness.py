@@ -310,7 +310,8 @@ class AdjudicationTests(unittest.TestCase):
             self.assertNotIn("BindCheck", card)
             self.assertTrue(key.is_file())
             for rater in ("a", "b"):
-                rows = list(csv.DictReader((cards / f"BLIND-SHEET-rater-{rater}.csv").open()))
+                with (cards / f"BLIND-SHEET-rater-{rater}.csv").open() as handle:
+                    rows = list(csv.DictReader(handle))
                 self.assertEqual(rows[0]["label"], "")
 
     def test_verifier_body_is_complete_and_does_not_include_next_function(self) -> None:
