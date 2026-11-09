@@ -7,6 +7,7 @@ import unittest
 
 from bindcheck_zk.analyzer import analyze
 from bindcheck_zk.p4 import SCALAR_FIELD, canonical_guard
+from bindcheck_zk.solidity import effect_calls, effect_roles
 
 
 Q = 21888242871839275222246405745257275088696311157297823662689037894645226208583
@@ -101,6 +102,18 @@ function submit(bytes memory proof, uint256 domain, uint256 nullifier) external 
                     result = analyze(root)
                     p1 = next(t["patterns"]["P1"] for t in result["triples"] if t["consumer"]["function"] == "submit")
                     self.assertEqual(p1["verdict"], expected)
+
+    def test_standard_token_internal_effect_roles(self) -> None:
+        cases = [
+            ("contract T is ERC20 {}", "_transfer(sender, recipient, amount);", [("recipient", "recipient"), ("amount", "amount")]),
+            ("contract T is ERC721 {}", "_transfer(sender, recipient, tokenId);", [("recipient", "recipient")]),
+            ("contract T is ERC721 {}", "_safeMint(recipient, tokenId);", [("recipient", "recipient")]),
+        ]
+        for source, body, expected in cases:
+            with self.subTest(body=body, source=source):
+                found = effect_calls(body, source)
+                self.assertEqual(len(found), 1)
+                self.assertEqual(effect_roles(found[0], source), expected)
 
 
 if __name__ == "__main__":
