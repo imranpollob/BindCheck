@@ -1,0 +1,7 @@
+repository: https://github.com/zksecurity/zkbugs  commit: 212cc500b7cf1a2221d3e42ff47baff453afd070
+bug entries: 140
+DSL: {'Circom': 70, 'Halo2': 35, 'Cairo': 8, 'Plonky3': 8, 'Bellperson': 7, 'Arkworks': 5, 'risc0': 3, 'PIL': 3, 'gnark': 1}
+Vulnerability: {'Under-Constrained': 123, 'Computational Issues': 9, 'Over-Constrained': 4, 'Fiat-Shamir Issue': 2, 'Backend Issue': 1, 'Private Information Leakage': 1}
+Root Cause: {'Wrong Translation of Logic into Constraints': 44, 'Missing Input Constraints': 40, 'Assigned but Unconstrained': 14, 'Unsafe Reuse of Circuit': 11, 'Circuit Design Issue': 7, 'Arithmetic Field Issues': 7, 'Misimplementation of a Specification': 5, 'Other Programming Errors': 4, 'Missing Constraint': 3, 'Fiat-Shamir': 2, 'Incorrect Custom Gates': 1, 'Out-of-Circuit Computation Not Being Constrained': 1, 'Missing/Incorrect Verifier Check': 1}
+Location file extension: {'.circom': 70, '.rs': 55, '.cairo': 8, '.pil': 3, '.go': 2, '.cpp': 2}
+entries whose Location is a .sol file: 0

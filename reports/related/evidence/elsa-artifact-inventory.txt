@@ -1,0 +1,14 @@
+repository: https://github.com/Anonymize-gitcode/ELSA
+commit: 509c987365502cee53764e552e14e42575cc7316 | tree truncated: False
+blob paths: 4258
+.sol files: 4086
+circuit/constraint files (.circom/.zok/.nr/.r1cs/.zkey/.sym): 0
+datasets/ZKP_dataset .sol files by category:
+  Assert_Violation: 330
+  DoS_with_Block_Gas_Limit_Gas: 330
+  Integer_Overflow_and_Underflow: 330
+  Missing_Protection_Against_Signature_Replay_Attacks: 330
+  Reentrancy: 331
+  Unprotected_Ether_Withdrawal: 330
+  Write_to_Arbitrary_Storage_Location: 330
+  total: 2311

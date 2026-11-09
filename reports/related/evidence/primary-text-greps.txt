@@ -1,0 +1,73 @@
+## SoK 2402.15293: dataset size
+40:                                         compasses an extensive analysis of 141 actual vulnerabilities
+60:                                         interactive protocol where an untrusted prover could convince       SNARKs. Specifically, we analyzed 141 vulnerability reports
+79:     SNARKs. We gathered 141 vulnerabilities from 107 au-           communication between prover and verifier is non-interactive,
+## SoK Table 5 (integration vulnerabilities)
+(i)            Integration Design Error     1        2       0          0            3
+cuit           Missing Validation Input     0        0       9          1           10
+               Total                        1        2       9          1           13
+              leading to a denial of service. Typically, such errors occur
+gra-          correct or easily compromised parameters can significantly
+                 B.2.2   Proof Delegation Error – Integration Design Error
+                 cate the full execution desired by the user, only processing
+## SoK Table 2/3 integration rows (layer total; impact: soundness/completeness/ZK)
+318: Integration         8            1        4    13
+330: Integration          11             2                  0
+## SoK: integration-layer defences
+651:the current defensive measures for each layer, suggest future       gap: there are currently no specific defenses developed for
+660:ploy static analysis using predefined rules to identify under-      and circuit code. We suggest exploring multi-layer testing
+662:utilizes static analysis and SMT solvers to spot common pit-        simultaneously. An example could be a combined testing
+852:We excluded the integration layer from the table as no defense detects bugs in that layer.
+
+## Tools study 2607.23752: scope and headline numbers
+28:                                         zkVMs with limited support. We then evaluate six tools across            formal-verification claims cover only selected components,
+29:                                         70 real-world vulnerabilities and find that while the tools detect       and little is known about adoption in practice.
+30:                                         45.7% of bugs on isolated targets, their effectiveness drops to
+31:                                         19.6% on full codebases, with important vulnerability classes               This paper studies the state of ZKP security tooling and
+34:                                         primarily on constraint correctness and identifying key gaps and         70 real-world vulnerabilities, a systematic analysis of formal-
+57:                                                                                                                  detects 45.7% on isolated circuits, but only 19.6% on whole-
+248:constraint mismatches. To achieve language-agnostic analysis         detects 32 of the 70 bugs (45.7%). Across all executions,
+253:such as pattern matching or taint analysis. It is fast, but          of the 56 bugs (19.6%), with 14 TPs in total (see Figure 2).
+813:  (a) Used tool categories         (b) Important tool traits                (c) Missing tool categories                System integration          26%     5%
+883:can propose specifications, invariants, tests, counterexamples,      systems [83], [84], ZKP compilers [85], [86], integrations
+884:and proof scripts, while independent analyzers, proof kernels,       of ZKPs with smart contracts [87]–[89], and fuzzing for
+887:review of generated artifacts, distinguish generated specifica-      implementation layers. We leave the systematic study and
+## Tools study: refs 87-89 (the only 'integrations of ZKPs with smart contracts' citations)
+1846-Conference on Computer and Communications Security, CCS 2025,
+--
+1849:[88] F. G. Figueira, M. Derka, C. L. Chiu, and J. Gorzny, “A practical
+1850-rollup escape hatch design,” in 2025 IEEE International Conference
+1851-on Blockchain and Cryptocurrency, ICBC 2025, Pisa, Italy, June 2-6,
+--
+1853:[89] S. Chaliasos, C. Swann, S. Pilehchiha, N. Mohnblatt, B. Livshits, and
+1854-A. Kattis, “Unaligned incentives: Pricing attacks against blockchain
+1855-rollups,” CoRR, vol. abs/2509.17126, 2025.
+## Tools study: evaluated tools (figure labels)
+711:Picus
+712:Civer
+713:Ecne
+714:Circomspect
+715:zkFuzz
+716:ConsCS
+
+## Solidity / smart-contract mentions in circuit-tool papers (count of lines)
+ccccheck-sp26: 0
+zkfuzz-2504.11961: 2
+zkcraft-2602.00667: 2
+liezz-2608.30648: 0
+zkap-usenix24: 4
+## ZKAP: unused public input discussion
+391:UnusedPubInput Issue Tracker
+445:the proof. But, in cases where a public input is completely
+
+## ELSA slides: scope lines
+20:doi:10.1145/3832222     github.com/Anonymize-gitcode/ELSA
+117:A benchmark extended with 2,310 new ZKP-based contracts, together with an extensive evaluation of the approach.
+278:ZKP (self-built)                        224        Complex algebraic constraints     TP — every vulnerability correctly found and categorised,
+292:2,310 contracts built by AST-based injection into 35 open-source                     Analyzers — Mythril, Slither and SmartCheck, each
+471:                                                                                            Detection range — SWC-101 integer overflow, 105 unprotected withdrawal,
+473:                                                                                            107 reentrancy, 110 assert violation, 121 signature replay, 124 arbitrary storage
+475:                                                                                            ZKP model — LLaMA-3.2-3B with LoRA, ~480 contract / hint pairs, all excluded
+482:                                                                                            Threats — synthetic ZKP injection into 35 real projects; contract names not
+493:failure is specific to CoT. GPT-4o was also less accurate.                                  Sampling — 224 of 2,310 ZKP contracts, 6.56% margin; 106 DAppSCAN files
+508:github.com/Anonymize-gitcode/ELSA                          doi:10.1145/3832222                                         tongji_junxiangwang@tongji.edu.cn
