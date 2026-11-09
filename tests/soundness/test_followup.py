@@ -23,6 +23,8 @@ class FollowupTests(unittest.TestCase):
             ("function checkField(uint x) pure { if (x >= " + str(SCALAR_FIELD) + ") revert(); } function verify(uint[] calldata _pubSignals) view { checkField(42) } function unrelated() { let x := _pubSignals }", {0}, False),
             ("uint256 constant BASE_FIELD = " + str(Q) + "; function verify(uint[] calldata input) view { require(input[1] < BASE_FIELD); }", {1}, False),
             ("uint256 constant SNARK_FIELD = " + str(SCALAR_FIELD) + "; function verify(uint[] calldata input) view { require(input[1] < SNARK_FIELD); }", {1}, True),
+            ("uint256 constant r = " + str(SCALAR_FIELD) + "; function verifyProof(uint[] calldata _pubSignals) view { assembly { function checkField(v) { if iszero(lt(v, r)) { } return(0, 0x20) } checkField(calldataload(add(_pubSignals, 0))) } }", {0}, False),
+            ("uint256 constant r = " + str(SCALAR_FIELD) + "; function checkField(v) { if iszero(lt(v, r)) { return(0, 0x20) } } function unrelated(uint[] calldata _pubSignals) { checkField(calldataload(add(_pubSignals, 0))) } function verifyProof(uint[] calldata _pubSignals) { }", {0}, False),
         ]
         for source, positions, expected in cases:
             with self.subTest(source=source[:90]):
@@ -158,6 +160,18 @@ contract Consumer {{
             (root / "Verifier.sol").write_text("contract Groth16Verifier { function verifyProof(bytes memory proof, uint256[2] memory input) public view returns (bool) { return true; }}")
             (root / "BaseA.sol").write_text("contract Base {}")
             (root / "BaseB.sol").write_text("contract Base { function _safeMint(address to, uint256 id) internal {} }")
+            (root / "Consumer.sol").write_text("contract Consumer is Base { function submit(bytes memory proof, address recipient, uint256 amount) public { verifier.verifyProof(proof, [uint256(uint160(recipient)), amount]); _safeMint(recipient, amount); }}")
+            output = analyze(root)
+            for triple in output["triples"]:
+                if triple["consumer"]["function"] == "submit":
+                    self.assertEqual(triple["patterns"]["P1"]["verdict"], "UNKNOWN")
+
+    def test_unimported_repository_base_is_unknown(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = pathlib.Path(tmp)
+            (root / "Main.nr").write_text("fn main(recipient: pub Field, amount: pub Field) {}\n")
+            (root / "Verifier.sol").write_text("contract Groth16Verifier { function verifyProof(bytes memory proof, uint256[2] memory input) public view returns (bool) { return true; }}")
+            (root / "Base.sol").write_text("contract Base {}")
             (root / "Consumer.sol").write_text("contract Consumer is Base { function submit(bytes memory proof, address recipient, uint256 amount) public { verifier.verifyProof(proof, [uint256(uint160(recipient)), amount]); _safeMint(recipient, amount); }}")
             output = analyze(root)
             for triple in output["triples"]:
