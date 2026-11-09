@@ -158,36 +158,44 @@ def run_row(
         return {"row": row, "acquisition": acquisition, "results": results, "cleanup": None}
     if campaign == "dev":
         source, acquisition = acquire(work_root, row)
-        write_json(row_output / "acquisition.json", acquisition)
+        try:
+            write_json(row_output / "acquisition.json", acquisition)
+        except Exception:
+            cleanup_clone(source, work_root)
+            raise
         if acquisition["status"] != "ready":
-            results = {arm: blocked_result(arm, row, "ACQUISITION_FAILED") for arm in ("A", "B", "C")}
-            for arm, result in results.items():
-                write_json(row_output / f"{arm}.json", result)
-            cleanup = cleanup_clone(source, work_root)
+            try:
+                results = {arm: blocked_result(arm, row, "ACQUISITION_FAILED") for arm in ("A", "B", "C")}
+                for arm, result in results.items():
+                    write_json(row_output / f"{arm}.json", result)
+            finally:
+                cleanup = cleanup_clone(source, work_root)
             return {"row": row, "acquisition": acquisition, "results": results, "cleanup": cleanup}
     else:
         source = pathlib.Path(row["path"])
         acquisition = {**row, "status": "local-synthetic", "source_accessed": True}
         write_json(row_output / "acquisition.json", acquisition)
     try:
-        arm_a = analyze_arm_a(source, row_output / "A", a_budget)
-        write_json(row_output / "A.json", arm_a)
-        arm_b = analyze_arm_b(source, row_output / "B", b_budget)
-        write_json(row_output / "B.json", arm_b)
-        arm_c = analyze_arm_c(source, row_output / "C", arm_a, arm_b)
-        write_json(row_output / "C.json", arm_c)
-        results = {"A": arm_a, "B": arm_b, "C": arm_c}
-    except Exception as exc:
-        results = {}
-        for arm in ("A", "B", "C"):
-            path = row_output / f"{arm}.json"
-            if path.is_file():
-                results[arm] = json.loads(path.read_text(encoding="utf-8"))
-            else:
-                results[arm] = blocked_result(arm, row, f"RUNNER_EXCEPTION:{type(exc).__name__}")
-                results[arm]["coverage"]["exception_detail"] = str(exc)
-                write_json(path, results[arm])
-    cleanup = cleanup_clone(source, work_root) if campaign == "dev" else None
+        try:
+            arm_a = analyze_arm_a(source, row_output / "A", a_budget)
+            write_json(row_output / "A.json", arm_a)
+            arm_b = analyze_arm_b(source, row_output / "B", b_budget)
+            write_json(row_output / "B.json", arm_b)
+            arm_c = analyze_arm_c(source, row_output / "C", arm_a, arm_b)
+            write_json(row_output / "C.json", arm_c)
+            results = {"A": arm_a, "B": arm_b, "C": arm_c}
+        except Exception as exc:
+            results = {}
+            for arm in ("A", "B", "C"):
+                path = row_output / f"{arm}.json"
+                if path.is_file():
+                    results[arm] = json.loads(path.read_text(encoding="utf-8"))
+                else:
+                    results[arm] = blocked_result(arm, row, f"RUNNER_EXCEPTION:{type(exc).__name__}")
+                    results[arm]["coverage"]["exception_detail"] = str(exc)
+                    write_json(path, results[arm])
+    finally:
+        cleanup = cleanup_clone(source, work_root) if campaign == "dev" else None
     return {"row": row, "acquisition": acquisition, "results": results, "cleanup": cleanup}
 
 
