@@ -119,6 +119,7 @@ def canonical_guard_positions(text: str) -> dict[str, Any]:
     chain = re.search(r"\btry\s+this\._decodeAndVerify\s*\(\s*\w+\s*,\s*(\w+)\s*\)\s+returns\s*\(\s*bool\s+(\w+)\s*\)\s*\{\s*return\s+\2\s*;\s*\}\s*catch\s*\{\s*return\s+false\s*;\s*\}", wrapper, re.S)
     raw_call = re.search(r"\breturn\s+this\._verifyProofRaw\s*\(([^;]+)\)\s*;", decode, re.S)
     raw_arity = re.search(r"\buint(?:256)?\s*\[\s*(\d+)\s*\]\s+calldata\s+_pubSignals\b", raw_header)
+    wrapped_fixed_arity: int | None = None
     if chain and raw_call and raw_arity and raw:
         public_vector = chain.group(1)
         copied_vector = raw_call.group(1).split(",")[-1].strip()
@@ -142,6 +143,7 @@ def canonical_guard_positions(text: str) -> dict[str, Any]:
                 and all(value.strip() in {"false", chain.group(2)} for value in wrapper_returns)
                 and len(decode_returns) == 1):
             verify_bodies.append(raw)
+            wrapped_fixed_arity = size
     guard_text = "\n".join(verify_bodies)
     exact_names = re.findall(
         rf"\b([A-Za-z_]\w*)\s*=\s*{SCALAR_FIELD}\s*;", text, re.I,
@@ -224,6 +226,7 @@ def canonical_guard_positions(text: str) -> dict[str, Any]:
         "indices": sorted(indices),
         "symbolic_indices": sorted(symbolic),
         "generic_guard": generic,
+        "wrapped_fixed_arity": wrapped_fixed_arity,
     }
 
 
@@ -284,7 +287,11 @@ def analyze_source(text: str, relative_path: str) -> dict[str, Any]:
     if len(fixed_arities) == 1:
         guard = canonical_guard(cleaned, set(range(next(iter(fixed_arities)))))
     elif dynamic_vectors:
-        guard = bool(guard_coverage["all_positions"])
+        wrapped_arity = guard_coverage["wrapped_fixed_arity"]
+        guard = bool(guard_coverage["all_positions"] or (
+            wrapped_arity is not None
+            and set(range(wrapped_arity)).issubset(set(guard_coverage["indices"]))
+        ))
     else:
         guard = canonical_guard(cleaned)
     p2 = has_pairing_p2(cleaned)

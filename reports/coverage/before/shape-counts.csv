@@ -1,0 +1,41 @@
+shape,rows_affected,unknown_cells,rows
+indexed/member assignment with unresolved storage semantics,20,41,DEV-F06;DEV-F11;DEV-F15;DEV-F16;DEV-F19;DEV-F24;DEV-F25;DEV-F27;DEV-F28;DEV-F31;DEV-F32;DEV-F33;DEV-F34;DEV-F36;DEV-F38;DEV-F42;DEV-F47;DEV-H04;DEV-H05;DEV-H06
+read-only verifier utility,18,50,DEV-F02;DEV-F03;DEV-F04;DEV-F06;DEV-F07;DEV-F09;DEV-F10;DEV-F15;DEV-F16;DEV-F20;DEV-F25;DEV-F28;DEV-F30;DEV-F33;DEV-F38;DEV-F40;DEV-F41;DEV-F42
+no live chain/contract/domain value in statement,15,15,DEV-F15;DEV-F24;DEV-F25;DEV-F27;DEV-F30;DEV-F32;DEV-F33;DEV-F34;DEV-F35;DEV-F38;DEV-F39;DEV-F49;DEV-F50;DEV-H01;DEV-H02
+verifier scalar guard absent or unsupported,15,15,DEV-F03;DEV-F08;DEV-F10;DEV-F11;DEV-F29;DEV-F32;DEV-F34;DEV-F36;DEV-F45;DEV-F46;DEV-F47;DEV-F48;DEV-F49;DEV-H01;DEV-H02
+multiple verifier shapes retained for consumer,10,10,DEV-F01;DEV-F06;DEV-F08;DEV-F10;DEV-F20;DEV-F30;DEV-F38;DEV-F39;DEV-H05;DEV-H06
+effect delegated beyond verifier-call function,9,25,DEV-F01;DEV-F02;DEV-F04;DEV-F08;DEV-F19;DEV-F20;DEV-F38;DEV-F45;DEV-F50
+fixed public array passed without named elements,9,9,DEV-F11;DEV-F15;DEV-F19;DEV-F25;DEV-F28;DEV-F30;DEV-F34;DEV-F42;DEV-F44
+matched circuit/verifier implementation missing,8,21,DEV-F02;DEV-F03;DEV-F04;DEV-F16;DEV-F46;DEV-F47;DEV-H03;DEV-H04
+context computed without dominating statement binding,8,8,DEV-F12;DEV-F14;DEV-F15;DEV-F19;DEV-F28;DEV-F29;DEV-F44;DEV-F48
+non-Groth16/PLONK verifier layout,6,6,DEV-F20;DEV-F33;DEV-F35;DEV-F38;DEV-H05;DEV-H06
+public vector alias or type unresolved,5,6,DEV-F11;DEV-F31;DEV-F33;DEV-F45;DEV-F50
+circuit/consumer public names differ,5,5,DEV-F06;DEV-F09;DEV-F11;DEV-H01;DEV-H02
+dynamic public array without exact length guard,5,5,DEV-F27;DEV-F35;DEV-F36;DEV-F38;DEV-F49
+no replay mapping key on recovered function,5,5,DEV-F15;DEV-F19;DEV-F35;DEV-F39;DEV-F44
+key or delegated verifier guard unparsed,4,4,DEV-F02;DEV-F06;DEV-F27;DEV-F39
+struct/member public vector,3,4,DEV-F14;DEV-F15;DEV-F41
+OpenZeppelin Pausable modifier,3,3,DEV-F29;DEV-F38;DEV-F48
+computed replay mapping key,3,3,DEV-F30;DEV-F33;DEV-F49
+replay read/write delegated to helper,3,3,DEV-F15;DEV-F30;DEV-F46
+source-only circuit public schema incomplete,3,3,DEV-F07;DEV-F32;DEV-F33
+bridge effects with no recovered Groth16 call,2,10,DEV-F21;DEV-F22
+verifier source without a consuming contract,2,10,DEV-F17;DEV-F43
+circuit or consumer element order incomplete,2,2,DEV-F07;DEV-F48
+"fixed/state-derived effect amount, caller independence unresolved",2,2,DEV-H01;DEV-H02
+local reentrancy lock modifier,2,2,DEV-F12;DEV-F19
+token inheritance or override unresolved,2,2,DEV-F15;DEV-F46
+low-level ABI-encoded verifier call,1,5,DEV-F37
+mock internal proof helper outside verifier-call recognizer,1,5,DEV-F26
+same-function verifier call and nonce roll not discovered,1,5,DEV-F18
+selector-driven verifier dispatch through inherited helper,1,5,DEV-F13
+verifier and effect in separate diamond facets,1,5,DEV-F05
+verifier and token effects in separate contracts,1,5,DEV-F23
+event-only verifier path,1,3,DEV-F01
+no inline protected effect on verifier-call path,1,3,DEV-F40
+ERC721Enumerable inherited token effect,1,1,DEV-F44
+custom/ambiguous inherited call path,1,1,DEV-H03
+duplicate IC source warning without full semantics,1,1,DEV-F39
+fail-closed placeholder verifier,1,1,DEV-F38
+indexed public vector expression,1,1,DEV-F42
+replay key position in vector unresolved,1,1,DEV-F32

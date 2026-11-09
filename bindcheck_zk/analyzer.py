@@ -18,7 +18,7 @@ from . import __version__
 from .circuits import Circuit, attach_or_build, discover as discover_circuits, is_entry_circuit, named_path, parse_r1cs
 from .freeze import freeze_manifest
 from .models import Budget, aggregate, location, result, sha256_file
-from .p4 import SCALAR_FIELD, analyze_runtime, analyze_source, canonical_guard, runtime_values_from_bundle
+from .p4 import SCALAR_FIELD, analyze_runtime, analyze_source, canonical_guard, fail_closed_verifier, runtime_values_from_bundle
 from .solidity import (
     Call,
     Function,
@@ -677,6 +677,8 @@ def analyze_p1(
         )
     if verifier is None or verifier.interface_only:
         return result("P1", "UNKNOWN", "VERIFIER_ARTIFACT_MISSING", "Consumer is analyzed, but the verifier implementation artifact is absent.", where=where)
+    if fail_closed_verifier(verifier.source.text):
+        return result("P1", "UNKNOWN", "FAIL_CLOSED_VERIFIER_PLACEHOLDER", "A verifier that unconditionally rejects proofs cannot establish a non-vacuous protected-effect binding.", where=where)
     if circuit is None:
         return result("P1", "UNKNOWN", "CIRCUIT_ARTIFACT_MISSING", "Consumer/verifier artifacts are present but no circuit artifact was matched.", where=where)
     aliases = {normalize_expression(name): value for name, value in assignments(consumer.function.body).items()}

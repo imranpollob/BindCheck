@@ -288,8 +288,8 @@ def main() -> int:
     parser.add_argument("--raw-task", default="T24")
     parser.add_argument("--checkout-root", type=pathlib.Path, default=CHECKOUT_ROOT)
     args = parser.parse_args()
-    if not re.fullmatch(r"T\d+|soundness", args.raw_task):
-        raise ValueError("--raw-task must be a T-number or soundness")
+    if not re.fullmatch(r"T\d+|soundness|coverage", args.raw_task):
+        raise ValueError("--raw-task must be a T-number, soundness, or coverage")
     CHECKOUT_ROOT = args.checkout_root.resolve()
 
     rows = dev_rows()

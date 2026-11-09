@@ -38,6 +38,32 @@ an overridden token effect, ambiguous base, conditional modifier,
 missing placeholder, or external-call modifier remains `UNKNOWN`. Standard
 ERC20/ERC721 internal token effects are recognized in the stated subset.
 
+The coverage revision also accepts exact bare or single-symbol named
+OpenZeppelin imports for `Pausable` and `ERC721Enumerable`. It resolves
+`whenNotPaused`/`whenPaused` only with direct `Pausable` inheritance, a matching
+exact import, and no same-named local modifier. It resolves an inherited
+`ERC721Enumerable` `_mint` role only with the exact import and no local token
+effect override. An exact supported import takes precedence over an
+unimported repository declaration with the same base name; without that import,
+the name collision remains unresolved. For a local reentrancy modifier, it accepts only one
+unconditional `require(status != ENTERED)`, assignment of that same status to
+`ENTERED`, one body placeholder, and assignment back to a distinct literal
+`NOT_ENTERED` constant. The status field and both constants must have unique
+local declarations, and the modifier may contain no other statements or
+external call. These rules only remove a source-context blocker; each effect
+role must still meet the direct or guarded binding test. A matched verifier
+whose entire body unconditionally returns `false` cannot support a non-vacuous
+P1 positive, so P1 returns `UNKNOWN / FAIL_CLOSED_VERIFIER_PLACEHOLDER`.
+
+The prospective control oracle and scoring plan are in
+[`tests/coverage/test_rules.py`](../tests/coverage/test_rules.py) and
+[`reports/coverage/PLAN.md`](../reports/coverage/PLAN.md). Adversarial negatives
+cover missing/wrong imports, a local external-call modifier, absent reset,
+conditional or duplicate placeholders, a reset to the entered state, a local
+`_mint` override, and a fail-closed verifier. Legitimate positives cover the
+exact named and bare imports, the full local lock, and an unoverridden
+`ERC721Enumerable` mint.
+
 Adversarial negatives: `SND-G01`, `SND-G02` in
 [`tests/soundness/expected.json`](../tests/soundness/expected.json), plus
 `P1-04`, `P1-05`, `P1-19`, `P1-21`, and `P1-23` in
@@ -186,6 +212,15 @@ Pairing-library generator recognition and absence of a runtime default-G2
 signature are screening facts. Without a parsed verification key they now
 return `UNKNOWN`, including controls `P4-03` and `P4-07`. Parsed constants
 without a recovered verification function also return `UNKNOWN`.
+
+The coverage revision recognizes a dynamic wrapper's scalar guard only if an
+exact length check and every position-preserving copy lead to a fixed raw
+snarkjs verifier, and the raw verifier rejects values at or above the exact
+scalar field at every position. The wrapper extractor records the fixed raw
+arity; P4 checks the complete index set against it. Swapped or missing copies,
+an inexact length check, and a base-field comparison remain `UNKNOWN`. The
+prospective positive and adversarial controls are in
+[`tests/coverage/test_rules.py`](../tests/coverage/test_rules.py).
 
 ## P5 — public-input interface agreement
 
