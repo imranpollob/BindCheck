@@ -1,0 +1,18 @@
+{
+  "schema": "bindcheck-zk.relational-dev-quarantine/v1",
+  "status": "INVALID_DO_NOT_USE",
+  "raw_run": "results/raw/relational/dev-20261109T030110Z-28687",
+  "manifest_sha256": "63f21a2cdb3982230b866ce6488a2ce941a5da6796ecab91a3560545919f6266",
+  "reason": "The historical DEV manifest contains repositories explicitly named by the lane data wall. The first runner acquired and analyzed them before the conflict was noticed. Its outputs are preserved as raw evidence but excluded from every reported result.",
+  "affected_rows": [
+    "DEV-F02",
+    "DEV-F03",
+    "DEV-F29",
+    "DEV-F44",
+    "DEV-H03",
+    "DEV-H04"
+  ],
+  "source_access_occurred": true,
+  "reuse_allowed": false,
+  "remediation": "Temporary checkouts were removed. The runner now policy-blocks named repositories before acquisition, emits MISSING artifact status, and assigns UNKNOWN to every relational dimension."
+}

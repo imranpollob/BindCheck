@@ -108,6 +108,8 @@ def main() -> int:
                 "limitations": "MISSING",
             })
 
+    builder_review_path = output_dir / "dev-builder-review.csv"
+
     summary = {
         "schema": "bindcheck-zk.relational-dev-summary/v1",
         "source": {
@@ -118,6 +120,12 @@ def main() -> int:
             "raw_ledger_sha256": sha256(raw_run / "per-row-ledger.json"),
             "git_revision": manifest["git_revision"],
             "analyzer_content_sha256": manifest["analyzer_content_sha256"],
+        },
+        "execution": {
+            "population_rows": manifest.get("population_rows", len(ledger)),
+            "analyzed_rows": manifest.get("analyzed_rows", len(ledger)),
+            "policy_blocked_rows": manifest.get("policy_blocked_rows", 0),
+            "policy_blocked_ids": manifest.get("policy_blocked_ids", []),
         },
         "rows": len(ledger),
         "fatal_rows": sum(row["fatal_reason"] is not None for row in ledger),
@@ -136,6 +144,8 @@ def main() -> int:
             "ledger": ledger_path.relative_to(ROOT).as_posix(),
             "decisions": decisions_path.relative_to(ROOT).as_posix(),
             "flag_adjudication": flags_path.relative_to(ROOT).as_posix(),
+            "builder_review": builder_review_path.relative_to(ROOT).as_posix() if builder_review_path.is_file() else None,
+            "builder_review_sha256": sha256(builder_review_path) if builder_review_path.is_file() else None,
         },
     }
     for dimension in DIMENSIONS:
