@@ -43,6 +43,20 @@ function useProof(bytes memory proof, uint256 nullifier) external {
                 p3 = triple["patterns"]["P3"]
                 self.assertEqual((p3["verdict"], p3["reason"]), ("UNKNOWN", "VERIFIER_ARTIFACT_MISSING"))
 
+    def test_missing_verifier_never_verifies_p2(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = pathlib.Path(tmp)
+            (root / "Main.nr").write_text("fn main(domain: pub Field, amount: pub Field) {}\n")
+            (root / "Consumer.sol").write_text("""
+contract Consumer { function submit(bytes memory proof, uint256 domain, uint256 amount) external {
+ verifier.verifyProof(proof, [domain, amount]); token.transfer(msg.sender, amount);
+}}
+""")
+            output = analyze(root)
+            for triple in output["triples"]:
+                p2 = triple["patterns"]["P2"]
+                self.assertEqual((p2["verdict"], p2["reason"]), ("UNKNOWN", "VERIFIER_ARTIFACT_MISSING"))
+
     def test_local_context_and_overrides(self) -> None:
         cases = [
             ("modifier gate() { require(msg.sender != address(0)); _; }", "gate", "VERIFIED_WITHIN_SCOPE"),
