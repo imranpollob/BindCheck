@@ -459,7 +459,20 @@ def aggregate_payload_verdict(payload: Mapping[str, Any], pattern: str) -> tuple
 
 
 def normalize_tool_payload(tool: str, payload: Mapping[str, Any], raw_path: str) -> dict[str, Any]:
-    if tool == "bindcheck-zk":
+    native_findings: list[Any] = []
+    if tool == "arm-c":
+        run = payload.get("run") or {}
+        result = payload.get("result") or {}
+        native_findings = list(result.get("findings") or [])
+        completed = run.get("status") == "completed"
+        raw_verdict = result.get("verdict", "UNKNOWN")
+        verdict = raw_verdict if completed and raw_verdict in VERDICTS else "UNKNOWN"
+        applicability = "APPLICABLE" if completed else "UNKNOWN"
+        reasons = sorted({str(item.get("code")) for item in native_findings if item.get("code")})
+        if not completed:
+            reasons.append(str(run.get("fatal_reason") or "ARM_C_INCOMPLETE"))
+        patterns = {}
+    elif tool == "bindcheck-zk":
         patterns: dict[str, dict[str, Any]] = {}
         for pattern in PATTERNS:
             item = (payload.get("patterns") or {}).get(pattern) or {}
@@ -506,6 +519,7 @@ def normalize_tool_payload(tool: str, payload: Mapping[str, Any], raw_path: str)
         "run_status": (payload.get("run") or {}).get("status"),
         "fatal_reason": (payload.get("run") or {}).get("fatal_reason"),
         "patterns": patterns,
+        "native_findings": native_findings,
         "coverage": payload.get("coverage") or {},
         "raw_result": raw_path,
         "raw_schema": payload.get("schema"),

@@ -52,7 +52,19 @@ from eval.common import (  # noqa: E402
 )
 
 
-TOOLS = ("bindcheck-zk", *BASELINES)
+TOOLS = ("bindcheck-zk", *BASELINES, "arm-c")
+ARM_C_TIMEOUT_SECONDS = 390.0
+EXPOSED_RANK = 259
+
+
+def execution_families(selected: list[dict[str, Any]], split: str) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    """Keep the original draw visible while excluding the predeclared exposed family."""
+    if split != "EVAL":
+        return selected, []
+    excluded = [item for item in selected if item["rank"] == EXPOSED_RANK]
+    if len(excluded) != 1 or excluded[0]["repository"] != "selfxyz/self":
+        raise EvaluationError("predeclared exposed family is absent or changed")
+    return [item for item in selected if item["rank"] != EXPOSED_RANK], excluded
 
 
 def default_output(split: str, dataset: pathlib.Path, metadata_only: bool) -> pathlib.Path:
@@ -173,7 +185,10 @@ def run_tool_once(tool: str, checkout: pathlib.Path, family_dir: pathlib.Path) -
         atomic_write_json(normalized_path, result)
         return result
 
-    argv, timeout = tool_command(tool, checkout)
+    if tool == "arm-c":
+        argv, timeout = [sys.executable, str(ROOT / "eval/run_arm_c.py"), str(checkout), str(family_dir / "arm-c-native")], ARM_C_TIMEOUT_SECONDS
+    else:
+        argv, timeout = tool_command(tool, checkout)
     attempt = {
         "schema": "bindcheck-zk.tool-attempt/v1",
         "tool": tool,
@@ -193,6 +208,11 @@ def run_tool_once(tool: str, checkout: pathlib.Path, family_dir: pathlib.Path) -
         record = run_command(
             argv, cwd=ROOT, timeout=timeout, env=scrub_network_environment()
         )
+    if tool == "arm-c":
+        picus_temps = family_dir / "arm-c-native" / "B" / "picus-tmp"
+        if picus_temps.exists():
+            shutil.rmtree(picus_temps)
+        record["picus_temp_removed"] = not picus_temps.exists()
     raw_text = record["stdout"]
     raw_path.write_text(raw_text, encoding="utf-8")
     attempt.update({
@@ -367,6 +387,7 @@ def main(argv: list[str] | None = None) -> int:
     output.mkdir(parents=True, exist_ok=True)
     rows = read_csv(dataset)
     selected = select_families(rows, split, max_families=args.max_families)
+    executable, exclusions = execution_families(selected, split)
     selection = selection_document(selected, split=split, dataset=dataset)
     write_selection(output, selection)
     selection_hash = sha256_file(output / "selected-families.json")
@@ -383,6 +404,13 @@ def main(argv: list[str] | None = None) -> int:
             "started_utc": utc_now(),
             "selection_sha256": selection_hash,
             "dataset_sha256": sha256_file(dataset),
+            "draw_families": len(selected),
+            "excluded_before_analysis": [
+                {"rank": item["rank"], "family_id": item["family_id"],
+                 "repository": item["repository"], "commit": item["commit"],
+                 "reason": "EXPOSED_GATE_REVIEW"}
+                for item in exclusions
+            ],
             "gate": gate,
             "fixed_limits_seconds": {
                 "fetch_each": FETCH_TIMEOUT_SECONDS,
@@ -390,6 +418,7 @@ def main(argv: list[str] | None = None) -> int:
                 "analyzer_outer": 150.0,
                 "baseline_inner": 120.0,
                 "baseline_outer": 150.0,
+                "arm_c_outer": ARM_C_TIMEOUT_SECONDS,
             },
             "no_retry_policy": "one attempt per acquisition/tool; interrupted or failed attempts become UNKNOWN",
         }
@@ -399,7 +428,7 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     results = []
-    for family in selected:
+    for family in (selected if args.metadata_only else executable):
         if args.metadata_only:
             item = metadata_check_family(family, output)
             print(f"METADATA\t{family['rank']:03d}\t{item['status']}\t{family['repository']}@{family['commit']}", flush=True)
