@@ -1,0 +1,29 @@
+{
+  "revisions": {
+    "repaired": [
+      {
+        "bytes": 20070,
+        "path": "packages/contracts/src/utils/Groth16Verifier.sol",
+        "sha256": "45fce53dc102fc2462debc8bb94d87da2f6419ce42df752d368c2ea5fe1bb4c9"
+      },
+      {
+        "bytes": 12739,
+        "path": "packages/contracts/src/EmailAuth.sol",
+        "sha256": "37fc804dbcf9c8117c599c37ec8c94cbac9264ee4fba23370d894ba570783735"
+      }
+    ],
+    "vulnerable": [
+      {
+        "bytes": 22293,
+        "path": "packages/contracts/src/utils/Groth16Verifier.sol",
+        "sha256": "e573ae80eeee2ff0b3fb3b81ab5c3944dfff0ee27865766d66803ca7b8fd2d23"
+      },
+      {
+        "bytes": 11829,
+        "path": "packages/contracts/src/EmailAuth.sol",
+        "sha256": "0f4ca79abf78704227014b1effca1d0ec1ae8082b1b215222f09277b7b067644"
+      }
+    ]
+  },
+  "schema": "bindcheck-benchmark.source-lock/v1"
+}

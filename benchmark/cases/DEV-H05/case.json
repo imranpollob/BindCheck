@@ -1,0 +1,29 @@
+{
+  "expected_location_regex": "^noir/agg_agg/src/main\\.nr(:[0-9]+)?$",
+  "expected_pattern": "R-EXTENT",
+  "expected_state": "vulnerable",
+  "exposure": "EXPOSED",
+  "family": "payy",
+  "id": "DEV-H05",
+  "label_provenance": "historical DEV pair; AI review, not human-adjudicated",
+  "label_status": "AI-PROPOSED",
+  "limitations": [
+    "Noir/UltraHonk is outside this benchmark frontend"
+  ],
+  "origin": "DEV-history",
+  "pair_id": "DEV-H03",
+  "revisions": {
+    "selected": {
+      "commit": "c4d2c9021b8fb9988816eb6987a734b830bfce15",
+      "repository": "polybase/payy",
+      "roles": {
+        "circuit": "noir/agg_agg/src/main.nr",
+        "consumer": "eth/contracts/rollup3/RollupV1.sol",
+        "verifier": "eth/noir/agg_agg.sol"
+      },
+      "source_checkout": "/Users/imranpollob/Coding/bc/bindcheck-zk/feasibility/work/full-dev/DEV-H05--polybase__payy--c4d2c9021b8f",
+      "verifier_kind": "Noir UltraHonk, outside Circom/Groth16"
+    }
+  },
+  "schema": "bindcheck-benchmark.case/v1"
+}

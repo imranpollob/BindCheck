@@ -1,0 +1,43 @@
+{
+  "card_sha256": "853e40f6cc082a79fbcccf394f5e59986a728166dd62c6231e7bb5fead4af097",
+  "expected_location_regex": null,
+  "expected_pattern": null,
+  "expected_state": "paired",
+  "exposure": "EXPOSED",
+  "family": "v2-family:46f609c91fab98525091",
+  "id": "GATE-14",
+  "label_provenance": "/Users/imranpollob/Coding/bc/bindcheck-zk/review/recall/14-data-are-not-fully-verified-during-state-update.md",
+  "label_status": "PENDING",
+  "limitations": [
+    "Source snapshots do not establish a matched buildable triple; reviewer decision pending"
+  ],
+  "origin": "public-report",
+  "proposal_location_regex": "^circuits/circom/tallyVotes\\.circom(:\\d+)?$",
+  "proposal_pattern": "NONE",
+  "revisions": {
+    "repaired": {
+      "commit": "6df6a4054da926b07f35c5befab4f1f8af33dcc6",
+      "repository": "privacy-scaling-explorations/maci",
+      "roles": {
+        "circuit": null,
+        "consumer": null,
+        "verifier": null
+      },
+      "snapshot_only": true,
+      "snapshot_root": "benchmark/cases/GATE-14/snapshots/repaired"
+    },
+    "vulnerable": {
+      "commit": "2db5f625b67a6b810bd851950d7a42c26189088b",
+      "repository": "privacy-scaling-explorations/maci",
+      "roles": {
+        "circuit": null,
+        "consumer": null,
+        "verifier": null
+      },
+      "snapshot_only": true,
+      "snapshot_root": "benchmark/cases/GATE-14/snapshots/vulnerable"
+    }
+  },
+  "schema": "bindcheck-benchmark.case/v1",
+  "source_case_id": "circom/privacy-scaling-explorations/maci/hashcloak_data_are_not_fully_verified_during_state_update"
+}

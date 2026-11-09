@@ -1,0 +1,19 @@
+{
+  "revisions": {
+    "repaired": [
+      {
+        "bytes": 3580,
+        "path": "semaphorejs/contracts/Semaphore.sol",
+        "sha256": "8735bf30969b8eaa42d3afa4e1548eb09da4574576084be879925fd1b14c67e1"
+      }
+    ],
+    "vulnerable": [
+      {
+        "bytes": 4481,
+        "path": "semaphorejs/contracts/Semaphore.sol",
+        "sha256": "2fd6039c8c2aac019201f8f74ebc99a0d12685a5ce1e89c688759914387f5788"
+      }
+    ]
+  },
+  "schema": "bindcheck-benchmark.source-lock/v1"
+}

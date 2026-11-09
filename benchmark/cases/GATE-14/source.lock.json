@@ -1,0 +1,29 @@
+{
+  "revisions": {
+    "repaired": [
+      {
+        "bytes": 13254,
+        "path": "circuits/circom/tallyVotes.circom",
+        "sha256": "6bfddef008b4c738a1d3e967018b290301d5b7c4efc8b83957f9bfa72bfdfb98"
+      },
+      {
+        "bytes": 29272,
+        "path": "circuits/circom/processMessages.circom",
+        "sha256": "4237201c79685ac78d4e7ad38cde56759220db46bf19fe29ed866ce9d44908a5"
+      }
+    ],
+    "vulnerable": [
+      {
+        "bytes": 13412,
+        "path": "circuits/circom/tallyVotes.circom",
+        "sha256": "6959d8ad401767762d5e38b1b9220555da2f9049f846f00ca0484bfe9ca65dd3"
+      },
+      {
+        "bytes": 24964,
+        "path": "circuits/circom/processMessages.circom",
+        "sha256": "1cbf3c79bfeb45fc42e348f8a86e0ee036439b5978c808d7ab3541a795b3a44a"
+      }
+    ]
+  },
+  "schema": "bindcheck-benchmark.source-lock/v1"
+}

@@ -1,0 +1,19 @@
+{
+  "revisions": {
+    "repaired": [
+      {
+        "bytes": 9377,
+        "path": "circuits/circuits/register_id/register_id.circom",
+        "sha256": "3832b2ca9ec6b3e3f65c0e52f4c277f718b6623ae986c5d1943b3bc06b3283ac"
+      }
+    ],
+    "vulnerable": [
+      {
+        "bytes": 7373,
+        "path": "circuits/circuits/register_id/register_id.circom",
+        "sha256": "b4edfe2e85039632717615ae97190de96f87652cf5a109da862f403a2c1a783f"
+      }
+    ]
+  },
+  "schema": "bindcheck-benchmark.source-lock/v1"
+}

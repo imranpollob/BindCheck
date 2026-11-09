@@ -1,0 +1,29 @@
+{
+  "revisions": {
+    "repaired": [
+      {
+        "bytes": 4526,
+        "path": "noir/agg_agg/src/main.nr",
+        "sha256": "3fd7c851050853339d7b45a71ed52fb17136202514792739817e2dcab30cfae9"
+      },
+      {
+        "bytes": 26295,
+        "path": "eth/contracts/rollup3/RollupV1.sol",
+        "sha256": "7062065cc95f447fea8bb28242d51c836c3cf9e39f1625180ecf9c240a5ffd8f"
+      }
+    ],
+    "vulnerable": [
+      {
+        "bytes": 3797,
+        "path": "noir/agg_agg/src/main.nr",
+        "sha256": "c44a67e6a2e704cdbae5ebe251a0cb1da19d1e9417cf9b332b86768c0ee8604d"
+      },
+      {
+        "bytes": 26295,
+        "path": "eth/contracts/rollup3/RollupV1.sol",
+        "sha256": "7062065cc95f447fea8bb28242d51c836c3cf9e39f1625180ecf9c240a5ffd8f"
+      }
+    ]
+  },
+  "schema": "bindcheck-benchmark.source-lock/v1"
+}

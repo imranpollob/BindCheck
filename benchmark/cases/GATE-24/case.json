@@ -1,0 +1,43 @@
+{
+  "card_sha256": "d07b9fae34bde9c2f025cb857967d34ba0542a8a13d847b2ef3e968ebd296096",
+  "expected_location_regex": null,
+  "expected_pattern": null,
+  "expected_state": "paired",
+  "exposure": "EXPOSED",
+  "family": "v2-family:afff5ce3be94469b8927",
+  "id": "GATE-24",
+  "label_provenance": "/Users/imranpollob/Coding/bc/bindcheck-zk/review/recall/24-payy-message-tail.md",
+  "label_status": "PENDING",
+  "limitations": [
+    "Source snapshots do not establish a matched buildable triple; reviewer decision pending"
+  ],
+  "origin": "public-report",
+  "proposal_location_regex": "^noir/agg_agg/src/main\\.nr(:\\d+)?$|^eth/contracts/rollup3/RollupV1\\.sol(:\\d+)?$",
+  "proposal_pattern": "NONE (closest P1; see mappability)",
+  "revisions": {
+    "repaired": {
+      "commit": "dcd5d96ee15664a59bc24ed0dc2bb78b73ac5e36",
+      "repository": "polybase/payy",
+      "roles": {
+        "circuit": null,
+        "consumer": null,
+        "verifier": null
+      },
+      "snapshot_only": true,
+      "snapshot_root": "benchmark/cases/GATE-24/snapshots/repaired"
+    },
+    "vulnerable": {
+      "commit": "c4d2c9021b8fb9988816eb6987a734b830bfce15",
+      "repository": "polybase/payy",
+      "roles": {
+        "circuit": null,
+        "consumer": null,
+        "verifier": null
+      },
+      "snapshot_only": true,
+      "snapshot_root": "benchmark/cases/GATE-24/snapshots/vulnerable"
+    }
+  },
+  "schema": "bindcheck-benchmark.case/v1",
+  "source_case_id": "payy-message-tail"
+}

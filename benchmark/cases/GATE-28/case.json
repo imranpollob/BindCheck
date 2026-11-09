@@ -1,0 +1,43 @@
+{
+  "card_sha256": "a3ef54829d699375d4052e77d723fe4afab8a7ad24082e6de8f685638bd968dd",
+  "expected_location_regex": null,
+  "expected_pattern": null,
+  "expected_state": "paired",
+  "exposure": "UNEXPOSED",
+  "family": "NOT-IN-CORPUS",
+  "id": "GATE-28",
+  "label_provenance": "/Users/imranpollob/Coding/bc/bindcheck-zk/review/recall/28-zkemail-zellic-skipped-subject-prefix.md",
+  "label_status": "PENDING",
+  "limitations": [
+    "Source snapshots do not establish a matched buildable triple; reviewer decision pending"
+  ],
+  "origin": "public-report",
+  "proposal_location_regex": "^packages/contracts/src/EmailAuth\\.sol(:\\d+)?$",
+  "proposal_pattern": "P1",
+  "revisions": {
+    "repaired": {
+      "commit": "1455cd221dcb0849190879911688152669e4ed36",
+      "repository": "zkemail/ether-email-auth",
+      "roles": {
+        "circuit": null,
+        "consumer": null,
+        "verifier": null
+      },
+      "snapshot_only": true,
+      "snapshot_root": "benchmark/cases/GATE-28/snapshots/repaired"
+    },
+    "vulnerable": {
+      "commit": "b5694a9e0e49d07a862232f665dc4d0886c5a15f",
+      "repository": "zkemail/ether-email-auth",
+      "roles": {
+        "circuit": null,
+        "consumer": null,
+        "verifier": null
+      },
+      "snapshot_only": true,
+      "snapshot_root": "benchmark/cases/GATE-28/snapshots/vulnerable"
+    }
+  },
+  "schema": "bindcheck-benchmark.case/v1",
+  "source_case_id": "zkemail-zellic-skipped-subject-prefix"
+}

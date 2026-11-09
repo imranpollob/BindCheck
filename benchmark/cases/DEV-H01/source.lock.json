@@ -1,0 +1,22 @@
+{
+  "revisions": {
+    "selected": [
+      {
+        "bytes": 3577,
+        "path": "circuits/circuit.circom",
+        "sha256": "46433635f94b027effa4d905d3eec1e8e08eeb821ad7bc0c65c6d9a494e9cfed"
+      },
+      {
+        "bytes": 27416,
+        "path": "contracts/compiled/MerkVerifier.sol",
+        "sha256": "2a2e335d51a50e77e9547d4ee0488e7d2bb997cf9daf315e39c6ec32c1cfc84e"
+      },
+      {
+        "bytes": 1917,
+        "path": "contracts/PrivateAirdrop.sol",
+        "sha256": "0580741f245ad1e9dadce7e879a96f5e3133749be33853b44712aaa895798793"
+      }
+    ]
+  },
+  "schema": "bindcheck-benchmark.source-lock/v1"
+}

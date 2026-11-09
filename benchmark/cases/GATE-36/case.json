@@ -1,0 +1,43 @@
+{
+  "card_sha256": "d886ab9230343cfbb02316212b1e174e6b1d61e0b7604008ab0da618eba65cc9",
+  "expected_location_regex": null,
+  "expected_pattern": null,
+  "expected_state": "paired",
+  "exposure": "EXPOSED",
+  "family": "v2-family:0e860df39615ca1cb602",
+  "id": "GATE-36",
+  "label_provenance": "/Users/imranpollob/Coding/bc/bindcheck-zk/review/recall/36-semaphore-audit-root-history-collision.md",
+  "label_status": "PENDING",
+  "limitations": [
+    "Source snapshots do not establish a matched buildable triple; reviewer decision pending"
+  ],
+  "origin": "public-report",
+  "proposal_location_regex": "^contracts/base/SemaphoreGroups\\.sol(:\\d+)?$",
+  "proposal_pattern": "P2",
+  "revisions": {
+    "repaired": {
+      "commit": "c6667d98b8c72a424afd118da6cbde03a4945690",
+      "repository": "semaphore-protocol/semaphore",
+      "roles": {
+        "circuit": null,
+        "consumer": null,
+        "verifier": null
+      },
+      "snapshot_only": true,
+      "snapshot_root": "benchmark/cases/GATE-36/snapshots/repaired"
+    },
+    "vulnerable": {
+      "commit": "fd3cc6f7db46aec83c0f807a8155dcd66561a0db",
+      "repository": "semaphore-protocol/semaphore",
+      "roles": {
+        "circuit": null,
+        "consumer": null,
+        "verifier": null
+      },
+      "snapshot_only": true,
+      "snapshot_root": "benchmark/cases/GATE-36/snapshots/vulnerable"
+    }
+  },
+  "schema": "bindcheck-benchmark.case/v1",
+  "source_case_id": "semaphore-audit-root-history-collision"
+}

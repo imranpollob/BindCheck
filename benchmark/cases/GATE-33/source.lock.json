@@ -1,0 +1,19 @@
+{
+  "revisions": {
+    "repaired": [
+      {
+        "bytes": 9921,
+        "path": "packages/circuits/src/email_auth_template.circom",
+        "sha256": "4f12de4c04f627649ff76a6c7e20dde7034d11187eab07df4219b535fdb9f15a"
+      }
+    ],
+    "vulnerable": [
+      {
+        "bytes": 9807,
+        "path": "packages/circuits/src/email_auth_template.circom",
+        "sha256": "0f6c2f1d9bf903ce95376229a736714ef9126fd27f56b86d965e7bef40d4b99f"
+      }
+    ]
+  },
+  "schema": "bindcheck-benchmark.source-lock/v1"
+}

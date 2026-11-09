@@ -1,0 +1,43 @@
+{
+  "card_sha256": "ed8e506f90bc74542097db4d9aad27ed0b085bd9c4a30f23c9cd954c1ae7660f",
+  "expected_location_regex": null,
+  "expected_pattern": null,
+  "expected_state": "paired",
+  "exposure": "UNEXPOSED",
+  "family": "v2-family:b856f5604c150e532d44",
+  "id": "GATE-15",
+  "label_provenance": "/Users/imranpollob/Coding/bc/bindcheck-zk/review/recall/15-an-attacker-can-craft-a-fake-non-inclusion-proof-for-a-given.md",
+  "label_status": "PENDING",
+  "limitations": [
+    "Source snapshots do not establish a matched buildable triple; reviewer decision pending"
+  ],
+  "origin": "public-report",
+  "proposal_location_regex": "^circuits/circuits/utils/crypto/merkle-trees/smt\\.circom(:\\d+)?$",
+  "proposal_pattern": "NONE",
+  "revisions": {
+    "repaired": {
+      "commit": "99e8eece5e0867017ca076731fba63ed96ae4711",
+      "repository": "selfxyz/self",
+      "roles": {
+        "circuit": null,
+        "consumer": null,
+        "verifier": null
+      },
+      "snapshot_only": true,
+      "snapshot_root": "benchmark/cases/GATE-15/snapshots/repaired"
+    },
+    "vulnerable": {
+      "commit": "4f18c75041bb47c1862169eef82c22067642a83a",
+      "repository": "selfxyz/self",
+      "roles": {
+        "circuit": null,
+        "consumer": null,
+        "verifier": null
+      },
+      "snapshot_only": true,
+      "snapshot_root": "benchmark/cases/GATE-15/snapshots/vulnerable"
+    }
+  },
+  "schema": "bindcheck-benchmark.case/v1",
+  "source_case_id": "circom/selfxyz/self/zksecurity_an_attacker_can_craft_a_fake_non_inclusion_proof_for_a_given_key_due_to_an_aliasing_bug_in_the_smt_verifier"
+}

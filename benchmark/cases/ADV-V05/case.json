@@ -1,0 +1,28 @@
+{
+  "expected_location_regex": "^Consumer\\.sol(:[0-9]+)?$",
+  "expected_pattern": "P1",
+  "expected_state": "vulnerable",
+  "exposure": "EXPOSED",
+  "family": "state-write",
+  "id": "ADV-V05",
+  "label_provenance": "redteam/adversarial/expected.json; same team authored arm C",
+  "label_status": "AI-PROPOSED",
+  "limitations": [
+    "AI-authored fixture and label; mock verifier is not an end-to-end proof oracle"
+  ],
+  "origin": "synthetic",
+  "pair_id": "ADV-05",
+  "revisions": {
+    "selected": {
+      "commit": "b0cdad7f5101b7000d9c2ceee138f2a9fb0abd65",
+      "roles": {
+        "circuit": "circuit.circom",
+        "consumer": "Consumer.sol",
+        "verifier": "Verifier.sol"
+      },
+      "source_tree": "benchmark/cases/ADV-V05/source",
+      "verifier_kind": "synthetic interface, not generated Groth16"
+    }
+  },
+  "schema": "bindcheck-benchmark.case/v1"
+}

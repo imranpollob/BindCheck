@@ -1,0 +1,27 @@
+{
+  "expected_location_regex": "^contracts/PrivateAirdrop\\.sol(:[0-9]+)?$",
+  "expected_pattern": "P3",
+  "expected_state": "repaired",
+  "exposure": "EXPOSED",
+  "family": "zkdrops",
+  "id": "DEV-H02",
+  "label_provenance": "historical DEV pair; AI review, not human-adjudicated",
+  "label_status": "AI-PROPOSED",
+  "limitations": [],
+  "origin": "DEV-history",
+  "pair_id": "DEV-H01",
+  "revisions": {
+    "selected": {
+      "commit": "f6f58020911cd2a19e1639f0dc93ec9fca2a9e17",
+      "repository": "a16z/zkdrops",
+      "roles": {
+        "circuit": "circuits/circuit.circom",
+        "consumer": "contracts/PrivateAirdrop.sol",
+        "verifier": "contracts/compiled/MerkVerifier.sol"
+      },
+      "source_checkout": "/Users/imranpollob/Coding/bc/bindcheck-zk/feasibility/work/full-dev/DEV-H02--a16z__zkdrops--f6f58020911c",
+      "verifier_kind": "Groth16 candidate"
+    }
+  },
+  "schema": "bindcheck-benchmark.case/v1"
+}

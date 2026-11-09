@@ -1,0 +1,43 @@
+{
+  "card_sha256": "7b32c1d1103164c7baad35ed85bbd07b7dcaefb4c0a5b0a087c655df078e0f3e",
+  "expected_location_regex": null,
+  "expected_pattern": null,
+  "expected_state": "paired",
+  "exposure": "UNEXPOSED",
+  "family": "v2-family:b856f5604c150e532d44",
+  "id": "GATE-47",
+  "label_provenance": "/Users/imranpollob/Coding/bc/bindcheck-zk/review/recall/47-the-registration-and-disclosure-circuits-lack-range-checks-f.md",
+  "label_status": "PENDING",
+  "limitations": [
+    "Source snapshots do not establish a matched buildable triple; reviewer decision pending"
+  ],
+  "origin": "public-report",
+  "proposal_location_regex": "^circuits/circuits/register_id/register_id\\.circom(:\\d+)?$",
+  "proposal_pattern": "NONE",
+  "revisions": {
+    "repaired": {
+      "commit": "49de54966e40709ac59d4070fd4bd0279b2a10c0",
+      "repository": "selfxyz/self",
+      "roles": {
+        "circuit": null,
+        "consumer": null,
+        "verifier": null
+      },
+      "snapshot_only": true,
+      "snapshot_root": "benchmark/cases/GATE-47/snapshots/repaired"
+    },
+    "vulnerable": {
+      "commit": "4f18c75041bb47c1862169eef82c22067642a83a",
+      "repository": "selfxyz/self",
+      "roles": {
+        "circuit": null,
+        "consumer": null,
+        "verifier": null
+      },
+      "snapshot_only": true,
+      "snapshot_root": "benchmark/cases/GATE-47/snapshots/vulnerable"
+    }
+  },
+  "schema": "bindcheck-benchmark.case/v1",
+  "source_case_id": "circom/selfxyz/self/zksecurity_the_registration_and_disclosure_circuits_lack_range_checks_for_the_input_indices"
+}
