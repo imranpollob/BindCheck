@@ -28,6 +28,15 @@ effect must be inside the equality branch. A guard in a sibling branch does
 not count. A post-effect guard is `UNKNOWN` because this frontend does not
 model the required post-dominance/rollback argument.
 
+The follow-up frontend resolves a local modifier only when it has exactly one
+unconditional body placeholder, a prefix made solely of `require`/`assert`
+checks, and no external call. It recognizes OpenZeppelin `nonReentrant` only
+with its exact package import. Inheritance resolution requires a unique local
+base declaration or an exact OpenZeppelin ERC20/ERC721/Ownable/ReentrancyGuard
+import; an overridden token effect, ambiguous base, conditional modifier,
+missing placeholder, or external-call modifier remains `UNKNOWN`. Standard
+ERC20/ERC721 internal token effects are recognized in the stated subset.
+
 Adversarial negatives: `SND-G01`, `SND-G02` in
 [`tests/soundness/expected.json`](../tests/soundness/expected.json), plus
 `P1-04`, `P1-05`, `P1-19`, `P1-21`, and `P1-23` in
@@ -121,6 +130,11 @@ Adversarial negatives: `P2-05`, `P2-06`, and `P2-07`. Legitimate positive:
 
 ## P3 — replay-key canonicality and consumption
 
+P1–P3 require matched circuit and verifier implementation artifacts before a
+positive verdict. P5 also requires a verifier implementation, rather than an
+interface declaration alone. The new artifact-negative controls are in
+[`test_followup.py`](../tests/soundness/test_followup.py).
+
 ### `REPLAY_KEY_CANONICAL_AND_CONSUMED`
 
 Property: each recovered replay mapping key is proof-bound, checked, consumed,
@@ -129,7 +143,12 @@ range guard for the exact public-input position from which that key derives.
 
 Justification: the consumer-vector analysis returns exact numeric positions.
 The verifier guard extractor returns exact guarded indices or an all-position
-loop. A guard on position `i` cannot discharge a replay key at position `j`.
+loop. It recognizes snarkjs `checkField(calldataload(add(_pubSignals, K)))`
+only when the helper rejects values at or above the exact BN254 scalar field
+and `K` is word-aligned. A guard on position `i` cannot discharge a replay key at position `j`.
+The local guard recognizer accepts only an unconditional, pre-verification
+`require` whose entire condition compares the replay key with the same scalar
+field. A comparison with the BN254 base field is insufficient.
 If proof relationship exists but position recovery fails, the result is
 `UNKNOWN`.
 
@@ -156,28 +175,10 @@ deployment correspondence, or exploitability.
 Adversarial negatives: `P4-02`, `P4-04`, and `P4-05`. Legitimate positives:
 `P4-01`, `P4-12`, and `P4-13`.
 
-### `PAIRING_LIBRARY_GENERATOR_EXCLUDED`
-
-Property: the only default G2 constants recognized in source/runtime form the
-standard pairing-library generator helper, not parsed gamma/delta key
-assignments.
-
-Justification: this is a narrow false-positive exclusion for the default-G2
-signature. It does not verify the rest of the key.
-
-Adversarial negatives: `P4-02` and `P4-06`. Legitimate positives: `P4-03` and
-`P4-07`.
-
-### `RUNTIME_DEFAULT_G2_SIGNATURE_ABSENT`
-
-Property: complete runtime-bytecode parsing finds fewer than two unexplained
-groups containing all four default BN254 G2 coordinates.
-
-Justification: this verifies only absence of the named bytecode signature
-within completely parsed runtime bytes. Truncated bytecode is `UNKNOWN`.
-
-Adversarial negative: `P4-06`. Legitimate positive: the runtime-absence branch
-covered by the P4 runtime controls; `P4-08` is the truncated `UNKNOWN` control.
+Pairing-library generator recognition and absence of a runtime default-G2
+signature are screening facts. Without a parsed verification key they now
+return `UNKNOWN`, including controls `P4-03` and `P4-07`. Parsed constants
+without a recovered verification function also return `UNKNOWN`.
 
 ## P5 — public-input interface agreement
 
