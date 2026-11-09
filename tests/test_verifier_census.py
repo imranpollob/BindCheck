@@ -111,6 +111,18 @@ function verifyAggregatedProof(bytes calldata proof) external pure returns (bool
 }}''')
         self.assertEqual(item["behavior"], "REJECT_ALL")
 
+    def test_dev_style_stand_in_preamble(self) -> None:
+        item = self.one('''/// @notice Drop-in stand-in for a generated verifier.
+/// This source has several lines of explanatory material before the contract.
+/// The purpose of this illustrative text is to make the marker remote.
+/// It is still attached to the next contract declaration.
+/// This is a source-level shape rather than a cryptographic verifier.
+contract Verifier { function verifyProof(uint[] memory input) public pure returns (bool) {
+  if (input.length != 2) return false;
+  return true;
+} }''')
+        self.assertEqual(item["behavior"], "SIMPLIFIED")
+
 
 if __name__ == "__main__":
     unittest.main()
