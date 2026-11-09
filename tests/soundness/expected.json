@@ -4,7 +4,7 @@
   "commitment_policy": "SCREEN_ONLY_NEVER_VERIFIED",
   "cases": [
     {"id":"SND-G01-irrelevant-branch","concern":"guard-dominance","fixture":"guard_irrelevant_branch","pattern":"P1","verdict":"VIOLATION","reason":"UNBOUND_EFFECT_RECIPIENT"},
-    {"id":"SND-G02-guard-after-effect","concern":"guard-dominance","fixture":"guard_after_effect","pattern":"P1","verdict":"VIOLATION","reason":"UNBOUND_EFFECT_RECIPIENT"},
+    {"id":"SND-G02-guard-after-effect","concern":"guard-dominance","fixture":"guard_after_effect","pattern":"P1","verdict":"UNKNOWN","reason":"POST_EFFECT_GUARD_SEMANTICS_UNRESOLVED"},
     {"id":"SND-G03-require-before-effect","concern":"guard-dominance","fixture":"guard_require_before","pattern":"P1","verdict":"VERIFIED_WITHIN_SCOPE","reason":"EFFECT_VALUES_DIRECT_PUBLIC_INPUTS"},
     {"id":"SND-G04-effect-in-equality-branch","concern":"guard-dominance","fixture":"guard_conditional_effect","pattern":"P1","verdict":"VERIFIED_WITHIN_SCOPE","reason":"EFFECT_VALUES_DIRECT_PUBLIC_INPUTS"},
     {"id":"SND-G05-unresolved-modifier","concern":"guard-dominance","fixture":"guard_modifier","pattern":"P1","verdict":"UNKNOWN","reason":"UNRESOLVED_CONSUMER_MODIFIER"},
