@@ -23,7 +23,7 @@ from eval.common import (
     select_families,
     sha256_file,
 )
-from eval.run_heldout import execution_families, run_tool_once
+from eval.run_heldout import capture_warning_sources, execution_families, run_tool_once
 from eval.run_recall import score_pair, strict_resolved_rows
 from eval.summarize import build_summary, summarize_group
 
@@ -161,6 +161,24 @@ class ResumeTests(unittest.TestCase):
             result = run_tool_once("bindcheck-zk", family_dir / "missing-checkout", family_dir)
             self.assertEqual(result["verdict"], "UNKNOWN")
             self.assertEqual(result["reasons"], ["INTERRUPTED_ATTEMPT"])
+
+    def test_warning_source_capture_uses_pinned_checkout_paths(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = pathlib.Path(temporary)
+            checkout, family_dir = root / "checkout", root / "family"
+            checkout.mkdir()
+            family_dir.mkdir()
+            (checkout / "Verifier.sol").write_text("contract Verifier { function verifyProof() public returns(bool) { return true; } }")
+            (checkout / "Consumer.sol").write_text("contract Consumer { function act() public {} }")
+            payload = {"triples": [{
+                "verifier": {"path": "Verifier.sol"},
+                "patterns": {"P1": {"verdict": "VIOLATION", "reason": "UNBOUND_EFFECT_AMOUNT",
+                                    "location": {"path": "Consumer.sol", "line": 1}}},
+            }]}
+            (family_dir / "bindcheck-zk-raw.json").write_text(json.dumps(payload))
+            manifest = capture_warning_sources(checkout, family_dir)
+            self.assertEqual({item["source_path"] for item in manifest["sources"]}, {"Consumer.sol", "Verifier.sol"})
+            self.assertTrue(all(item["status"] == "COPIED" for item in manifest["sources"]))
 
 
 class SummaryTests(unittest.TestCase):
