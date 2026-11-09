@@ -1,0 +1,17 @@
+warning_id,group_index,source,row,pattern,reason,path,line,function,author_adjudication,instances_final,group_verifier_kind
+W01,6,T24,DEV-F38,P3,REPLAY_KEY_NOT_BOUND_TO_PROOF,blockchain/contracts/ZKIdentity.sol,117,verifyAndConsumeZkProof,true positive,10,FAIL-CLOSED
+W02,3,T24,DEV-F27,P3,REPLAY_KEY_NOT_BOUND_TO_PROOF,smart-contracts/contracts/CropChain.sol,865,verifyQualityAttestation,true positive,1,SIMPLIFIED/STAND-IN
+W03,2,T24,DEV-F25,P3,REPLAY_KEY_NOT_BOUND_TO_PROOF,shadow-credit-network/contracts/CreditDataWithZK.sol,146,submitWithProof,true positive,1,REAL
+W04,13,T24,DEV-F48,P3,FIELD_ALIAS_REPLAY_KEY,privatecrypmix/packages/contracts/contracts/PrivateCrypMix.sol,200,withdrawCrossChain,true positive,1,SIMPLIFIED/STAND-IN
+W05,15,T24,DEV-F49,P4,PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND,contracts/src/Verifier.sol,1,settle,true positive,2,SIMPLIFIED/STAND-IN
+W06,14,T24,DEV-F48,P4,PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND,privatecrypmix/packages/contracts/contracts/Verifier.sol,1,withdrawCrossChain,true positive,1,SIMPLIFIED/STAND-IN
+W07,10,T24,DEV-F39,P4,DUPLICATE_IC_SOURCE_WARNING,contracts/verifiers/ReputationVerifier.sol,1,mintPass,true positive,1,PLACEHOLDER+FAIL-CLOSED
+W08,12,T24,DEV-F48,P4,PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND,privatecrypmix/packages/contracts/contracts/Verifier.sol,1,withdraw,true positive,1,SIMPLIFIED/STAND-IN
+W09,16,T25 retained-new,DEV-F35,P1,UNBOUND_EFFECT_AMOUNT,contract/DarkPool.sol,128,executeBatch,true positive,1,SIMPLIFIED/STAND-IN
+W10,1,T24,DEV-F14,P1,UNBOUND_EFFECT_AMOUNT,evm-bridge/contracts/evm-bridge.sol,114,processWithdrawal,true positive,3,REAL
+W11,9,T24,DEV-F39,P1,UNBOUND_EFFECT_RECIPIENT,contracts/passes/EventPass.sol,127,mintPass,true positive,3,"MIXED(PLACEHOLDER+FAIL-CLOSED,REAL)"
+W12,7,T24,DEV-F38,P3,FIELD_ALIAS_REPLAY_KEY,blockchain/contracts/ZKPrivacy.sol,79,submitAnonymousRating,unclear,10,FAIL-CLOSED
+W13,5,T24,DEV-F36,P4,PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND,hardhat/contracts/Verifier.sol,1,verifyAndLink,true positive,1,PLACEHOLDER
+W14,4,T24,DEV-F30,P1,UNBOUND_EFFECT_AMOUNT,projects/ZKredential/packages/zk-contracts/contracts/core/ComplianceGateway.sol,130,verifyAndExecute,true positive,9,REAL
+W15,8,T24,DEV-F38,P3,FIELD_ALIAS_REPLAY_KEY,blockchain/contracts/ZKPrivacy.sol,180,processPrivateTransaction,unclear,10,FAIL-CLOSED
+W16,11,T24,DEV-F48,P3,FIELD_ALIAS_REPLAY_KEY,privatecrypmix/packages/contracts/contracts/PrivateCrypMix.sol,136,withdraw,true positive,1,SIMPLIFIED/STAND-IN

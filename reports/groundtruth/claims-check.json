@@ -1,0 +1,417 @@
+{
+ "generated_by": "reports/groundtruth/scripts/claims_check.py",
+ "t25": {
+  "source": "reports/T25-full-dev-ledger.csv (phase=after)",
+  "rows": 56,
+  "P1": {
+   "verdicts": {
+    "UNKNOWN": 48,
+    "VERIFIED_WITHIN_SCOPE": 4,
+    "VIOLATION": 4
+   },
+   "applicability": {
+    "NOT_APPLICABLE": 29,
+    "UNKNOWN": 10,
+    "APPLICABLE": 17
+   },
+   "unknown_among_applicable": 9,
+   "applicable": 17,
+   "decided_among_applicable": 8
+  },
+  "P2": {
+   "verdicts": {
+    "UNKNOWN": 55,
+    "VERIFIED_WITHIN_SCOPE": 1
+   },
+   "applicability": {
+    "NOT_APPLICABLE": 19,
+    "APPLICABLE": 27,
+    "UNKNOWN": 10
+   },
+   "unknown_among_applicable": 26,
+   "applicable": 27,
+   "decided_among_applicable": 1
+  },
+  "P3": {
+   "verdicts": {
+    "UNKNOWN": 40,
+    "VERIFIED_WITHIN_SCOPE": 12,
+    "VIOLATION": 4
+   },
+   "applicability": {
+    "NOT_APPLICABLE": 23,
+    "APPLICABLE": 23,
+    "UNKNOWN": 10
+   },
+   "unknown_among_applicable": 7,
+   "applicable": 23,
+   "decided_among_applicable": 16
+  },
+  "P4": {
+   "verdicts": {
+    "VERIFIED_WITHIN_SCOPE": 23,
+    "UNKNOWN": 33
+   },
+   "applicability": {
+    "APPLICABLE": 46,
+    "UNKNOWN": 10
+   },
+   "unknown_among_applicable": 23,
+   "applicable": 46,
+   "decided_among_applicable": 23
+  },
+  "P5": {
+   "verdicts": {
+    "UNKNOWN": 52,
+    "VERIFIED_WITHIN_SCOPE": 4
+   },
+   "applicability": {
+    "APPLICABLE": 46,
+    "UNKNOWN": 10
+   },
+   "unknown_among_applicable": 42,
+   "applicable": 46,
+   "decided_among_applicable": 4
+  },
+  "violation_rows": [
+   {
+    "id": "DEV-F14",
+    "repository": "RippnerLabs/meridian-link",
+    "patterns": [
+     "P1"
+    ]
+   },
+   {
+    "id": "DEV-F25",
+    "repository": "Chidubemkingsley/Shadow-Credit-Network",
+    "patterns": [
+     "P3"
+    ]
+   },
+   {
+    "id": "DEV-F27",
+    "repository": "Nitya-003/CropChain",
+    "patterns": [
+     "P3"
+    ]
+   },
+   {
+    "id": "DEV-F30",
+    "repository": "ethpanda-org/ETHShanghai-2025",
+    "patterns": [
+     "P1"
+    ]
+   },
+   {
+    "id": "DEV-F35",
+    "repository": "sambitsargam/ShadowSats",
+    "patterns": [
+     "P1"
+    ]
+   },
+   {
+    "id": "DEV-F38",
+    "repository": "KanishJebaMathewM/Truxify",
+    "patterns": [
+     "P3"
+    ]
+   },
+   {
+    "id": "DEV-F39",
+    "repository": "Servesh21/RacePass",
+    "patterns": [
+     "P1"
+    ]
+   },
+   {
+    "id": "DEV-F48",
+    "repository": "SovereignWave/qwer",
+    "patterns": [
+     "P3"
+    ]
+   }
+  ],
+  "rows_with_triples": 46,
+  "builds_ok": 45,
+  "builds_failed": 31,
+  "runtime_seconds": {
+   "sum": 176.287691,
+   "max": 38.557065,
+   "median": 0.3265585
+  },
+  "historical_rows_P3": {
+   "DEV-H01": "a16z/zkdrops@4002962fb6 P3=VERIFIED_WITHIN_SCOPE (REPLAY_KEY_CANONICAL_AND_CONSUMED)",
+   "DEV-H02": "a16z/zkdrops@f6f5802091 P3=VERIFIED_WITHIN_SCOPE (REPLAY_KEY_CANONICAL_AND_CONSUMED)",
+   "DEV-H03": "semaphore-protocol/semaphore@8d703c124c P3=VERIFIED_WITHIN_SCOPE (REPLAY_KEY_CANONICAL_AND_CONSUMED)",
+   "DEV-H04": "semaphore-protocol/semaphore@3dcf79f6a0 P3=VERIFIED_WITHIN_SCOPE (REPLAY_KEY_CANONICAL_AND_CONSUMED)",
+   "DEV-H05": "polybase/payy@c4d2c9021b P3=UNKNOWN (PROTECTED_EFFECT_NOT_RECOVERED)",
+   "DEV-H06": "polybase/payy@dcd5d96ee1 P3=UNKNOWN (PROTECTED_EFFECT_NOT_RECOVERED)"
+  }
+ },
+ "warnings": {
+  "source": "reports/T24-warning-adjudication.csv + reports/T25-warning-adjudication.csv",
+  "retained_groups": 16,
+  "retained_instances": 56,
+  "author_labels": {
+   "true positive": 14,
+   "unclear": 2
+  },
+  "removed_before_final": 3,
+  "verifier_flags": "see reports/groundtruth/warning-verifier-flags.csv",
+  "groups_with_any_non_real_verifier": 13,
+  "groups_with_only_non_real_verifiers": 12,
+  "author_true_positive_on_only_non_real": 10
+ },
+ "corpus": {
+  "source": "dataset/source-corpus-v2.csv",
+  "rows": 5024,
+  "split": {
+   "DEV": 56,
+   "EVAL": 4968
+  },
+  "generated_by": "reports/groundtruth/scripts/strata_recount.py",
+  "eligible_eval_families": 1384,
+  "strata_canonical_row_label": {
+   "unclassified": 755,
+   "deployed-address-in-docs": 303,
+   "hackathon-student": 81,
+   "verified-deployed": 38,
+   "audited-production": 207
+  },
+  "strata_sampler_rule_family_strongest": {
+   "unclassified": 751,
+   "deployed-address-in-docs": 303,
+   "hackathon-student": 82,
+   "verified-deployed": 38,
+   "audited-production": 210
+  },
+  "strata_stated_in_EVAL-SAMPLE-PLAN-v2": {
+   "audited-production": 207,
+   "deployed-address-in-docs": 303,
+   "hackathon-student": 81,
+   "unclassified": 755,
+   "verified-deployed": 38
+  },
+  "canonical_equals_plan": true,
+  "sampler_equals_plan": false,
+  "audited_production_canonical_rows": 207,
+  "audited_production_canonical_rows_stars_0": 138,
+  "recall_cases": 47,
+  "recall_v1_scope_class_integration": 20,
+  "recall_v2_scope_class_integration": 27,
+  "recall_promoted_v1_broader_to_v2_strict": 7,
+  "recall_v2_strict_resolved_pairs": 16,
+  "recall_v1_strict_resolved_pairs": 12,
+  "recall_all_resolved_pairs": 31,
+  "recall_expectations_rows": 16
+ },
+ "census": {
+  "source": "dataset/onchain-census-summary.json; dataset/onchain-census.csv",
+  "exact_deployment_rows": 1049,
+  "unique_deployments": 1027,
+  "unique_runtime_hashes": 561,
+  "default_g2_gamma_delta_signature_unique_deployments": 43,
+  "source_confirmed_consumer_links": 0,
+  "funded_vulnerable_consumer_instances": 0,
+  "chains_queried": 7,
+  "recount_unique_by_chain_from_csv": {
+   "137": 117,
+   "8453": 268,
+   "42161": 212,
+   "59144": 60,
+   "1": 223,
+   "10": 147
+  },
+  "csv_key_columns": [
+   "chain_id",
+   "address"
+  ],
+  "recount_unique_total": 1027
+ },
+ "consumer_census": {
+  "source": "dataset/onchain-consumers-v2-summary.json",
+  "unique_deployments": 277,
+  "unique_github_repositories": 86,
+  "chain_counts": {
+   "arbitrum-one": 25,
+   "base": 92,
+   "ethereum": 77,
+   "linea": 14,
+   "optimism": 38,
+   "polygon": 31,
+   "zksync-era": 0
+  }
+ },
+ "t26_dev_dry_run_network": {
+  "source": "results/raw/T26/dev-dry-run-network/summary.json (bindcheck-zk worktree)",
+  "families": 5,
+  "tools": {
+   "bindcheck-zk": {
+    "verdicts": {
+     "VIOLATION": 1,
+     "VERIFIED_WITHIN_SCOPE": 0,
+     "UNKNOWN": 4
+    },
+    "unknown_by_reason": {
+     "CALLER_INDEPENDENCE_UNRESOLVED": 1,
+     "CONTEXT_COMPUTATION_NOT_GUARDED": 1,
+     "NO_CONTEXT_BINDING_RECOVERED": 3,
+     "PROTECTED_EFFECT_NOT_RECOVERED": 3,
+     "PUBLIC_INPUT_ORDER_UNRESOLVED": 1,
+     "REPLAY_KEY_NOT_RECOVERED": 1,
+     "UNSUPPORTED_VERIFIER_KEY_LAYOUT": 1,
+     "VERIFIER_MATCH_AMBIGUOUS": 1
+    }
+   },
+   "circomspect": {
+    "verdicts": {
+     "VIOLATION": 0,
+     "VERIFIED_WITHIN_SCOPE": 0,
+     "UNKNOWN": 5
+    },
+    "unknown_by_reason": {
+     "BASELINE_TOOL_UNAVAILABLE": 5
+    }
+   },
+   "picus": {
+    "verdicts": {
+     "VIOLATION": 0,
+     "VERIFIED_WITHIN_SCOPE": 0,
+     "UNKNOWN": 5
+    },
+    "unknown_by_reason": {
+     "BASELINE_TOOL_UNAVAILABLE": 5
+    }
+   },
+   "slither": {
+    "verdicts": {
+     "VIOLATION": 0,
+     "VERIFIED_WITHIN_SCOPE": 0,
+     "UNKNOWN": 5
+    },
+    "unknown_by_reason": {
+     "BASELINE_FAILED": 5
+    }
+   },
+   "zkap": {
+    "verdicts": {
+     "VIOLATION": 0,
+     "VERIFIED_WITHIN_SCOPE": 0,
+     "UNKNOWN": 5
+    },
+    "unknown_by_reason": {
+     "BASELINE_TOOL_UNAVAILABLE": 5
+    }
+   }
+  }
+ },
+ "t26_eval_metadata": {
+  "source": "results/raw/T26/eval-metadata-07210625783a/families/*",
+  "family_dirs": 278
+ },
+ "e4": {
+  "zkredential": {
+   "source": "results/raw/feasibility-v2/zkredential-e4-20261103T183338Z-51083/observation.json",
+   "callerChosenAmount": "123456789012345678901234",
+   "attackerBalanceAfter": "123456789012345678901234",
+   "credentialOwnerBalanceAfter": "0",
+   "realVerifierAccepted": true,
+   "unchangedGatewayCommittedEffect": true
+  },
+  "zkdrops": {
+   "source": "results/raw/feasibility-v2/zkdrops-alias-e4-20261103T183918Z-54527/observation.json",
+   "vulnerableCommit": "4002962fb632578dd12477346d2e5c4159ffb2ef",
+   "redeemerBalanceAfter": "20000",
+   "stateEffects": 2
+  },
+  "payy": {
+   "source": "/Users/imranpollob/Coding/bc/BindCheck/results/raw/T18/90_summary.json",
+   "rollup_before": "100",
+   "rollup_after": "93"
+  },
+  "racepass": {
+   "source": "results/raw/feasibility-v2/racepass-e4-20261103T184530Z-61766/",
+   "files": [
+    "10_npm_ci.log",
+    "11_age_compile.log",
+    "12_age_zkey_correspondence.log",
+    "13_kyc_compile.log",
+    "14_kyc_zkey_correspondence.log",
+    "20_make_inputs.log",
+    "30_age_fullprove.log",
+    "31_age_vkey.log",
+    "32_age_verify.log",
+    "40_kyc_fullprove.log",
+    "41_kyc_vkey.log",
+    "42_kyc_verify.log",
+    "50_unchanged_consumer_e4.log",
+    "anvil-chain-id.txt",
+    "anvil-wait.log",
+    "anvil.log",
+    "circuit-build",
+    "environment.txt",
+    "proofs",
+    "racepass-source.tar",
+    "result.json",
+    "sha256.txt",
+    "steps.tsv",
+    "work"
+   ]
+  }
+ },
+ "e4_racepass_steps": {
+  "source": "results/raw/feasibility-v2/racepass-e4-20261103T184530Z-61766/steps.tsv",
+  "rows": 13,
+  "pass": 13
+ },
+ "t23_slither_racepass_stderr_chars": {
+  "source": "results/raw/T23/run-20261104T030439Z-3115/racepass--slither.json .coverage.invocations[0].stderr",
+  "chars": 12000
+ },
+ "d1_historical": {
+  "d2_01_by_target_prefix": {
+   "source": "bindcheck-d1-paper/results/raw/D2-01-recovery-01/integrated/benchmark-results.json (targets[].analysis.path prefix WT=WarpToad, PY=Payy)",
+   "WT:DETECTED": 17,
+   "WT:UNSUPPORTED": 1,
+   "PY:UNSUPPORTED": 12
+  },
+  "d2_01_counts": {
+   "source": "bindcheck-d1-paper/results/raw/D2-01-recovery-01/integrated/benchmark-results.json",
+   "associated_warning_objects": 23,
+   "detected": 17,
+   "misses": 0,
+   "targets": 30,
+   "unsupported": 13,
+   "warning_objects": 26
+  },
+  "d1p32_totals": {
+   "source": "bindcheck-d1-paper/results/raw/D1P-32/summary.json",
+   "foundry_generic": {
+    "detected": 3,
+    "missed": 6,
+    "unresolved": 21
+   },
+   "foundry_same_policy": {
+    "detected": 8,
+    "missed": 1,
+    "unresolved": 21
+   }
+  },
+  "d1p43_union_vs_full": {
+   "source": "reports/D1P-43.md:127-128",
+   "unjoined_union": "5/7",
+   "full": "7/7",
+   "recomputed": false
+  },
+  "d1p41_union_vs_full": {
+   "source": "reports/D1P-41-ablation-preliminary.md:114-115",
+   "unjoined_union": "6/8",
+   "full": "6/8",
+   "recomputed": false
+  },
+  "gate_a": {
+   "source": "bindcheck-d1-paper/results/raw/D2-07-recovery-01/finalization-summary.json",
+   "exists": true
+  }
+ }
+}

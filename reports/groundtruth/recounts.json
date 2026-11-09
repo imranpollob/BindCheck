@@ -1,0 +1,37 @@
+{
+  "generated_by": "reports/groundtruth/scripts/strata_recount.py",
+  "eligible_eval_families": 1384,
+  "strata_canonical_row_label": {
+    "unclassified": 755,
+    "deployed-address-in-docs": 303,
+    "hackathon-student": 81,
+    "verified-deployed": 38,
+    "audited-production": 207
+  },
+  "strata_sampler_rule_family_strongest": {
+    "unclassified": 751,
+    "deployed-address-in-docs": 303,
+    "hackathon-student": 82,
+    "verified-deployed": 38,
+    "audited-production": 210
+  },
+  "strata_stated_in_EVAL-SAMPLE-PLAN-v2": {
+    "audited-production": 207,
+    "deployed-address-in-docs": 303,
+    "hackathon-student": 81,
+    "unclassified": 755,
+    "verified-deployed": 38
+  },
+  "canonical_equals_plan": true,
+  "sampler_equals_plan": false,
+  "audited_production_canonical_rows": 207,
+  "audited_production_canonical_rows_stars_0": 138,
+  "recall_cases": 47,
+  "recall_v1_scope_class_integration": 20,
+  "recall_v2_scope_class_integration": 27,
+  "recall_promoted_v1_broader_to_v2_strict": 7,
+  "recall_v2_strict_resolved_pairs": 16,
+  "recall_v1_strict_resolved_pairs": 12,
+  "recall_all_resolved_pairs": 31,
+  "recall_expectations_rows": 16
+}
