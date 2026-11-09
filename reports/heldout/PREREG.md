@@ -1,0 +1,35 @@
+# E2 held-out measurement preregistration
+
+**Status:** prospective protocol, committed before any EVAL analyzer or arm C run. The analyzer freeze-2 declaration is **MISSING** at this commit. Its content SHA-256 and operational tag must be filled in by a later, explicitly dated preregistration addendum before execution. No result may be interpreted under the first freeze by substitution.
+
+## Fixed population and exclusion
+
+The draw is the byte-exact [selected-families.csv](selected-families.csv) from the preservation worktree `/Users/imranpollob/Coding/bc/bindcheck-zk/`, SHA-256 `cf1b64bc68d90a790e63d965a3e3c607dc6f27e5250ba58d5968d4f792972d8b`. It has [278 family rows](selected-families.csv) under the frozen source ledger [SHA-256 `07210625783a21a6128ea3f99402fc4a48b36922056241649999547a374b0c95`](../../dataset/source-corpus-v2.csv). No family is replaced after a failure. The full draw remains visible in every selection artifact.
+
+[Rank 259, `selfxyz/self@be761b35e69d85e48dd1c6f3eca7422a4ae43add`](selected-families.csv), is **EXPOSED** by the gate review ([ground-truth report §3](../groundtruth/REPORT.md#3-promoted-cases-payy-dsl-label-exposure)); it is excluded from held-out analyzer and arm C execution, with its exclusion in the run manifest. No other exclusion is allowed after observing analyzer output. Build/acquisition failures and unavailable tools remain in the funnel as `UNKNOWN`, never substituted or scored as misses. The static verifier census is whole-corpus DEV+EVAL and is reported separately from this family draw.
+
+## Frozen code and budgets
+
+- Analyzer: `bindcheck_zk/` content SHA-256 **MISSING pending `docs/FREEZE-2.md` on `zk-integration`**. The first freeze is [8ea6d2239cd94e2b4478bfae48fe8e764bf448a3b44c58224bbeeb6fa2f70542](../../docs/FREEZE-2026-11-09.md) and is not the E2 run identity. No change under `bindcheck_zk/` is permitted in this lane.
+- Strong arm C implementation: commit [`ec1cd7fe4aa11bc935750736237ba9f76b8dee74`](../../baselines/strong/arm_c.py), file SHA-256 `b19f5979e06e7f973f263ccc702ca1ddd33928147b735126e10c221374b8ac54` ([arm_c.py](../../baselines/strong/arm_c.py)). It runs with its required [arm A](../../baselines/strong/arm_a.py) and [arm B](../../baselines/strong/arm_b.py) inputs, no case-specific policy file or path hint. Arm C's name heuristic is a source screen, not a proof of correct composition. Any arm C output missing a source location remains unlocalized.
+- Acquisition: pinned commit, shallow filtered fetch and checkout, each step limited to [300 seconds](../../eval/common.py) where configured. Failed or mismatched checkout is `UNKNOWN`. The prebuild pass is compilation only, before EVAL analysis.
+- BindCheck: [150-second outer timeout](../../eval/common.py), with the checker's own fixed internal budget. Baseline adapters: [120-second internal, 150-second outer budgets](../../eval/common.py). Arm A: [120 seconds](../../baselines/strong/run_campaign.py); arm B: [180 seconds](../../baselines/strong/run_campaign.py), including its [60-second per-circuit Picus cap](../redteam/REPORT.md). Arm C receives no extra source-tuning budget; its launcher has a fixed outer process timeout recorded before execution. Each Picus invocation uses a private `TMPDIR`, and a timeout kills the process group; temporary checkouts and Picus directories are removed after each attempt.
+
+The same pinned checkout is used for BindCheck and arm C on a family. No EVAL run is repeated or tuned after inspecting an output. A harness crash requires a documented fix and a full rerun with the old attempt retained. Tool setup failure, timeout, unsupported input, and missing artifacts are separate `UNKNOWN` categories. E1 source warnings are not E2 models or E4 exploits.
+
+## Warning and adjudication rules
+
+A BindCheck warning is a triple-level `VIOLATION` or a P4 source warning with a reason in [the frozen adjudicator's P4 list](../../eval/adjudicate.py). Deduplicate by family, pattern, reason, source path and line, and message. Arm C findings are reported as native codes; a comparative detection requires a completed run, the **right target pattern and matching source location** on an independently adjudicated defect. A warning with no location cannot earn localized detection credit. A warning on a repaired revision or an independently established legitimate case is a false alarm; no warning on an unlabeled source is not a true negative. `UNKNOWN`, timeout, setup failure, and tool unavailability are neither a win nor a miss for either tool.
+
+Before revealing tool identity or confidence to raters, create one blind card per warning with code at the location, the matched verifier body, and the applicable [rule text](../../docs/verdict-rules.md). Give two human raters separate blank sheets using [adjudication-template.csv](../../eval/adjudication-template.csv). Keep the unblinding key outside `review/heldout/`. Raters label `TP`, `FP`, or `unclear` and provide reasons independently; resolve disagreements after both sheets are sealed. AI suggestions are marked AI opinion and never treated as independent human annotation. E4 requires a real proof, unchanged verifier and consumer, admitted local state, and committed unauthorized effect; no source warning is promoted to E4 automatically.
+
+## Tables to report, including empty or negative outcomes
+
+1. Draw and funnel: selected families, excluded exposed families, acquisition attempted/failed, prebuild success/failure, analyzable families, per-pattern applicable/unknown-applicability, decided, warnings, and exact failure reasons. Keep family, row, and verifier denominators separate.
+2. P1–P5: verdict × applicability matrices; all reason and unknown-reason-code counts; warning locations and evidence grades; zero `VIOLATION` or zero `VERIFIED_WITHIN_SCOPE` cells explicitly.
+3. Arm C on the same family revisions: completed, `UNKNOWN`, warnings, code and location matches to adjudicated defects, false alarms on reviewed repaired/legitimate cases, and non-target findings separately. Unavailable native tools and null locations stay separate.
+4. Whole-source-corpus verifier census: generator/template family, scalar `r` guard, base `q` guard, absent/partial/unknown guard coverage, placeholder/simplified/fail-closed behavior, each with classified-source denominator, missing-source count, and per-row source hash/line evidence.
+5. Runtime distribution: per-family acquisition, prebuild, BindCheck, each baseline, and arm C times from command records; exact observed minimum, median, maximum, and timeouts, without extrapolated totals.
+6. Blind adjudication: TP, FP, unclear, unresolved, both-rater coverage and agreement; disclosure and E4 status. Report zero findings, zero E4 validation, and negative or inconclusive comparisons explicitly if observed.
+
+No ecosystem prevalence or superiority claim follows from the keyword-based maturity strata or from this convenience source corpus. Human review of final labels and claims remains required.
