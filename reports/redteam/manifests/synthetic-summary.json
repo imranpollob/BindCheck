@@ -1,0 +1,151 @@
+{
+  "adjudication_template": "finding-adjudication.csv",
+  "adjudication_template_sha256": "5b24b1e57681ff38b15a6619c3c7cb093b348114a82889386bf27e8eb60498db",
+  "campaign": "synthetic",
+  "counts": {
+    "A": {
+      "fatal_reasons": {
+        "NONE": 46
+      },
+      "finding_instances_by_code": {
+        "A_CALLER_NOT_PROVED_IDENTITY": 3,
+        "A_CALL_VALUE_UNBOUND": 2,
+        "A_EFFECT_AMOUNT_UNBOUND": 12,
+        "A_EFFECT_IDENTITY_UNBOUND": 2,
+        "A_EFFECT_RECIPIENT_UNBOUND": 14,
+        "A_FOUNDRY_POLICY_COUNTEREXAMPLE": 5,
+        "A_GUARD_AFTER_EFFECT": 2,
+        "A_GUARD_NOT_DOMINATING": 1,
+        "A_REPLAY_KEY_UNBOUND": 4,
+        "A_REPLAY_POSITION_FIELD_GUARD_MISSING": 2,
+        "A_STATE_WRITE_VALUE_UNBOUND": 2,
+        "A_VERIFIER_ARITY_MISMATCH": 2
+      },
+      "rows": 46,
+      "rows_with_findings": 33,
+      "run_statuses": {
+        "completed": 46
+      },
+      "verdicts": {
+        "UNKNOWN": 6,
+        "VERIFIED_WITHIN_SCOPE": 7,
+        "VIOLATION": 33
+      }
+    },
+    "B": {
+      "fatal_reasons": {
+        "NONE": 46
+      },
+      "finding_instances_by_code": {},
+      "native_signal_instances_by_code": {
+        "B_LENGTH_SIGNAL_PRESENT": 38,
+        "B_MASKS_CONSTRAINED": 2,
+        "B_PREFIX_CONSTRAINT_PRESENT": 4,
+        "B_PUBLIC_ALIAS_SIGNAL_PRESENT": 2,
+        "B_UNUSED_AMOUNT_SIGNAL": 4
+      },
+      "rows": 46,
+      "rows_with_findings": 0,
+      "run_statuses": {
+        "completed": 46
+      },
+      "tool_statuses": {
+        "circom_inspect": {
+          "completed": 46
+        },
+        "circomspect": {
+          "completed": 46
+        },
+        "picus": {
+          "completed": 46
+        },
+        "zkap": {
+          "UNKNOWN": 46
+        }
+      },
+      "verdicts": {
+        "UNKNOWN": 46
+      }
+    },
+    "C": {
+      "fatal_reasons": {
+        "NONE": 46
+      },
+      "finding_instances_by_code": {
+        "A_CALLER_NOT_PROVED_IDENTITY": 2,
+        "A_CALL_VALUE_UNBOUND": 2,
+        "A_EFFECT_AMOUNT_UNBOUND": 8,
+        "A_EFFECT_IDENTITY_UNBOUND": 2,
+        "A_EFFECT_RECIPIENT_UNBOUND": 10,
+        "A_FOUNDRY_POLICY_COUNTEREXAMPLE": 5,
+        "A_GUARD_AFTER_EFFECT": 2,
+        "A_GUARD_NOT_DOMINATING": 1,
+        "A_REPLAY_KEY_UNBOUND": 4,
+        "A_REPLAY_POSITION_FIELD_GUARD_MISSING": 2,
+        "A_STATE_WRITE_VALUE_UNBOUND": 2,
+        "A_VERIFIER_ARITY_MISMATCH": 2,
+        "C_ALIAS_BINDING_MISSING": 2,
+        "C_ARRAY_EXTENT_MISMATCH": 1,
+        "C_ARRAY_LENGTH_UNBOUND": 1,
+        "C_CALLER_POLICY_MISMATCH": 1,
+        "C_COMMITMENT_ENCODING_MISMATCH": 1,
+        "C_COMMITMENT_FIELD_MISSING": 1,
+        "C_EFFECT_NOT_PROOF_BOUND": 18,
+        "C_MASKS_OVERLAP": 1,
+        "C_NULLIFIER_SCOPE_MISSING_CHAIN": 1,
+        "C_NULLIFIER_SCOPE_MISSING_CONTRACT": 1,
+        "C_PUBLIC_INPUT_DECODING_MISMATCH": 1
+      },
+      "rows": 46,
+      "rows_with_findings": 36,
+      "run_statuses": {
+        "completed": 46
+      },
+      "verdicts": {
+        "VERIFIED_WITHIN_SCOPE": 10,
+        "VIOLATION": 36
+      }
+    }
+  },
+  "schema": "bindcheck-redteam.campaign-summary/v1",
+  "synthetic_score": {
+    "by_arm": {
+      "A": {
+        "legitimate_rows_reported_violation": 16,
+        "noncompleted_rows": 0,
+        "required_findings_present": 45,
+        "required_native_signals_present": 46,
+        "rows": 46,
+        "unknown_rows": 6,
+        "verdict_matches": 31,
+        "vulnerable_rows_reported_violation": 17
+      },
+      "B": {
+        "legitimate_rows_reported_violation": 0,
+        "noncompleted_rows": 0,
+        "required_findings_present": 46,
+        "required_native_signals_present": 46,
+        "rows": 46,
+        "unknown_rows": 46,
+        "verdict_matches": 46,
+        "vulnerable_rows_reported_violation": 0
+      },
+      "C": {
+        "legitimate_rows_reported_violation": 13,
+        "noncompleted_rows": 0,
+        "required_findings_present": 46,
+        "required_native_signals_present": 46,
+        "rows": 46,
+        "unknown_rows": 0,
+        "verdict_matches": 33,
+        "vulnerable_rows_reported_violation": 23
+      }
+    },
+    "cases": 46,
+    "detail_csv": "synthetic-score.csv",
+    "detail_csv_sha256": "35080ba89bb9bea9c5a678dd19b69a447e5611e3713ca21f16be44b238840678",
+    "expected_sha256": "41e3fcebf92f6a03f27998843fd865155d0db4ecfb58d51235f58ec4b3fc9e3e",
+    "rows": 138,
+    "schema": "bindcheck-redteam.synthetic-score/v1"
+  }
+}

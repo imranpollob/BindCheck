@@ -1,0 +1,18 @@
+{
+  "campaign_picus_process_lines": [],
+  "campaign_roots": [
+    "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/results/raw/redteam/dev-20261109-final",
+    "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/results/raw/redteam/synthetic-20261109-foundry"
+  ],
+  "ps_exit_status": 0,
+  "recorded_utc": "2026-11-09T05:55:49.513475+00:00",
+  "remaining_picus_tmp_dirs": {
+    "dev-20261109-final": [],
+    "synthetic-20261109-foundry": []
+  },
+  "remaining_work_dirs": {
+    "dev-20261109-final": null,
+    "synthetic-20261109-foundry": null
+  },
+  "schema": "bindcheck-redteam.cleanup-audit/v1"
+}

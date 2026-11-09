@@ -1,0 +1,523 @@
+{
+  "schema": "bindcheck-redteam.adversarial-expectations/v1",
+  "frozen_before_implementation": true,
+  "research_verdicts": [
+    "VIOLATION",
+    "VERIFIED_WITHIN_SCOPE",
+    "UNKNOWN"
+  ],
+  "notes": [
+    "These are AI-authored development expectations and require human review before they can serve as paper ground truth.",
+    "Arm B is circuit-only. Its integration verdict is therefore UNKNOWN even when a native circuit diagnostic is expected.",
+    "An expected Arm A false alarm is recorded as VIOLATION plus expected_false_alarm=true; it is not relabeled as a successful security result.",
+    "Arm C may use the policy file and simple name/length/scope joins, but no BindCheck verdict logic."
+  ],
+  "cases": [
+    {
+      "id": "ADV-V01",
+      "label": "VULNERABLE",
+      "family": "effect-recipient",
+      "summary": "Mint recipient is independent calldata and is absent from the verifier public inputs.",
+      "expected": {
+        "A": {"verdict": "VIOLATION", "findings": ["A_EFFECT_RECIPIENT_UNBOUND"], "expected_false_alarm": false},
+        "B": {"verdict": "UNKNOWN", "native_signals": []},
+        "C": {"verdict": "VIOLATION", "findings": ["C_EFFECT_NOT_PROOF_BOUND"]}
+      }
+    },
+    {
+      "id": "ADV-L01",
+      "label": "LEGITIMATE",
+      "family": "effect-recipient",
+      "summary": "Mint recipient is decoded from the verifier public-input vector.",
+      "expected": {
+        "A": {"verdict": "VERIFIED_WITHIN_SCOPE", "findings": [], "expected_false_alarm": false},
+        "B": {"verdict": "UNKNOWN", "native_signals": []},
+        "C": {"verdict": "VERIFIED_WITHIN_SCOPE", "findings": []}
+      }
+    },
+    {
+      "id": "ADV-V02",
+      "label": "VULNERABLE",
+      "family": "effect-amount",
+      "summary": "Mint amount is independent calldata and is absent from the verifier public inputs.",
+      "expected": {
+        "A": {"verdict": "VIOLATION", "findings": ["A_EFFECT_AMOUNT_UNBOUND"], "expected_false_alarm": false},
+        "B": {"verdict": "UNKNOWN", "native_signals": []},
+        "C": {"verdict": "VIOLATION", "findings": ["C_EFFECT_NOT_PROOF_BOUND"]}
+      }
+    },
+    {
+      "id": "ADV-L02",
+      "label": "LEGITIMATE",
+      "family": "effect-amount",
+      "summary": "Mint amount is decoded from the verifier public-input vector.",
+      "expected": {
+        "A": {"verdict": "VERIFIED_WITHIN_SCOPE", "findings": [], "expected_false_alarm": false},
+        "B": {"verdict": "UNKNOWN", "native_signals": []},
+        "C": {"verdict": "VERIFIED_WITHIN_SCOPE", "findings": []}
+      }
+    },
+    {
+      "id": "ADV-V03",
+      "label": "VULNERABLE",
+      "family": "native-call-value",
+      "summary": "A native-value call uses caller-selected value not represented in the proof statement.",
+      "expected": {
+        "A": {"verdict": "VIOLATION", "findings": ["A_CALL_VALUE_UNBOUND"], "expected_false_alarm": false},
+        "B": {"verdict": "UNKNOWN", "native_signals": []},
+        "C": {"verdict": "VIOLATION", "findings": ["C_EFFECT_NOT_PROOF_BOUND"]}
+      }
+    },
+    {
+      "id": "ADV-L03",
+      "label": "LEGITIMATE",
+      "family": "native-call-value",
+      "summary": "A native-value call uses the amount decoded from a verifier public input.",
+      "expected": {
+        "A": {"verdict": "VERIFIED_WITHIN_SCOPE", "findings": [], "expected_false_alarm": false},
+        "B": {"verdict": "UNKNOWN", "native_signals": []},
+        "C": {"verdict": "VERIFIED_WITHIN_SCOPE", "findings": []}
+      }
+    },
+    {
+      "id": "ADV-V04",
+      "label": "VULNERABLE",
+      "family": "burn-owner",
+      "summary": "Burn owner is caller-selected and is not tied to a proved identity.",
+      "expected": {
+        "A": {"verdict": "VIOLATION", "findings": ["A_EFFECT_IDENTITY_UNBOUND"], "expected_false_alarm": false},
+        "B": {"verdict": "UNKNOWN", "native_signals": []},
+        "C": {"verdict": "VIOLATION", "findings": ["C_EFFECT_NOT_PROOF_BOUND"]}
+      }
+    },
+    {
+      "id": "ADV-L04",
+      "label": "LEGITIMATE",
+      "family": "burn-owner",
+      "summary": "Burn owner is decoded from the identity public input.",
+      "expected": {
+        "A": {"verdict": "VERIFIED_WITHIN_SCOPE", "findings": [], "expected_false_alarm": false},
+        "B": {"verdict": "UNKNOWN", "native_signals": []},
+        "C": {"verdict": "VERIFIED_WITHIN_SCOPE", "findings": []}
+      }
+    },
+    {
+      "id": "ADV-V05",
+      "label": "VULNERABLE",
+      "family": "state-write",
+      "summary": "Protected credit state is written with a caller-selected quantity not proved by the statement.",
+      "expected": {
+        "A": {"verdict": "VIOLATION", "findings": ["A_STATE_WRITE_VALUE_UNBOUND"], "expected_false_alarm": false},
+        "B": {"verdict": "UNKNOWN", "native_signals": []},
+        "C": {"verdict": "VIOLATION", "findings": ["C_EFFECT_NOT_PROOF_BOUND"]}
+      }
+    },
+    {
+      "id": "ADV-L05",
+      "label": "LEGITIMATE",
+      "family": "state-write",
+      "summary": "Protected credit state is written with the quantity decoded from a public input.",
+      "expected": {
+        "A": {"verdict": "VERIFIED_WITHIN_SCOPE", "findings": [], "expected_false_alarm": false},
+        "B": {"verdict": "UNKNOWN", "native_signals": []},
+        "C": {"verdict": "VERIFIED_WITHIN_SCOPE", "findings": []}
+      }
+    },
+    {
+      "id": "ADV-V06",
+      "label": "VULNERABLE",
+      "family": "guard-dominance-irrelevant-branch",
+      "summary": "An equality appears in a non-enforcing branch and does not dominate the effect.",
+      "expected": {
+        "A": {"verdict": "VIOLATION", "findings": ["A_GUARD_NOT_DOMINATING"], "expected_false_alarm": false},
+        "B": {"verdict": "UNKNOWN", "native_signals": []},
+        "C": {"verdict": "VIOLATION", "findings": ["A_GUARD_NOT_DOMINATING"]}
+      }
+    },
+    {
+      "id": "ADV-L06",
+      "label": "LEGITIMATE",
+      "family": "guard-dominance-irrelevant-branch",
+      "summary": "A reverting equality guard dominates the protected effect.",
+      "expected": {
+        "A": {"verdict": "VERIFIED_WITHIN_SCOPE", "findings": [], "expected_false_alarm": false},
+        "B": {"verdict": "UNKNOWN", "native_signals": []},
+        "C": {"verdict": "VERIFIED_WITHIN_SCOPE", "findings": []}
+      }
+    },
+    {
+      "id": "ADV-V07",
+      "label": "VULNERABLE",
+      "family": "guard-dominance-after-effect",
+      "summary": "The equality check occurs after an externally visible effect.",
+      "expected": {
+        "A": {"verdict": "VIOLATION", "findings": ["A_GUARD_AFTER_EFFECT"], "expected_false_alarm": false},
+        "B": {"verdict": "UNKNOWN", "native_signals": []},
+        "C": {"verdict": "VIOLATION", "findings": ["A_GUARD_AFTER_EFFECT"]}
+      }
+    },
+    {
+      "id": "ADV-L07",
+      "label": "LEGITIMATE",
+      "family": "guard-dominance-after-effect",
+      "summary": "The reverting equality guard occurs before the externally visible effect.",
+      "expected": {
+        "A": {"verdict": "VERIFIED_WITHIN_SCOPE", "findings": [], "expected_false_alarm": false},
+        "B": {"verdict": "UNKNOWN", "native_signals": []},
+        "C": {"verdict": "VERIFIED_WITHIN_SCOPE", "findings": []}
+      }
+    },
+    {
+      "id": "ADV-V08",
+      "label": "VULNERABLE",
+      "family": "replay-key-binding",
+      "summary": "A consumed nullifier is not derived from any verifier public input.",
+      "expected": {
+        "A": {"verdict": "VIOLATION", "findings": ["A_REPLAY_KEY_UNBOUND"], "expected_false_alarm": false},
+        "B": {"verdict": "UNKNOWN", "native_signals": []},
+        "C": {"verdict": "VIOLATION", "findings": ["A_REPLAY_KEY_UNBOUND"]}
+      }
+    },
+    {
+      "id": "ADV-L08",
+      "label": "LEGITIMATE",
+      "family": "replay-key-binding",
+      "summary": "The consumed nullifier is decoded from its declared verifier public-input position.",
+      "expected": {
+        "A": {"verdict": "VERIFIED_WITHIN_SCOPE", "findings": [], "expected_false_alarm": false},
+        "B": {"verdict": "UNKNOWN", "native_signals": []},
+        "C": {"verdict": "VERIFIED_WITHIN_SCOPE", "findings": []}
+      }
+    },
+    {
+      "id": "ADV-V09",
+      "label": "VULNERABLE",
+      "family": "replay-position-canonicality",
+      "summary": "The verifier guards a different public-input position than the replay key.",
+      "expected": {
+        "A": {"verdict": "VIOLATION", "findings": ["A_REPLAY_POSITION_FIELD_GUARD_MISSING"], "expected_false_alarm": false},
+        "B": {"verdict": "UNKNOWN", "native_signals": []},
+        "C": {"verdict": "VIOLATION", "findings": ["A_REPLAY_POSITION_FIELD_GUARD_MISSING"]}
+      }
+    },
+    {
+      "id": "ADV-L09",
+      "label": "LEGITIMATE",
+      "family": "replay-position-canonicality",
+      "summary": "The scalar-field guard applies to the exact public-input position used as the replay key.",
+      "expected": {
+        "A": {"verdict": "VERIFIED_WITHIN_SCOPE", "findings": [], "expected_false_alarm": false},
+        "B": {"verdict": "UNKNOWN", "native_signals": []},
+        "C": {"verdict": "VERIFIED_WITHIN_SCOPE", "findings": []}
+      }
+    },
+    {
+      "id": "ADV-V10",
+      "label": "VULNERABLE",
+      "family": "verifier-arity",
+      "summary": "The consumer passes three public values to a generated verifier whose IC length requires four.",
+      "expected": {
+        "A": {"verdict": "VIOLATION", "findings": ["A_VERIFIER_ARITY_MISMATCH"], "expected_false_alarm": false},
+        "B": {"verdict": "UNKNOWN", "native_signals": []},
+        "C": {"verdict": "VIOLATION", "findings": ["A_VERIFIER_ARITY_MISMATCH"]}
+      }
+    },
+    {
+      "id": "ADV-L10",
+      "label": "LEGITIMATE",
+      "family": "verifier-arity",
+      "summary": "The consumer public vector length and generated-verifier IC length agree.",
+      "expected": {
+        "A": {"verdict": "VERIFIED_WITHIN_SCOPE", "findings": [], "expected_false_alarm": false},
+        "B": {"verdict": "UNKNOWN", "native_signals": []},
+        "C": {"verdict": "VERIFIED_WITHIN_SCOPE", "findings": []}
+      }
+    },
+    {
+      "id": "ADV-V11",
+      "label": "VULNERABLE",
+      "family": "prefix-vs-full-array",
+      "summary": "The circuit binds only the active prefix while the consumer processes the full calldata array.",
+      "expected": {
+        "A": {"verdict": "UNKNOWN", "findings": [], "expected_false_alarm": false},
+        "B": {"verdict": "UNKNOWN", "native_signals": ["B_PREFIX_CONSTRAINT_PRESENT"]},
+        "C": {"verdict": "VIOLATION", "findings": ["C_ARRAY_EXTENT_MISMATCH"]}
+      }
+    },
+    {
+      "id": "ADV-L11",
+      "label": "LEGITIMATE",
+      "family": "prefix-vs-full-array",
+      "summary": "The consumer processes exactly the active prefix constrained by the circuit.",
+      "expected": {
+        "A": {"verdict": "UNKNOWN", "findings": [], "expected_false_alarm": false},
+        "B": {"verdict": "UNKNOWN", "native_signals": ["B_PREFIX_CONSTRAINT_PRESENT"]},
+        "C": {"verdict": "VERIFIED_WITHIN_SCOPE", "findings": []}
+      }
+    },
+    {
+      "id": "ADV-V12",
+      "label": "VULNERABLE",
+      "family": "overlapping-masks",
+      "summary": "Two enabled masks overlap and authorize the same effect occurrence twice.",
+      "expected": {
+        "A": {"verdict": "UNKNOWN", "findings": [], "expected_false_alarm": false},
+        "B": {"verdict": "UNKNOWN", "native_signals": ["B_MASKS_CONSTRAINED"]},
+        "C": {"verdict": "VIOLATION", "findings": ["C_MASKS_OVERLAP"]}
+      }
+    },
+    {
+      "id": "ADV-L12",
+      "label": "LEGITIMATE",
+      "family": "overlapping-masks",
+      "summary": "The circuit enforces pairwise-disjoint activation masks before the consumer effects.",
+      "expected": {
+        "A": {"verdict": "UNKNOWN", "findings": [], "expected_false_alarm": false},
+        "B": {"verdict": "UNKNOWN", "native_signals": ["B_MASKS_CONSTRAINED"]},
+        "C": {"verdict": "VERIFIED_WITHIN_SCOPE", "findings": []}
+      }
+    },
+    {
+      "id": "ADV-V13",
+      "label": "VULNERABLE",
+      "family": "decoding-order",
+      "summary": "The consumer decodes recipient and amount from the opposite public-input positions.",
+      "expected": {
+        "A": {"verdict": "UNKNOWN", "findings": [], "expected_false_alarm": false},
+        "B": {"verdict": "UNKNOWN", "native_signals": []},
+        "C": {"verdict": "VIOLATION", "findings": ["C_PUBLIC_INPUT_DECODING_MISMATCH"]}
+      }
+    },
+    {
+      "id": "ADV-L13",
+      "label": "LEGITIMATE",
+      "family": "decoding-order",
+      "summary": "The consumer decoding order matches the named circuit public-input order.",
+      "expected": {
+        "A": {"verdict": "UNKNOWN", "findings": [], "expected_false_alarm": false},
+        "B": {"verdict": "UNKNOWN", "native_signals": []},
+        "C": {"verdict": "VERIFIED_WITHIN_SCOPE", "findings": []}
+      }
+    },
+    {
+      "id": "ADV-V14",
+      "label": "VULNERABLE",
+      "family": "nullifier-chain-scope",
+      "summary": "The nullifier is proof-bound but omits the chain identifier required by policy.",
+      "expected": {
+        "A": {"verdict": "VERIFIED_WITHIN_SCOPE", "findings": [], "expected_false_alarm": false},
+        "B": {"verdict": "UNKNOWN", "native_signals": []},
+        "C": {"verdict": "VIOLATION", "findings": ["C_NULLIFIER_SCOPE_MISSING_CHAIN"]}
+      }
+    },
+    {
+      "id": "ADV-L14",
+      "label": "LEGITIMATE",
+      "family": "nullifier-chain-scope",
+      "summary": "The proof-bound nullifier includes the chain identifier required by policy.",
+      "expected": {
+        "A": {"verdict": "VERIFIED_WITHIN_SCOPE", "findings": [], "expected_false_alarm": false},
+        "B": {"verdict": "UNKNOWN", "native_signals": []},
+        "C": {"verdict": "VERIFIED_WITHIN_SCOPE", "findings": []}
+      }
+    },
+    {
+      "id": "ADV-V15",
+      "label": "VULNERABLE",
+      "family": "nullifier-contract-scope",
+      "summary": "The nullifier is proof-bound but omits the consuming contract required by policy.",
+      "expected": {
+        "A": {"verdict": "VERIFIED_WITHIN_SCOPE", "findings": [], "expected_false_alarm": false},
+        "B": {"verdict": "UNKNOWN", "native_signals": []},
+        "C": {"verdict": "VIOLATION", "findings": ["C_NULLIFIER_SCOPE_MISSING_CONTRACT"]}
+      }
+    },
+    {
+      "id": "ADV-L15",
+      "label": "LEGITIMATE",
+      "family": "nullifier-contract-scope",
+      "summary": "The proof-bound nullifier includes the consuming contract required by policy.",
+      "expected": {
+        "A": {"verdict": "VERIFIED_WITHIN_SCOPE", "findings": [], "expected_false_alarm": false},
+        "B": {"verdict": "UNKNOWN", "native_signals": []},
+        "C": {"verdict": "VERIFIED_WITHIN_SCOPE", "findings": []}
+      }
+    },
+    {
+      "id": "ADV-V16",
+      "label": "VULNERABLE",
+      "family": "commitment-order",
+      "summary": "The same names appear in a commitment, but consumer and circuit preimage order differ.",
+      "expected": {
+        "A": {"verdict": "VIOLATION", "findings": ["A_EFFECT_RECIPIENT_UNBOUND"], "expected_false_alarm": false},
+        "B": {"verdict": "UNKNOWN", "native_signals": []},
+        "C": {"verdict": "VIOLATION", "findings": ["C_COMMITMENT_ENCODING_MISMATCH"]}
+      }
+    },
+    {
+      "id": "ADV-L16",
+      "label": "LEGITIMATE",
+      "family": "commitment-order",
+      "summary": "Consumer and circuit use the same declared commitment preimage order.",
+      "expected": {
+        "A": {"verdict": "VIOLATION", "findings": ["A_EFFECT_RECIPIENT_UNBOUND"], "expected_false_alarm": true},
+        "B": {"verdict": "UNKNOWN", "native_signals": []},
+        "C": {"verdict": "VERIFIED_WITHIN_SCOPE", "findings": []}
+      }
+    },
+    {
+      "id": "ADV-V17",
+      "label": "VULNERABLE",
+      "family": "commitment-fields",
+      "summary": "The public commitment excludes the amount used by the consumer effect.",
+      "expected": {
+        "A": {"verdict": "VIOLATION", "findings": ["A_EFFECT_AMOUNT_UNBOUND"], "expected_false_alarm": false},
+        "B": {"verdict": "UNKNOWN", "native_signals": ["B_UNUSED_AMOUNT_SIGNAL"]},
+        "C": {"verdict": "VIOLATION", "findings": ["C_COMMITMENT_FIELD_MISSING"]}
+      }
+    },
+    {
+      "id": "ADV-L17",
+      "label": "LEGITIMATE",
+      "family": "commitment-fields",
+      "summary": "The public commitment contains the amount used by the consumer effect.",
+      "expected": {
+        "A": {"verdict": "VIOLATION", "findings": ["A_EFFECT_AMOUNT_UNBOUND"], "expected_false_alarm": true},
+        "B": {"verdict": "UNKNOWN", "native_signals": []},
+        "C": {"verdict": "VERIFIED_WITHIN_SCOPE", "findings": []}
+      }
+    },
+    {
+      "id": "ADV-V18",
+      "label": "VULNERABLE",
+      "family": "array-length-signal",
+      "summary": "The consumer array length is not tied to the circuit length signal.",
+      "expected": {
+        "A": {"verdict": "UNKNOWN", "findings": [], "expected_false_alarm": false},
+        "B": {"verdict": "UNKNOWN", "native_signals": ["B_LENGTH_SIGNAL_PRESENT"]},
+        "C": {"verdict": "VIOLATION", "findings": ["C_ARRAY_LENGTH_UNBOUND"]}
+      }
+    },
+    {
+      "id": "ADV-L18",
+      "label": "LEGITIMATE",
+      "family": "array-length-signal",
+      "summary": "A dominating guard equates the consumer array length with the circuit length signal.",
+      "expected": {
+        "A": {"verdict": "UNKNOWN", "findings": [], "expected_false_alarm": false},
+        "B": {"verdict": "UNKNOWN", "native_signals": ["B_LENGTH_SIGNAL_PRESENT"]},
+        "C": {"verdict": "VERIFIED_WITHIN_SCOPE", "findings": []}
+      }
+    },
+    {
+      "id": "ADV-V19",
+      "label": "VULNERABLE",
+      "family": "alias-decoding",
+      "summary": "A consumer alias used in the effect has no equality to its named public value.",
+      "expected": {
+        "A": {"verdict": "VIOLATION", "findings": ["A_EFFECT_ALIAS_UNBOUND"], "expected_false_alarm": false},
+        "B": {"verdict": "UNKNOWN", "native_signals": ["B_PUBLIC_ALIAS_SIGNAL_PRESENT"]},
+        "C": {"verdict": "VIOLATION", "findings": ["C_ALIAS_BINDING_MISSING"]}
+      }
+    },
+    {
+      "id": "ADV-L19",
+      "label": "LEGITIMATE",
+      "family": "alias-decoding",
+      "summary": "A dominating equality ties the consumer alias to its named public value.",
+      "expected": {
+        "A": {"verdict": "VERIFIED_WITHIN_SCOPE", "findings": [], "expected_false_alarm": false},
+        "B": {"verdict": "UNKNOWN", "native_signals": ["B_PUBLIC_ALIAS_SIGNAL_PRESENT"]},
+        "C": {"verdict": "VERIFIED_WITHIN_SCOPE", "findings": []}
+      }
+    },
+    {
+      "id": "ADV-V20",
+      "label": "VULNERABLE",
+      "family": "caller-identity-policy",
+      "summary": "The effect beneficiary is msg.sender although policy requires the proved identity.",
+      "expected": {
+        "A": {"verdict": "VIOLATION", "findings": ["A_CALLER_NOT_PROVED_IDENTITY"], "expected_false_alarm": false},
+        "B": {"verdict": "UNKNOWN", "native_signals": []},
+        "C": {"verdict": "VIOLATION", "findings": ["C_CALLER_POLICY_MISMATCH"]}
+      }
+    },
+    {
+      "id": "ADV-L20",
+      "label": "LEGITIMATE",
+      "family": "caller-identity-policy",
+      "summary": "Policy intentionally permits any caller to receive the effect after proof verification.",
+      "expected": {
+        "A": {"verdict": "VIOLATION", "findings": ["A_CALLER_NOT_PROVED_IDENTITY"], "expected_false_alarm": true},
+        "B": {"verdict": "UNKNOWN", "native_signals": []},
+        "C": {"verdict": "VERIFIED_WITHIN_SCOPE", "findings": []}
+      }
+    },
+    {
+      "id": "ADV-V21",
+      "label": "VULNERABLE",
+      "family": "safe-transfer-record-amount",
+      "summary": "A SafeERC20-style safeTransfer uses a record amount that is separate from the proof public amount.",
+      "expected": {
+        "A": {"verdict": "VIOLATION", "findings": ["A_EFFECT_AMOUNT_UNBOUND"], "expected_false_alarm": false},
+        "B": {"verdict": "UNKNOWN", "native_signals": []},
+        "C": {"verdict": "VIOLATION", "findings": ["C_EFFECT_NOT_PROOF_BOUND"]}
+      }
+    },
+    {
+      "id": "ADV-L21",
+      "label": "LEGITIMATE",
+      "family": "safe-transfer-record-amount",
+      "summary": "A SafeERC20-style safeTransfer uses the amount decoded from the proof public vector.",
+      "expected": {
+        "A": {"verdict": "VERIFIED_WITHIN_SCOPE", "findings": [], "expected_false_alarm": false},
+        "B": {"verdict": "UNKNOWN", "native_signals": []},
+        "C": {"verdict": "VERIFIED_WITHIN_SCOPE", "findings": []}
+      }
+    },
+    {
+      "id": "ADV-V22",
+      "label": "VULNERABLE",
+      "family": "nested-replay-key",
+      "summary": "The final key of a nested replay mapping is a caller nonce absent from the verifier public vector.",
+      "expected": {
+        "A": {"verdict": "VIOLATION", "findings": ["A_REPLAY_KEY_UNBOUND"], "expected_false_alarm": false},
+        "B": {"verdict": "UNKNOWN", "native_signals": []},
+        "C": {"verdict": "VIOLATION", "findings": ["A_REPLAY_KEY_UNBOUND"]}
+      }
+    },
+    {
+      "id": "ADV-L22",
+      "label": "LEGITIMATE",
+      "family": "nested-replay-key",
+      "summary": "The final key of a nested replay mapping is decoded from its guarded verifier public position.",
+      "expected": {
+        "A": {"verdict": "VERIFIED_WITHIN_SCOPE", "findings": [], "expected_false_alarm": false},
+        "B": {"verdict": "UNKNOWN", "native_signals": []},
+        "C": {"verdict": "VERIFIED_WITHIN_SCOPE", "findings": []}
+      }
+    },
+    {
+      "id": "ADV-V23",
+      "label": "VULNERABLE",
+      "family": "erc721-safe-mint-recipient",
+      "summary": "An ERC-721 _safeMint recipient is independent calldata and absent from every verifier public vector.",
+      "expected": {
+        "A": {"verdict": "VIOLATION", "findings": ["A_EFFECT_RECIPIENT_UNBOUND"], "expected_false_alarm": false},
+        "B": {"verdict": "UNKNOWN", "native_signals": []},
+        "C": {"verdict": "VIOLATION", "findings": ["C_EFFECT_NOT_PROOF_BOUND"]}
+      }
+    },
+    {
+      "id": "ADV-L23",
+      "label": "LEGITIMATE",
+      "family": "erc721-safe-mint-recipient",
+      "summary": "An ERC-721 _safeMint recipient is decoded from a verifier public input.",
+      "expected": {
+        "A": {"verdict": "VERIFIED_WITHIN_SCOPE", "findings": [], "expected_false_alarm": false},
+        "B": {"verdict": "UNKNOWN", "native_signals": []},
+        "C": {"verdict": "VERIFIED_WITHIN_SCOPE", "findings": []}
+      }
+    }
+  ]
+}

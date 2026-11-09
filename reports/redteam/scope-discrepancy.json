@@ -1,0 +1,11 @@
+{
+  "case_directory_count": 46,
+  "directories_without_expected_id": [],
+  "expected_count": 46,
+  "expected_ids_without_directory": [],
+  "expected_source": "redteam/adversarial/expected.json",
+  "requested_count": 49,
+  "requested_count_source": "user task message in this session",
+  "schema": "bindcheck-redteam.scope-discrepancy/v1",
+  "unprovided_requested_entries": 3
+}

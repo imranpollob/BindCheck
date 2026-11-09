@@ -1,0 +1,40 @@
+{
+  "commands": [
+    {
+      "argv": [
+        "python3",
+        "-m",
+        "unittest",
+        "tests.test_strong_baseline",
+        "-q"
+      ],
+      "exit_status": 0,
+      "stderr": "----------------------------------------------------------------------\nRan 12 tests in 2.062s\n\nOK\n",
+      "stdout": ""
+    },
+    {
+      "argv": [
+        "python3",
+        "-m",
+        "compileall",
+        "-q",
+        "baselines/strong"
+      ],
+      "exit_status": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit_status": 0,
+      "stderr": "",
+      "stdout": ""
+    }
+  ],
+  "recorded_utc": "2026-11-09T05:59:05.812653+00:00",
+  "schema": "bindcheck-redteam.validation/v1"
+}

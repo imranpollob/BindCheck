@@ -1,0 +1,818 @@
+{
+  "arm": "B",
+  "campaign": "dev",
+  "data_wall_tokens": [
+    "zkemail",
+    "zk-email",
+    "semaphore-protocol",
+    "selfxyz/self",
+    "/maci",
+    "a16z/zkdrops",
+    "tangle-network",
+    "nightfall",
+    "zeto",
+    "veil",
+    "foom"
+  ],
+  "finished_utc": "2026-11-09T05:46:24.180403+00:00",
+  "records": [
+    {
+      "cleanup": null,
+      "commit": "df4bf730214bf9d0c717a9258f7a74861758c269",
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "DEV-F01",
+      "picus_temp_bytes_by_run": [],
+      "repository": "0xbow-io/privacy-pools-core",
+      "result_path": "results/raw/redteam/dev-20261109-final/cases/DEV-F01/B.json",
+      "result_sha256": "958c893d78699673396908f3f92f6f2b6522dd59ec2ae8edb9a53f4f6f9d5579",
+      "run_status": "completed",
+      "verdict": "UNKNOWN"
+    },
+    {
+      "cleanup": null,
+      "commit": "dbab5553c486a09d5e1042e5271e3316224cc176",
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "DEV-F02",
+      "picus_temp_bytes_by_run": [],
+      "repository": "semaphore-protocol/semaphore",
+      "result_path": "results/raw/redteam/dev-20261109-final/cases/DEV-F02/B.json",
+      "result_sha256": "a122909b5985cdb8222b0274651c4e0b9f12403f471799da5dffb07f5ea70723",
+      "run_status": "completed",
+      "verdict": "UNKNOWN"
+    },
+    {
+      "cleanup": null,
+      "commit": "919c433d09aa776a05ca2d89a0074324d6199e91",
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "DEV-F03",
+      "picus_temp_bytes_by_run": [],
+      "repository": "privacy-scaling-explorations/maci",
+      "result_path": "results/raw/redteam/dev-20261109-final/cases/DEV-F03/B.json",
+      "result_sha256": "c4a1b6fad3381e7812c12d5bda859e6299c4be0c4167b14b17835308fa74823c",
+      "run_status": "completed",
+      "verdict": "UNKNOWN"
+    },
+    {
+      "cleanup": null,
+      "commit": "fe3a863f9613e1992ffd218fd1e38ea665866738",
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "DEV-F04",
+      "picus_temp_bytes_by_run": [],
+      "repository": "Unirep/Unirep",
+      "result_path": "results/raw/redteam/dev-20261109-final/cases/DEV-F04/B.json",
+      "result_sha256": "cf8f1968735a37f54da564ba02fd46424218f38d7abf0073c464906b4551d7b3",
+      "run_status": "completed",
+      "verdict": "UNKNOWN"
+    },
+    {
+      "cleanup": null,
+      "commit": "949c677aa086b5ea0d53697936c9a332ebb737fb",
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "DEV-F05",
+      "picus_temp_bytes_by_run": [],
+      "repository": "dfdao/arena",
+      "result_path": "results/raw/redteam/dev-20261109-final/cases/DEV-F05/B.json",
+      "result_sha256": "cc5126abe4a20ac9b30d6be566fe506302eb20a360e97e3cb279733800415c66",
+      "run_status": "completed",
+      "verdict": "UNKNOWN"
+    },
+    {
+      "cleanup": null,
+      "commit": "b750bc45a87bb65dfe0a1a3e0ebb0141b63b1138",
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "DEV-F06",
+      "picus_temp_bytes_by_run": [
+        0,
+        13619200,
+        47005696
+      ],
+      "repository": "nocturne-xyz/protocol",
+      "result_path": "results/raw/redteam/dev-20261109-final/cases/DEV-F06/B.json",
+      "result_sha256": "cc58c34145e53698a39b10ac49d0c45f40c0f31ab5ecfcf84895f30192eef7c2",
+      "run_status": "completed",
+      "verdict": "UNKNOWN"
+    },
+    {
+      "cleanup": null,
+      "commit": "4dad918761cfb1d7d5ed9918dcd796d0cb23ae82",
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "DEV-F07",
+      "picus_temp_bytes_by_run": [],
+      "repository": "anon-aadhaar/anon-aadhaar",
+      "result_path": "results/raw/redteam/dev-20261109-final/cases/DEV-F07/B.json",
+      "result_sha256": "068906bd8050fa7eb6a221f5009bcd91e383893fb7fdd19b19ac96daef34928e",
+      "run_status": "completed",
+      "verdict": "UNKNOWN"
+    },
+    {
+      "cleanup": null,
+      "commit": "fa4274dbca8547963f92364ceacb7f62aecc8fd4",
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "DEV-F08",
+      "picus_temp_bytes_by_run": [],
+      "repository": "zkp2p/zk-p2p",
+      "result_path": "results/raw/redteam/dev-20261109-final/cases/DEV-F08/B.json",
+      "result_sha256": "ce9c07f05ffec11aac1c596ffa76bebe313548ff0a062b1967a6196e6d5487e8",
+      "run_status": "completed",
+      "verdict": "UNKNOWN"
+    },
+    {
+      "cleanup": null,
+      "commit": "4a93d95914296c2f12ade7d815bc304e92977865",
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "DEV-F09",
+      "picus_temp_bytes_by_run": [
+        0
+      ],
+      "repository": "zk-poll/zk-poll",
+      "result_path": "results/raw/redteam/dev-20261109-final/cases/DEV-F09/B.json",
+      "result_sha256": "f49e5a1a160c83e8ca5605037b41b4f31dbbc9430880056726846f5ebfffcb20",
+      "run_status": "completed",
+      "verdict": "UNKNOWN"
+    },
+    {
+      "cleanup": null,
+      "commit": "f4aece4c513161e78d3dd78579687133cfd4f22a",
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "DEV-F10",
+      "picus_temp_bytes_by_run": [
+        0,
+        0,
+        0
+      ],
+      "repository": "0xFableOrg/0xFable",
+      "result_path": "results/raw/redteam/dev-20261109-final/cases/DEV-F10/B.json",
+      "result_sha256": "1883a89e9259f2e4675f1f1e0ac641ffe17a40b723f4fceb1d878bdd1c835eee",
+      "run_status": "completed",
+      "verdict": "UNKNOWN"
+    },
+    {
+      "cleanup": null,
+      "commit": "2e79b4de2afaaf86bd14e3f29014dfe39dee9e87",
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "DEV-F11",
+      "picus_temp_bytes_by_run": [
+        0
+      ],
+      "repository": "NebraZKP/upa",
+      "result_path": "results/raw/redteam/dev-20261109-final/cases/DEV-F11/B.json",
+      "result_sha256": "00ef1887ec1b09af4dd82b6b6dcbc303b2830486c04a448e50e5e23cfa424694",
+      "run_status": "completed",
+      "verdict": "UNKNOWN"
+    },
+    {
+      "cleanup": null,
+      "commit": "6d07155ecf295e6d68936bf424557621d0c66456",
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "DEV-F12",
+      "picus_temp_bytes_by_run": [
+        0
+      ],
+      "repository": "NethermindEth/spsc",
+      "result_path": "results/raw/redteam/dev-20261109-final/cases/DEV-F12/B.json",
+      "result_sha256": "c9dc0503e9cc4ab3c2fa14bbecbc03dd2faaafd5dbeab3a068bfa0077c88ee21",
+      "run_status": "completed",
+      "verdict": "UNKNOWN"
+    },
+    {
+      "cleanup": null,
+      "commit": "5277758874584bc52e88590303aa072bebfd3b56",
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "DEV-F13",
+      "picus_temp_bytes_by_run": [
+        271849872,
+        0,
+        0
+      ],
+      "repository": "weavedb/zkjson",
+      "result_path": "results/raw/redteam/dev-20261109-final/cases/DEV-F13/B.json",
+      "result_sha256": "8be3013c6cf96f174825a5060ef189f6694514d3508b5ab0894c373c7fc24dd7",
+      "run_status": "completed",
+      "verdict": "UNKNOWN"
+    },
+    {
+      "cleanup": null,
+      "commit": "5a5a9f6eb2983ea38fb9475c9cd781514569e166",
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "DEV-F14",
+      "picus_temp_bytes_by_run": [],
+      "repository": "RippnerLabs/meridian-link",
+      "result_path": "results/raw/redteam/dev-20261109-final/cases/DEV-F14/B.json",
+      "result_sha256": "23cd018211a94d71bdab00c342fdbf5ca7bbf8b79d91efd044610e6b2a17bc4f",
+      "run_status": "completed",
+      "verdict": "UNKNOWN"
+    },
+    {
+      "cleanup": null,
+      "commit": "8dc98cd4d63ad3aa6d86b70b8f4bbcd70f1e8be1",
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "DEV-F15",
+      "picus_temp_bytes_by_run": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "repository": "ava-labs/EncryptedERC",
+      "result_path": "results/raw/redteam/dev-20261109-final/cases/DEV-F15/B.json",
+      "result_sha256": "cbceacf1074b8fc45b926c63e8d2bbd89350280f0c0b6dc58ab93cb181aa5cd8",
+      "run_status": "completed",
+      "verdict": "UNKNOWN"
+    },
+    {
+      "cleanup": null,
+      "commit": "fa37b3e7341c9225bdc1ab6a9ba94ee41a876c8d",
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "DEV-F16",
+      "picus_temp_bytes_by_run": [],
+      "repository": "poa-box/POP",
+      "result_path": "results/raw/redteam/dev-20261109-final/cases/DEV-F16/B.json",
+      "result_sha256": "9affcd1392051b9f37d4cee023871bdefc0e8533e356f3f0b38ac44a4fe77d86",
+      "run_status": "completed",
+      "verdict": "UNKNOWN"
+    },
+    {
+      "cleanup": null,
+      "commit": "e307919ba4472fd9493a9ccdbcfe0b537d16e5ad",
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "DEV-F17",
+      "picus_temp_bytes_by_run": [
+        0
+      ],
+      "repository": "zeroauth-dev/ZeroAuth",
+      "result_path": "results/raw/redteam/dev-20261109-final/cases/DEV-F17/B.json",
+      "result_sha256": "0eea49c7066c84d847f359d2aacc418a256323e16de6fff2c148a5bbfa068fc7",
+      "run_status": "completed",
+      "verdict": "UNKNOWN"
+    },
+    {
+      "cleanup": null,
+      "commit": "0b6fc64428a95f0ee35237aaff6aaa9a9d8d7bbd",
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "DEV-F18",
+      "picus_temp_bytes_by_run": [],
+      "repository": "WTCHAI/zkbiown",
+      "result_path": "results/raw/redteam/dev-20261109-final/cases/DEV-F18/B.json",
+      "result_sha256": "38895ee0eda933dd037d41e9b84c1dde408d008be684577102610bc2af342736",
+      "run_status": "completed",
+      "verdict": "UNKNOWN"
+    },
+    {
+      "cleanup": null,
+      "commit": "9d79ae267314d9001e6ac0b9657b4698eaff5190",
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "DEV-F19",
+      "picus_temp_bytes_by_run": [],
+      "repository": "raylsnetwork/uniswap-incubator",
+      "result_path": "results/raw/redteam/dev-20261109-final/cases/DEV-F19/B.json",
+      "result_sha256": "43cd0e8e685a8244244484727a28d0ccf5df25e884129b923828a29e2e0c95d1",
+      "run_status": "completed",
+      "verdict": "UNKNOWN"
+    },
+    {
+      "cleanup": null,
+      "commit": "4cae99814370f73a16ba44186cba7022201becfe",
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "DEV-F20",
+      "picus_temp_bytes_by_run": [],
+      "repository": "raycashxyz/erc-7984-single-tx-unwrap",
+      "result_path": "results/raw/redteam/dev-20261109-final/cases/DEV-F20/B.json",
+      "result_sha256": "e1744de9b5c09d0c8a144815b21db4f537d2970d854fd442f8bbf952b748557a",
+      "run_status": "completed",
+      "verdict": "UNKNOWN"
+    },
+    {
+      "cleanup": null,
+      "commit": "b6c73cb69d7146c8e6cd8d8946ffd7e1a5f907b7",
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "DEV-F21",
+      "picus_temp_bytes_by_run": [
+        26135920,
+        63975712
+      ],
+      "repository": "Chronos-Vault/chronos-vault-security",
+      "result_path": "results/raw/redteam/dev-20261109-final/cases/DEV-F21/B.json",
+      "result_sha256": "b78ad3757f7374a177e9195facaa2030f22a2e1b580673ff59fe3bc69ebf4bef",
+      "run_status": "completed",
+      "verdict": "UNKNOWN"
+    },
+    {
+      "cleanup": null,
+      "commit": "004ae28b73f0e096ca66565db64555188eecfd0a",
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "DEV-F22",
+      "picus_temp_bytes_by_run": [
+        28749512,
+        47981788,
+        0
+      ],
+      "repository": "Chronos-Vault/chronos-vault-contracts",
+      "result_path": "results/raw/redteam/dev-20261109-final/cases/DEV-F22/B.json",
+      "result_sha256": "abc99adc777f0d9288399c9b2818dd403270457a71a8cbd4a2c99b45137ebd03",
+      "run_status": "completed",
+      "verdict": "UNKNOWN"
+    },
+    {
+      "cleanup": null,
+      "commit": "2552c0356d0f4ac71becf2ee64ca0b21f846090b",
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "DEV-F23",
+      "picus_temp_bytes_by_run": [],
+      "repository": "QuantSingularity/Fluxion",
+      "result_path": "results/raw/redteam/dev-20261109-final/cases/DEV-F23/B.json",
+      "result_sha256": "9723003b96dc5b1ff6073e37ae854fdcfbf66e6db102724a4c1d3f98bd504225",
+      "run_status": "completed",
+      "verdict": "UNKNOWN"
+    },
+    {
+      "cleanup": null,
+      "commit": "63dce70b8feac7dbc402ec0367feb32fb59f649a",
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "DEV-F24",
+      "picus_temp_bytes_by_run": [
+        0
+      ],
+      "repository": "ramakrishnanhulk20/Z-Tor",
+      "result_path": "results/raw/redteam/dev-20261109-final/cases/DEV-F24/B.json",
+      "result_sha256": "76e81d9dffd2dbb684e03d4973fcfbf9c676a51600664a3659fb7dd797e23e58",
+      "run_status": "completed",
+      "verdict": "UNKNOWN"
+    },
+    {
+      "cleanup": null,
+      "commit": "ac446670d0c022ab65570ed0d4d6ab2585399934",
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "DEV-F25",
+      "picus_temp_bytes_by_run": [
+        0
+      ],
+      "repository": "Chidubemkingsley/Shadow-Credit-Network",
+      "result_path": "results/raw/redteam/dev-20261109-final/cases/DEV-F25/B.json",
+      "result_sha256": "a86b409b8ad3c874a7ca3bbbd220bd4d01a3e957986933534f2969dffa80de18",
+      "run_status": "completed",
+      "verdict": "UNKNOWN"
+    },
+    {
+      "cleanup": null,
+      "commit": "570f0a6727b61782cdd4dd953c2c467bbdd98f29",
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "DEV-F26",
+      "picus_temp_bytes_by_run": [],
+      "repository": "JunaidCD/Credence",
+      "result_path": "results/raw/redteam/dev-20261109-final/cases/DEV-F26/B.json",
+      "result_sha256": "c5eec71053e5412360efd850829901d560e6bb7db2a7497e4c425445c566dff9",
+      "run_status": "completed",
+      "verdict": "UNKNOWN"
+    },
+    {
+      "cleanup": null,
+      "commit": "ae1e95e99c504018b4f43acd2ca7d1c59b3f116d",
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "DEV-F27",
+      "picus_temp_bytes_by_run": [
+        0
+      ],
+      "repository": "Nitya-003/CropChain",
+      "result_path": "results/raw/redteam/dev-20261109-final/cases/DEV-F27/B.json",
+      "result_sha256": "858ab8548f08b072745c6b7f173f2013e8e77105d09bb5b5139858af9716c225",
+      "run_status": "completed",
+      "verdict": "UNKNOWN"
+    },
+    {
+      "cleanup": null,
+      "commit": "909f813c3f52ba6c18d305bc8e61aeeb658ec849",
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "DEV-F28",
+      "picus_temp_bytes_by_run": [],
+      "repository": "rudrakumar07/zkfinance",
+      "result_path": "results/raw/redteam/dev-20261109-final/cases/DEV-F28/B.json",
+      "result_sha256": "a7890450b23f1a626060d5c0ff5468f38487b2832548efdbe36bd28a323294f2",
+      "run_status": "completed",
+      "verdict": "UNKNOWN"
+    },
+    {
+      "cleanup": null,
+      "commit": "955cc7511f4f5f4044613c886f10ddb62002b4ac",
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "DEV-F29",
+      "picus_temp_bytes_by_run": [],
+      "repository": "Veilpayapp/VEILPAY-APP",
+      "result_path": "results/raw/redteam/dev-20261109-final/cases/DEV-F29/B.json",
+      "result_sha256": "bf6cb3d9c32c0692f703d0ca7651b3c8dd87a21d586cbad138d6c1817674b02f",
+      "run_status": "completed",
+      "verdict": "UNKNOWN"
+    },
+    {
+      "cleanup": null,
+      "commit": "23917814522bac494150c7e99a123aa15a448155",
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "DEV-F30",
+      "picus_temp_bytes_by_run": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "repository": "ethpanda-org/ETHShanghai-2025",
+      "result_path": "results/raw/redteam/dev-20261109-final/cases/DEV-F30/B.json",
+      "result_sha256": "a9a59b099500986385376592b6b9a996965c34726a91babf82abd7ddc7a207b6",
+      "run_status": "completed",
+      "verdict": "UNKNOWN"
+    },
+    {
+      "cleanup": null,
+      "commit": "3957b693b1a7aa42a63be2ccfa734fd40267e415",
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "DEV-F31",
+      "picus_temp_bytes_by_run": [],
+      "repository": "emmaguo13/zk-blind",
+      "result_path": "results/raw/redteam/dev-20261109-final/cases/DEV-F31/B.json",
+      "result_sha256": "fb8b7aba71f8425eb04d66eb832302489e95c6703e29220ad7fc9ef4d3187199",
+      "run_status": "completed",
+      "verdict": "UNKNOWN"
+    },
+    {
+      "cleanup": null,
+      "commit": "e06fe20809685e45bceb7fc1a2ac980ad0e4d0c7",
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "DEV-F32",
+      "picus_temp_bytes_by_run": [],
+      "repository": "a00012025/email2ether",
+      "result_path": "results/raw/redteam/dev-20261109-final/cases/DEV-F32/B.json",
+      "result_sha256": "3be94906394d74db9fd4d263ec06d6922ad9aab2b5933ae52193f0b295820e41",
+      "run_status": "completed",
+      "verdict": "UNKNOWN"
+    },
+    {
+      "cleanup": null,
+      "commit": "183fb3d66df2d8e31faf31ea9a4528aee2750e82",
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "DEV-F33",
+      "picus_temp_bytes_by_run": [],
+      "repository": "social-tw/social-tw-website",
+      "result_path": "results/raw/redteam/dev-20261109-final/cases/DEV-F33/B.json",
+      "result_sha256": "302ab78faaa22610ba45e0905d13efdd5a190caaa263bea287f158691a5f32bd",
+      "run_status": "completed",
+      "verdict": "UNKNOWN"
+    },
+    {
+      "cleanup": null,
+      "commit": "18d3a277ccd82736757a34ad56690a241ae77744",
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "DEV-F34",
+      "picus_temp_bytes_by_run": [
+        0
+      ],
+      "repository": "avitenzer/zk_voting",
+      "result_path": "results/raw/redteam/dev-20261109-final/cases/DEV-F34/B.json",
+      "result_sha256": "74ebaf481984df58e4a04958d35a00af3f1becf885027c80c774f29a91ba50b0",
+      "run_status": "completed",
+      "verdict": "UNKNOWN"
+    },
+    {
+      "cleanup": null,
+      "commit": "c08a9bca6903ece8ebb86090b79d77f6eec56d90",
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "DEV-F35",
+      "picus_temp_bytes_by_run": [],
+      "repository": "sambitsargam/ShadowSats",
+      "result_path": "results/raw/redteam/dev-20261109-final/cases/DEV-F35/B.json",
+      "result_sha256": "4bcdcdd422542eadc09d31ea8d3eb1c9c8b96d3eece2956a07d489e2d04c2388",
+      "run_status": "completed",
+      "verdict": "UNKNOWN"
+    },
+    {
+      "cleanup": null,
+      "commit": "8b1bdf45dccddfbada274bb12f604486f0b28363",
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "DEV-F36",
+      "picus_temp_bytes_by_run": [],
+      "repository": "partik03/aieth",
+      "result_path": "results/raw/redteam/dev-20261109-final/cases/DEV-F36/B.json",
+      "result_sha256": "1f66022980eca50c1251a7736190b303255415c55e98970236a71fd7ab73a3c3",
+      "run_status": "completed",
+      "verdict": "UNKNOWN"
+    },
+    {
+      "cleanup": null,
+      "commit": "387a3da4df53eb4a9904ddd9c78d4025e3ed33f6",
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "DEV-F37",
+      "picus_temp_bytes_by_run": [],
+      "repository": "Mahadev-05/BlockChain",
+      "result_path": "results/raw/redteam/dev-20261109-final/cases/DEV-F37/B.json",
+      "result_sha256": "875800f175227b04abd8847c9a563be6e243517f0166c6b5598ce4a395c8d34b",
+      "run_status": "completed",
+      "verdict": "UNKNOWN"
+    },
+    {
+      "cleanup": null,
+      "commit": "21fd7f6587070404257c1528b114fda8ac15dd4b",
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "DEV-F38",
+      "picus_temp_bytes_by_run": [
+        0
+      ],
+      "repository": "KanishJebaMathewM/Truxify",
+      "result_path": "results/raw/redteam/dev-20261109-final/cases/DEV-F38/B.json",
+      "result_sha256": "7483d73db426fea5cfc5fadbda4d29f64b940c875da127e7f88279baf3244b5f",
+      "run_status": "completed",
+      "verdict": "UNKNOWN"
+    },
+    {
+      "cleanup": null,
+      "commit": "abd54b5c541ac9d26f938a6bdbd78545526249e5",
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "DEV-F39",
+      "picus_temp_bytes_by_run": [
+        0,
+        0,
+        0
+      ],
+      "repository": "Servesh21/RacePass",
+      "result_path": "results/raw/redteam/dev-20261109-final/cases/DEV-F39/B.json",
+      "result_sha256": "20d8035aaad4e71f1f282f8048dca53a44412d75a076c6817dee77aa255129a7",
+      "run_status": "completed",
+      "verdict": "UNKNOWN"
+    },
+    {
+      "cleanup": null,
+      "commit": "cdfa9138eb41505b5097357829120d8857c1a593",
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "DEV-F40",
+      "picus_temp_bytes_by_run": [],
+      "repository": "Blacksaviour/Undertow",
+      "result_path": "results/raw/redteam/dev-20261109-final/cases/DEV-F40/B.json",
+      "result_sha256": "d8c7ce0e5f02a19897efe888556a6a82542d22f76e124be2a1c04092c11e37a8",
+      "run_status": "completed",
+      "verdict": "UNKNOWN"
+    },
+    {
+      "cleanup": null,
+      "commit": "2652bcd4e2e36bfc0d53af2f38edb65a53eff152",
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "DEV-F41",
+      "picus_temp_bytes_by_run": [],
+      "repository": "hollow-leaf/tobi",
+      "result_path": "results/raw/redteam/dev-20261109-final/cases/DEV-F41/B.json",
+      "result_sha256": "cb639a821c5cde9117ff0316cf9213ccc77af93d65be8f89882c996b3af0420b",
+      "run_status": "completed",
+      "verdict": "UNKNOWN"
+    },
+    {
+      "cleanup": null,
+      "commit": "dd59473d55eed29b1605da94c936e6b9dfc057e4",
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "DEV-F42",
+      "picus_temp_bytes_by_run": [
+        0,
+        0
+      ],
+      "repository": "hollow-leaf/easyeigen",
+      "result_path": "results/raw/redteam/dev-20261109-final/cases/DEV-F42/B.json",
+      "result_sha256": "e2d12a861de4187068af2ca095ddca654d88a04acdd9cae4a31ec29cbb562c0e",
+      "run_status": "completed",
+      "verdict": "UNKNOWN"
+    },
+    {
+      "cleanup": null,
+      "commit": "1707b183808d96cad7f67a9229073bfd7bd801d0",
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "DEV-F43",
+      "picus_temp_bytes_by_run": [],
+      "repository": "metacraft-labs/DendrETH",
+      "result_path": "results/raw/redteam/dev-20261109-final/cases/DEV-F43/B.json",
+      "result_sha256": "144594112c02fe2066b9fa2318a26ccc52af279c4a223f54ec2205bdd7448613",
+      "run_status": "completed",
+      "verdict": "UNKNOWN"
+    },
+    {
+      "cleanup": null,
+      "commit": "b6d9c2d6a8c99563411992ae3610ecf2afba1ee5",
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "DEV-F44",
+      "picus_temp_bytes_by_run": [],
+      "repository": "zkemail/proof-of-twitter",
+      "result_path": "results/raw/redteam/dev-20261109-final/cases/DEV-F44/B.json",
+      "result_sha256": "6e90f63596fb255812b35df09178b6088fb86e26fe2031370fdf1544ad6abdb5",
+      "run_status": "completed",
+      "verdict": "UNKNOWN"
+    },
+    {
+      "cleanup": null,
+      "commit": "85c72bd2e523dfbfc22bb13fbe45aae0cfac7843",
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "DEV-F45",
+      "picus_temp_bytes_by_run": [],
+      "repository": "MynaWallet/monorepo",
+      "result_path": "results/raw/redteam/dev-20261109-final/cases/DEV-F45/B.json",
+      "result_sha256": "c0603241e6a4f69426b861b301012541fc567bba5b9fe9fa7ed4ace5be2bee6d",
+      "run_status": "completed",
+      "verdict": "UNKNOWN"
+    },
+    {
+      "cleanup": null,
+      "commit": "c8cf762ccee253d1002acc1150171ddcf1cbacd8",
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "DEV-F46",
+      "picus_temp_bytes_by_run": [],
+      "repository": "Cipher-Protocol/cipher-core",
+      "result_path": "results/raw/redteam/dev-20261109-final/cases/DEV-F46/B.json",
+      "result_sha256": "b8927bcbeba6c71ca0152640dee0b8d1cc59d2df84669b2f6415cdec15075137",
+      "run_status": "completed",
+      "verdict": "UNKNOWN"
+    },
+    {
+      "cleanup": null,
+      "commit": "7863d23366550fb2fdd33f4d85b0f1bab4d18209",
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "DEV-F47",
+      "picus_temp_bytes_by_run": [],
+      "repository": "RayHuang880301/zkUTXO-core",
+      "result_path": "results/raw/redteam/dev-20261109-final/cases/DEV-F47/B.json",
+      "result_sha256": "1e2092eb12bca3f50308252b8d03d298d4abbd3a68166c50700ed71e50287cf3",
+      "run_status": "completed",
+      "verdict": "UNKNOWN"
+    },
+    {
+      "cleanup": null,
+      "commit": "d588661d8e803000c1390a65911c7f0e805ec69d",
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "DEV-F48",
+      "picus_temp_bytes_by_run": [],
+      "repository": "SovereignWave/qwer",
+      "result_path": "results/raw/redteam/dev-20261109-final/cases/DEV-F48/B.json",
+      "result_sha256": "6f18214d7b527bb25593eaf3f6655c868caeba708538d53d4abad773febc2659",
+      "run_status": "completed",
+      "verdict": "UNKNOWN"
+    },
+    {
+      "cleanup": null,
+      "commit": "979468c59d474f1363b9caf065e962ed10901371",
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "DEV-F49",
+      "picus_temp_bytes_by_run": [
+        0,
+        0
+      ],
+      "repository": "KELLERBABG/Planetary-Entropy-Mining",
+      "result_path": "results/raw/redteam/dev-20261109-final/cases/DEV-F49/B.json",
+      "result_sha256": "a2ec585db37e4d8cc36d64e6c40b4f710a4663ae5438418ceb6a79e78803bce6",
+      "run_status": "completed",
+      "verdict": "UNKNOWN"
+    },
+    {
+      "cleanup": null,
+      "commit": "f3e8920d952b0beea9273f0c5902b9707e0948ed",
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "DEV-F50",
+      "picus_temp_bytes_by_run": [
+        0
+      ],
+      "repository": "Lucklyric/tallymesh",
+      "result_path": "results/raw/redteam/dev-20261109-final/cases/DEV-F50/B.json",
+      "result_sha256": "7de932659cacd42ec4edf28f07bfeecbe4879080302cb30c09c373e1861b2f42",
+      "run_status": "completed",
+      "verdict": "UNKNOWN"
+    },
+    {
+      "cleanup": null,
+      "commit": "4002962fb632578dd12477346d2e5c4159ffb2ef",
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "DEV-H01",
+      "picus_temp_bytes_by_run": [
+        0
+      ],
+      "repository": "a16z/zkdrops",
+      "result_path": "results/raw/redteam/dev-20261109-final/cases/DEV-H01/B.json",
+      "result_sha256": "53a1482e3f478fae2dcaedfc3d62c9f9ff6dd1c58b5693e3d2008c9e462eca19",
+      "run_status": "completed",
+      "verdict": "UNKNOWN"
+    },
+    {
+      "cleanup": null,
+      "commit": "f6f58020911cd2a19e1639f0dc93ec9fca2a9e17",
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "DEV-H02",
+      "picus_temp_bytes_by_run": [
+        0
+      ],
+      "repository": "a16z/zkdrops",
+      "result_path": "results/raw/redteam/dev-20261109-final/cases/DEV-H02/B.json",
+      "result_sha256": "644d05eef55997c72133ad0fe5f85241065904751a8e36169a6d539d2c9567d3",
+      "run_status": "completed",
+      "verdict": "UNKNOWN"
+    },
+    {
+      "cleanup": null,
+      "commit": "8d703c124c663537966d6fc35cfec84146e236b2",
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "DEV-H03",
+      "picus_temp_bytes_by_run": [],
+      "repository": "semaphore-protocol/semaphore",
+      "result_path": "results/raw/redteam/dev-20261109-final/cases/DEV-H03/B.json",
+      "result_sha256": "21862affc4d41ceebdb0a1d34d9dfbd1f2c5149cb2e5df959cd44445930504e4",
+      "run_status": "completed",
+      "verdict": "UNKNOWN"
+    },
+    {
+      "cleanup": null,
+      "commit": "3dcf79f6a095397352f71384e3dc6889c640a50f",
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "DEV-H04",
+      "picus_temp_bytes_by_run": [],
+      "repository": "semaphore-protocol/semaphore",
+      "result_path": "results/raw/redteam/dev-20261109-final/cases/DEV-H04/B.json",
+      "result_sha256": "a53756081572f9974321cdd6d118657b2d3804bce6be5ad9197d607eda5b0e2d",
+      "run_status": "completed",
+      "verdict": "UNKNOWN"
+    },
+    {
+      "cleanup": null,
+      "commit": "c4d2c9021b8fb9988816eb6987a734b830bfce15",
+      "fatal_reason": "NO_SUPPORTED_CIRCUIT_INPUT",
+      "finding_codes": [],
+      "id": "DEV-H05",
+      "picus_temp_bytes_by_run": [],
+      "repository": "polybase/payy",
+      "result_path": "results/raw/redteam/dev-20261109-final/cases/DEV-H05/B.json",
+      "result_sha256": "59e98cebb05cbdb7e737eb0467934c58164581d3235be0bc1d82e127c01096d4",
+      "run_status": "UNKNOWN",
+      "verdict": "UNKNOWN"
+    },
+    {
+      "cleanup": null,
+      "commit": "dcd5d96ee15664a59bc24ed0dc2bb78b73ac5e36",
+      "fatal_reason": "NO_SUPPORTED_CIRCUIT_INPUT",
+      "finding_codes": [],
+      "id": "DEV-H06",
+      "picus_temp_bytes_by_run": [],
+      "repository": "polybase/payy",
+      "result_path": "results/raw/redteam/dev-20261109-final/cases/DEV-H06/B.json",
+      "result_sha256": "616603e240581cbc7bc3d4c262b1815b8cb1fd12e9046e00557e19cd7e084c5a",
+      "run_status": "UNKNOWN",
+      "verdict": "UNKNOWN"
+    }
+  ],
+  "row_count": 56,
+  "row_sources": [
+    "dataset/source-corpus-v2.csv:DEV"
+  ],
+  "schema": "bindcheck-redteam.arm-manifest/v1",
+  "started_from_revision": "011042e97de754936ca8a53cfddc2adc6fd7d6aa",
+  "started_utc": "2026-11-09T05:35:25.151945+00:00"
+}

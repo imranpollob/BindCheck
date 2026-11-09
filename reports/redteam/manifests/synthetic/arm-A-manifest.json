@@ -1,0 +1,709 @@
+{
+  "arm": "A",
+  "campaign": "synthetic",
+  "data_wall_tokens": [
+    "zkemail",
+    "zk-email",
+    "semaphore-protocol",
+    "selfxyz/self",
+    "/maci",
+    "a16z/zkdrops",
+    "tangle-network",
+    "nightfall",
+    "zeto",
+    "veil",
+    "foom"
+  ],
+  "finished_utc": "2026-11-09T05:47:53.355868+00:00",
+  "records": [
+    {
+      "cleanup": null,
+      "commit": null,
+      "fatal_reason": null,
+      "finding_codes": [
+        "A_EFFECT_RECIPIENT_UNBOUND",
+        "A_EFFECT_AMOUNT_UNBOUND"
+      ],
+      "id": "ADV-L01",
+      "picus_temp_bytes_by_run": [],
+      "repository": null,
+      "result_path": "results/raw/redteam/synthetic-20261109-foundry/cases/ADV-L01/A.json",
+      "result_sha256": "6a29e3c7e0770207f8ff5c00f16d6d14e07e2cdc3ede03d0f6493e9ab077235e",
+      "run_status": "completed",
+      "verdict": "VIOLATION"
+    },
+    {
+      "cleanup": null,
+      "commit": null,
+      "fatal_reason": null,
+      "finding_codes": [
+        "A_EFFECT_RECIPIENT_UNBOUND",
+        "A_EFFECT_AMOUNT_UNBOUND"
+      ],
+      "id": "ADV-L02",
+      "picus_temp_bytes_by_run": [],
+      "repository": null,
+      "result_path": "results/raw/redteam/synthetic-20261109-foundry/cases/ADV-L02/A.json",
+      "result_sha256": "b7dac71d0171943b189ffb20a1d58a3b647521fee1bd51e6d5d743d4eda3979e",
+      "run_status": "completed",
+      "verdict": "VIOLATION"
+    },
+    {
+      "cleanup": null,
+      "commit": null,
+      "fatal_reason": null,
+      "finding_codes": [
+        "A_CALL_VALUE_UNBOUND"
+      ],
+      "id": "ADV-L03",
+      "picus_temp_bytes_by_run": [],
+      "repository": null,
+      "result_path": "results/raw/redteam/synthetic-20261109-foundry/cases/ADV-L03/A.json",
+      "result_sha256": "30c2f9accc8aaab7d4773bf95f7e5604d0b719ced0cc2336cded1885b3dc60f6",
+      "run_status": "completed",
+      "verdict": "VIOLATION"
+    },
+    {
+      "cleanup": null,
+      "commit": null,
+      "fatal_reason": null,
+      "finding_codes": [
+        "A_EFFECT_IDENTITY_UNBOUND"
+      ],
+      "id": "ADV-L04",
+      "picus_temp_bytes_by_run": [],
+      "repository": null,
+      "result_path": "results/raw/redteam/synthetic-20261109-foundry/cases/ADV-L04/A.json",
+      "result_sha256": "7a29bb9e1034e8ac9855158b35f1cd694cfcecbe316cc11f5d30d022a949b413",
+      "run_status": "completed",
+      "verdict": "VIOLATION"
+    },
+    {
+      "cleanup": null,
+      "commit": null,
+      "fatal_reason": null,
+      "finding_codes": [
+        "A_STATE_WRITE_VALUE_UNBOUND"
+      ],
+      "id": "ADV-L05",
+      "picus_temp_bytes_by_run": [],
+      "repository": null,
+      "result_path": "results/raw/redteam/synthetic-20261109-foundry/cases/ADV-L05/A.json",
+      "result_sha256": "d5d22191c48260784569749efb6c2dfb3a79f616f290d37e0da50d494adc33a3",
+      "run_status": "completed",
+      "verdict": "VIOLATION"
+    },
+    {
+      "cleanup": null,
+      "commit": null,
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "ADV-L06",
+      "picus_temp_bytes_by_run": [],
+      "repository": null,
+      "result_path": "results/raw/redteam/synthetic-20261109-foundry/cases/ADV-L06/A.json",
+      "result_sha256": "76d3c8b14b218f4d8804c6f959b90488ae5af825237fd3da592d9db931f44a27",
+      "run_status": "completed",
+      "verdict": "VERIFIED_WITHIN_SCOPE"
+    },
+    {
+      "cleanup": null,
+      "commit": null,
+      "fatal_reason": null,
+      "finding_codes": [
+        "A_GUARD_AFTER_EFFECT"
+      ],
+      "id": "ADV-L07",
+      "picus_temp_bytes_by_run": [],
+      "repository": null,
+      "result_path": "results/raw/redteam/synthetic-20261109-foundry/cases/ADV-L07/A.json",
+      "result_sha256": "cdbe9f293df3ade15eb913bf9c3fc59aa5c699c964daf0321f887b892b02bcdd",
+      "run_status": "completed",
+      "verdict": "VIOLATION"
+    },
+    {
+      "cleanup": null,
+      "commit": null,
+      "fatal_reason": null,
+      "finding_codes": [
+        "A_REPLAY_KEY_UNBOUND"
+      ],
+      "id": "ADV-L08",
+      "picus_temp_bytes_by_run": [],
+      "repository": null,
+      "result_path": "results/raw/redteam/synthetic-20261109-foundry/cases/ADV-L08/A.json",
+      "result_sha256": "d101a48fb5d66ddd8f879e8f15daf063e00820d36e39a52dd76ba6fd3018d54c",
+      "run_status": "completed",
+      "verdict": "VIOLATION"
+    },
+    {
+      "cleanup": null,
+      "commit": null,
+      "fatal_reason": null,
+      "finding_codes": [
+        "A_REPLAY_POSITION_FIELD_GUARD_MISSING"
+      ],
+      "id": "ADV-L09",
+      "picus_temp_bytes_by_run": [],
+      "repository": null,
+      "result_path": "results/raw/redteam/synthetic-20261109-foundry/cases/ADV-L09/A.json",
+      "result_sha256": "1c3d42a3deab158d1508edf6fec4f7ad2cba8b575829eb91ef7f4e62c6039d7a",
+      "run_status": "completed",
+      "verdict": "VIOLATION"
+    },
+    {
+      "cleanup": null,
+      "commit": null,
+      "fatal_reason": null,
+      "finding_codes": [
+        "A_VERIFIER_ARITY_MISMATCH"
+      ],
+      "id": "ADV-L10",
+      "picus_temp_bytes_by_run": [],
+      "repository": null,
+      "result_path": "results/raw/redteam/synthetic-20261109-foundry/cases/ADV-L10/A.json",
+      "result_sha256": "da6f742d7e08d90751a3ba84c74ad1b4acdcaf7739ec177eb1669fbad5d1dd4b",
+      "run_status": "completed",
+      "verdict": "VIOLATION"
+    },
+    {
+      "cleanup": null,
+      "commit": null,
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "ADV-L11",
+      "picus_temp_bytes_by_run": [],
+      "repository": null,
+      "result_path": "results/raw/redteam/synthetic-20261109-foundry/cases/ADV-L11/A.json",
+      "result_sha256": "4946a38982b74606fb3e2da19f32d4a5c5926f4c4b8aa6adfe14a4b1f5f5fc36",
+      "run_status": "completed",
+      "verdict": "UNKNOWN"
+    },
+    {
+      "cleanup": null,
+      "commit": null,
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "ADV-L12",
+      "picus_temp_bytes_by_run": [],
+      "repository": null,
+      "result_path": "results/raw/redteam/synthetic-20261109-foundry/cases/ADV-L12/A.json",
+      "result_sha256": "270c0447add53b3d86964237e96db2ceec6664dcc4bca63180178ae6d67df4f8",
+      "run_status": "completed",
+      "verdict": "UNKNOWN"
+    },
+    {
+      "cleanup": null,
+      "commit": null,
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "ADV-L13",
+      "picus_temp_bytes_by_run": [],
+      "repository": null,
+      "result_path": "results/raw/redteam/synthetic-20261109-foundry/cases/ADV-L13/A.json",
+      "result_sha256": "9b6e27397f610e7cb9a49d713ceb6ab7f5d9f9dcc90df2a25c73f8fa875b9001",
+      "run_status": "completed",
+      "verdict": "VERIFIED_WITHIN_SCOPE"
+    },
+    {
+      "cleanup": null,
+      "commit": null,
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "ADV-L14",
+      "picus_temp_bytes_by_run": [],
+      "repository": null,
+      "result_path": "results/raw/redteam/synthetic-20261109-foundry/cases/ADV-L14/A.json",
+      "result_sha256": "d87c9dff4694df3d264f3713b4fe2f74ec18df5f1a94ad5a0b6e453f27fb890c",
+      "run_status": "completed",
+      "verdict": "VERIFIED_WITHIN_SCOPE"
+    },
+    {
+      "cleanup": null,
+      "commit": null,
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "ADV-L15",
+      "picus_temp_bytes_by_run": [],
+      "repository": null,
+      "result_path": "results/raw/redteam/synthetic-20261109-foundry/cases/ADV-L15/A.json",
+      "result_sha256": "ccc19a039ddb2400b30007d1794d0193c424fc0819fd5cbb97bca94ff07b5ad2",
+      "run_status": "completed",
+      "verdict": "VERIFIED_WITHIN_SCOPE"
+    },
+    {
+      "cleanup": null,
+      "commit": null,
+      "fatal_reason": null,
+      "finding_codes": [
+        "A_EFFECT_RECIPIENT_UNBOUND",
+        "A_EFFECT_AMOUNT_UNBOUND",
+        "A_EFFECT_AMOUNT_UNBOUND",
+        "A_EFFECT_RECIPIENT_UNBOUND"
+      ],
+      "id": "ADV-L16",
+      "picus_temp_bytes_by_run": [],
+      "repository": null,
+      "result_path": "results/raw/redteam/synthetic-20261109-foundry/cases/ADV-L16/A.json",
+      "result_sha256": "56e26364573b24607bf092c2365ee9133930da56cc0e811178eb22d09c1a49ac",
+      "run_status": "completed",
+      "verdict": "VIOLATION"
+    },
+    {
+      "cleanup": null,
+      "commit": null,
+      "fatal_reason": null,
+      "finding_codes": [
+        "A_EFFECT_RECIPIENT_UNBOUND",
+        "A_EFFECT_AMOUNT_UNBOUND",
+        "A_EFFECT_AMOUNT_UNBOUND",
+        "A_EFFECT_RECIPIENT_UNBOUND"
+      ],
+      "id": "ADV-L17",
+      "picus_temp_bytes_by_run": [],
+      "repository": null,
+      "result_path": "results/raw/redteam/synthetic-20261109-foundry/cases/ADV-L17/A.json",
+      "result_sha256": "1cb87c7ca88997ba5e9b292a024197e13a0e48f282de40d9461b4990c7511e5d",
+      "run_status": "completed",
+      "verdict": "VIOLATION"
+    },
+    {
+      "cleanup": null,
+      "commit": null,
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "ADV-L18",
+      "picus_temp_bytes_by_run": [],
+      "repository": null,
+      "result_path": "results/raw/redteam/synthetic-20261109-foundry/cases/ADV-L18/A.json",
+      "result_sha256": "d51936eaf3fffdae56aab4c56e3780844ae92d2017d060aaa830e288d6a5718b",
+      "run_status": "completed",
+      "verdict": "UNKNOWN"
+    },
+    {
+      "cleanup": null,
+      "commit": null,
+      "fatal_reason": null,
+      "finding_codes": [
+        "A_EFFECT_RECIPIENT_UNBOUND"
+      ],
+      "id": "ADV-L19",
+      "picus_temp_bytes_by_run": [],
+      "repository": null,
+      "result_path": "results/raw/redteam/synthetic-20261109-foundry/cases/ADV-L19/A.json",
+      "result_sha256": "735e241a3bb8b540e3e0e858486bea3efd79f3088ce43be8a121d2f699c9b0cb",
+      "run_status": "completed",
+      "verdict": "VIOLATION"
+    },
+    {
+      "cleanup": null,
+      "commit": null,
+      "fatal_reason": null,
+      "finding_codes": [
+        "A_CALLER_NOT_PROVED_IDENTITY"
+      ],
+      "id": "ADV-L20",
+      "picus_temp_bytes_by_run": [],
+      "repository": null,
+      "result_path": "results/raw/redteam/synthetic-20261109-foundry/cases/ADV-L20/A.json",
+      "result_sha256": "41143dc04448d2f7fc067555439c2927e217126af8f60374f930b126bfc9899a",
+      "run_status": "completed",
+      "verdict": "VIOLATION"
+    },
+    {
+      "cleanup": null,
+      "commit": null,
+      "fatal_reason": null,
+      "finding_codes": [
+        "A_EFFECT_AMOUNT_UNBOUND"
+      ],
+      "id": "ADV-L21",
+      "picus_temp_bytes_by_run": [],
+      "repository": null,
+      "result_path": "results/raw/redteam/synthetic-20261109-foundry/cases/ADV-L21/A.json",
+      "result_sha256": "8ee28b6486e52589fb33099547cdc0ff4accc4a13b6804f90d77498d2b83eaad",
+      "run_status": "completed",
+      "verdict": "VIOLATION"
+    },
+    {
+      "cleanup": null,
+      "commit": null,
+      "fatal_reason": null,
+      "finding_codes": [
+        "A_REPLAY_KEY_UNBOUND"
+      ],
+      "id": "ADV-L22",
+      "picus_temp_bytes_by_run": [],
+      "repository": null,
+      "result_path": "results/raw/redteam/synthetic-20261109-foundry/cases/ADV-L22/A.json",
+      "result_sha256": "071e51e579dbdc0212746d707ad37abf04e2385021e919fd766bc1fd637c8ea2",
+      "run_status": "completed",
+      "verdict": "VIOLATION"
+    },
+    {
+      "cleanup": null,
+      "commit": null,
+      "fatal_reason": null,
+      "finding_codes": [
+        "A_EFFECT_RECIPIENT_UNBOUND"
+      ],
+      "id": "ADV-L23",
+      "picus_temp_bytes_by_run": [],
+      "repository": null,
+      "result_path": "results/raw/redteam/synthetic-20261109-foundry/cases/ADV-L23/A.json",
+      "result_sha256": "0e90e22fa80950f01d06b1b24d0894551bdda81609fdad17f5a05ce709e88181",
+      "run_status": "completed",
+      "verdict": "VIOLATION"
+    },
+    {
+      "cleanup": null,
+      "commit": null,
+      "fatal_reason": null,
+      "finding_codes": [
+        "A_EFFECT_RECIPIENT_UNBOUND",
+        "A_EFFECT_AMOUNT_UNBOUND",
+        "A_FOUNDRY_POLICY_COUNTEREXAMPLE"
+      ],
+      "id": "ADV-V01",
+      "picus_temp_bytes_by_run": [],
+      "repository": null,
+      "result_path": "results/raw/redteam/synthetic-20261109-foundry/cases/ADV-V01/A.json",
+      "result_sha256": "00927b91c87576e817082953e5fb27c49382ddbfb79872987fe4e26985288164",
+      "run_status": "completed",
+      "verdict": "VIOLATION"
+    },
+    {
+      "cleanup": null,
+      "commit": null,
+      "fatal_reason": null,
+      "finding_codes": [
+        "A_EFFECT_AMOUNT_UNBOUND",
+        "A_EFFECT_RECIPIENT_UNBOUND"
+      ],
+      "id": "ADV-V02",
+      "picus_temp_bytes_by_run": [],
+      "repository": null,
+      "result_path": "results/raw/redteam/synthetic-20261109-foundry/cases/ADV-V02/A.json",
+      "result_sha256": "dba843d3894eb8f75e5992d72876603f7b6751d24b339c6d83033a64d52589f5",
+      "run_status": "completed",
+      "verdict": "VIOLATION"
+    },
+    {
+      "cleanup": null,
+      "commit": null,
+      "fatal_reason": null,
+      "finding_codes": [
+        "A_CALL_VALUE_UNBOUND"
+      ],
+      "id": "ADV-V03",
+      "picus_temp_bytes_by_run": [],
+      "repository": null,
+      "result_path": "results/raw/redteam/synthetic-20261109-foundry/cases/ADV-V03/A.json",
+      "result_sha256": "8fb150663cca6fc4c3e034410427321f489e46dca2cd460eb221d7dff4c25a55",
+      "run_status": "completed",
+      "verdict": "VIOLATION"
+    },
+    {
+      "cleanup": null,
+      "commit": null,
+      "fatal_reason": null,
+      "finding_codes": [
+        "A_EFFECT_IDENTITY_UNBOUND"
+      ],
+      "id": "ADV-V04",
+      "picus_temp_bytes_by_run": [],
+      "repository": null,
+      "result_path": "results/raw/redteam/synthetic-20261109-foundry/cases/ADV-V04/A.json",
+      "result_sha256": "22310e865896452767c8f37c1d4b4ed8b9ce4b04b1d8a069a798445e2da71adc",
+      "run_status": "completed",
+      "verdict": "VIOLATION"
+    },
+    {
+      "cleanup": null,
+      "commit": null,
+      "fatal_reason": null,
+      "finding_codes": [
+        "A_STATE_WRITE_VALUE_UNBOUND"
+      ],
+      "id": "ADV-V05",
+      "picus_temp_bytes_by_run": [],
+      "repository": null,
+      "result_path": "results/raw/redteam/synthetic-20261109-foundry/cases/ADV-V05/A.json",
+      "result_sha256": "41fcd8a85582d2c43e552b4a3b857c4d16c101264ba7728030c62132dccefb6a",
+      "run_status": "completed",
+      "verdict": "VIOLATION"
+    },
+    {
+      "cleanup": null,
+      "commit": null,
+      "fatal_reason": null,
+      "finding_codes": [
+        "A_GUARD_NOT_DOMINATING",
+        "A_FOUNDRY_POLICY_COUNTEREXAMPLE"
+      ],
+      "id": "ADV-V06",
+      "picus_temp_bytes_by_run": [],
+      "repository": null,
+      "result_path": "results/raw/redteam/synthetic-20261109-foundry/cases/ADV-V06/A.json",
+      "result_sha256": "36b38f0b6191efd38185857a65a3a1cfe05c6cc76db882607ef754a11f600c95",
+      "run_status": "completed",
+      "verdict": "VIOLATION"
+    },
+    {
+      "cleanup": null,
+      "commit": null,
+      "fatal_reason": null,
+      "finding_codes": [
+        "A_GUARD_AFTER_EFFECT"
+      ],
+      "id": "ADV-V07",
+      "picus_temp_bytes_by_run": [],
+      "repository": null,
+      "result_path": "results/raw/redteam/synthetic-20261109-foundry/cases/ADV-V07/A.json",
+      "result_sha256": "2ec8993c787ff0ecb101694daa1d473192d1ae525316c78897430f202805b9cc",
+      "run_status": "completed",
+      "verdict": "VIOLATION"
+    },
+    {
+      "cleanup": null,
+      "commit": null,
+      "fatal_reason": null,
+      "finding_codes": [
+        "A_REPLAY_KEY_UNBOUND"
+      ],
+      "id": "ADV-V08",
+      "picus_temp_bytes_by_run": [],
+      "repository": null,
+      "result_path": "results/raw/redteam/synthetic-20261109-foundry/cases/ADV-V08/A.json",
+      "result_sha256": "80b2690d61aefe7784bb369286ec1d76085a1aa85bba1f3df085e33c243c2558",
+      "run_status": "completed",
+      "verdict": "VIOLATION"
+    },
+    {
+      "cleanup": null,
+      "commit": null,
+      "fatal_reason": null,
+      "finding_codes": [
+        "A_REPLAY_POSITION_FIELD_GUARD_MISSING"
+      ],
+      "id": "ADV-V09",
+      "picus_temp_bytes_by_run": [],
+      "repository": null,
+      "result_path": "results/raw/redteam/synthetic-20261109-foundry/cases/ADV-V09/A.json",
+      "result_sha256": "07cff5d3c1869ee6327bb378944aacd60d5c6d2072f9f2c12efb24e3174fddd5",
+      "run_status": "completed",
+      "verdict": "VIOLATION"
+    },
+    {
+      "cleanup": null,
+      "commit": null,
+      "fatal_reason": null,
+      "finding_codes": [
+        "A_VERIFIER_ARITY_MISMATCH"
+      ],
+      "id": "ADV-V10",
+      "picus_temp_bytes_by_run": [],
+      "repository": null,
+      "result_path": "results/raw/redteam/synthetic-20261109-foundry/cases/ADV-V10/A.json",
+      "result_sha256": "56cc8f500344b558737e79c93377a4a043b4331be1aecc420f876c2f79cc9dab",
+      "run_status": "completed",
+      "verdict": "VIOLATION"
+    },
+    {
+      "cleanup": null,
+      "commit": null,
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "ADV-V11",
+      "picus_temp_bytes_by_run": [],
+      "repository": null,
+      "result_path": "results/raw/redteam/synthetic-20261109-foundry/cases/ADV-V11/A.json",
+      "result_sha256": "7515dfe897df765086eb6ca09ea04c7ae7f8eabbc1f2f8d949cf3a7a8aca4175",
+      "run_status": "completed",
+      "verdict": "UNKNOWN"
+    },
+    {
+      "cleanup": null,
+      "commit": null,
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "ADV-V12",
+      "picus_temp_bytes_by_run": [],
+      "repository": null,
+      "result_path": "results/raw/redteam/synthetic-20261109-foundry/cases/ADV-V12/A.json",
+      "result_sha256": "3f03fda68aba0a31796ba2e7f28435af32f581a1934a01688b7802125d0e435a",
+      "run_status": "completed",
+      "verdict": "UNKNOWN"
+    },
+    {
+      "cleanup": null,
+      "commit": null,
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "ADV-V13",
+      "picus_temp_bytes_by_run": [],
+      "repository": null,
+      "result_path": "results/raw/redteam/synthetic-20261109-foundry/cases/ADV-V13/A.json",
+      "result_sha256": "b6d4d11d05c49993801cc3f27f93d4ca4dff467de5a636eeca00d605faf686f2",
+      "run_status": "completed",
+      "verdict": "VERIFIED_WITHIN_SCOPE"
+    },
+    {
+      "cleanup": null,
+      "commit": null,
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "ADV-V14",
+      "picus_temp_bytes_by_run": [],
+      "repository": null,
+      "result_path": "results/raw/redteam/synthetic-20261109-foundry/cases/ADV-V14/A.json",
+      "result_sha256": "be0d91e23a9dd5bb653c61318fa30fe2a7e3c3f53a5e3510f064e4ae245abb58",
+      "run_status": "completed",
+      "verdict": "VERIFIED_WITHIN_SCOPE"
+    },
+    {
+      "cleanup": null,
+      "commit": null,
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "ADV-V15",
+      "picus_temp_bytes_by_run": [],
+      "repository": null,
+      "result_path": "results/raw/redteam/synthetic-20261109-foundry/cases/ADV-V15/A.json",
+      "result_sha256": "57fd8fb145c5f2d4fd9710e4330618372890878e27f7d7b4f55b62eca523dfe6",
+      "run_status": "completed",
+      "verdict": "VERIFIED_WITHIN_SCOPE"
+    },
+    {
+      "cleanup": null,
+      "commit": null,
+      "fatal_reason": null,
+      "finding_codes": [
+        "A_EFFECT_RECIPIENT_UNBOUND",
+        "A_EFFECT_AMOUNT_UNBOUND"
+      ],
+      "id": "ADV-V16",
+      "picus_temp_bytes_by_run": [],
+      "repository": null,
+      "result_path": "results/raw/redteam/synthetic-20261109-foundry/cases/ADV-V16/A.json",
+      "result_sha256": "32c30752aba278856ae86ed6528879c4ea69f93fa3a5faa7e593963b26abeb8d",
+      "run_status": "completed",
+      "verdict": "VIOLATION"
+    },
+    {
+      "cleanup": null,
+      "commit": null,
+      "fatal_reason": null,
+      "finding_codes": [
+        "A_EFFECT_RECIPIENT_UNBOUND",
+        "A_EFFECT_AMOUNT_UNBOUND"
+      ],
+      "id": "ADV-V17",
+      "picus_temp_bytes_by_run": [],
+      "repository": null,
+      "result_path": "results/raw/redteam/synthetic-20261109-foundry/cases/ADV-V17/A.json",
+      "result_sha256": "26e1a101e1ffc734ddaa1717d3475631d97b75b68b70031e6a84ca4cf048fbc2",
+      "run_status": "completed",
+      "verdict": "VIOLATION"
+    },
+    {
+      "cleanup": null,
+      "commit": null,
+      "fatal_reason": null,
+      "finding_codes": [],
+      "id": "ADV-V18",
+      "picus_temp_bytes_by_run": [],
+      "repository": null,
+      "result_path": "results/raw/redteam/synthetic-20261109-foundry/cases/ADV-V18/A.json",
+      "result_sha256": "ee145e923890cfffe0788ff41503daa4bb5841e72bcbf1e3931211fcfd2264fd",
+      "run_status": "completed",
+      "verdict": "UNKNOWN"
+    },
+    {
+      "cleanup": null,
+      "commit": null,
+      "fatal_reason": null,
+      "finding_codes": [
+        "A_EFFECT_RECIPIENT_UNBOUND",
+        "A_FOUNDRY_POLICY_COUNTEREXAMPLE"
+      ],
+      "id": "ADV-V19",
+      "picus_temp_bytes_by_run": [],
+      "repository": null,
+      "result_path": "results/raw/redteam/synthetic-20261109-foundry/cases/ADV-V19/A.json",
+      "result_sha256": "51cfaa286cf8fb099dfa39fc499f1c128b217b33cc6b4592967e706b2a614ad4",
+      "run_status": "completed",
+      "verdict": "VIOLATION"
+    },
+    {
+      "cleanup": null,
+      "commit": null,
+      "fatal_reason": null,
+      "finding_codes": [
+        "A_CALLER_NOT_PROVED_IDENTITY",
+        "A_CALLER_NOT_PROVED_IDENTITY",
+        "A_FOUNDRY_POLICY_COUNTEREXAMPLE"
+      ],
+      "id": "ADV-V20",
+      "picus_temp_bytes_by_run": [],
+      "repository": null,
+      "result_path": "results/raw/redteam/synthetic-20261109-foundry/cases/ADV-V20/A.json",
+      "result_sha256": "860edd52eee096f72fa4613fb90cd24d04a0e07e90f599d773649107699a49a0",
+      "run_status": "completed",
+      "verdict": "VIOLATION"
+    },
+    {
+      "cleanup": null,
+      "commit": null,
+      "fatal_reason": null,
+      "finding_codes": [
+        "A_EFFECT_AMOUNT_UNBOUND"
+      ],
+      "id": "ADV-V21",
+      "picus_temp_bytes_by_run": [],
+      "repository": null,
+      "result_path": "results/raw/redteam/synthetic-20261109-foundry/cases/ADV-V21/A.json",
+      "result_sha256": "da854d6d17f92cf38a25ea63e54757aa98533e99f6d6f43aebe99a37308e9c48",
+      "run_status": "completed",
+      "verdict": "VIOLATION"
+    },
+    {
+      "cleanup": null,
+      "commit": null,
+      "fatal_reason": null,
+      "finding_codes": [
+        "A_REPLAY_KEY_UNBOUND"
+      ],
+      "id": "ADV-V22",
+      "picus_temp_bytes_by_run": [],
+      "repository": null,
+      "result_path": "results/raw/redteam/synthetic-20261109-foundry/cases/ADV-V22/A.json",
+      "result_sha256": "d228a4865ce498446e2e5bb2c389c2c314783000b69637d51aee25005ae161cc",
+      "run_status": "completed",
+      "verdict": "VIOLATION"
+    },
+    {
+      "cleanup": null,
+      "commit": null,
+      "fatal_reason": null,
+      "finding_codes": [
+        "A_EFFECT_RECIPIENT_UNBOUND",
+        "A_FOUNDRY_POLICY_COUNTEREXAMPLE"
+      ],
+      "id": "ADV-V23",
+      "picus_temp_bytes_by_run": [],
+      "repository": null,
+      "result_path": "results/raw/redteam/synthetic-20261109-foundry/cases/ADV-V23/A.json",
+      "result_sha256": "8fd16feeb7bfd47e5294455e78c3861357d49d31972721eb9882804000fb34a8",
+      "run_status": "completed",
+      "verdict": "VIOLATION"
+    }
+  ],
+  "row_count": 46,
+  "row_sources": [
+    "redteam/adversarial/expected.json"
+  ],
+  "schema": "bindcheck-redteam.arm-manifest/v1",
+  "started_from_revision": "011042e97de754936ca8a53cfddc2adc6fd7d6aa",
+  "started_utc": "2026-11-09T05:46:42.811443+00:00"
+}

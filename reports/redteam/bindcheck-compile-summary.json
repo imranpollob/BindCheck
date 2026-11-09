@@ -1,0 +1,562 @@
+{
+  "all_circuit_builds_exit_zero": true,
+  "build_kinds": {
+    "compile": 46
+  },
+  "row_count": 46,
+  "rows": [
+    {
+      "circuit_builds": [
+        {
+          "exit_status": 0,
+          "kind": "compile",
+          "timed_out": false
+        }
+      ],
+      "id": "ADV-L01",
+      "run_status": "completed",
+      "source": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L01/result.json"
+    },
+    {
+      "circuit_builds": [
+        {
+          "exit_status": 0,
+          "kind": "compile",
+          "timed_out": false
+        }
+      ],
+      "id": "ADV-L02",
+      "run_status": "completed",
+      "source": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L02/result.json"
+    },
+    {
+      "circuit_builds": [
+        {
+          "exit_status": 0,
+          "kind": "compile",
+          "timed_out": false
+        }
+      ],
+      "id": "ADV-L03",
+      "run_status": "completed",
+      "source": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L03/result.json"
+    },
+    {
+      "circuit_builds": [
+        {
+          "exit_status": 0,
+          "kind": "compile",
+          "timed_out": false
+        }
+      ],
+      "id": "ADV-L04",
+      "run_status": "completed",
+      "source": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L04/result.json"
+    },
+    {
+      "circuit_builds": [
+        {
+          "exit_status": 0,
+          "kind": "compile",
+          "timed_out": false
+        }
+      ],
+      "id": "ADV-L05",
+      "run_status": "completed",
+      "source": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L05/result.json"
+    },
+    {
+      "circuit_builds": [
+        {
+          "exit_status": 0,
+          "kind": "compile",
+          "timed_out": false
+        }
+      ],
+      "id": "ADV-L06",
+      "run_status": "completed",
+      "source": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L06/result.json"
+    },
+    {
+      "circuit_builds": [
+        {
+          "exit_status": 0,
+          "kind": "compile",
+          "timed_out": false
+        }
+      ],
+      "id": "ADV-L07",
+      "run_status": "completed",
+      "source": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L07/result.json"
+    },
+    {
+      "circuit_builds": [
+        {
+          "exit_status": 0,
+          "kind": "compile",
+          "timed_out": false
+        }
+      ],
+      "id": "ADV-L08",
+      "run_status": "completed",
+      "source": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L08/result.json"
+    },
+    {
+      "circuit_builds": [
+        {
+          "exit_status": 0,
+          "kind": "compile",
+          "timed_out": false
+        }
+      ],
+      "id": "ADV-L09",
+      "run_status": "completed",
+      "source": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L09/result.json"
+    },
+    {
+      "circuit_builds": [
+        {
+          "exit_status": 0,
+          "kind": "compile",
+          "timed_out": false
+        }
+      ],
+      "id": "ADV-L10",
+      "run_status": "completed",
+      "source": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L10/result.json"
+    },
+    {
+      "circuit_builds": [
+        {
+          "exit_status": 0,
+          "kind": "compile",
+          "timed_out": false
+        }
+      ],
+      "id": "ADV-L11",
+      "run_status": "completed",
+      "source": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L11/result.json"
+    },
+    {
+      "circuit_builds": [
+        {
+          "exit_status": 0,
+          "kind": "compile",
+          "timed_out": false
+        }
+      ],
+      "id": "ADV-L12",
+      "run_status": "completed",
+      "source": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L12/result.json"
+    },
+    {
+      "circuit_builds": [
+        {
+          "exit_status": 0,
+          "kind": "compile",
+          "timed_out": false
+        }
+      ],
+      "id": "ADV-L13",
+      "run_status": "completed",
+      "source": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L13/result.json"
+    },
+    {
+      "circuit_builds": [
+        {
+          "exit_status": 0,
+          "kind": "compile",
+          "timed_out": false
+        }
+      ],
+      "id": "ADV-L14",
+      "run_status": "completed",
+      "source": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L14/result.json"
+    },
+    {
+      "circuit_builds": [
+        {
+          "exit_status": 0,
+          "kind": "compile",
+          "timed_out": false
+        }
+      ],
+      "id": "ADV-L15",
+      "run_status": "completed",
+      "source": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L15/result.json"
+    },
+    {
+      "circuit_builds": [
+        {
+          "exit_status": 0,
+          "kind": "compile",
+          "timed_out": false
+        }
+      ],
+      "id": "ADV-L16",
+      "run_status": "completed",
+      "source": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L16/result.json"
+    },
+    {
+      "circuit_builds": [
+        {
+          "exit_status": 0,
+          "kind": "compile",
+          "timed_out": false
+        }
+      ],
+      "id": "ADV-L17",
+      "run_status": "completed",
+      "source": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L17/result.json"
+    },
+    {
+      "circuit_builds": [
+        {
+          "exit_status": 0,
+          "kind": "compile",
+          "timed_out": false
+        }
+      ],
+      "id": "ADV-L18",
+      "run_status": "completed",
+      "source": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L18/result.json"
+    },
+    {
+      "circuit_builds": [
+        {
+          "exit_status": 0,
+          "kind": "compile",
+          "timed_out": false
+        }
+      ],
+      "id": "ADV-L19",
+      "run_status": "completed",
+      "source": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L19/result.json"
+    },
+    {
+      "circuit_builds": [
+        {
+          "exit_status": 0,
+          "kind": "compile",
+          "timed_out": false
+        }
+      ],
+      "id": "ADV-L20",
+      "run_status": "completed",
+      "source": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L20/result.json"
+    },
+    {
+      "circuit_builds": [
+        {
+          "exit_status": 0,
+          "kind": "compile",
+          "timed_out": false
+        }
+      ],
+      "id": "ADV-L21",
+      "run_status": "completed",
+      "source": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L21/result.json"
+    },
+    {
+      "circuit_builds": [
+        {
+          "exit_status": 0,
+          "kind": "compile",
+          "timed_out": false
+        }
+      ],
+      "id": "ADV-L22",
+      "run_status": "completed",
+      "source": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L22/result.json"
+    },
+    {
+      "circuit_builds": [
+        {
+          "exit_status": 0,
+          "kind": "compile",
+          "timed_out": false
+        }
+      ],
+      "id": "ADV-L23",
+      "run_status": "completed",
+      "source": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-L23/result.json"
+    },
+    {
+      "circuit_builds": [
+        {
+          "exit_status": 0,
+          "kind": "compile",
+          "timed_out": false
+        }
+      ],
+      "id": "ADV-V01",
+      "run_status": "completed",
+      "source": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V01/result.json"
+    },
+    {
+      "circuit_builds": [
+        {
+          "exit_status": 0,
+          "kind": "compile",
+          "timed_out": false
+        }
+      ],
+      "id": "ADV-V02",
+      "run_status": "completed",
+      "source": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V02/result.json"
+    },
+    {
+      "circuit_builds": [
+        {
+          "exit_status": 0,
+          "kind": "compile",
+          "timed_out": false
+        }
+      ],
+      "id": "ADV-V03",
+      "run_status": "completed",
+      "source": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V03/result.json"
+    },
+    {
+      "circuit_builds": [
+        {
+          "exit_status": 0,
+          "kind": "compile",
+          "timed_out": false
+        }
+      ],
+      "id": "ADV-V04",
+      "run_status": "completed",
+      "source": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V04/result.json"
+    },
+    {
+      "circuit_builds": [
+        {
+          "exit_status": 0,
+          "kind": "compile",
+          "timed_out": false
+        }
+      ],
+      "id": "ADV-V05",
+      "run_status": "completed",
+      "source": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V05/result.json"
+    },
+    {
+      "circuit_builds": [
+        {
+          "exit_status": 0,
+          "kind": "compile",
+          "timed_out": false
+        }
+      ],
+      "id": "ADV-V06",
+      "run_status": "completed",
+      "source": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V06/result.json"
+    },
+    {
+      "circuit_builds": [
+        {
+          "exit_status": 0,
+          "kind": "compile",
+          "timed_out": false
+        }
+      ],
+      "id": "ADV-V07",
+      "run_status": "completed",
+      "source": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V07/result.json"
+    },
+    {
+      "circuit_builds": [
+        {
+          "exit_status": 0,
+          "kind": "compile",
+          "timed_out": false
+        }
+      ],
+      "id": "ADV-V08",
+      "run_status": "completed",
+      "source": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V08/result.json"
+    },
+    {
+      "circuit_builds": [
+        {
+          "exit_status": 0,
+          "kind": "compile",
+          "timed_out": false
+        }
+      ],
+      "id": "ADV-V09",
+      "run_status": "completed",
+      "source": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V09/result.json"
+    },
+    {
+      "circuit_builds": [
+        {
+          "exit_status": 0,
+          "kind": "compile",
+          "timed_out": false
+        }
+      ],
+      "id": "ADV-V10",
+      "run_status": "completed",
+      "source": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V10/result.json"
+    },
+    {
+      "circuit_builds": [
+        {
+          "exit_status": 0,
+          "kind": "compile",
+          "timed_out": false
+        }
+      ],
+      "id": "ADV-V11",
+      "run_status": "completed",
+      "source": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V11/result.json"
+    },
+    {
+      "circuit_builds": [
+        {
+          "exit_status": 0,
+          "kind": "compile",
+          "timed_out": false
+        }
+      ],
+      "id": "ADV-V12",
+      "run_status": "completed",
+      "source": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V12/result.json"
+    },
+    {
+      "circuit_builds": [
+        {
+          "exit_status": 0,
+          "kind": "compile",
+          "timed_out": false
+        }
+      ],
+      "id": "ADV-V13",
+      "run_status": "completed",
+      "source": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V13/result.json"
+    },
+    {
+      "circuit_builds": [
+        {
+          "exit_status": 0,
+          "kind": "compile",
+          "timed_out": false
+        }
+      ],
+      "id": "ADV-V14",
+      "run_status": "completed",
+      "source": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V14/result.json"
+    },
+    {
+      "circuit_builds": [
+        {
+          "exit_status": 0,
+          "kind": "compile",
+          "timed_out": false
+        }
+      ],
+      "id": "ADV-V15",
+      "run_status": "completed",
+      "source": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V15/result.json"
+    },
+    {
+      "circuit_builds": [
+        {
+          "exit_status": 0,
+          "kind": "compile",
+          "timed_out": false
+        }
+      ],
+      "id": "ADV-V16",
+      "run_status": "completed",
+      "source": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V16/result.json"
+    },
+    {
+      "circuit_builds": [
+        {
+          "exit_status": 0,
+          "kind": "compile",
+          "timed_out": false
+        }
+      ],
+      "id": "ADV-V17",
+      "run_status": "completed",
+      "source": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V17/result.json"
+    },
+    {
+      "circuit_builds": [
+        {
+          "exit_status": 0,
+          "kind": "compile",
+          "timed_out": false
+        }
+      ],
+      "id": "ADV-V18",
+      "run_status": "completed",
+      "source": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V18/result.json"
+    },
+    {
+      "circuit_builds": [
+        {
+          "exit_status": 0,
+          "kind": "compile",
+          "timed_out": false
+        }
+      ],
+      "id": "ADV-V19",
+      "run_status": "completed",
+      "source": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V19/result.json"
+    },
+    {
+      "circuit_builds": [
+        {
+          "exit_status": 0,
+          "kind": "compile",
+          "timed_out": false
+        }
+      ],
+      "id": "ADV-V20",
+      "run_status": "completed",
+      "source": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V20/result.json"
+    },
+    {
+      "circuit_builds": [
+        {
+          "exit_status": 0,
+          "kind": "compile",
+          "timed_out": false
+        }
+      ],
+      "id": "ADV-V21",
+      "run_status": "completed",
+      "source": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V21/result.json"
+    },
+    {
+      "circuit_builds": [
+        {
+          "exit_status": 0,
+          "kind": "compile",
+          "timed_out": false
+        }
+      ],
+      "id": "ADV-V22",
+      "run_status": "completed",
+      "source": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V22/result.json"
+    },
+    {
+      "circuit_builds": [
+        {
+          "exit_status": 0,
+          "kind": "compile",
+          "timed_out": false
+        }
+      ],
+      "id": "ADV-V23",
+      "run_status": "completed",
+      "source": "results/raw/redteam/bindcheck-20261109-circom/cases/ADV-V23/result.json"
+    }
+  ],
+  "schema": "bindcheck-redteam.bindcheck-compile-summary/v1"
+}

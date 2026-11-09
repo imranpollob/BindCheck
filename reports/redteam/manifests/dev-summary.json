@@ -1,0 +1,99 @@
+{
+  "adjudication_template": "finding-adjudication.csv",
+  "adjudication_template_sha256": "c42ceb43f3280d3dc7c74009ec9144606161768af89036da3e29af78db2483be",
+  "campaign": "dev",
+  "counts": {
+    "A": {
+      "fatal_reasons": {
+        "NONE": 56
+      },
+      "finding_instances_by_code": {
+        "A_CALLER_NOT_PROVED_IDENTITY": 14,
+        "A_CALL_VALUE_UNBOUND": 21,
+        "A_EFFECT_AMOUNT_UNBOUND": 31,
+        "A_EFFECT_IDENTITY_UNBOUND": 2,
+        "A_EFFECT_RECIPIENT_UNBOUND": 31,
+        "A_REPLAY_KEY_UNBOUND": 26,
+        "A_REPLAY_POSITION_FIELD_GUARD_MISSING": 7,
+        "A_STATE_WRITE_VALUE_UNBOUND": 1,
+        "A_VERIFIER_ARITY_MISMATCH": 2
+      },
+      "rows": 56,
+      "rows_with_findings": 26,
+      "run_statuses": {
+        "completed": 56
+      },
+      "verdicts": {
+        "UNKNOWN": 29,
+        "VERIFIED_WITHIN_SCOPE": 1,
+        "VIOLATION": 26
+      }
+    },
+    "B": {
+      "fatal_reasons": {
+        "NONE": 54,
+        "NO_SUPPORTED_CIRCUIT_INPUT": 2
+      },
+      "finding_instances_by_code": {},
+      "native_signal_instances_by_code": {
+        "B_UNUSED_AMOUNT_SIGNAL": 2
+      },
+      "rows": 56,
+      "rows_with_findings": 0,
+      "run_statuses": {
+        "UNKNOWN": 2,
+        "completed": 54
+      },
+      "tool_statuses": {
+        "circom_inspect": {
+          "TIMEOUT": 2,
+          "UNKNOWN": 2,
+          "completed": 52
+        },
+        "circomspect": {
+          "UNKNOWN": 2,
+          "completed": 54
+        },
+        "picus": {
+          "TIMEOUT": 6,
+          "UNKNOWN": 34,
+          "completed": 16
+        },
+        "zkap": {
+          "UNKNOWN": 56
+        }
+      },
+      "verdicts": {
+        "UNKNOWN": 56
+      }
+    },
+    "C": {
+      "fatal_reasons": {
+        "NONE": 56
+      },
+      "finding_instances_by_code": {
+        "A_CALLER_NOT_PROVED_IDENTITY": 5,
+        "A_CALL_VALUE_UNBOUND": 5,
+        "A_EFFECT_AMOUNT_UNBOUND": 31,
+        "A_EFFECT_IDENTITY_UNBOUND": 2,
+        "A_EFFECT_RECIPIENT_UNBOUND": 14,
+        "A_REPLAY_KEY_UNBOUND": 26,
+        "A_REPLAY_POSITION_FIELD_GUARD_MISSING": 7,
+        "A_STATE_WRITE_VALUE_UNBOUND": 1,
+        "A_VERIFIER_ARITY_MISMATCH": 2,
+        "C_EFFECT_NOT_PROOF_BOUND": 16
+      },
+      "rows": 56,
+      "rows_with_findings": 26,
+      "run_statuses": {
+        "completed": 56
+      },
+      "verdicts": {
+        "UNKNOWN": 29,
+        "VERIFIED_WITHIN_SCOPE": 1,
+        "VIOLATION": 26
+      }
+    }
+  },
+  "schema": "bindcheck-redteam.campaign-summary/v1"
+}
