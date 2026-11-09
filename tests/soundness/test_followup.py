@@ -6,7 +6,7 @@ import tempfile
 import unittest
 
 from bindcheck_zk.analyzer import analyze
-from bindcheck_zk.p4 import SCALAR_FIELD, canonical_guard
+from bindcheck_zk.p4 import SCALAR_FIELD, analyze_source, canonical_guard
 from bindcheck_zk.solidity import effect_calls, effect_roles
 
 
@@ -145,6 +145,24 @@ contract Consumer {{
                     output = analyze(root)
                     for triple in output["triples"]:
                         self.assertEqual(triple["patterns"]["P3"]["verdict"], expected)
+
+    def test_key_constants_without_verifier_are_unknown(self) -> None:
+        source = "uint256 constant GAMMAX1 = 1; uint256 constant GAMMAX2 = 2; uint256 constant GAMMAY1 = 3; uint256 constant GAMMAY2 = 4; uint256 constant DELTAX1 = 5; uint256 constant DELTAX2 = 6; uint256 constant DELTAY1 = 7; uint256 constant DELTAY2 = 8;"
+        finding = analyze_source(source, "KeyConstants.sol")["finding"]
+        self.assertEqual(finding["verdict"], "UNKNOWN")
+
+    def test_ambiguous_repository_base_is_unknown(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = pathlib.Path(tmp)
+            (root / "Main.nr").write_text("fn main(recipient: pub Field, amount: pub Field) {}\n")
+            (root / "Verifier.sol").write_text("contract Groth16Verifier { function verifyProof(bytes memory proof, uint256[2] memory input) public view returns (bool) { return true; }}")
+            (root / "BaseA.sol").write_text("contract Base {}")
+            (root / "BaseB.sol").write_text("contract Base { function _safeMint(address to, uint256 id) internal {} }")
+            (root / "Consumer.sol").write_text("contract Consumer is Base { function submit(bytes memory proof, address recipient, uint256 amount) public { verifier.verifyProof(proof, [uint256(uint160(recipient)), amount]); _safeMint(recipient, amount); }}")
+            output = analyze(root)
+            for triple in output["triples"]:
+                if triple["consumer"]["function"] == "submit":
+                    self.assertEqual(triple["patterns"]["P1"]["verdict"], "UNKNOWN")
 
 
 if __name__ == "__main__":
