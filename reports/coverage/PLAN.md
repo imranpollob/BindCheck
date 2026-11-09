@@ -45,3 +45,27 @@ The intended DEV paths are `DEV-F12`, `DEV-F29`, `DEV-F44`, and `DEV-F48` for
 P1. Their exact resulting verdicts are deliberately not supplied to the tool
 or assumed in advance: the control oracle specifies the added semantics;
 actual DEV outcomes will be adjudicated after the run.
+
+## Addendum A — before the second rule revision
+
+The first unhinted development run exposed two source shapes that the initial
+controls did not cover. The first run is retained under
+`results/raw/coverage/after-20261109T145517Z-95388/` and is not the final
+score. The new expectations below are committed before implementing and
+running their controls or the final DEV campaign.
+
+4. Named OpenZeppelin imports such as `import {Pausable} from
+   "@openzeppelin/contracts/utils/Pausable.sol";` have the same exact-package
+   meaning as bare imports. A direct-vector transfer under `whenNotPaused`
+   must be P1 `VERIFIED_WITHIN_SCOPE`; a similarly named import from a
+   different package must be `UNKNOWN`.
+5. A verifier implementation with an unconditional `return false` cannot
+   establish a non-vacuous P1 positive. A directly bound transfer matched
+   only to that verifier must be P1 `UNKNOWN`, even if its source-level roles
+   appear bound. An actual verifier body with a supported success path keeps
+   the prior source-level P1 result. This avoids promoting a placeholder in
+   DEV-F38 to a positive result.
+6. A dynamic wrapper with an exact length check, position-preserving copy to
+   a fixed raw snarkjs verifier, and scalar guard on every raw position may
+   satisfy P4's guard subcondition. Swapped or missing copies, absent exact
+   length check, or base-field comparison stay P4 `UNKNOWN`.
