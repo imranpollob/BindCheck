@@ -1,0 +1,28 @@
+{
+  "schema": "bindcheck-zk.soundness-expectations/v1",
+  "declared_before_rule_changes": true,
+  "commitment_policy": "SCREEN_ONLY_NEVER_VERIFIED",
+  "cases": [
+    {"id":"SND-G01-irrelevant-branch","concern":"guard-dominance","fixture":"guard_irrelevant_branch","pattern":"P1","verdict":"VIOLATION","reason":"UNBOUND_EFFECT_RECIPIENT"},
+    {"id":"SND-G02-guard-after-effect","concern":"guard-dominance","fixture":"guard_after_effect","pattern":"P1","verdict":"VIOLATION","reason":"UNBOUND_EFFECT_RECIPIENT"},
+    {"id":"SND-G03-require-before-effect","concern":"guard-dominance","fixture":"guard_require_before","pattern":"P1","verdict":"VERIFIED_WITHIN_SCOPE","reason":"EFFECT_VALUES_DIRECT_PUBLIC_INPUTS"},
+    {"id":"SND-G04-effect-in-equality-branch","concern":"guard-dominance","fixture":"guard_conditional_effect","pattern":"P1","verdict":"VERIFIED_WITHIN_SCOPE","reason":"EFFECT_VALUES_DIRECT_PUBLIC_INPUTS"},
+    {"id":"SND-G05-unresolved-modifier","concern":"guard-dominance","fixture":"guard_modifier","pattern":"P1","verdict":"UNKNOWN","reason":"UNRESOLVED_CONSUMER_MODIFIER"},
+    {"id":"SND-G06-unresolved-inheritance","concern":"guard-dominance","fixture":"guard_inheritance","pattern":"P1","verdict":"UNKNOWN","reason":"UNRESOLVED_CONSUMER_INHERITANCE"},
+    {"id":"SND-G07-unresolved-proxy","concern":"guard-dominance","fixture":"guard_proxy","pattern":"P1","verdict":"UNKNOWN","reason":"UNSUPPORTED_DELEGATECALL_CONTEXT"},
+
+    {"id":"SND-I01-caller-not-proven-identity","concern":"proof-authorized-identity","fixture":"identity_unproven_caller","pattern":"P1","verdict":"VIOLATION","reason":"UNBOUND_EFFECT_RECIPIENT"},
+    {"id":"SND-I02-caller-equals-public-input","concern":"proof-authorized-identity","fixture":"identity_proven_caller","pattern":"P1","verdict":"VERIFIED_WITHIN_SCOPE","reason":"EFFECT_VALUES_DIRECT_PUBLIC_INPUTS"},
+    {"id":"SND-I03-any-caller-policy","concern":"proof-authorized-identity","fixture":"identity_any_caller","pattern":"P1","verdict":"VERIFIED_WITHIN_SCOPE","reason":"RECIPIENT_ALLOWED_BY_ANY_CALLER_POLICY","policy":{"any_caller_may_receive":true}},
+
+    {"id":"SND-C01-wrong-position-guarded","concern":"replay-key-canonicality","fixture":"canonical_wrong_position","pattern":"P3","verdict":"VIOLATION","reason":"FIELD_ALIAS_REPLAY_KEY"},
+    {"id":"SND-C02-replay-position-guarded","concern":"replay-key-canonicality","fixture":"canonical_right_position","pattern":"P3","verdict":"VERIFIED_WITHIN_SCOPE","reason":"REPLAY_KEY_CANONICAL_AND_CONSUMED"},
+    {"id":"SND-C03-all-positions-loop-guarded","concern":"replay-key-canonicality","fixture":"canonical_all_positions","pattern":"P3","verdict":"VERIFIED_WITHIN_SCOPE","reason":"REPLAY_KEY_CANONICAL_AND_CONSUMED"},
+
+    {"id":"SND-M01-connected-nonbinding","concern":"commitment-screen","fixture":"commitment_connected_nonbinding","pattern":"P1","verdict":"UNKNOWN","reason":"COMMITMENT_BINDING_SCREEN_ONLY"},
+    {"id":"SND-M02-altered-coefficients","concern":"commitment-screen","fixture":"commitment_altered_coefficients","pattern":"P1","verdict":"UNKNOWN","reason":"COMMITMENT_BINDING_SCREEN_ONLY"},
+    {"id":"SND-M03-swapped-preimage-order","concern":"commitment-screen","fixture":"commitment_swapped_order","pattern":"P1","verdict":"UNKNOWN","reason":"COMMITMENT_PREIMAGE_ORDER_UNRESOLVED"},
+    {"id":"SND-M04-consistent-screen-positive","concern":"commitment-screen","fixture":"commitment_consistent","pattern":"P1","verdict":"UNKNOWN","reason":"COMMITMENT_BINDING_SCREEN_ONLY"},
+    {"id":"SND-M05-direct-public-positive","concern":"commitment-screen","fixture":"direct_public_positive","pattern":"P1","verdict":"VERIFIED_WITHIN_SCOPE","reason":"EFFECT_VALUES_DIRECT_PUBLIC_INPUTS"}
+  ]
+}
