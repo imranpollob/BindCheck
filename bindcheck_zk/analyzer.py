@@ -1417,7 +1417,7 @@ def analyze(
             else:
                 p4_result = verifier.p4["finding"]
             significant_runtime = next((entry["finding"] for entry in runtime_results if entry["finding"]["reason"] in {"DEFAULT_G2_RUNTIME_SIGNATURE", "PAIRING_LIBRARY_GENERATOR_EXCLUDED", "RUNTIME_BYTECODE_PARSE_INCOMPLETE"}), None)
-            if significant_runtime is not None:
+            if significant_runtime is not None and p4_result.get("verdict") != "VIOLATION":
                 p4_result = significant_runtime
             pattern_results = {
                 "P1": analyze_p1(circuit, verifier, consumer, policy),

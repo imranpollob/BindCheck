@@ -13,7 +13,7 @@ SCALAR_FIELD = 21888242871839275222246405745257275088548364400416034343698204186
 BN254_G2 = (
     11559732032986387107991004021392285783925812861821192530917403151452391805634,
     10857046999023057135944570762232829481370756359578518086990519993285655852781,
-    4082367875863431332203403145435568316851327593401208105741076214120093531,
+    4082367875863433681332203403145435568316851327593401208105741076214120093531,
     8495653923123431417604973247489272438418190587263600148770280649306958101930,
 )
 LARGE_NUMBER = re.compile(r"0x[0-9a-fA-F]{20,}|\b\d{20,}\b")
@@ -310,12 +310,16 @@ def analyze_source(text: str, relative_path: str) -> dict[str, Any]:
         {"provenance": "EXTRACTED", "name": "fail_closed_verifier", "value": fail_closed},
     ]
     where = location(relative_path, 1)
-    if gamma == BN254_G2 and delta == BN254_G2:
+    if parsed and gamma == delta:
+        default = gamma == BN254_G2
         finding = result(
-            "P4", "UNKNOWN", "DEFAULT_G2_GAMMA_DELTA_SOURCE_WARNING",
-            "Gamma and delta both resolve to the default BN254 G2 generator; source correspondence is E1 only.",
+            "P4", "VIOLATION", "GAMMA_EQUALS_DELTA_SOURCE_KEY",
+            ("Gamma and delta are the same G2 point"
+             + (" (the default BN254 G2 generator)" if default else "")
+             + "; with A=alpha, B=beta, C=-vk_x the Groth16 pairing equation holds for every public input,"
+             " so this source verifier accepts forged proofs."),
             where=where, facts=facts,
-            limitations=["No proof-generation, key-ceremony, deployment, or exploit claim follows from source constants."],
+            limitations=["Source-key finding: deployment correspondence and an executed forged proof are not established by this result."],
         )
     elif duplicates:
         finding = result(

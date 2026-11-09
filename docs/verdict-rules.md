@@ -197,8 +197,8 @@ state machines remain `UNKNOWN`.
 
 ### `VERIFICATION_KEY_CHECKS_PASS`
 
-Property: parsed gamma/delta differ from the known default-equal G2 pattern,
-no duplicate parsed IC point exists, and every fixed public-input position (or
+Property: parsed gamma and delta are different G2 points (any equal pair, not
+only the default generator), no duplicate parsed IC point exists, and every fixed public-input position (or
 all positions of a dynamic vector) has a recognized rejecting scalar guard.
 
 Justification: source constants and guard positions are extracted directly.
@@ -221,6 +221,22 @@ arity; P4 checks the complete index set against it. Swapped or missing copies,
 an inexact length check, and a base-field comparison remain `UNKNOWN`. The
 prospective positive and adversarial controls are in
 [`tests/coverage/test_rules.py`](../tests/coverage/test_rules.py).
+
+### `GAMMA_EQUALS_DELTA_SOURCE_KEY` (VIOLATION, freeze 2)
+
+Property: both gamma and delta are fully parsed from the verifier source and
+are the same G2 point. Then A = alpha, B = beta, C = -vk_x satisfies
+e(A,B) = e(alpha,beta) e(vk_x,gamma) e(C,delta) for every public input, so
+the source verifier accepts forged proofs. This holds for the default
+generator (an uncontributed snarkjs `_0000.zkey`) and for any other equal pair.
+A runtime screening result never overrides this source violation.
+
+Freeze 1 used a BN254 G2 generator constant with a dropped digit group (off
+the curve), and rejected only gamma = delta = that constant, so real
+default-key verifiers could receive `VERIFIED_WITHIN_SCOPE`. Regression
+controls built from real snarkjs 0.7.6 output are in
+[`tests/freeze2/test_p4_key.py`](../tests/freeze2/test_p4_key.py); `P4-02` now
+expects this violation.
 
 ## P5 — public-input interface agreement
 
