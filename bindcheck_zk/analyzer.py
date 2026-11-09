@@ -817,11 +817,19 @@ def analyze_p2(circuit: Circuit | None, consumer: Consumer) -> dict[str, Any]:
     has_context = bool(re.search(context_pattern, vector_text, re.I))
     committed = has_context and bool(re.search(r"\b(?:keccak256|sha256|poseidon|hash)\b", vector_text, re.I))
     direct = has_context and not committed
-    guarded = bool(re.search(
-        r"(?:require|if)\s*\((?=[^;]*(?:block\s*\.\s*chainid|address\s*\(\s*this\s*\)|\b(?:domain|chain_id|chainId|appId)\b))(?=[^;]*(?:==|!=))",
+    context_expressions = re.findall(
+        r"block\s*\.\s*chainid|address\s*\(\s*this\s*\)|\b(?:domain|chain_id|chainId|appId)\b",
         body,
-        re.I | re.S,
-    ))
+        re.I,
+    )
+    guarded = bool(consumer.effect_calls) and all(
+        any(
+            _guard_bound(context, vector, aliases, body, effect.offset)
+            for context in context_expressions
+            for vector in consumer.vectors
+        )
+        for effect in consumer.effect_calls
+    )
     computed = bool(re.search(context_pattern, body, re.I))
     facts = [
         {"provenance": "EXTRACTED", "name": "context_in_public_vector", "value": direct},

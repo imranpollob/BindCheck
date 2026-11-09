@@ -107,7 +107,7 @@ def canonical_guard_positions(text: str) -> dict[str, Any]:
     for pattern in (
         rf"{vector}\s*\[\s*{index_pattern}\s*\]\s*<\s*{modulus}",
         rf"{modulus}\s*<=\s*{vector}\s*\[\s*{index_pattern}\s*\]",
-        rf"\bif\s*\([^)]*{vector}\s*\[\s*{index_pattern}\s*\]\s*>=\s*{modulus}[^)]*\)\s*\{{?[^{{}}]*\b(?:return\s+false|revert\b)",
+        rf"\bif\s*\([^)]*{vector}\s*\[\s*{index_pattern}\s*\]\s*>=\s*{modulus}[^)]*\)\s*\{{?[^{{}}]*?\b(?:return\s+false|revert\b)",
     ):
         for match in re.finditer(pattern, text, re.I):
             index = match.group("index")
@@ -122,7 +122,7 @@ def canonical_guard_positions(text: str) -> dict[str, Any]:
     )
     for alias, index in aliases:
         if re.search(
-            rf"\bif\s*\([^)]*\b{re.escape(alias)}\b\s*>=\s*{modulus}[^)]*\)\s*\{{?[^{{}}]*\b(?:return\s+false|revert\b)",
+            rf"\bif\s*\([^)]*\b{re.escape(alias)}\b\s*>=\s*{modulus}[^)]*\)\s*\{{?[^{{}}]*?\b(?:return\s+false|revert\b)",
             text,
             re.I,
         ):
@@ -184,7 +184,25 @@ def analyze_source(text: str, relative_path: str) -> dict[str, Any]:
     for index, point in points.items():
         reverse[point].append(index)
     duplicates = sorted(indices for indices in reverse.values() if len(indices) > 1)
-    guard = canonical_guard(cleaned)
+    fixed_arities = {
+        int(value) for value in re.findall(
+            r"\b(?:uint(?:256)?|bytes32)\s*\[\s*(\d+)\s*\]\s+(?:memory|calldata|storage)?\s*(?:inputs?|pubSignals?|publicInputs?)\b",
+            cleaned,
+            re.I,
+        )
+    }
+    dynamic_vectors = bool(re.search(
+        r"\b(?:uint(?:256)?|bytes32)\s*\[\s*\]\s+(?:memory|calldata|storage)?\s*(?:inputs?|pubSignals?|publicInputs?)\b",
+        cleaned,
+        re.I,
+    ))
+    guard_coverage = canonical_guard_positions(cleaned)
+    if len(fixed_arities) == 1:
+        guard = canonical_guard(cleaned, set(range(next(iter(fixed_arities)))))
+    elif dynamic_vectors:
+        guard = bool(guard_coverage["all_positions"])
+    else:
+        guard = canonical_guard(cleaned)
     p2 = has_pairing_p2(cleaned)
     delegated = delegates_verification(cleaned)
     fail_closed = fail_closed_verifier(cleaned)
@@ -196,6 +214,7 @@ def analyze_source(text: str, relative_path: str) -> dict[str, Any]:
         {"provenance": "EXTRACTED", "name": "pairing_library_p2", "value": p2},
         {"provenance": "EXTRACTED", "name": "duplicate_ic_indices", "value": duplicates},
         {"provenance": "EXTRACTED", "name": "canonical_guard", "value": guard},
+        {"provenance": "EXTRACTED", "name": "canonical_guard_coverage", "value": guard_coverage},
         {"provenance": "EXTRACTED", "name": "delegated_verification", "value": delegated},
         {"provenance": "EXTRACTED", "name": "fail_closed_verifier", "value": fail_closed},
     ]
