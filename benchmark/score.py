@@ -78,7 +78,7 @@ def main() -> None:
     args.output.mkdir(parents=True,exist_ok=True)
     fields=list(rows[0]) if rows else []
     with (args.output / "matrix.csv").open("w",newline="") as f:
-        w=csv.DictWriter(f,fieldnames=fields);w.writeheader();w.writerows(rows)
+        w=csv.DictWriter(f,fieldnames=fields,lineterminator="\n");w.writeheader();w.writerows(rows)
     counts=collections.defaultdict(collections.Counter)
     for row in rows:counts[(row["label_status"],row["tool"])][row["outcome"]]+=1
     summary={f"{label}/{tool}":dict(counter) for (label,tool),counter in sorted(counts.items())}

@@ -16,6 +16,8 @@ The [build ledger](../../results/raw/bench/e1-build-20261109-verified/build.json
 
 The [scoring rules](../../benchmark/scoring-rules.json) and [scorer](../../benchmark/score.py) were committed at [aa4b7d7](../../benchmark/manifest.json) before these runs. DETECT requires the right pattern **and** source location. FALSE-ALARM requires a target binding warning on the repaired/legitimate revision. Unrelated native warnings stay separate. UNKNOWN, timeouts, setup failures, missing artifacts, and circuit-only conclusions earn no detection or miss. A completed vulnerable run without a correctly located finding is MISS; a completed repaired run without one is CLEAR. The [scorer regressions](../../results/raw/bench/verification-20261109.json) passed [4](../../results/raw/bench/verification-20261109.json) tests. The [per-case matrix](matrix.csv) retains every tool, case, side, reason, and source path.
 
+Post-run scorer changes made the already-committed evidence-grade exclusion explicit and changed CSV line endings to LF. Re-executing the original committed scorer on the same observations produced a [logically identical matrix](../../results/raw/bench/matrix-equivalence.json); neither expected labels nor scoring policy changed.
+
 ## Exploratory tool by pattern results
 
 Arm A is the committed consumer/verifier source screen plus a same-policy Foundry harness with a mock verifier; arm B retains native circuit-tool output; arm C adds the committed straightforward source joins to A and B. Their implementation is documented in [baselines/strong](../../baselines/strong/README.md). Slither default was invoked separately. None of the mock Foundry failures is treated as proof-backed validation.
