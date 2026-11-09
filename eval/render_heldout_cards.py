@@ -30,7 +30,7 @@ RULE_TEXT = {
 
 
 def _blind_message(message: str) -> str:
-    return re.sub(r"(?i)bindcheck(?:[_-]zk)?", "the checker", message)
+    return re.sub(r"(?i)bindcheck(?:[_-]zk)?|arm[ _-]?c\b", "the checker", message)
 
 
 def verifier_body(source: str, function_name: str) -> str:
@@ -82,14 +82,26 @@ def _context(source: str | None, line: str) -> str:
     return "\n".join(f"{index:>5} {lines[index - 1]}" for index in range(start, stop + 1))
 
 
-def _matched_verifier(family: dict[str, Any], payload: dict[str, Any], warning_id: str) -> tuple[str | None, str]:
+def _matched_verifier(family: dict[str, Any], payload: dict[str, Any], warning: dict[str, str]) -> tuple[str | None, str]:
+    candidates: set[tuple[str, str]] = set()
     for triple in payload.get("triples", []) or []:
-        for item in (triple.get("patterns") or {}).values():
-            if _warning_row(family, item)["warning_id"] == warning_id:
-                verifier = triple.get("verifier") or {}
-                declarations = verifier.get("declarations") or []
-                name = declarations[0].get("name", "verifyProof") if declarations else "verifyProof"
-                return verifier.get("path"), str(name)
+        if warning["tool"] == "bindcheck-zk":
+            matched = any(_warning_row(family, item)["warning_id"] == warning["warning_id"]
+                          for item in (triple.get("patterns") or {}).values())
+        else:
+            matched = (triple.get("consumer") or {}).get("path") == warning["source_path"]
+        if matched:
+            verifier = triple.get("verifier") or {}
+            declarations = verifier.get("declarations") or []
+            name = declarations[0].get("name", "verifyProof") if declarations else "verifyProof"
+            if verifier.get("path"):
+                candidates.add((str(verifier["path"]), str(name)))
+    if len(candidates) == 1:
+        return next(iter(candidates))
+    if warning["tool"] == "arm-c" and not candidates:
+        paths = {path for path in str(family.get("verifier_paths") or "").split("|") if path}
+        if len(paths) == 1:
+            return next(iter(paths)), "verifyProof"
     return None, "verifyProof"
 
 
@@ -111,14 +123,19 @@ def render(run_dir: pathlib.Path, card_dir: pathlib.Path, key_path: pathlib.Path
         card_id = f"W{number:04d}"
         family_dir = family_dirs[warning["family_id"]]
         family = load_json(family_dir / "family.json")
-        payload = load_json(family_dir / "bindcheck-zk-raw.json")
-        verifier_path, function_name = _matched_verifier(family, payload, warning["warning_id"])
+        raw_path = family_dir / "bindcheck-zk-raw.json"
+        try:
+            payload = load_json(raw_path) if raw_path.is_file() else {}
+        except (OSError, ValueError):
+            payload = {}
+        verifier_path, function_name = _matched_verifier(family, payload, warning)
         if verifier_path is None and warning["source_path"].endswith(".sol"):
             verifier_path = warning["source_path"]
         location_source, location_meta = _source(family_dir, warning["source_path"])
         verifier_source, verifier_meta = _source(family_dir, verifier_path or "")
         body = verifier_body(verifier_source, function_name) if verifier_source is not None else "MISSING: matched verifier source was not captured"
-        rule = RULE_TEXT.get(warning["pattern"], "MISSING: no preregistered rule text for this pattern")
+        rule = RULE_TEXT.get(warning["pattern"],
+                             "Native source heuristic: independently check the reported source shape, its proof relationship, and its effect before assigning a binding-flaw label.")
         warning_message = _blind_message(warning["message"])
         lines = [
             f"# Blind warning {card_id}", "",
@@ -134,9 +151,9 @@ def render(run_dir: pathlib.Path, card_dir: pathlib.Path, key_path: pathlib.Path
         ]
         (card_dir / f"{card_id}.md").write_text("\n".join(lines), encoding="utf-8")
         index.append(f"- [{card_id}]({card_id}.md)")
-        sheet_rows.append({**warning, "warning_id": card_id, "message": warning_message,
+        sheet_rows.append({**warning, "warning_id": card_id, "reason_code": "", "message": warning_message,
                            "label": "", "rater_reason": ""})
-        keys.append({"card_id": card_id, "warning_id": warning["warning_id"],
+        keys.append({"card_id": card_id, "tool": warning["tool"], "warning_id": warning["warning_id"],
                      "family_id": warning["family_id"], "repository": warning["repository"],
                      "commit": warning["commit"], "pattern": warning["pattern"],
                      "reason_code": warning["reason_code"], "source_path": warning["source_path"],
@@ -147,7 +164,7 @@ def render(run_dir: pathlib.Path, card_dir: pathlib.Path, key_path: pathlib.Path
     key_path.parent.mkdir(parents=True, exist_ok=True)
     with key_path.open("w", newline="", encoding="utf-8") as handle:
         writer = csv.DictWriter(handle, fieldnames=tuple(keys[0]) if keys else (
-            "card_id", "warning_id", "family_id", "repository", "commit", "pattern", "reason_code",
+            "card_id", "tool", "warning_id", "family_id", "repository", "commit", "pattern", "reason_code",
             "source_path", "source_line", "raw_family_dir"))
         writer.writeheader()
         writer.writerows(keys)

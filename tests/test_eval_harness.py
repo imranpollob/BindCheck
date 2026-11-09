@@ -364,6 +364,20 @@ class AdjudicationTests(unittest.TestCase):
                 "run": {"status": "UNKNOWN"}, "result": {"findings": [{"code": "C_SOMETHING"}]}}))
             self.assertEqual(extract_warnings(pathlib.Path(temporary)), [])
 
+    def test_completed_arm_c_survives_missing_bindcheck_json(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            family_dir = pathlib.Path(temporary) / "families/001-test"
+            family_dir.mkdir(parents=True)
+            (family_dir / "family.json").write_text(json.dumps({"family_id": "f"}))
+            (family_dir / "bindcheck-zk-raw.json").write_text("broken json")
+            (family_dir / "arm-c-raw.json").write_text(json.dumps({
+                "run": {"status": "completed"}, "result": {"findings": [{
+                    "code": "C_SOMETHING", "message": "Something",
+                    "location": {"path": "Consumer.sol", "line": 4}}]}}))
+            rows = extract_warnings(pathlib.Path(temporary))
+            self.assertEqual(len(rows), 1)
+            self.assertEqual(rows[0]["tool"], "arm-c")
+
     def test_blind_card_has_source_and_separate_blank_sheets(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             root = pathlib.Path(temporary)

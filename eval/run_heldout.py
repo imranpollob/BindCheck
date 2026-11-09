@@ -178,7 +178,10 @@ def capture_warning_sources(checkout: pathlib.Path, family_dir: pathlib.Path) ->
     raw_path = family_dir / "bindcheck-zk-raw.json"
     wanted: dict[str, str | None] = {}
     if raw_path.is_file():
-        payload = load_json(raw_path)
+        try:
+            payload = load_json(raw_path)
+        except (OSError, ValueError):
+            payload = {}
         for triple in payload.get("triples", []) or []:
             warnings = [item for item in (triple.get("patterns") or {}).values()
                         if item.get("verdict") == "VIOLATION" or item.get("reason") in P4_WARNING_REASONS]
@@ -197,6 +200,24 @@ def capture_warning_sources(checkout: pathlib.Path, family_dir: pathlib.Path) ->
                 path = (item.get("location") or {}).get("path")
                 if path:
                     wanted[str(path)] = None
+    arm_c_path = family_dir / "arm-c-raw.json"
+    if arm_c_path.is_file():
+        try:
+            arm_c = load_json(arm_c_path)
+        except (OSError, ValueError):
+            arm_c = {}
+        if (arm_c.get("run") or {}).get("status") == "completed":
+            findings = (arm_c.get("result") or {}).get("findings") or []
+            if findings:
+                for item in findings:
+                    path = (item.get("location") or {}).get("path")
+                    if path:
+                        wanted[str(path)] = None
+                family_path = family_dir / "family.json"
+                family = load_json(family_path) if family_path.is_file() else {}
+                for path in str(family.get("verifier_paths") or "").split("|"):
+                    if path:
+                        wanted.setdefault(path, None)
     source_dir = family_dir / "warning-sources"
     sources = []
     for source_path, expected_sha256 in sorted(wanted.items()):
