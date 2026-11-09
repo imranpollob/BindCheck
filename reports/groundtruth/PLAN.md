@@ -141,3 +141,38 @@ retained DEV checkout. Assign one kind:
 The blind adjudication sheet shows code excerpts and the rule's claim text,
 uses opaque IDs in a seeded random order, and omits the tool's verdict,
 confidence, instance counts, the author's label, and the author's reason.
+
+## Addendum A (2026-11-08, written AFTER inspecting C5 v1 output)
+
+Spot-checking the C5 v1 proposals found systematic rubric-implementation
+errors: addresses inside `sepolia.`/`kovan.`/`rinkeby.`/`mumbai.`/`amoy.`
+explorer URLs counted as mainnet because a generic word such as "Ethereum" was
+inside the 300-character window; third-party token, donation, local-node and
+placeholder addresses counted as deployments; and all four v1
+`audited-production` hits were a CI-workflow URL, a self-declared shields.io
+badge, a `localhost` URL, and a link to an upstream project's audit in a README
+that also says it is not audited.
+
+C5 v1 output is retained unchanged in column `proposed_label_v1`. A **post-hoc**
+refinement v1.1 (column `proposed_label`) changes only the evidence extraction,
+not the label order or confidence scheme:
+
+1. When an address occurs inside an explorer URL, the URL host decides the
+   network (testnet host markers: sepolia, goerli, holesky, hoodi, rinkeby,
+   ropsten, kovan, mumbai, amoy, fuji, cardona, chiado, alfajores, devnet,
+   `testnet`). Otherwise only the address's own line and one line either side
+   are used; if both testnet and mainnet cues occur there, the address is
+   `MIXED` (low confidence).
+2. An address whose line context says example/placeholder/local/account
+   #/private key/donation, or names a third-party token (USDC/USDT/WETH/DAI),
+   or is a repeated-nibble placeholder, is excluded and counted as doubtful.
+3. Audit links exclude badges (`shields.io`, `badge`), CI (`/actions/`), and
+   `localhost`; a remaining link must be a PDF, contain an `/audit` path
+   segment, or point to a known auditor domain. A README that also says it is
+   not audited is proposed `unclassified` with flag `AUDIT-CONTRADICTION`.
+4. Hackathon/student cues are also searched in the corpus column
+   `v2_maturity_basis` (repository metadata excerpt), and `university`/`thesis`
+   count as a low-confidence academic cue.
+
+Because v1.1 was written after seeing v1 output, its agreement figures are
+descriptive only and must not be presented as a pre-registered measurement.
