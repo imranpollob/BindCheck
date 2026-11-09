@@ -179,8 +179,8 @@ contract Consumer {{
                     self.assertEqual(triple["patterns"]["P1"]["verdict"], "UNKNOWN")
 
     def test_snarkjs_wrapper_requires_position_preserving_copy(self) -> None:
-        for source_index, expected in [(1, True), (0, False)]:
-            with self.subTest(source_index=source_index):
+        for source_index, mutation, expected in [(1, "", True), (0, "", False), (1, "mutate(pub);", False)]:
+            with self.subTest(source_index=source_index, mutation=mutation):
                 source = f"""
 uint256 constant r = {SCALAR_FIELD};
 function _verifyProofRaw(uint256[2] calldata _pubSignals) public view returns (bool) {{
@@ -193,7 +193,7 @@ function verifyProof(bytes calldata proof, bytes32[] calldata publicInputs) exte
 }}
 function _decodeAndVerify(bytes calldata proof, bytes32[] calldata publicInputs) external view returns (bool) {{
  uint256[2] memory pub; pub[0] = uint256(publicInputs[0]);
- pub[1] = uint256(publicInputs[{source_index}]);
+ pub[1] = uint256(publicInputs[{source_index}]); {mutation}
  return this._verifyProofRaw(pub);
 }}
 """
