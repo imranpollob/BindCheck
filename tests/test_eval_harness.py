@@ -10,6 +10,7 @@ import tempfile
 import unittest
 
 from eval.adjudicate import cohen_kappa
+from eval.render_heldout_cards import verifier_body
 from eval.common import (
     PLAN_SOURCE_SHA256,
     RECALL_LEDGER,
@@ -282,6 +283,19 @@ class RecallTests(unittest.TestCase):
 
 
 class AdjudicationTests(unittest.TestCase):
+    def test_verifier_body_is_complete_and_does_not_include_next_function(self) -> None:
+        source = '''contract Verifier {
+function verifyProof(uint[] memory input) public returns (bool) {
+  if (input.length == 0) { return false; }
+  return true;
+}
+function other() public {}
+}'''
+        body = verifier_body(source, "verifyProof")
+        self.assertIn("if (input.length == 0) { return false; }", body)
+        self.assertIn("return true;", body)
+        self.assertNotIn("function other", body)
+
     def test_known_cohen_kappa(self) -> None:
         result = cohen_kappa(
             {"a": "TP", "b": "TP", "c": "FP"},
