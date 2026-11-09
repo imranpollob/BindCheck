@@ -1,0 +1,19 @@
+{
+  "revisions": {
+    "repaired": [
+      {
+        "bytes": 3347,
+        "path": "circuits/circuits/utils/crypto/merkle-trees/smt.circom",
+        "sha256": "772217f373fae81aa80d0d4c8c901170e4b272544b4d6d0ff092b5d3c2c74cb0"
+      }
+    ],
+    "vulnerable": [
+      {
+        "bytes": 3391,
+        "path": "circuits/circuits/utils/crypto/merkle-trees/smt.circom",
+        "sha256": "34e168964750cb81a644f3149232a537a6cabc5450c30a128f6cf516f288075f"
+      }
+    ]
+  },
+  "schema": "bindcheck-benchmark.source-lock/v1"
+}

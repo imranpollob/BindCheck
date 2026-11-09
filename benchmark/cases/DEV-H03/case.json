@@ -1,0 +1,30 @@
+{
+  "expected_location_regex": "^semaphorejs/contracts/Semaphore\\.sol(:[0-9]+)?$",
+  "expected_pattern": "P3",
+  "expected_state": "vulnerable",
+  "exposure": "EXPOSED",
+  "family": "semaphore",
+  "id": "DEV-H03",
+  "label_provenance": "historical DEV pair; AI review, not human-adjudicated",
+  "label_status": "AI-PROPOSED",
+  "limitations": [
+    "matched verifier artifact absent in preserved checkout"
+  ],
+  "origin": "DEV-history",
+  "pair_id": "DEV-H02",
+  "protocol": "MISSING_VERIFIER",
+  "revisions": {
+    "selected": {
+      "commit": "8d703c124c663537966d6fc35cfec84146e236b2",
+      "repository": "semaphore-protocol/semaphore",
+      "roles": {
+        "circuit": "semaphorejs/snark/semaphore.circom",
+        "consumer": "semaphorejs/contracts/Semaphore.sol",
+        "verifier": "semaphorejs/build/verifier.sol"
+      },
+      "source_checkout": "/Users/imranpollob/Coding/bc/bindcheck-zk/feasibility/work/full-dev/DEV-H03--semaphore-protocol__semaphore--8d703c124c66",
+      "verifier_kind": "matched verifier artifact absent"
+    }
+  },
+  "schema": "bindcheck-benchmark.case/v1"
+}

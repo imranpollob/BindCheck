@@ -1,0 +1,19 @@
+{
+  "revisions": {
+    "repaired": [
+      {
+        "bytes": 12213,
+        "path": "packages/contracts/src/EmailAuth.sol",
+        "sha256": "c36e96eef49a24ce3eb306871d4b3c04b2f0ee93dd0447ec14305009f13d6e1c"
+      }
+    ],
+    "vulnerable": [
+      {
+        "bytes": 11829,
+        "path": "packages/contracts/src/EmailAuth.sol",
+        "sha256": "0f4ca79abf78704227014b1effca1d0ec1ae8082b1b215222f09277b7b067644"
+      }
+    ]
+  },
+  "schema": "bindcheck-benchmark.source-lock/v1"
+}

@@ -1,0 +1,801 @@
+{
+  "cases": [
+    {
+      "case": "cases/ADV-V01/case.json",
+      "id": "ADV-V01",
+      "label_status": "AI-PROPOSED",
+      "lock": "cases/ADV-V01/source.lock.json",
+      "origin": "synthetic"
+    },
+    {
+      "case": "cases/ADV-L01/case.json",
+      "id": "ADV-L01",
+      "label_status": "AI-PROPOSED",
+      "lock": "cases/ADV-L01/source.lock.json",
+      "origin": "synthetic"
+    },
+    {
+      "case": "cases/ADV-V02/case.json",
+      "id": "ADV-V02",
+      "label_status": "AI-PROPOSED",
+      "lock": "cases/ADV-V02/source.lock.json",
+      "origin": "synthetic"
+    },
+    {
+      "case": "cases/ADV-L02/case.json",
+      "id": "ADV-L02",
+      "label_status": "AI-PROPOSED",
+      "lock": "cases/ADV-L02/source.lock.json",
+      "origin": "synthetic"
+    },
+    {
+      "case": "cases/ADV-V03/case.json",
+      "id": "ADV-V03",
+      "label_status": "AI-PROPOSED",
+      "lock": "cases/ADV-V03/source.lock.json",
+      "origin": "synthetic"
+    },
+    {
+      "case": "cases/ADV-L03/case.json",
+      "id": "ADV-L03",
+      "label_status": "AI-PROPOSED",
+      "lock": "cases/ADV-L03/source.lock.json",
+      "origin": "synthetic"
+    },
+    {
+      "case": "cases/ADV-V04/case.json",
+      "id": "ADV-V04",
+      "label_status": "AI-PROPOSED",
+      "lock": "cases/ADV-V04/source.lock.json",
+      "origin": "synthetic"
+    },
+    {
+      "case": "cases/ADV-L04/case.json",
+      "id": "ADV-L04",
+      "label_status": "AI-PROPOSED",
+      "lock": "cases/ADV-L04/source.lock.json",
+      "origin": "synthetic"
+    },
+    {
+      "case": "cases/ADV-V05/case.json",
+      "id": "ADV-V05",
+      "label_status": "AI-PROPOSED",
+      "lock": "cases/ADV-V05/source.lock.json",
+      "origin": "synthetic"
+    },
+    {
+      "case": "cases/ADV-L05/case.json",
+      "id": "ADV-L05",
+      "label_status": "AI-PROPOSED",
+      "lock": "cases/ADV-L05/source.lock.json",
+      "origin": "synthetic"
+    },
+    {
+      "case": "cases/ADV-V06/case.json",
+      "id": "ADV-V06",
+      "label_status": "AI-PROPOSED",
+      "lock": "cases/ADV-V06/source.lock.json",
+      "origin": "synthetic"
+    },
+    {
+      "case": "cases/ADV-L06/case.json",
+      "id": "ADV-L06",
+      "label_status": "AI-PROPOSED",
+      "lock": "cases/ADV-L06/source.lock.json",
+      "origin": "synthetic"
+    },
+    {
+      "case": "cases/ADV-V07/case.json",
+      "id": "ADV-V07",
+      "label_status": "AI-PROPOSED",
+      "lock": "cases/ADV-V07/source.lock.json",
+      "origin": "synthetic"
+    },
+    {
+      "case": "cases/ADV-L07/case.json",
+      "id": "ADV-L07",
+      "label_status": "AI-PROPOSED",
+      "lock": "cases/ADV-L07/source.lock.json",
+      "origin": "synthetic"
+    },
+    {
+      "case": "cases/ADV-V08/case.json",
+      "id": "ADV-V08",
+      "label_status": "AI-PROPOSED",
+      "lock": "cases/ADV-V08/source.lock.json",
+      "origin": "synthetic"
+    },
+    {
+      "case": "cases/ADV-L08/case.json",
+      "id": "ADV-L08",
+      "label_status": "AI-PROPOSED",
+      "lock": "cases/ADV-L08/source.lock.json",
+      "origin": "synthetic"
+    },
+    {
+      "case": "cases/ADV-V09/case.json",
+      "id": "ADV-V09",
+      "label_status": "AI-PROPOSED",
+      "lock": "cases/ADV-V09/source.lock.json",
+      "origin": "synthetic"
+    },
+    {
+      "case": "cases/ADV-L09/case.json",
+      "id": "ADV-L09",
+      "label_status": "AI-PROPOSED",
+      "lock": "cases/ADV-L09/source.lock.json",
+      "origin": "synthetic"
+    },
+    {
+      "case": "cases/ADV-V10/case.json",
+      "id": "ADV-V10",
+      "label_status": "AI-PROPOSED",
+      "lock": "cases/ADV-V10/source.lock.json",
+      "origin": "synthetic"
+    },
+    {
+      "case": "cases/ADV-L10/case.json",
+      "id": "ADV-L10",
+      "label_status": "AI-PROPOSED",
+      "lock": "cases/ADV-L10/source.lock.json",
+      "origin": "synthetic"
+    },
+    {
+      "case": "cases/ADV-V11/case.json",
+      "id": "ADV-V11",
+      "label_status": "AI-PROPOSED",
+      "lock": "cases/ADV-V11/source.lock.json",
+      "origin": "synthetic"
+    },
+    {
+      "case": "cases/ADV-L11/case.json",
+      "id": "ADV-L11",
+      "label_status": "AI-PROPOSED",
+      "lock": "cases/ADV-L11/source.lock.json",
+      "origin": "synthetic"
+    },
+    {
+      "case": "cases/ADV-V12/case.json",
+      "id": "ADV-V12",
+      "label_status": "AI-PROPOSED",
+      "lock": "cases/ADV-V12/source.lock.json",
+      "origin": "synthetic"
+    },
+    {
+      "case": "cases/ADV-L12/case.json",
+      "id": "ADV-L12",
+      "label_status": "AI-PROPOSED",
+      "lock": "cases/ADV-L12/source.lock.json",
+      "origin": "synthetic"
+    },
+    {
+      "case": "cases/ADV-V13/case.json",
+      "id": "ADV-V13",
+      "label_status": "AI-PROPOSED",
+      "lock": "cases/ADV-V13/source.lock.json",
+      "origin": "synthetic"
+    },
+    {
+      "case": "cases/ADV-L13/case.json",
+      "id": "ADV-L13",
+      "label_status": "AI-PROPOSED",
+      "lock": "cases/ADV-L13/source.lock.json",
+      "origin": "synthetic"
+    },
+    {
+      "case": "cases/ADV-V14/case.json",
+      "id": "ADV-V14",
+      "label_status": "AI-PROPOSED",
+      "lock": "cases/ADV-V14/source.lock.json",
+      "origin": "synthetic"
+    },
+    {
+      "case": "cases/ADV-L14/case.json",
+      "id": "ADV-L14",
+      "label_status": "AI-PROPOSED",
+      "lock": "cases/ADV-L14/source.lock.json",
+      "origin": "synthetic"
+    },
+    {
+      "case": "cases/ADV-V15/case.json",
+      "id": "ADV-V15",
+      "label_status": "AI-PROPOSED",
+      "lock": "cases/ADV-V15/source.lock.json",
+      "origin": "synthetic"
+    },
+    {
+      "case": "cases/ADV-L15/case.json",
+      "id": "ADV-L15",
+      "label_status": "AI-PROPOSED",
+      "lock": "cases/ADV-L15/source.lock.json",
+      "origin": "synthetic"
+    },
+    {
+      "case": "cases/ADV-V16/case.json",
+      "id": "ADV-V16",
+      "label_status": "AI-PROPOSED",
+      "lock": "cases/ADV-V16/source.lock.json",
+      "origin": "synthetic"
+    },
+    {
+      "case": "cases/ADV-L16/case.json",
+      "id": "ADV-L16",
+      "label_status": "AI-PROPOSED",
+      "lock": "cases/ADV-L16/source.lock.json",
+      "origin": "synthetic"
+    },
+    {
+      "case": "cases/ADV-V17/case.json",
+      "id": "ADV-V17",
+      "label_status": "AI-PROPOSED",
+      "lock": "cases/ADV-V17/source.lock.json",
+      "origin": "synthetic"
+    },
+    {
+      "case": "cases/ADV-L17/case.json",
+      "id": "ADV-L17",
+      "label_status": "AI-PROPOSED",
+      "lock": "cases/ADV-L17/source.lock.json",
+      "origin": "synthetic"
+    },
+    {
+      "case": "cases/ADV-V18/case.json",
+      "id": "ADV-V18",
+      "label_status": "AI-PROPOSED",
+      "lock": "cases/ADV-V18/source.lock.json",
+      "origin": "synthetic"
+    },
+    {
+      "case": "cases/ADV-L18/case.json",
+      "id": "ADV-L18",
+      "label_status": "AI-PROPOSED",
+      "lock": "cases/ADV-L18/source.lock.json",
+      "origin": "synthetic"
+    },
+    {
+      "case": "cases/ADV-V19/case.json",
+      "id": "ADV-V19",
+      "label_status": "AI-PROPOSED",
+      "lock": "cases/ADV-V19/source.lock.json",
+      "origin": "synthetic"
+    },
+    {
+      "case": "cases/ADV-L19/case.json",
+      "id": "ADV-L19",
+      "label_status": "AI-PROPOSED",
+      "lock": "cases/ADV-L19/source.lock.json",
+      "origin": "synthetic"
+    },
+    {
+      "case": "cases/ADV-V20/case.json",
+      "id": "ADV-V20",
+      "label_status": "AI-PROPOSED",
+      "lock": "cases/ADV-V20/source.lock.json",
+      "origin": "synthetic"
+    },
+    {
+      "case": "cases/ADV-L20/case.json",
+      "id": "ADV-L20",
+      "label_status": "AI-PROPOSED",
+      "lock": "cases/ADV-L20/source.lock.json",
+      "origin": "synthetic"
+    },
+    {
+      "case": "cases/ADV-V21/case.json",
+      "id": "ADV-V21",
+      "label_status": "AI-PROPOSED",
+      "lock": "cases/ADV-V21/source.lock.json",
+      "origin": "synthetic"
+    },
+    {
+      "case": "cases/ADV-L21/case.json",
+      "id": "ADV-L21",
+      "label_status": "AI-PROPOSED",
+      "lock": "cases/ADV-L21/source.lock.json",
+      "origin": "synthetic"
+    },
+    {
+      "case": "cases/ADV-V22/case.json",
+      "id": "ADV-V22",
+      "label_status": "AI-PROPOSED",
+      "lock": "cases/ADV-V22/source.lock.json",
+      "origin": "synthetic"
+    },
+    {
+      "case": "cases/ADV-L22/case.json",
+      "id": "ADV-L22",
+      "label_status": "AI-PROPOSED",
+      "lock": "cases/ADV-L22/source.lock.json",
+      "origin": "synthetic"
+    },
+    {
+      "case": "cases/ADV-V23/case.json",
+      "id": "ADV-V23",
+      "label_status": "AI-PROPOSED",
+      "lock": "cases/ADV-V23/source.lock.json",
+      "origin": "synthetic"
+    },
+    {
+      "case": "cases/ADV-L23/case.json",
+      "id": "ADV-L23",
+      "label_status": "AI-PROPOSED",
+      "lock": "cases/ADV-L23/source.lock.json",
+      "origin": "synthetic"
+    },
+    {
+      "case": "cases/GATE-14/case.json",
+      "id": "GATE-14",
+      "label_status": "PENDING",
+      "lock": "cases/GATE-14/source.lock.json",
+      "origin": "public-report"
+    },
+    {
+      "case": "cases/GATE-15/case.json",
+      "id": "GATE-15",
+      "label_status": "PENDING",
+      "lock": "cases/GATE-15/source.lock.json",
+      "origin": "public-report"
+    },
+    {
+      "case": "cases/GATE-20/case.json",
+      "id": "GATE-20",
+      "label_status": "PENDING",
+      "lock": "cases/GATE-20/source.lock.json",
+      "origin": "public-report"
+    },
+    {
+      "case": "cases/GATE-21/case.json",
+      "id": "GATE-21",
+      "label_status": "PENDING",
+      "lock": "cases/GATE-21/source.lock.json",
+      "origin": "public-report"
+    },
+    {
+      "case": "cases/GATE-22/case.json",
+      "id": "GATE-22",
+      "label_status": "PENDING",
+      "lock": "cases/GATE-22/source.lock.json",
+      "origin": "public-report"
+    },
+    {
+      "case": "cases/GATE-24/case.json",
+      "id": "GATE-24",
+      "label_status": "PENDING",
+      "lock": "cases/GATE-24/source.lock.json",
+      "origin": "public-report"
+    },
+    {
+      "case": "cases/GATE-28/case.json",
+      "id": "GATE-28",
+      "label_status": "PENDING",
+      "lock": "cases/GATE-28/source.lock.json",
+      "origin": "public-report"
+    },
+    {
+      "case": "cases/GATE-29/case.json",
+      "id": "GATE-29",
+      "label_status": "PENDING",
+      "lock": "cases/GATE-29/source.lock.json",
+      "origin": "public-report"
+    },
+    {
+      "case": "cases/GATE-30/case.json",
+      "id": "GATE-30",
+      "label_status": "PENDING",
+      "lock": "cases/GATE-30/source.lock.json",
+      "origin": "public-report"
+    },
+    {
+      "case": "cases/GATE-31/case.json",
+      "id": "GATE-31",
+      "label_status": "PENDING",
+      "lock": "cases/GATE-31/source.lock.json",
+      "origin": "public-report"
+    },
+    {
+      "case": "cases/GATE-32/case.json",
+      "id": "GATE-32",
+      "label_status": "PENDING",
+      "lock": "cases/GATE-32/source.lock.json",
+      "origin": "public-report"
+    },
+    {
+      "case": "cases/GATE-33/case.json",
+      "id": "GATE-33",
+      "label_status": "PENDING",
+      "lock": "cases/GATE-33/source.lock.json",
+      "origin": "public-report"
+    },
+    {
+      "case": "cases/GATE-36/case.json",
+      "id": "GATE-36",
+      "label_status": "PENDING",
+      "lock": "cases/GATE-36/source.lock.json",
+      "origin": "public-report"
+    },
+    {
+      "case": "cases/GATE-38/case.json",
+      "id": "GATE-38",
+      "label_status": "PENDING",
+      "lock": "cases/GATE-38/source.lock.json",
+      "origin": "public-report"
+    },
+    {
+      "case": "cases/GATE-40/case.json",
+      "id": "GATE-40",
+      "label_status": "PENDING",
+      "lock": "cases/GATE-40/source.lock.json",
+      "origin": "public-report"
+    },
+    {
+      "case": "cases/GATE-47/case.json",
+      "id": "GATE-47",
+      "label_status": "PENDING",
+      "lock": "cases/GATE-47/source.lock.json",
+      "origin": "public-report"
+    },
+    {
+      "case": "cases/DEV-H01/case.json",
+      "id": "DEV-H01",
+      "label_status": "AI-PROPOSED",
+      "lock": "cases/DEV-H01/source.lock.json",
+      "origin": "DEV-history"
+    },
+    {
+      "case": "cases/DEV-H02/case.json",
+      "id": "DEV-H02",
+      "label_status": "AI-PROPOSED",
+      "lock": "cases/DEV-H02/source.lock.json",
+      "origin": "DEV-history"
+    },
+    {
+      "case": "cases/DEV-H03/case.json",
+      "id": "DEV-H03",
+      "label_status": "AI-PROPOSED",
+      "lock": "cases/DEV-H03/source.lock.json",
+      "origin": "DEV-history"
+    },
+    {
+      "case": "cases/DEV-H04/case.json",
+      "id": "DEV-H04",
+      "label_status": "AI-PROPOSED",
+      "lock": "cases/DEV-H04/source.lock.json",
+      "origin": "DEV-history"
+    },
+    {
+      "case": "cases/DEV-H05/case.json",
+      "id": "DEV-H05",
+      "label_status": "AI-PROPOSED",
+      "lock": "cases/DEV-H05/source.lock.json",
+      "origin": "DEV-history"
+    },
+    {
+      "case": "cases/DEV-H06/case.json",
+      "id": "DEV-H06",
+      "label_status": "AI-PROPOSED",
+      "lock": "cases/DEV-H06/source.lock.json",
+      "origin": "DEV-history"
+    }
+  ],
+  "note": "Case labels and scoring are frozen before E1 benchmark runs; public cards with blank reviewer fields remain PENDING.",
+  "pairs": [
+    {
+      "origin": "synthetic",
+      "pair_id": "ADV-01",
+      "repaired_case": "ADV-L01",
+      "vulnerable_case": "ADV-V01"
+    },
+    {
+      "origin": "synthetic",
+      "pair_id": "ADV-02",
+      "repaired_case": "ADV-L02",
+      "vulnerable_case": "ADV-V02"
+    },
+    {
+      "origin": "synthetic",
+      "pair_id": "ADV-03",
+      "repaired_case": "ADV-L03",
+      "vulnerable_case": "ADV-V03"
+    },
+    {
+      "origin": "synthetic",
+      "pair_id": "ADV-04",
+      "repaired_case": "ADV-L04",
+      "vulnerable_case": "ADV-V04"
+    },
+    {
+      "origin": "synthetic",
+      "pair_id": "ADV-05",
+      "repaired_case": "ADV-L05",
+      "vulnerable_case": "ADV-V05"
+    },
+    {
+      "origin": "synthetic",
+      "pair_id": "ADV-06",
+      "repaired_case": "ADV-L06",
+      "vulnerable_case": "ADV-V06"
+    },
+    {
+      "origin": "synthetic",
+      "pair_id": "ADV-07",
+      "repaired_case": "ADV-L07",
+      "vulnerable_case": "ADV-V07"
+    },
+    {
+      "origin": "synthetic",
+      "pair_id": "ADV-08",
+      "repaired_case": "ADV-L08",
+      "vulnerable_case": "ADV-V08"
+    },
+    {
+      "origin": "synthetic",
+      "pair_id": "ADV-09",
+      "repaired_case": "ADV-L09",
+      "vulnerable_case": "ADV-V09"
+    },
+    {
+      "origin": "synthetic",
+      "pair_id": "ADV-10",
+      "repaired_case": "ADV-L10",
+      "vulnerable_case": "ADV-V10"
+    },
+    {
+      "origin": "synthetic",
+      "pair_id": "ADV-11",
+      "repaired_case": "ADV-L11",
+      "vulnerable_case": "ADV-V11"
+    },
+    {
+      "origin": "synthetic",
+      "pair_id": "ADV-12",
+      "repaired_case": "ADV-L12",
+      "vulnerable_case": "ADV-V12"
+    },
+    {
+      "origin": "synthetic",
+      "pair_id": "ADV-13",
+      "repaired_case": "ADV-L13",
+      "vulnerable_case": "ADV-V13"
+    },
+    {
+      "origin": "synthetic",
+      "pair_id": "ADV-14",
+      "repaired_case": "ADV-L14",
+      "vulnerable_case": "ADV-V14"
+    },
+    {
+      "origin": "synthetic",
+      "pair_id": "ADV-15",
+      "repaired_case": "ADV-L15",
+      "vulnerable_case": "ADV-V15"
+    },
+    {
+      "origin": "synthetic",
+      "pair_id": "ADV-16",
+      "repaired_case": "ADV-L16",
+      "vulnerable_case": "ADV-V16"
+    },
+    {
+      "origin": "synthetic",
+      "pair_id": "ADV-17",
+      "repaired_case": "ADV-L17",
+      "vulnerable_case": "ADV-V17"
+    },
+    {
+      "origin": "synthetic",
+      "pair_id": "ADV-18",
+      "repaired_case": "ADV-L18",
+      "vulnerable_case": "ADV-V18"
+    },
+    {
+      "origin": "synthetic",
+      "pair_id": "ADV-19",
+      "repaired_case": "ADV-L19",
+      "vulnerable_case": "ADV-V19"
+    },
+    {
+      "origin": "synthetic",
+      "pair_id": "ADV-20",
+      "repaired_case": "ADV-L20",
+      "vulnerable_case": "ADV-V20"
+    },
+    {
+      "origin": "synthetic",
+      "pair_id": "ADV-21",
+      "repaired_case": "ADV-L21",
+      "vulnerable_case": "ADV-V21"
+    },
+    {
+      "origin": "synthetic",
+      "pair_id": "ADV-22",
+      "repaired_case": "ADV-L22",
+      "vulnerable_case": "ADV-V22"
+    },
+    {
+      "origin": "synthetic",
+      "pair_id": "ADV-23",
+      "repaired_case": "ADV-L23",
+      "vulnerable_case": "ADV-V23"
+    },
+    {
+      "origin": "DEV-history",
+      "pair_id": "DEV-H01",
+      "repaired_case": "DEV-H02",
+      "vulnerable_case": "DEV-H01"
+    },
+    {
+      "origin": "DEV-history",
+      "pair_id": "DEV-H02",
+      "repaired_case": "DEV-H04",
+      "vulnerable_case": "DEV-H03"
+    },
+    {
+      "origin": "DEV-history",
+      "pair_id": "DEV-H03",
+      "repaired_case": "DEV-H06",
+      "vulnerable_case": "DEV-H05"
+    },
+    {
+      "origin": "public-report",
+      "pair_id": "GATE-14",
+      "repaired_case": "GATE-14",
+      "revision_sides": [
+        "vulnerable",
+        "repaired"
+      ],
+      "vulnerable_case": "GATE-14"
+    },
+    {
+      "origin": "public-report",
+      "pair_id": "GATE-15",
+      "repaired_case": "GATE-15",
+      "revision_sides": [
+        "vulnerable",
+        "repaired"
+      ],
+      "vulnerable_case": "GATE-15"
+    },
+    {
+      "origin": "public-report",
+      "pair_id": "GATE-20",
+      "repaired_case": "GATE-20",
+      "revision_sides": [
+        "vulnerable",
+        "repaired"
+      ],
+      "vulnerable_case": "GATE-20"
+    },
+    {
+      "origin": "public-report",
+      "pair_id": "GATE-21",
+      "repaired_case": "GATE-21",
+      "revision_sides": [
+        "vulnerable",
+        "repaired"
+      ],
+      "vulnerable_case": "GATE-21"
+    },
+    {
+      "origin": "public-report",
+      "pair_id": "GATE-22",
+      "repaired_case": "GATE-22",
+      "revision_sides": [
+        "vulnerable",
+        "repaired"
+      ],
+      "vulnerable_case": "GATE-22"
+    },
+    {
+      "origin": "public-report",
+      "pair_id": "GATE-24",
+      "repaired_case": "GATE-24",
+      "revision_sides": [
+        "vulnerable",
+        "repaired"
+      ],
+      "vulnerable_case": "GATE-24"
+    },
+    {
+      "origin": "public-report",
+      "pair_id": "GATE-28",
+      "repaired_case": "GATE-28",
+      "revision_sides": [
+        "vulnerable",
+        "repaired"
+      ],
+      "vulnerable_case": "GATE-28"
+    },
+    {
+      "origin": "public-report",
+      "pair_id": "GATE-29",
+      "repaired_case": "GATE-29",
+      "revision_sides": [
+        "vulnerable",
+        "repaired"
+      ],
+      "vulnerable_case": "GATE-29"
+    },
+    {
+      "origin": "public-report",
+      "pair_id": "GATE-30",
+      "repaired_case": "GATE-30",
+      "revision_sides": [
+        "vulnerable",
+        "repaired"
+      ],
+      "vulnerable_case": "GATE-30"
+    },
+    {
+      "origin": "public-report",
+      "pair_id": "GATE-31",
+      "repaired_case": "GATE-31",
+      "revision_sides": [
+        "vulnerable",
+        "repaired"
+      ],
+      "vulnerable_case": "GATE-31"
+    },
+    {
+      "origin": "public-report",
+      "pair_id": "GATE-32",
+      "repaired_case": "GATE-32",
+      "revision_sides": [
+        "vulnerable",
+        "repaired"
+      ],
+      "vulnerable_case": "GATE-32"
+    },
+    {
+      "origin": "public-report",
+      "pair_id": "GATE-33",
+      "repaired_case": "GATE-33",
+      "revision_sides": [
+        "vulnerable",
+        "repaired"
+      ],
+      "vulnerable_case": "GATE-33"
+    },
+    {
+      "origin": "public-report",
+      "pair_id": "GATE-36",
+      "repaired_case": "GATE-36",
+      "revision_sides": [
+        "vulnerable",
+        "repaired"
+      ],
+      "vulnerable_case": "GATE-36"
+    },
+    {
+      "origin": "public-report",
+      "pair_id": "GATE-38",
+      "repaired_case": "GATE-38",
+      "revision_sides": [
+        "vulnerable",
+        "repaired"
+      ],
+      "vulnerable_case": "GATE-38"
+    },
+    {
+      "origin": "public-report",
+      "pair_id": "GATE-40",
+      "repaired_case": "GATE-40",
+      "revision_sides": [
+        "vulnerable",
+        "repaired"
+      ],
+      "vulnerable_case": "GATE-40"
+    },
+    {
+      "origin": "public-report",
+      "pair_id": "GATE-47",
+      "repaired_case": "GATE-47",
+      "revision_sides": [
+        "vulnerable",
+        "repaired"
+      ],
+      "vulnerable_case": "GATE-47"
+    }
+  ],
+  "schema": "bindcheck-benchmark.manifest/v1",
+  "source_revision": "b0cdad7f5101b7000d9c2ceee138f2a9fb0abd65"
+}

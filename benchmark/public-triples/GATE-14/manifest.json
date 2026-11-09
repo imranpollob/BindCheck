@@ -1,0 +1,233 @@
+{
+  "exposure": "EXPOSED",
+  "gate_manifest": "gate/GATE-MANIFEST.csv",
+  "id": "GATE-14",
+  "label_status": "PENDING",
+  "origin": "public-report",
+  "protocol_class": "UNRESOLVED",
+  "reconstruction": {
+    "build_ledger": "results/raw/bench/public-audit-20261109/",
+    "checkout_ledger": "results/raw/bench/public-fetch-20261109/checkouts.json",
+    "dependency_ledger": "results/raw/bench/public-deps-20261109/runs.json",
+    "fetch_ledger": "results/raw/bench/public-fetch-20261109/fetch.json",
+    "script": "benchmark/fetch_public.py; benchmark/checkout_public.py; benchmark/audit_public.py"
+  },
+  "repository": "privacy-scaling-explorations/maci",
+  "repository_url": "https://github.com/privacy-scaling-explorations/maci.git",
+  "revisions": {
+    "repaired": {
+      "build": {
+        "circuit": {
+          "argv": [
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/tools/circom-src/target/release/circom",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-fetch-20261109/work/privacy-scaling-explorations__maci/6df6a4054da9/circuits/circom/tallyVotes.circom",
+            "--r1cs",
+            "--sym",
+            "--O0",
+            "-o",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-audit-20261109/GATE-14/repaired/build-3u7mnztx/circuit-out",
+            "-l",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/node_modules"
+          ],
+          "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-fetch-20261109/work/privacy-scaling-explorations__maci/6df6a4054da9",
+          "elapsed_seconds": 0.7040601660009997,
+          "exit_status": 1,
+          "status": "BUILD_FAILED",
+          "stderr": "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-audit-20261109/GATE-14/repaired/circuit.stderr",
+          "stderr_excerpt": "\u001b[0m\u001b[1m\u001b[38;5;9merror[P1014]\u001b[0m\u001b[1m:  The file ../../node_modules/circomlib/circuits/poseidon.circom to be included has not been found\u001b[0m\n \u001b[0m\u001b[34m=\u001b[0m Consider using compilation option -l to indicate include paths\n\n\u001b[31mprevious errors were found\u001b[0m\n",
+          "stderr_sha256": "c626b79d2655047bf96d3efbbf3983ef3f95e4ed94aeae25bdee0238b7ca537a",
+          "stdout": "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-audit-20261109/GATE-14/repaired/circuit.stdout",
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "timed_out": false
+        },
+        "consumer": {
+          "argv": [
+            "solc",
+            "--bin",
+            "--base-path",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-fetch-20261109/work/privacy-scaling-explorations__maci/6df6a4054da9",
+            "--include-path",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-fetch-20261109/work/privacy-scaling-explorations__maci/6df6a4054da9/node_modules",
+            "-o",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-audit-20261109/GATE-14/repaired/build-3u7mnztx/consumer-out",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-fetch-20261109/work/privacy-scaling-explorations__maci/6df6a4054da9/contracts/contracts/Poll.sol"
+          ],
+          "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-fetch-20261109/work/privacy-scaling-explorations__maci/6df6a4054da9",
+          "elapsed_seconds": 0.36514112499935436,
+          "exit_status": 1,
+          "status": "BUILD_FAILED",
+          "stderr": "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-audit-20261109/GATE-14/repaired/consumer.stderr",
+          "stderr_excerpt": "Error: Source file requires different compiler version (current compiler is 0.8.30+commit.73712a01.Darwin.appleclang) - note that nightly builds are considered to be strictly less than the released version\n --> contracts/contracts/Poll.sol:3:1:\n  |\n3 | pragma solidity ^0.7.2;\n  | ^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+          "stderr_sha256": "1d0181c35837140e58ca5890f5c7eb67ac64aad54036f1556fdb57c1e1cf4ed1",
+          "stdout": "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-audit-20261109/GATE-14/repaired/consumer.stdout",
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "timed_out": false
+        },
+        "verifier": {
+          "status": "ROLE_MISSING"
+        }
+      },
+      "buildability": {
+        "reason": "Only a snarkJS Solidity template with <%contract_name%> and a dynamic-VK verifier are committed; no generated circuit-specific Groth16 verifier for tallyVotes is pinned. Gate card also identifies a different processMessages fix.",
+        "role_statuses": {
+          "circuit": "BUILD_FAILED",
+          "consumer": "BUILD_FAILED",
+          "verifier": "ROLE_MISSING"
+        },
+        "status": "STRUCTURAL_BLOCKED"
+      },
+      "commit": "6df6a4054da926b07f35c5befab4f1f8af33dcc6",
+      "dependency_install": {
+        "status": "NOT_ATTEMPTED"
+      },
+      "git_fetch_command": [
+        "git",
+        "fetch",
+        "--filter=blob:none",
+        "--no-tags",
+        "--depth=1",
+        "origin",
+        "6df6a4054da926b07f35c5befab4f1f8af33dcc6"
+      ],
+      "locks": [
+        {
+          "path": "package-lock.json",
+          "sha256": "3e3ae2cafd841c5688900ae891298812be7aa22e873418af1011d5c91b546160"
+        }
+      ],
+      "observed_head": "6df6a4054da926b07f35c5befab4f1f8af33dcc6",
+      "repository": "privacy-scaling-explorations/maci",
+      "roles": {
+        "candidate_verifier": {
+          "path": "circuits/ts/verifier_groth16.sol",
+          "sha256": "ac434027a98da4cf4ed29153c8595c00ae98a6275a502447f428a8eabaa3b47c",
+          "type": "file"
+        },
+        "circuit": {
+          "path": "circuits/circom/tallyVotes.circom",
+          "sha256": "6bfddef008b4c738a1d3e967018b290301d5b7c4efc8b83957f9bfa72bfdfb98",
+          "type": "file"
+        },
+        "consumer": {
+          "path": "contracts/contracts/Poll.sol",
+          "sha256": "4292885d1d8f8bc6e4709e68da2161648ed336f4abb472da9062633a094ea1e4",
+          "type": "file"
+        }
+      },
+      "source": "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-fetch-20261109/work/privacy-scaling-explorations__maci/6df6a4054da9",
+      "source_correspondence": "No complete Circom/generated-Groth16/consumer source correspondence is established.",
+      "status": "STRUCTURAL_BLOCKED",
+      "structural_blocker": "Only a snarkJS Solidity template with <%contract_name%> and a dynamic-VK verifier are committed; no generated circuit-specific Groth16 verifier for tallyVotes is pinned. Gate card also identifies a different processMessages fix."
+    },
+    "vulnerable": {
+      "build": {
+        "circuit": {
+          "argv": [
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/tools/circom-src/target/release/circom",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-fetch-20261109/work/privacy-scaling-explorations__maci/2db5f625b67a/circuits/circom/tallyVotes.circom",
+            "--r1cs",
+            "--sym",
+            "--O0",
+            "-o",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-audit-20261109/GATE-14/vulnerable/build-ed3aockc/circuit-out",
+            "-l",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/node_modules"
+          ],
+          "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-fetch-20261109/work/privacy-scaling-explorations__maci/2db5f625b67a",
+          "elapsed_seconds": 0.7005338329981896,
+          "exit_status": 1,
+          "status": "BUILD_FAILED",
+          "stderr": "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-audit-20261109/GATE-14/vulnerable/circuit.stderr",
+          "stderr_excerpt": "\u001b[0m\u001b[1m\u001b[38;5;9merror[P1008]\u001b[0m\u001b[1m: Missing semicolon\u001b[0m\n   \u001b[0m\u001b[34m\u250c\u2500\u001b[0m \"/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-fetch-20261109/work/privacy-scaling-explorations__maci/2db5f625b67a/circuits/circom/tallyVotes.circom\":31:19\n   \u001b[0m\u001b[34m\u2502\u001b[0m\n\u001b[0m\u001b[34m31\u001b[0m \u001b[0m\u001b[34m\u2502\u001b[0m     signal private\u001b[0m\u001b[31m \u001b[0minput stateRoot;\n   \u001b[0m\u001b[34m\u2502\u001b[0m                   \u001b[0m\u001b[31m^\u001b[0m \u001b[0m\u001b[31mA semicolon is needed here\u001b[0m\n\n\u001b[0m\u001b[1m\u001b[38;5;9merror[P1012]\u001b[0m\u001b[1m: illegal expression\u001b[0m\n   \u001b[0m\u001b[34m\u250c\u2500\u001b[0m \"/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-fetch-20261109/work/privacy-scaling-explorations__maci/2db5f625b67a/circuits/circom/tallyVotes.circom\":31:20\n   \u001b[0m\u001b[34m\u2502\u001b[0m\n\u001b[0m\u001b[34m31\u001b[0m \u001b[0m\u001b[34m\u2502\u001b[0m     signal private \u001b[0m\u001b[31minput stateRoot;\u001b[0m\n   \u001b[0m\u001b[34m\u2502\u001b[0m                    \u001b[0m\u001b[31m^^^^^^^^^^^^^^^^\u001b[0m \u001b[0m\u001b[31mhere\u001b[0m\n\n\u001b[0m\u001b[1m\u001b[38;5;9merror[P1008]\u001b[0m\u001b[1m: Missing semicolon\u001b[0m\n   \u001b[0m\u001b[34m\u250c\u2500\u001b[0m \"/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-fetch-20261109/work/privacy-scaling-explorations__maci/2db5f625b67a/circuits/circom/tallyVotes.circom\":32:19\n   \u001b[0m\u001b[34m\u2502\u001b[0m\n\u001b[0m\u001b[34m32\u001b[0m \u001b[",
+          "stderr_sha256": "f8d91e966a16e6cc6f6437757dc62c7646bd3074fccb1d31fd04efbbf3dc7548",
+          "stdout": "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-audit-20261109/GATE-14/vulnerable/circuit.stdout",
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "timed_out": false
+        },
+        "consumer": {
+          "argv": [
+            "solc",
+            "--bin",
+            "--base-path",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-fetch-20261109/work/privacy-scaling-explorations__maci/2db5f625b67a",
+            "--include-path",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-fetch-20261109/work/privacy-scaling-explorations__maci/2db5f625b67a/node_modules",
+            "-o",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-audit-20261109/GATE-14/vulnerable/build-ed3aockc/consumer-out",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-fetch-20261109/work/privacy-scaling-explorations__maci/2db5f625b67a/contracts/contracts/Poll.sol"
+          ],
+          "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-fetch-20261109/work/privacy-scaling-explorations__maci/2db5f625b67a",
+          "elapsed_seconds": 0.3666313329995319,
+          "exit_status": 1,
+          "status": "BUILD_FAILED",
+          "stderr": "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-audit-20261109/GATE-14/vulnerable/consumer.stderr",
+          "stderr_excerpt": "Error: Source file requires different compiler version (current compiler is 0.8.30+commit.73712a01.Darwin.appleclang) - note that nightly builds are considered to be strictly less than the released version\n --> contracts/contracts/Poll.sol:3:1:\n  |\n3 | pragma solidity ^0.7.2;\n  | ^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+          "stderr_sha256": "1d0181c35837140e58ca5890f5c7eb67ac64aad54036f1556fdb57c1e1cf4ed1",
+          "stdout": "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-audit-20261109/GATE-14/vulnerable/consumer.stdout",
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "timed_out": false
+        },
+        "verifier": {
+          "status": "ROLE_MISSING"
+        }
+      },
+      "buildability": {
+        "reason": "Only a snarkJS Solidity template with <%contract_name%> and a dynamic-VK verifier are committed; no generated circuit-specific Groth16 verifier for tallyVotes is pinned. Gate card also identifies a different processMessages fix.",
+        "role_statuses": {
+          "circuit": "BUILD_FAILED",
+          "consumer": "BUILD_FAILED",
+          "verifier": "ROLE_MISSING"
+        },
+        "status": "STRUCTURAL_BLOCKED"
+      },
+      "commit": "2db5f625b67a6b810bd851950d7a42c26189088b",
+      "dependency_install": {
+        "status": "NOT_ATTEMPTED"
+      },
+      "git_fetch_command": [
+        "git",
+        "fetch",
+        "--filter=blob:none",
+        "--no-tags",
+        "--depth=1",
+        "origin",
+        "2db5f625b67a6b810bd851950d7a42c26189088b"
+      ],
+      "locks": [
+        {
+          "path": "package-lock.json",
+          "sha256": "844316dcc1cc65bae2efc71324910736efcd51d0554078aa31df4c0b867a359c"
+        }
+      ],
+      "observed_head": "2db5f625b67a6b810bd851950d7a42c26189088b",
+      "repository": "privacy-scaling-explorations/maci",
+      "roles": {
+        "candidate_verifier": {
+          "path": "circuits/ts/verifier_groth16.sol",
+          "sha256": "ac434027a98da4cf4ed29153c8595c00ae98a6275a502447f428a8eabaa3b47c",
+          "type": "file"
+        },
+        "circuit": {
+          "path": "circuits/circom/tallyVotes.circom",
+          "sha256": "6959d8ad401767762d5e38b1b9220555da2f9049f846f00ca0484bfe9ca65dd3",
+          "type": "file"
+        },
+        "consumer": {
+          "path": "contracts/contracts/Poll.sol",
+          "sha256": "e1f1c93d03821718fc7c4f631a22f42a743f72e0f4e35a03137882676cbb6615",
+          "type": "file"
+        }
+      },
+      "source": "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-fetch-20261109/work/privacy-scaling-explorations__maci/2db5f625b67a",
+      "source_correspondence": "No complete Circom/generated-Groth16/consumer source correspondence is established.",
+      "status": "STRUCTURAL_BLOCKED",
+      "structural_blocker": "Only a snarkJS Solidity template with <%contract_name%> and a dynamic-VK verifier are committed; no generated circuit-specific Groth16 verifier for tallyVotes is pinned. Gate card also identifies a different processMessages fix."
+    }
+  },
+  "schema": "bindcheck-benchmark.public-triple/v1",
+  "unscored_proposal": {
+    "expected_location_regex": "^circuits/circom/tallyVotes\\.circom(:\\d+)?$",
+    "expected_pattern": "NONE",
+    "source": "gate/GATE-MANIFEST.csv; reviewer card remains PENDING"
+  }
+}

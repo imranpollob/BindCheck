@@ -1,0 +1,32 @@
+{
+  "revisions": {
+    "selected": [
+      {
+        "bytes": 1557,
+        "path": "Consumer.sol",
+        "sha256": "85f9cdbc740b308a2e3be35c83a5512805bf59a2852abed64279e59fd1a48e7f"
+      },
+      {
+        "bytes": 714,
+        "path": "Verifier.sol",
+        "sha256": "34c365247d0c96646635d33722a989ef2707a017319b31773c4d470bdf7cbcd9"
+      },
+      {
+        "bytes": 225,
+        "path": "circuit.circom",
+        "sha256": "9f09bc04a91bc4e3a27ac902a9596f599dacd6026dc3cb93d73177ccf5146e6b"
+      },
+      {
+        "bytes": 866,
+        "path": "policy.json",
+        "sha256": "d204bdef87f5e612cc50f13e0cfee1bc9ae9ae7a3fbb40a2671ebe34e06a0d86"
+      },
+      {
+        "bytes": 1012,
+        "path": "test/PolicyHarness.t.sol",
+        "sha256": "de155e9bad9828f475ad2e1bf737ae62c0d45e427eabf1c9eb67271e54095a5c"
+      }
+    ]
+  },
+  "schema": "bindcheck-benchmark.source-lock/v1"
+}

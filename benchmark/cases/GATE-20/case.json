@@ -1,0 +1,45 @@
+{
+  "card_sha256": "ef9fa26b9578e400c3e8810fea472b33389f73881766ceb0fcfef7531f9f1bee",
+  "expected_location_regex": null,
+  "expected_pattern": null,
+  "expected_state": "paired",
+  "exposure": "UNEXPOSED",
+  "family": "v2-family:6edc8a55e55ee119f15c",
+  "id": "GATE-20",
+  "label_provenance": "/Users/imranpollob/Coding/bc/bindcheck-zk/review/recall/20-incorrect-initialization-in-membership-circuits.md",
+  "label_status": "PENDING",
+  "limitations": [
+    "Source snapshots do not establish a matched buildable triple; reviewer decision pending"
+  ],
+  "origin": "public-report",
+  "pair_id": "GATE-20",
+  "proposal_location_regex": "^circuits/set/membership\\.circom(:\\d+)?$",
+  "proposal_pattern": "NONE",
+  "protocol": "UNRESOLVED",
+  "revisions": {
+    "repaired": {
+      "commit": "eeb4fc7a4883d513e3fe3adbe2c447133ccd39f2",
+      "repository": "tangle-network/protocol-solidity",
+      "roles": {
+        "circuit": null,
+        "consumer": null,
+        "verifier": null
+      },
+      "snapshot_only": true,
+      "snapshot_root": "benchmark/cases/GATE-20/snapshots/repaired"
+    },
+    "vulnerable": {
+      "commit": "848d073bb17f0aaffc6d39f594cc59efedeaec89",
+      "repository": "tangle-network/protocol-solidity",
+      "roles": {
+        "circuit": null,
+        "consumer": null,
+        "verifier": null
+      },
+      "snapshot_only": true,
+      "snapshot_root": "benchmark/cases/GATE-20/snapshots/vulnerable"
+    }
+  },
+  "schema": "bindcheck-benchmark.case/v1",
+  "source_case_id": "circom/tangle-network/protocol-solidity/veridise_incorrect_initialization_in_membership_circuits"
+}

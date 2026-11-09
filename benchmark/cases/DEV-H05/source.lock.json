@@ -1,0 +1,22 @@
+{
+  "revisions": {
+    "selected": [
+      {
+        "bytes": 3797,
+        "path": "noir/agg_agg/src/main.nr",
+        "sha256": "c44a67e6a2e704cdbae5ebe251a0cb1da19d1e9417cf9b332b86768c0ee8604d"
+      },
+      {
+        "bytes": 98485,
+        "path": "eth/noir/agg_agg.sol",
+        "sha256": "6d3c96f07f61f2e3129fd4843666a43e068740cad5531158a8719dd439187eeb"
+      },
+      {
+        "bytes": 26295,
+        "path": "eth/contracts/rollup3/RollupV1.sol",
+        "sha256": "7062065cc95f447fea8bb28242d51c836c3cf9e39f1625180ecf9c240a5ffd8f"
+      }
+    ]
+  },
+  "schema": "bindcheck-benchmark.source-lock/v1"
+}

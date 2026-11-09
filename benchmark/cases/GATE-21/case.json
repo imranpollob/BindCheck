@@ -1,0 +1,45 @@
+{
+  "card_sha256": "87b9d1c95b7a2f9a0489b11e4d6d34d2428ac25a72459cfcd1c28dbde7592234",
+  "expected_location_regex": null,
+  "expected_pattern": null,
+  "expected_state": "paired",
+  "exposure": "EXPOSED",
+  "family": "v2-family:0e860df39615ca1cb602",
+  "id": "GATE-21",
+  "label_provenance": "/Users/imranpollob/Coding/bc/bindcheck-zk/review/recall/21-semaphore-nullifier-field-alias.md",
+  "label_status": "PENDING",
+  "limitations": [
+    "Source snapshots do not establish a matched buildable triple; reviewer decision pending"
+  ],
+  "origin": "public-report",
+  "pair_id": "GATE-21",
+  "proposal_location_regex": "^semaphorejs/contracts/Semaphore\\.sol(:\\d+)?$",
+  "proposal_pattern": "P3",
+  "protocol": "UNRESOLVED",
+  "revisions": {
+    "repaired": {
+      "commit": "3dcf79f6a095397352f71384e3dc6889c640a50f",
+      "repository": "semaphore-protocol/semaphore",
+      "roles": {
+        "circuit": null,
+        "consumer": null,
+        "verifier": null
+      },
+      "snapshot_only": true,
+      "snapshot_root": "benchmark/cases/GATE-21/snapshots/repaired"
+    },
+    "vulnerable": {
+      "commit": "8d703c124c663537966d6fc35cfec84146e236b2",
+      "repository": "semaphore-protocol/semaphore",
+      "roles": {
+        "circuit": null,
+        "consumer": null,
+        "verifier": null
+      },
+      "snapshot_only": true,
+      "snapshot_root": "benchmark/cases/GATE-21/snapshots/vulnerable"
+    }
+  },
+  "schema": "bindcheck-benchmark.case/v1",
+  "source_case_id": "semaphore-nullifier-field-alias"
+}

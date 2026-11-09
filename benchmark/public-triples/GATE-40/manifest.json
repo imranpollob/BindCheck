@@ -1,0 +1,313 @@
+{
+  "exposure": "NOT_MARKED",
+  "gate_manifest": "gate/GATE-MANIFEST.csv",
+  "id": "GATE-40",
+  "label_status": "PENDING",
+  "origin": "public-report",
+  "protocol_class": "CIRCOM_GROTH16_SOURCE_LINKED_KEY_UNPROVEN",
+  "reconstruction": {
+    "build_ledger": "results/raw/bench/public-audit-20261109/",
+    "checkout_ledger": "results/raw/bench/public-fetch-20261109/checkouts.json",
+    "dependency_ledger": "results/raw/bench/public-deps-20261109/runs.json",
+    "fetch_ledger": "results/raw/bench/public-fetch-20261109/fetch.json",
+    "script": "benchmark/fetch_public.py; benchmark/checkout_public.py; benchmark/audit_public.py"
+  },
+  "repository": "zkemail/ether-email-auth",
+  "repository_url": "https://github.com/zkemail/ether-email-auth.git",
+  "revisions": {
+    "repaired": {
+      "build": {
+        "circuit": {
+          "argv": [
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/tools/circom-src/target/release/circom",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-fetch-20261109/work/zkemail__ether-email-auth/984b5919a9be/packages/circuits/src/email_auth.circom",
+            "--r1cs",
+            "--sym",
+            "--O0",
+            "-o",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-audit-20261109/GATE-40/repaired/attempt-001/build-2u48bvf3/circuit-out",
+            "-l",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-fetch-20261109/work/zkemail__ether-email-auth/984b5919a9be/node_modules",
+            "-l",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/node_modules"
+          ],
+          "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-fetch-20261109/work/zkemail__ether-email-auth/984b5919a9be",
+          "elapsed_seconds": 0.04242358299961779,
+          "exit_status": 1,
+          "status": "BUILD_FAILED",
+          "stderr": "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-audit-20261109/GATE-40/repaired/attempt-001/circuit.stderr",
+          "stderr_excerpt": "\u001b[0m\u001b[1m\u001b[38;5;9merror[P1014]\u001b[0m\u001b[1m:  The file @zk-email/circuits/email-verifier.circom to be included has not been found\u001b[0m\n \u001b[0m\u001b[34m=\u001b[0m Consider using compilation option -l to indicate include paths\n\n\u001b[31mprevious errors were found\u001b[0m\n",
+          "stderr_sha256": "8b5ac1614b39d2e5600820f41cd8007637e10ee548606f003f5bfeb10f3a09ca",
+          "stdout": "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-audit-20261109/GATE-40/repaired/attempt-001/circuit.stdout",
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "timed_out": false
+        },
+        "consumer": {
+          "argv": [
+            "solc",
+            "--bin",
+            "--base-path",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-fetch-20261109/work/zkemail__ether-email-auth/984b5919a9be",
+            "--include-path",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-fetch-20261109/work/zkemail__ether-email-auth/984b5919a9be/node_modules",
+            "-o",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-audit-20261109/GATE-40/repaired/attempt-001/build-2u48bvf3/consumer-out",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-fetch-20261109/work/zkemail__ether-email-auth/984b5919a9be/packages/contracts/src/EmailAuth.sol"
+          ],
+          "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-fetch-20261109/work/zkemail__ether-email-auth/984b5919a9be",
+          "elapsed_seconds": 0.04119020800135331,
+          "exit_status": 1,
+          "status": "BUILD_FAILED",
+          "stderr": "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-audit-20261109/GATE-40/repaired/attempt-001/consumer.stderr",
+          "stderr_excerpt": "Error: Source \"@zk-email/contracts/DKIMRegistry.sol\" not found: File not found. Searched the following locations: \"/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-fetch-20261109/work/zkemail__ether-email-auth/984b5919a9be\", \"/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-fetch-20261109/work/zkemail__ether-email-auth/984b5919a9be/node_modules\".\n --> packages/contracts/src/EmailAuth.sol:5:1:\n  |\n5 | import {IDKIMRegistry} from \"@zk-email/contracts/DKIMRegistry.sol\";\n  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\nError: Source \"@openzeppelin/contracts/utils/Strings.sol\" not found: File not found. Searched the following locations: \"/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-fetch-20261109/work/zkemail__ether-email-auth/984b5919a9be\", \"/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-fetch-20261109/work/zkemail__ether-email-auth/984b5919a9be/node_modules\".\n --> packages/contracts/src/EmailAuth.sol:8:1:\n  |\n8 | import {Strings} from \"@openzeppelin/contracts/utils/Strings.sol\";\n  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\nError: Sour",
+          "stderr_sha256": "a46d0f6e6b3edfd3fec6da769c5aa0df4613fda68ad1e1473b67726ddc3fcab5",
+          "stdout": "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-audit-20261109/GATE-40/repaired/attempt-001/consumer.stdout",
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "timed_out": false
+        },
+        "verifier": {
+          "argv": [
+            "solc",
+            "--bin",
+            "--base-path",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-fetch-20261109/work/zkemail__ether-email-auth/984b5919a9be",
+            "--include-path",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-fetch-20261109/work/zkemail__ether-email-auth/984b5919a9be/node_modules",
+            "-o",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-audit-20261109/GATE-40/repaired/attempt-001/build-2u48bvf3/verifier-out",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-fetch-20261109/work/zkemail__ether-email-auth/984b5919a9be/packages/contracts/src/utils/Groth16Verifier.sol"
+          ],
+          "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-fetch-20261109/work/zkemail__ether-email-auth/984b5919a9be",
+          "elapsed_seconds": 0.03867004200219526,
+          "exit_status": 0,
+          "status": "BUILD_OK",
+          "stderr": "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-audit-20261109/GATE-40/repaired/attempt-001/verifier.stderr",
+          "stderr_excerpt": "",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stdout": "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-audit-20261109/GATE-40/repaired/attempt-001/verifier.stdout",
+          "stdout_sha256": "485a2182ca0d06dbf84abb1b910db99b60c48ec0da94c94821875dfa75ecd15c",
+          "timed_out": false
+        }
+      },
+      "buildability": {
+        "reason": "circuit:BUILD_FAILED; consumer:BUILD_FAILED",
+        "role_statuses": {
+          "circuit": "BUILD_FAILED",
+          "consumer": "BUILD_FAILED",
+          "verifier": "BUILD_OK"
+        },
+        "status": "BUILD_FAILED"
+      },
+      "commit": "984b5919a9be715b743b08863ab6471c2b5356a6",
+      "dependency_install": {
+        "argv": [
+          "yarn",
+          "install",
+          "--frozen-lockfile",
+          "--ignore-scripts",
+          "--ignore-engines",
+          "--non-interactive"
+        ],
+        "lock_sha256": "07733d6140d84418bfb597ee562badafa8f9bc55e6045059a1b231d487361516",
+        "status": "FAILED",
+        "stderr": "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-deps-20261109/zkemail__ether-email-auth/984b5919a9be/stderr",
+        "stderr_sha256": "6745ebc0b64ae88f7bb5a753894edfd2d72303c3b3ca68d02bb5917e0f34945c",
+        "stdout": "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-deps-20261109/zkemail__ether-email-auth/984b5919a9be/stdout",
+        "stdout_sha256": "af6295eb1e8c8c3dc42a07e08a8970494095cb19a70cd68a52aa58e056043347"
+      },
+      "git_fetch_command": [
+        "git",
+        "fetch",
+        "--filter=blob:none",
+        "--no-tags",
+        "--depth=1",
+        "origin",
+        "984b5919a9be715b743b08863ab6471c2b5356a6"
+      ],
+      "locks": [
+        {
+          "path": "yarn.lock",
+          "sha256": "07733d6140d84418bfb597ee562badafa8f9bc55e6045059a1b231d487361516"
+        }
+      ],
+      "observed_head": "984b5919a9be715b743b08863ab6471c2b5356a6",
+      "repository": "zkemail/ether-email-auth",
+      "roles": {
+        "circuit": {
+          "path": "packages/circuits/src/email_auth.circom",
+          "sha256": "68ee35bdf2e2d820db763e3d4f0ddfdfbb302da2f6cd33d42881283fe6088173",
+          "type": "file"
+        },
+        "consumer": {
+          "path": "packages/contracts/src/EmailAuth.sol",
+          "sha256": "e80c52ad9b7bf3e402fa2b4b55c8bb0c1b0e6598deee44d7784f68bac56cff2d",
+          "type": "file"
+        },
+        "intermediary": {
+          "path": "packages/contracts/src/utils/Verifier.sol",
+          "sha256": "7dc78f1769116b308fc393e00813c0ff4acb8b0dd832a392d2973d147234c44c",
+          "type": "file"
+        },
+        "verifier": {
+          "path": "packages/contracts/src/utils/Groth16Verifier.sol",
+          "sha256": "68f8ecc48675168351f59694f42a5ac0cfae9658c4322d5efd436471762a972f",
+          "type": "file"
+        }
+      },
+      "source": "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-fetch-20261109/work/zkemail__ether-email-auth/984b5919a9be",
+      "source_correspondence": "EmailAuth calls utils/Verifier.verifyEmailProof, which calls the committed generated Groth16Verifier; email_auth.circom is the selected main. Verifying-key identity against the circuit is unproved.",
+      "status": "BUILDS_ATTEMPTED",
+      "structural_blocker": null
+    },
+    "vulnerable": {
+      "build": {
+        "circuit": {
+          "argv": [
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/tools/circom-src/target/release/circom",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-fetch-20261109/work/zkemail__ether-email-auth/8a62db1e676a/packages/circuits/src/email_auth.circom",
+            "--r1cs",
+            "--sym",
+            "--O0",
+            "-o",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-audit-20261109/GATE-40/vulnerable/attempt-001/build-9jredat6/circuit-out",
+            "-l",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-fetch-20261109/work/zkemail__ether-email-auth/8a62db1e676a/node_modules",
+            "-l",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/node_modules"
+          ],
+          "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-fetch-20261109/work/zkemail__ether-email-auth/8a62db1e676a",
+          "elapsed_seconds": 90.27853554200192,
+          "exit_status": -9,
+          "status": "TIMEOUT",
+          "stderr": "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-audit-20261109/GATE-40/vulnerable/attempt-001/circuit.stderr",
+          "stderr_excerpt": "",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stdout": "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-audit-20261109/GATE-40/vulnerable/attempt-001/circuit.stdout",
+          "stdout_sha256": "5c5283256cae63051c25d77354c964332e22e359d221739f181ab3e34ee60914",
+          "timed_out": true
+        },
+        "consumer": {
+          "argv": [
+            "solc",
+            "--bin",
+            "--base-path",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-fetch-20261109/work/zkemail__ether-email-auth/8a62db1e676a",
+            "--include-path",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-fetch-20261109/work/zkemail__ether-email-auth/8a62db1e676a/node_modules",
+            "-o",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-audit-20261109/GATE-40/vulnerable/attempt-001/build-9jredat6/consumer-out",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-fetch-20261109/work/zkemail__ether-email-auth/8a62db1e676a/packages/contracts/src/EmailAuth.sol"
+          ],
+          "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-fetch-20261109/work/zkemail__ether-email-auth/8a62db1e676a",
+          "elapsed_seconds": 0.34444008299760753,
+          "exit_status": 0,
+          "status": "BUILD_OK",
+          "stderr": "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-audit-20261109/GATE-40/vulnerable/attempt-001/consumer.stderr",
+          "stderr_excerpt": "",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stdout": "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-audit-20261109/GATE-40/vulnerable/attempt-001/consumer.stdout",
+          "stdout_sha256": "ea27593852a118127645b6dbff2577f92eec5b83cc1a227d78bc7bbf295bf37b",
+          "timed_out": false
+        },
+        "verifier": {
+          "argv": [
+            "solc",
+            "--bin",
+            "--base-path",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-fetch-20261109/work/zkemail__ether-email-auth/8a62db1e676a",
+            "--include-path",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-fetch-20261109/work/zkemail__ether-email-auth/8a62db1e676a/node_modules",
+            "-o",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-audit-20261109/GATE-40/vulnerable/attempt-001/build-9jredat6/verifier-out",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-fetch-20261109/work/zkemail__ether-email-auth/8a62db1e676a/packages/contracts/src/utils/Groth16Verifier.sol"
+          ],
+          "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-fetch-20261109/work/zkemail__ether-email-auth/8a62db1e676a",
+          "elapsed_seconds": 2.170653458000743,
+          "exit_status": 0,
+          "status": "BUILD_OK",
+          "stderr": "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-audit-20261109/GATE-40/vulnerable/attempt-001/verifier.stderr",
+          "stderr_excerpt": "",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stdout": "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-audit-20261109/GATE-40/vulnerable/attempt-001/verifier.stdout",
+          "stdout_sha256": "ef72fc8044bce2ce7e9141fcf499e01fbdf789d6714a3938aed56065f56bf285",
+          "timed_out": false
+        }
+      },
+      "buildability": {
+        "reason": "circuit:TIMEOUT",
+        "role_statuses": {
+          "circuit": "TIMEOUT",
+          "consumer": "BUILD_OK",
+          "verifier": "BUILD_OK"
+        },
+        "status": "BUILD_TIMEOUT"
+      },
+      "commit": "8a62db1e676aedbb20a403be95fffebef12b97e4",
+      "dependency_install": {
+        "argv": [
+          "yarn",
+          "install",
+          "--frozen-lockfile",
+          "--ignore-scripts",
+          "--ignore-engines",
+          "--non-interactive"
+        ],
+        "lock_sha256": "4612d9f722e7adf4856d86372aae7c16b5355916f5f09e7a38c35ed95867fda0",
+        "status": "COMPLETED",
+        "stderr": "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-deps-20261109/zkemail__ether-email-auth/8a62db1e676a/stderr",
+        "stderr_sha256": "329c74a48375382d03c331cdd9bcfcdcf722c09bdb0ed22fc5ab6b56fbca238b",
+        "stdout": "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-deps-20261109/zkemail__ether-email-auth/8a62db1e676a/stdout",
+        "stdout_sha256": "6879f6a352c8d320df70583c26dae3f9ddc1b305f5f4dea596e63bb58842e50d"
+      },
+      "git_fetch_command": [
+        "git",
+        "fetch",
+        "--filter=blob:none",
+        "--no-tags",
+        "--depth=1",
+        "origin",
+        "8a62db1e676aedbb20a403be95fffebef12b97e4"
+      ],
+      "locks": [
+        {
+          "path": "yarn.lock",
+          "sha256": "4612d9f722e7adf4856d86372aae7c16b5355916f5f09e7a38c35ed95867fda0"
+        }
+      ],
+      "observed_head": "8a62db1e676aedbb20a403be95fffebef12b97e4",
+      "repository": "zkemail/ether-email-auth",
+      "roles": {
+        "circuit": {
+          "path": "packages/circuits/src/email_auth.circom",
+          "sha256": "42e2bfb57e495d15df572522e87c9b4f923cc19192bdc5c785509d12640a53b4",
+          "type": "file"
+        },
+        "consumer": {
+          "path": "packages/contracts/src/EmailAuth.sol",
+          "sha256": "7787681f97d513fc46cfb4247ef0818e1e799a648645f724a0befa48b82a5074",
+          "type": "file"
+        },
+        "intermediary": {
+          "path": "packages/contracts/src/utils/Verifier.sol",
+          "sha256": "f6005341a71b30368cee1ac755f6acc3526c4513a486e97a019b864ead20a351",
+          "type": "file"
+        },
+        "verifier": {
+          "path": "packages/contracts/src/utils/Groth16Verifier.sol",
+          "sha256": "ac1b9a2cb316aa03ec6c402e1b0e3d0df221365c0915ca5cf1e33f9e8f56aeaa",
+          "type": "file"
+        }
+      },
+      "source": "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/public-fetch-20261109/work/zkemail__ether-email-auth/8a62db1e676a",
+      "source_correspondence": "EmailAuth calls utils/Verifier.verifyEmailProof, which calls the committed generated Groth16Verifier; email_auth.circom is the selected main. Verifying-key identity against the circuit is unproved.",
+      "status": "BUILDS_ATTEMPTED",
+      "structural_blocker": null
+    }
+  },
+  "schema": "bindcheck-benchmark.public-triple/v1",
+  "unscored_proposal": {
+    "expected_location_regex": "^packages/contracts/src/utils/Groth16Verifier\\.sol(:\\d+)?$",
+    "expected_pattern": "P4",
+    "source": "gate/GATE-MANIFEST.csv; reviewer card remains PENDING"
+  }
+}
