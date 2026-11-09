@@ -28,10 +28,14 @@ def score(case: dict, observation: dict, rules: dict) -> dict:
     location = case.get("expected_location_regex")
     for finding in findings:
         pattern = finding.get("pattern") or rules["finding_pattern_map"].get(finding.get("code"))
+        grade = finding.get("evidence_grade", "E1")
         raw_loc = finding.get("location")
         if isinstance(raw_loc, dict):
             raw_loc = raw_loc.get("path", "") + (":" + str(raw_loc["line"]) if raw_loc.get("line") is not None else "")
-        right = bool(expected and location and pattern == expected and raw_loc and re.fullmatch(location, raw_loc))
+        right = bool(finding.get("code") not in rules.get("excluded_finding_codes", [])
+                     and grade in ("E1", "E2", "E3", "E4")
+                     and expected and location and pattern == expected and raw_loc
+                     and re.fullmatch(location, raw_loc))
         (target if right else other).append(finding)
     if case["label_status"] == "PENDING":
         outcome = "UNKNOWN"; reason = "LABEL_PENDING"

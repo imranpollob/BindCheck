@@ -69,11 +69,16 @@ def main():
     ap.add_argument("--synthetic-bindcheck",type=pathlib.Path,required=True)
     ap.add_argument("--local",type=pathlib.Path,required=True)
     ap.add_argument("--build",type=pathlib.Path,required=True)
+    ap.add_argument("--zkfuzz",type=pathlib.Path,required=True)
+    ap.add_argument("--zkfuzz-retry",type=pathlib.Path,required=True)
     ap.add_argument("--output",type=pathlib.Path,required=True)
     args=ap.parse_args()
     manifest=read(BENCH/"manifest.json")
     builds={(r["case_id"],r["side"]):r for r in read(args.build)["records"]}
     native={(r["id"],r["side"]):r for r in read(args.local/"runs.json")["records"]}
+    zkfuzz={(r["case_id"],r["side"]):r for r in read(args.zkfuzz)["records"]}
+    retry_records={(r["case_id"],r["side"]):r for r in read(args.zkfuzz_retry)["records"]}
+    zkfuzz.update(retry_records)
     observations=[]
     for item in manifest["cases"]:
         case=read(BENCH/item["case"]);cid=case["id"]
@@ -92,7 +97,12 @@ def main():
             for name,key in (("Circomspect","circomspect"),("Picus","picus"),("ZKAP","zkap")):
                 path=abc/"B.json"
                 observations.append(native_circuit(name,cid,side,path,key) if allowed else base(name,cid,side,"UNKNOWN",b["status"],path))
-            observations.append(base("zkFuzz",cid,side,"UNKNOWN","CIRCUIT_ONLY_NO_INTEGRATION_VERDICT",args.local))
+            z=zkfuzz[cid,side]
+            zo=base("zkFuzz",cid,side,"UNKNOWN",
+                    "CIRCUIT_ONLY_NO_INTEGRATION_VERDICT" if z["status"]=="COMPLETED" else z["status"],
+                    args.zkfuzz_retry if (cid,side) in retry_records else args.zkfuzz)
+            zo["native_status"]=z["status"]
+            observations.append(zo)
     args.output.parent.mkdir(parents=True,exist_ok=True)
     with args.output.open("w") as f:
         for obs in observations:f.write(json.dumps(obs,sort_keys=True)+"\n")

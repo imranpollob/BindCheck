@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import base64
 import datetime as dt
 import hashlib
 import json
@@ -39,7 +40,8 @@ def run(argv,cwd,timeout,stdout_path,stderr_path):
 
 def main():
     ap=argparse.ArgumentParser();ap.add_argument("--output",type=pathlib.Path,required=True)
-    ap.add_argument("--dependency-root",type=pathlib.Path);args=ap.parse_args()
+    ap.add_argument("--dependency-root",type=pathlib.Path)
+    ap.add_argument("--dependency-tarball",type=pathlib.Path);args=ap.parse_args()
     output=args.output.resolve();output.mkdir(parents=True,exist_ok=False)
     manifest=json.loads((BENCH/"manifest.json").read_text())
     records=[]
@@ -51,6 +53,12 @@ def main():
             source=pathlib.Path(rev.get("source_tree") or rev.get("snapshot_root") or rev.get("source_checkout") or "")
             if not source.is_absolute():source=ROOT/source
             result["source_root"]=str(source)
+            if rev.get("source_checkout") and source.is_dir():
+                head=subprocess.run(["git","rev-parse","HEAD"],cwd=source,text=True,capture_output=True,check=False)
+                result["source_revision_check"]={"argv":["git","rev-parse","HEAD"],
+                    "exit_status":head.returncode,"observed":head.stdout.strip(),"expected":rev.get("commit")}
+                if head.returncode!=0 or head.stdout.strip()!=rev.get("commit"):
+                    result["status"]="REVISION_MISMATCH";records.append(result);continue
             hashes=lock["revisions"].get(side,[])
             for entry in hashes:
                 p=source/entry["path"]
@@ -58,6 +66,16 @@ def main():
                     "observed_sha256":sha(p) if p.is_file() else None})
             if any(c["observed_sha256"]!=c["expected_sha256"] for c in result["checks"]):
                 result["status"]="LOCK_MISMATCH";records.append(result);continue
+            if case["family"]=="zkdrops" and args.dependency_root:
+                package_lock=source/"package-lock.json"
+                expected=json.loads(package_lock.read_text())["packages"]["node_modules/@openzeppelin/contracts"]["integrity"] if package_lock.is_file() else None
+                observed=("sha512-"+base64.b64encode(hashlib.sha512(args.dependency_tarball.read_bytes()).digest()).decode()) if args.dependency_tarball and args.dependency_tarball.is_file() else None
+                result["dependency_lock"]={"package_lock":str(package_lock),"package_lock_sha256":sha(package_lock) if package_lock.is_file() else None,
+                    "tarball":str(args.dependency_tarball) if args.dependency_tarball else None,
+                    "tarball_sha256":sha(args.dependency_tarball) if args.dependency_tarball and args.dependency_tarball.is_file() else None,
+                    "expected_integrity":expected,"observed_integrity":observed}
+                if not expected or observed!=expected:
+                    result["status"]="DEPENDENCY_LOCK_MISMATCH";records.append(result);continue
             roles=rev["roles"]
             missing=[role for role,path in roles.items() if not path or not (source/path).is_file()]
             if missing:

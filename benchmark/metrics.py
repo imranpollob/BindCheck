@@ -17,6 +17,8 @@ def main():
     ap.add_argument("--observations",type=pathlib.Path,required=True)
     ap.add_argument("--synthetic-abc",type=pathlib.Path,required=True)
     ap.add_argument("--local",type=pathlib.Path,required=True)
+    ap.add_argument("--zkfuzz",type=pathlib.Path,required=True)
+    ap.add_argument("--zkfuzz-retry",type=pathlib.Path,required=True)
     ap.add_argument("--output",type=pathlib.Path,required=True);args=ap.parse_args()
     rows=list(csv.DictReader(args.matrix.open()))
     manifest=json.loads((BENCH/"manifest.json").read_text())
@@ -24,6 +26,7 @@ def main():
     builds=json.loads(args.build.read_text())["records"]
     obs=[json.loads(line) for line in args.observations.read_text().splitlines() if line.strip()]
     composition=collections.Counter((c["origin"],c["label_status"]) for c in cases)
+    protocols=collections.Counter((c["origin"],c.get("protocol","MISSING")) for c in cases)
     build_counts=collections.Counter((next(c["origin"] for c in cases if c["id"]==b["case_id"]),b["status"]) for b in builds)
     outcome_counts=collections.defaultdict(collections.Counter)
     pattern_counts=collections.defaultdict(collections.Counter)
@@ -90,8 +93,19 @@ def main():
         if "skipped" in d:slither_counts["skipped:"+d["skipped"]]+=1
         else:slither_counts["exit:"+str(d.get("exit_status"))]+=1
     native_execution["slither_default"]={"counts":dict(slither_counts)}
+    z=json.loads(args.zkfuzz.read_text())
+    native_execution["zkfuzz"]={"binary_sha256":z["binary_sha256"],
+        "settings_sha256":z["settings_sha256"],
+        "counts":dict(collections.Counter(r["status"] for r in z["records"])),
+        "exit_status":dict(collections.Counter(str(r.get("exit_status")) for r in z["records"] if "exit_status" in r))}
+    retry=json.loads(args.zkfuzz_retry.read_text())
+    native_execution["zkfuzz_retry"]={"binary_sha256":retry["binary_sha256"],
+        "settings_sha256":retry["settings_sha256"],
+        "counts":dict(collections.Counter(r["status"] for r in retry["records"])),
+        "exit_status":dict(collections.Counter(str(r.get("exit_status")) for r in retry["records"] if "exit_status" in r))}
     output={"schema":"bindcheck-benchmark.metrics/v1",
             "composition":{f"{a}/{b}":v for (a,b),v in sorted(composition.items())},
+            "protocols":{f"{a}/{b}":v for (a,b),v in sorted(protocols.items())},
             "build_status":{f"{a}/{b}":v for (a,b),v in sorted(build_counts.items())},
             "outcomes":{f"{a}/{b}":dict(v) for (a,b),v in sorted(outcome_counts.items())},
             "by_pattern":{f"{a}/{b}/{p}":dict(v) for (a,b,p),v in sorted(pattern_counts.items())},

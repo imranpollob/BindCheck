@@ -1,0 +1,830 @@
+{
+  "build_status": {
+    "DEV-history/BUILD_OK": 2,
+    "DEV-history/MISSING_ARTIFACT": 2,
+    "DEV-history/UNSUPPORTED_FRONTEND": 2,
+    "public-report/MISSING_ARTIFACT": 32,
+    "synthetic/BUILD_OK_NON_GROTH16": 46
+  },
+  "by_pattern": {
+    "AI-PROPOSED/A/P1": {
+      "CLEAR": 9,
+      "DETECT": 10,
+      "FALSE-ALARM": 1
+    },
+    "AI-PROPOSED/A/P3": {
+      "CLEAR": 6,
+      "DETECT": 4,
+      "FALSE-ALARM": 1,
+      "MISS": 3,
+      "UNKNOWN": 2
+    },
+    "AI-PROPOSED/A/P5": {
+      "CLEAR": 2,
+      "MISS": 2
+    },
+    "AI-PROPOSED/A/R-COMMITMENT": {
+      "CLEAR": 2,
+      "MISS": 2
+    },
+    "AI-PROPOSED/A/R-EXTENT": {
+      "UNKNOWN": 6
+    },
+    "AI-PROPOSED/A/R-MASK": {
+      "UNKNOWN": 2
+    },
+    "AI-PROPOSED/B/P1": {
+      "UNKNOWN": 20
+    },
+    "AI-PROPOSED/B/P3": {
+      "UNKNOWN": 16
+    },
+    "AI-PROPOSED/B/P5": {
+      "UNKNOWN": 4
+    },
+    "AI-PROPOSED/B/R-COMMITMENT": {
+      "UNKNOWN": 4
+    },
+    "AI-PROPOSED/B/R-EXTENT": {
+      "UNKNOWN": 6
+    },
+    "AI-PROPOSED/B/R-MASK": {
+      "UNKNOWN": 2
+    },
+    "AI-PROPOSED/BindCheck-F1/P1": {
+      "CLEAR": 8,
+      "DETECT": 8,
+      "FALSE-ALARM": 1,
+      "UNKNOWN": 3
+    },
+    "AI-PROPOSED/BindCheck-F1/P3": {
+      "CLEAR": 5,
+      "DETECT": 4,
+      "MISS": 2,
+      "UNKNOWN": 5
+    },
+    "AI-PROPOSED/BindCheck-F1/P5": {
+      "CLEAR": 1,
+      "MISS": 1,
+      "UNKNOWN": 2
+    },
+    "AI-PROPOSED/BindCheck-F1/R-COMMITMENT": {
+      "UNKNOWN": 4
+    },
+    "AI-PROPOSED/BindCheck-F1/R-EXTENT": {
+      "UNKNOWN": 6
+    },
+    "AI-PROPOSED/BindCheck-F1/R-MASK": {
+      "UNKNOWN": 2
+    },
+    "AI-PROPOSED/C/P1": {
+      "CLEAR": 10,
+      "DETECT": 10
+    },
+    "AI-PROPOSED/C/P3": {
+      "CLEAR": 6,
+      "DETECT": 4,
+      "FALSE-ALARM": 1,
+      "MISS": 3,
+      "UNKNOWN": 2
+    },
+    "AI-PROPOSED/C/P5": {
+      "CLEAR": 2,
+      "MISS": 2
+    },
+    "AI-PROPOSED/C/R-COMMITMENT": {
+      "CLEAR": 2,
+      "MISS": 2
+    },
+    "AI-PROPOSED/C/R-EXTENT": {
+      "CLEAR": 2,
+      "MISS": 2,
+      "UNKNOWN": 2
+    },
+    "AI-PROPOSED/C/R-MASK": {
+      "CLEAR": 1,
+      "MISS": 1
+    },
+    "AI-PROPOSED/Circomspect/P1": {
+      "UNKNOWN": 20
+    },
+    "AI-PROPOSED/Circomspect/P3": {
+      "UNKNOWN": 16
+    },
+    "AI-PROPOSED/Circomspect/P5": {
+      "UNKNOWN": 4
+    },
+    "AI-PROPOSED/Circomspect/R-COMMITMENT": {
+      "UNKNOWN": 4
+    },
+    "AI-PROPOSED/Circomspect/R-EXTENT": {
+      "UNKNOWN": 6
+    },
+    "AI-PROPOSED/Circomspect/R-MASK": {
+      "UNKNOWN": 2
+    },
+    "AI-PROPOSED/Picus/P1": {
+      "UNKNOWN": 20
+    },
+    "AI-PROPOSED/Picus/P3": {
+      "UNKNOWN": 16
+    },
+    "AI-PROPOSED/Picus/P5": {
+      "UNKNOWN": 4
+    },
+    "AI-PROPOSED/Picus/R-COMMITMENT": {
+      "UNKNOWN": 4
+    },
+    "AI-PROPOSED/Picus/R-EXTENT": {
+      "UNKNOWN": 6
+    },
+    "AI-PROPOSED/Picus/R-MASK": {
+      "UNKNOWN": 2
+    },
+    "AI-PROPOSED/Slither-default/P1": {
+      "UNKNOWN": 20
+    },
+    "AI-PROPOSED/Slither-default/P3": {
+      "UNKNOWN": 16
+    },
+    "AI-PROPOSED/Slither-default/P5": {
+      "UNKNOWN": 4
+    },
+    "AI-PROPOSED/Slither-default/R-COMMITMENT": {
+      "UNKNOWN": 4
+    },
+    "AI-PROPOSED/Slither-default/R-EXTENT": {
+      "UNKNOWN": 6
+    },
+    "AI-PROPOSED/Slither-default/R-MASK": {
+      "UNKNOWN": 2
+    },
+    "AI-PROPOSED/ZKAP/P1": {
+      "UNKNOWN": 20
+    },
+    "AI-PROPOSED/ZKAP/P3": {
+      "UNKNOWN": 16
+    },
+    "AI-PROPOSED/ZKAP/P5": {
+      "UNKNOWN": 4
+    },
+    "AI-PROPOSED/ZKAP/R-COMMITMENT": {
+      "UNKNOWN": 4
+    },
+    "AI-PROPOSED/ZKAP/R-EXTENT": {
+      "UNKNOWN": 6
+    },
+    "AI-PROPOSED/ZKAP/R-MASK": {
+      "UNKNOWN": 2
+    },
+    "AI-PROPOSED/zkFuzz/P1": {
+      "UNKNOWN": 20
+    },
+    "AI-PROPOSED/zkFuzz/P3": {
+      "UNKNOWN": 16
+    },
+    "AI-PROPOSED/zkFuzz/P5": {
+      "UNKNOWN": 4
+    },
+    "AI-PROPOSED/zkFuzz/R-COMMITMENT": {
+      "UNKNOWN": 4
+    },
+    "AI-PROPOSED/zkFuzz/R-EXTENT": {
+      "UNKNOWN": 6
+    },
+    "AI-PROPOSED/zkFuzz/R-MASK": {
+      "UNKNOWN": 2
+    },
+    "PENDING/A/MISSING": {
+      "UNKNOWN": 32
+    },
+    "PENDING/B/MISSING": {
+      "UNKNOWN": 32
+    },
+    "PENDING/BindCheck-F1/MISSING": {
+      "UNKNOWN": 32
+    },
+    "PENDING/C/MISSING": {
+      "UNKNOWN": 32
+    },
+    "PENDING/Circomspect/MISSING": {
+      "UNKNOWN": 32
+    },
+    "PENDING/Picus/MISSING": {
+      "UNKNOWN": 32
+    },
+    "PENDING/Slither-default/MISSING": {
+      "UNKNOWN": 32
+    },
+    "PENDING/ZKAP/MISSING": {
+      "UNKNOWN": 32
+    },
+    "PENDING/zkFuzz/MISSING": {
+      "UNKNOWN": 32
+    }
+  },
+  "composition": {
+    "DEV-history/AI-PROPOSED": 6,
+    "public-report/PENDING": 16,
+    "synthetic/AI-PROPOSED": 46
+  },
+  "native_execution": {
+    "circomspect": {
+      "cases_with_b_output": 52,
+      "counts": {
+        "case_status:UNKNOWN": 2,
+        "case_status:completed": 50,
+        "exit:0": 45,
+        "exit:1": 11
+      },
+      "invocations": 56,
+      "picus_temp_removed": null
+    },
+    "picus": {
+      "cases_with_b_output": 52,
+      "counts": {
+        "case_status:UNKNOWN": 4,
+        "case_status:completed": 48,
+        "exit:8": 48
+      },
+      "invocations": 48,
+      "picus_temp_removed": 48
+    },
+    "slither_default": {
+      "counts": {
+        "exit:1": 4,
+        "exit:255": 48,
+        "exit:None": 32
+      }
+    },
+    "zkap": {
+      "cases_with_b_output": 52,
+      "counts": {
+        "case_status:UNKNOWN": 52
+      },
+      "invocations": 0,
+      "picus_temp_removed": null
+    },
+    "zkfuzz": {
+      "binary_sha256": "ce06d095be7d795d3210844a90950d826aa33e435bdfbec65dcfa79558680a30",
+      "counts": {
+        "COMPLETED": 46,
+        "ERROR": 4,
+        "MISSING_CIRCUIT": 32,
+        "UNSUPPORTED_FRONTEND": 2
+      },
+      "exit_status": {
+        "0": 46,
+        "1": 4
+      },
+      "settings_sha256": "dbb5c6d48de51215d7168c0d7614bfceba65668516860951fa322ef170a156ce"
+    },
+    "zkfuzz_retry": {
+      "binary_sha256": "ce06d095be7d795d3210844a90950d826aa33e435bdfbec65dcfa79558680a30",
+      "counts": {
+        "TIMEOUT": 2
+      },
+      "exit_status": {
+        "-9": 2
+      },
+      "settings_sha256": "dbb5c6d48de51215d7168c0d7614bfceba65668516860951fa322ef170a156ce"
+    }
+  },
+  "native_invocations": {
+    "Circomspect": 48,
+    "Picus": 48,
+    "ZKAP": 0
+  },
+  "native_status": {
+    "Circomspect": {
+      "completed": 48
+    },
+    "Picus": {
+      "completed": 48
+    },
+    "Slither-default": {
+      "completed": 48
+    },
+    "ZKAP": {
+      "UNKNOWN": 48
+    },
+    "zkFuzz": {
+      "COMPLETED": 46,
+      "ERROR": 2,
+      "MISSING_CIRCUIT": 32,
+      "TIMEOUT": 2,
+      "UNSUPPORTED_FRONTEND": 2
+    }
+  },
+  "outcomes": {
+    "AI-PROPOSED/A": {
+      "CLEAR": 19,
+      "DETECT": 14,
+      "FALSE-ALARM": 2,
+      "MISS": 7,
+      "UNKNOWN": 10
+    },
+    "AI-PROPOSED/B": {
+      "UNKNOWN": 52
+    },
+    "AI-PROPOSED/BindCheck-F1": {
+      "CLEAR": 14,
+      "DETECT": 12,
+      "FALSE-ALARM": 1,
+      "MISS": 3,
+      "UNKNOWN": 22
+    },
+    "AI-PROPOSED/C": {
+      "CLEAR": 23,
+      "DETECT": 14,
+      "FALSE-ALARM": 1,
+      "MISS": 10,
+      "UNKNOWN": 4
+    },
+    "AI-PROPOSED/Circomspect": {
+      "UNKNOWN": 52
+    },
+    "AI-PROPOSED/Picus": {
+      "UNKNOWN": 52
+    },
+    "AI-PROPOSED/Slither-default": {
+      "UNKNOWN": 52
+    },
+    "AI-PROPOSED/ZKAP": {
+      "UNKNOWN": 52
+    },
+    "AI-PROPOSED/zkFuzz": {
+      "UNKNOWN": 52
+    },
+    "PENDING/A": {
+      "UNKNOWN": 32
+    },
+    "PENDING/B": {
+      "UNKNOWN": 32
+    },
+    "PENDING/BindCheck-F1": {
+      "UNKNOWN": 32
+    },
+    "PENDING/C": {
+      "UNKNOWN": 32
+    },
+    "PENDING/Circomspect": {
+      "UNKNOWN": 32
+    },
+    "PENDING/Picus": {
+      "UNKNOWN": 32
+    },
+    "PENDING/Slither-default": {
+      "UNKNOWN": 32
+    },
+    "PENDING/ZKAP": {
+      "UNKNOWN": 32
+    },
+    "PENDING/zkFuzz": {
+      "UNKNOWN": 32
+    }
+  },
+  "pair_discrimination": {
+    "AI-PROPOSED/A": {
+      "success_count": 12,
+      "success_pairs": [
+        "ADV-01",
+        "ADV-02",
+        "ADV-03",
+        "ADV-04",
+        "ADV-05",
+        "ADV-06",
+        "ADV-07",
+        "ADV-08",
+        "ADV-09",
+        "ADV-21",
+        "ADV-22",
+        "ADV-23"
+      ],
+      "total_pairs": 26,
+      "unknown_pairs": [
+        "ADV-11",
+        "ADV-12",
+        "ADV-18",
+        "DEV-H02",
+        "DEV-H03"
+      ]
+    },
+    "AI-PROPOSED/B": {
+      "success_count": 0,
+      "success_pairs": [],
+      "total_pairs": 26,
+      "unknown_pairs": [
+        "ADV-01",
+        "ADV-02",
+        "ADV-03",
+        "ADV-04",
+        "ADV-05",
+        "ADV-06",
+        "ADV-07",
+        "ADV-08",
+        "ADV-09",
+        "ADV-10",
+        "ADV-11",
+        "ADV-12",
+        "ADV-13",
+        "ADV-14",
+        "ADV-15",
+        "ADV-16",
+        "ADV-17",
+        "ADV-18",
+        "ADV-19",
+        "ADV-20",
+        "ADV-21",
+        "ADV-22",
+        "ADV-23",
+        "DEV-H01",
+        "DEV-H02",
+        "DEV-H03"
+      ]
+    },
+    "AI-PROPOSED/BindCheck-F1": {
+      "success_count": 10,
+      "success_pairs": [
+        "ADV-01",
+        "ADV-02",
+        "ADV-03",
+        "ADV-05",
+        "ADV-06",
+        "ADV-08",
+        "ADV-09",
+        "ADV-21",
+        "ADV-23",
+        "DEV-H01"
+      ],
+      "total_pairs": 26,
+      "unknown_pairs": [
+        "ADV-04",
+        "ADV-07",
+        "ADV-11",
+        "ADV-12",
+        "ADV-13",
+        "ADV-16",
+        "ADV-17",
+        "ADV-18",
+        "ADV-19",
+        "ADV-22",
+        "DEV-H02",
+        "DEV-H03"
+      ]
+    },
+    "AI-PROPOSED/C": {
+      "success_count": 13,
+      "success_pairs": [
+        "ADV-01",
+        "ADV-02",
+        "ADV-03",
+        "ADV-04",
+        "ADV-05",
+        "ADV-06",
+        "ADV-07",
+        "ADV-08",
+        "ADV-09",
+        "ADV-20",
+        "ADV-21",
+        "ADV-22",
+        "ADV-23"
+      ],
+      "total_pairs": 26,
+      "unknown_pairs": [
+        "DEV-H02",
+        "DEV-H03"
+      ]
+    },
+    "AI-PROPOSED/Circomspect": {
+      "success_count": 0,
+      "success_pairs": [],
+      "total_pairs": 26,
+      "unknown_pairs": [
+        "ADV-01",
+        "ADV-02",
+        "ADV-03",
+        "ADV-04",
+        "ADV-05",
+        "ADV-06",
+        "ADV-07",
+        "ADV-08",
+        "ADV-09",
+        "ADV-10",
+        "ADV-11",
+        "ADV-12",
+        "ADV-13",
+        "ADV-14",
+        "ADV-15",
+        "ADV-16",
+        "ADV-17",
+        "ADV-18",
+        "ADV-19",
+        "ADV-20",
+        "ADV-21",
+        "ADV-22",
+        "ADV-23",
+        "DEV-H01",
+        "DEV-H02",
+        "DEV-H03"
+      ]
+    },
+    "AI-PROPOSED/Picus": {
+      "success_count": 0,
+      "success_pairs": [],
+      "total_pairs": 26,
+      "unknown_pairs": [
+        "ADV-01",
+        "ADV-02",
+        "ADV-03",
+        "ADV-04",
+        "ADV-05",
+        "ADV-06",
+        "ADV-07",
+        "ADV-08",
+        "ADV-09",
+        "ADV-10",
+        "ADV-11",
+        "ADV-12",
+        "ADV-13",
+        "ADV-14",
+        "ADV-15",
+        "ADV-16",
+        "ADV-17",
+        "ADV-18",
+        "ADV-19",
+        "ADV-20",
+        "ADV-21",
+        "ADV-22",
+        "ADV-23",
+        "DEV-H01",
+        "DEV-H02",
+        "DEV-H03"
+      ]
+    },
+    "AI-PROPOSED/Slither-default": {
+      "success_count": 0,
+      "success_pairs": [],
+      "total_pairs": 26,
+      "unknown_pairs": [
+        "ADV-01",
+        "ADV-02",
+        "ADV-03",
+        "ADV-04",
+        "ADV-05",
+        "ADV-06",
+        "ADV-07",
+        "ADV-08",
+        "ADV-09",
+        "ADV-10",
+        "ADV-11",
+        "ADV-12",
+        "ADV-13",
+        "ADV-14",
+        "ADV-15",
+        "ADV-16",
+        "ADV-17",
+        "ADV-18",
+        "ADV-19",
+        "ADV-20",
+        "ADV-21",
+        "ADV-22",
+        "ADV-23",
+        "DEV-H01",
+        "DEV-H02",
+        "DEV-H03"
+      ]
+    },
+    "AI-PROPOSED/ZKAP": {
+      "success_count": 0,
+      "success_pairs": [],
+      "total_pairs": 26,
+      "unknown_pairs": [
+        "ADV-01",
+        "ADV-02",
+        "ADV-03",
+        "ADV-04",
+        "ADV-05",
+        "ADV-06",
+        "ADV-07",
+        "ADV-08",
+        "ADV-09",
+        "ADV-10",
+        "ADV-11",
+        "ADV-12",
+        "ADV-13",
+        "ADV-14",
+        "ADV-15",
+        "ADV-16",
+        "ADV-17",
+        "ADV-18",
+        "ADV-19",
+        "ADV-20",
+        "ADV-21",
+        "ADV-22",
+        "ADV-23",
+        "DEV-H01",
+        "DEV-H02",
+        "DEV-H03"
+      ]
+    },
+    "AI-PROPOSED/zkFuzz": {
+      "success_count": 0,
+      "success_pairs": [],
+      "total_pairs": 26,
+      "unknown_pairs": [
+        "ADV-01",
+        "ADV-02",
+        "ADV-03",
+        "ADV-04",
+        "ADV-05",
+        "ADV-06",
+        "ADV-07",
+        "ADV-08",
+        "ADV-09",
+        "ADV-10",
+        "ADV-11",
+        "ADV-12",
+        "ADV-13",
+        "ADV-14",
+        "ADV-15",
+        "ADV-16",
+        "ADV-17",
+        "ADV-18",
+        "ADV-19",
+        "ADV-20",
+        "ADV-21",
+        "ADV-22",
+        "ADV-23",
+        "DEV-H01",
+        "DEV-H02",
+        "DEV-H03"
+      ]
+    }
+  },
+  "protocols": {
+    "DEV-history/MISSING_VERIFIER": 2,
+    "DEV-history/PLONK": 2,
+    "DEV-history/ULTRAHONK": 2,
+    "public-report/UNRESOLVED": 16,
+    "synthetic/MOCK_VERIFIER": 46
+  },
+  "scatter": {
+    "AI-PROPOSED/A": {
+      "decided_denominator": 52,
+      "decided_numerator": 42,
+      "decided_rate": "42/52",
+      "precision": "14/16",
+      "precision_denominator": 16,
+      "precision_numerator": 14
+    },
+    "AI-PROPOSED/B": {
+      "decided_denominator": 52,
+      "decided_numerator": 0,
+      "decided_rate": "0/52",
+      "precision": "MISSING",
+      "precision_denominator": 0,
+      "precision_numerator": 0
+    },
+    "AI-PROPOSED/BindCheck-F1": {
+      "decided_denominator": 52,
+      "decided_numerator": 30,
+      "decided_rate": "30/52",
+      "precision": "12/13",
+      "precision_denominator": 13,
+      "precision_numerator": 12
+    },
+    "AI-PROPOSED/C": {
+      "decided_denominator": 52,
+      "decided_numerator": 48,
+      "decided_rate": "48/52",
+      "precision": "14/15",
+      "precision_denominator": 15,
+      "precision_numerator": 14
+    },
+    "AI-PROPOSED/Circomspect": {
+      "decided_denominator": 52,
+      "decided_numerator": 0,
+      "decided_rate": "0/52",
+      "precision": "MISSING",
+      "precision_denominator": 0,
+      "precision_numerator": 0
+    },
+    "AI-PROPOSED/Picus": {
+      "decided_denominator": 52,
+      "decided_numerator": 0,
+      "decided_rate": "0/52",
+      "precision": "MISSING",
+      "precision_denominator": 0,
+      "precision_numerator": 0
+    },
+    "AI-PROPOSED/Slither-default": {
+      "decided_denominator": 52,
+      "decided_numerator": 0,
+      "decided_rate": "0/52",
+      "precision": "MISSING",
+      "precision_denominator": 0,
+      "precision_numerator": 0
+    },
+    "AI-PROPOSED/ZKAP": {
+      "decided_denominator": 52,
+      "decided_numerator": 0,
+      "decided_rate": "0/52",
+      "precision": "MISSING",
+      "precision_denominator": 0,
+      "precision_numerator": 0
+    },
+    "AI-PROPOSED/zkFuzz": {
+      "decided_denominator": 52,
+      "decided_numerator": 0,
+      "decided_rate": "0/52",
+      "precision": "MISSING",
+      "precision_denominator": 0,
+      "precision_numerator": 0
+    },
+    "PENDING/A": {
+      "decided_denominator": 32,
+      "decided_numerator": 0,
+      "decided_rate": "0/32",
+      "precision": "MISSING",
+      "precision_denominator": 0,
+      "precision_numerator": 0
+    },
+    "PENDING/B": {
+      "decided_denominator": 32,
+      "decided_numerator": 0,
+      "decided_rate": "0/32",
+      "precision": "MISSING",
+      "precision_denominator": 0,
+      "precision_numerator": 0
+    },
+    "PENDING/BindCheck-F1": {
+      "decided_denominator": 32,
+      "decided_numerator": 0,
+      "decided_rate": "0/32",
+      "precision": "MISSING",
+      "precision_denominator": 0,
+      "precision_numerator": 0
+    },
+    "PENDING/C": {
+      "decided_denominator": 32,
+      "decided_numerator": 0,
+      "decided_rate": "0/32",
+      "precision": "MISSING",
+      "precision_denominator": 0,
+      "precision_numerator": 0
+    },
+    "PENDING/Circomspect": {
+      "decided_denominator": 32,
+      "decided_numerator": 0,
+      "decided_rate": "0/32",
+      "precision": "MISSING",
+      "precision_denominator": 0,
+      "precision_numerator": 0
+    },
+    "PENDING/Picus": {
+      "decided_denominator": 32,
+      "decided_numerator": 0,
+      "decided_rate": "0/32",
+      "precision": "MISSING",
+      "precision_denominator": 0,
+      "precision_numerator": 0
+    },
+    "PENDING/Slither-default": {
+      "decided_denominator": 32,
+      "decided_numerator": 0,
+      "decided_rate": "0/32",
+      "precision": "MISSING",
+      "precision_denominator": 0,
+      "precision_numerator": 0
+    },
+    "PENDING/ZKAP": {
+      "decided_denominator": 32,
+      "decided_numerator": 0,
+      "decided_rate": "0/32",
+      "precision": "MISSING",
+      "precision_denominator": 0,
+      "precision_numerator": 0
+    },
+    "PENDING/zkFuzz": {
+      "decided_denominator": 32,
+      "decided_numerator": 0,
+      "decided_rate": "0/32",
+      "precision": "MISSING",
+      "precision_denominator": 0,
+      "precision_numerator": 0
+    }
+  },
+  "schema": "bindcheck-benchmark.metrics/v1",
+  "unsafe_certification": {
+    "AI-PROPOSED/A": [
+      "ADV-V13",
+      "ADV-V14",
+      "ADV-V15"
+    ],
+    "AI-PROPOSED/BindCheck-F1": [
+      "ADV-V14",
+      "ADV-V15"
+    ]
+  }
+}
