@@ -24,7 +24,7 @@ from eval.common import (
     select_families,
     sha256_file,
 )
-from eval.run_heldout import capture_warning_sources, execution_families, run_tool_once
+from eval.run_heldout import capture_warning_sources, execution_families, prepare_pinned_vendor, run_tool_once
 from eval.run_recall import score_pair, strict_resolved_rows
 from eval.summarize import build_summary, summarize_group
 
@@ -84,6 +84,37 @@ class SelectionTests(unittest.TestCase):
         self.assertEqual(exclusions[0]["repository"], "selfxyz/self")
         self.assertNotIn(259, {item["rank"] for item in executable})
         self.assertEqual(len(executable) + len(exclusions), len(selected))
+
+
+class VendorSetupTests(unittest.TestCase):
+    def test_pinned_vendor_is_linked_without_replacing_existing_source(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = pathlib.Path(temporary)
+            checkout, vendor, evidence = root / "checkout", root / "vendor", root / "evidence"
+            checkout.mkdir(); vendor.mkdir(); evidence.mkdir()
+            (vendor / "poseidon.circom").write_text("template Poseidon() {}\n")
+            from bindcheck_zk.circuits import _tree_digest
+            expected = _tree_digest(vendor)
+            first = prepare_pinned_vendor(checkout, evidence, vendor, expected)
+            self.assertEqual(first["status"], "LINKED_PINNED_VENDOR")
+            self.assertEqual((checkout / "node_modules/circomlib/poseidon.circom").read_text(),
+                             "template Poseidon() {}\n")
+            self.assertEqual(json.loads((evidence / "dependency-setup.json").read_text()), first)
+            second = prepare_pinned_vendor(checkout, evidence, vendor, expected)
+            self.assertEqual(second["status"], "EXISTING_VENDOR")
+            self.assertEqual(_tree_digest(vendor), expected)
+
+    def test_vendor_setup_rejects_missing_or_escape(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = pathlib.Path(temporary)
+            checkout, evidence, vendor = root / "checkout", root / "evidence", root / "vendor"
+            checkout.mkdir(); evidence.mkdir(); vendor.mkdir()
+            with self.assertRaises(Exception):
+                prepare_pinned_vendor(checkout, evidence, vendor, ("a" * 64, 1))
+            (checkout / "node_modules").symlink_to(root)
+            from bindcheck_zk.circuits import _tree_digest
+            with self.assertRaises(Exception):
+                prepare_pinned_vendor(checkout, evidence, vendor, _tree_digest(vendor))
 
 
 class GateTests(unittest.TestCase):
