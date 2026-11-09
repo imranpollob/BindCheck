@@ -493,12 +493,28 @@ def has_unsupported_construct(body: str) -> str | None:
     return None
 
 
+def _exact_oz_import(source: str, symbol: str, path: str) -> bool:
+    """Recognize bare or exact named imports, excluding aliases and lookalikes."""
+    prefix = rf'import\s+(?:\{{\s*{re.escape(symbol)}\s*\}}\s+from\s+)?["\']'
+    return bool(re.search(prefix + rf'@openzeppelin/contracts/{re.escape(path)}["\']\s*;', source))
+
+
 def unresolved_function_context(
     function: Function, source_text: str,
     repository_contracts: dict[str, tuple[str, pathlib.Path]] | None = None,
     source_path: pathlib.Path | None = None,
 ) -> str | None:
     """Fail closed on consumer context that this frontend does not resolve."""
+    masked_source = mask_comments_and_strings(source_text)
+    enclosing_source = ""
+    for declaration in re.finditer(r"\b(?:abstract\s+)?contract\s+[A-Za-z_]\w*[^\{]*\{", masked_source):
+        opening = masked_source.find("{", declaration.start())
+        parsed = balanced(masked_source, opening, "{", "}")
+        if parsed is not None and opening < function.start < parsed[1]:
+            enclosing_source = source_text[declaration.start():parsed[1]]
+            break
+    if not enclosing_source:
+        return "UNRESOLVED_CONSUMER_INHERITANCE"
     masked_header = mask_comments_and_strings(function.header)
     opening = masked_header.find("(")
     parameters = balanced(masked_header, opening)
@@ -511,32 +527,49 @@ def unresolved_function_context(
     }
     modifiers = [token for token in IDENT.findall(suffix) if token.lower() not in standard]
     for modifier in modifiers:
-        declarations = list(re.finditer(rf"\bmodifier\s+{re.escape(modifier)}\s*(?:\([^)]*\))?\s*\{{", source_text))
+        modifier_scope = enclosing_source
+        declarations = list(re.finditer(rf"\bmodifier\s+{re.escape(modifier)}\s*(?:\([^)]*\))?\s*\{{", modifier_scope))
         if not declarations:
-            known_oz = (
-                modifier == "nonReentrant"
-                and re.search(r'import\s+["\']@openzeppelin/contracts/(?:utils|security)/ReentrancyGuard\.sol["\']', source_text)
+            # Preserve the source-only control fixture's top-level modifier
+            # declaration. Valid Solidity places modifiers in the contract.
+            first_contract = re.search(r"\b(?:abstract\s+)?contract\s+", masked_source)
+            preamble = source_text[:first_contract.start()] if first_contract else ""
+            preamble_declarations = list(re.finditer(
+                rf"\bmodifier\s+{re.escape(modifier)}\s*(?:\([^)]*\))?\s*\{{", preamble
+            ))
+            if len(preamble_declarations) == 1:
+                modifier_scope = preamble
+                declarations = preamble_declarations
+        if not declarations:
+            known_oz = bool(
+                (modifier == "nonReentrant" and any(_exact_oz_import(source_text, "ReentrancyGuard", f"{directory}/ReentrancyGuard.sol")
+                 for directory in ("utils", "security")) and re.search(r"\bis\s+[^\{;]*\bReentrancyGuard\b", enclosing_source))
+                or (modifier in {"whenNotPaused", "whenPaused"} and any(_exact_oz_import(source_text, "Pausable", f"{directory}/Pausable.sol")
+                 for directory in ("utils", "security")) and re.search(r"\bis\s+[^\{;]*\bPausable\b", enclosing_source))
             )
             if not known_oz:
                 return "UNRESOLVED_CONSUMER_MODIFIER"
             continue
         if len(declarations) != 1:
             return "UNRESOLVED_CONSUMER_MODIFIER"
-        opening = source_text.find("{", declarations[0].start())
-        parsed_modifier = balanced(source_text, opening, "{", "}")
+        opening = modifier_scope.find("{", declarations[0].start())
+        parsed_modifier = balanced(modifier_scope, opening, "{", "}")
         if parsed_modifier is None:
             return "UNRESOLVED_CONSUMER_MODIFIER"
         modifier_body = mask_comments_and_strings(parsed_modifier[0])
         if len(re.findall(r"\b_\s*;", modifier_body)) != 1:
             return "UNRESOLVED_CONSUMER_MODIFIER"
         before, after = re.split(r"\b_\s*;", modifier_body, maxsplit=1)
-        if after.strip() or re.search(r"\b(?:if|for|while|try|assembly|return|break|continue)\b|\b[A-Za-z_]\w*\s*\.\s*[A-Za-z_]\w*\s*\(", before):
-            return "UNRESOLVED_CONSUMER_MODIFIER"
-        statements = [item.strip() for item in before.split(";") if item.strip()]
-        if any(not re.fullmatch(r"(?:require|assert)\s*\([^;]*\)", item, re.S) for item in statements):
-            return "UNRESOLVED_CONSUMER_MODIFIER"
+        if after.strip():
+            if not _local_status_lock_modifier(before, after, enclosing_source):
+                return "UNRESOLVED_CONSUMER_MODIFIER"
+        else:
+            if re.search(r"\b(?:if|for|while|try|assembly|return|break|continue)\b|\b[A-Za-z_]\w*\s*\.\s*[A-Za-z_]\w*\s*\(", before):
+                return "UNRESOLVED_CONSUMER_MODIFIER"
+            statements = [item.strip() for item in before.split(";") if item.strip()]
+            if any(not re.fullmatch(r"(?:require|assert)\s*\([^;]*\)", item, re.S) for item in statements):
+                return "UNRESOLVED_CONSUMER_MODIFIER"
 
-    masked_source = mask_comments_and_strings(source_text)
     for match in re.finditer(r"\b(?:abstract\s+)?contract\s+[A-Za-z_]\w*([^\{]*)\{", masked_source):
         opening = masked_source.find("{", match.start())
         parsed = balanced(masked_source, opening, "{", "}")
@@ -551,17 +584,22 @@ def unresolved_function_context(
                 if base_match is None:
                     return "UNRESOLVED_CONSUMER_INHERITANCE"
                 base = base_match.group(1)
+                oz_path = {
+                    "ERC721": "token/ERC721/ERC721.sol",
+                    "ERC721Enumerable": "token/ERC721/extensions/ERC721Enumerable.sol",
+                    "ERC20": "token/ERC20/ERC20.sol",
+                    "Ownable": "access/Ownable.sol",
+                    "ReentrancyGuard": "utils/ReentrancyGuard.sol",
+                    "Pausable": "utils/Pausable.sol",
+                }.get(base)
+                supported_oz = bool(oz_path and _exact_oz_import(source_text, base, oz_path))
+                if base in {"ReentrancyGuard", "Pausable"}:
+                    supported_oz = supported_oz or _exact_oz_import(source_text, base, f"security/{base}.sol")
+                if supported_oz:
+                    continue
                 base_record = (repository_contracts or {}).get(base)
                 if base_record is None:
-                    oz_path = {
-                        "ERC721": "token/ERC721/ERC721.sol",
-                        "ERC20": "token/ERC20/ERC20.sol",
-                        "Ownable": "access/Ownable.sol",
-                        "ReentrancyGuard": "utils/ReentrancyGuard.sol",
-                    }.get(base)
-                    if not oz_path or not re.search(rf'import\s+["\']@openzeppelin/contracts/{re.escape(oz_path)}["\']', source_text):
-                        if base != "ReentrancyGuard" or not re.search(r'import\s+["\']@openzeppelin/contracts/security/ReentrancyGuard\.sol["\']', source_text):
-                            return "UNRESOLVED_CONSUMER_INHERITANCE"
+                    return "UNRESOLVED_CONSUMER_INHERITANCE"
                 else:
                     base_source, base_path = base_record
                     if source_path is None:
@@ -583,3 +621,26 @@ def unresolved_function_context(
                 return "UNRESOLVED_CONSUMER_INHERITANCE"
         break
     return None
+
+
+def _local_status_lock_modifier(before: str, after: str, contract_source: str) -> bool:
+    """Accept only the exact guard/set/body/reset local lock shape."""
+    prefix = re.fullmatch(
+        r"\s*require\s*\(\s*([A-Za-z_]\w*)\s*!=\s*([A-Za-z_]\w*)\s*(?:,\s*[^()]*)?\)\s*;"
+        r"\s*\1\s*=\s*\2\s*;\s*", before, re.S,
+    )
+    if prefix is None:
+        return False
+    status, entered = prefix.group(1), prefix.group(2)
+    reset = re.fullmatch(rf"\s*{re.escape(status)}\s*=\s*([A-Za-z_]\w*)\s*;\s*", after)
+    if reset is None or reset.group(1) == entered:
+        return False
+    released = reset.group(1)
+    declared_status = re.findall(
+        rf"\buint256\s+(?:(?:private|internal|public)\s+)?{re.escape(status)}\s*;", contract_source
+    )
+    constant_pattern = r"\buint256\s+(?:(?:private|internal|public)\s+)?constant\s+{}\s*=\s*(\d+)\s*;"
+    entered_values = re.findall(constant_pattern.format(re.escape(entered)), contract_source)
+    released_values = re.findall(constant_pattern.format(re.escape(released)), contract_source)
+    return (len(declared_status) == len(entered_values) == len(released_values) == 1
+            and entered_values[0] != released_values[0])
