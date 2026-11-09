@@ -4,7 +4,7 @@
   "after_raw": "results/raw/coverage/after-20261109T150206Z-10301",
   "before_analyzer_sha256": "8ea6d2239cd94e2b4478bfae48fe8e764bf448a3b44c58224bbeeb6fa2f70542",
   "before_manifest_sha256": "21ecb42b7a45c0d37cac887b374377da038ace0caa2a6005f56a8769bd399db9",
-  "before_raw": "/Users/imranpollob/Coding/bc/bindcheck-zk-soundness/results/raw/soundness/after-20261109T061325Z-77918",
+  "before_raw": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/soundness/after-20261109T061325Z-77918",
   "builds": {
     "after": {
       "build_attempts": 76,

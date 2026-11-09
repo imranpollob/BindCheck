@@ -120,7 +120,7 @@
     },
     "zkfuzz": {
       "argv": [
-        "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/zkfuzz-setup-20261109/bin/zkfuzz",
+        "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/zkfuzz-setup-20261109/bin/zkfuzz",
         "--version"
       ],
       "exit_status": 0,
@@ -155,7 +155,7 @@
       "sha256": "6e67873ae89d0944ba55651491e9ce70f1c6a271dbfdd8d52e088089b44258bc"
     },
     "zkfuzz": {
-      "path": "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/zkfuzz-setup-20261109/bin/zkfuzz",
+      "path": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/zkfuzz-setup-20261109/bin/zkfuzz",
       "sha256": "ce06d095be7d795d3210844a90950d826aa33e435bdfbec65dcfa79558680a30"
     }
   },

@@ -4,7 +4,7 @@
 
 ## Frozen input and review protocol
 
-The controlling analyzer content SHA-256 is [`92789fad12050a3058a21cc5c2326e7d41604ad5ade0f09f72a35789437e6c1a`](../../docs/FREEZE-2.md). The [DEV ledger](../freeze2/dev-ledger.csv) SHA-256 is [`6edc51ef213402e1e70578c91e1c2c757e02af01da76b6ff93327495a459275a`](audit.json). The ignored [raw manifest](</Users/imranpollob/Coding/bc/bindcheck-zk-coverage/results/raw/coverage/after-20261109T165844Z-58315/manifest.json>) SHA-256 is `17c375f02a382bfe667a72a11669eca55e632d6de1cf1012069dfe7694ab441c` (observed by the `shasum` command below). Each raw result hash, source revision and card hash is in [audit.json](audit.json). [PLAN.md](PLAN.md), committed as `7f9af7c` before the card audit, fixes the inventory and scoring rules.
+The controlling analyzer content SHA-256 is [`92789fad12050a3058a21cc5c2326e7d41604ad5ade0f09f72a35789437e6c1a`](../../docs/FREEZE-2.md). The [DEV ledger](../freeze2/dev-ledger.csv) SHA-256 is [`6edc51ef213402e1e70578c91e1c2c757e02af01da76b6ff93327495a459275a`](audit.json). The ignored [raw manifest](</Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/coverage/after-20261109T165844Z-58315/manifest.json>) SHA-256 is `17c375f02a382bfe667a72a11669eca55e632d6de1cf1012069dfe7694ab441c` (observed by the `shasum` command below). Each raw result hash, source revision and card hash is in [audit.json](audit.json). [PLAN.md](PLAN.md), committed as `7f9af7c` before the card audit, fixes the inventory and scoring rules.
 
 The cards inspect the pinned, read-only DEV checkouts named in the [ledger](../freeze2/dev-ledger.csv), the source code and documentation at those revisions, the earlier [verifier-kind flags](../groundtruth/warning-verifier-flags.csv), and the existing [case policies](../../findings/zkredential/policy.md) and [RacePass policy](../../findings/racepass/policy.md). The independent paper lane's [STATUS §4(b)](</Users/imranpollob/Coding/bc/bindcheck-zk-paper/paper/zk/STATUS.md>) supplies the compiled-R1CS cross-check for F34. No EVAL checkout, network target, RPC, transaction, maintainer, or newly generated proof was used.
 
@@ -38,7 +38,7 @@ PATH=/opt/homebrew/bin:$PATH /opt/homebrew/bin/python3 reports/validate/audit.py
 It exited `0` after a parser fix. [audit.json](audit.json) confirms each cell's raw analyzer hash and verdict, each pinned checkout's `git rev-parse HEAD`, the index/card match, blank human fields and the AI-label tally. The first attempt exited `1` because `audit.py` split Markdown links on `)(` rather than `](`; it produced no audit data and was fixed before the successful run. `git diff --check` exited `0`. `/opt/homebrew/bin/python3 --version` returned `Python 3.15.0`; `git --version` returned `git version 2.51.0`. The raw manifest hash command was:
 
 ```sh
-shasum -a 256 /Users/imranpollob/Coding/bc/bindcheck-zk-coverage/results/raw/coverage/after-20261109T165844Z-58315/manifest.json
+shasum -a 256 /Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/coverage/after-20261109T165844Z-58315/manifest.json
 ```
 
 No Picus run or temporary checkout was made, so no Picus TMPDIR or process-group cleanup was needed. No toolchain/dependency was installed.

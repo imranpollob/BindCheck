@@ -1,6 +1,6 @@
 # DEV-F14 / P4 — meridian-link
 
-**Frozen result:** `VIOLATION / GAMMA_EQUALS_DELTA_SOURCE_KEY` ([ledger](../../reports/freeze2/dev-ledger.csv); [raw](</Users/imranpollob/Coding/bc/bindcheck-zk-coverage/results/raw/coverage/after-20261109T165844Z-58315/DEV-F14--result.json>)). **Revision:** `5a5a9f6eb2983ea38fb9475c9cd781514569e166`. Source root: `/Users/imranpollob/Coding/bc/bindcheck-zk/feasibility/work/full-dev/DEV-F14--RippnerLabs__meridian-link--5a5a9f6eb298/`.
+**Frozen result:** `VIOLATION / GAMMA_EQUALS_DELTA_SOURCE_KEY` ([ledger](../../reports/freeze2/dev-ledger.csv); [raw](</Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/coverage/after-20261109T165844Z-58315/DEV-F14--result.json>)). **Revision:** `5a5a9f6eb2983ea38fb9475c9cd781514569e166`. Source root: `/Users/imranpollob/Coding/bc/bindcheck-zk/feasibility/work/full-dev/DEV-F14--RippnerLabs__meridian-link--5a5a9f6eb298/`.
 
 - **Verifier reality:** `evm-bridge/contracts/SolDepositVerifier.sol:36-43` has equal gamma/delta coordinates and `:178` invokes pairing precompile 8. This is a real pairing verifier.
 - **Consumer wiring:** `evm-bridge/contracts/evm-bridge.sol:4,85-86,132-141` imports/calls this named verifier. `evm-bridge/scripts/deploy.ts:116-124` deploys `SolDepositVerifier` and passes its address to `SolanaEVMBridge`. The flagged file is the script-selected source verifier; live address correspondence is MISSING.

@@ -29,7 +29,7 @@ their control expectations were committed as `d245ad5` and `06daf92`
 before the corresponding rule revisions. The analyzer receives none of those
 expected outcomes. The before evidence is the soundness follow-up's
 [`8ea6d2239cd94e2b4478bfae48fe8e764bf448a3b44c58224bbeeb6fa2f70542`](../soundness/REPORT-2.md)
-run; [its raw manifest](</Users/imranpollob/Coding/bc/bindcheck-zk-soundness/results/raw/soundness/after-20261109T061325Z-77918/manifest.json>)
+run; [its raw manifest](</Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/soundness/after-20261109T061325Z-77918/manifest.json>)
 has SHA-256
 [`21ecb42b7a45c0d37cac887b374377da038ace0caa2a6005f56a8769bd399db9`](dev-summary.json).
 The after manifest has SHA-256

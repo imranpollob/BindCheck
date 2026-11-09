@@ -14,7 +14,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 OUT = ROOT / "benchmark"
 CASES = OUT / "cases"
 ORIGINAL = pathlib.Path("/Users/imranpollob/Coding/bc/bindcheck-zk")
-GT = pathlib.Path("/Users/imranpollob/Coding/bc/bindcheck-zk-groundtruth/results/raw/groundtruth/pairs")
+GT = pathlib.Path("/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/groundtruth/pairs")
 DEV = ORIGINAL / "feasibility/work/full-dev"
 PATTERN = {
     1:"P1", 2:"P1", 3:"P1", 4:"P1", 5:"P1", 6:"P1", 7:"P1", 8:"P3",

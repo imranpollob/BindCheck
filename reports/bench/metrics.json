@@ -444,7 +444,7 @@
     "full_run_status": {
       "completed": 52
     },
-    "input_receipts": "/Users/imranpollob/Coding/bc/bindcheck-zk-bench/results/raw/bench/e1-freeze2-20261109/runs.json",
+    "input_receipts": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/e1-freeze2-20261109/runs.json",
     "no_circuit_run_status": {
       "completed": 52
     },
