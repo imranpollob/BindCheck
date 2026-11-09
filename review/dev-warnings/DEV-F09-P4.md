@@ -1,0 +1,10 @@
+# DEV-F09 / P4 — zk-poll
+
+**Frozen result:** `VIOLATION / GAMMA_EQUALS_DELTA_SOURCE_KEY` ([ledger](../../reports/freeze2/dev-ledger.csv); [raw](</Users/imranpollob/Coding/bc/bindcheck-zk-coverage/results/raw/coverage/after-20261109T165844Z-58315/DEV-F09--result.json>)). **Revision:** `4a93d95914296c2f12ade7d815bc304e92977865`. Source root: `/Users/imranpollob/Coding/bc/bindcheck-zk/feasibility/work/full-dev/DEV-F09--zk-poll__zk-poll--4a93d9591429/`.
+
+- **Verifier reality:** `contracts/verifiers/ECDSASemaphoreVerifier16.sol:190-201,241-265` and `ECDSASemaphoreVerifier2.sol:190-201,241-265` contain real pairing checks and equal `vk.gamma2`/`vk.delta2`. The source-key flaw is real in those files.
+- **Consumer wiring:** `contracts/base/SemaphoreCore.sol:20-35` receives an `IVerifier` parameter, so that file alone does not identify the key. `test/ecdsa-poll.test.js:19-35` deploys the flagged `ECDSASemaphoreVerifier16` for a test. The repository's `scripts/deployECDSA.ts:8-22` deploys `ECDSASemaphoreVerifier` without the `16`/`2` suffix; its `vk.delta2` differs from `vk.gamma2` (`contracts/verifiers/ECDSASemaphoreVerifier.sol:190-200`). The flagged pair is therefore test/alternate key evidence, not the script's selected consumer key.
+- **Policy:** `README.md:17-22` says the voter proves group membership and the public key is nullified to prevent double voting. A forgeable key conflicts with that policy on the test variant.
+- **P4 setup:** `scripts/circuit_script.sh:30,36,43,49` sets up `_0.zkey`, contributes to `_1.zkey`, beacons to `_final.zkey`, and exports the final verification key. The active script does not export an uncontributed `_0.zkey` verifier. A submodule script also contributes (`circuits/packages/circom-ecdsa-submodule/scripts/verify/build_verify.sh:35,41`). Provenance of the two flagged Solidity files is MISSING.
+
+**AI opinion:** `FALSE-ALARM` as a warning on the repository's deployment-script path; `ECDSASemaphoreVerifier16` remains a real vulnerable test variant. **Human label:** ____  **Human reviewer/date:** ____  **Reason or correction:** ____

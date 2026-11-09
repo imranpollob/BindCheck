@@ -1,0 +1,9 @@
+# DEV-F38 / P3 — Truxify
+
+**Frozen result:** `VIOLATION / REPLAY_KEY_NOT_BOUND_TO_PROOF; FIELD_ALIAS_REPLAY_KEY` ([ledger](../../reports/freeze2/dev-ledger.csv); [raw](</Users/imranpollob/Coding/bc/bindcheck-zk-coverage/results/raw/coverage/after-20261109T165844Z-58315/DEV-F38--result.json>)). **Revision:** `21fd7f6587070404257c1528b114fda8ac15dd4b`. Source root: `/Users/imranpollob/Coding/bc/bindcheck-zk/feasibility/work/full-dev/DEV-F38--KanishJebaMathewM__Truxify--21fd7f658707/`.
+
+- **Verifier reality:** `blockchain/contracts/verifier.sol:4-22` says it “FAILS CLOSED” and unconditionally returns false. `blockchain/contracts/zkSTARKVerifier.sol:4-17` is a placeholder that also returns false. Neither supplies an accepting proof path. This matches [ground-truth flags](../../reports/groundtruth/warning-verifier-flags.csv).
+- **Consumer wiring:** `ZKIdentity.sol:43-45,98-114` accepts a verifier address and calls an `IVerifier` with `(bytes proof,uint256[] inputs)`; the flagged `verifier.sol` instead declares the four-argument Groth16 signature (`:13-18`). `ZKPrivacy.sol:72-75,79-93,194-203` calls a configurable four-argument `IVerifier`; the local four-argument file is fail-closed and has fixed two-input ABI. These are at best incompatible or rejecting local candidates, not a demonstrated live verification path.
+- **Policy:** `ZKIdentity.sol:123-127` consumes a nullifier after verification. `ZKPrivacy.sol:86-93,194-203` compares nullifier and other values to proof inputs before marking/using them. A field alias would matter under an accepting field verifier, but neither matched local implementation can accept that path. `ZKPrivacy`'s transaction payout (`:205-207`) cannot be attributed to these placeholders from a valid proof.
+
+**AI opinion:** `FALSE-ALARM` for this E1 binding warning on the matched fail-closed/incompatible verifiers. **Human label:** ____  **Human reviewer/date:** ____  **Reason or correction:** ____
