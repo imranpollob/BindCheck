@@ -1,0 +1,332 @@
+{
+  "schema": "bindcheck-zk.relational-expectations/v1",
+  "frozen_before_case_or_rule_implementation": true,
+  "scope": "Authored development controls only. These expectations are test oracles and are never analyzer inputs.",
+  "dimensions": ["EXTENT", "MASK", "REPRESENTATION", "MULTIPLICITY_SCOPE", "ROLE_IDENTITY"],
+  "cases": [
+    {
+      "id": "REL-EXT-01",
+      "fixture": "extent_bridge_withdrawal_vulnerable",
+      "dimension": "EXTENT",
+      "expected_verdict": "VIOLATION",
+      "expected_reason": "CONSUMER_RELIANCE_EXCEEDS_PRODUCER_EXTENT",
+      "scenario": "A bridge circuit authenticates only active withdrawal slots, while the settlement contract transfers every configured slot."
+    },
+    {
+      "id": "REL-EXT-02",
+      "fixture": "extent_payroll_batch_vulnerable",
+      "dimension": "EXTENT",
+      "expected_verdict": "VIOLATION",
+      "expected_reason": "CONSUMER_RELIANCE_EXCEEDS_PRODUCER_EXTENT",
+      "scenario": "A payroll proof covers the active employee prefix, while the treasury credits the complete fixed-size payroll array."
+    },
+    {
+      "id": "REL-EXT-03",
+      "fixture": "extent_auction_settlement_vulnerable",
+      "dimension": "EXTENT",
+      "expected_verdict": "VIOLATION",
+      "expected_reason": "CONSUMER_RELIANCE_EXCEEDS_PRODUCER_EXTENT",
+      "scenario": "An auction circuit enforces selected bid slots, while the exchange consumes bids beyond the proved prefix."
+    },
+    {
+      "id": "REL-EXT-04",
+      "fixture": "extent_credential_airdrop_vulnerable",
+      "dimension": "EXTENT",
+      "expected_verdict": "VIOLATION",
+      "expected_reason": "CONSUMER_RELIANCE_EXCEEDS_PRODUCER_EXTENT",
+      "scenario": "An eligibility proof binds a valid-recipient prefix, while the distributor mints for every recipient slot."
+    },
+    {
+      "id": "REL-EXT-05",
+      "fixture": "extent_bridge_withdrawal_legitimate",
+      "dimension": "EXTENT",
+      "expected_verdict": "VERIFIED_WITHIN_SCOPE",
+      "expected_reason": "RELIANCE_CONTAINED_IN_PRODUCER_ENFORCEMENT",
+      "scenario": "The bridge settlement loop consumes exactly the active withdrawal prefix authenticated by the circuit."
+    },
+    {
+      "id": "REL-EXT-06",
+      "fixture": "extent_payroll_batch_legitimate",
+      "dimension": "EXTENT",
+      "expected_verdict": "VERIFIED_WITHIN_SCOPE",
+      "expected_reason": "RELIANCE_CONTAINED_IN_PRODUCER_ENFORCEMENT",
+      "scenario": "The treasury credits only employee slots below the proof-bound active employee count."
+    },
+    {
+      "id": "REL-EXT-07",
+      "fixture": "extent_auction_settlement_legitimate",
+      "dimension": "EXTENT",
+      "expected_verdict": "VERIFIED_WITHIN_SCOPE",
+      "expected_reason": "RELIANCE_CONTAINED_IN_PRODUCER_ENFORCEMENT",
+      "scenario": "The exchange settlement loop is guarded by the same selected-bid extent enforced by the circuit."
+    },
+    {
+      "id": "REL-EXT-08",
+      "fixture": "extent_credential_airdrop_legitimate",
+      "dimension": "EXTENT",
+      "expected_verdict": "VERIFIED_WITHIN_SCOPE",
+      "expected_reason": "RELIANCE_CONTAINED_IN_PRODUCER_ENFORCEMENT",
+      "scenario": "The distributor mints only for recipient slots inside the proof-bound valid-recipient prefix."
+    },
+
+    {
+      "id": "REL-MASK-01",
+      "fixture": "mask_identity_disclosure_vulnerable",
+      "dimension": "MASK",
+      "expected_verdict": "VIOLATION",
+      "expected_reason": "CONSUMER_RELIANCE_OVERLAPS_UNENFORCED_MASK",
+      "scenario": "A selective-disclosure proof authenticates chosen attributes, while the registry stores the entire attribute vector."
+    },
+    {
+      "id": "REL-MASK-02",
+      "fixture": "mask_order_settlement_vulnerable",
+      "dimension": "MASK",
+      "expected_verdict": "VIOLATION",
+      "expected_reason": "CONSUMER_RELIANCE_OVERLAPS_UNENFORCED_MASK",
+      "scenario": "An order proof selects authenticated orders with a public mask, while the market settles every order slot."
+    },
+    {
+      "id": "REL-MASK-03",
+      "fixture": "mask_oracle_update_vulnerable",
+      "dimension": "MASK",
+      "expected_verdict": "VIOLATION",
+      "expected_reason": "CONSUMER_RELIANCE_OVERLAPS_UNENFORCED_MASK",
+      "scenario": "An oracle circuit authenticates selected observations, while the feed contract publishes every observation."
+    },
+    {
+      "id": "REL-MASK-04",
+      "fixture": "mask_ballot_tally_vulnerable",
+      "dimension": "MASK",
+      "expected_verdict": "VIOLATION",
+      "expected_reason": "CONSUMER_RELIANCE_OVERLAPS_UNENFORCED_MASK",
+      "scenario": "A ballot circuit constrains enabled contests, while the tally contract counts all contest slots."
+    },
+    {
+      "id": "REL-MASK-05",
+      "fixture": "mask_identity_disclosure_legitimate",
+      "dimension": "MASK",
+      "expected_verdict": "VERIFIED_WITHIN_SCOPE",
+      "expected_reason": "RELIANCE_CONTAINED_IN_PRODUCER_ENFORCEMENT",
+      "scenario": "The registry stores an attribute only when the same public disclosure mask enables its circuit constraint."
+    },
+    {
+      "id": "REL-MASK-06",
+      "fixture": "mask_order_settlement_legitimate",
+      "dimension": "MASK",
+      "expected_verdict": "VERIFIED_WITHIN_SCOPE",
+      "expected_reason": "RELIANCE_CONTAINED_IN_PRODUCER_ENFORCEMENT",
+      "scenario": "The market settles exactly the order slots selected by the proof's public mask."
+    },
+    {
+      "id": "REL-MASK-07",
+      "fixture": "mask_oracle_update_legitimate",
+      "dimension": "MASK",
+      "expected_verdict": "VERIFIED_WITHIN_SCOPE",
+      "expected_reason": "RELIANCE_CONTAINED_IN_PRODUCER_ENFORCEMENT",
+      "scenario": "The feed contract publishes only observations selected by the circuit's public mask."
+    },
+    {
+      "id": "REL-MASK-08",
+      "fixture": "mask_ballot_tally_legitimate",
+      "dimension": "MASK",
+      "expected_verdict": "VERIFIED_WITHIN_SCOPE",
+      "expected_reason": "RELIANCE_CONTAINED_IN_PRODUCER_ENFORCEMENT",
+      "scenario": "The tally contract counts a contest only under the same enabled-contest mask used by the circuit."
+    },
+
+    {
+      "id": "REL-REP-01",
+      "fixture": "representation_invoice_decimal_vulnerable",
+      "dimension": "REPRESENTATION",
+      "expected_verdict": "VIOLATION",
+      "expected_reason": "REPRESENTATION_MISMATCH",
+      "scenario": "An invoice circuit packs decimal digits least-significant first, while the payment contract decodes them most-significant first."
+    },
+    {
+      "id": "REL-REP-02",
+      "fixture": "representation_bridge_limbs_vulnerable",
+      "dimension": "REPRESENTATION",
+      "expected_verdict": "VIOLATION",
+      "expected_reason": "REPRESENTATION_MISMATCH",
+      "scenario": "A bridge circuit packs 16-bit limbs little-endian, while the contract reconstructs the withdrawal amount big-endian."
+    },
+    {
+      "id": "REL-REP-03",
+      "fixture": "representation_asset_bytes_vulnerable",
+      "dimension": "REPRESENTATION",
+      "expected_verdict": "VIOLATION",
+      "expected_reason": "REPRESENTATION_MISMATCH",
+      "scenario": "An asset circuit packs identifier bytes in little-endian order, while the vault interprets the bytes in network order."
+    },
+    {
+      "id": "REL-REP-04",
+      "fixture": "representation_permission_bits_vulnerable",
+      "dimension": "REPRESENTATION",
+      "expected_verdict": "VIOLATION",
+      "expected_reason": "REPRESENTATION_MISMATCH",
+      "scenario": "A permission circuit assigns low-to-high bit weights, while the access contract reverses the bit significance."
+    },
+    {
+      "id": "REL-REP-05",
+      "fixture": "representation_invoice_decimal_legitimate",
+      "dimension": "REPRESENTATION",
+      "expected_verdict": "VERIFIED_WITHIN_SCOPE",
+      "expected_reason": "REPRESENTATION_COMPATIBLE",
+      "scenario": "The invoice circuit and payment contract use the same least-significant-first decimal encoding."
+    },
+    {
+      "id": "REL-REP-06",
+      "fixture": "representation_bridge_limbs_legitimate",
+      "dimension": "REPRESENTATION",
+      "expected_verdict": "VERIFIED_WITHIN_SCOPE",
+      "expected_reason": "REPRESENTATION_COMPATIBLE",
+      "scenario": "The bridge circuit and settlement contract reconstruct 16-bit amount limbs with identical weights."
+    },
+    {
+      "id": "REL-REP-07",
+      "fixture": "representation_asset_bytes_legitimate",
+      "dimension": "REPRESENTATION",
+      "expected_verdict": "VERIFIED_WITHIN_SCOPE",
+      "expected_reason": "REPRESENTATION_COMPATIBLE",
+      "scenario": "The circuit and vault use the same byte order for the packed asset identifier."
+    },
+    {
+      "id": "REL-REP-08",
+      "fixture": "representation_permission_bits_legitimate",
+      "dimension": "REPRESENTATION",
+      "expected_verdict": "VERIFIED_WITHIN_SCOPE",
+      "expected_reason": "REPRESENTATION_COMPATIBLE",
+      "scenario": "The circuit and access contract assign identical significance to every permission bit."
+    },
+
+    {
+      "id": "REL-SCOPE-01",
+      "fixture": "scope_campaign_claim_vulnerable",
+      "dimension": "MULTIPLICITY_SCOPE",
+      "expected_verdict": "VIOLATION",
+      "expected_reason": "UNIQUENESS_SCOPE_MISMATCH",
+      "scenario": "A claim nullifier omits campaign identity, while the distributor permits the same nullifier once per campaign."
+    },
+    {
+      "id": "REL-SCOPE-02",
+      "fixture": "scope_pool_withdrawal_vulnerable",
+      "dimension": "MULTIPLICITY_SCOPE",
+      "expected_verdict": "VIOLATION",
+      "expected_reason": "UNIQUENESS_SCOPE_MISMATCH",
+      "scenario": "A withdrawal nullifier omits pool identity, while spent state is partitioned by pool."
+    },
+    {
+      "id": "REL-SCOPE-03",
+      "fixture": "scope_ballot_vote_vulnerable",
+      "dimension": "MULTIPLICITY_SCOPE",
+      "expected_verdict": "VIOLATION",
+      "expected_reason": "UNIQUENESS_SCOPE_MISMATCH",
+      "scenario": "A vote nullifier omits ballot identity, while the election contract records use separately for each ballot."
+    },
+    {
+      "id": "REL-SCOPE-04",
+      "fixture": "scope_vault_redemption_vulnerable",
+      "dimension": "MULTIPLICITY_SCOPE",
+      "expected_verdict": "VIOLATION",
+      "expected_reason": "UNIQUENESS_SCOPE_MISMATCH",
+      "scenario": "A redemption nullifier omits vault identity, while the consumer's replay barrier is scoped per vault."
+    },
+    {
+      "id": "REL-SCOPE-05",
+      "fixture": "scope_campaign_claim_legitimate",
+      "dimension": "MULTIPLICITY_SCOPE",
+      "expected_verdict": "VERIFIED_WITHIN_SCOPE",
+      "expected_reason": "UNIQUENESS_SCOPE_COMPATIBLE",
+      "scenario": "The claim nullifier includes campaign identity before the per-campaign replay barrier is updated."
+    },
+    {
+      "id": "REL-SCOPE-06",
+      "fixture": "scope_pool_withdrawal_legitimate",
+      "dimension": "MULTIPLICITY_SCOPE",
+      "expected_verdict": "VERIFIED_WITHIN_SCOPE",
+      "expected_reason": "UNIQUENESS_SCOPE_COMPATIBLE",
+      "scenario": "The withdrawal nullifier includes pool identity and matches the consumer's per-pool replay scope."
+    },
+    {
+      "id": "REL-SCOPE-07",
+      "fixture": "scope_ballot_vote_legitimate",
+      "dimension": "MULTIPLICITY_SCOPE",
+      "expected_verdict": "VERIFIED_WITHIN_SCOPE",
+      "expected_reason": "UNIQUENESS_SCOPE_COMPATIBLE",
+      "scenario": "The vote nullifier includes ballot identity before the per-ballot used flag is committed."
+    },
+    {
+      "id": "REL-SCOPE-08",
+      "fixture": "scope_vault_redemption_legitimate",
+      "dimension": "MULTIPLICITY_SCOPE",
+      "expected_verdict": "VERIFIED_WITHIN_SCOPE",
+      "expected_reason": "UNIQUENESS_SCOPE_COMPATIBLE",
+      "scenario": "The redemption nullifier includes vault identity and matches the per-vault replay barrier."
+    },
+
+    {
+      "id": "REL-ROLE-01",
+      "fixture": "role_owner_recipient_vulnerable",
+      "dimension": "ROLE_IDENTITY",
+      "expected_verdict": "VIOLATION",
+      "expected_reason": "ROLE_IDENTITY_MISMATCH",
+      "scenario": "The circuit authenticates an owner identity, while the consumer supplies and pays an independently named recipient."
+    },
+    {
+      "id": "REL-ROLE-02",
+      "fixture": "role_source_destination_root_vulnerable",
+      "dimension": "ROLE_IDENTITY",
+      "expected_verdict": "VIOLATION",
+      "expected_reason": "ROLE_IDENTITY_MISMATCH",
+      "scenario": "The circuit constrains a source state root, while the consumer maps the same verifier position to a destination root."
+    },
+    {
+      "id": "REL-ROLE-03",
+      "fixture": "role_sender_beneficiary_vulnerable",
+      "dimension": "ROLE_IDENTITY",
+      "expected_verdict": "VIOLATION",
+      "expected_reason": "ROLE_IDENTITY_MISMATCH",
+      "scenario": "The circuit binds a sender identity, while the consumer treats the position as the mint beneficiary."
+    },
+    {
+      "id": "REL-ROLE-04",
+      "fixture": "role_source_destination_domain_vulnerable",
+      "dimension": "ROLE_IDENTITY",
+      "expected_verdict": "VIOLATION",
+      "expected_reason": "ROLE_IDENTITY_MISMATCH",
+      "scenario": "The circuit binds a source domain, while the consumer supplies a destination domain in that verifier position."
+    },
+    {
+      "id": "REL-ROLE-05",
+      "fixture": "role_owner_recipient_legitimate",
+      "dimension": "ROLE_IDENTITY",
+      "expected_verdict": "VERIFIED_WITHIN_SCOPE",
+      "expected_reason": "ROLE_IDENTITY_COMPATIBLE",
+      "scenario": "The consumer supplies the authenticated owner and directs the owner-bound effect to that same identity."
+    },
+    {
+      "id": "REL-ROLE-06",
+      "fixture": "role_source_destination_root_legitimate",
+      "dimension": "ROLE_IDENTITY",
+      "expected_verdict": "VERIFIED_WITHIN_SCOPE",
+      "expected_reason": "ROLE_IDENTITY_COMPATIBLE",
+      "scenario": "The source-root verifier position is mapped to and checked against the consumer's source root."
+    },
+    {
+      "id": "REL-ROLE-07",
+      "fixture": "role_sender_beneficiary_legitimate",
+      "dimension": "ROLE_IDENTITY",
+      "expected_verdict": "VERIFIED_WITHIN_SCOPE",
+      "expected_reason": "ROLE_IDENTITY_COMPATIBLE",
+      "scenario": "The consumer maps the sender identity to the sender-authorized effect rather than an unrelated beneficiary."
+    },
+    {
+      "id": "REL-ROLE-08",
+      "fixture": "role_source_destination_domain_legitimate",
+      "dimension": "ROLE_IDENTITY",
+      "expected_verdict": "VERIFIED_WITHIN_SCOPE",
+      "expected_reason": "ROLE_IDENTITY_COMPATIBLE",
+      "scenario": "The verifier's source-domain position is supplied from the consumer's source-domain value."
+    }
+  ]
+}
