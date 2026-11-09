@@ -37,6 +37,7 @@ def unknown_reason_code(reason: str) -> str:
     if any(word in normalized for word in (
         "UNSUPPORTED", "PARSE_INCOMPLETE", "HELPER_UNRESOLVED",
         "EXPRESSION_UNRESOLVED", "DYNAMIC_PUBLIC_INPUT_LENGTH_UNRESOLVED",
+        "UNRESOLVED_CONSUMER", "SCREEN_ONLY", "POSITION_UNRESOLVED",
     )):
         return "UNSUPPORTED_CONSTRUCT"
     return "OTHER"

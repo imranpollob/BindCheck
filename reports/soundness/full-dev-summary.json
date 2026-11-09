@@ -1,0 +1,431 @@
+{
+  "patterns": {
+    "P1": {
+      "applicability": {
+        "after": {
+          "APPLICABLE": 17,
+          "NOT_APPLICABLE": 29,
+          "UNKNOWN": 10
+        },
+        "before": {
+          "APPLICABLE": 17,
+          "NOT_APPLICABLE": 29,
+          "UNKNOWN": 10
+        }
+      },
+      "applicable_decisions": {
+        "after": {
+          "applicable": 17,
+          "decided": 1,
+          "unknown": 16
+        },
+        "before": {
+          "applicable": 17,
+          "decided": 8,
+          "unknown": 9
+        }
+      },
+      "counts": {
+        "after": {
+          "UNKNOWN": 55,
+          "VIOLATION": 1
+        },
+        "before": {
+          "UNKNOWN": 48,
+          "VERIFIED_WITHIN_SCOPE": 4,
+          "VIOLATION": 4
+        }
+      },
+      "transitions": [
+        {
+          "after": "UNKNOWN",
+          "after_reasons": [
+            "UNRESOLVED_CONSUMER_MODIFIER"
+          ],
+          "before": "VERIFIED_WITHIN_SCOPE",
+          "id": "DEV-F12",
+          "repository": "NethermindEth/spsc"
+        },
+        {
+          "after": "UNKNOWN",
+          "after_reasons": [
+            "UNRESOLVED_CONSUMER_INHERITANCE"
+          ],
+          "before": "VIOLATION",
+          "id": "DEV-F14",
+          "repository": "RippnerLabs/meridian-link"
+        },
+        {
+          "after": "UNKNOWN",
+          "after_reasons": [
+            "PROTECTED_EFFECT_NOT_RECOVERED",
+            "UNRESOLVED_CONSUMER_MODIFIER"
+          ],
+          "before": "VERIFIED_WITHIN_SCOPE",
+          "id": "DEV-F19",
+          "repository": "raylsnetwork/uniswap-incubator"
+        },
+        {
+          "after": "UNKNOWN",
+          "after_reasons": [
+            "PROTECTED_EFFECT_NOT_RECOVERED",
+            "UNRESOLVED_CONSUMER_MODIFIER"
+          ],
+          "before": "VIOLATION",
+          "id": "DEV-F30",
+          "repository": "ethpanda-org/ETHShanghai-2025"
+        },
+        {
+          "after": "UNKNOWN",
+          "after_reasons": [
+            "UNRESOLVED_CONSUMER_MODIFIER"
+          ],
+          "before": "VIOLATION",
+          "id": "DEV-F35",
+          "repository": "sambitsargam/ShadowSats"
+        },
+        {
+          "after": "UNKNOWN",
+          "after_reasons": [
+            "PROTECTED_EFFECT_NOT_RECOVERED",
+            "UNRESOLVED_CONSUMER_MODIFIER"
+          ],
+          "before": "VERIFIED_WITHIN_SCOPE",
+          "id": "DEV-F38",
+          "repository": "KanishJebaMathewM/Truxify"
+        },
+        {
+          "after": "UNKNOWN",
+          "after_reasons": [
+            "UNRESOLVED_CONSUMER_INHERITANCE"
+          ],
+          "before": "VIOLATION",
+          "id": "DEV-F39",
+          "repository": "Servesh21/RacePass"
+        },
+        {
+          "after": "UNKNOWN",
+          "after_reasons": [
+            "UNRESOLVED_CONSUMER_INHERITANCE"
+          ],
+          "before": "VERIFIED_WITHIN_SCOPE",
+          "id": "DEV-F44",
+          "repository": "zkemail/proof-of-twitter"
+        },
+        {
+          "after": "VIOLATION",
+          "after_reasons": [
+            "UNBOUND_EFFECT_RECIPIENT"
+          ],
+          "before": "UNKNOWN",
+          "id": "DEV-F49",
+          "repository": "KELLERBABG/Planetary-Entropy-Mining"
+        }
+      ]
+    },
+    "P2": {
+      "applicability": {
+        "after": {
+          "APPLICABLE": 27,
+          "NOT_APPLICABLE": 19,
+          "UNKNOWN": 10
+        },
+        "before": {
+          "APPLICABLE": 27,
+          "NOT_APPLICABLE": 19,
+          "UNKNOWN": 10
+        }
+      },
+      "applicable_decisions": {
+        "after": {
+          "applicable": 27,
+          "decided": 0,
+          "unknown": 27
+        },
+        "before": {
+          "applicable": 27,
+          "decided": 1,
+          "unknown": 26
+        }
+      },
+      "counts": {
+        "after": {
+          "UNKNOWN": 56
+        },
+        "before": {
+          "UNKNOWN": 55,
+          "VERIFIED_WITHIN_SCOPE": 1
+        }
+      },
+      "transitions": [
+        {
+          "after": "UNKNOWN",
+          "after_reasons": [
+            "CONTEXT_COMPUTATION_NOT_GUARDED",
+            "PROTECTED_EFFECT_NOT_RECOVERED"
+          ],
+          "before": "VERIFIED_WITHIN_SCOPE",
+          "id": "DEV-F15",
+          "repository": "ava-labs/EncryptedERC"
+        }
+      ]
+    },
+    "P3": {
+      "applicability": {
+        "after": {
+          "APPLICABLE": 23,
+          "NOT_APPLICABLE": 23,
+          "UNKNOWN": 10
+        },
+        "before": {
+          "APPLICABLE": 23,
+          "NOT_APPLICABLE": 23,
+          "UNKNOWN": 10
+        }
+      },
+      "applicable_decisions": {
+        "after": {
+          "applicable": 23,
+          "decided": 15,
+          "unknown": 8
+        },
+        "before": {
+          "applicable": 23,
+          "decided": 16,
+          "unknown": 7
+        }
+      },
+      "counts": {
+        "after": {
+          "UNKNOWN": 41,
+          "VERIFIED_WITHIN_SCOPE": 4,
+          "VIOLATION": 11
+        },
+        "before": {
+          "UNKNOWN": 40,
+          "VERIFIED_WITHIN_SCOPE": 12,
+          "VIOLATION": 4
+        }
+      },
+      "transitions": [
+        {
+          "after": "VIOLATION",
+          "after_reasons": [
+            "FIELD_ALIAS_REPLAY_KEY"
+          ],
+          "before": "VERIFIED_WITHIN_SCOPE",
+          "id": "DEV-F12",
+          "repository": "NethermindEth/spsc"
+        },
+        {
+          "after": "VIOLATION",
+          "after_reasons": [
+            "FIELD_ALIAS_REPLAY_KEY"
+          ],
+          "before": "VERIFIED_WITHIN_SCOPE",
+          "id": "DEV-F14",
+          "repository": "RippnerLabs/meridian-link"
+        },
+        {
+          "after": "VIOLATION",
+          "after_reasons": [
+            "FIELD_ALIAS_REPLAY_KEY"
+          ],
+          "before": "VERIFIED_WITHIN_SCOPE",
+          "id": "DEV-F24",
+          "repository": "ramakrishnanhulk20/Z-Tor"
+        },
+        {
+          "after": "VIOLATION",
+          "after_reasons": [
+            "FIELD_ALIAS_REPLAY_KEY",
+            "REPLAY_KEY_NOT_RECOVERED"
+          ],
+          "before": "VERIFIED_WITHIN_SCOPE",
+          "id": "DEV-F29",
+          "repository": "Veilpayapp/VEILPAY-APP"
+        },
+        {
+          "after": "UNKNOWN",
+          "after_reasons": [
+            "REPLAY_KEY_POSITION_UNRESOLVED"
+          ],
+          "before": "VERIFIED_WITHIN_SCOPE",
+          "id": "DEV-F32",
+          "repository": "a00012025/email2ether"
+        },
+        {
+          "after": "VIOLATION",
+          "after_reasons": [
+            "FIELD_ALIAS_REPLAY_KEY"
+          ],
+          "before": "VERIFIED_WITHIN_SCOPE",
+          "id": "DEV-F34",
+          "repository": "avitenzer/zk_voting"
+        },
+        {
+          "after": "VIOLATION",
+          "after_reasons": [
+            "FIELD_ALIAS_REPLAY_KEY"
+          ],
+          "before": "VERIFIED_WITHIN_SCOPE",
+          "id": "DEV-H01",
+          "repository": "a16z/zkdrops"
+        },
+        {
+          "after": "VIOLATION",
+          "after_reasons": [
+            "FIELD_ALIAS_REPLAY_KEY"
+          ],
+          "before": "VERIFIED_WITHIN_SCOPE",
+          "id": "DEV-H02",
+          "repository": "a16z/zkdrops"
+        }
+      ]
+    },
+    "P4": {
+      "applicability": {
+        "after": {
+          "APPLICABLE": 46,
+          "UNKNOWN": 10
+        },
+        "before": {
+          "APPLICABLE": 46,
+          "UNKNOWN": 10
+        }
+      },
+      "applicable_decisions": {
+        "after": {
+          "applicable": 46,
+          "decided": 22,
+          "unknown": 24
+        },
+        "before": {
+          "applicable": 46,
+          "decided": 23,
+          "unknown": 23
+        }
+      },
+      "counts": {
+        "after": {
+          "UNKNOWN": 34,
+          "VERIFIED_WITHIN_SCOPE": 22
+        },
+        "before": {
+          "UNKNOWN": 33,
+          "VERIFIED_WITHIN_SCOPE": 23
+        }
+      },
+      "transitions": [
+        {
+          "after": "UNKNOWN",
+          "after_reasons": [
+            "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"
+          ],
+          "before": "VERIFIED_WITHIN_SCOPE",
+          "id": "DEV-F29",
+          "repository": "Veilpayapp/VEILPAY-APP"
+        }
+      ]
+    },
+    "P5": {
+      "applicability": {
+        "after": {
+          "APPLICABLE": 46,
+          "UNKNOWN": 10
+        },
+        "before": {
+          "APPLICABLE": 46,
+          "UNKNOWN": 10
+        }
+      },
+      "applicable_decisions": {
+        "after": {
+          "applicable": 46,
+          "decided": 4,
+          "unknown": 42
+        },
+        "before": {
+          "applicable": 46,
+          "decided": 4,
+          "unknown": 42
+        }
+      },
+      "counts": {
+        "after": {
+          "UNKNOWN": 52,
+          "VERIFIED_WITHIN_SCOPE": 4
+        },
+        "before": {
+          "UNKNOWN": 52,
+          "VERIFIED_WITHIN_SCOPE": 4
+        }
+      },
+      "transitions": []
+    }
+  },
+  "population": {
+    "ledger_rows": 112,
+    "phases": 2,
+    "rows_per_phase": 56,
+    "same_row_ids": true
+  },
+  "runs": {
+    "after": {
+      "analyzer_content_sha256": "bca703515661a19bac0b0086ce8e885b7140bdb9270e794a4f981a5b10af5a77",
+      "builds_failed": 33,
+      "builds_ok": 43,
+      "crashes": 0,
+      "revision": "6a991bf1a61d09e430c107653891ad46a11a0453",
+      "rows_with_triples": 46,
+      "slowest": {
+        "id": "DEV-F50",
+        "runtime_seconds": 45.934566
+      },
+      "summed_analyzer_seconds": 239.481817
+    },
+    "before": {
+      "analyzer_content_sha256": "2741c40e8acdd86d2a15aca1cfd9f1ef989558c749e25ec4d926c3a483fb94bd",
+      "revision": "cd56c24606eefb6be0db41b9338404dde9a4083d"
+    }
+  },
+  "schema": "bindcheck-zk.soundness-dev-summary/v1",
+  "sources": {
+    "after_manifest": {
+      "path": "results/raw/T27/after-20261109T030552Z-33270/manifest.json",
+      "sha256": "60561481132698e29315d6e33497bd797408a05ecbdddf837e02c9ee88ea2d61"
+    },
+    "after_raw_ledger": {
+      "path": "results/raw/T27/after-20261109T030552Z-33270/per-row-ledger.json",
+      "sha256": "0ccb1b0bb269d2c385039c0820e51ef7bfad6604a9c799965e50cb1d7e821e8a"
+    },
+    "before_manifest": {
+      "path": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/T25/after-20261106T155532Z-23564/manifest.json",
+      "sha256": "baac06bf19ef4995d46ceb92e2c98266e177410d909eb134490262f8fe0412ea"
+    },
+    "ledger": {
+      "path": "reports/soundness/full-dev-before-after.csv",
+      "sha256": "edf96ea21de08e9901c96c006528431c00ecea323c41efbcca77fe4e51c83f91"
+    }
+  },
+  "spsc": {
+    "after": {
+      "P1_applicability": "APPLICABLE",
+      "P1_reasons": "UNRESOLVED_CONSUMER_MODIFIER",
+      "P1_unknown_reason_codes": "UNSUPPORTED_CONSTRUCT",
+      "P1_verdict": "UNKNOWN",
+      "commit": "6d07155ecf295e6d68936bf424557621d0c66456",
+      "id": "DEV-F12",
+      "repository": "NethermindEth/spsc"
+    },
+    "before": {
+      "P1_applicability": "APPLICABLE",
+      "P1_reasons": "EFFECT_VALUES_BOUND_BY_COMPILED_COMMITMENT",
+      "P1_unknown_reason_codes": "NOT_REPORTED",
+      "P1_verdict": "VERIFIED_WITHIN_SCOPE",
+      "commit": "6d07155ecf295e6d68936bf424557621d0c66456",
+      "id": "DEV-F12",
+      "repository": "NethermindEth/spsc"
+    }
+  }
+}

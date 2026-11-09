@@ -1,0 +1,468 @@
+{
+  "after": {
+    "path": "results/raw/soundness/after-20261109T061325Z-77918/per-row-ledger.json",
+    "sha256": "cc0aa9dce6a61eb2e11aeb47d3ce38619b8840f20e1030ffdfa427775dbd2fb2"
+  },
+  "before": {
+    "path": "results/raw/T27/after-20261109T030552Z-33270/per-row-ledger.json",
+    "sha256": "0ccb1b0bb269d2c385039c0820e51ef7bfad6604a9c799965e50cb1d7e821e8a"
+  },
+  "changed_reasons_only": [
+    {
+      "after_applicability": "APPLICABLE",
+      "after_reasons": "PROTECTED_EFFECT_NOT_RECOVERED;VERIFIER_ARTIFACT_MISSING",
+      "after_verdict": "UNKNOWN",
+      "before_applicability": "APPLICABLE",
+      "before_reasons": "NO_CONTEXT_BINDING_RECOVERED;PROTECTED_EFFECT_NOT_RECOVERED",
+      "before_verdict": "UNKNOWN",
+      "commit": "fe3a863f9613e1992ffd218fd1e38ea665866738",
+      "id": "DEV-F04",
+      "pattern": "P2",
+      "repository": "Unirep/Unirep"
+    },
+    {
+      "after_applicability": "APPLICABLE",
+      "after_reasons": "PROTECTED_EFFECT_NOT_RECOVERED;VERIFIER_ARTIFACT_MISSING",
+      "after_verdict": "UNKNOWN",
+      "before_applicability": "APPLICABLE",
+      "before_reasons": "PROTECTED_EFFECT_NOT_RECOVERED;REPLAY_KEY_EXPRESSION_UNRESOLVED",
+      "before_verdict": "UNKNOWN",
+      "commit": "fe3a863f9613e1992ffd218fd1e38ea665866738",
+      "id": "DEV-F04",
+      "pattern": "P3",
+      "repository": "Unirep/Unirep"
+    },
+    {
+      "after_applicability": "APPLICABLE",
+      "after_reasons": "VERIFIER_ARTIFACT_MISSING",
+      "after_verdict": "UNKNOWN",
+      "before_applicability": "APPLICABLE",
+      "before_reasons": "CIRCUIT_ARTIFACT_MISSING",
+      "before_verdict": "UNKNOWN",
+      "commit": "fe3a863f9613e1992ffd218fd1e38ea665866738",
+      "id": "DEV-F04",
+      "pattern": "P5",
+      "repository": "Unirep/Unirep"
+    },
+    {
+      "after_applicability": "APPLICABLE",
+      "after_reasons": "PROTECTED_EFFECT_NOT_RECOVERED;PUBLIC_INPUT_VECTOR_UNRESOLVED;UNRESOLVED_CONSUMER_INHERITANCE",
+      "after_verdict": "UNKNOWN",
+      "before_applicability": "APPLICABLE",
+      "before_reasons": "PROTECTED_EFFECT_NOT_RECOVERED;UNRESOLVED_CONSUMER_INHERITANCE",
+      "before_verdict": "UNKNOWN",
+      "commit": "8dc98cd4d63ad3aa6d86b70b8f4bbcd70f1e8be1",
+      "id": "DEV-F15",
+      "pattern": "P1",
+      "repository": "ava-labs/EncryptedERC"
+    },
+    {
+      "after_applicability": "APPLICABLE",
+      "after_reasons": "CONTEXT_COMPUTATION_NOT_GUARDED;NO_CONTEXT_BINDING_RECOVERED;PROTECTED_EFFECT_NOT_RECOVERED",
+      "after_verdict": "UNKNOWN",
+      "before_applicability": "APPLICABLE",
+      "before_reasons": "CONTEXT_COMPUTATION_NOT_GUARDED;PROTECTED_EFFECT_NOT_RECOVERED",
+      "before_verdict": "UNKNOWN",
+      "commit": "8dc98cd4d63ad3aa6d86b70b8f4bbcd70f1e8be1",
+      "id": "DEV-F15",
+      "pattern": "P2",
+      "repository": "ava-labs/EncryptedERC"
+    },
+    {
+      "after_applicability": "APPLICABLE",
+      "after_reasons": "PROTECTED_EFFECT_NOT_RECOVERED;REPLAY_BARRIER_HELPER_UNRESOLVED;REPLAY_KEY_NOT_RECOVERED",
+      "after_verdict": "UNKNOWN",
+      "before_applicability": "APPLICABLE",
+      "before_reasons": "PROTECTED_EFFECT_NOT_RECOVERED;REPLAY_BARRIER_HELPER_UNRESOLVED",
+      "before_verdict": "UNKNOWN",
+      "commit": "8dc98cd4d63ad3aa6d86b70b8f4bbcd70f1e8be1",
+      "id": "DEV-F15",
+      "pattern": "P3",
+      "repository": "ava-labs/EncryptedERC"
+    },
+    {
+      "after_applicability": "APPLICABLE",
+      "after_reasons": "PROTECTED_EFFECT_NOT_RECOVERED;VERIFIER_ARTIFACT_MISSING",
+      "after_verdict": "UNKNOWN",
+      "before_applicability": "APPLICABLE",
+      "before_reasons": "CONTEXT_COMPUTATION_NOT_GUARDED;NO_CONTEXT_BINDING_RECOVERED;PROTECTED_EFFECT_NOT_RECOVERED",
+      "before_verdict": "UNKNOWN",
+      "commit": "fa37b3e7341c9225bdc1ab6a9ba94ee41a876c8d",
+      "id": "DEV-F16",
+      "pattern": "P2",
+      "repository": "poa-box/POP"
+    },
+    {
+      "after_applicability": "APPLICABLE",
+      "after_reasons": "PROTECTED_EFFECT_NOT_RECOVERED;VERIFIER_ARTIFACT_MISSING",
+      "after_verdict": "UNKNOWN",
+      "before_applicability": "APPLICABLE",
+      "before_reasons": "PROTECTED_EFFECT_NOT_RECOVERED;REPLAY_BARRIER_HELPER_UNRESOLVED",
+      "before_verdict": "UNKNOWN",
+      "commit": "fa37b3e7341c9225bdc1ab6a9ba94ee41a876c8d",
+      "id": "DEV-F16",
+      "pattern": "P3",
+      "repository": "poa-box/POP"
+    },
+    {
+      "after_applicability": "APPLICABLE",
+      "after_reasons": "VERIFIER_ARTIFACT_MISSING",
+      "after_verdict": "UNKNOWN",
+      "before_applicability": "APPLICABLE",
+      "before_reasons": "CIRCUIT_INTERFACE_INCOMPLETE;PUBLIC_INPUT_MEANING_UNRESOLVED;PUBLIC_INPUT_VECTOR_UNRESOLVED",
+      "before_verdict": "UNKNOWN",
+      "commit": "fa37b3e7341c9225bdc1ab6a9ba94ee41a876c8d",
+      "id": "DEV-F16",
+      "pattern": "P5",
+      "repository": "poa-box/POP"
+    },
+    {
+      "after_applicability": "APPLICABLE",
+      "after_reasons": "PUBLIC_INPUT_VECTOR_UNRESOLVED",
+      "after_verdict": "UNKNOWN",
+      "before_applicability": "APPLICABLE",
+      "before_reasons": "PUBLIC_INPUT_VECTOR_UNRESOLVED;VERIFIER_MATCH_AMBIGUOUS",
+      "before_verdict": "UNKNOWN",
+      "commit": "85c72bd2e523dfbfc22bb13fbe45aae0cfac7843",
+      "id": "DEV-F45",
+      "pattern": "P5",
+      "repository": "MynaWallet/monorepo"
+    },
+    {
+      "after_applicability": "APPLICABLE",
+      "after_reasons": "CIRCUIT_ARTIFACT_MISSING",
+      "after_verdict": "UNKNOWN",
+      "before_applicability": "APPLICABLE",
+      "before_reasons": "NO_CONTEXT_BINDING_RECOVERED",
+      "before_verdict": "UNKNOWN",
+      "commit": "c8cf762ccee253d1002acc1150171ddcf1cbacd8",
+      "id": "DEV-F46",
+      "pattern": "P2",
+      "repository": "Cipher-Protocol/cipher-core"
+    },
+    {
+      "after_applicability": "APPLICABLE",
+      "after_reasons": "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND",
+      "after_verdict": "UNKNOWN",
+      "before_applicability": "APPLICABLE",
+      "before_reasons": "VERIFICATION_KEY_PARSE_INCOMPLETE",
+      "before_verdict": "UNKNOWN",
+      "commit": "c8cf762ccee253d1002acc1150171ddcf1cbacd8",
+      "id": "DEV-F46",
+      "pattern": "P4",
+      "repository": "Cipher-Protocol/cipher-core"
+    },
+    {
+      "after_applicability": "APPLICABLE",
+      "after_reasons": "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND",
+      "after_verdict": "UNKNOWN",
+      "before_applicability": "APPLICABLE",
+      "before_reasons": "VERIFICATION_KEY_PARSE_INCOMPLETE",
+      "before_verdict": "UNKNOWN",
+      "commit": "7863d23366550fb2fdd33f4d85b0f1bab4d18209",
+      "id": "DEV-F47",
+      "pattern": "P4",
+      "repository": "RayHuang880301/zkUTXO-core"
+    },
+    {
+      "after_applicability": "APPLICABLE",
+      "after_reasons": "CALLER_INDEPENDENCE_UNRESOLVED",
+      "after_verdict": "UNKNOWN",
+      "before_applicability": "APPLICABLE",
+      "before_reasons": "UNRESOLVED_CONSUMER_INHERITANCE",
+      "before_verdict": "UNKNOWN",
+      "commit": "4002962fb632578dd12477346d2e5c4159ffb2ef",
+      "id": "DEV-H01",
+      "pattern": "P1",
+      "repository": "a16z/zkdrops"
+    },
+    {
+      "after_applicability": "APPLICABLE",
+      "after_reasons": "CALLER_INDEPENDENCE_UNRESOLVED",
+      "after_verdict": "UNKNOWN",
+      "before_applicability": "APPLICABLE",
+      "before_reasons": "UNRESOLVED_CONSUMER_INHERITANCE",
+      "before_verdict": "UNKNOWN",
+      "commit": "f6f58020911cd2a19e1639f0dc93ec9fca2a9e17",
+      "id": "DEV-H02",
+      "pattern": "P1",
+      "repository": "a16z/zkdrops"
+    },
+    {
+      "after_applicability": "APPLICABLE",
+      "after_reasons": "VERIFIER_ARTIFACT_MISSING",
+      "after_verdict": "UNKNOWN",
+      "before_applicability": "APPLICABLE",
+      "before_reasons": "NO_CONTEXT_BINDING_RECOVERED",
+      "before_verdict": "UNKNOWN",
+      "commit": "8d703c124c663537966d6fc35cfec84146e236b2",
+      "id": "DEV-H03",
+      "pattern": "P2",
+      "repository": "semaphore-protocol/semaphore"
+    },
+    {
+      "after_applicability": "APPLICABLE",
+      "after_reasons": "VERIFIER_ARTIFACT_MISSING",
+      "after_verdict": "UNKNOWN",
+      "before_applicability": "APPLICABLE",
+      "before_reasons": "NO_CONTEXT_BINDING_RECOVERED",
+      "before_verdict": "UNKNOWN",
+      "commit": "3dcf79f6a095397352f71384e3dc6889c640a50f",
+      "id": "DEV-H04",
+      "pattern": "P2",
+      "repository": "semaphore-protocol/semaphore"
+    }
+  ],
+  "changed_verdicts": [
+    {
+      "after_applicability": "APPLICABLE",
+      "after_reasons": "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND;VERIFICATION_KEY_CHECKS_PASS",
+      "after_verdict": "UNKNOWN",
+      "before_applicability": "APPLICABLE",
+      "before_reasons": "VERIFICATION_KEY_CHECKS_PASS",
+      "before_verdict": "VERIFIED_WITHIN_SCOPE",
+      "commit": "fa4274dbca8547963f92364ceacb7f62aecc8fd4",
+      "id": "DEV-F08",
+      "pattern": "P4",
+      "repository": "zkp2p/zk-p2p"
+    },
+    {
+      "after_applicability": "APPLICABLE",
+      "after_reasons": "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND",
+      "after_verdict": "UNKNOWN",
+      "before_applicability": "APPLICABLE",
+      "before_reasons": "VERIFICATION_KEY_CHECKS_PASS",
+      "before_verdict": "VERIFIED_WITHIN_SCOPE",
+      "commit": "f4aece4c513161e78d3dd78579687133cfd4f22a",
+      "id": "DEV-F10",
+      "pattern": "P4",
+      "repository": "0xFableOrg/0xFable"
+    },
+    {
+      "after_applicability": "APPLICABLE",
+      "after_reasons": "REPLAY_KEY_CANONICAL_AND_CONSUMED",
+      "after_verdict": "VERIFIED_WITHIN_SCOPE",
+      "before_applicability": "APPLICABLE",
+      "before_reasons": "FIELD_ALIAS_REPLAY_KEY",
+      "before_verdict": "VIOLATION",
+      "commit": "6d07155ecf295e6d68936bf424557621d0c66456",
+      "id": "DEV-F12",
+      "pattern": "P3",
+      "repository": "NethermindEth/spsc"
+    },
+    {
+      "after_applicability": "APPLICABLE",
+      "after_reasons": "UNBOUND_EFFECT_AMOUNT",
+      "after_verdict": "VIOLATION",
+      "before_applicability": "APPLICABLE",
+      "before_reasons": "UNRESOLVED_CONSUMER_INHERITANCE",
+      "before_verdict": "UNKNOWN",
+      "commit": "5a5a9f6eb2983ea38fb9475c9cd781514569e166",
+      "id": "DEV-F14",
+      "pattern": "P1",
+      "repository": "RippnerLabs/meridian-link"
+    },
+    {
+      "after_applicability": "APPLICABLE",
+      "after_reasons": "REPLAY_KEY_CANONICAL_AND_CONSUMED",
+      "after_verdict": "VERIFIED_WITHIN_SCOPE",
+      "before_applicability": "APPLICABLE",
+      "before_reasons": "FIELD_ALIAS_REPLAY_KEY",
+      "before_verdict": "VIOLATION",
+      "commit": "5a5a9f6eb2983ea38fb9475c9cd781514569e166",
+      "id": "DEV-F14",
+      "pattern": "P3",
+      "repository": "RippnerLabs/meridian-link"
+    },
+    {
+      "after_applicability": "APPLICABLE",
+      "after_reasons": "REPLAY_KEY_CANONICAL_AND_CONSUMED",
+      "after_verdict": "VERIFIED_WITHIN_SCOPE",
+      "before_applicability": "APPLICABLE",
+      "before_reasons": "FIELD_ALIAS_REPLAY_KEY",
+      "before_verdict": "VIOLATION",
+      "commit": "63dce70b8feac7dbc402ec0367feb32fb59f649a",
+      "id": "DEV-F24",
+      "pattern": "P3",
+      "repository": "ramakrishnanhulk20/Z-Tor"
+    },
+    {
+      "after_applicability": "APPLICABLE",
+      "after_reasons": "REPLAY_KEY_CANONICAL_AND_CONSUMED;REPLAY_KEY_NOT_RECOVERED",
+      "after_verdict": "VERIFIED_WITHIN_SCOPE",
+      "before_applicability": "APPLICABLE",
+      "before_reasons": "FIELD_ALIAS_REPLAY_KEY;REPLAY_KEY_NOT_RECOVERED",
+      "before_verdict": "VIOLATION",
+      "commit": "955cc7511f4f5f4044613c886f10ddb62002b4ac",
+      "id": "DEV-F29",
+      "pattern": "P3",
+      "repository": "Veilpayapp/VEILPAY-APP"
+    },
+    {
+      "after_applicability": "APPLICABLE",
+      "after_reasons": "PROTECTED_EFFECT_NOT_RECOVERED;UNBOUND_EFFECT_AMOUNT",
+      "after_verdict": "VIOLATION",
+      "before_applicability": "APPLICABLE",
+      "before_reasons": "PROTECTED_EFFECT_NOT_RECOVERED;UNRESOLVED_CONSUMER_MODIFIER",
+      "before_verdict": "UNKNOWN",
+      "commit": "23917814522bac494150c7e99a123aa15a448155",
+      "id": "DEV-F30",
+      "pattern": "P1",
+      "repository": "ethpanda-org/ETHShanghai-2025"
+    },
+    {
+      "after_applicability": "APPLICABLE",
+      "after_reasons": "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND",
+      "after_verdict": "UNKNOWN",
+      "before_applicability": "APPLICABLE",
+      "before_reasons": "VERIFICATION_KEY_CHECKS_PASS",
+      "before_verdict": "VERIFIED_WITHIN_SCOPE",
+      "commit": "e06fe20809685e45bceb7fc1a2ac980ad0e4d0c7",
+      "id": "DEV-F32",
+      "pattern": "P4",
+      "repository": "a00012025/email2ether"
+    },
+    {
+      "after_applicability": "APPLICABLE",
+      "after_reasons": "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND",
+      "after_verdict": "UNKNOWN",
+      "before_applicability": "APPLICABLE",
+      "before_reasons": "VERIFICATION_KEY_CHECKS_PASS",
+      "before_verdict": "VERIFIED_WITHIN_SCOPE",
+      "commit": "18d3a277ccd82736757a34ad56690a241ae77744",
+      "id": "DEV-F34",
+      "pattern": "P4",
+      "repository": "avitenzer/zk_voting"
+    },
+    {
+      "after_applicability": "APPLICABLE",
+      "after_reasons": "UNBOUND_EFFECT_AMOUNT",
+      "after_verdict": "VIOLATION",
+      "before_applicability": "APPLICABLE",
+      "before_reasons": "UNRESOLVED_CONSUMER_MODIFIER",
+      "before_verdict": "UNKNOWN",
+      "commit": "c08a9bca6903ece8ebb86090b79d77f6eec56d90",
+      "id": "DEV-F35",
+      "pattern": "P1",
+      "repository": "sambitsargam/ShadowSats"
+    },
+    {
+      "after_applicability": "APPLICABLE",
+      "after_reasons": "UNBOUND_EFFECT_RECIPIENT",
+      "after_verdict": "VIOLATION",
+      "before_applicability": "APPLICABLE",
+      "before_reasons": "UNRESOLVED_CONSUMER_INHERITANCE",
+      "before_verdict": "UNKNOWN",
+      "commit": "abd54b5c541ac9d26f938a6bdbd78545526249e5",
+      "id": "DEV-F39",
+      "pattern": "P1",
+      "repository": "Servesh21/RacePass"
+    },
+    {
+      "after_applicability": "APPLICABLE",
+      "after_reasons": "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND",
+      "after_verdict": "UNKNOWN",
+      "before_applicability": "APPLICABLE",
+      "before_reasons": "VERIFICATION_KEY_CHECKS_PASS",
+      "before_verdict": "VERIFIED_WITHIN_SCOPE",
+      "commit": "85c72bd2e523dfbfc22bb13fbe45aae0cfac7843",
+      "id": "DEV-F45",
+      "pattern": "P4",
+      "repository": "MynaWallet/monorepo"
+    },
+    {
+      "after_applicability": "APPLICABLE",
+      "after_reasons": "REPLAY_KEY_CANONICAL_AND_CONSUMED",
+      "after_verdict": "VERIFIED_WITHIN_SCOPE",
+      "before_applicability": "APPLICABLE",
+      "before_reasons": "FIELD_ALIAS_REPLAY_KEY",
+      "before_verdict": "VIOLATION",
+      "commit": "f6f58020911cd2a19e1639f0dc93ec9fca2a9e17",
+      "id": "DEV-H02",
+      "pattern": "P3",
+      "repository": "a16z/zkdrops"
+    },
+    {
+      "after_applicability": "APPLICABLE",
+      "after_reasons": "VERIFIER_ARTIFACT_MISSING",
+      "after_verdict": "UNKNOWN",
+      "before_applicability": "APPLICABLE",
+      "before_reasons": "REPLAY_KEY_CANONICAL_AND_CONSUMED",
+      "before_verdict": "VERIFIED_WITHIN_SCOPE",
+      "commit": "8d703c124c663537966d6fc35cfec84146e236b2",
+      "id": "DEV-H03",
+      "pattern": "P3",
+      "repository": "semaphore-protocol/semaphore"
+    },
+    {
+      "after_applicability": "APPLICABLE",
+      "after_reasons": "VERIFIER_ARTIFACT_MISSING",
+      "after_verdict": "UNKNOWN",
+      "before_applicability": "APPLICABLE",
+      "before_reasons": "REPLAY_KEY_CANONICAL_AND_CONSUMED",
+      "before_verdict": "VERIFIED_WITHIN_SCOPE",
+      "commit": "3dcf79f6a095397352f71384e3dc6889c640a50f",
+      "id": "DEV-H04",
+      "pattern": "P3",
+      "repository": "semaphore-protocol/semaphore"
+    }
+  ],
+  "ledger": {
+    "path": "reports/soundness/full-dev-ledger-2.csv",
+    "sha256": "3a64e8eb237cc2b615985986f5fdca457582763dd062e7f2d8b8e53c180cccd8"
+  },
+  "patterns": {
+    "P1": {
+      "after": {
+        "UNKNOWN": 51,
+        "VIOLATION": 5
+      },
+      "before": {
+        "UNKNOWN": 55,
+        "VIOLATION": 1
+      }
+    },
+    "P2": {
+      "after": {
+        "UNKNOWN": 56
+      },
+      "before": {
+        "UNKNOWN": 56
+      }
+    },
+    "P3": {
+      "after": {
+        "UNKNOWN": 43,
+        "VERIFIED_WITHIN_SCOPE": 7,
+        "VIOLATION": 6
+      },
+      "before": {
+        "UNKNOWN": 41,
+        "VERIFIED_WITHIN_SCOPE": 4,
+        "VIOLATION": 11
+      }
+    },
+    "P4": {
+      "after": {
+        "UNKNOWN": 39,
+        "VERIFIED_WITHIN_SCOPE": 17
+      },
+      "before": {
+        "UNKNOWN": 34,
+        "VERIFIED_WITHIN_SCOPE": 22
+      }
+    },
+    "P5": {
+      "after": {
+        "UNKNOWN": 52,
+        "VERIFIED_WITHIN_SCOPE": 4
+      },
+      "before": {
+        "UNKNOWN": 52,
+        "VERIFIED_WITHIN_SCOPE": 4
+      }
+    }
+  },
+  "population_rows": 56,
+  "schema": "bindcheck-zk.soundness-followup-summary/v1"
+}

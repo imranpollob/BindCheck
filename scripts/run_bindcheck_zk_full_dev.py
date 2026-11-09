@@ -279,15 +279,18 @@ def analyze_row(row: dict[str, str], output_dir: pathlib.Path) -> tuple[dict[str
 
 
 def main() -> int:
+    global CHECKOUT_ROOT
     parser = argparse.ArgumentParser()
     parser.add_argument("--phase", required=True, choices=("before", "after"))
     parser.add_argument("--fetch-jobs", type=int, default=6)
     parser.add_argument("--analyze-jobs", type=int, default=3)
     parser.add_argument("--skip-fetch", action="store_true")
     parser.add_argument("--raw-task", default="T24")
+    parser.add_argument("--checkout-root", type=pathlib.Path, default=CHECKOUT_ROOT)
     args = parser.parse_args()
-    if not re.fullmatch(r"T\d+", args.raw_task):
-        raise ValueError("--raw-task must be a T-number such as T25")
+    if not re.fullmatch(r"T\d+|soundness", args.raw_task):
+        raise ValueError("--raw-task must be a T-number or soundness")
+    CHECKOUT_ROOT = args.checkout_root.resolve()
 
     rows = dev_rows()
     run_id = dt.datetime.now(dt.UTC).strftime(f"{args.phase}-%Y%m%dT%H%M%SZ-") + str(os.getpid())

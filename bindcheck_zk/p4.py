@@ -93,29 +93,145 @@ def extract_ic(text: str, constants: dict[str, int]) -> dict[int, tuple[int, int
     return output
 
 
-def canonical_guard(text: str) -> bool:
-    exact_names = [name for name, value in named_constants(text).items() if value == SCALAR_FIELD]
-    semantic_name = r"[A-Za-z_]\w*(?:SNARK|SCALAR|FIELD)[A-Za-z_]*"
-    modulus_parts = [str(SCALAR_FIELD), semantic_name, *(re.escape(name) for name in exact_names)]
+def canonical_guard_positions(text: str) -> dict[str, Any]:
+    """Return the exact public-input positions covered by recognized guards."""
+    named_bodies: dict[str, tuple[str, str]] = {}
+    verify_bodies: list[str] = []
+    for function in re.finditer(r"\bfunction\s+([A-Za-z_]\w*)\s*\(", text):
+        opening = text.find("{", function.end())
+        if opening < 0 or ";" in text[function.end():opening]:
+            continue
+        depth = 0
+        for ending in range(opening, len(text)):
+            depth += (text[ending] == "{") - (text[ending] == "}")
+            if depth == 0:
+                body = text[opening + 1:ending]
+                named_bodies[function.group(1)] = (text[function.start():opening], body)
+                if function.group(1).lower() in {"verifyproof", "verifytx", "verify"}:
+                    verify_bodies.append(body)
+                break
+    # A narrow wrapper used by snarkjs post-processing: the public ABI calls
+    # a decoder that copies every public word at the same index into the raw
+    # verifier.  Any missing/ambiguous/reordered copy leaves the path unknown.
+    wrapper = named_bodies.get("verifyProof", ("", ""))[1]
+    decode = named_bodies.get("_decodeAndVerify", ("", ""))[1]
+    raw_header, raw = named_bodies.get("_verifyProofRaw", ("", ""))
+    chain = re.search(r"\btry\s+this\._decodeAndVerify\s*\(\s*\w+\s*,\s*(\w+)\s*\)\s+returns\s*\(\s*bool\s+(\w+)\s*\)\s*\{\s*return\s+\2\s*;\s*\}\s*catch\s*\{\s*return\s+false\s*;\s*\}", wrapper, re.S)
+    raw_call = re.search(r"\breturn\s+this\._verifyProofRaw\s*\(([^;]+)\)\s*;", decode, re.S)
+    raw_arity = re.search(r"\buint(?:256)?\s*\[\s*(\d+)\s*\]\s+calldata\s+_pubSignals\b", raw_header)
+    if chain and raw_call and raw_arity and raw:
+        public_vector = chain.group(1)
+        copied_vector = raw_call.group(1).split(",")[-1].strip()
+        size = int(raw_arity.group(1))
+        copies = re.findall(
+            rf"\b{re.escape(copied_vector)}\s*\[\s*(\d+)\s*\]\s*=\s*uint256\s*\(\s*{re.escape(public_vector)}\s*\[\s*(\d+)\s*\]\s*\)\s*;",
+            decode,
+        )
+        all_writes = re.findall(rf"\b{re.escape(copied_vector)}\s*\[\s*\d+\s*\]\s*=", decode)
+        wrapper_returns = re.findall(r"\breturn\s+([^;]+);", wrapper)
+        decode_returns = re.findall(r"\breturn\s+([^;]+);", decode)
+        length_guard = re.search(rf"\bif\s*\(\s*{re.escape(public_vector)}\.length\s*!=\s*{size}\s*\)\s*return\s+false\s*;", wrapper)
+        clean_decode = strip_comments(decode)
+        vector_occurrences = len(re.findall(rf"\b{re.escape(copied_vector)}\b", clean_decode))
+        decoder_calls = set(re.findall(r"\b([A-Za-z_]\w*)\s*\(", clean_decode))
+        if (length_guard and len(copies) == len(all_writes) == size
+                and {int(dst) for dst, _ in copies} == set(range(size))
+                and all(dst == src for dst, src in copies)
+                and vector_occurrences == size + 2
+                and decoder_calls <= {"decode", "uint256", "_verifyProofRaw"}
+                and all(value.strip() in {"false", chain.group(2)} for value in wrapper_returns)
+                and len(decode_returns) == 1):
+            verify_bodies.append(raw)
+    guard_text = "\n".join(verify_bodies)
+    exact_names = re.findall(
+        rf"\b([A-Za-z_]\w*)\s*=\s*{SCALAR_FIELD}\s*;", text, re.I,
+    )
+    modulus_parts = [str(SCALAR_FIELD), *(rf"\b{re.escape(name)}\b" for name in exact_names)]
     modulus = rf"(?:{'|'.join(modulus_parts)})"
-    if any(re.search(pattern, text, re.I) for pattern in (
-        rf"(?:inputs?|pubSignals?|publicInputs?)\s*\[[^\]]+\]\s*<\s*{modulus}",
-        rf"{modulus}\s*<=\s*(?:inputs?|pubSignals?|publicInputs?)\s*\[",
-        rf"\bcheckField\s*\([^;]*(?:inputs?|pubSignals?|publicInputs?)",
-        rf"\b(?:require|assert)\s*\([^;]*(?:inputs?|pubSignals?|publicInputs?)[^;]*<\s*{modulus}",
-        rf"\bif\s*\([^)]*(?:inputs?|pubSignals?|publicInputs?)\s*\[[^\]]+\]\s*>=\s*{modulus}[^)]*\)\s*\{{?[^{{}}]*\b(?:return\s+false|revert\b)",
-    )):
-        return True
+    vector = r"(?:inputs?|pubSignals?|publicInputs?)"
+    indices: set[int] = set()
+    symbolic: set[str] = set()
+    all_positions = False
+    index_pattern = r"(?P<index>\d+|[A-Za-z_]\w*)"
+    for pattern in (
+        rf"{vector}\s*\[\s*{index_pattern}\s*\]\s*<\s*{modulus}",
+        rf"{modulus}\s*<=\s*{vector}\s*\[\s*{index_pattern}\s*\]",
+        rf"\bif\s*\([^)]*{vector}\s*\[\s*{index_pattern}\s*\]\s*>=\s*{modulus}[^)]*\)\s*\{{?[^{{}}]*?\b(?:return\s+false|revert\b)",
+    ):
+        for match in re.finditer(pattern, guard_text, re.I):
+            index = match.group("index")
+            if index.isdigit():
+                indices.add(int(index))
+            else:
+                symbolic.add(index)
     aliases = re.findall(
-        r"\b(?:uint(?:256)?\s+)?([A-Za-z_]\w*)\s*=\s*(?:inputs?|pubSignals?|publicInputs?)\s*\[[^\]]+\]\s*;",
-        text,
+        rf"\b(?:uint(?:256)?\s+)?([A-Za-z_]\w*)\s*=\s*{vector}\s*\[\s*(\d+)\s*\]\s*;",
+        guard_text,
         re.I,
     )
-    return any(re.search(
-        rf"\bif\s*\([^)]*\b{re.escape(alias)}\b\s*>=\s*{modulus}[^)]*\)\s*\{{?[^{{}}]*\b(?:return\s+false|revert\b)",
-        text,
-        re.I,
-    ) for alias in aliases)
+    for alias, index in aliases:
+        if re.search(
+            rf"\bif\s*\([^)]*\b{re.escape(alias)}\b\s*>=\s*{modulus}[^)]*\)\s*\{{?[^{{}}]*?\b(?:return\s+false|revert\b)",
+            guard_text,
+            re.I,
+        ):
+            indices.add(int(index))
+    for index in symbolic:
+        if re.search(
+            rf"\bfor\s*\([^;]*\b{re.escape(index)}\b[^;]*;[^;]*(?:<|!=)\s*{vector}\.length[^;]*;[^)]*\)",
+            guard_text,
+            re.I | re.S,
+        ):
+            all_positions = True
+    # snarkjs emits one Yul call per public word.  A helper name alone is not
+    # evidence: inspect its rejecting comparison against the exact scalar r.
+    generic = False
+    helpers = list(re.finditer(r"\bfunction\s+checkField\s*\(\s*(?:uint(?:256)?\s+)?(\w+)\s*\)[^{}]*\{", text, re.I))
+    if len(helpers) == 1:
+        helper = helpers[0]
+        opening = text.find("{", helper.start())
+        depth = 0
+        ending = opening
+        for ending in range(opening, len(text)):
+            depth += (text[ending] == "{") - (text[ending] == "}")
+            if depth == 0:
+                break
+        body = text[opening + 1:ending]
+        parameter = re.escape(helper.group(1))
+        yul_reject = re.search(
+            rf"\bif\s+iszero\s*\(\s*lt\s*\(\s*{parameter}\s*,\s*{modulus}\s*\)\s*\)\s*\{{([^{{}}]*)\}}",
+            body, re.I | re.S,
+        )
+        solidity_reject = re.search(
+            rf"\bif\s*\(\s*{parameter}\s*>=\s*{modulus}\s*\)\s*(?:revert\s*\(|\{{[^{{}}]*\brevert\s*\()",
+            body, re.I | re.S,
+        )
+        yul_block = yul_reject.group(1) if yul_reject else ""
+        yul_fails = bool(re.search(r"\brevert\s*\(", yul_block, re.I) or (
+            re.search(r"\bmstore\s*\(\s*0\s*,\s*0\s*\)", yul_block, re.I)
+            and re.search(r"\breturn\s*\(\s*0\s*,\s*0x20\s*\)", yul_block, re.I)
+        ))
+        if solidity_reject or yul_fails:
+            for match in re.finditer(
+                rf"\bcheckField\s*\(\s*calldataload\s*\(\s*add\s*\(\s*(_?{vector})\s*,\s*(\d+)\s*\)\s*\)\s*\)",
+                guard_text, re.I,
+            ):
+                offset = int(match.group(2))
+                if offset % 32 == 0:
+                    indices.add(offset // 32)
+    return {
+        "all_positions": all_positions,
+        "indices": sorted(indices),
+        "symbolic_indices": sorted(symbolic),
+        "generic_guard": generic,
+    }
+
+
+def canonical_guard(text: str, positions: set[int] | None = None) -> bool:
+    coverage = canonical_guard_positions(text)
+    if positions is None:
+        return bool(coverage["all_positions"] or coverage["indices"] or coverage["generic_guard"])
+    return bool(coverage["all_positions"] or positions.issubset(set(coverage["indices"])))
 
 
 def delegates_verification(text: str) -> bool:
@@ -152,7 +268,25 @@ def analyze_source(text: str, relative_path: str) -> dict[str, Any]:
     for index, point in points.items():
         reverse[point].append(index)
     duplicates = sorted(indices for indices in reverse.values() if len(indices) > 1)
-    guard = canonical_guard(cleaned)
+    fixed_arities = {
+        int(value) for value in re.findall(
+            r"\b(?:uint(?:256)?|bytes32)\s*\[\s*(\d+)\s*\]\s+(?:memory|calldata|storage)?\s*(?:inputs?|pubSignals?|publicInputs?)\b",
+            cleaned,
+            re.I,
+        )
+    }
+    dynamic_vectors = bool(re.search(
+        r"\b(?:uint(?:256)?|bytes32)\s*\[\s*\]\s+(?:memory|calldata|storage)?\s*(?:inputs?|pubSignals?|publicInputs?)\b",
+        cleaned,
+        re.I,
+    ))
+    guard_coverage = canonical_guard_positions(cleaned)
+    if len(fixed_arities) == 1:
+        guard = canonical_guard(cleaned, set(range(next(iter(fixed_arities)))))
+    elif dynamic_vectors:
+        guard = bool(guard_coverage["all_positions"])
+    else:
+        guard = canonical_guard(cleaned)
     p2 = has_pairing_p2(cleaned)
     delegated = delegates_verification(cleaned)
     fail_closed = fail_closed_verifier(cleaned)
@@ -164,6 +298,7 @@ def analyze_source(text: str, relative_path: str) -> dict[str, Any]:
         {"provenance": "EXTRACTED", "name": "pairing_library_p2", "value": p2},
         {"provenance": "EXTRACTED", "name": "duplicate_ic_indices", "value": duplicates},
         {"provenance": "EXTRACTED", "name": "canonical_guard", "value": guard},
+        {"provenance": "EXTRACTED", "name": "canonical_guard_coverage", "value": guard_coverage},
         {"provenance": "EXTRACTED", "name": "delegated_verification", "value": delegated},
         {"provenance": "EXTRACTED", "name": "fail_closed_verifier", "value": fail_closed},
     ]
@@ -182,8 +317,8 @@ def analyze_source(text: str, relative_path: str) -> dict[str, Any]:
         )
     elif p2 and not parsed:
         finding = result(
-            "P4", "VERIFIED_WITHIN_SCOPE", "PAIRING_LIBRARY_GENERATOR_EXCLUDED",
-            "Default G2 constants occur only in the recognized Pairing.P2 generator helper; no gamma/delta key assignment was parsed.",
+            "P4", "UNKNOWN", "VERIFICATION_KEY_PARSE_INCOMPLETE",
+            "Only a Pairing.P2 generator helper was recovered; no gamma/delta verification key was parsed.",
             where=where, facts=facts,
         )
     elif fail_closed:
@@ -203,7 +338,7 @@ def analyze_source(text: str, relative_path: str) -> dict[str, Any]:
             "P4", "UNKNOWN", "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND",
             "No supported canonical public-input field guard was recovered.", where=where, facts=facts,
         )
-    elif parsed and (not verify or guard):
+    elif parsed and verify and guard:
         finding = result(
             "P4", "VERIFIED_WITHIN_SCOPE", "VERIFICATION_KEY_CHECKS_PASS",
             "Parsed gamma/delta are distinct from the default-equal-key pattern and no duplicate IC point was found.",
@@ -292,13 +427,13 @@ def analyze_runtime(hex_value: str, relative_path: str, *, source_has_p2: bool =
         )
     elif source_has_p2 and len(groups) == 1:
         finding = result(
-            "P4", "VERIFIED_WITHIN_SCOPE", "PAIRING_LIBRARY_GENERATOR_EXCLUDED",
-            "The only complete default-G2 runtime group corresponds to the source Pairing.P2 generator helper.",
+            "P4", "UNKNOWN", "VERIFICATION_KEY_PARSE_INCOMPLETE",
+            "The only complete default-G2 runtime group may be the Pairing.P2 generator helper, but no key correspondence was established.",
             where=where, facts=facts,
         )
     elif not groups:
         finding = result(
-            "P4", "VERIFIED_WITHIN_SCOPE", "RUNTIME_DEFAULT_G2_SIGNATURE_ABSENT",
+            "P4", "UNKNOWN", "RUNTIME_DEFAULT_G2_SIGNATURE_ABSENT",
             "No complete default-G2 PUSH32 group was recovered from runtime bytecode.",
             where=where, facts=facts,
             limitations=["Absence of this signature does not establish verifier correctness."],

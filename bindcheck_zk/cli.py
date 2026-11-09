@@ -18,8 +18,14 @@ def parser() -> argparse.ArgumentParser:
     analyze_parser.add_argument("repo_dir", type=pathlib.Path)
     analyze_parser.add_argument("--circuit", action="append", default=[])
     analyze_parser.add_argument("--consumer", action="append", default=[])
+    analyze_parser.add_argument(
+        "--any-caller-may-receive",
+        action="store_true",
+        help="explicit policy: any caller may receive a caller-directed protected effect",
+    )
     bundle_parser = subparsers.add_parser("analyze-bundle", help="analyze an offline verified-source bundle")
     bundle_parser.add_argument("directory", type=pathlib.Path)
+    bundle_parser.add_argument("--any-caller-may-receive", action="store_true")
     baseline_parser = subparsers.add_parser("baseline", help="run an installed baseline through the common envelope")
     baseline_parser.add_argument("tool", choices=("slither", "circomspect", "zkap", "picus"))
     baseline_parser.add_argument("repo_dir", type=pathlib.Path)
@@ -38,9 +44,14 @@ def main(argv: list[str] | None = None) -> int:
                 explicit_circuits=args.circuit,
                 explicit_consumers=args.consumer,
                 bundle=False,
+                policy={"any_caller_may_receive": args.any_caller_may_receive},
             )
         elif args.command == "analyze-bundle":
-            output = analyze(args.directory, bundle=True)
+            output = analyze(
+                args.directory,
+                bundle=True,
+                policy={"any_caller_may_receive": args.any_caller_may_receive},
+            )
         else:
             output = run_baseline(
                 args.tool,

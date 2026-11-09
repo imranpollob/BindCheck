@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import importlib.util
+import inspect
 import json
 import pathlib
 import struct
@@ -56,7 +57,10 @@ def key_source(*, default: bool = False, duplicate: bool = False, guard: bool = 
     delta = BN254_G2 if default else tuple(value + 20 for value in BN254_G2)
     ic1 = (123456789012345678901, 223456789012345678901)
     ic2 = ic1 if duplicate else (323456789012345678901, 423456789012345678901)
-    guard_text = f"require(input[0] < {R});" if guard else "input[0];"
+    guard_text = (
+        f"for (uint256 i = 0; i < input.length; i++) require(input[i] < {R});"
+        if guard else "input[0];"
+    )
     return f"""
 contract Groth16Verifier {{
  uint256 constant gammaX1={gamma[0]}; uint256 constant gammaX2={gamma[1]};
@@ -517,13 +521,17 @@ contract Consumer {
             vsource = key_source(guard=False).replace("Groth16Verifier", "CustomVerifier")
         elif name == "p4_direct_reject_guard":
             vsource = key_source(guard=False).replace(
-                "input[0];", f"if (input[0] >= {R}) return false;"
+                "input[0];", f"if (input[0] >= {R}) return false; if (input[1] >= {R}) return false;"
             )
         elif name == "p4_alias_reject_guard":
             vsource = (
                 key_source(guard=False)
                 .replace(" memory input)", " memory inputs)")
-                .replace("input[0];", f"uint256 publicInput = inputs[0]; if (publicInput >= {R}) revert();")
+                .replace(
+                    "input[0];",
+                    f"uint256 publicInput = inputs[0]; uint256 publicInputTwo = inputs[1]; "
+                    f"if (publicInput >= {R}) revert(); if (publicInputTwo >= {R}) revert();",
+                )
             )
         elif name == "p4_delegated_guard":
             vsource = """
@@ -796,7 +804,10 @@ class BindCheckZKControlTests(unittest.TestCase):
                     root = pathlib.Path(name)
                     write_fixture(root, control["fixture"])
                     explicit = [control["explicit_consumer"]] if control.get("explicit_consumer") else None
-                    output = analyze(root, explicit_consumers=explicit)
+                    kwargs = {"explicit_consumers": explicit}
+                    if "policy" in inspect.signature(analyze).parameters:
+                        kwargs["policy"] = control.get("policy", {})
+                    output = analyze(root, **kwargs)
                 summary = output["patterns"][control["pattern"]]
                 extra_failures = []
                 if "applicability" in control and summary.get("applicability") != control["applicability"]:
