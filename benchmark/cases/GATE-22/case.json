@@ -12,8 +12,10 @@
     "Source snapshots do not establish a matched buildable triple; reviewer decision pending"
   ],
   "origin": "public-report",
+  "pair_id": "GATE-22",
   "proposal_location_regex": "^contracts/PrivateAirdrop\\.sol(:\\d+)?$",
   "proposal_pattern": "P3",
+  "protocol": "UNRESOLVED",
   "revisions": {
     "repaired": {
       "commit": "f6f58020911cd2a19e1639f0dc93ec9fca2a9e17",

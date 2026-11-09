@@ -7,9 +7,12 @@
   "id": "DEV-H02",
   "label_provenance": "historical DEV pair; AI review, not human-adjudicated",
   "label_status": "AI-PROPOSED",
-  "limitations": [],
+  "limitations": [
+    "Generated verifier declares PlonkVerifier; outside Groth16 subset"
+  ],
   "origin": "DEV-history",
   "pair_id": "DEV-H01",
+  "protocol": "PLONK",
   "revisions": {
     "selected": {
       "commit": "f6f58020911cd2a19e1639f0dc93ec9fca2a9e17",
@@ -20,7 +23,7 @@
         "verifier": "contracts/compiled/MerkVerifier.sol"
       },
       "source_checkout": "/Users/imranpollob/Coding/bc/bindcheck-zk/feasibility/work/full-dev/DEV-H02--a16z__zkdrops--f6f58020911c",
-      "verifier_kind": "Groth16 candidate"
+      "verifier_kind": "snarkJS PLONK, outside Groth16"
     }
   },
   "schema": "bindcheck-benchmark.case/v1"

@@ -12,6 +12,7 @@
   ],
   "origin": "synthetic",
   "pair_id": "ADV-14",
+  "protocol": "MOCK_VERIFIER",
   "revisions": {
     "selected": {
       "commit": "b0cdad7f5101b7000d9c2ceee138f2a9fb0abd65",

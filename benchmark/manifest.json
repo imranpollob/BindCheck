@@ -478,6 +478,324 @@
     }
   ],
   "note": "Case labels and scoring are frozen before E1 benchmark runs; public cards with blank reviewer fields remain PENDING.",
+  "pairs": [
+    {
+      "origin": "synthetic",
+      "pair_id": "ADV-01",
+      "repaired_case": "ADV-L01",
+      "vulnerable_case": "ADV-V01"
+    },
+    {
+      "origin": "synthetic",
+      "pair_id": "ADV-02",
+      "repaired_case": "ADV-L02",
+      "vulnerable_case": "ADV-V02"
+    },
+    {
+      "origin": "synthetic",
+      "pair_id": "ADV-03",
+      "repaired_case": "ADV-L03",
+      "vulnerable_case": "ADV-V03"
+    },
+    {
+      "origin": "synthetic",
+      "pair_id": "ADV-04",
+      "repaired_case": "ADV-L04",
+      "vulnerable_case": "ADV-V04"
+    },
+    {
+      "origin": "synthetic",
+      "pair_id": "ADV-05",
+      "repaired_case": "ADV-L05",
+      "vulnerable_case": "ADV-V05"
+    },
+    {
+      "origin": "synthetic",
+      "pair_id": "ADV-06",
+      "repaired_case": "ADV-L06",
+      "vulnerable_case": "ADV-V06"
+    },
+    {
+      "origin": "synthetic",
+      "pair_id": "ADV-07",
+      "repaired_case": "ADV-L07",
+      "vulnerable_case": "ADV-V07"
+    },
+    {
+      "origin": "synthetic",
+      "pair_id": "ADV-08",
+      "repaired_case": "ADV-L08",
+      "vulnerable_case": "ADV-V08"
+    },
+    {
+      "origin": "synthetic",
+      "pair_id": "ADV-09",
+      "repaired_case": "ADV-L09",
+      "vulnerable_case": "ADV-V09"
+    },
+    {
+      "origin": "synthetic",
+      "pair_id": "ADV-10",
+      "repaired_case": "ADV-L10",
+      "vulnerable_case": "ADV-V10"
+    },
+    {
+      "origin": "synthetic",
+      "pair_id": "ADV-11",
+      "repaired_case": "ADV-L11",
+      "vulnerable_case": "ADV-V11"
+    },
+    {
+      "origin": "synthetic",
+      "pair_id": "ADV-12",
+      "repaired_case": "ADV-L12",
+      "vulnerable_case": "ADV-V12"
+    },
+    {
+      "origin": "synthetic",
+      "pair_id": "ADV-13",
+      "repaired_case": "ADV-L13",
+      "vulnerable_case": "ADV-V13"
+    },
+    {
+      "origin": "synthetic",
+      "pair_id": "ADV-14",
+      "repaired_case": "ADV-L14",
+      "vulnerable_case": "ADV-V14"
+    },
+    {
+      "origin": "synthetic",
+      "pair_id": "ADV-15",
+      "repaired_case": "ADV-L15",
+      "vulnerable_case": "ADV-V15"
+    },
+    {
+      "origin": "synthetic",
+      "pair_id": "ADV-16",
+      "repaired_case": "ADV-L16",
+      "vulnerable_case": "ADV-V16"
+    },
+    {
+      "origin": "synthetic",
+      "pair_id": "ADV-17",
+      "repaired_case": "ADV-L17",
+      "vulnerable_case": "ADV-V17"
+    },
+    {
+      "origin": "synthetic",
+      "pair_id": "ADV-18",
+      "repaired_case": "ADV-L18",
+      "vulnerable_case": "ADV-V18"
+    },
+    {
+      "origin": "synthetic",
+      "pair_id": "ADV-19",
+      "repaired_case": "ADV-L19",
+      "vulnerable_case": "ADV-V19"
+    },
+    {
+      "origin": "synthetic",
+      "pair_id": "ADV-20",
+      "repaired_case": "ADV-L20",
+      "vulnerable_case": "ADV-V20"
+    },
+    {
+      "origin": "synthetic",
+      "pair_id": "ADV-21",
+      "repaired_case": "ADV-L21",
+      "vulnerable_case": "ADV-V21"
+    },
+    {
+      "origin": "synthetic",
+      "pair_id": "ADV-22",
+      "repaired_case": "ADV-L22",
+      "vulnerable_case": "ADV-V22"
+    },
+    {
+      "origin": "synthetic",
+      "pair_id": "ADV-23",
+      "repaired_case": "ADV-L23",
+      "vulnerable_case": "ADV-V23"
+    },
+    {
+      "origin": "DEV-history",
+      "pair_id": "DEV-H01",
+      "repaired_case": "DEV-H02",
+      "vulnerable_case": "DEV-H01"
+    },
+    {
+      "origin": "DEV-history",
+      "pair_id": "DEV-H02",
+      "repaired_case": "DEV-H04",
+      "vulnerable_case": "DEV-H03"
+    },
+    {
+      "origin": "DEV-history",
+      "pair_id": "DEV-H03",
+      "repaired_case": "DEV-H06",
+      "vulnerable_case": "DEV-H05"
+    },
+    {
+      "origin": "public-report",
+      "pair_id": "GATE-14",
+      "repaired_case": "GATE-14",
+      "revision_sides": [
+        "vulnerable",
+        "repaired"
+      ],
+      "vulnerable_case": "GATE-14"
+    },
+    {
+      "origin": "public-report",
+      "pair_id": "GATE-15",
+      "repaired_case": "GATE-15",
+      "revision_sides": [
+        "vulnerable",
+        "repaired"
+      ],
+      "vulnerable_case": "GATE-15"
+    },
+    {
+      "origin": "public-report",
+      "pair_id": "GATE-20",
+      "repaired_case": "GATE-20",
+      "revision_sides": [
+        "vulnerable",
+        "repaired"
+      ],
+      "vulnerable_case": "GATE-20"
+    },
+    {
+      "origin": "public-report",
+      "pair_id": "GATE-21",
+      "repaired_case": "GATE-21",
+      "revision_sides": [
+        "vulnerable",
+        "repaired"
+      ],
+      "vulnerable_case": "GATE-21"
+    },
+    {
+      "origin": "public-report",
+      "pair_id": "GATE-22",
+      "repaired_case": "GATE-22",
+      "revision_sides": [
+        "vulnerable",
+        "repaired"
+      ],
+      "vulnerable_case": "GATE-22"
+    },
+    {
+      "origin": "public-report",
+      "pair_id": "GATE-24",
+      "repaired_case": "GATE-24",
+      "revision_sides": [
+        "vulnerable",
+        "repaired"
+      ],
+      "vulnerable_case": "GATE-24"
+    },
+    {
+      "origin": "public-report",
+      "pair_id": "GATE-28",
+      "repaired_case": "GATE-28",
+      "revision_sides": [
+        "vulnerable",
+        "repaired"
+      ],
+      "vulnerable_case": "GATE-28"
+    },
+    {
+      "origin": "public-report",
+      "pair_id": "GATE-29",
+      "repaired_case": "GATE-29",
+      "revision_sides": [
+        "vulnerable",
+        "repaired"
+      ],
+      "vulnerable_case": "GATE-29"
+    },
+    {
+      "origin": "public-report",
+      "pair_id": "GATE-30",
+      "repaired_case": "GATE-30",
+      "revision_sides": [
+        "vulnerable",
+        "repaired"
+      ],
+      "vulnerable_case": "GATE-30"
+    },
+    {
+      "origin": "public-report",
+      "pair_id": "GATE-31",
+      "repaired_case": "GATE-31",
+      "revision_sides": [
+        "vulnerable",
+        "repaired"
+      ],
+      "vulnerable_case": "GATE-31"
+    },
+    {
+      "origin": "public-report",
+      "pair_id": "GATE-32",
+      "repaired_case": "GATE-32",
+      "revision_sides": [
+        "vulnerable",
+        "repaired"
+      ],
+      "vulnerable_case": "GATE-32"
+    },
+    {
+      "origin": "public-report",
+      "pair_id": "GATE-33",
+      "repaired_case": "GATE-33",
+      "revision_sides": [
+        "vulnerable",
+        "repaired"
+      ],
+      "vulnerable_case": "GATE-33"
+    },
+    {
+      "origin": "public-report",
+      "pair_id": "GATE-36",
+      "repaired_case": "GATE-36",
+      "revision_sides": [
+        "vulnerable",
+        "repaired"
+      ],
+      "vulnerable_case": "GATE-36"
+    },
+    {
+      "origin": "public-report",
+      "pair_id": "GATE-38",
+      "repaired_case": "GATE-38",
+      "revision_sides": [
+        "vulnerable",
+        "repaired"
+      ],
+      "vulnerable_case": "GATE-38"
+    },
+    {
+      "origin": "public-report",
+      "pair_id": "GATE-40",
+      "repaired_case": "GATE-40",
+      "revision_sides": [
+        "vulnerable",
+        "repaired"
+      ],
+      "vulnerable_case": "GATE-40"
+    },
+    {
+      "origin": "public-report",
+      "pair_id": "GATE-47",
+      "repaired_case": "GATE-47",
+      "revision_sides": [
+        "vulnerable",
+        "repaired"
+      ],
+      "vulnerable_case": "GATE-47"
+    }
+  ],
   "schema": "bindcheck-benchmark.manifest/v1",
   "source_revision": "b0cdad7f5101b7000d9c2ceee138f2a9fb0abd65"
 }

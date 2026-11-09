@@ -12,8 +12,10 @@
     "Source snapshots do not establish a matched buildable triple; reviewer decision pending"
   ],
   "origin": "public-report",
+  "pair_id": "GATE-15",
   "proposal_location_regex": "^circuits/circuits/utils/crypto/merkle-trees/smt\\.circom(:\\d+)?$",
   "proposal_pattern": "NONE",
+  "protocol": "UNRESOLVED",
   "revisions": {
     "repaired": {
       "commit": "99e8eece5e0867017ca076731fba63ed96ae4711",

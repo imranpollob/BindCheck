@@ -12,6 +12,7 @@
   ],
   "origin": "DEV-history",
   "pair_id": "DEV-H02",
+  "protocol": "MISSING_VERIFIER",
   "revisions": {
     "selected": {
       "commit": "8d703c124c663537966d6fc35cfec84146e236b2",
@@ -22,7 +23,7 @@
         "verifier": "semaphorejs/build/verifier.sol"
       },
       "source_checkout": "/Users/imranpollob/Coding/bc/bindcheck-zk/feasibility/work/full-dev/DEV-H03--semaphore-protocol__semaphore--8d703c124c66",
-      "verifier_kind": "Groth16 candidate"
+      "verifier_kind": "matched verifier artifact absent"
     }
   },
   "schema": "bindcheck-benchmark.case/v1"

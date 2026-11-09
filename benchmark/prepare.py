@@ -65,7 +65,7 @@ def main() -> None:
         shutil.copytree(source, destination)
         files = [source_entry(p, p.relative_to(destination).as_posix()) for p in sorted(destination.rglob("*")) if p.is_file()]
         roles = {"circuit":"circuit.circom", "verifier":"Verifier.sol", "consumer":"Consumer.sol"}
-        case = {"schema":"bindcheck-benchmark.case/v1", "id":cid, "origin":"synthetic",
+        case = {"schema":"bindcheck-benchmark.case/v1", "id":cid, "origin":"synthetic", "protocol":"MOCK_VERIFIER",
                 "family":item["family"], "exposure": "EXPOSED", "label_status":"AI-PROPOSED",
                 "label_provenance":"redteam/adversarial/expected.json; same team authored arm C",
                 "expected_state":"vulnerable" if item["label"] == "VULNERABLE" else "repaired",
@@ -101,7 +101,8 @@ def main() -> None:
                            "repository":row["repository"], "roles":{"circuit":None,"verifier":None,"consumer":None},
                            "snapshot_root":f"benchmark/cases/{cid}/snapshots/{side}",
                            "snapshot_only":True} for side,commit in (("vulnerable",row["vulnerable_commit"]),("repaired",row["fixed_commit"]))}
-        case = {"schema":"bindcheck-benchmark.case/v1", "id":cid, "origin":"public-report",
+        case = {"schema":"bindcheck-benchmark.case/v1", "id":cid, "origin":"public-report", "protocol":"UNRESOLVED",
+                "pair_id":cid,
                 "source_case_id":row["case_id"], "family":row["family"], "exposure":row["exposed"] or "UNEXPOSED",
                 "label_status":label, "label_provenance":str(card), "card_sha256":digest(card),
                 "expected_state":"paired", "expected_pattern":None if label == "PENDING" else row["proposed_expected_pattern"],
@@ -130,6 +131,7 @@ def main() -> None:
                 p=source/rel
                 if p.is_file():files.append(source_entry(p,rel))
         case={"schema":"bindcheck-benchmark.case/v1", "id":cid,"origin":"DEV-history",
+              "protocol":"PLONK" if group=="zkdrops" else "MISSING_VERIFIER" if group=="semaphore" else "ULTRAHONK",
               "family":group,"exposure":"EXPOSED","label_status":"AI-PROPOSED",
               "label_provenance":"historical DEV pair; AI review, not human-adjudicated",
               "expected_state":"vulnerable" if n%2 else "repaired",
@@ -140,12 +142,22 @@ def main() -> None:
               "pair_id":f"DEV-H{(n+1)//2:02d}",
               "revisions":{"selected":{"commit":row["commit"],"repository":row["repository"],
                     "source_checkout":str(source) if source else None,"roles":roles[group],
-                    "verifier_kind":"Noir UltraHonk, outside Circom/Groth16" if group=="payy" else "Groth16 candidate"}},
+                    "verifier_kind":"Noir UltraHonk, outside Circom/Groth16" if group=="payy" else
+                    "matched verifier artifact absent" if group=="semaphore" else "snarkJS PLONK, outside Groth16"}},
               "limitations":(["matched verifier artifact absent in preserved checkout"] if group=="semaphore" else
-                             ["Noir/UltraHonk is outside this benchmark frontend"] if group=="payy" else [])}
+                             ["Noir/UltraHonk is outside this benchmark frontend"] if group=="payy" else
+                             ["Generated verifier declares PlonkVerifier; outside Groth16 subset"]) }
         add_case(manifest,case,{"selected":files})
+    pairs=[]
+    for n in range(1,24):pairs.append({"pair_id":f"ADV-{n:02d}","origin":"synthetic",
+        "vulnerable_case":f"ADV-V{n:02d}","repaired_case":f"ADV-L{n:02d}"})
+    for n in (1,3,5):pairs.append({"pair_id":f"DEV-H{(n+1)//2:02d}","origin":"DEV-history",
+        "vulnerable_case":f"DEV-H{n:02d}","repaired_case":f"DEV-H{n+1:02d}"})
+    for row in gate:pairs.append({"pair_id":"GATE-"+row["row"].zfill(2),"origin":"public-report",
+        "vulnerable_case":"GATE-"+row["row"].zfill(2),"repaired_case":"GATE-"+row["row"].zfill(2),
+        "revision_sides":["vulnerable","repaired"]})
     jwrite(OUT / "manifest.json", {"schema":"bindcheck-benchmark.manifest/v1",
-           "source_revision":home_rev,"cases":manifest,
+           "source_revision":home_rev,"cases":manifest,"pairs":pairs,
            "note":"Case labels and scoring are frozen before E1 benchmark runs; public cards with blank reviewer fields remain PENDING."})
 
 if __name__ == "__main__":

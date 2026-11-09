@@ -12,8 +12,10 @@
     "Source snapshots do not establish a matched buildable triple; reviewer decision pending"
   ],
   "origin": "public-report",
+  "pair_id": "GATE-14",
   "proposal_location_regex": "^circuits/circom/tallyVotes\\.circom(:\\d+)?$",
   "proposal_pattern": "NONE",
+  "protocol": "UNRESOLVED",
   "revisions": {
     "repaired": {
       "commit": "6df6a4054da926b07f35c5befab4f1f8af33dcc6",

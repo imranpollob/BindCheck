@@ -12,8 +12,10 @@
     "Source snapshots do not establish a matched buildable triple; reviewer decision pending"
   ],
   "origin": "public-report",
+  "pair_id": "GATE-36",
   "proposal_location_regex": "^contracts/base/SemaphoreGroups\\.sol(:\\d+)?$",
   "proposal_pattern": "P2",
+  "protocol": "UNRESOLVED",
   "revisions": {
     "repaired": {
       "commit": "c6667d98b8c72a424afd118da6cbde03a4945690",

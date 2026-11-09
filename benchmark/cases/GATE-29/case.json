@@ -12,8 +12,10 @@
     "Source snapshots do not establish a matched buildable triple; reviewer decision pending"
   ],
   "origin": "public-report",
+  "pair_id": "GATE-29",
   "proposal_location_regex": "^packages/contracts/src/EmailAuth\\.sol(:\\d+)?$",
   "proposal_pattern": "P3",
+  "protocol": "UNRESOLVED",
   "revisions": {
     "repaired": {
       "commit": "e84065db4fa087b8d6152bb9682de71f6676e3ff",

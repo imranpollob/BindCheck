@@ -12,6 +12,7 @@
   ],
   "origin": "DEV-history",
   "pair_id": "DEV-H03",
+  "protocol": "ULTRAHONK",
   "revisions": {
     "selected": {
       "commit": "dcd5d96ee15664a59bc24ed0dc2bb78b73ac5e36",
