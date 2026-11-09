@@ -80,6 +80,8 @@ function submit(bytes memory proof, uint256 domain, uint256 nullifier) external 
                     for triple in output["triples"]:
                         for pattern in ("P1", "P2", "P3"):
                             self.assertEqual(triple["patterns"][pattern]["verdict"], "UNKNOWN")
+                        if interface_only:
+                            self.assertEqual(triple["patterns"]["P5"]["verdict"], "UNKNOWN")
 
     def test_local_context_and_overrides(self) -> None:
         cases = [
