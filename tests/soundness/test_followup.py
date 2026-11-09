@@ -115,6 +115,35 @@ function submit(bytes memory proof, uint256 domain, uint256 nullifier) external 
                 self.assertEqual(len(found), 1)
                 self.assertEqual(effect_roles(found[0], source), expected)
 
+    def test_local_replay_guard_is_exact_and_unconditional(self) -> None:
+        guards = [
+            ("require(uint256(nullifierHash) < SNARK_FIELD);", "VERIFIED_WITHIN_SCOPE"),
+            ("require(uint256(nullifierHash) < SNARK_FIELD || true);", "VIOLATION"),
+            ("if (choose) require(uint256(nullifierHash) < SNARK_FIELD);", "VIOLATION"),
+            ("require(uint256(nullifierHash) < BASE_FIELD);", "VIOLATION"),
+        ]
+        for guard, expected in guards:
+            with self.subTest(guard=guard):
+                with tempfile.TemporaryDirectory() as tmp:
+                    root = pathlib.Path(tmp)
+                    (root / "Main.nr").write_text("fn main(nullifier: pub Field) {}\n")
+                    (root / "Verifier.sol").write_text("contract Groth16Verifier { function verifyProof(bytes memory proof, uint256[1] memory input) public view returns (bool) { return true; }}")
+                    (root / "Consumer.sol").write_text(f"""
+contract Consumer {{
+ uint256 constant SNARK_FIELD = {SCALAR_FIELD}; uint256 constant BASE_FIELD = {Q};
+ mapping(bytes32 => bool) nullifierSpent;
+ function submit(bytes memory proof, bytes32 nullifierHash, bool choose) external {{
+ {guard} require(!nullifierSpent[nullifierHash]);
+ uint256[1] memory pubSignals; pubSignals[0] = uint256(nullifierHash);
+ verifier.verifyProof(proof, pubSignals); nullifierSpent[nullifierHash] = true;
+ token.transfer(msg.sender, 1);
+ }}
+}}
+""")
+                    output = analyze(root)
+                    for triple in output["triples"]:
+                        self.assertEqual(triple["patterns"]["P3"]["verdict"], expected)
+
 
 if __name__ == "__main__":
     unittest.main()
