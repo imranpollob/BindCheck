@@ -1,0 +1,150 @@
+{
+  "after_analyzer_sha256": "92789fad12050a3058a21cc5c2326e7d41604ad5ade0f09f72a35789437e6c1a",
+  "after_manifest_sha256": "17c375f02a382bfe667a72a11669eca55e632d6de1cf1012069dfe7694ab441c",
+  "after_raw": "results/raw/coverage/after-20261109T165844Z-58315",
+  "before_analyzer_sha256": "8ea6d2239cd94e2b4478bfae48fe8e764bf448a3b44c58224bbeeb6fa2f70542",
+  "before_manifest_sha256": "21ecb42b7a45c0d37cac887b374377da038ace0caa2a6005f56a8769bd399db9",
+  "before_raw": "/Users/imranpollob/Coding/bc/bindcheck-zk-soundness/results/raw/soundness/after-20261109T061325Z-77918",
+  "builds": {
+    "after": {
+      "build_attempts": 76,
+      "build_timeouts": 1,
+      "builds_failed_or_timed_out": 31,
+      "builds_ok": 45,
+      "crashes": 0,
+      "rows_with_triples": 46
+    },
+    "before": {
+      "build_attempts": 76,
+      "build_timeouts": 1,
+      "builds_failed_or_timed_out": 31,
+      "builds_ok": 45,
+      "crashes": 0,
+      "rows_with_triples": 46
+    }
+  },
+  "changed_reasons_including_verdict_changes": 15,
+  "changed_verdicts": 8,
+  "overall": {
+    "after": {
+      "applicable_pattern_rows": 159,
+      "decided_pattern_rows": 45
+    },
+    "before": {
+      "applicable_pattern_rows": 159,
+      "decided_pattern_rows": 39
+    }
+  },
+  "patterns": {
+    "P1": {
+      "after": {
+        "UNKNOWN": 11,
+        "VERIFIED_WITHIN_SCOPE": 0,
+        "VIOLATION": 6,
+        "applicable": 17,
+        "decided": 6,
+        "not_applicable": 29,
+        "rows": 56,
+        "unknown_applicability": 10
+      },
+      "before": {
+        "UNKNOWN": 12,
+        "VERIFIED_WITHIN_SCOPE": 0,
+        "VIOLATION": 5,
+        "applicable": 17,
+        "decided": 5,
+        "not_applicable": 29,
+        "rows": 56,
+        "unknown_applicability": 10
+      }
+    },
+    "P2": {
+      "after": {
+        "UNKNOWN": 27,
+        "VERIFIED_WITHIN_SCOPE": 0,
+        "VIOLATION": 0,
+        "applicable": 27,
+        "decided": 0,
+        "not_applicable": 19,
+        "rows": 56,
+        "unknown_applicability": 10
+      },
+      "before": {
+        "UNKNOWN": 27,
+        "VERIFIED_WITHIN_SCOPE": 0,
+        "VIOLATION": 0,
+        "applicable": 27,
+        "decided": 0,
+        "not_applicable": 19,
+        "rows": 56,
+        "unknown_applicability": 10
+      }
+    },
+    "P3": {
+      "after": {
+        "UNKNOWN": 10,
+        "VERIFIED_WITHIN_SCOPE": 7,
+        "VIOLATION": 6,
+        "applicable": 23,
+        "decided": 13,
+        "not_applicable": 23,
+        "rows": 56,
+        "unknown_applicability": 10
+      },
+      "before": {
+        "UNKNOWN": 10,
+        "VERIFIED_WITHIN_SCOPE": 7,
+        "VIOLATION": 6,
+        "applicable": 23,
+        "decided": 13,
+        "not_applicable": 23,
+        "rows": 56,
+        "unknown_applicability": 10
+      }
+    },
+    "P4": {
+      "after": {
+        "UNKNOWN": 24,
+        "VERIFIED_WITHIN_SCOPE": 16,
+        "VIOLATION": 6,
+        "applicable": 46,
+        "decided": 22,
+        "not_applicable": 0,
+        "rows": 56,
+        "unknown_applicability": 10
+      },
+      "before": {
+        "UNKNOWN": 29,
+        "VERIFIED_WITHIN_SCOPE": 17,
+        "VIOLATION": 0,
+        "applicable": 46,
+        "decided": 17,
+        "not_applicable": 0,
+        "rows": 56,
+        "unknown_applicability": 10
+      }
+    },
+    "P5": {
+      "after": {
+        "UNKNOWN": 42,
+        "VERIFIED_WITHIN_SCOPE": 4,
+        "VIOLATION": 0,
+        "applicable": 46,
+        "decided": 4,
+        "not_applicable": 0,
+        "rows": 56,
+        "unknown_applicability": 10
+      },
+      "before": {
+        "UNKNOWN": 42,
+        "VERIFIED_WITHIN_SCOPE": 4,
+        "VIOLATION": 0,
+        "applicable": 46,
+        "decided": 4,
+        "not_applicable": 0,
+        "rows": 56,
+        "unknown_applicability": 10
+      }
+    }
+  }
+}
