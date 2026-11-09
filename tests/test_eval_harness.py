@@ -18,13 +18,14 @@ from eval.common import (
     GateError,
     check_eval_gate,
     aggregate_payload_verdict,
+    normalize_tool_payload,
     read_csv,
     select_families,
     sha256_file,
 )
 from eval.run_heldout import run_tool_once
 from eval.run_recall import score_pair, strict_resolved_rows
-from eval.summarize import summarize_group
+from eval.summarize import build_summary, summarize_group
 
 
 def git(root: pathlib.Path, *args: str) -> str:
@@ -154,32 +155,62 @@ class ResumeTests(unittest.TestCase):
 
 
 class SummaryTests(unittest.TestCase):
-    def test_unknown_reasons_exclude_verified_triple_reasons(self) -> None:
-        verdict, reasons = aggregate_payload_verdict({
+    def test_pattern_normalization_preserves_applicability_and_reasons(self) -> None:
+        payload = {
             "patterns": {
-                "P1": {"verdict": "UNKNOWN", "reasons": ["MIXED_SUMMARY"]},
-                "P2": {"verdict": "VERIFIED_WITHIN_SCOPE", "reasons": ["VERIFIED_REASON"]},
+                "P1": {"verdict": "VIOLATION", "applicability": "APPLICABLE", "reasons": ["UNBOUND_EFFECT_AMOUNT"], "unknown_reason_codes": []},
+                "P2": {"verdict": "UNKNOWN", "applicability": "NOT_APPLICABLE", "reasons": ["NO_CONTEXT"], "unknown_reason_codes": ["NO_TARGET"]},
+                "P3": {"verdict": "UNKNOWN", "applicability": "APPLICABLE", "reasons": ["MIXED_SUMMARY"], "unknown_reason_codes": ["UNSUPPORTED_CONSTRUCT"]},
             },
             "triples": [
-                {"patterns": {"P1": {"verdict": "UNKNOWN", "reason": "REAL_UNKNOWN"}}},
-                {"patterns": {"P1": {"verdict": "VERIFIED_WITHIN_SCOPE", "reason": "VERIFIED_REASON"}}},
+                {"patterns": {"P3": {"verdict": "UNKNOWN", "reason": "REAL_UNKNOWN", "unknown_reason_code": "UNSUPPORTED_CONSTRUCT"}}},
+                {"patterns": {"P3": {"verdict": "VERIFIED_WITHIN_SCOPE", "reason": "VERIFIED_REASON"}}},
             ],
-        })
+        }
+        normalized = normalize_tool_payload("bindcheck-zk", payload, "raw.json")
+        self.assertEqual(normalized["patterns"]["P1"]["verdict"], "VIOLATION")
+        self.assertEqual(normalized["patterns"]["P2"]["applicability"], "NOT_APPLICABLE")
+        self.assertEqual(normalized["patterns"]["P2"]["verdict"], "UNKNOWN")
+        self.assertEqual(normalized["patterns"]["P3"]["reasons"], ["MIXED_SUMMARY"])
+        self.assertEqual(normalized["patterns"]["P3"]["unknown_reason_codes"], ["UNSUPPORTED_CONSTRUCT"])
+        verdict, reasons = aggregate_payload_verdict(payload, "P3")
         self.assertEqual(verdict, "UNKNOWN")
         self.assertIn("REAL_UNKNOWN", reasons)
         self.assertNotIn("VERIFIED_REASON", reasons)
 
+    def test_per_pattern_summary_has_verdict_by_applicability_and_unknown_codes(self) -> None:
+        families = [
+            {"family": {"stratum": "verified-deployed"}, "tools": {"bindcheck-zk": normalize_tool_payload("bindcheck-zk", {
+                "patterns": {"P1": {"verdict": "VIOLATION", "applicability": "APPLICABLE", "reasons": ["UNBOUND"]},
+                             "P2": {"verdict": "UNKNOWN", "applicability": "NOT_APPLICABLE", "reasons": ["NO_CONTEXT"]}},
+            }, "a.json")}},
+            {"family": {"stratum": "verified-deployed"}, "tools": {"bindcheck-zk": normalize_tool_payload("bindcheck-zk", {
+                "patterns": {"P1": {"verdict": "UNKNOWN", "applicability": "APPLICABLE", "reasons": ["UNRESOLVED"], "unknown_reason_codes": ["UNSUPPORTED_CONSTRUCT"]},
+                             "P2": {"verdict": "VERIFIED_WITHIN_SCOPE", "applicability": "APPLICABLE", "reasons": ["CONTEXT_BOUND"]}},
+            }, "b.json")}},
+        ]
+        summary = build_summary(families, seed=7, replicates=0)
+        p1 = summary["tools"]["bindcheck-zk"]["P1"]["overall"]
+        p2 = summary["tools"]["bindcheck-zk"]["P2"]["overall"]
+        self.assertEqual(p1["verdict_by_applicability"]["VIOLATION"]["APPLICABLE"], 1)
+        self.assertEqual(p1["verdict_by_applicability"]["UNKNOWN"]["APPLICABLE"], 1)
+        self.assertEqual(p1["unknown_by_reason"], {"UNRESOLVED": 1})
+        self.assertEqual(p1["unknown_by_reason_code"], {"UNSUPPORTED_CONSTRUCT": 1})
+        self.assertEqual(p2["verdict_by_applicability"]["UNKNOWN"]["NOT_APPLICABLE"], 1)
+        self.assertEqual(p2["applicable"], 1)
+        self.assertEqual(p2["decided"], 1)
+
     def test_unknown_future_reasons_and_not_applicable_are_preserved(self) -> None:
         records = [
-            {"verdict": "VIOLATION", "reasons": []},
-            {"verdict": "VERIFIED_WITHIN_SCOPE", "reasons": []},
-            {"verdict": "UNKNOWN", "reasons": ["FUTURE_REASON_9000"]},
-            {"verdict": "NOT_APPLICABLE", "reasons": ["NO_NATIVE_SCOPE"]},
+            {"verdict": "VIOLATION", "applicability": "APPLICABLE", "reasons": []},
+            {"verdict": "VERIFIED_WITHIN_SCOPE", "applicability": "APPLICABLE", "reasons": []},
+            {"verdict": "UNKNOWN", "applicability": "APPLICABLE", "reasons": ["FUTURE_REASON_9000"]},
+            {"verdict": "UNKNOWN", "applicability": "NOT_APPLICABLE", "reasons": ["NO_NATIVE_SCOPE"]},
         ]
         summary = summarize_group(records, seed=7, replicates=200)
         self.assertEqual(summary["applicable"], 3)
         self.assertEqual(summary["decided"], 2)
-        self.assertEqual(summary["unknown_by_reason"], {"FUTURE_REASON_9000": 1})
+        self.assertEqual(summary["unknown_by_reason"], {"FUTURE_REASON_9000": 1, "NO_NATIVE_SCOPE": 1})
         self.assertIn("violation_rate_among_applicable", summary["family_bootstrap_95pct"])
 
 
