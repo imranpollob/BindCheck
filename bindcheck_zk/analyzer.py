@@ -649,18 +649,18 @@ def analyze_p1(
     unsupported = has_unsupported_construct(consumer.function.body)
     if unsupported:
         return result("P1", "UNKNOWN", unsupported, "Consumer function uses a construct outside the supported dataflow subset.", where=where)
+    if not consumer.effect_calls:
+        return result(
+            "P1", "UNKNOWN", "PROTECTED_EFFECT_NOT_RECOVERED",
+            "No supported protected effect is committed on the recovered verifier-accepting function path.",
+            where=where, applicability="NOT_APPLICABLE",
+        )
     unresolved_context = unresolved_function_context(consumer.function, consumer.source.text)
     if unresolved_context:
         return result(
             "P1", "UNKNOWN", unresolved_context,
             "The effect-bearing consumer path depends on modifier or inherited semantics outside the supported frontend.",
             where=where,
-        )
-    if not consumer.effect_calls:
-        return result(
-            "P1", "UNKNOWN", "PROTECTED_EFFECT_NOT_RECOVERED",
-            "No supported protected effect is committed on the recovered verifier-accepting function path.",
-            where=where, applicability="NOT_APPLICABLE",
         )
     if verifier is None:
         return result("P1", "UNKNOWN", "VERIFIER_ARTIFACT_MISSING", "Consumer is analyzed, but the verifier implementation artifact is absent.", where=where)
