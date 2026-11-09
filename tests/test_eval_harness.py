@@ -10,7 +10,7 @@ import tempfile
 import unittest
 
 from eval.adjudicate import cohen_kappa
-from eval.render_heldout_cards import verifier_body
+from eval.render_heldout_cards import render, verifier_body
 from eval.common import (
     PLAN_SOURCE_SHA256,
     RECALL_LEDGER,
@@ -283,6 +283,36 @@ class RecallTests(unittest.TestCase):
 
 
 class AdjudicationTests(unittest.TestCase):
+    def test_blind_card_has_source_and_separate_blank_sheets(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = pathlib.Path(temporary)
+            family_dir = root / "run/families/001-test"
+            checkout = root / "checkout"
+            family_dir.mkdir(parents=True)
+            checkout.mkdir()
+            family = {"family_id": "family-test", "repository": "owner/repo", "commit": "a" * 40}
+            (family_dir / "family.json").write_text(json.dumps(family))
+            (checkout / "Verifier.sol").write_text("contract Verifier { function verifyProof() public returns(bool) { return true; } }")
+            (checkout / "Consumer.sol").write_text("contract Consumer { function act() public {} }")
+            (family_dir / "bindcheck-zk-raw.json").write_text(json.dumps({"triples": [{
+                "verifier": {"path": "Verifier.sol", "declarations": [{"name": "verifyProof"}]},
+                "patterns": {"P1": {"pattern": "P1", "verdict": "VIOLATION", "reason": "UNBOUND_EFFECT_AMOUNT",
+                                    "message": "Effect amount is unbound.",
+                                    "location": {"path": "Consumer.sol", "line": 1}}},
+            }]}))
+            capture_warning_sources(checkout, family_dir)
+            cards, key = root / "cards", root / "key.csv"
+            result = render(root / "run", cards, key)
+            self.assertEqual(result["cards"], 1)
+            card = (cards / "W0001.md").read_text()
+            self.assertIn("function verifyProof", card)
+            self.assertIn("contract Consumer", card)
+            self.assertNotIn("BindCheck", card)
+            self.assertTrue(key.is_file())
+            for rater in ("a", "b"):
+                rows = list(csv.DictReader((cards / f"BLIND-SHEET-rater-{rater}.csv").open()))
+                self.assertEqual(rows[0]["label"], "")
+
     def test_verifier_body_is_complete_and_does_not_include_next_function(self) -> None:
         source = '''contract Verifier {
 function verifyProof(uint[] memory input) public returns (bool) {
