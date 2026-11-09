@@ -81,10 +81,8 @@ contract Verifier { function verifyProof(uint256[1] calldata input) public view 
         self.assertEqual(yes["range_class"], "NONE")
 
     def test_simplified_and_dummy_key(self) -> None:
-        simplified = self.one('contract Verifier { // simplified verification
-function verifyProof(uint[] calldata input) public pure returns (bool) { return input.length > 0; } }')
-        dummy = self.one('contract Verifier { uint256 constant vkx = 0x1234;
-function verifyProof(uint[] calldata input) public view returns (bool) { return Pairing.pairingProd4(); } }')
+        simplified = self.one('contract Verifier { // simplified verification\nfunction verifyProof(uint[] calldata input) public pure returns (bool) { return input.length > 0; } }')
+        dummy = self.one('contract Verifier { uint256 constant vkx = 0x1234;\nfunction verifyProof(uint[] calldata input) public view returns (bool) { return Pairing.pairingProd4(); } }')
         self.assertEqual(simplified["behavior"], "SIMPLIFIED")
         self.assertEqual(dummy["behavior"], "DUMMY_CONSTANTS")
 
