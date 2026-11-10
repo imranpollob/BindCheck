@@ -38,6 +38,7 @@ def _is_warning(result: Mapping[str, Any]) -> bool:
 def _warning_row(family: Mapping[str, Any], result: Mapping[str, Any]) -> dict[str, str]:
     location = result.get("location") or {}
     identity = "|".join([
+        "bindcheck-zk",
         str(family.get("family_id", "")),
         str(result.get("pattern", "")),
         str(result.get("reason", "")),
@@ -46,6 +47,7 @@ def _warning_row(family: Mapping[str, Any], result: Mapping[str, Any]) -> dict[s
         str(result.get("message", "")),
     ])
     return {
+        "tool": "bindcheck-zk",
         "warning_id": hashlib.sha256(identity.encode("utf-8")).hexdigest()[:24],
         "family_id": str(family.get("family_id", "")),
         "repository": str(family.get("repository", "")),
@@ -60,15 +62,37 @@ def _warning_row(family: Mapping[str, Any], result: Mapping[str, Any]) -> dict[s
     }
 
 
+def _arm_c_warning_row(family: Mapping[str, Any], finding: Mapping[str, Any]) -> dict[str, str]:
+    location = finding.get("location") or {}
+    code = str(finding.get("code") or "NATIVE_CODE_MISSING")
+    message = str(finding.get("message") or "")
+    identity = "|".join(("arm-c", str(family.get("family_id", "")), code,
+                         str(location.get("path") or ""), str(location.get("line") or ""), message))
+    return {
+        "tool": "arm-c",
+        "warning_id": hashlib.sha256(identity.encode("utf-8")).hexdigest()[:24],
+        "family_id": str(family.get("family_id", "")),
+        "repository": str(family.get("repository", "")),
+        "commit": str(family.get("commit", "")),
+        "pattern": "",
+        "reason_code": code,
+        "source_path": str(location.get("path") or ""),
+        "source_line": str(location.get("line") or ""),
+        "message": message,
+        "label": "", "rater_reason": "",
+    }
+
+
 def extract_warnings(run_dir: pathlib.Path) -> list[dict[str, str]]:
     output: dict[str, dict[str, str]] = {}
     for family_path in sorted(run_dir.glob("families/*/family.json")):
         family_dir = family_path.parent
         raw_path = family_dir / "bindcheck-zk-raw.json"
-        if not raw_path.exists():
-            continue
         family = load_json(family_path)
-        payload = load_json(raw_path)
+        try:
+            payload = load_json(raw_path) if raw_path.is_file() else {}
+        except (OSError, ValueError):
+            payload = {}
         candidates = []
         for triple in payload.get("triples", []) or []:
             candidates.extend((triple.get("patterns") or {}).values())
@@ -79,6 +103,16 @@ def extract_warnings(run_dir: pathlib.Path) -> list[dict[str, str]]:
             if _is_warning(result):
                 row = _warning_row(family, result)
                 output.setdefault(row["warning_id"], row)
+        arm_c_path = family_dir / "arm-c-raw.json"
+        if arm_c_path.is_file():
+            try:
+                arm_c = load_json(arm_c_path)
+            except (OSError, ValueError):
+                continue
+            if (arm_c.get("run") or {}).get("status") == "completed":
+                for finding in (arm_c.get("result") or {}).get("findings") or []:
+                    row = _arm_c_warning_row(family, finding)
+                    output.setdefault(row["warning_id"], row)
     return [output[key] for key in sorted(output)]
 
 

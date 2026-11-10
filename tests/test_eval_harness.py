@@ -9,7 +9,8 @@ import subprocess
 import tempfile
 import unittest
 
-from eval.adjudicate import cohen_kappa
+from eval.adjudicate import cohen_kappa, extract_warnings
+from eval.render_heldout_cards import render, verifier_body
 from eval.common import (
     PLAN_SOURCE_SHA256,
     RECALL_LEDGER,
@@ -18,13 +19,14 @@ from eval.common import (
     GateError,
     check_eval_gate,
     aggregate_payload_verdict,
+    normalize_tool_payload,
     read_csv,
     select_families,
     sha256_file,
 )
-from eval.run_heldout import run_tool_once
+from eval.run_heldout import capture_warning_sources, execution_families, prepare_pinned_vendor, run_tool_once
 from eval.run_recall import score_pair, strict_resolved_rows
-from eval.summarize import summarize_group
+from eval.summarize import build_summary, summarize_group
 
 
 def git(root: pathlib.Path, *args: str) -> str:
@@ -73,6 +75,46 @@ class SelectionTests(unittest.TestCase):
             "Blacksaviour/Undertow",
             "Veilpayapp/VEILPAY-APP",
         ])
+
+    def test_exposed_rank_stays_in_draw_but_not_execution(self) -> None:
+        selected = select_families(self.rows, "EVAL")
+        executable, exclusions = execution_families(selected, "EVAL")
+        self.assertEqual(len(selected), 278)
+        self.assertEqual([item["rank"] for item in exclusions], [259])
+        self.assertEqual(exclusions[0]["repository"], "selfxyz/self")
+        self.assertNotIn(259, {item["rank"] for item in executable})
+        self.assertEqual(len(executable) + len(exclusions), len(selected))
+
+
+class VendorSetupTests(unittest.TestCase):
+    def test_pinned_vendor_is_linked_without_replacing_existing_source(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = pathlib.Path(temporary)
+            checkout, vendor, evidence = root / "checkout", root / "vendor", root / "evidence"
+            checkout.mkdir(); vendor.mkdir(); evidence.mkdir()
+            (vendor / "poseidon.circom").write_text("template Poseidon() {}\n")
+            from bindcheck_zk.circuits import _tree_digest
+            expected = _tree_digest(vendor)
+            first = prepare_pinned_vendor(checkout, evidence, vendor, expected)
+            self.assertEqual(first["status"], "LINKED_PINNED_VENDOR")
+            self.assertEqual((checkout / "node_modules/circomlib/poseidon.circom").read_text(),
+                             "template Poseidon() {}\n")
+            self.assertEqual(json.loads((evidence / "dependency-setup.json").read_text()), first)
+            second = prepare_pinned_vendor(checkout, evidence, vendor, expected)
+            self.assertEqual(second["status"], "EXISTING_VENDOR")
+            self.assertEqual(_tree_digest(vendor), expected)
+
+    def test_vendor_setup_rejects_missing_or_escape(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = pathlib.Path(temporary)
+            checkout, evidence, vendor = root / "checkout", root / "evidence", root / "vendor"
+            checkout.mkdir(); evidence.mkdir(); vendor.mkdir()
+            with self.assertRaises(Exception):
+                prepare_pinned_vendor(checkout, evidence, vendor, ("a" * 64, 1))
+            (checkout / "node_modules").symlink_to(root)
+            from bindcheck_zk.circuits import _tree_digest
+            with self.assertRaises(Exception):
+                prepare_pinned_vendor(checkout, evidence, vendor, _tree_digest(vendor))
 
 
 class GateTests(unittest.TestCase):
@@ -152,34 +194,97 @@ class ResumeTests(unittest.TestCase):
             self.assertEqual(result["verdict"], "UNKNOWN")
             self.assertEqual(result["reasons"], ["INTERRUPTED_ATTEMPT"])
 
+    def test_warning_source_capture_uses_pinned_checkout_paths(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = pathlib.Path(temporary)
+            checkout, family_dir = root / "checkout", root / "family"
+            checkout.mkdir()
+            family_dir.mkdir()
+            (checkout / "Verifier.sol").write_text("contract Verifier { function verifyProof() public returns(bool) { return true; } }")
+            (checkout / "Consumer.sol").write_text("contract Consumer { function act() public {} }")
+            payload = {"triples": [{
+                "verifier": {"path": "Verifier.sol"},
+                "patterns": {"P1": {"verdict": "VIOLATION", "reason": "UNBOUND_EFFECT_AMOUNT",
+                                    "location": {"path": "Consumer.sol", "line": 1}}},
+            }]}
+            (family_dir / "bindcheck-zk-raw.json").write_text(json.dumps(payload))
+            manifest = capture_warning_sources(checkout, family_dir)
+            self.assertEqual({item["source_path"] for item in manifest["sources"]}, {"Consumer.sol", "Verifier.sol"})
+            self.assertTrue(all(item["status"] == "COPIED" for item in manifest["sources"]))
+
 
 class SummaryTests(unittest.TestCase):
-    def test_unknown_reasons_exclude_verified_triple_reasons(self) -> None:
-        verdict, reasons = aggregate_payload_verdict({
+    def test_arm_c_native_warning_keeps_location_and_failed_run_unknown(self) -> None:
+        completed = normalize_tool_payload("arm-c", {
+            "run": {"status": "completed"},
+            "result": {"verdict": "VIOLATION", "findings": [{"code": "C_EFFECT_NOT_PROOF_BOUND", "location": {"path": "Consumer.sol", "line": 42}}]},
+        }, "c.json")
+        self.assertEqual(completed["verdict"], "VIOLATION")
+        self.assertEqual(completed["applicability"], "APPLICABLE")
+        self.assertEqual(completed["native_findings"][0]["location"]["line"], 42)
+        failed = normalize_tool_payload("arm-c", {
+            "run": {"status": "UNKNOWN", "fatal_reason": "BASELINE_TIMEOUT"},
+            "result": {"verdict": "VIOLATION", "findings": []},
+        }, "c.json")
+        self.assertEqual(failed["verdict"], "UNKNOWN")
+        self.assertEqual(failed["applicability"], "UNKNOWN")
+
+    def test_pattern_normalization_preserves_applicability_and_reasons(self) -> None:
+        payload = {
             "patterns": {
-                "P1": {"verdict": "UNKNOWN", "reasons": ["MIXED_SUMMARY"]},
-                "P2": {"verdict": "VERIFIED_WITHIN_SCOPE", "reasons": ["VERIFIED_REASON"]},
+                "P1": {"verdict": "VIOLATION", "applicability": "APPLICABLE", "reasons": ["UNBOUND_EFFECT_AMOUNT"], "unknown_reason_codes": []},
+                "P2": {"verdict": "UNKNOWN", "applicability": "NOT_APPLICABLE", "reasons": ["NO_CONTEXT"], "unknown_reason_codes": ["NO_TARGET"]},
+                "P3": {"verdict": "UNKNOWN", "applicability": "APPLICABLE", "reasons": ["MIXED_SUMMARY"], "unknown_reason_codes": ["UNSUPPORTED_CONSTRUCT"]},
             },
             "triples": [
-                {"patterns": {"P1": {"verdict": "UNKNOWN", "reason": "REAL_UNKNOWN"}}},
-                {"patterns": {"P1": {"verdict": "VERIFIED_WITHIN_SCOPE", "reason": "VERIFIED_REASON"}}},
+                {"patterns": {"P3": {"verdict": "UNKNOWN", "reason": "REAL_UNKNOWN", "unknown_reason_code": "UNSUPPORTED_CONSTRUCT"}}},
+                {"patterns": {"P3": {"verdict": "VERIFIED_WITHIN_SCOPE", "reason": "VERIFIED_REASON"}}},
             ],
-        })
+        }
+        normalized = normalize_tool_payload("bindcheck-zk", payload, "raw.json")
+        self.assertEqual(normalized["patterns"]["P1"]["verdict"], "VIOLATION")
+        self.assertEqual(normalized["patterns"]["P2"]["applicability"], "NOT_APPLICABLE")
+        self.assertEqual(normalized["patterns"]["P2"]["verdict"], "UNKNOWN")
+        self.assertEqual(normalized["patterns"]["P3"]["reasons"], ["MIXED_SUMMARY"])
+        self.assertEqual(normalized["patterns"]["P3"]["unknown_reason_codes"], ["UNSUPPORTED_CONSTRUCT"])
+        verdict, reasons = aggregate_payload_verdict(payload, "P3")
         self.assertEqual(verdict, "UNKNOWN")
         self.assertIn("REAL_UNKNOWN", reasons)
         self.assertNotIn("VERIFIED_REASON", reasons)
 
+    def test_per_pattern_summary_has_verdict_by_applicability_and_unknown_codes(self) -> None:
+        families = [
+            {"family": {"stratum": "verified-deployed"}, "tools": {"bindcheck-zk": normalize_tool_payload("bindcheck-zk", {
+                "patterns": {"P1": {"verdict": "VIOLATION", "applicability": "APPLICABLE", "reasons": ["UNBOUND"]},
+                             "P2": {"verdict": "UNKNOWN", "applicability": "NOT_APPLICABLE", "reasons": ["NO_CONTEXT"]}},
+            }, "a.json")}},
+            {"family": {"stratum": "verified-deployed"}, "tools": {"bindcheck-zk": normalize_tool_payload("bindcheck-zk", {
+                "patterns": {"P1": {"verdict": "UNKNOWN", "applicability": "APPLICABLE", "reasons": ["UNRESOLVED"], "unknown_reason_codes": ["UNSUPPORTED_CONSTRUCT"]},
+                             "P2": {"verdict": "VERIFIED_WITHIN_SCOPE", "applicability": "APPLICABLE", "reasons": ["CONTEXT_BOUND"]}},
+            }, "b.json")}},
+        ]
+        summary = build_summary(families, seed=7, replicates=0)
+        p1 = summary["tools"]["bindcheck-zk"]["P1"]["overall"]
+        p2 = summary["tools"]["bindcheck-zk"]["P2"]["overall"]
+        self.assertEqual(p1["verdict_by_applicability"]["VIOLATION"]["APPLICABLE"], 1)
+        self.assertEqual(p1["verdict_by_applicability"]["UNKNOWN"]["APPLICABLE"], 1)
+        self.assertEqual(p1["unknown_by_reason"], {"UNRESOLVED": 1})
+        self.assertEqual(p1["unknown_by_reason_code"], {"UNSUPPORTED_CONSTRUCT": 1})
+        self.assertEqual(p2["verdict_by_applicability"]["UNKNOWN"]["NOT_APPLICABLE"], 1)
+        self.assertEqual(p2["applicable"], 1)
+        self.assertEqual(p2["decided"], 1)
+
     def test_unknown_future_reasons_and_not_applicable_are_preserved(self) -> None:
         records = [
-            {"verdict": "VIOLATION", "reasons": []},
-            {"verdict": "VERIFIED_WITHIN_SCOPE", "reasons": []},
-            {"verdict": "UNKNOWN", "reasons": ["FUTURE_REASON_9000"]},
-            {"verdict": "NOT_APPLICABLE", "reasons": ["NO_NATIVE_SCOPE"]},
+            {"verdict": "VIOLATION", "applicability": "APPLICABLE", "reasons": []},
+            {"verdict": "VERIFIED_WITHIN_SCOPE", "applicability": "APPLICABLE", "reasons": []},
+            {"verdict": "UNKNOWN", "applicability": "APPLICABLE", "reasons": ["FUTURE_REASON_9000"]},
+            {"verdict": "UNKNOWN", "applicability": "NOT_APPLICABLE", "reasons": ["NO_NATIVE_SCOPE"]},
         ]
         summary = summarize_group(records, seed=7, replicates=200)
         self.assertEqual(summary["applicable"], 3)
         self.assertEqual(summary["decided"], 2)
-        self.assertEqual(summary["unknown_by_reason"], {"FUTURE_REASON_9000": 1})
+        self.assertEqual(summary["unknown_by_reason"], {"FUTURE_REASON_9000": 1, "NO_NATIVE_SCOPE": 1})
         self.assertIn("violation_rate_among_applicable", summary["family_bootstrap_95pct"])
 
 
@@ -209,6 +314,114 @@ class RecallTests(unittest.TestCase):
 
 
 class AdjudicationTests(unittest.TestCase):
+    def test_bindcheck_and_completed_arm_c_get_distinct_blind_cards(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = pathlib.Path(temporary)
+            family_dir, checkout = root / "run/families/001-test", root / "checkout"
+            family_dir.mkdir(parents=True)
+            checkout.mkdir()
+            family = {"family_id": "family-test", "repository": "owner/repo", "commit": "a" * 40,
+                      "verifier_paths": "Verifier.sol"}
+            (family_dir / "family.json").write_text(json.dumps(family))
+            (checkout / "Verifier.sol").write_text("contract Verifier { function verifyProof() public returns(bool) { return true; } }")
+            (checkout / "Consumer.sol").write_text("contract Consumer { function act() public {} }")
+            (family_dir / "bindcheck-zk-raw.json").write_text(json.dumps({"triples": [{
+                "verifier": {"path": "Verifier.sol", "declarations": [{"name": "verifyProof"}]},
+                "patterns": {"P1": {"pattern": "P1", "verdict": "VIOLATION", "reason": "UNBOUND_EFFECT",
+                                    "message": "Effect is unbound", "location": {"path": "Consumer.sol", "line": 1}}},
+            }]}))
+            (family_dir / "arm-c-raw.json").write_text(json.dumps({
+                "run": {"status": "completed"}, "result": {"findings": [{
+                    "code": "A_EFFECT_RECIPIENT_UNBOUND", "message": "Recipient is unbound",
+                    "location": {"path": "Consumer.sol", "line": 1}, "evidence_grade": "E1"}]}}))
+            capture_warning_sources(checkout, family_dir)
+            rows = extract_warnings(root / "run")
+            self.assertEqual({row["tool"] for row in rows}, {"bindcheck-zk", "arm-c"})
+            cards, key = root / "cards", root / "key.csv"
+            result = render(root / "run", cards, key)
+            self.assertEqual(result["cards"], 2)
+            with key.open(newline="") as handle:
+                keyed = list(csv.DictReader(handle))
+            self.assertEqual({row["tool"] for row in keyed}, {"bindcheck-zk", "arm-c"})
+            for card_path in cards.glob("W*.md"):
+                card = card_path.read_text().lower()
+                self.assertIn("contract consumer", card)
+                self.assertIn("function verifyproof", card)
+                self.assertNotIn("arm-c", card)
+                self.assertNotIn("bindcheck-zk", card)
+            for rater in ("a", "b"):
+                with (cards / f"BLIND-SHEET-rater-{rater}.csv").open(newline="") as handle:
+                    sheet = list(csv.DictReader(handle))
+                self.assertEqual(len(sheet), 2)
+                self.assertTrue(all(not row["label"] and not row["reason_code"] for row in sheet))
+
+    def test_incomplete_arm_c_has_no_warning_credit(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            family_dir = pathlib.Path(temporary) / "families/001-test"
+            family_dir.mkdir(parents=True)
+            (family_dir / "family.json").write_text(json.dumps({"family_id": "f"}))
+            (family_dir / "arm-c-raw.json").write_text(json.dumps({
+                "run": {"status": "UNKNOWN"}, "result": {"findings": [{"code": "C_SOMETHING"}]}}))
+            self.assertEqual(extract_warnings(pathlib.Path(temporary)), [])
+
+    def test_completed_arm_c_survives_missing_bindcheck_json(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            family_dir = pathlib.Path(temporary) / "families/001-test"
+            family_dir.mkdir(parents=True)
+            (family_dir / "family.json").write_text(json.dumps({"family_id": "f"}))
+            (family_dir / "bindcheck-zk-raw.json").write_text("broken json")
+            (family_dir / "arm-c-raw.json").write_text(json.dumps({
+                "run": {"status": "completed"}, "result": {"findings": [{
+                    "code": "C_SOMETHING", "message": "Something",
+                    "location": {"path": "Consumer.sol", "line": 4}}]}}))
+            rows = extract_warnings(pathlib.Path(temporary))
+            self.assertEqual(len(rows), 1)
+            self.assertEqual(rows[0]["tool"], "arm-c")
+
+    def test_blind_card_has_source_and_separate_blank_sheets(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = pathlib.Path(temporary)
+            family_dir = root / "run/families/001-test"
+            checkout = root / "checkout"
+            family_dir.mkdir(parents=True)
+            checkout.mkdir()
+            family = {"family_id": "family-test", "repository": "owner/repo", "commit": "a" * 40}
+            (family_dir / "family.json").write_text(json.dumps(family))
+            (checkout / "Verifier.sol").write_text("contract Verifier { function verifyProof() public returns(bool) { return true; } }")
+            (checkout / "Consumer.sol").write_text("contract Consumer { function act() public {} }")
+            (family_dir / "bindcheck-zk-raw.json").write_text(json.dumps({"triples": [{
+                "verifier": {"path": "Verifier.sol", "declarations": [{"name": "verifyProof"}]},
+                "patterns": {"P1": {"pattern": "P1", "verdict": "VIOLATION", "reason": "UNBOUND_EFFECT_AMOUNT",
+                                    "message": "Effect amount is unbound.",
+                                    "location": {"path": "Consumer.sol", "line": 1}}},
+            }]}))
+            capture_warning_sources(checkout, family_dir)
+            cards, key = root / "cards", root / "key.csv"
+            result = render(root / "run", cards, key)
+            self.assertEqual(result["cards"], 1)
+            card = (cards / "W0001.md").read_text()
+            self.assertIn("function verifyProof", card)
+            self.assertIn("contract Consumer", card)
+            self.assertNotIn("BindCheck", card)
+            self.assertTrue(key.is_file())
+            for rater in ("a", "b"):
+                with (cards / f"BLIND-SHEET-rater-{rater}.csv").open() as handle:
+                    rows = list(csv.DictReader(handle))
+                self.assertEqual(rows[0]["label"], "")
+
+    def test_verifier_body_is_complete_and_does_not_include_next_function(self) -> None:
+        source = '''contract Verifier {
+function verifyProof(uint[] memory input) public returns (bool) {
+  if (input.length == 0) { return false; }
+  return true;
+}
+function other() public {}
+}'''
+        body = verifier_body(source, "verifyProof")
+        self.assertIn("if (input.length == 0) { return false; }", body)
+        self.assertIn("return true;", body)
+        self.assertNotIn("function other", body)
+
     def test_known_cohen_kappa(self) -> None:
         result = cohen_kappa(
             {"a": "TP", "b": "TP", "c": "FP"},

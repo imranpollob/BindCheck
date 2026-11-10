@@ -16,6 +16,8 @@ if __package__ in {None, ""}:
     sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
 
 from eval.common import (  # noqa: E402
+    APPLICABILITIES,
+    PATTERNS,
     STRATA,
     VERDICTS,
     EvaluationError,
@@ -47,9 +49,9 @@ def percentile(values: Sequence[float], fraction: float) -> float | None:
 
 def _rates(records: Sequence[Mapping[str, Any]]) -> dict[str, float | None]:
     total = len(records)
-    applicable = sum(item["verdict"] != "NOT_APPLICABLE" for item in records)
-    decided = sum(item["verdict"] in {"VIOLATION", "VERIFIED_WITHIN_SCOPE"} for item in records)
-    violations = sum(item["verdict"] == "VIOLATION" for item in records)
+    applicable = sum(item["applicability"] == "APPLICABLE" for item in records)
+    decided = sum(item["applicability"] == "APPLICABLE" and item["verdict"] in {"VIOLATION", "VERIFIED_WITHIN_SCOPE"} for item in records)
+    violations = sum(item["applicability"] == "APPLICABLE" and item["verdict"] == "VIOLATION" for item in records)
     return {
         "applicable_rate": applicable / total if total else None,
         "decided_rate_among_applicable": decided / applicable if applicable else None,
@@ -75,7 +77,7 @@ def bootstrap_intervals(
         low = percentile(values, 0.025)
         high = percentile(values, 0.975)
         output[key] = None if low is None or high is None else {
-            "low": round(low, 6), "high": round(high, 6)
+            "low": low, "high": high
         }
     return output
 
@@ -85,18 +87,39 @@ def summarize_group(
 ) -> dict[str, Any]:
     for item in records:
         validate_verdict(str(item["verdict"]))
+        if item.get("applicability") not in APPLICABILITIES:
+            raise EvaluationError(f"invalid applicability: {item.get('applicability')!r}")
     counts = Counter(str(item["verdict"]) for item in records)
-    applicable = len(records) - counts["NOT_APPLICABLE"]
-    decided = counts["VIOLATION"] + counts["VERIFIED_WITHIN_SCOPE"]
+    matrix = {
+        verdict: {applicability: sum(
+            item["verdict"] == verdict and item["applicability"] == applicability
+            for item in records
+        ) for applicability in sorted(APPLICABILITIES)}
+        for verdict in sorted(VERDICTS)
+    }
+    applicable = sum(item["applicability"] == "APPLICABLE" for item in records)
+    decided = matrix["VIOLATION"]["APPLICABLE"] + matrix["VERIFIED_WITHIN_SCOPE"]["APPLICABLE"]
+    def tally(field: str, *, unknown_only: bool = False) -> dict[str, int]:
+        output: Counter[str] = Counter()
+        for item in records:
+            if unknown_only and item["verdict"] != "UNKNOWN":
+                continue
+            for value in set(map(str, item.get(field) or [])):
+                output[value] += 1
+        return dict(sorted(output.items()))
     return {
         "families": len(records),
         "applicable": applicable,
         "decided": decided,
+        "verdict_by_applicability": matrix,
         "VIOLATION": counts["VIOLATION"],
         "VERIFIED_WITHIN_SCOPE": counts["VERIFIED_WITHIN_SCOPE"],
         "UNKNOWN": counts["UNKNOWN"],
-        "NOT_APPLICABLE": counts["NOT_APPLICABLE"],
+        "NOT_APPLICABLE": sum(item["applicability"] == "NOT_APPLICABLE" for item in records),
+        "applicability_unknown": sum(item["applicability"] == "UNKNOWN" for item in records),
+        "by_reason": tally("reasons"),
         "unknown_by_reason": tally_unknown_reasons(records),
+        "unknown_by_reason_code": tally("unknown_reason_codes", unknown_only=True),
         "rates": _rates(records),
         "family_bootstrap_95pct": bootstrap_intervals(
             records, seed=seed, replicates=replicates
@@ -117,6 +140,11 @@ def load_family_results(run_dir: pathlib.Path) -> list[dict[str, Any]]:
             verdict = result.get("verdict")
             if verdict not in VERDICTS:
                 raise EvaluationError(f"{path}: {tool} has unsupported verdict {verdict!r}")
+            if tool == "bindcheck-zk":
+                for pattern in PATTERNS:
+                    entry = (result.get("patterns") or {}).get(pattern)
+                    if not isinstance(entry, dict) or entry.get("verdict") not in VERDICTS or entry.get("applicability") not in APPLICABILITIES:
+                        raise EvaluationError(f"{path}: {tool} {pattern} lacks a valid verdict/applicability")
         output.append({"path": path, "family": family, "tools": tools})
     return output
 
@@ -133,20 +161,23 @@ def build_summary(
     tables: dict[str, Any] = {}
     for tool_index, tool in enumerate(tools):
         tables[tool] = {}
-        for stratum_index, stratum in enumerate(strata):
-            records = [
-                item["tools"][tool]
-                for item in families
-                if tool in item["tools"]
-                and (stratum == "overall" or item["family"].get("stratum") == stratum)
-            ]
-            tables[tool][stratum] = summarize_group(
-                records,
-                seed=seed + tool_index * 100 + stratum_index,
-                replicates=replicates,
-            )
+        scopes = PATTERNS if tool == "bindcheck-zk" else ("overall-tool",)
+        for scope_index, scope in enumerate(scopes):
+            tables[tool][scope] = {}
+            for stratum_index, stratum in enumerate(strata):
+                records = [
+                    (item["tools"][tool]["patterns"][scope] if tool == "bindcheck-zk" else item["tools"][tool])
+                    for item in families
+                    if tool in item["tools"]
+                    and (stratum == "overall" or item["family"].get("stratum") == stratum)
+                ]
+                tables[tool][scope][stratum] = summarize_group(
+                    records,
+                    seed=seed + tool_index * 1000 + scope_index * 100 + stratum_index,
+                    replicates=replicates,
+                )
     return {
-        "schema": "bindcheck-zk.evaluation-summary/v1",
+        "schema": "bindcheck-zk.evaluation-summary/v2",
         "generated_utc": utc_now(),
         "families": len(families),
         "bootstrap": {"unit": "family", "seed": seed, "replicates": replicates, "interval": 0.95},
@@ -154,56 +185,33 @@ def build_summary(
     }
 
 
-def _fmt_rate(value: float | None) -> str:
-    return "—" if value is None else f"{100 * value:.1f}%"
-
-
 def render_markdown(summary: Mapping[str, Any]) -> str:
     lines = [
-        "# Held-out evaluation summary",
-        "",
-        f"Families: {summary['families']}. Bootstrap unit: family; "
-        f"{summary['bootstrap']['replicates']} replicates; seed {summary['bootstrap']['seed']}.",
-        "",
-        "`UNKNOWN` remains unresolved coverage and is never counted as safe. "
-        "`NOT_APPLICABLE` is excluded from applicable denominators.",
-        "",
+        "# Held-out evaluation summary", "",
+        f"Families: {summary['families']}.", "",
+        "`UNKNOWN` remains unresolved coverage. `NOT_APPLICABLE` is applicability, never a verdict.", "",
     ]
-    for tool, strata in summary["tools"].items():
-        lines.extend([
-            f"## {tool}",
-            "",
-            "| Stratum | Families | Applicable | Decided | VIOLATION | VERIFIED_WITHIN_SCOPE | UNKNOWN | NOT_APPLICABLE | Decided/applicable | Violation/applicable |",
-            "| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
-        ])
-        for stratum, item in strata.items():
-            lines.append(
-                f"| {stratum} | {item['families']} | {item['applicable']} | {item['decided']} | "
-                f"{item['VIOLATION']} | {item['VERIFIED_WITHIN_SCOPE']} | {item['UNKNOWN']} | "
-                f"{item['NOT_APPLICABLE']} | {_fmt_rate(item['rates']['decided_rate_among_applicable'])} | "
-                f"{_fmt_rate(item['rates']['violation_rate_among_applicable'])} |"
-            )
-        lines.extend(["", "Unknown reasons:", ""])
-        overall_reasons = strata["overall"]["unknown_by_reason"]
-        if overall_reasons:
-            lines.extend(f"- `{reason}`: {count}" for reason, count in overall_reasons.items())
-        else:
-            lines.append("- None")
-        lines.append("")
-
-    lines.extend([
-        "## Overall baseline comparison",
-        "",
-        "| Tool | Applicable | Decided | VIOLATION | VERIFIED_WITHIN_SCOPE | UNKNOWN | NOT_APPLICABLE |",
-        "| --- | ---: | ---: | ---: | ---: | ---: | ---: |",
-    ])
-    for tool, strata in summary["tools"].items():
-        item = strata["overall"]
-        lines.append(
-            f"| {tool} | {item['applicable']} | {item['decided']} | {item['VIOLATION']} | "
-            f"{item['VERIFIED_WITHIN_SCOPE']} | {item['UNKNOWN']} | {item['NOT_APPLICABLE']} |"
-        )
-    lines.append("")
+    for tool, scopes in summary["tools"].items():
+        for scope, strata in scopes.items():
+            lines.extend([
+                f"## {tool} / {scope}", "",
+                "| Stratum | Families | Applicable | Applicability unknown | Decided | VIOLATION | VERIFIED_WITHIN_SCOPE | UNKNOWN | NOT_APPLICABLE |",
+                "| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
+            ])
+            for stratum, item in strata.items():
+                lines.append(
+                    f"| {stratum} | {item['families']} | {item['applicable']} | "
+                    f"{item['applicability_unknown']} | {item['decided']} | {item['VIOLATION']} | "
+                    f"{item['VERIFIED_WITHIN_SCOPE']} | {item['UNKNOWN']} | {item['NOT_APPLICABLE']} |"
+                )
+            overall = strata["overall"]
+            for title, key in (("Reasons", "by_reason"), ("Unknown reasons", "unknown_by_reason"),
+                               ("Unknown reason codes", "unknown_by_reason_code")):
+                lines.extend(["", f"{title}:", ""])
+                lines.extend(f"- `{reason}`: {count}" for reason, count in overall[key].items())
+                if not overall[key]:
+                    lines.append("- None")
+            lines.append("")
     return "\n".join(lines)
 
 

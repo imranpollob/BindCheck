@@ -1,0 +1,20 @@
+{
+  "build_timeout_seconds": 30.0,
+  "checkout_remaining": 0,
+  "circom": "/Users/imranpollob/Coding/bc/bindcheck-zk/tools/circom-src/target/release/circom",
+  "circom_sha256": "7d0bd3cc8d0c4942813f5060bd5f9c011f3469e46755a067926101ee74d4e202",
+  "circomlib_tree_sha256": "d359bab216fc262b406f468d87774ec1b6661e4438b38851fcd6a0a2e1e8a57a",
+  "completed_utc": "2026-11-09T15:46:53.501966+00:00",
+  "families": 278,
+  "jobs": 2,
+  "max_builds_per_family": 2,
+  "sample_sha256": "cf1b64bc68d90a790e63d965a3e3c607dc6f27e5250ba58d5968d4f792972d8b",
+  "schema": "bindcheck-zk.prebuild-summary/v1",
+  "source_corpus_sha256": "07210625783a21a6128ea3f99402fc4a48b36922056241649999547a374b0c95",
+  "status_counts": {
+    "BUILD_FAILED": 46,
+    "BUILT": 163,
+    "EXPOSED_EXCLUDED": 1,
+    "NO_ENTRY_CIRCOM": 68
+  }
+}
