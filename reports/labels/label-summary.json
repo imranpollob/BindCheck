@@ -1,0 +1,391 @@
+{
+  "set_H": {
+    "strata": {
+      "arm-c:A_CALLER_NOT_PROVED_IDENTITY": {
+        "population": 30,
+        "n": 2,
+        "A": [
+          2,
+          2,
+          0
+        ],
+        "B": [
+          2,
+          2,
+          0
+        ],
+        "agreed": [
+          2,
+          2
+        ],
+        "disagree": 0,
+        "final": [
+          2,
+          2,
+          0
+        ]
+      },
+      "arm-c:A_CALL_VALUE_UNBOUND": {
+        "population": 28,
+        "n": 2,
+        "A": [
+          0,
+          2,
+          0
+        ],
+        "B": [
+          0,
+          2,
+          0
+        ],
+        "agreed": [
+          0,
+          2
+        ],
+        "disagree": 0,
+        "final": [
+          0,
+          2,
+          0
+        ]
+      },
+      "arm-c:A_EFFECT_AMOUNT_UNBOUND": {
+        "population": 84,
+        "n": 6,
+        "A": [
+          1,
+          6,
+          0
+        ],
+        "B": [
+          1,
+          6,
+          0
+        ],
+        "agreed": [
+          1,
+          6
+        ],
+        "disagree": 0,
+        "final": [
+          1,
+          6,
+          0
+        ]
+      },
+      "arm-c:A_EFFECT_IDENTITY_UNBOUND": {
+        "population": 1,
+        "n": 1,
+        "A": [
+          0,
+          1,
+          0
+        ],
+        "B": [
+          0,
+          1,
+          0
+        ],
+        "agreed": [
+          0,
+          1
+        ],
+        "disagree": 0,
+        "final": [
+          0,
+          1,
+          0
+        ]
+      },
+      "arm-c:A_EFFECT_RECIPIENT_UNBOUND": {
+        "population": 73,
+        "n": 5,
+        "A": [
+          0,
+          5,
+          0
+        ],
+        "B": [
+          0,
+          5,
+          0
+        ],
+        "agreed": [
+          0,
+          5
+        ],
+        "disagree": 0,
+        "final": [
+          0,
+          5,
+          0
+        ]
+      },
+      "arm-c:A_REPLAY_KEY_UNBOUND": {
+        "population": 143,
+        "n": 11,
+        "A": [
+          1,
+          11,
+          0
+        ],
+        "B": [
+          1,
+          11,
+          0
+        ],
+        "agreed": [
+          1,
+          11
+        ],
+        "disagree": 0,
+        "final": [
+          1,
+          11,
+          0
+        ]
+      },
+      "arm-c:A_REPLAY_POSITION_FIELD_GUARD_MISSING": {
+        "population": 16,
+        "n": 1,
+        "A": [
+          0,
+          0,
+          1
+        ],
+        "B": [
+          1,
+          1,
+          0
+        ],
+        "agreed": [
+          0,
+          0
+        ],
+        "disagree": 1,
+        "final": [
+          1,
+          1,
+          0
+        ]
+      },
+      "arm-c:A_STATE_WRITE_VALUE_UNBOUND": {
+        "population": 11,
+        "n": 1,
+        "A": [
+          0,
+          1,
+          0
+        ],
+        "B": [
+          0,
+          1,
+          0
+        ],
+        "agreed": [
+          0,
+          1
+        ],
+        "disagree": 0,
+        "final": [
+          0,
+          1,
+          0
+        ]
+      },
+      "arm-c:A_VERIFIER_ARITY_MISMATCH": {
+        "population": 8,
+        "n": 1,
+        "A": [
+          0,
+          1,
+          0
+        ],
+        "B": [
+          0,
+          1,
+          0
+        ],
+        "agreed": [
+          0,
+          1
+        ],
+        "disagree": 0,
+        "final": [
+          0,
+          1,
+          0
+        ]
+      },
+      "arm-c:C_EFFECT_NOT_PROOF_BOUND": {
+        "population": 68,
+        "n": 5,
+        "A": [
+          0,
+          0,
+          5
+        ],
+        "B": [
+          2,
+          4,
+          1
+        ],
+        "agreed": [
+          0,
+          0
+        ],
+        "disagree": 4,
+        "final": [
+          2,
+          4,
+          1
+        ]
+      },
+      "bindcheck-zk:P1": {
+        "population": 21,
+        "n": 15,
+        "A": [
+          9,
+          15,
+          0
+        ],
+        "B": [
+          9,
+          15,
+          0
+        ],
+        "agreed": [
+          9,
+          15
+        ],
+        "disagree": 0,
+        "final": [
+          9,
+          15,
+          0
+        ]
+      },
+      "bindcheck-zk:P3": {
+        "population": 53,
+        "n": 15,
+        "A": [
+          9,
+          14,
+          1
+        ],
+        "B": [
+          9,
+          15,
+          0
+        ],
+        "agreed": [
+          9,
+          14
+        ],
+        "disagree": 1,
+        "final": [
+          9,
+          15,
+          0
+        ]
+      },
+      "bindcheck-zk:P4/GAMMA_EQUALS_DELTA_SOURCE_KEY": {
+        "population": 56,
+        "n": 10,
+        "A": [
+          10,
+          10,
+          0
+        ],
+        "B": [
+          10,
+          10,
+          0
+        ],
+        "agreed": [
+          10,
+          10
+        ],
+        "disagree": 0,
+        "final": [
+          10,
+          10,
+          0
+        ]
+      },
+      "bindcheck-zk:P4/PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND": {
+        "population": 128,
+        "n": 10,
+        "A": [
+          7,
+          10,
+          0
+        ],
+        "B": [
+          7,
+          10,
+          0
+        ],
+        "agreed": [
+          7,
+          10
+        ],
+        "disagree": 0,
+        "final": [
+          7,
+          10,
+          0
+        ]
+      },
+      "bindcheck-zk:P5": {
+        "population": 72,
+        "n": 15,
+        "A": [
+          2,
+          13,
+          2
+        ],
+        "B": [
+          2,
+          15,
+          0
+        ],
+        "agreed": [
+          2,
+          13
+        ],
+        "disagree": 2,
+        "final": [
+          2,
+          15,
+          0
+        ]
+      }
+    },
+    "weighted": {
+      "bindcheck-zk:A": 0.6162071262071261,
+      "bindcheck-zk:B": 0.6048484848484849,
+      "bindcheck-zk:agreed": 0.6162071262071261,
+      "arm-c:A": 0.15079365079365079,
+      "arm-c:B": 0.23160173160173161,
+      "arm-c:agreed": 0.15079365079365079,
+      "bindcheck-zk:final": 0.6048484848484849,
+      "arm-c:final": 0.23160173160173161
+    }
+  },
+  "set_D": {
+    "A": {
+      "TP": 14,
+      "unclear": 2
+    },
+    "B": {
+      "TP": 16
+    },
+    "author": {
+      "TP": 14,
+      "unclear": 2
+    },
+    "agree_AB": 14,
+    "kappa": 0.0
+  }
+}

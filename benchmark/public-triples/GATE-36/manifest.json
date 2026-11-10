@@ -1,0 +1,301 @@
+{
+  "exposure": "EXPOSED",
+  "gate_manifest": "gate/GATE-MANIFEST.csv",
+  "id": "GATE-36",
+  "label_status": "PENDING",
+  "origin": "public-report",
+  "protocol_class": "CIRCOM_GROTH16_SOURCE_LINKED_KEY_UNPROVEN",
+  "reconstruction": {
+    "build_ledger": "results/raw/bench/public-audit-20261109/",
+    "checkout_ledger": "results/raw/bench/public-fetch-20261109/checkouts.json",
+    "dependency_ledger": "results/raw/bench/public-deps-20261109/runs.json",
+    "fetch_ledger": "results/raw/bench/public-fetch-20261109/fetch.json",
+    "script": "benchmark/fetch_public.py; benchmark/checkout_public.py; benchmark/audit_public.py"
+  },
+  "repository": "semaphore-protocol/semaphore",
+  "repository_url": "https://github.com/semaphore-protocol/semaphore.git",
+  "revisions": {
+    "repaired": {
+      "build": {
+        "circuit": {
+          "argv": [
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/tools/circom-src/target/release/circom",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/semaphore-protocol__semaphore/c6667d98b8c7/circuits/semaphore.circom",
+            "--r1cs",
+            "--sym",
+            "--O0",
+            "-o",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-36/repaired/attempt-001/build-ezvo6y53/circuit-out",
+            "-l",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/semaphore-protocol__semaphore/c6667d98b8c7/node_modules",
+            "-l",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/node_modules"
+          ],
+          "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/semaphore-protocol__semaphore/c6667d98b8c7",
+          "elapsed_seconds": 0.5033960840009968,
+          "exit_status": 0,
+          "status": "BUILD_OK",
+          "stderr": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-36/repaired/attempt-001/circuit.stderr",
+          "stderr_excerpt": "",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stdout": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-36/repaired/attempt-001/circuit.stdout",
+          "stdout_sha256": "2131eb971895691d30589718460a0d6f25cbaa93414569265c485766fe86f2e9",
+          "timed_out": false
+        },
+        "consumer": {
+          "argv": [
+            "solc",
+            "--bin",
+            "--base-path",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/semaphore-protocol__semaphore/c6667d98b8c7",
+            "--include-path",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/semaphore-protocol__semaphore/c6667d98b8c7/node_modules",
+            "--include-path",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/deps-20261109/node_modules",
+            "-o",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-36/repaired/attempt-001/build-ezvo6y53/consumer-out",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/semaphore-protocol__semaphore/c6667d98b8c7/contracts/base/SemaphoreCore.sol"
+          ],
+          "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/semaphore-protocol__semaphore/c6667d98b8c7",
+          "elapsed_seconds": 0.021220582999376347,
+          "exit_status": 0,
+          "status": "BUILD_OK",
+          "stderr": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-36/repaired/attempt-001/consumer.stderr",
+          "stderr_excerpt": "",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stdout": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-36/repaired/attempt-001/consumer.stdout",
+          "stdout_sha256": "cedb41f37b67ccdd9f5f980c997bae5ca94fa067d04865bb0473cd05e2a4ca49",
+          "timed_out": false
+        },
+        "verifier": {
+          "argv": [
+            "solc",
+            "--bin",
+            "--base-path",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/semaphore-protocol__semaphore/c6667d98b8c7",
+            "--include-path",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/semaphore-protocol__semaphore/c6667d98b8c7/node_modules",
+            "--include-path",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/deps-20261109/node_modules",
+            "-o",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-36/repaired/attempt-001/build-ezvo6y53/verifier-out",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/semaphore-protocol__semaphore/c6667d98b8c7/contracts/base/Verifier.sol"
+          ],
+          "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/semaphore-protocol__semaphore/c6667d98b8c7",
+          "elapsed_seconds": 0.1219286249979632,
+          "exit_status": 0,
+          "status": "BUILD_OK",
+          "stderr": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-36/repaired/attempt-001/verifier.stderr",
+          "stderr_excerpt": "",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stdout": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-36/repaired/attempt-001/verifier.stdout",
+          "stdout_sha256": "9d026edab83c8dcda93eb3330487d0da4f13ead17b7f667e45cf70a76aefcaf6",
+          "timed_out": false
+        }
+      },
+      "buildability": {
+        "reason": null,
+        "role_statuses": {
+          "circuit": "BUILD_OK",
+          "consumer": "BUILD_OK",
+          "verifier": "BUILD_OK"
+        },
+        "status": "BUILD_OK"
+      },
+      "commit": "c6667d98b8c72a424afd118da6cbde03a4945690",
+      "dependency_install": {
+        "integrity": "sha512-hg6HnKAqAhx1NZc5kXuDOOgyOZYa6TQIKbITnuY7dgvBtIFPWh5aNRJhNUBrxrx+wHX3sZvhu0igmFKfaXoLsQ==",
+        "package": "circomlib@2.0.2",
+        "receipt": "results/raw/bench/public-deps-20261109/gate36/receipt.json",
+        "status": "COMPLETED"
+      },
+      "git_fetch_command": [
+        "git",
+        "fetch",
+        "--filter=blob:none",
+        "--no-tags",
+        "--depth=1",
+        "origin",
+        "c6667d98b8c72a424afd118da6cbde03a4945690"
+      ],
+      "locks": [
+        {
+          "path": "yarn.lock",
+          "sha256": "855d98f0bd1d833e6e4d774846c26f06e8d7b76259e4079b89507cc1cfc5c845"
+        }
+      ],
+      "observed_head": "c6667d98b8c72a424afd118da6cbde03a4945690",
+      "repository": "semaphore-protocol/semaphore",
+      "roles": {
+        "circuit": {
+          "path": "circuits/semaphore.circom",
+          "sha256": "86679953cfbff0b64dff66592528f27cd113841c2439847b62e8a2582db12aa8",
+          "type": "file"
+        },
+        "consumer": {
+          "path": "contracts/base/SemaphoreCore.sol",
+          "sha256": "474406a9c70abce2388d8b1067ed4ac04e33d3e01a81da00c50bd2bb165e9648",
+          "type": "file"
+        },
+        "target": {
+          "path": "contracts/base/SemaphoreGroups.sol",
+          "sha256": "11fe07e149347359383ff7ef24e3bf9234f629c7e9e72f8aa89801ccc0b26105",
+          "type": "file"
+        },
+        "verifier": {
+          "path": "contracts/base/Verifier.sol",
+          "sha256": "bea1e793f8ef6df5b4c2f8d8f6094f84119690b351726a07f8da4675da9cd355",
+          "type": "file"
+        }
+      },
+      "source": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/semaphore-protocol__semaphore/c6667d98b8c7",
+      "source_correspondence": "SemaphoreCore._isValidProof calls the generated Verifier with root, nullifierHash, signalHash, and externalNullifier; circuits/semaphore.circom declares the corresponding public inputs. Verifying-key identity is unproved.",
+      "status": "BUILDS_ATTEMPTED",
+      "structural_blocker": null
+    },
+    "vulnerable": {
+      "build": {
+        "circuit": {
+          "argv": [
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/tools/circom-src/target/release/circom",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/semaphore-protocol__semaphore/fd3cc6f7db46/circuits/semaphore.circom",
+            "--r1cs",
+            "--sym",
+            "--O0",
+            "-o",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-36/vulnerable/attempt-001/build-dy3e0orq/circuit-out",
+            "-l",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/semaphore-protocol__semaphore/fd3cc6f7db46/node_modules",
+            "-l",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/node_modules"
+          ],
+          "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/semaphore-protocol__semaphore/fd3cc6f7db46",
+          "elapsed_seconds": 0.500744749999285,
+          "exit_status": 0,
+          "status": "BUILD_OK",
+          "stderr": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-36/vulnerable/attempt-001/circuit.stderr",
+          "stderr_excerpt": "",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stdout": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-36/vulnerable/attempt-001/circuit.stdout",
+          "stdout_sha256": "033d2a164c0c13c5f79af8df5920916eb498b434dc4feb02357687cb40be8b06",
+          "timed_out": false
+        },
+        "consumer": {
+          "argv": [
+            "solc",
+            "--bin",
+            "--base-path",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/semaphore-protocol__semaphore/fd3cc6f7db46",
+            "--include-path",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/semaphore-protocol__semaphore/fd3cc6f7db46/node_modules",
+            "--include-path",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/deps-20261109/node_modules",
+            "-o",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-36/vulnerable/attempt-001/build-dy3e0orq/consumer-out",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/semaphore-protocol__semaphore/fd3cc6f7db46/contracts/base/SemaphoreCore.sol"
+          ],
+          "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/semaphore-protocol__semaphore/fd3cc6f7db46",
+          "elapsed_seconds": 0.02068383300138521,
+          "exit_status": 0,
+          "status": "BUILD_OK",
+          "stderr": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-36/vulnerable/attempt-001/consumer.stderr",
+          "stderr_excerpt": "",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stdout": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-36/vulnerable/attempt-001/consumer.stdout",
+          "stdout_sha256": "64f81caba3b9b5c23f46de06853783675a7923afb938e85868ba6d11171d47c2",
+          "timed_out": false
+        },
+        "verifier": {
+          "argv": [
+            "solc",
+            "--bin",
+            "--base-path",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/semaphore-protocol__semaphore/fd3cc6f7db46",
+            "--include-path",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/semaphore-protocol__semaphore/fd3cc6f7db46/node_modules",
+            "--include-path",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/deps-20261109/node_modules",
+            "-o",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-36/vulnerable/attempt-001/build-dy3e0orq/verifier-out",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/semaphore-protocol__semaphore/fd3cc6f7db46/contracts/base/Verifier.sol"
+          ],
+          "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/semaphore-protocol__semaphore/fd3cc6f7db46",
+          "elapsed_seconds": 0.1264957499988668,
+          "exit_status": 0,
+          "status": "BUILD_OK",
+          "stderr": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-36/vulnerable/attempt-001/verifier.stderr",
+          "stderr_excerpt": "",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stdout": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-36/vulnerable/attempt-001/verifier.stdout",
+          "stdout_sha256": "cc7947e44049ecf91172b33b71bf366ddcc2aef599d9a547e90f1a663bd92575",
+          "timed_out": false
+        }
+      },
+      "buildability": {
+        "reason": null,
+        "role_statuses": {
+          "circuit": "BUILD_OK",
+          "consumer": "BUILD_OK",
+          "verifier": "BUILD_OK"
+        },
+        "status": "BUILD_OK"
+      },
+      "commit": "fd3cc6f7db46aec83c0f807a8155dcd66561a0db",
+      "dependency_install": {
+        "integrity": "sha512-hg6HnKAqAhx1NZc5kXuDOOgyOZYa6TQIKbITnuY7dgvBtIFPWh5aNRJhNUBrxrx+wHX3sZvhu0igmFKfaXoLsQ==",
+        "package": "circomlib@2.0.2",
+        "receipt": "results/raw/bench/public-deps-20261109/gate36/receipt.json",
+        "status": "COMPLETED"
+      },
+      "git_fetch_command": [
+        "git",
+        "fetch",
+        "--filter=blob:none",
+        "--no-tags",
+        "--depth=1",
+        "origin",
+        "fd3cc6f7db46aec83c0f807a8155dcd66561a0db"
+      ],
+      "locks": [
+        {
+          "path": "yarn.lock",
+          "sha256": "855d98f0bd1d833e6e4d774846c26f06e8d7b76259e4079b89507cc1cfc5c845"
+        }
+      ],
+      "observed_head": "fd3cc6f7db46aec83c0f807a8155dcd66561a0db",
+      "repository": "semaphore-protocol/semaphore",
+      "roles": {
+        "circuit": {
+          "path": "circuits/semaphore.circom",
+          "sha256": "86679953cfbff0b64dff66592528f27cd113841c2439847b62e8a2582db12aa8",
+          "type": "file"
+        },
+        "consumer": {
+          "path": "contracts/base/SemaphoreCore.sol",
+          "sha256": "474406a9c70abce2388d8b1067ed4ac04e33d3e01a81da00c50bd2bb165e9648",
+          "type": "file"
+        },
+        "target": {
+          "path": "contracts/base/SemaphoreGroups.sol",
+          "sha256": "b693eec551c17143a81a0081d5d7bbcc4707a32b79d8b10c2da7c23c14b97930",
+          "type": "file"
+        },
+        "verifier": {
+          "path": "contracts/base/Verifier.sol",
+          "sha256": "bea1e793f8ef6df5b4c2f8d8f6094f84119690b351726a07f8da4675da9cd355",
+          "type": "file"
+        }
+      },
+      "source": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/semaphore-protocol__semaphore/fd3cc6f7db46",
+      "source_correspondence": "SemaphoreCore._isValidProof calls the generated Verifier with root, nullifierHash, signalHash, and externalNullifier; circuits/semaphore.circom declares the corresponding public inputs. Verifying-key identity is unproved.",
+      "status": "BUILDS_ATTEMPTED",
+      "structural_blocker": null
+    }
+  },
+  "schema": "bindcheck-benchmark.public-triple/v1",
+  "unscored_proposal": {
+    "expected_location_regex": "^contracts/base/SemaphoreGroups\\.sol(:\\d+)?$",
+    "expected_pattern": "P2",
+    "source": "gate/GATE-MANIFEST.csv; reviewer card remains PENDING"
+  }
+}

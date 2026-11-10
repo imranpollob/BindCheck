@@ -1,0 +1,45 @@
+{
+  "card_sha256": "89d8041b05174a67c59792d6eb2436a0aab43ff8dfb73ed46aaaf9985adecbea",
+  "expected_location_regex": null,
+  "expected_pattern": null,
+  "expected_state": "paired",
+  "exposure": "EXPOSED",
+  "family": "v2-family:1395df438d266c900be8",
+  "id": "GATE-22",
+  "label_provenance": "/Users/imranpollob/Coding/bc/bindcheck-zk/review/recall/22-zkdrops-nullifier-field-alias.md",
+  "label_status": "PENDING",
+  "limitations": [
+    "Source snapshots do not establish a matched buildable triple; reviewer decision pending"
+  ],
+  "origin": "public-report",
+  "pair_id": "GATE-22",
+  "proposal_location_regex": "^contracts/PrivateAirdrop\\.sol(:\\d+)?$",
+  "proposal_pattern": "P3",
+  "protocol": "UNRESOLVED",
+  "revisions": {
+    "repaired": {
+      "commit": "f6f58020911cd2a19e1639f0dc93ec9fca2a9e17",
+      "repository": "a16z/zkdrops",
+      "roles": {
+        "circuit": null,
+        "consumer": null,
+        "verifier": null
+      },
+      "snapshot_only": true,
+      "snapshot_root": "benchmark/cases/GATE-22/snapshots/repaired"
+    },
+    "vulnerable": {
+      "commit": "4002962fb632578dd12477346d2e5c4159ffb2ef",
+      "repository": "a16z/zkdrops",
+      "roles": {
+        "circuit": null,
+        "consumer": null,
+        "verifier": null
+      },
+      "snapshot_only": true,
+      "snapshot_root": "benchmark/cases/GATE-22/snapshots/vulnerable"
+    }
+  },
+  "schema": "bindcheck-benchmark.case/v1",
+  "source_case_id": "zkdrops-nullifier-field-alias"
+}

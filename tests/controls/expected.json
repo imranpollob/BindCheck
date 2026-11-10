@@ -98,7 +98,7 @@
     {"id":"P3-18-no-replay-state-not-applicable","fixture":"p1_fixed_direct","pattern":"P3","verdict":"UNKNOWN","reason":"REPLAY_KEY_NOT_RECOVERED","applicability":"NOT_APPLICABLE"},
 
     {"id":"P4-01-distinct-gamma-delta-clean","fixture":"p4_distinct","pattern":"P4","verdict":"VERIFIED_WITHIN_SCOPE","reason":"VERIFICATION_KEY_CHECKS_PASS"},
-    {"id":"P4-02-default-gamma-delta-source","fixture":"p4_default_key","pattern":"P4","verdict":"UNKNOWN","reason":"DEFAULT_G2_GAMMA_DELTA_SOURCE_WARNING"},
+    {"id":"P4-02-default-gamma-delta-source","fixture":"p4_default_key","pattern":"P4","verdict":"VIOLATION","reason":"GAMMA_EQUALS_DELTA_SOURCE_KEY"},
     {"id":"P4-03-pairing-p2-generator-clean","fixture":"p4_library_p2","pattern":"P4","verdict":"UNKNOWN","reason":"VERIFICATION_KEY_PARSE_INCOMPLETE"},
     {"id":"P4-04-duplicate-ic-source","fixture":"p4_duplicate_ic","pattern":"P4","verdict":"UNKNOWN","reason":"DUPLICATE_IC_SOURCE_WARNING"},
     {"id":"P4-05-missing-field-guard","fixture":"p4_no_guard","pattern":"P4","verdict":"UNKNOWN","reason":"PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND"},

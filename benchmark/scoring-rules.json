@@ -1,0 +1,28 @@
+{
+  "schema": "bindcheck-benchmark.scoring-rules/v1",
+  "statuses": ["DETECT", "MISS", "FALSE-ALARM", "CLEAR", "UNKNOWN", "ERROR"],
+  "minimum_evidence": "E1",
+  "rules": [
+    "A detection requires an E1-or-higher binding finding with the expected pattern and a source location matching the frozen regex. A verdict alone, a finding without location, or an unrelated warning cannot detect.",
+    "On a vulnerable case, a completed applicable run without such a finding is MISS. A safe/clean certification on that case is also counted separately as unsafe certification.",
+    "On a repaired or legitimate case, an applicable binding warning at the expected pattern/location is FALSE-ALARM. A completed run with no such warning is CLEAR; unrelated warnings are retained in a non-target column, not called false alarms.",
+    "PENDING labels, missing triples, unsupported frontends, missing tools, timeout, failed setup, and integration-UNKNOWN are UNKNOWN, never wins or misses.",
+    "A tool crash after valid setup is ERROR. A source/build/setup failure is UNKNOWN with reason, not ERROR.",
+    "A circuit-only result does not certify a circuit-contract binding; its integration status is UNKNOWN.",
+    "HUMAN-ACCEPTED, AI-PROPOSED, and PENDING are reported separately; no headline denominator draws from AI-PROPOSED or PENDING."
+  ],
+  "finding_pattern_map": {
+    "A_EFFECT_RECIPIENT_UNBOUND":"P1", "A_EFFECT_AMOUNT_UNBOUND":"P1", "A_CALL_VALUE_UNBOUND":"P1",
+    "A_EFFECT_IDENTITY_UNBOUND":"P1", "A_EFFECT_ALIAS_UNBOUND":"P1", "A_STATE_WRITE_VALUE_UNBOUND":"P1",
+    "A_CALLER_NOT_PROVED_IDENTITY":"P1", "A_GUARD_AFTER_EFFECT":"P1", "A_GUARD_NOT_DOMINATING":"P1",
+    "A_REPLAY_KEY_UNBOUND":"P3", "A_REPLAY_POSITION_FIELD_GUARD_MISSING":"P3",
+    "A_VERIFIER_ARITY_MISMATCH":"P5", "A_VERIFIER_ORDER_MISMATCH":"P5",
+    "C_EFFECT_NOT_PROOF_BOUND":"P1", "C_CALLER_POLICY_MISMATCH":"P1", "C_ALIAS_BINDING_MISSING":"P1",
+    "C_ARRAY_EXTENT_MISMATCH":"R-EXTENT", "C_ARRAY_LENGTH_UNBOUND":"R-EXTENT",
+    "C_MASKS_OVERLAP":"R-MASK", "C_PUBLIC_INPUT_DECODING_MISMATCH":"P5",
+    "C_NULLIFIER_SCOPE_MISSING_CHAIN":"P3", "C_NULLIFIER_SCOPE_MISSING_CONTRACT":"P3",
+    "C_COMMITMENT_ENCODING_MISMATCH":"R-COMMITMENT", "C_COMMITMENT_FIELD_MISSING":"R-COMMITMENT"
+  },
+  "excluded_finding_codes": ["A_FOUNDRY_POLICY_COUNTEREXAMPLE"],
+  "excluded_reason": "The synthetic Foundry harness substitutes an always-true verifier and has no binding-location evidence."
+}

@@ -1,0 +1,210 @@
+{
+  "commands": {
+    "circom": {
+      "argv": [
+        "/Users/imranpollob/Coding/bc/bindcheck-zk/tools/circom-src/target/release/circom",
+        "--version"
+      ],
+      "exit_status": 0,
+      "stderr": "",
+      "stdout": "circom compiler 2.2.3\n"
+    },
+    "circomspect": {
+      "argv": [
+        "/Users/imranpollob/Coding/bc/bindcheck-zk/tools/circomspect-src/target/release/circomspect",
+        "--help"
+      ],
+      "exit_status": 0,
+      "stderr": "",
+      "stdout": "A static analyzer and linter for Circom programs\n\nUsage: circomspect [OPTIONS] [INPUT]...\n\nArguments:\n  [INPUT]...  Initial input file(s)\n\nOptions:\n  -L, --library <LIBRARIES>  Library file paths\n  -l, --level <LEVEL>        Output level (INFO, WARNING, or ERROR) [default: WARNING]\n  -s, --sarif-file <OUTPUT>  Output analysis results to a Sarif file\n  -a, --allow <ID>           Ignore results from given analysis passes\n  -v, --verbose              Enable verbose output\n  -c, --curve <NAME>         Set curve (BN254, BLS12_381, or GOLDILOCKS) [default: BN254]\n  -h, --help                 Print help\n"
+    },
+    "colima": {
+      "argv": [
+        "colima",
+        "status"
+      ],
+      "error": "FileNotFoundError: [Errno 2] No such file or directory: 'colima'",
+      "exit_status": null
+    },
+    "docker": {
+      "argv": [
+        "docker",
+        "version"
+      ],
+      "error": "FileNotFoundError: [Errno 2] No such file or directory: 'docker'",
+      "exit_status": null
+    },
+    "freeze": {
+      "argv": [
+        "./freeze.sh"
+      ],
+      "exit_status": 0,
+      "stderr": "",
+      "stdout": "d68b0f44c776fe25806c1c5b77fccd5c25d58c799ee039481a98150695d5419c  bindcheck-zk\n06ba0d244121cd4b69cda91076b01313cf84f20c296e15538dc9d399b18dcdfc  requirements-bindcheck-zk.txt\n7adb795ac70e77f15ba08df5f2bf83549e1dd8a76e08fac9eae58370944c0412  bindcheck_zk/__init__.py\ndc3ea50600b6ebe2a57906b8cb0e4bc367556399d3dc63ec40ecf3e8ba4a04ff  bindcheck_zk/analyzer.py\nfcc21abd390495b75c2b87abb0de5fc1b97280ba613594f5fb7677b6ef0f239f  bindcheck_zk/baselines.py\nb5bd70d689d10f3e17e35371eb1b6c5e4b6ea1feff327e0c3a84dcb183a4a851  bindcheck_zk/circuits.py\ndd31d69ce55ff8e8a2be00302ca30c0c0e2968ed0112d96dcac97fb557d50a7a  bindcheck_zk/cli.py\n99860c8de125092061bcdc0121a98aeae1ae1724d3195d0c86e65dbd65415eb5  bindcheck_zk/freeze.py\n17eca4206c56cd85c1a63654a74e1dca82689c2f3a8ff15a6c46d6e6ed855488  bindcheck_zk/models.py\nca6029a8ede78a3d278bb2ad85cf24829867b7dcef303423db090017382925e1  bindcheck_zk/p4.py\n96081e3b0d350eec77f18b1ff159f307932d203cabfbf1ba98e72a2e53d983c7  bindcheck_zk/solidity.py\nc9460c748ea8a28349f842223ccb4e17a0dbcf3f9d6f24b74a0589e4f718019b  bindcheck_zk/subprocesses.py\n87baaec867654a03087287abeb8132363c3804b74dfdcfb51dd70d5a0541d717  bindcheck_zk/config.json\ncb2bf493199c5469e4ee24c12b3f72bd39dfe662e57a7f3c8eca9a6f87736f02  bindcheck_zk/vendor-lock.json\nBINDCHECK_ZK_CONTENT_SHA256=8ea6d2239cd94e2b4478bfae48fe8e764bf448a3b44c58224bbeeb6fa2f70542\n"
+    },
+    "git_head": {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit_status": 0,
+      "stderr": "",
+      "stdout": "710f0696c142f605d55ccaa50bae57592c86eab0\n"
+    },
+    "git_status": {
+      "argv": [
+        "git",
+        "status",
+        "--short"
+      ],
+      "exit_status": 0,
+      "stderr": "",
+      "stdout": " M benchmark/build.py\n M benchmark/cases/ADV-L01/case.json\n M benchmark/cases/ADV-L02/case.json\n M benchmark/cases/ADV-L03/case.json\n M benchmark/cases/ADV-L04/case.json\n M benchmark/cases/ADV-L05/case.json\n M benchmark/cases/ADV-L06/case.json\n M benchmark/cases/ADV-L07/case.json\n M benchmark/cases/ADV-L08/case.json\n M benchmark/cases/ADV-L09/case.json\n M benchmark/cases/ADV-L10/case.json\n M benchmark/cases/ADV-L11/case.json\n M benchmark/cases/ADV-L12/case.json\n M benchmark/cases/ADV-L13/case.json\n M benchmark/cases/ADV-L14/case.json\n M benchmark/cases/ADV-L15/case.json\n M benchmark/cases/ADV-L16/case.json\n M benchmark/cases/ADV-L17/case.json\n M benchmark/cases/ADV-L18/case.json\n M benchmark/cases/ADV-L19/case.json\n M benchmark/cases/ADV-L20/case.json\n M benchmark/cases/ADV-L21/case.json\n M benchmark/cases/ADV-L22/case.json\n M benchmark/cases/ADV-L23/case.json\n M benchmark/cases/ADV-V01/case.json\n M benchmark/cases/ADV-V02/case.json\n M benchmark/cases/ADV-V03/case.json\n M benchmark/cases/ADV-V04/case.json\n M benchmark/cases/ADV-V05/case.json\n M benchmark/cases/ADV-V06/case.json\n M benchmark/cases/ADV-V07/case.json\n M benchmark/cases/ADV-V08/case.json\n M benchmark/cases/ADV-V09/case.json\n M benchmark/cases/ADV-V10/case.json\n M benchmark/cases/ADV-V11/case.json\n M benchmark/cases/ADV-V12/case.json\n M benchmark/cases/ADV-V13/case.json\n M benchmark/cases/ADV-V14/case.json\n M benchmark/cases/ADV-V15/case.json\n M benchmark/cases/ADV-V16/case.json\n M benchmark/cases/ADV-V17/case.json\n M benchmark/cases/ADV-V18/case.json\n M benchmark/cases/ADV-V19/case.json\n M benchmark/cases/ADV-V20/case.json\n M benchmark/cases/ADV-V21/case.json\n M benchmark/cases/ADV-V22/case.json\n M benchmark/cases/ADV-V23/case.json\n M benchmark/cases/DEV-H01/case.json\n M benchmark/cases/DEV-H02/case.json\n M benchmark/cases/DEV-H03/case.json\n M benchmark/cases/DEV-H04/case.json\n M benchmark/cases/DEV-H05/case.json\n M benchmark/cases/DEV-H06/case.json\n M benchmark/cases/GATE-14/case.json\n M benchmark/cases/GATE-15/case.json\n M benchmark/cases/GATE-20/case.json\n M benchmark/cases/GATE-21/case.json\n M benchmark/cases/GATE-22/case.json\n M benchmark/cases/GATE-24/case.json\n M benchmark/cases/GATE-28/case.json\n M benchmark/cases/GATE-29/case.json\n M benchmark/cases/GATE-30/case.json\n M benchmark/cases/GATE-31/case.json\n M benchmark/cases/GATE-32/case.json\n M benchmark/cases/GATE-33/case.json\n M benchmark/cases/GATE-36/case.json\n M benchmark/cases/GATE-38/case.json\n M benchmark/cases/GATE-40/case.json\n M benchmark/cases/GATE-47/case.json\n M benchmark/collect.py\n M benchmark/environment.py\n M benchmark/metrics.py\n M benchmark/prepare.py\n M benchmark/run_zkfuzz.py\n?? benchmark/rescore.py\n?? benchmark/test_score.py\n?? reports/bench/\n"
+    },
+    "host_disk": {
+      "argv": [
+        "df",
+        "-k",
+        "."
+      ],
+      "exit_status": 0,
+      "stderr": "",
+      "stdout": "Filesystem   1024-blocks      Used Available Capacity iused     ifree %iused  Mounted on\n/dev/disk3s5   239362496 184968760  21428256    90% 2857428 214282560    1%   /System/Volumes/Data\n"
+    },
+    "host_memory": {
+      "argv": [
+        "sysctl",
+        "-n",
+        "hw.memsize"
+      ],
+      "exit_status": 0,
+      "stderr": "",
+      "stdout": "8589934592\n"
+    },
+    "picus": {
+      "argv": [
+        "/Users/imranpollob/Coding/bc/bindcheck-zk/tools/picus-src/run-picus",
+        "--help"
+      ],
+      "exit_status": 0,
+      "stderr": "",
+      "stdout": "usage: run-picus [ <option> ... ] <source>\n  <source> must be a file with .circom, .r1cs, or .sr1cs extension\n\n<option> is one of\n\n  --json <json-target>\n     either:\n       - json logging output path; or\n       - '-', which suppresses the text logging mode and\n         outputs json logging to standard output\n     (default: no json output)\n  --noclean\n     do not clean up temporary files (default: false)\n  --timeout <timeout>\n     timeout for SMT query (default: 5000ms)\n  --solver <solver>\n     solver to use: cvc4 | cvc5 | z3 (default: cvc5)\n  --selector <selector>\n     selector to use: counter | first (default: counter)\n  --precondition <precondition>\n     path to precondition json (default: none)\n  --noprop\n     disable propagation (default: false / propagation on)\n  --nosolve\n     disable solver phase (default: false / solver on)\n  --strong\n     check for strong safety (default: false)\n  --truncate <truncate>\n     truncate overly long logged message: on | off (default: on)\n  --log-level <log-level>\n     The log-level for text logging (default: INFO)\n     Possible levels (in the ascending order): DEBUG, ACCOUNTING, PROGRESS, INFO, WARNING, ERROR, CRITICAL\n \n circom options (only applicable for circom source)\n \n  --opt-level <opt-level>\n     optimization level for circom compilation (default: 0)\n \n circom and r1cs options (only applicable for circom and r1cs source)\n \n  --wtns <wtns>\n     wtns files output directory (default: don't output)\n \n other options\n \n  --help, -h\n     Show this help\n  --\n     Do not treat any remaining argument as a switch (at this level)\n\n Multiple single-letter switches can be combined after\n one `-`. For example, `-h-` is the same as `-h --`.\n"
+    },
+    "python": {
+      "argv": [
+        "/opt/homebrew/bin/python3",
+        "--version"
+      ],
+      "exit_status": 0,
+      "stderr": "",
+      "stdout": "Python 3.15.0\n"
+    },
+    "slither": {
+      "argv": [
+        "/opt/homebrew/bin/slither",
+        "--version"
+      ],
+      "exit_status": 0,
+      "stderr": "",
+      "stdout": "0.11.3\n"
+    },
+    "solc": {
+      "argv": [
+        "/opt/homebrew/bin/solc",
+        "--version"
+      ],
+      "exit_status": 0,
+      "stderr": "",
+      "stdout": "solc, the solidity compiler commandline interface\nVersion: 0.8.30+commit.73712a01.Darwin.appleclang\n"
+    },
+    "zkfuzz": {
+      "argv": [
+        "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/zkfuzz-setup-20261109/bin/zkfuzz",
+        "--version"
+      ],
+      "exit_status": 0,
+      "stderr": "\n           zkFuzz      \n      ZK Circuit Fuzzer\n    \nWelcome to the zkFuzz\n\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\n",
+      "stdout": "ZK Circuit Fuzzer 2.2.1\n"
+    }
+  },
+  "created_utc": "2026-11-09T15:09:04.601827+00:00",
+  "executables": {
+    "circom": {
+      "path": "/Users/imranpollob/Coding/bc/bindcheck-zk/tools/circom-src/target/release/circom",
+      "sha256": "7d0bd3cc8d0c4942813f5060bd5f9c011f3469e46755a067926101ee74d4e202"
+    },
+    "circomspect": {
+      "path": "/Users/imranpollob/Coding/bc/bindcheck-zk/tools/circomspect-src/target/release/circomspect",
+      "sha256": "c45398fcd1a03b51166cf20172593c2280e1e5852d36ee2d4eb6c3e06fd85cb5"
+    },
+    "picus": {
+      "path": "/Users/imranpollob/Coding/bc/bindcheck-zk/tools/picus-src/run-picus",
+      "sha256": "b34c0b65494be0a45f541a568c1cd7812e67c686988164d2c1e869448402d113"
+    },
+    "python": {
+      "path": "/opt/homebrew/bin/python3",
+      "sha256": "15c72833c1ffc09bc4e05d1e1866784d126721ad548d9c4d8f943641262535cb"
+    },
+    "slither": {
+      "path": "/opt/homebrew/bin/slither",
+      "sha256": "706ccd1aa319e9604f44269528474a73523200dccc39606e1c9db71c8ad2960e"
+    },
+    "solc": {
+      "path": "/opt/homebrew/bin/solc",
+      "sha256": "6e67873ae89d0944ba55651491e9ce70f1c6a271dbfdd8d52e088089b44258bc"
+    },
+    "zkfuzz": {
+      "path": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/zkfuzz-setup-20261109/bin/zkfuzz",
+      "sha256": "ce06d095be7d795d3210844a90950d826aa33e435bdfbec65dcfa79558680a30"
+    }
+  },
+  "schema": "bindcheck-benchmark.environment/v1",
+  "source_revisions": {
+    "circom": {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit_status": 0,
+      "stderr": "",
+      "stdout": "ad44e915a12bb047b05745c2884aad9cc8326bc6\n"
+    },
+    "circomspect": {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit_status": 0,
+      "stderr": "",
+      "stdout": "50010b623ed4f3bff9d1b0363cfe952385b47af3\n"
+    },
+    "picus": {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit_status": 0,
+      "stderr": "",
+      "stdout": "138b151d3a388e5b6c040c163e0a1db04f2ceda6\n"
+    }
+  },
+  "zkap_preflight": {
+    "colima_path": null,
+    "docker_path": null,
+    "prior_record": "reports/redteam/manifests/zkap-preflight.json"
+  },
+  "zkfuzz_provenance": {
+    "binary_sha256": "ce06d095be7d795d3210844a90950d826aa33e435bdfbec65dcfa79558680a30",
+    "build_record": "build2.json",
+    "cargo_lock_sha256": "df93f5a66fe4b0783f493e2607d1a8fea49029ebb2b580c819093434646f8d7c",
+    "initial_locked_failure": "build.exit",
+    "primary_run": "../e1-zkfuzz-20261109/runs.json",
+    "retry_run": "../e1-zkfuzz-h-retry-20261109/runs.json",
+    "source_revision": "c58639d18bd5d3bf9a883eec25513c3f9e830d4a",
+    "temporary_checkout_removed": true
+  }
+}

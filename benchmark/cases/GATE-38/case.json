@@ -1,0 +1,45 @@
+{
+  "card_sha256": "e4e9d7ea16378b2cd088d301e0caf768dcaed6853486862ed217849b24654820",
+  "expected_location_regex": null,
+  "expected_pattern": null,
+  "expected_state": "paired",
+  "exposure": "UNEXPOSED",
+  "family": "NOT-IN-CORPUS",
+  "id": "GATE-38",
+  "label_provenance": "/Users/imranpollob/Coding/bc/bindcheck-zk/review/recall/38-zkemail-matterlabs-guardian-repeat.md",
+  "label_status": "PENDING",
+  "limitations": [
+    "Source snapshots do not establish a matched buildable triple; reviewer decision pending"
+  ],
+  "origin": "public-report",
+  "pair_id": "GATE-38",
+  "proposal_location_regex": "^src/EmailRecoveryManager\\.sol(:\\d+)?$",
+  "proposal_pattern": "P3",
+  "protocol": "UNRESOLVED",
+  "revisions": {
+    "repaired": {
+      "commit": "c866ecb3dd326fe17850c61a9e38eb3db8a45695",
+      "repository": "zkemail/email-recovery",
+      "roles": {
+        "circuit": null,
+        "consumer": null,
+        "verifier": null
+      },
+      "snapshot_only": true,
+      "snapshot_root": "benchmark/cases/GATE-38/snapshots/repaired"
+    },
+    "vulnerable": {
+      "commit": "041a882677622b580693d2a4f08d6661bf77ea89",
+      "repository": "zkemail/email-recovery",
+      "roles": {
+        "circuit": null,
+        "consumer": null,
+        "verifier": null
+      },
+      "snapshot_only": true,
+      "snapshot_root": "benchmark/cases/GATE-38/snapshots/vulnerable"
+    }
+  },
+  "schema": "bindcheck-benchmark.case/v1",
+  "source_case_id": "zkemail-matterlabs-guardian-repeat"
+}

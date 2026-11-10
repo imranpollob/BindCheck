@@ -1,0 +1,19 @@
+{
+  "revisions": {
+    "repaired": [
+      {
+        "bytes": 29098,
+        "path": "src/EmailRecoveryManager.sol",
+        "sha256": "4b5023b8ffc3de1ca7b160ec86a31d5e34bab6cedf7cfffc952149bd290d53f5"
+      }
+    ],
+    "vulnerable": [
+      {
+        "bytes": 22537,
+        "path": "src/EmailRecoveryManager.sol",
+        "sha256": "901e1a1f166dc91c834b82bbc380ba2bac68dee582a3cf96fce491bbb5dfdabf"
+      }
+    ]
+  },
+  "schema": "bindcheck-benchmark.source-lock/v1"
+}

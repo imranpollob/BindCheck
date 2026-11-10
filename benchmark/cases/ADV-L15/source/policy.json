@@ -1,0 +1,30 @@
+{
+  "assumptions": [
+    "The verifier is sound for the pinned synthetic relation in static arms.",
+    "The Foundry consumer harness deliberately replaces it with an always-true mock and cannot establish a real-proof claim."
+  ],
+  "caller_policy": "proved_identity",
+  "case_id": "ADV-L15",
+  "protected_effect": {
+    "amount_role": "amount",
+    "kind": "balance",
+    "recipient_role": "recipient"
+  },
+  "public_schema": [
+    "contractAddress",
+    "nullifier"
+  ],
+  "replay": {
+    "key_role": "nullifier",
+    "require_scalar_canonicality": true,
+    "required_scope": [
+      "contractAddress"
+    ]
+  },
+  "required_bindings": {
+    "amount": "public_input_or_declared_commitment",
+    "recipient": "public_input_or_declared_commitment"
+  },
+  "schema": "bindcheck-redteam.policy/v1",
+  "status": "AI_AUTHORED_DEVELOPMENT_POLICY_REQUIRES_HUMAN_REVIEW"
+}

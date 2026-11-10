@@ -1,0 +1,17 @@
+{
+  "revisions": {
+    "selected": [
+      {
+        "bytes": 78,
+        "path": "semaphorejs/snark/semaphore.circom",
+        "sha256": "74cb0269b6e91a2d17ffc134ad0cacd5fa9e4adf828712605981925dcb98f181"
+      },
+      {
+        "bytes": 3580,
+        "path": "semaphorejs/contracts/Semaphore.sol",
+        "sha256": "8735bf30969b8eaa42d3afa4e1548eb09da4574576084be879925fd1b14c67e1"
+      }
+    ]
+  },
+  "schema": "bindcheck-benchmark.source-lock/v1"
+}

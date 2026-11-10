@@ -1,0 +1,173 @@
+{
+  "exposure": "NOT_MARKED",
+  "gate_manifest": "gate/GATE-MANIFEST.csv",
+  "id": "GATE-38",
+  "label_status": "PENDING",
+  "origin": "public-report",
+  "protocol_class": "UNRESOLVED",
+  "reconstruction": {
+    "build_ledger": "results/raw/bench/public-audit-20261109/",
+    "checkout_ledger": "results/raw/bench/public-fetch-20261109/checkouts.json",
+    "dependency_ledger": "results/raw/bench/public-deps-20261109/runs.json",
+    "fetch_ledger": "results/raw/bench/public-fetch-20261109/fetch.json",
+    "script": "benchmark/fetch_public.py; benchmark/checkout_public.py; benchmark/audit_public.py"
+  },
+  "repository": "zkemail/email-recovery",
+  "repository_url": "https://github.com/zkemail/email-recovery.git",
+  "revisions": {
+    "repaired": {
+      "build": {
+        "circuit": {
+          "status": "ROLE_MISSING"
+        },
+        "consumer": {
+          "argv": [
+            "solc",
+            "--bin",
+            "--base-path",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/zkemail__email-recovery/c866ecb3dd32",
+            "--include-path",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/zkemail__email-recovery/c866ecb3dd32/node_modules",
+            "-o",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-38/repaired/build-4kja2wk5/consumer-out",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/zkemail__email-recovery/c866ecb3dd32/src/EmailRecoveryManager.sol"
+          ],
+          "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/zkemail__email-recovery/c866ecb3dd32",
+          "elapsed_seconds": 0.039403292001225054,
+          "exit_status": 1,
+          "status": "BUILD_FAILED",
+          "stderr": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-38/repaired/consumer.stderr",
+          "stderr_excerpt": "Error: Source \"@zk-email/ether-email-auth-contracts/src/EmailAccountRecovery.sol\" not found: File not found. Searched the following locations: \"/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/zkemail__email-recovery/c866ecb3dd32\", \"/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/zkemail__email-recovery/c866ecb3dd32/node_modules\".\n --> src/EmailRecoveryManager.sol:4:1:\n  |\n4 | import { EmailAccountRecovery } from\n  | ^ (Relevant source part starts here and spans across multiple lines).\n\nError: Source \"@openzeppelin/contracts/utils/structs/EnumerableSet.sol\" not found: File not found. Searched the following locations: \"/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/zkemail__email-recovery/c866ecb3dd32\", \"/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/zkemail__email-recovery/c866ecb3dd32/node_modules\".\n --> src/EmailRecoveryManager.sol:6:1:\n  |\n6 | import { EnumerableSet } from \"@openzeppelin/contracts/utils/structs/EnumerableSet.sol\";\n  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+          "stderr_sha256": "df25c57e1da84622d4c8458328bd0703a59b607bc37df3a89ca8b34bc361fcaf",
+          "stdout": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-38/repaired/consumer.stdout",
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "timed_out": false
+        },
+        "verifier": {
+          "status": "ROLE_MISSING"
+        }
+      },
+      "buildability": {
+        "reason": "Neither pinned revision contains a .circom source or generated Groth16 verifier; only a test mock verifier is present.",
+        "role_statuses": {
+          "circuit": "ROLE_MISSING",
+          "consumer": "BUILD_FAILED",
+          "verifier": "ROLE_MISSING"
+        },
+        "status": "STRUCTURAL_BLOCKED"
+      },
+      "commit": "c866ecb3dd326fe17850c61a9e38eb3db8a45695",
+      "dependency_install": {
+        "status": "NOT_ATTEMPTED"
+      },
+      "git_fetch_command": [
+        "git",
+        "fetch",
+        "--filter=blob:none",
+        "--no-tags",
+        "--depth=1",
+        "origin",
+        "c866ecb3dd326fe17850c61a9e38eb3db8a45695"
+      ],
+      "locks": [
+        {
+          "path": "pnpm-lock.yaml",
+          "sha256": "3fd752a17e917f08c8cad26d99916c46c5187ad9cc44f4c19709913425ecb8dc"
+        }
+      ],
+      "observed_head": "c866ecb3dd326fe17850c61a9e38eb3db8a45695",
+      "repository": "zkemail/email-recovery",
+      "roles": {
+        "consumer": {
+          "path": "src/EmailRecoveryManager.sol",
+          "sha256": "4b5023b8ffc3de1ca7b160ec86a31d5e34bab6cedf7cfffc952149bd290d53f5",
+          "type": "file"
+        }
+      },
+      "source": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/zkemail__email-recovery/c866ecb3dd32",
+      "source_correspondence": "No complete Circom/generated-Groth16/consumer source correspondence is established.",
+      "status": "STRUCTURAL_BLOCKED",
+      "structural_blocker": "Neither pinned revision contains a .circom source or generated Groth16 verifier; only a test mock verifier is present."
+    },
+    "vulnerable": {
+      "build": {
+        "circuit": {
+          "status": "ROLE_MISSING"
+        },
+        "consumer": {
+          "argv": [
+            "solc",
+            "--bin",
+            "--base-path",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/zkemail__email-recovery/041a88267762",
+            "--include-path",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/zkemail__email-recovery/041a88267762/node_modules",
+            "-o",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-38/vulnerable/build-xyu8rds4/consumer-out",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/zkemail__email-recovery/041a88267762/src/EmailRecoveryManager.sol"
+          ],
+          "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/zkemail__email-recovery/041a88267762",
+          "elapsed_seconds": 0.05991262499810546,
+          "exit_status": 1,
+          "status": "BUILD_FAILED",
+          "stderr": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-38/vulnerable/consumer.stderr",
+          "stderr_excerpt": "Error: Source \"@zk-email/ether-email-auth-contracts/src/EmailAccountRecovery.sol\" not found: File not found. Searched the following locations: \"/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/zkemail__email-recovery/041a88267762\", \"/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/zkemail__email-recovery/041a88267762/node_modules\".\n --> src/EmailRecoveryManager.sol:4:1:\n  |\n4 | import { EmailAccountRecovery } from\n  | ^ (Relevant source part starts here and spans across multiple lines).\n\nError: Source \"@openzeppelin/contracts/utils/structs/EnumerableSet.sol\" not found: File not found. Searched the following locations: \"/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/zkemail__email-recovery/041a88267762\", \"/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/zkemail__email-recovery/041a88267762/node_modules\".\n --> src/libraries/EnumerableGuardianMap.sol:4:1:\n  |\n4 | import { EnumerableSet } from \"@openzeppelin/contracts/utils/structs/EnumerableSet.sol\";\n  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+          "stderr_sha256": "99a4b460c71b02ff13590a574181f144aecf8c90c5f5dcb02df5242d437cac0d",
+          "stdout": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-38/vulnerable/consumer.stdout",
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "timed_out": false
+        },
+        "verifier": {
+          "status": "ROLE_MISSING"
+        }
+      },
+      "buildability": {
+        "reason": "Neither pinned revision contains a .circom source or generated Groth16 verifier; only a test mock verifier is present.",
+        "role_statuses": {
+          "circuit": "ROLE_MISSING",
+          "consumer": "BUILD_FAILED",
+          "verifier": "ROLE_MISSING"
+        },
+        "status": "STRUCTURAL_BLOCKED"
+      },
+      "commit": "041a882677622b580693d2a4f08d6661bf77ea89",
+      "dependency_install": {
+        "status": "NOT_ATTEMPTED"
+      },
+      "git_fetch_command": [
+        "git",
+        "fetch",
+        "--filter=blob:none",
+        "--no-tags",
+        "--depth=1",
+        "origin",
+        "041a882677622b580693d2a4f08d6661bf77ea89"
+      ],
+      "locks": [
+        {
+          "path": "pnpm-lock.yaml",
+          "sha256": "17b74436429db9b6a5a5b98979dd23a8b139f2ee8e0503e580faa24ddb1281cf"
+        }
+      ],
+      "observed_head": "041a882677622b580693d2a4f08d6661bf77ea89",
+      "repository": "zkemail/email-recovery",
+      "roles": {
+        "consumer": {
+          "path": "src/EmailRecoveryManager.sol",
+          "sha256": "901e1a1f166dc91c834b82bbc380ba2bac68dee582a3cf96fce491bbb5dfdabf",
+          "type": "file"
+        }
+      },
+      "source": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/zkemail__email-recovery/041a88267762",
+      "source_correspondence": "No complete Circom/generated-Groth16/consumer source correspondence is established.",
+      "status": "STRUCTURAL_BLOCKED",
+      "structural_blocker": "Neither pinned revision contains a .circom source or generated Groth16 verifier; only a test mock verifier is present."
+    }
+  },
+  "schema": "bindcheck-benchmark.public-triple/v1",
+  "unscored_proposal": {
+    "expected_location_regex": "^src/EmailRecoveryManager\\.sol(:\\d+)?$",
+    "expected_pattern": "P3",
+    "source": "gate/GATE-MANIFEST.csv; reviewer card remains PENDING"
+  }
+}

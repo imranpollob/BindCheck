@@ -1,0 +1,289 @@
+{
+  "exposure": "EXPOSED",
+  "gate_manifest": "gate/GATE-MANIFEST.csv",
+  "id": "GATE-22",
+  "label_status": "PENDING",
+  "origin": "public-report",
+  "protocol_class": "PLONK",
+  "reconstruction": {
+    "build_ledger": "results/raw/bench/public-audit-20261109/",
+    "checkout_ledger": "results/raw/bench/public-fetch-20261109/checkouts.json",
+    "dependency_ledger": "results/raw/bench/public-deps-20261109/runs.json",
+    "fetch_ledger": "results/raw/bench/public-fetch-20261109/fetch.json",
+    "script": "benchmark/fetch_public.py; benchmark/checkout_public.py; benchmark/audit_public.py"
+  },
+  "repository": "a16z/zkdrops",
+  "repository_url": "https://github.com/a16z/zkdrops.git",
+  "revisions": {
+    "repaired": {
+      "build": {
+        "circuit": {
+          "argv": [
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/tools/circom-src/target/release/circom",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/a16z__zkdrops/f6f58020911c/circuits/circuit.circom",
+            "--r1cs",
+            "--sym",
+            "--O0",
+            "-o",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-22/repaired/attempt-001/build-mcsreuof/circuit-out",
+            "-l",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/a16z__zkdrops/f6f58020911c/node_modules",
+            "-l",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/node_modules"
+          ],
+          "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/a16z__zkdrops/f6f58020911c",
+          "elapsed_seconds": 0.9069508749998931,
+          "exit_status": 0,
+          "status": "BUILD_OK",
+          "stderr": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-22/repaired/attempt-001/circuit.stderr",
+          "stderr_excerpt": "",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stdout": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-22/repaired/attempt-001/circuit.stdout",
+          "stdout_sha256": "58472ac4bcc84a7d27734ef6bb37e4b6d0f1a08dd44513dadffa80c9b7f4df3f",
+          "timed_out": false
+        },
+        "consumer": {
+          "argv": [
+            "solc",
+            "--bin",
+            "--base-path",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/a16z__zkdrops/f6f58020911c",
+            "--include-path",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/a16z__zkdrops/f6f58020911c/node_modules",
+            "--include-path",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/deps-20261109/node_modules",
+            "-o",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-22/repaired/attempt-001/build-mcsreuof/consumer-out",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/a16z__zkdrops/f6f58020911c/contracts/PrivateAirdrop.sol"
+          ],
+          "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/a16z__zkdrops/f6f58020911c",
+          "elapsed_seconds": 0.042861540998273995,
+          "exit_status": 0,
+          "status": "BUILD_OK",
+          "stderr": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-22/repaired/attempt-001/consumer.stderr",
+          "stderr_excerpt": "",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stdout": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-22/repaired/attempt-001/consumer.stdout",
+          "stdout_sha256": "cc1aab8b524bc48f1314f47bca3fa8327e223b8e4714a41adb7c91d15443cdbc",
+          "timed_out": false
+        },
+        "verifier": {
+          "argv": [
+            "solc",
+            "--bin",
+            "--base-path",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/a16z__zkdrops/f6f58020911c",
+            "--include-path",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/a16z__zkdrops/f6f58020911c/node_modules",
+            "--include-path",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/deps-20261109/node_modules",
+            "-o",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-22/repaired/attempt-001/build-mcsreuof/verifier-out",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/a16z__zkdrops/f6f58020911c/contracts/compiled/MerkVerifier.sol"
+          ],
+          "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/a16z__zkdrops/f6f58020911c",
+          "elapsed_seconds": 0.22070004099805374,
+          "exit_status": 0,
+          "status": "BUILD_OK",
+          "stderr": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-22/repaired/attempt-001/verifier.stderr",
+          "stderr_excerpt": "",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stdout": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-22/repaired/attempt-001/verifier.stdout",
+          "stdout_sha256": "918ea0d1c7ec8f31d0463f6179a9065e826cd1e676a9bbcae852ef2b4663d607",
+          "timed_out": false
+        }
+      },
+      "buildability": {
+        "reason": "Committed snarkJS-generated verifier declares PlonkVerifier, not Groth16.",
+        "role_statuses": {
+          "circuit": "BUILD_OK",
+          "consumer": "BUILD_OK",
+          "verifier": "BUILD_OK"
+        },
+        "status": "STRUCTURAL_BLOCKED"
+      },
+      "commit": "f6f58020911cd2a19e1639f0dc93ec9fca2a9e17",
+      "dependency_install": {
+        "package": "@openzeppelin/contracts@4.4.1",
+        "receipt": "results/raw/bench/e1-build-20261109-verified/build.json",
+        "status": "COMPLETED"
+      },
+      "git_fetch_command": [
+        "git",
+        "fetch",
+        "--filter=blob:none",
+        "--no-tags",
+        "--depth=1",
+        "origin",
+        "f6f58020911cd2a19e1639f0dc93ec9fca2a9e17"
+      ],
+      "locks": [
+        {
+          "path": "package-lock.json",
+          "sha256": "5fe4dc55c771f8f18e3b45305ad84797a87fcbef17e640bfa5a9428dc33ef30d"
+        }
+      ],
+      "observed_head": "f6f58020911cd2a19e1639f0dc93ec9fca2a9e17",
+      "repository": "a16z/zkdrops",
+      "roles": {
+        "circuit": {
+          "path": "circuits/circuit.circom",
+          "sha256": "46433635f94b027effa4d905d3eec1e8e08eeb821ad7bc0c65c6d9a494e9cfed",
+          "type": "file"
+        },
+        "consumer": {
+          "path": "contracts/PrivateAirdrop.sol",
+          "sha256": "9b968fbdd48537ec32bfab5a96d0797597920229782f89e12018dc10e560824d",
+          "type": "file"
+        },
+        "verifier": {
+          "path": "contracts/compiled/MerkVerifier.sol",
+          "sha256": "2a2e335d51a50e77e9547d4ee0488e7d2bb997cf9daf315e39c6ec32c1cfc84e",
+          "type": "file"
+        }
+      },
+      "source": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/a16z__zkdrops/f6f58020911c",
+      "source_correspondence": "No complete Circom/generated-Groth16/consumer source correspondence is established.",
+      "status": "STRUCTURAL_BLOCKED",
+      "structural_blocker": "Committed snarkJS-generated verifier declares PlonkVerifier, not Groth16."
+    },
+    "vulnerable": {
+      "build": {
+        "circuit": {
+          "argv": [
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/tools/circom-src/target/release/circom",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/a16z__zkdrops/4002962fb632/circuits/circuit.circom",
+            "--r1cs",
+            "--sym",
+            "--O0",
+            "-o",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-22/vulnerable/attempt-001/build-tpw9ak2s/circuit-out",
+            "-l",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/a16z__zkdrops/4002962fb632/node_modules",
+            "-l",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/node_modules"
+          ],
+          "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/a16z__zkdrops/4002962fb632",
+          "elapsed_seconds": 0.9063459999997576,
+          "exit_status": 0,
+          "status": "BUILD_OK",
+          "stderr": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-22/vulnerable/attempt-001/circuit.stderr",
+          "stderr_excerpt": "",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stdout": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-22/vulnerable/attempt-001/circuit.stdout",
+          "stdout_sha256": "67528396da7888b724d67c179853b69c6840d2f0b7dccc5e744e9ae3a416c324",
+          "timed_out": false
+        },
+        "consumer": {
+          "argv": [
+            "solc",
+            "--bin",
+            "--base-path",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/a16z__zkdrops/4002962fb632",
+            "--include-path",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/a16z__zkdrops/4002962fb632/node_modules",
+            "--include-path",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/deps-20261109/node_modules",
+            "-o",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-22/vulnerable/attempt-001/build-tpw9ak2s/consumer-out",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/a16z__zkdrops/4002962fb632/contracts/PrivateAirdrop.sol"
+          ],
+          "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/a16z__zkdrops/4002962fb632",
+          "elapsed_seconds": 0.04273533400191809,
+          "exit_status": 0,
+          "status": "BUILD_OK",
+          "stderr": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-22/vulnerable/attempt-001/consumer.stderr",
+          "stderr_excerpt": "",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stdout": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-22/vulnerable/attempt-001/consumer.stdout",
+          "stdout_sha256": "c47fea047498933ab6e06dc7b0d7e7a225b1bbe0029a53035dc448fe6c336dc1",
+          "timed_out": false
+        },
+        "verifier": {
+          "argv": [
+            "solc",
+            "--bin",
+            "--base-path",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/a16z__zkdrops/4002962fb632",
+            "--include-path",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/a16z__zkdrops/4002962fb632/node_modules",
+            "--include-path",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/deps-20261109/node_modules",
+            "-o",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-22/vulnerable/attempt-001/build-tpw9ak2s/verifier-out",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/a16z__zkdrops/4002962fb632/contracts/compiled/MerkVerifier.sol"
+          ],
+          "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/a16z__zkdrops/4002962fb632",
+          "elapsed_seconds": 0.22351870800048346,
+          "exit_status": 0,
+          "status": "BUILD_OK",
+          "stderr": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-22/vulnerable/attempt-001/verifier.stderr",
+          "stderr_excerpt": "",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stdout": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-22/vulnerable/attempt-001/verifier.stdout",
+          "stdout_sha256": "e4bf40a5c0a0bbf5157486861b25c3f9a6cfcfac929dfc86c23ceb48b266b136",
+          "timed_out": false
+        }
+      },
+      "buildability": {
+        "reason": "Committed snarkJS-generated verifier declares PlonkVerifier, not Groth16.",
+        "role_statuses": {
+          "circuit": "BUILD_OK",
+          "consumer": "BUILD_OK",
+          "verifier": "BUILD_OK"
+        },
+        "status": "STRUCTURAL_BLOCKED"
+      },
+      "commit": "4002962fb632578dd12477346d2e5c4159ffb2ef",
+      "dependency_install": {
+        "package": "@openzeppelin/contracts@4.4.1",
+        "receipt": "results/raw/bench/e1-build-20261109-verified/build.json",
+        "status": "COMPLETED"
+      },
+      "git_fetch_command": [
+        "git",
+        "fetch",
+        "--filter=blob:none",
+        "--no-tags",
+        "--depth=1",
+        "origin",
+        "4002962fb632578dd12477346d2e5c4159ffb2ef"
+      ],
+      "locks": [
+        {
+          "path": "package-lock.json",
+          "sha256": "5fe4dc55c771f8f18e3b45305ad84797a87fcbef17e640bfa5a9428dc33ef30d"
+        }
+      ],
+      "observed_head": "4002962fb632578dd12477346d2e5c4159ffb2ef",
+      "repository": "a16z/zkdrops",
+      "roles": {
+        "circuit": {
+          "path": "circuits/circuit.circom",
+          "sha256": "46433635f94b027effa4d905d3eec1e8e08eeb821ad7bc0c65c6d9a494e9cfed",
+          "type": "file"
+        },
+        "consumer": {
+          "path": "contracts/PrivateAirdrop.sol",
+          "sha256": "0580741f245ad1e9dadce7e879a96f5e3133749be33853b44712aaa895798793",
+          "type": "file"
+        },
+        "verifier": {
+          "path": "contracts/compiled/MerkVerifier.sol",
+          "sha256": "2a2e335d51a50e77e9547d4ee0488e7d2bb997cf9daf315e39c6ec32c1cfc84e",
+          "type": "file"
+        }
+      },
+      "source": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/a16z__zkdrops/4002962fb632",
+      "source_correspondence": "No complete Circom/generated-Groth16/consumer source correspondence is established.",
+      "status": "STRUCTURAL_BLOCKED",
+      "structural_blocker": "Committed snarkJS-generated verifier declares PlonkVerifier, not Groth16."
+    }
+  },
+  "schema": "bindcheck-benchmark.public-triple/v1",
+  "unscored_proposal": {
+    "expected_location_regex": "^contracts/PrivateAirdrop\\.sol(:\\d+)?$",
+    "expected_pattern": "P3",
+    "source": "gate/GATE-MANIFEST.csv; reviewer card remains PENDING"
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "card_sha256": "2e3fa540e50c6c483295dbe846647cf6b71d7cdcd08639be634f8117da1e35c0",
+  "expected_location_regex": null,
+  "expected_pattern": null,
+  "expected_state": "paired",
+  "exposure": "UNEXPOSED",
+  "family": "NOT-IN-CORPUS",
+  "id": "GATE-30",
+  "label_provenance": "/Users/imranpollob/Coding/bc/bindcheck-zk/review/recall/30-zkemail-zellic-stale-zk-regex-artifact.md",
+  "label_status": "PENDING",
+  "limitations": [
+    "Source snapshots do not establish a matched buildable triple; reviewer decision pending"
+  ],
+  "origin": "public-report",
+  "pair_id": "GATE-30",
+  "proposal_location_regex": "^packages/circuits/src/regexes/invitation_code(_with_prefix)?_regex\\.circom(:\\d+)?$",
+  "proposal_pattern": "NONE",
+  "protocol": "UNRESOLVED",
+  "revisions": {
+    "repaired": {
+      "commit": "9deaf80435502c4d9c1a77465a0e8195f749e63d",
+      "repository": "zkemail/ether-email-auth",
+      "roles": {
+        "circuit": null,
+        "consumer": null,
+        "verifier": null
+      },
+      "snapshot_only": true,
+      "snapshot_root": "benchmark/cases/GATE-30/snapshots/repaired"
+    },
+    "vulnerable": {
+      "commit": "b5694a9e0e49d07a862232f665dc4d0886c5a15f",
+      "repository": "zkemail/ether-email-auth",
+      "roles": {
+        "circuit": null,
+        "consumer": null,
+        "verifier": null
+      },
+      "snapshot_only": true,
+      "snapshot_root": "benchmark/cases/GATE-30/snapshots/vulnerable"
+    }
+  },
+  "schema": "bindcheck-benchmark.case/v1",
+  "source_case_id": "zkemail-zellic-stale-zk-regex-artifact"
+}

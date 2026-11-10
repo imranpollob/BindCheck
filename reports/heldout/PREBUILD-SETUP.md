@@ -1,0 +1,7 @@
+# Build-only setup correction
+
+The first passive prebuild pass was stopped before completion because this worktree lacked the pinned `circomlib` dependency. The [aborted-run record](../../results/raw/heldout/prebuild-v1/ABORTED.json) preserves the completed family statuses, the reason for stopping, and the temporary checkout cleanup. Its compile records are under [prebuild-v1](../../results/raw/heldout/prebuild-v1/); they are setup evidence only and will not be pooled with the controlling pass.
+
+The missing include is visible in the [rank 1 compile record](../../results/raw/heldout/prebuild-v1/families/001-048a8237bb38/prebuild.json): `node_modules/circomlib/circuits/poseidon.circom` was unresolved. The local dependency was copied from the read-only integration worktree into ignored `node_modules/circomlib`. Its tree hash and file count match the pinned [`vendor-lock.json`](../../bindcheck_zk/vendor-lock.json): `d359bab216fc262b406f468d87774ec1b6661e4438b38851fcd6a0a2e1e8a57a` and `144`. No downloaded dependency is committed.
+
+The [prebuild script](../../eval/prebuild_heldout.py) now refuses to run unless that exact vendor tree and the source-ledger hash are present. The controlling pass will use a fresh ignored `results/raw/heldout/prebuild-v2/` directory for the complete preregistered draw. This correction precedes any EVAL analyzer or arm C run; the first pass remains available for audit.

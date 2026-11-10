@@ -1,0 +1,323 @@
+{
+  "exposure": "NOT_MARKED",
+  "gate_manifest": "gate/GATE-MANIFEST.csv",
+  "id": "GATE-15",
+  "label_status": "PENDING",
+  "origin": "public-report",
+  "protocol_class": "CIRCOM_GROTH16_SOURCE_LINKED_KEY_UNPROVEN",
+  "reconstruction": {
+    "build_ledger": "results/raw/bench/public-audit-20261109/",
+    "checkout_ledger": "results/raw/bench/public-fetch-20261109/checkouts.json",
+    "dependency_ledger": "results/raw/bench/public-deps-20261109/runs.json",
+    "fetch_ledger": "results/raw/bench/public-fetch-20261109/fetch.json",
+    "script": "benchmark/fetch_public.py; benchmark/checkout_public.py; benchmark/audit_public.py"
+  },
+  "repository": "selfxyz/self",
+  "repository_url": "https://github.com/selfxyz/self.git",
+  "revisions": {
+    "repaired": {
+      "build": {
+        "circuit": {
+          "argv": [
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/tools/circom-src/target/release/circom",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/selfxyz__self/99e8eece5e08/circuits/circuits/disclose/vc_and_disclose.circom",
+            "--r1cs",
+            "--sym",
+            "--O0",
+            "-o",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-15/repaired/attempt-002/build-vbngf9o3/circuit-out",
+            "-l",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/selfxyz__self/99e8eece5e08/node_modules",
+            "-l",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/node_modules",
+            "-l",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/selfxyz__self/99e8eece5e08/node_modules/circomlib/circuits"
+          ],
+          "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/selfxyz__self/99e8eece5e08",
+          "elapsed_seconds": 3.7314792919969477,
+          "exit_status": 0,
+          "status": "BUILD_OK",
+          "stderr": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-15/repaired/attempt-002/circuit.stderr",
+          "stderr_excerpt": "",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stdout": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-15/repaired/attempt-002/circuit.stdout",
+          "stdout_sha256": "58f47bd2fed86d7204068426d1964f74c4e53cb17237a4177b236defedc3f50a",
+          "timed_out": false
+        },
+        "consumer": {
+          "argv": [
+            "/Users/imranpollob/.solc-select/artifacts/solc-0.8.28/solc-0.8.28",
+            "--bin",
+            "--base-path",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/selfxyz__self/99e8eece5e08",
+            "--include-path",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/selfxyz__self/99e8eece5e08/node_modules",
+            "-o",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-15/repaired/attempt-002/build-vbngf9o3/consumer-out",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/selfxyz__self/99e8eece5e08/contracts/contracts/IdentityVerificationHubImplV1.sol"
+          ],
+          "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/selfxyz__self/99e8eece5e08",
+          "elapsed_seconds": 0.24948749999748543,
+          "exit_status": 0,
+          "status": "BUILD_OK",
+          "stderr": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-15/repaired/attempt-002/consumer.stderr",
+          "stderr_excerpt": "Warning: Contract code size is 27240 bytes and exceeds 24576 bytes (a limit introduced in Spurious Dragon). This contract may not be deployable on Mainnet. Consider enabling the optimizer (with a low \"runs\" value!), turning off revert strings, or using libraries.\n  --> contracts/contracts/IdentityVerificationHubImplV1.sol:71:1:\n   |\n71 | contract IdentityVerificationHubImplV1 is IdentityVerificationHubStorageV1, IIdentityVerificationHubV1 {\n   | ^ (Relevant source part starts here and spans across multiple lines).\n\n",
+          "stderr_sha256": "09e225aeffaccae4a8c4efe2e239c4e0cbdf04792866a0c6fa005122a08a0e2f",
+          "stdout": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-15/repaired/attempt-002/consumer.stdout",
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "timed_out": false
+        },
+        "verifier": {
+          "argv": [
+            "/Users/imranpollob/.solc-select/artifacts/solc-0.8.28/solc-0.8.28",
+            "--bin",
+            "--base-path",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/selfxyz__self/99e8eece5e08",
+            "--include-path",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/selfxyz__self/99e8eece5e08/node_modules",
+            "-o",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-15/repaired/attempt-002/build-vbngf9o3/verifier-out",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/selfxyz__self/99e8eece5e08/contracts/contracts/verifiers/disclose/Verifier_vc_and_disclose.sol"
+          ],
+          "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/selfxyz__self/99e8eece5e08",
+          "elapsed_seconds": 0.025719875000504544,
+          "exit_status": 0,
+          "status": "BUILD_OK",
+          "stderr": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-15/repaired/attempt-002/verifier.stderr",
+          "stderr_excerpt": "",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stdout": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-15/repaired/attempt-002/verifier.stdout",
+          "stdout_sha256": "eaa44bd52818766b5cafaa502122eef267fde26f814f728d653d44496a306960",
+          "timed_out": false
+        }
+      },
+      "buildability": {
+        "reason": null,
+        "role_statuses": {
+          "circuit": "BUILD_OK",
+          "consumer": "BUILD_OK",
+          "verifier": "BUILD_OK"
+        },
+        "status": "BUILD_OK"
+      },
+      "commit": "99e8eece5e0867017ca076731fba63ed96ae4711",
+      "dependency_install": {
+        "argv": [
+          "npm",
+          "exec",
+          "--yes",
+          "--package=@yarnpkg/cli-dist@4.6.0",
+          "--",
+          "yarn",
+          "install",
+          "--immutable",
+          "--mode=skip-build"
+        ],
+        "lock_sha256": "f6db80d1fa0d2b5fc54fa8494d0aa025eb1ddf5029fb24721039a2dd55d64e53",
+        "status": "COMPLETED",
+        "stderr": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-deps-20261109/selfxyz__self/99e8eece5e08/stderr",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-deps-20261109/selfxyz__self/99e8eece5e08/stdout",
+        "stdout_sha256": "66b8110487f7522501ad9f61784316d0a62fc0f0a8bd6c6d9ec19c091bea9e58"
+      },
+      "git_fetch_command": [
+        "git",
+        "fetch",
+        "--filter=blob:none",
+        "--no-tags",
+        "--depth=1",
+        "origin",
+        "99e8eece5e0867017ca076731fba63ed96ae4711"
+      ],
+      "locks": [
+        {
+          "path": "yarn.lock",
+          "sha256": "f6db80d1fa0d2b5fc54fa8494d0aa025eb1ddf5029fb24721039a2dd55d64e53"
+        }
+      ],
+      "observed_head": "99e8eece5e0867017ca076731fba63ed96ae4711",
+      "repository": "selfxyz/self",
+      "roles": {
+        "circuit": {
+          "path": "circuits/circuits/disclose/vc_and_disclose.circom",
+          "sha256": "e634dfc19c90a3fd0afe5465f3a7a477e3c9964f5e9de8f10d8a227ed85e8b9e",
+          "type": "file"
+        },
+        "consumer": {
+          "path": "contracts/contracts/IdentityVerificationHubImplV1.sol",
+          "sha256": "f351e7529cb87c8dc90538e9f4d2020381cf4a4b2184de5f97633db03bc85ec2",
+          "type": "file"
+        },
+        "target": {
+          "path": "circuits/circuits/utils/crypto/merkle-trees/smt.circom",
+          "sha256": "772217f373fae81aa80d0d4c8c901170e4b272544b4d6d0ff092b5d3c2c74cb0",
+          "type": "file"
+        },
+        "verifier": {
+          "path": "contracts/contracts/verifiers/disclose/Verifier_vc_and_disclose.sol",
+          "sha256": "8f45cd7d539a029661d1e2fd0dd5930a3963e432cc7dd66f9f34dc7e734c29b5",
+          "type": "file"
+        }
+      },
+      "source": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/selfxyz__self/99e8eece5e08",
+      "source_correspondence": "IdentityVerificationHubImplV1 dispatches to a named generated verifier matching the selected main circuit family; verifying-key identity against the circuit is unproved.",
+      "status": "BUILDS_ATTEMPTED",
+      "structural_blocker": null
+    },
+    "vulnerable": {
+      "build": {
+        "circuit": {
+          "argv": [
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/tools/circom-src/target/release/circom",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/selfxyz__self/4f18c75041bb/circuits/circuits/disclose/vc_and_disclose.circom",
+            "--r1cs",
+            "--sym",
+            "--O0",
+            "-o",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-15/vulnerable/attempt-002/build-eg0qgm_7/circuit-out",
+            "-l",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/selfxyz__self/4f18c75041bb/node_modules",
+            "-l",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/node_modules",
+            "-l",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/selfxyz__self/4f18c75041bb/node_modules/circomlib/circuits"
+          ],
+          "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/selfxyz__self/4f18c75041bb",
+          "elapsed_seconds": 2.941681291998975,
+          "exit_status": 0,
+          "status": "BUILD_OK",
+          "stderr": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-15/vulnerable/attempt-002/circuit.stderr",
+          "stderr_excerpt": "",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stdout": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-15/vulnerable/attempt-002/circuit.stdout",
+          "stdout_sha256": "f45619e1f853e69f1d108e94c578011451a2dcae3ebd3ac5ac5cdff76d24fd92",
+          "timed_out": false
+        },
+        "consumer": {
+          "argv": [
+            "/Users/imranpollob/.solc-select/artifacts/solc-0.8.28/solc-0.8.28",
+            "--bin",
+            "--base-path",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/selfxyz__self/4f18c75041bb",
+            "--include-path",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/selfxyz__self/4f18c75041bb/node_modules",
+            "-o",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-15/vulnerable/attempt-002/build-eg0qgm_7/consumer-out",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/selfxyz__self/4f18c75041bb/contracts/contracts/IdentityVerificationHubImplV1.sol"
+          ],
+          "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/selfxyz__self/4f18c75041bb",
+          "elapsed_seconds": 0.2707622080015426,
+          "exit_status": 0,
+          "status": "BUILD_OK",
+          "stderr": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-15/vulnerable/attempt-002/consumer.stderr",
+          "stderr_excerpt": "Warning: Contract code size is 27240 bytes and exceeds 24576 bytes (a limit introduced in Spurious Dragon). This contract may not be deployable on Mainnet. Consider enabling the optimizer (with a low \"runs\" value!), turning off revert strings, or using libraries.\n  --> contracts/contracts/IdentityVerificationHubImplV1.sol:71:1:\n   |\n71 | contract IdentityVerificationHubImplV1 is IdentityVerificationHubStorageV1, IIdentityVerificationHubV1 {\n   | ^ (Relevant source part starts here and spans across multiple lines).\n\n",
+          "stderr_sha256": "09e225aeffaccae4a8c4efe2e239c4e0cbdf04792866a0c6fa005122a08a0e2f",
+          "stdout": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-15/vulnerable/attempt-002/consumer.stdout",
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "timed_out": false
+        },
+        "verifier": {
+          "argv": [
+            "/Users/imranpollob/.solc-select/artifacts/solc-0.8.28/solc-0.8.28",
+            "--bin",
+            "--base-path",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/selfxyz__self/4f18c75041bb",
+            "--include-path",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/selfxyz__self/4f18c75041bb/node_modules",
+            "-o",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-15/vulnerable/attempt-002/build-eg0qgm_7/verifier-out",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/selfxyz__self/4f18c75041bb/contracts/contracts/verifiers/disclose/Verifier_vc_and_disclose.sol"
+          ],
+          "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/selfxyz__self/4f18c75041bb",
+          "elapsed_seconds": 0.026848666999285342,
+          "exit_status": 0,
+          "status": "BUILD_OK",
+          "stderr": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-15/vulnerable/attempt-002/verifier.stderr",
+          "stderr_excerpt": "",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stdout": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-15/vulnerable/attempt-002/verifier.stdout",
+          "stdout_sha256": "1effc74b2d8eec74123c9ecf7bdeb71e149c900ad166693b55bb399ab367abfc",
+          "timed_out": false
+        }
+      },
+      "buildability": {
+        "reason": null,
+        "role_statuses": {
+          "circuit": "BUILD_OK",
+          "consumer": "BUILD_OK",
+          "verifier": "BUILD_OK"
+        },
+        "status": "BUILD_OK"
+      },
+      "commit": "4f18c75041bb47c1862169eef82c22067642a83a",
+      "dependency_install": {
+        "argv": [
+          "npm",
+          "exec",
+          "--yes",
+          "--package=@yarnpkg/cli-dist@4.6.0",
+          "--",
+          "yarn",
+          "install",
+          "--immutable",
+          "--mode=skip-build"
+        ],
+        "lock_sha256": "f6db80d1fa0d2b5fc54fa8494d0aa025eb1ddf5029fb24721039a2dd55d64e53",
+        "status": "COMPLETED",
+        "stderr": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-deps-20261109/selfxyz__self/4f18c75041bb/stderr",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-deps-20261109/selfxyz__self/4f18c75041bb/stdout",
+        "stdout_sha256": "9daa3d97333245a2d2b3c5a807bd1751301064e1f94ac6bae4ecef9191384236"
+      },
+      "git_fetch_command": [
+        "git",
+        "fetch",
+        "--filter=blob:none",
+        "--no-tags",
+        "--depth=1",
+        "origin",
+        "4f18c75041bb47c1862169eef82c22067642a83a"
+      ],
+      "locks": [
+        {
+          "path": "yarn.lock",
+          "sha256": "f6db80d1fa0d2b5fc54fa8494d0aa025eb1ddf5029fb24721039a2dd55d64e53"
+        }
+      ],
+      "observed_head": "4f18c75041bb47c1862169eef82c22067642a83a",
+      "repository": "selfxyz/self",
+      "roles": {
+        "circuit": {
+          "path": "circuits/circuits/disclose/vc_and_disclose.circom",
+          "sha256": "e634dfc19c90a3fd0afe5465f3a7a477e3c9964f5e9de8f10d8a227ed85e8b9e",
+          "type": "file"
+        },
+        "consumer": {
+          "path": "contracts/contracts/IdentityVerificationHubImplV1.sol",
+          "sha256": "f351e7529cb87c8dc90538e9f4d2020381cf4a4b2184de5f97633db03bc85ec2",
+          "type": "file"
+        },
+        "target": {
+          "path": "circuits/circuits/utils/crypto/merkle-trees/smt.circom",
+          "sha256": "34e168964750cb81a644f3149232a537a6cabc5450c30a128f6cf516f288075f",
+          "type": "file"
+        },
+        "verifier": {
+          "path": "contracts/contracts/verifiers/disclose/Verifier_vc_and_disclose.sol",
+          "sha256": "8f45cd7d539a029661d1e2fd0dd5930a3963e432cc7dd66f9f34dc7e734c29b5",
+          "type": "file"
+        }
+      },
+      "source": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/selfxyz__self/4f18c75041bb",
+      "source_correspondence": "IdentityVerificationHubImplV1 dispatches to a named generated verifier matching the selected main circuit family; verifying-key identity against the circuit is unproved.",
+      "status": "BUILDS_ATTEMPTED",
+      "structural_blocker": null
+    }
+  },
+  "schema": "bindcheck-benchmark.public-triple/v1",
+  "unscored_proposal": {
+    "expected_location_regex": "^circuits/circuits/utils/crypto/merkle-trees/smt\\.circom(:\\d+)?$",
+    "expected_pattern": "NONE",
+    "source": "gate/GATE-MANIFEST.csv; reviewer card remains PENDING"
+  }
+}

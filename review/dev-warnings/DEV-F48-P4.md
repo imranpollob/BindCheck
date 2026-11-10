@@ -1,0 +1,9 @@
+# DEV-F48 / P4 — PrivateCrypMix
+
+**Frozen result:** `VIOLATION / GAMMA_EQUALS_DELTA_SOURCE_KEY` ([ledger](../../reports/freeze2/dev-ledger.csv); [raw](</Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/coverage/after-20261109T165844Z-58315/DEV-F48--result.json>)). **Revision:** `d588661d8e803000c1390a65911c7f0e805ec69d`. Source root: `/Users/imranpollob/Coding/bc/bindcheck-zk/feasibility/work/full-dev/DEV-F48--SovereignWave__qwer--d588661d8e80/`.
+
+- **Verifier reality:** `privatecrypmix/packages/contracts/contracts/Verifier.sol:43-55` assigns identical gamma and delta in storage, but `verifyProof` at `:60-71` never reads `verifyingKey` and returns true after simple nonempty/nonzero checks. It is explicitly “a simplified version” (`:7`). Equality is not the reason this code accepts proof bytes; the Groth16 forged-proof equation does not describe this function.
+- **Consumer wiring and policy:** `scripts/deploy.js:10-25` deploys this stand-in and passes it to `PrivateCrypMix`, whose constructor stores the interface at `PrivateCrypMix.sol:74-81`. The consumer expects a valid proof before withdrawal (`:152-159,214-221`); arbitrary acceptance violates that intent, but the specific P4 key diagnostic is misplaced.
+- **P4 setup:** `scripts/buildCircuits.js:46` creates `withdraw_0000.zkey`; `:50` contributes to `withdraw_final.zkey`; `:60` exports Solidity from the **final** key under the build directory. The repository's own generation script would not export an uncontributed key, and it does not overwrite the committed stand-in at `contracts/Verifier.sol` in the cited path. Exact key provenance of the dummy constants is MISSING.
+
+**AI opinion:** `FALSE-ALARM` for the P4 gamma/delta mechanism at this used stand-in; generic mock acceptance should be adjudicated separately. **Human label:** ____  **Human reviewer/date:** ____  **Reason or correction:** ____

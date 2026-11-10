@@ -1,0 +1,9 @@
+# DEV-F48 / P3 — PrivateCrypMix
+
+**Frozen result:** `VIOLATION / FIELD_ALIAS_REPLAY_KEY` ([ledger](../../reports/freeze2/dev-ledger.csv); [raw](</Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/coverage/after-20261109T165844Z-58315/DEV-F48--result.json>)). **Revision:** `d588661d8e803000c1390a65911c7f0e805ec69d`. Source root: `/Users/imranpollob/Coding/bc/bindcheck-zk/feasibility/work/full-dev/DEV-F48--SovereignWave__qwer--d588661d8e80/`.
+
+- **Verifier reality:** `privatecrypmix/packages/contracts/contracts/Verifier.sol:5-7,60-71` says it is simplified and returns true for nonempty bytes and nonzero root/nullifier. It has no pairing and does not interpret field-equivalent public signals. Parsed gamma/delta constants are dead data, reviewed separately in [F48/P4](DEV-F48-P4.md).
+- **Consumer wiring:** `PrivateCrypMix.sol:74-81` stores an interface verifier from constructor. `scripts/deploy.js:10-25` deploys this exact stand-in and passes its address. Thus the source file is used by the repository's own script, but the claimed field-alias mechanism is absent. `scripts/buildCircuits.js:46-60` would generate a different, contributed-key verifier under its build directory.
+- **Policy:** `PrivateCrypMix.sol:145-165,208-227` requires a nullifier to be unused, passes `uint256(_nullifierHash)` as public slot 1, and then consumes the `bytes32` key. The intended one-spend policy is clear, but with this stand-in the principal issue is accepting arbitrary proof bytes, not a scalar-field alias. Replacing it with the generated verifier might create a different P3 question; that version was not analyzed here.
+
+**AI opinion:** `FALSE-ALARM` for `FIELD_ALIAS_REPLAY_KEY` on this verifier/consumer pair; generic mock acceptance is a separate flaw. **Human label:** ____  **Human reviewer/date:** ____  **Reason or correction:** ____

@@ -1,0 +1,19 @@
+{
+  "revisions": {
+    "repaired": [
+      {
+        "bytes": 2125,
+        "path": "contracts/PrivateAirdrop.sol",
+        "sha256": "9b968fbdd48537ec32bfab5a96d0797597920229782f89e12018dc10e560824d"
+      }
+    ],
+    "vulnerable": [
+      {
+        "bytes": 1917,
+        "path": "contracts/PrivateAirdrop.sol",
+        "sha256": "0580741f245ad1e9dadce7e879a96f5e3133749be33853b44712aaa895798793"
+      }
+    ]
+  },
+  "schema": "bindcheck-benchmark.source-lock/v1"
+}

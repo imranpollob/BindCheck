@@ -469,11 +469,11 @@
   "dev_warning_opinions": "dev-warning-opinions.csv",
   "schema": "bindcheck-redteam.report-metrics/v1",
   "sources": {
-    "bindcheck": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/results/raw/redteam/bindcheck-20261109-circom",
-    "dev": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/results/raw/redteam/dev-20261109-final",
+    "bindcheck": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/redteam/bindcheck-20261109-circom",
+    "dev": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/redteam/dev-20261109-final",
     "expected": "redteam/adversarial/expected.json",
     "expected_sha256": "41e3fcebf92f6a03f27998843fd865155d0db4ecfb58d51235f58ec4b3fc9e3e",
-    "synthetic": "/Users/imranpollob/Coding/bc/bindcheck-zk-redteam/results/raw/redteam/synthetic-20261109-foundry"
+    "synthetic": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/redteam/synthetic-20261109-foundry"
   },
   "synthetic_by_family": {
     "A": {

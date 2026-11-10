@@ -1,0 +1,19 @@
+{
+  "revisions": {
+    "repaired": [
+      {
+        "bytes": 20006,
+        "path": "packages/contracts/src/utils/Groth16Verifier.sol",
+        "sha256": "68f8ecc48675168351f59694f42a5ac0cfae9658c4322d5efd436471762a972f"
+      }
+    ],
+    "vulnerable": [
+      {
+        "bytes": 22280,
+        "path": "packages/contracts/src/utils/Groth16Verifier.sol",
+        "sha256": "ac1b9a2cb316aa03ec6c402e1b0e3d0df221365c0915ca5cf1e33f9e8f56aeaa"
+      }
+    ]
+  },
+  "schema": "bindcheck-benchmark.source-lock/v1"
+}

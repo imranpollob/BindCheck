@@ -1,0 +1,270 @@
+{
+  "schema": "bindcheck-zk.validate-audit/v1",
+  "analyzer_sha256": "92789fad12050a3058a21cc5c2326e7d41604ad5ade0f09f72a35789437e6c1a",
+  "ledger": "/Users/imranpollob/Coding/bc/bindcheck-zk/reports/freeze2/dev-ledger.csv",
+  "ledger_sha256": "6edc51ef213402e1e70578c91e1c2c757e02af01da76b6ff93327495a459275a",
+  "violation_cells": 18,
+  "cards": 17,
+  "labels": {
+    "FALSE-ALARM": 5,
+    "INTENDED-BEHAVIOUR": 1,
+    "TRUE": 7,
+    "UNDECIDABLE": 5
+  },
+  "cells": [
+    {
+      "row": "DEV-F08",
+      "pattern": "P4",
+      "label": "FALSE-ALARM",
+      "card": "review/dev-warnings/DEV-F08-P4.md",
+      "card_sha256": "07b76709d0963f6b01396ec6876012c3a7ec0d8b7d810e2b6bf87bd20fca829f"
+    },
+    {
+      "row": "DEV-F09",
+      "pattern": "P4",
+      "label": "FALSE-ALARM",
+      "card": "review/dev-warnings/DEV-F09-P4.md",
+      "card_sha256": "edae2090697f2f8f3e91790844bdcf038003bf73670c99876d1fdf501000d36f"
+    },
+    {
+      "row": "DEV-F10",
+      "pattern": "P4",
+      "label": "TRUE",
+      "card": "review/dev-warnings/DEV-F10-P4.md",
+      "card_sha256": "cd335d8e9c2a1504594b3c8b7d2690e0b28fbb2f6a520b8455415798edf287f0"
+    },
+    {
+      "row": "DEV-F14",
+      "pattern": "P1",
+      "label": "TRUE",
+      "card": "review/dev-warnings/DEV-F14-P1.md",
+      "card_sha256": "005a82b108edadc2cca9a29626650ffa794a80ffeffaa255e31f168acf62cde4"
+    },
+    {
+      "row": "DEV-F14",
+      "pattern": "P4",
+      "label": "TRUE",
+      "card": "review/dev-warnings/DEV-F14-P4.md",
+      "card_sha256": "7fc48e26d9122f559a4f7ba44400e158e7a44407cf3c18583b0dc06b8a26e83a"
+    },
+    {
+      "row": "DEV-F25",
+      "pattern": "P3",
+      "label": "UNDECIDABLE",
+      "card": "review/dev-warnings/DEV-F25-P3.md",
+      "card_sha256": "74d22569d2d87f0c065b95ffb02471d26fb4aced99e9cb0e78e12e488a21ac72"
+    },
+    {
+      "row": "DEV-F27",
+      "pattern": "P3",
+      "label": "UNDECIDABLE",
+      "card": "review/dev-warnings/DEV-F27-P3.md",
+      "card_sha256": "ac6899d502938d01185e898977559f9efad0012913b8bc4210a3756b1bfe2b37"
+    },
+    {
+      "row": "DEV-F30",
+      "pattern": "P1",
+      "label": "UNDECIDABLE",
+      "card": "review/dev-warnings/DEV-F30-P1.md",
+      "card_sha256": "8fe13b52219e5c5ce76538bae6ba8cb1a02355cf84019f629fb0377515413d35"
+    },
+    {
+      "row": "DEV-F34",
+      "pattern": "P3",
+      "label": "TRUE",
+      "card": "review/dev-warnings/DEV-F34.md",
+      "card_sha256": "596996eff219a6994fd7be71fb7b519c316a902505a0da302cee0e09a1ae39a3"
+    },
+    {
+      "row": "DEV-F34",
+      "pattern": "P4",
+      "label": "TRUE",
+      "card": "review/dev-warnings/DEV-F34.md",
+      "card_sha256": "596996eff219a6994fd7be71fb7b519c316a902505a0da302cee0e09a1ae39a3"
+    },
+    {
+      "row": "DEV-F35",
+      "pattern": "P1",
+      "label": "UNDECIDABLE",
+      "card": "review/dev-warnings/DEV-F35-P1.md",
+      "card_sha256": "f51a17fe2f01c3a8a7e942e196d10d900376b18db2c6ffc9ec2de6892c844a17"
+    },
+    {
+      "row": "DEV-F38",
+      "pattern": "P3",
+      "label": "FALSE-ALARM",
+      "card": "review/dev-warnings/DEV-F38-P3.md",
+      "card_sha256": "7e5250cfc5d5dc13358c2c0b0c356d6cfcdc40109055f21437442840f1fa4288"
+    },
+    {
+      "row": "DEV-F39",
+      "pattern": "P1",
+      "label": "UNDECIDABLE",
+      "card": "review/dev-warnings/DEV-F39-P1.md",
+      "card_sha256": "1d67a4a2669c05d1dacde4c345bb07555e913b5bf812f65c763f2fcfc7caa54b"
+    },
+    {
+      "row": "DEV-F44",
+      "pattern": "P1",
+      "label": "TRUE",
+      "card": "review/dev-warnings/DEV-F44-P1.md",
+      "card_sha256": "abae682f8ec0fda10c487ff013455525644abc368357dc284f51f50f9b2ec3cf"
+    },
+    {
+      "row": "DEV-F48",
+      "pattern": "P3",
+      "label": "FALSE-ALARM",
+      "card": "review/dev-warnings/DEV-F48-P3.md",
+      "card_sha256": "cbb912f38bb5826bfb7f0d303ade886009c7e1347a617672a95dfba31f238b7b"
+    },
+    {
+      "row": "DEV-F48",
+      "pattern": "P4",
+      "label": "FALSE-ALARM",
+      "card": "review/dev-warnings/DEV-F48-P4.md",
+      "card_sha256": "7870ae92850544609b0b65b45dc3522cd4b946d7c35225818b47ab71c038f29f"
+    },
+    {
+      "row": "DEV-F49",
+      "pattern": "P1",
+      "label": "INTENDED-BEHAVIOUR",
+      "card": "review/dev-warnings/DEV-F49-P1.md",
+      "card_sha256": "52c2e38247420594779e42b3af3a2dd5a5baa9ee9772f138e6b914c04019680c"
+    },
+    {
+      "row": "DEV-H01",
+      "pattern": "P3",
+      "label": "TRUE",
+      "card": "review/dev-warnings/DEV-H01-P3.md",
+      "card_sha256": "35c969aa78dad0008960e3e3e3733a407287c01871c474cb464ac7f4863d5730"
+    }
+  ],
+  "evidence": [
+    {
+      "row": "DEV-F08",
+      "pattern": "P4",
+      "source_revision": "fa4274dbca8547963f92364ceacb7f62aecc8fd4",
+      "raw": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/coverage/after-20261109T165844Z-58315/DEV-F08--result.json",
+      "raw_sha256": "f1b70bbd9c899887ee011ac55db810c0ba2e50daba49395e41f381616e3aaacd"
+    },
+    {
+      "row": "DEV-F09",
+      "pattern": "P4",
+      "source_revision": "4a93d95914296c2f12ade7d815bc304e92977865",
+      "raw": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/coverage/after-20261109T165844Z-58315/DEV-F09--result.json",
+      "raw_sha256": "02a4e5d6ec9545b4270bab7960e714b317464af6b3b0482c6580039c194edf63"
+    },
+    {
+      "row": "DEV-F10",
+      "pattern": "P4",
+      "source_revision": "f4aece4c513161e78d3dd78579687133cfd4f22a",
+      "raw": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/coverage/after-20261109T165844Z-58315/DEV-F10--result.json",
+      "raw_sha256": "73f3978955ff12966e88ae0610738eb430088f763468adf5ffa2f7d87c394126"
+    },
+    {
+      "row": "DEV-F14",
+      "pattern": "P1",
+      "source_revision": "5a5a9f6eb2983ea38fb9475c9cd781514569e166",
+      "raw": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/coverage/after-20261109T165844Z-58315/DEV-F14--result.json",
+      "raw_sha256": "90561ec74687e0fc2c9b5666a49224b2bfe9c140c4390ff5de3feb0ab57d04bc"
+    },
+    {
+      "row": "DEV-F14",
+      "pattern": "P4",
+      "source_revision": "5a5a9f6eb2983ea38fb9475c9cd781514569e166",
+      "raw": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/coverage/after-20261109T165844Z-58315/DEV-F14--result.json",
+      "raw_sha256": "90561ec74687e0fc2c9b5666a49224b2bfe9c140c4390ff5de3feb0ab57d04bc"
+    },
+    {
+      "row": "DEV-F25",
+      "pattern": "P3",
+      "source_revision": "ac446670d0c022ab65570ed0d4d6ab2585399934",
+      "raw": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/coverage/after-20261109T165844Z-58315/DEV-F25--result.json",
+      "raw_sha256": "0302d1a1aa5ad59fe4befe5d0070bb5c519194401485ba1967977a5f8ed4b05d"
+    },
+    {
+      "row": "DEV-F27",
+      "pattern": "P3",
+      "source_revision": "ae1e95e99c504018b4f43acd2ca7d1c59b3f116d",
+      "raw": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/coverage/after-20261109T165844Z-58315/DEV-F27--result.json",
+      "raw_sha256": "8a12852142aec3ba051393fed8882e264b092bc03e357fe1dd9e5b521248ec16"
+    },
+    {
+      "row": "DEV-F30",
+      "pattern": "P1",
+      "source_revision": "23917814522bac494150c7e99a123aa15a448155",
+      "raw": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/coverage/after-20261109T165844Z-58315/DEV-F30--result.json",
+      "raw_sha256": "6c865fe4e73cf5016e6eeb6ea9a2f2370056a5cc4254e50f347177dacc984b8a"
+    },
+    {
+      "row": "DEV-F34",
+      "pattern": "P3",
+      "source_revision": "18d3a277ccd82736757a34ad56690a241ae77744",
+      "raw": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/coverage/after-20261109T165844Z-58315/DEV-F34--result.json",
+      "raw_sha256": "5f60e659772cd087a498e916cd5f54423760e5c61a7530a5538e5a3eb8297459"
+    },
+    {
+      "row": "DEV-F34",
+      "pattern": "P4",
+      "source_revision": "18d3a277ccd82736757a34ad56690a241ae77744",
+      "raw": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/coverage/after-20261109T165844Z-58315/DEV-F34--result.json",
+      "raw_sha256": "5f60e659772cd087a498e916cd5f54423760e5c61a7530a5538e5a3eb8297459"
+    },
+    {
+      "row": "DEV-F35",
+      "pattern": "P1",
+      "source_revision": "c08a9bca6903ece8ebb86090b79d77f6eec56d90",
+      "raw": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/coverage/after-20261109T165844Z-58315/DEV-F35--result.json",
+      "raw_sha256": "6db61193d1a8b37e2c7785b084ec1bf89ea278ac7dca898ecdc19b4b3363c1f6"
+    },
+    {
+      "row": "DEV-F38",
+      "pattern": "P3",
+      "source_revision": "21fd7f6587070404257c1528b114fda8ac15dd4b",
+      "raw": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/coverage/after-20261109T165844Z-58315/DEV-F38--result.json",
+      "raw_sha256": "9a2d572bfc80fb976b15825a90bb0c5b4f53cae7c73732601e35c4719c5373c3"
+    },
+    {
+      "row": "DEV-F39",
+      "pattern": "P1",
+      "source_revision": "abd54b5c541ac9d26f938a6bdbd78545526249e5",
+      "raw": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/coverage/after-20261109T165844Z-58315/DEV-F39--result.json",
+      "raw_sha256": "254e3d33e17aba9476dd704a7fe19cc562482e4931ff4b7f158733260443156c"
+    },
+    {
+      "row": "DEV-F44",
+      "pattern": "P1",
+      "source_revision": "b6d9c2d6a8c99563411992ae3610ecf2afba1ee5",
+      "raw": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/coverage/after-20261109T165844Z-58315/DEV-F44--result.json",
+      "raw_sha256": "e0f0336d31d9dcb9f8b45ad90f8e7a87fb48edee9a84ecae852c95cc49798380"
+    },
+    {
+      "row": "DEV-F48",
+      "pattern": "P3",
+      "source_revision": "d588661d8e803000c1390a65911c7f0e805ec69d",
+      "raw": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/coverage/after-20261109T165844Z-58315/DEV-F48--result.json",
+      "raw_sha256": "aa25519766dc6fd61964f2700483e109baae8970bcf00fe4b542909faf8563fb"
+    },
+    {
+      "row": "DEV-F48",
+      "pattern": "P4",
+      "source_revision": "d588661d8e803000c1390a65911c7f0e805ec69d",
+      "raw": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/coverage/after-20261109T165844Z-58315/DEV-F48--result.json",
+      "raw_sha256": "aa25519766dc6fd61964f2700483e109baae8970bcf00fe4b542909faf8563fb"
+    },
+    {
+      "row": "DEV-F49",
+      "pattern": "P1",
+      "source_revision": "979468c59d474f1363b9caf065e962ed10901371",
+      "raw": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/coverage/after-20261109T165844Z-58315/DEV-F49--result.json",
+      "raw_sha256": "49cd4f80a920f570708141e2a7843c39952af5fe3151f2cc799b029dbcd5f21c"
+    },
+    {
+      "row": "DEV-H01",
+      "pattern": "P3",
+      "source_revision": "4002962fb632578dd12477346d2e5c4159ffb2ef",
+      "raw": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/coverage/after-20261109T165844Z-58315/DEV-H01--result.json",
+      "raw_sha256": "c466a3219c4bf6cc21207896182b4442f27abe5a6245dfe8b67b78e0462d3c8e"
+    }
+  ]
+}

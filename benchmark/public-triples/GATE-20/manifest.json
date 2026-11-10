@@ -1,0 +1,223 @@
+{
+  "exposure": "NOT_MARKED",
+  "gate_manifest": "gate/GATE-MANIFEST.csv",
+  "id": "GATE-20",
+  "label_status": "PENDING",
+  "origin": "public-report",
+  "protocol_class": "UNRESOLVED",
+  "reconstruction": {
+    "build_ledger": "results/raw/bench/public-audit-20261109/",
+    "checkout_ledger": "results/raw/bench/public-fetch-20261109/checkouts.json",
+    "dependency_ledger": "results/raw/bench/public-deps-20261109/runs.json",
+    "fetch_ledger": "results/raw/bench/public-fetch-20261109/fetch.json",
+    "script": "benchmark/fetch_public.py; benchmark/checkout_public.py; benchmark/audit_public.py"
+  },
+  "repository": "tangle-network/protocol-solidity",
+  "repository_url": "https://github.com/tangle-network/protocol-solidity.git",
+  "revisions": {
+    "repaired": {
+      "build": {
+        "circuit": {
+          "argv": [
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/tools/circom-src/target/release/circom",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/tangle-network__protocol-solidity/eeb4fc7a4883/circuits/set/membership.circom",
+            "--r1cs",
+            "--sym",
+            "--O0",
+            "-o",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-20/repaired/build-oil66ge_/circuit-out",
+            "-l",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/node_modules"
+          ],
+          "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/tangle-network__protocol-solidity/eeb4fc7a4883",
+          "elapsed_seconds": 0.012885374999314081,
+          "exit_status": 1,
+          "status": "BUILD_FAILED",
+          "stderr": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-20/repaired/circuit.stderr",
+          "stderr_excerpt": "\u001b[0m\u001b[1m\u001b[38;5;9merror[P1014]\u001b[0m\u001b[1m:  The file ../../node_modules/circomlib/circuits/comparators.circom to be included has not been found\u001b[0m\n \u001b[0m\u001b[34m=\u001b[0m Consider using compilation option -l to indicate include paths\n\n\u001b[31mprevious errors were found\u001b[0m\n",
+          "stderr_sha256": "0efdd3b251c5e16363793e730f89e436d73e57f7eb6757ce73ad011cd2f7f0ee",
+          "stdout": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-20/repaired/circuit.stdout",
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "timed_out": false
+        },
+        "consumer": {
+          "argv": [
+            "solc",
+            "--bin",
+            "--base-path",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/tangle-network__protocol-solidity/eeb4fc7a4883",
+            "--include-path",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/tangle-network__protocol-solidity/eeb4fc7a4883/node_modules",
+            "-o",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-20/repaired/build-oil66ge_/consumer-out",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/tangle-network__protocol-solidity/eeb4fc7a4883/packages/contracts/contracts/vanchors/base/ZKVAnchorBase.sol"
+          ],
+          "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/tangle-network__protocol-solidity/eeb4fc7a4883",
+          "elapsed_seconds": 0.07709900000190828,
+          "exit_status": 1,
+          "status": "BUILD_FAILED",
+          "stderr": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-20/repaired/consumer.stderr",
+          "stderr_excerpt": "Error: Source \"@openzeppelin/contracts/security/ReentrancyGuard.sol\" not found: File not found. Searched the following locations: \"/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/tangle-network__protocol-solidity/eeb4fc7a4883\", \"/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/tangle-network__protocol-solidity/eeb4fc7a4883/node_modules\".\n --> packages/contracts/contracts/vanchors/base/VAnchorBase.sol:9:1:\n  |\n9 | import \"@openzeppelin/contracts/security/ReentrancyGuard.sol\";\n  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\nError: Source \"@openzeppelin/contracts/token/ERC20/IERC20.sol\" not found: File not found. Searched the following locations: \"/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/tangle-network__protocol-solidity/eeb4fc7a4883\", \"/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/tangle-network__protocol-solidity/eeb4fc7a4883/node_modules\".\n  --> packages/contracts/contracts/vanchors/base/VAnchorBase.sol:10:1:\n   |\n10 | import \"@openzeppelin/contracts/token/ERC20/IERC20.sol\";\n  ",
+          "stderr_sha256": "cc6a97ad25aded08c7fea3b09a1c6b8ddd87c03851065a6025a12cabb842883c",
+          "stdout": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-20/repaired/consumer.stdout",
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "timed_out": false
+        },
+        "verifier": {
+          "status": "ROLE_MISSING"
+        }
+      },
+      "buildability": {
+        "reason": "SetMembership is a template with no component main; committed generated VAnchor verifiers correspond to transaction circuits, with no identified membership-proof consumer/verifier.",
+        "role_statuses": {
+          "circuit": "BUILD_FAILED",
+          "consumer": "BUILD_FAILED",
+          "verifier": "ROLE_MISSING"
+        },
+        "status": "STRUCTURAL_BLOCKED"
+      },
+      "commit": "eeb4fc7a4883d513e3fe3adbe2c447133ccd39f2",
+      "dependency_install": {
+        "status": "NOT_ATTEMPTED"
+      },
+      "git_fetch_command": [
+        "git",
+        "fetch",
+        "--filter=blob:none",
+        "--no-tags",
+        "--depth=1",
+        "origin",
+        "eeb4fc7a4883d513e3fe3adbe2c447133ccd39f2"
+      ],
+      "locks": [
+        {
+          "path": "yarn.lock",
+          "sha256": "c5d8797dd9ba62710ab621fb1a91341ab0ef8a01e83094dd1af5f267cd5b64c9"
+        }
+      ],
+      "observed_head": "eeb4fc7a4883d513e3fe3adbe2c447133ccd39f2",
+      "repository": "tangle-network/protocol-solidity",
+      "roles": {
+        "circuit": {
+          "path": "circuits/set/membership.circom",
+          "sha256": "aa3591a36706b1f90aac449cf6ee3f2433b0e120b13eee7bb5069c335a9aaaa3",
+          "type": "file"
+        },
+        "consumer": {
+          "path": "packages/contracts/contracts/vanchors/base/ZKVAnchorBase.sol",
+          "sha256": "3106bfadd37bee6d935675f726651b42e619eb1636afeb25e41d2d216cf2a90a",
+          "type": "file"
+        }
+      },
+      "source": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/tangle-network__protocol-solidity/eeb4fc7a4883",
+      "source_correspondence": "No complete Circom/generated-Groth16/consumer source correspondence is established.",
+      "status": "STRUCTURAL_BLOCKED",
+      "structural_blocker": "SetMembership is a template with no component main; committed generated VAnchor verifiers correspond to transaction circuits, with no identified membership-proof consumer/verifier."
+    },
+    "vulnerable": {
+      "build": {
+        "circuit": {
+          "argv": [
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/tools/circom-src/target/release/circom",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/tangle-network__protocol-solidity/848d073bb17f/circuits/set/membership.circom",
+            "--r1cs",
+            "--sym",
+            "--O0",
+            "-o",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-20/vulnerable/build-tzvid5qt/circuit-out",
+            "-l",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/node_modules"
+          ],
+          "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/tangle-network__protocol-solidity/848d073bb17f",
+          "elapsed_seconds": 0.010320624998712447,
+          "exit_status": 1,
+          "status": "BUILD_FAILED",
+          "stderr": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-20/vulnerable/circuit.stderr",
+          "stderr_excerpt": "\u001b[0m\u001b[1m\u001b[38;5;9merror[P1014]\u001b[0m\u001b[1m:  The file ../../node_modules/circomlib/circuits/comparators.circom to be included has not been found\u001b[0m\n \u001b[0m\u001b[34m=\u001b[0m Consider using compilation option -l to indicate include paths\n\n\u001b[31mprevious errors were found\u001b[0m\n",
+          "stderr_sha256": "0efdd3b251c5e16363793e730f89e436d73e57f7eb6757ce73ad011cd2f7f0ee",
+          "stdout": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-20/vulnerable/circuit.stdout",
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "timed_out": false
+        },
+        "consumer": {
+          "argv": [
+            "solc",
+            "--bin",
+            "--base-path",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/tangle-network__protocol-solidity/848d073bb17f",
+            "--include-path",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/tangle-network__protocol-solidity/848d073bb17f/node_modules",
+            "-o",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-20/vulnerable/build-tzvid5qt/consumer-out",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/tangle-network__protocol-solidity/848d073bb17f/packages/contracts/contracts/vanchors/base/ZKVAnchorBase.sol"
+          ],
+          "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/tangle-network__protocol-solidity/848d073bb17f",
+          "elapsed_seconds": 0.09048375000202213,
+          "exit_status": 1,
+          "status": "BUILD_FAILED",
+          "stderr": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-20/vulnerable/consumer.stderr",
+          "stderr_excerpt": "Error: Source \"@openzeppelin/contracts/security/ReentrancyGuard.sol\" not found: File not found. Searched the following locations: \"/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/tangle-network__protocol-solidity/848d073bb17f\", \"/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/tangle-network__protocol-solidity/848d073bb17f/node_modules\".\n --> packages/contracts/contracts/vanchors/base/VAnchorBase.sol:9:1:\n  |\n9 | import \"@openzeppelin/contracts/security/ReentrancyGuard.sol\";\n  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\nError: Source \"@openzeppelin/contracts/token/ERC20/IERC20.sol\" not found: File not found. Searched the following locations: \"/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/tangle-network__protocol-solidity/848d073bb17f\", \"/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/tangle-network__protocol-solidity/848d073bb17f/node_modules\".\n  --> packages/contracts/contracts/vanchors/base/VAnchorBase.sol:10:1:\n   |\n10 | import \"@openzeppelin/contracts/token/ERC20/IERC20.sol\";\n  ",
+          "stderr_sha256": "864dc05fe2ab90b0cb5ef2d9a0d25d25ac7bcbbdb9d491753ea76aaab58a6e7b",
+          "stdout": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-20/vulnerable/consumer.stdout",
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "timed_out": false
+        },
+        "verifier": {
+          "status": "ROLE_MISSING"
+        }
+      },
+      "buildability": {
+        "reason": "SetMembership is a template with no component main; committed generated VAnchor verifiers correspond to transaction circuits, with no identified membership-proof consumer/verifier.",
+        "role_statuses": {
+          "circuit": "BUILD_FAILED",
+          "consumer": "BUILD_FAILED",
+          "verifier": "ROLE_MISSING"
+        },
+        "status": "STRUCTURAL_BLOCKED"
+      },
+      "commit": "848d073bb17f0aaffc6d39f594cc59efedeaec89",
+      "dependency_install": {
+        "status": "NOT_ATTEMPTED"
+      },
+      "git_fetch_command": [
+        "git",
+        "fetch",
+        "--filter=blob:none",
+        "--no-tags",
+        "--depth=1",
+        "origin",
+        "848d073bb17f0aaffc6d39f594cc59efedeaec89"
+      ],
+      "locks": [
+        {
+          "path": "yarn.lock",
+          "sha256": "823e2d0356b9c0774c30c6420e139215e25d51420c88909d0e126736fe96a225"
+        }
+      ],
+      "observed_head": "848d073bb17f0aaffc6d39f594cc59efedeaec89",
+      "repository": "tangle-network/protocol-solidity",
+      "roles": {
+        "circuit": {
+          "path": "circuits/set/membership.circom",
+          "sha256": "884f3b47b1134607f85f03af91fed2f3eba98a1bf9b5b21b0e7ce8eb309142a0",
+          "type": "file"
+        },
+        "consumer": {
+          "path": "packages/contracts/contracts/vanchors/base/ZKVAnchorBase.sol",
+          "sha256": "3106bfadd37bee6d935675f726651b42e619eb1636afeb25e41d2d216cf2a90a",
+          "type": "file"
+        }
+      },
+      "source": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/tangle-network__protocol-solidity/848d073bb17f",
+      "source_correspondence": "No complete Circom/generated-Groth16/consumer source correspondence is established.",
+      "status": "STRUCTURAL_BLOCKED",
+      "structural_blocker": "SetMembership is a template with no component main; committed generated VAnchor verifiers correspond to transaction circuits, with no identified membership-proof consumer/verifier."
+    }
+  },
+  "schema": "bindcheck-benchmark.public-triple/v1",
+  "unscored_proposal": {
+    "expected_location_regex": "^circuits/set/membership\\.circom(:\\d+)?$",
+    "expected_pattern": "NONE",
+    "source": "gate/GATE-MANIFEST.csv; reviewer card remains PENDING"
+  }
+}

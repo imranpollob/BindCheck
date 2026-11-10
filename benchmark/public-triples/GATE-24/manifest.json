@@ -1,0 +1,225 @@
+{
+  "exposure": "EXPOSED",
+  "gate_manifest": "gate/GATE-MANIFEST.csv",
+  "id": "GATE-24",
+  "label_status": "PENDING",
+  "origin": "public-report",
+  "protocol_class": "NOIR_ULTRAHONK",
+  "reconstruction": {
+    "build_ledger": "results/raw/bench/public-audit-20261109/",
+    "checkout_ledger": "results/raw/bench/public-fetch-20261109/checkouts.json",
+    "dependency_ledger": "results/raw/bench/public-deps-20261109/runs.json",
+    "fetch_ledger": "results/raw/bench/public-fetch-20261109/fetch.json",
+    "script": "benchmark/fetch_public.py; benchmark/checkout_public.py; benchmark/audit_public.py"
+  },
+  "repository": "polybase/payy",
+  "repository_url": "https://github.com/polybase/payy.git",
+  "revisions": {
+    "repaired": {
+      "build": {
+        "circuit": {
+          "path": "noir/agg_agg/src/main.nr",
+          "status": "UNSUPPORTED_FRONTEND"
+        },
+        "consumer": {
+          "argv": [
+            "solc",
+            "--bin",
+            "--base-path",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/polybase__payy/dcd5d96ee156",
+            "--include-path",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/polybase__payy/dcd5d96ee156/node_modules",
+            "-o",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-24/repaired/build-o369kqve/consumer-out",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/polybase__payy/dcd5d96ee156/eth/contracts/rollup3/RollupV1.sol"
+          ],
+          "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/polybase__payy/dcd5d96ee156",
+          "elapsed_seconds": 0.02811791699787136,
+          "exit_status": 1,
+          "status": "BUILD_FAILED",
+          "stderr": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-24/repaired/consumer.stderr",
+          "stderr_excerpt": "Error: Source \"@openzeppelin/contracts/utils/cryptography/ECDSA.sol\" not found: File not found. Searched the following locations: \"/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/polybase__payy/dcd5d96ee156\", \"/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/polybase__payy/dcd5d96ee156/node_modules\".\n --> eth/contracts/rollup3/RollupV1.sol:4:1:\n  |\n4 | import \"@openzeppelin/contracts/utils/cryptography/ECDSA.sol\";\n  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\nError: Source \"@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol\" not found: File not found. Searched the following locations: \"/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/polybase__payy/dcd5d96ee156\", \"/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/polybase__payy/dcd5d96ee156/node_modules\".\n --> eth/contracts/rollup3/RollupV1.sol:5:1:\n  |\n5 | import \"@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol\";\n  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\nError: Sour",
+          "stderr_sha256": "07e56cb7bc649421047afbd456a900c90b2862da13e66e937563b800ff37a0b7",
+          "stdout": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-24/repaired/consumer.stdout",
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "timed_out": false
+        },
+        "verifier": {
+          "argv": [
+            "solc",
+            "--bin",
+            "--base-path",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/polybase__payy/dcd5d96ee156",
+            "--include-path",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/polybase__payy/dcd5d96ee156/node_modules",
+            "-o",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-24/repaired/build-o369kqve/verifier-out",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/polybase__payy/dcd5d96ee156/eth/contracts/AggregateVerifierV1.sol"
+          ],
+          "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/polybase__payy/dcd5d96ee156",
+          "elapsed_seconds": 0.04544854200139525,
+          "exit_status": 0,
+          "status": "BUILD_OK",
+          "stderr": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-24/repaired/verifier.stderr",
+          "stderr_excerpt": "",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stdout": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-24/repaired/verifier.stdout",
+          "stdout_sha256": "1ba789aa6047b97800324c9eb8d568c0df5001b1bda5d9c593d78e2887a8a02b",
+          "timed_out": false
+        }
+      },
+      "buildability": {
+        "reason": "Pinned circuit is Noir and consumer uses UltraHonk; no Circom/Groth16 triple.",
+        "role_statuses": {
+          "circuit": "UNSUPPORTED_FRONTEND",
+          "consumer": "BUILD_FAILED",
+          "verifier": "BUILD_OK"
+        },
+        "status": "STRUCTURAL_BLOCKED"
+      },
+      "commit": "dcd5d96ee15664a59bc24ed0dc2bb78b73ac5e36",
+      "dependency_install": {
+        "status": "NOT_ATTEMPTED"
+      },
+      "git_fetch_command": [
+        "git",
+        "fetch",
+        "--filter=blob:none",
+        "--no-tags",
+        "--depth=1",
+        "origin",
+        "dcd5d96ee15664a59bc24ed0dc2bb78b73ac5e36"
+      ],
+      "locks": [],
+      "observed_head": "dcd5d96ee15664a59bc24ed0dc2bb78b73ac5e36",
+      "repository": "polybase/payy",
+      "roles": {
+        "circuit": {
+          "path": "noir/agg_agg/src/main.nr",
+          "sha256": "3fd7c851050853339d7b45a71ed52fb17136202514792739817e2dcab30cfae9",
+          "type": "file"
+        },
+        "consumer": {
+          "path": "eth/contracts/rollup3/RollupV1.sol",
+          "sha256": "7062065cc95f447fea8bb28242d51c836c3cf9e39f1625180ecf9c240a5ffd8f",
+          "type": "file"
+        },
+        "verifier": {
+          "path": "eth/contracts/AggregateVerifierV1.sol",
+          "sha256": "629d8841b80d288cc0a696ed6ea9c42ca62f332ce56a04625963dcc31497c0f3",
+          "type": "file"
+        }
+      },
+      "source": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/polybase__payy/dcd5d96ee156",
+      "source_correspondence": "No complete Circom/generated-Groth16/consumer source correspondence is established.",
+      "status": "STRUCTURAL_BLOCKED",
+      "structural_blocker": "Pinned circuit is Noir and consumer uses UltraHonk; no Circom/Groth16 triple."
+    },
+    "vulnerable": {
+      "build": {
+        "circuit": {
+          "path": "noir/agg_agg/src/main.nr",
+          "status": "UNSUPPORTED_FRONTEND"
+        },
+        "consumer": {
+          "argv": [
+            "solc",
+            "--bin",
+            "--base-path",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/polybase__payy/c4d2c9021b8f",
+            "--include-path",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/polybase__payy/c4d2c9021b8f/node_modules",
+            "-o",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-24/vulnerable/build-0zb3o7cn/consumer-out",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/polybase__payy/c4d2c9021b8f/eth/contracts/rollup3/RollupV1.sol"
+          ],
+          "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/polybase__payy/c4d2c9021b8f",
+          "elapsed_seconds": 0.019820542001980357,
+          "exit_status": 1,
+          "status": "BUILD_FAILED",
+          "stderr": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-24/vulnerable/consumer.stderr",
+          "stderr_excerpt": "Error: Source \"@openzeppelin/contracts/utils/cryptography/ECDSA.sol\" not found: File not found. Searched the following locations: \"/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/polybase__payy/c4d2c9021b8f\", \"/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/polybase__payy/c4d2c9021b8f/node_modules\".\n --> eth/contracts/rollup3/RollupV1.sol:4:1:\n  |\n4 | import \"@openzeppelin/contracts/utils/cryptography/ECDSA.sol\";\n  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\nError: Source \"@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol\" not found: File not found. Searched the following locations: \"/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/polybase__payy/c4d2c9021b8f\", \"/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/polybase__payy/c4d2c9021b8f/node_modules\".\n --> eth/contracts/rollup3/RollupV1.sol:5:1:\n  |\n5 | import \"@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol\";\n  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\nError: Sour",
+          "stderr_sha256": "e14d7edc3e7367d60ce32f623f750564dfe2b8506061169c43bc4f7cb1bc6a59",
+          "stdout": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-24/vulnerable/consumer.stdout",
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "timed_out": false
+        },
+        "verifier": {
+          "argv": [
+            "solc",
+            "--bin",
+            "--base-path",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/polybase__payy/c4d2c9021b8f",
+            "--include-path",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/polybase__payy/c4d2c9021b8f/node_modules",
+            "-o",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-24/vulnerable/build-0zb3o7cn/verifier-out",
+            "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/polybase__payy/c4d2c9021b8f/eth/contracts/AggregateVerifierV1.sol"
+          ],
+          "cwd": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/polybase__payy/c4d2c9021b8f",
+          "elapsed_seconds": 0.05095941599938669,
+          "exit_status": 0,
+          "status": "BUILD_OK",
+          "stderr": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-24/vulnerable/verifier.stderr",
+          "stderr_excerpt": "",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stdout": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-audit-20261109/GATE-24/vulnerable/verifier.stdout",
+          "stdout_sha256": "1e61ff6b375becdec18d8b375fb30cb1a0c84f4fcb0ab36504c570bae8eb27f3",
+          "timed_out": false
+        }
+      },
+      "buildability": {
+        "reason": "Pinned circuit is Noir and consumer uses UltraHonk; no Circom/Groth16 triple.",
+        "role_statuses": {
+          "circuit": "UNSUPPORTED_FRONTEND",
+          "consumer": "BUILD_FAILED",
+          "verifier": "BUILD_OK"
+        },
+        "status": "STRUCTURAL_BLOCKED"
+      },
+      "commit": "c4d2c9021b8fb9988816eb6987a734b830bfce15",
+      "dependency_install": {
+        "status": "NOT_ATTEMPTED"
+      },
+      "git_fetch_command": [
+        "git",
+        "fetch",
+        "--filter=blob:none",
+        "--no-tags",
+        "--depth=1",
+        "origin",
+        "c4d2c9021b8fb9988816eb6987a734b830bfce15"
+      ],
+      "locks": [],
+      "observed_head": "c4d2c9021b8fb9988816eb6987a734b830bfce15",
+      "repository": "polybase/payy",
+      "roles": {
+        "circuit": {
+          "path": "noir/agg_agg/src/main.nr",
+          "sha256": "c44a67e6a2e704cdbae5ebe251a0cb1da19d1e9417cf9b332b86768c0ee8604d",
+          "type": "file"
+        },
+        "consumer": {
+          "path": "eth/contracts/rollup3/RollupV1.sol",
+          "sha256": "7062065cc95f447fea8bb28242d51c836c3cf9e39f1625180ecf9c240a5ffd8f",
+          "type": "file"
+        },
+        "verifier": {
+          "path": "eth/contracts/AggregateVerifierV1.sol",
+          "sha256": "629d8841b80d288cc0a696ed6ea9c42ca62f332ce56a04625963dcc31497c0f3",
+          "type": "file"
+        }
+      },
+      "source": "/Users/imranpollob/Coding/bc/bindcheck-zk/results/raw/bench/public-fetch-20261109/work/polybase__payy/c4d2c9021b8f",
+      "source_correspondence": "No complete Circom/generated-Groth16/consumer source correspondence is established.",
+      "status": "STRUCTURAL_BLOCKED",
+      "structural_blocker": "Pinned circuit is Noir and consumer uses UltraHonk; no Circom/Groth16 triple."
+    }
+  },
+  "schema": "bindcheck-benchmark.public-triple/v1",
+  "unscored_proposal": {
+    "expected_location_regex": "^noir/agg_agg/src/main\\.nr(:\\d+)?$|^eth/contracts/rollup3/RollupV1\\.sol(:\\d+)?$",
+    "expected_pattern": "NONE (closest P1; see mappability)",
+    "source": "gate/GATE-MANIFEST.csv; reviewer card remains PENDING"
+  }
+}

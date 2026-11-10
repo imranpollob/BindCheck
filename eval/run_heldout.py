@@ -13,6 +13,7 @@ import json
 import pathlib
 import shutil
 import sys
+import tempfile
 from collections import Counter
 from typing import Any, Mapping
 
@@ -24,6 +25,7 @@ from eval.common import (  # noqa: E402
     FETCH_TIMEOUT_SECONDS,
     METADATA_TIMEOUT_SECONDS,
     PLAN_SOURCE_SHA256,
+    PATTERNS,
     ROOT,
     SOURCE_LEDGER,
     EvaluationError,
@@ -48,9 +50,24 @@ from eval.common import (  # noqa: E402
     utc_now,
     write_selection,
 )
+from eval.adjudicate import P4_WARNING_REASONS
+from bindcheck_zk.circuits import _tree_digest
 
 
-TOOLS = ("bindcheck-zk", *BASELINES)
+TOOLS = ("bindcheck-zk", *BASELINES, "arm-c")
+ARM_C_TIMEOUT_SECONDS = 390.0
+EXPOSED_RANK = 259
+PINNED_VENDOR_TREE = ("d359bab216fc262b406f468d87774ec1b6661e4438b38851fcd6a0a2e1e8a57a", 144)
+
+
+def execution_families(selected: list[dict[str, Any]], split: str) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    """Keep the original draw visible while excluding the predeclared exposed family."""
+    if split != "EVAL":
+        return selected, []
+    excluded = [item for item in selected if item["rank"] == EXPOSED_RANK]
+    if len(excluded) != 1 or excluded[0]["repository"] != "selfxyz/self":
+        raise EvaluationError("predeclared exposed family is absent or changed")
+    return [item for item in selected if item["rank"] != EXPOSED_RANK], excluded
 
 
 def default_output(split: str, dataset: pathlib.Path, metadata_only: bool) -> pathlib.Path:
@@ -156,6 +173,115 @@ def _recover_or_unknown(
     return normalized
 
 
+def capture_warning_sources(checkout: pathlib.Path, family_dir: pathlib.Path) -> dict[str, Any]:
+    """Retain code needed for later blind cards before deleting a checkout."""
+    raw_path = family_dir / "bindcheck-zk-raw.json"
+    wanted: dict[str, str | None] = {}
+    if raw_path.is_file():
+        try:
+            payload = load_json(raw_path)
+        except (OSError, ValueError):
+            payload = {}
+        for triple in payload.get("triples", []) or []:
+            warnings = [item for item in (triple.get("patterns") or {}).values()
+                        if item.get("verdict") == "VIOLATION" or item.get("reason") in P4_WARNING_REASONS]
+            if not warnings:
+                continue
+            for item in warnings:
+                path = (item.get("location") or {}).get("path")
+                if path:
+                    wanted[str(path)] = None
+            verifier = triple.get("verifier") or {}
+            if verifier.get("path"):
+                wanted[str(verifier["path"])] = verifier.get("sha256")
+        for check in payload.get("runtime_bytecode_checks", []) or []:
+            item = check.get("finding") or {}
+            if item.get("verdict") == "VIOLATION" or item.get("reason") in P4_WARNING_REASONS:
+                path = (item.get("location") or {}).get("path")
+                if path:
+                    wanted[str(path)] = None
+    arm_c_path = family_dir / "arm-c-raw.json"
+    if arm_c_path.is_file():
+        try:
+            arm_c = load_json(arm_c_path)
+        except (OSError, ValueError):
+            arm_c = {}
+        if (arm_c.get("run") or {}).get("status") == "completed":
+            findings = (arm_c.get("result") or {}).get("findings") or []
+            if findings:
+                for item in findings:
+                    path = (item.get("location") or {}).get("path")
+                    if path:
+                        wanted[str(path)] = None
+                family_path = family_dir / "family.json"
+                family = load_json(family_path) if family_path.is_file() else {}
+                for path in str(family.get("verifier_paths") or "").split("|"):
+                    if path:
+                        wanted.setdefault(path, None)
+    source_dir = family_dir / "warning-sources"
+    sources = []
+    for source_path, expected_sha256 in sorted(wanted.items()):
+        candidate = (checkout / source_path).resolve()
+        try:
+            candidate.relative_to(checkout.resolve())
+        except ValueError:
+            sources.append({"source_path": source_path, "status": "UNSAFE_PATH"})
+            continue
+        if not candidate.is_file():
+            sources.append({"source_path": source_path, "status": "MISSING"})
+            continue
+        if candidate.stat().st_size > 8 * 1024 * 1024:
+            sources.append({"source_path": source_path, "status": "TOO_LARGE"})
+            continue
+        source_dir.mkdir(exist_ok=True)
+        destination = source_dir / (sha256_bytes(source_path.encode()) + candidate.suffix)
+        shutil.copy2(candidate, destination)
+        observed = sha256_file(destination)
+        sources.append({
+            "source_path": source_path,
+            "status": "COPIED" if expected_sha256 in (None, observed) else "HASH_MISMATCH",
+            "expected_sha256": expected_sha256,
+            "source_sha256": observed,
+            "retained_path": str(destination.relative_to(family_dir)),
+        })
+    manifest = {"schema": "bindcheck-zk.warning-sources/v1", "sources": sources}
+    atomic_write_json(family_dir / "warning-sources.json", manifest)
+    return manifest
+
+
+def prepare_pinned_vendor(
+    checkout: pathlib.Path, family_dir: pathlib.Path, vendor: pathlib.Path,
+    expected_tree: tuple[str, int] = PINNED_VENDOR_TREE,
+) -> dict[str, Any]:
+    """Expose pinned circomlib to repository-relative imports in a temporary checkout."""
+    if not vendor.is_dir() or _tree_digest(vendor) != expected_tree:
+        raise EvaluationError("pinned local circomlib is missing or differs from vendor lock")
+    modules = checkout / "node_modules"
+    if modules.is_symlink() and not modules.resolve().is_relative_to(checkout.resolve()):
+        raise EvaluationError("repository node_modules symlink escapes checkout")
+    if modules.exists() and not modules.is_dir():
+        raise EvaluationError("repository node_modules is not a directory")
+    modules.mkdir(exist_ok=True)
+    target = modules / "circomlib"
+    if target.is_symlink() and target.resolve() != vendor.resolve() and not target.resolve().is_relative_to(checkout.resolve()):
+        raise EvaluationError("repository circomlib symlink escapes checkout")
+    if target.exists() or target.is_symlink():
+        if not target.is_dir():
+            raise EvaluationError("repository circomlib path is not a directory")
+        status = "EXISTING_VENDOR"
+        digest, files = _tree_digest(target)
+    else:
+        target.symlink_to(vendor.resolve(), target_is_directory=True)
+        status = "LINKED_PINNED_VENDOR"
+        digest, files = expected_tree
+    result = {"schema": "bindcheck-zk.dependency-setup/v1", "status": status,
+              "vendor_path": str(target.relative_to(checkout)), "tree_sha256": digest,
+              "files": files, "pinned_tree_sha256": expected_tree[0],
+              "pinned_files": expected_tree[1]}
+    atomic_write_json(family_dir / "dependency-setup.json", result)
+    return result
+
+
 def run_tool_once(tool: str, checkout: pathlib.Path, family_dir: pathlib.Path) -> dict[str, Any]:
     normalized_path = family_dir / f"{tool}.json"
     attempt_path = family_dir / f"{tool}-attempt.json"
@@ -171,7 +297,10 @@ def run_tool_once(tool: str, checkout: pathlib.Path, family_dir: pathlib.Path) -
         atomic_write_json(normalized_path, result)
         return result
 
-    argv, timeout = tool_command(tool, checkout)
+    if tool == "arm-c":
+        argv, timeout = [sys.executable, str(ROOT / "eval/run_arm_c.py"), str(checkout), str(family_dir / "arm-c-native")], ARM_C_TIMEOUT_SECONDS
+    else:
+        argv, timeout = tool_command(tool, checkout)
     attempt = {
         "schema": "bindcheck-zk.tool-attempt/v1",
         "tool": tool,
@@ -181,9 +310,21 @@ def run_tool_once(tool: str, checkout: pathlib.Path, family_dir: pathlib.Path) -
         "timeout_seconds": timeout,
     }
     atomic_write_json(attempt_path, attempt)
-    record = run_command(
-        argv, cwd=ROOT, timeout=timeout, env=scrub_network_environment()
-    )
+    if tool == "picus":
+        with tempfile.TemporaryDirectory(prefix="picus-", dir=family_dir) as temporary:
+            record = run_command(
+                argv, cwd=ROOT, timeout=timeout,
+                env={**scrub_network_environment(), "TMPDIR": temporary},
+            )
+    else:
+        record = run_command(
+            argv, cwd=ROOT, timeout=timeout, env=scrub_network_environment()
+        )
+    if tool == "arm-c":
+        picus_temps = family_dir / "arm-c-native" / "B" / "picus-tmp"
+        if picus_temps.exists():
+            shutil.rmtree(picus_temps)
+        record["picus_temp_removed"] = not picus_temps.exists()
     raw_text = record["stdout"]
     raw_path.write_text(raw_text, encoding="utf-8")
     attempt.update({
@@ -232,8 +373,15 @@ def analyze_family(
             for tool in TOOLS:
                 tools[tool] = _recover_or_unknown(tool, family_dir, reason)
         else:
+            prepare_pinned_vendor(checkout, family_dir, ROOT / "node_modules/circomlib")
             for tool in TOOLS:
                 tools[tool] = run_tool_once(tool, checkout, family_dir)
+            try:
+                capture_warning_sources(checkout, family_dir)
+            except Exception as exc:
+                atomic_write_json(family_dir / "warning-sources-error.json", {
+                    "type": type(exc).__name__, "detail": str(exc), "recorded_utc": utc_now()
+                })
     except Exception as exc:  # one family failure is coverage, not a changed-settings retry
         acquisition = load_json(family_dir / "acquisition.json") if family_dir.joinpath("acquisition.json").exists() else {"status": "harness-error"}
         for tool in TOOLS:
@@ -358,6 +506,7 @@ def main(argv: list[str] | None = None) -> int:
     output.mkdir(parents=True, exist_ok=True)
     rows = read_csv(dataset)
     selected = select_families(rows, split, max_families=args.max_families)
+    executable, exclusions = execution_families(selected, split)
     selection = selection_document(selected, split=split, dataset=dataset)
     write_selection(output, selection)
     selection_hash = sha256_file(output / "selected-families.json")
@@ -374,6 +523,13 @@ def main(argv: list[str] | None = None) -> int:
             "started_utc": utc_now(),
             "selection_sha256": selection_hash,
             "dataset_sha256": sha256_file(dataset),
+            "draw_families": len(selected),
+            "excluded_before_analysis": [
+                {"rank": item["rank"], "family_id": item["family_id"],
+                 "repository": item["repository"], "commit": item["commit"],
+                 "reason": "EXPOSED_GATE_REVIEW"}
+                for item in exclusions
+            ],
             "gate": gate,
             "fixed_limits_seconds": {
                 "fetch_each": FETCH_TIMEOUT_SECONDS,
@@ -381,6 +537,7 @@ def main(argv: list[str] | None = None) -> int:
                 "analyzer_outer": 150.0,
                 "baseline_inner": 120.0,
                 "baseline_outer": 150.0,
+                "arm_c_outer": ARM_C_TIMEOUT_SECONDS,
             },
             "no_retry_policy": "one attempt per acquisition/tool; interrupted or failed attempts become UNKNOWN",
         }
@@ -390,14 +547,15 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     results = []
-    for family in selected:
+    for family in (selected if args.metadata_only else executable):
         if args.metadata_only:
             item = metadata_check_family(family, output)
             print(f"METADATA\t{family['rank']:03d}\t{item['status']}\t{family['repository']}@{family['commit']}", flush=True)
         else:
             item = analyze_family(family, output)
             bindcheck = item["tools"]["bindcheck-zk"]
-            print(f"FAMILY\t{family['rank']:03d}\t{bindcheck['verdict']}\t{family['repository']}@{family['commit']}", flush=True)
+            pattern_status = ",".join(f"{pattern}:{bindcheck['patterns'][pattern]['verdict']}/{bindcheck['patterns'][pattern]['applicability']}" for pattern in PATTERNS)
+            print(f"FAMILY\t{family['rank']:03d}\t{pattern_status}\t{family['repository']}@{family['commit']}", flush=True)
         results.append(item)
 
     if args.metadata_only:
@@ -409,11 +567,21 @@ def main(argv: list[str] | None = None) -> int:
         }
         exit_status = 0 if counts.get("EXISTS", 0) == len(results) else 1
     else:
-        verdicts = Counter(item["tools"]["bindcheck-zk"]["verdict"] for item in results)
+        verdicts = {
+            pattern: dict(sorted(Counter(
+                (item["tools"]["bindcheck-zk"]["patterns"][pattern]["verdict"],
+                 item["tools"]["bindcheck-zk"]["patterns"][pattern]["applicability"])
+                for item in results
+            ).items()))
+            for pattern in PATTERNS
+        }
         work_root = output / "work"
         completed = {
             "completed_utc": utc_now(), "families": len(results),
-            "bindcheck_verdicts": dict(sorted(verdicts.items())),
+            "bindcheck_pattern_verdict_applicability": {
+                pattern: {f"{verdict}/{applicability}": count for (verdict, applicability), count in counts.items()}
+                for pattern, counts in verdicts.items()
+            },
             "clones_remaining": len(list(work_root.iterdir())) if work_root.exists() else 0,
         }
         exit_status = 0

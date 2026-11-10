@@ -1,0 +1,45 @@
+{
+  "card_sha256": "2e1099aa31f38a08474d719cff9f66bcfa2e162169a0288dae9d117df9ae5604",
+  "expected_location_regex": null,
+  "expected_pattern": null,
+  "expected_state": "paired",
+  "exposure": "UNEXPOSED",
+  "family": "NOT-IN-CORPUS",
+  "id": "GATE-40",
+  "label_provenance": "/Users/imranpollob/Coding/bc/bindcheck-zk/review/recall/40-zkemail-matterlabs-proof-coordinate-range.md",
+  "label_status": "PENDING",
+  "limitations": [
+    "Source snapshots do not establish a matched buildable triple; reviewer decision pending"
+  ],
+  "origin": "public-report",
+  "pair_id": "GATE-40",
+  "proposal_location_regex": "^packages/contracts/src/utils/Groth16Verifier\\.sol(:\\d+)?$",
+  "proposal_pattern": "P4",
+  "protocol": "UNRESOLVED",
+  "revisions": {
+    "repaired": {
+      "commit": "984b5919a9be715b743b08863ab6471c2b5356a6",
+      "repository": "zkemail/ether-email-auth",
+      "roles": {
+        "circuit": null,
+        "consumer": null,
+        "verifier": null
+      },
+      "snapshot_only": true,
+      "snapshot_root": "benchmark/cases/GATE-40/snapshots/repaired"
+    },
+    "vulnerable": {
+      "commit": "8a62db1e676aedbb20a403be95fffebef12b97e4",
+      "repository": "zkemail/ether-email-auth",
+      "roles": {
+        "circuit": null,
+        "consumer": null,
+        "verifier": null
+      },
+      "snapshot_only": true,
+      "snapshot_root": "benchmark/cases/GATE-40/snapshots/vulnerable"
+    }
+  },
+  "schema": "bindcheck-benchmark.case/v1",
+  "source_case_id": "zkemail-matterlabs-proof-coordinate-range"
+}
