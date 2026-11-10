@@ -35,3 +35,15 @@ this is disclosed.
 (`SAMPLE-SHEET-rater-a.csv`, `SAMPLE-SHEET-rater-b.csv`), labels `TP` / `FP` /
 `unclear` with a one-line reason, no exchange before both sheets are sealed,
 then agreement and disagreement resolution with cited reasons.
+
+## Addendum — self-contained rater packets (2026-11-09, still before any label)
+
+Raters receive packets built by `eval/build_rater_packet.py` (guide and README
+in `eval/rater-packet/`). Each packet holds set H (these 100 cards) and set D
+(the 16 DEV cards W01–W16), a rater guide, full local copies of the analysed
+Solidity files, and GitHub permalinks pinned to the analysed commits. To
+strengthen blinding, every card's tool-specific rule statement and reason code
+are replaced by a uniform warning kind (K1–K6) and a neutral concern sentence.
+A scan confirmed that no tool reason code appears in the packets. Sheets are
+`LABELS-set-{H,D}-rater-{A,B}.csv` and are keyed by `warning_id`, the same
+ids as `SAMPLE-SHEET-*` and the DEV `BLIND-SHEET-*`.
