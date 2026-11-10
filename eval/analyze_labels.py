@@ -159,6 +159,39 @@ def main() -> None:
     for r in dis_rows:
         lines.append(f"| {r['warning_id']} | {r['tool']}:{r['stratum']} | {r['rater_A']} | {r['rater_B']} |")
 
+    # ---------- final labels (agreed + jointly resolved) ----------
+    res_path = LAB / "RESOLUTION-SHEET.csv"
+    res = {r["warning_id"]: r for r in csv.DictReader(res_path.open(encoding="utf-8-sig"))}
+    if res and all(r.get("final_label", "").strip() for r in res.values()):
+        final = {}
+        for r in ledger:
+            wid = r["warning_id"]
+            if r["agree"]:
+                final[wid] = r["rater_A"]
+            else:
+                lab = {"tp": "TP", "fp": "FP", "unclear": "unclear"}[res[wid]["final_label"].strip().lower()]
+                final[wid] = lab
+            r["final"] = final[wid]
+        lines += ["", "## Final labels (agreed, plus the 8 jointly resolved in `review/labels/RESOLUTION-SHEET.csv`)", "",
+                  "| Tool | Stratum | Pop. | n | Final precision [Wilson 95%] | Unclear |",
+                  "| --- | --- | ---: | ---: | --- | ---: |"]
+        fe = defaultdict(lambda: [0.0, 0.0])
+        for st in sorted(per):
+            labs = [final[w] for w, _, _ in per[st]]
+            k, n, u = labs.count("TP"), labs.count("TP") + labs.count("FP"), labs.count("unclear")
+            lines.append(f"| {st[0]} | {st[1]} | {pop[st]} | {len(labs)} | {fmt(k, n)} | {u} |")
+            summary["set_H"]["strata"][f"{st[0]}:{st[1]}"]["final"] = [k, n, u]
+            if n:
+                fe[st[0]][0] += pop[st]
+                fe[st[0]][1] += pop[st] * k / n
+        lines += ["", "| Tool | Population-weighted final precision |", "| --- | --- |"]
+        for tool in ("bindcheck-zk", "arm-c"):
+            w, wp = fe[tool]
+            lines.append(f"| {tool} | {wp/w:.2f} (weight {int(w)}) |")
+            summary["set_H"].setdefault("weighted", {})[f"{tool}:final"] = wp / w
+        bc = [final[w] for st in per if st[0] == "bindcheck-zk" for w, _, _ in per[st]]
+        lines.append(f"\nBindCheck unweighted over the sample: {fmt(bc.count('TP'), bc.count('TP') + bc.count('FP'))}.")
+
     # ---------- set D ----------
     dids = sorted(dev)
     da = [D["A"][w]["label"] for w in dids]

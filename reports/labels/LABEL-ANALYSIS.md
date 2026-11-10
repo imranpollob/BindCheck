@@ -50,6 +50,33 @@ Weights are stratum populations; strata with no decided card are dropped from bo
 | W0618 | bindcheck-zk:P3 | unclear | FP |
 | W0742 | arm-c:C_EFFECT_NOT_PROOF_BOUND | unclear | TP |
 
+## Final labels (agreed, plus the 8 jointly resolved in `review/labels/RESOLUTION-SHEET.csv`)
+
+| Tool | Stratum | Pop. | n | Final precision [Wilson 95%] | Unclear |
+| --- | --- | ---: | ---: | --- | ---: |
+| arm-c | A_CALLER_NOT_PROVED_IDENTITY | 30 | 2 | 2/2 = 1.00 [0.34, 1.00] | 0 |
+| arm-c | A_CALL_VALUE_UNBOUND | 28 | 2 | 0/2 = 0.00 [0.00, 0.66] | 0 |
+| arm-c | A_EFFECT_AMOUNT_UNBOUND | 84 | 6 | 1/6 = 0.17 [0.03, 0.56] | 0 |
+| arm-c | A_EFFECT_IDENTITY_UNBOUND | 1 | 1 | 0/1 = 0.00 [0.00, 0.79] | 0 |
+| arm-c | A_EFFECT_RECIPIENT_UNBOUND | 73 | 5 | 0/5 = 0.00 [0.00, 0.43] | 0 |
+| arm-c | A_REPLAY_KEY_UNBOUND | 143 | 11 | 1/11 = 0.09 [0.02, 0.38] | 0 |
+| arm-c | A_REPLAY_POSITION_FIELD_GUARD_MISSING | 16 | 1 | 1/1 = 1.00 [0.21, 1.00] | 0 |
+| arm-c | A_STATE_WRITE_VALUE_UNBOUND | 11 | 1 | 0/1 = 0.00 [0.00, 0.79] | 0 |
+| arm-c | A_VERIFIER_ARITY_MISMATCH | 8 | 1 | 0/1 = 0.00 [0.00, 0.79] | 0 |
+| arm-c | C_EFFECT_NOT_PROOF_BOUND | 68 | 5 | 2/4 = 0.50 [0.15, 0.85] | 1 |
+| bindcheck-zk | P1 | 21 | 15 | 9/15 = 0.60 [0.36, 0.80] | 0 |
+| bindcheck-zk | P3 | 53 | 15 | 9/15 = 0.60 [0.36, 0.80] | 0 |
+| bindcheck-zk | P4/GAMMA_EQUALS_DELTA_SOURCE_KEY | 56 | 10 | 10/10 = 1.00 [0.72, 1.00] | 0 |
+| bindcheck-zk | P4/PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND | 128 | 10 | 7/10 = 0.70 [0.40, 0.89] | 0 |
+| bindcheck-zk | P5 | 72 | 15 | 2/15 = 0.13 [0.04, 0.38] | 0 |
+
+| Tool | Population-weighted final precision |
+| --- | --- |
+| bindcheck-zk | 0.60 (weight 330) |
+| arm-c | 0.23 (weight 462) |
+
+BindCheck unweighted over the sample: 37/65 = 0.57 [0.45, 0.68].
+
 ## Set D — 16 DEV gate cards
 
 - Rater agreement 14/16; κ = 0.000
