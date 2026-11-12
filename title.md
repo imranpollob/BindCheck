@@ -1,0 +1,1 @@
+BindCheck: Assessing the Binding Between Zero-Knowledge Circuits and Smart Contracts in Blockchain Applications
