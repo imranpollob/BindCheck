@@ -1,6 +1,7 @@
 # Sprint plan: EuroS&P 2027 ("Proved, but Not Authorized")
 
-Drafted 2026-11-17. Planning document only. The research contract, README and
+Drafted 2026-11-17. Planning document only. Task prompts and the workflow live in
+[`docs/orchestration/`](orchestration/README.md). The research contract, README and
 task reports stay authoritative. This plan proposes contract revision 4 (task S0).
 
 ## Deadlines (EuroS&P 2027 CFP, AoE)
@@ -98,8 +99,8 @@ fixing the analyzer is moved to DEV by a dated amendment **before** freeze 3.
 
 ### S2 — Freeze-3 analyzer fixes, DEV only (Wed 18 – Sat 21 Nov)
 
-1. **P4:** fix the BN254 G2 constant in `p4.py:16` and add an on-twist
-   regression. This re-certifies the 3 unsafe DEV results (STATUS §4a).
+1. **P4:** already done. The BN254 G2 constant was fixed in freeze 2
+   (`docs/FREEZE-2.md`); the note in `paper/zk/STATUS.md` §4a predates the fix.
 2. **P5 false positives:**
    - exclude proof-array arguments;
    - model PLONK pairing-point inputs;
@@ -109,8 +110,8 @@ fixing the analyzer is moved to DEV by a dated amendment **before** freeze 3.
 4. **Canonicality rule:** add a P3 variant that fires when a verifier admits
    non-canonical inputs and the consumer keys state on the raw value. It covers
    both Groth16 and Honk verifier layouts. Today Honk layouts return UNKNOWN.
-5. **zk-relational branch:** merge it only if it raises decided P1/P3 on DEV.
-   (It exists only on the Mac; push it first.)
+5. **zk-relational branch:** removed by the author on 17 Nov, so it is out of
+   scope.
 
 **Done when:** all regressions pass and the DEV rerun reports deltas.
 
