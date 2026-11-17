@@ -1,0 +1,10 @@
+{
+  "name": "bindcheck-bbjs-5.0.0",
+  "version": "0.0.0",
+  "private": true,
+  "description": "T0 pin: @aztec/bb.js 5.0.0 (WarpToad pin); installed into tools/bbjs-5.0.0 by scripts/setup_linux_tools.sh",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "@aztec/bb.js": "5.0.0"
+  }
+}
