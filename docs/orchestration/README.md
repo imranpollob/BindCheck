@@ -53,6 +53,7 @@ git grep -l "bc/bindcheck-zk/" -- '*.py' '*.sh'
 | S1 | [S1-honk-canonicality.md](S1-honk-canonicality.md) | READY (priority 1) | `prototypes/s1-honk-canon/`, `reports/S1/` | `bindcheck_zk/` |
 | S2a | [S2a-precision-fixes.md](S2a-precision-fixes.md) | READY (priority 2) | `bindcheck_zk/`, `tests/s2a/`, `reports/S2a/` | `findings/`, `oracle/` |
 | S4 | [S4-execution-oracle.md](S4-execution-oracle.md) | READY (priority 2) | `oracle/`, `tests/oracle/`, `reports/S4/` | `bindcheck_zk/` |
+| T0 | [T0-linux-toolchains.md](T0-linux-toolchains.md) | READY (before S1/S2a/S4) | `tools/` (ignored), `scripts/setup_linux_tools.sh`, `reports/T0/` | `results/raw/` |
 | R1 | [R1-incident-census.md](R1-incident-census.md) | READY (priority 1) | `reports/R1/` | everything else |
 | R2 | [R2-audit-census.md](R2-audit-census.md) | READY (priority 1) | `reports/R2/` | everything else |
 | S0 | (reviewer) contract revision 4 | WAITING on H1 | `docs/research-contract.md` | — |
