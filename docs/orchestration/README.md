@@ -50,12 +50,25 @@ git grep -l "bc/bindcheck-zk/" -- '*.py' '*.sh'
 
 | Task | Prompt | Status | Owns (may edit) | Must not edit |
 |---|---|---|---|---|
-| S1 | [S1-honk-canonicality.md](S1-honk-canonicality.md) | READY | `prototypes/s1-honk-canon/`, `reports/S1/` | `bindcheck_zk/` |
-| S2a | [S2a-precision-fixes.md](S2a-precision-fixes.md) | READY | `bindcheck_zk/`, `tests/s2a/`, `reports/S2a/` | `findings/`, `oracle/` |
-| S4 | [S4-execution-oracle.md](S4-execution-oracle.md) | READY | `oracle/`, `tests/oracle/`, `reports/S4/` | `bindcheck_zk/` |
+| S1 | [S1-honk-canonicality.md](S1-honk-canonicality.md) | READY (priority 1) | `prototypes/s1-honk-canon/`, `reports/S1/` | `bindcheck_zk/` |
+| S2a | [S2a-precision-fixes.md](S2a-precision-fixes.md) | READY (priority 2) | `bindcheck_zk/`, `tests/s2a/`, `reports/S2a/` | `findings/`, `oracle/` |
+| S4 | [S4-execution-oracle.md](S4-execution-oracle.md) | READY (priority 2) | `oracle/`, `tests/oracle/`, `reports/S4/` | `bindcheck_zk/` |
+| R1 | [R1-incident-census.md](R1-incident-census.md) | READY (priority 1) | `reports/R1/` | everything else |
+| R2 | [R2-audit-census.md](R2-audit-census.md) | READY (priority 1) | `reports/R2/` | everything else |
 | S0 | (reviewer) contract revision 4 | WAITING on H1 | `docs/research-contract.md` | — |
 | S2b | canonicality rule | WAITING on S1 | — | — |
 | S3 | circuit-targeted queries | WAITING on S2a | — | — |
+
+## Gate on 21 Nov (problem significance)
+
+R1, R2 and S1 decide which paper is written:
+
+- **Continue the binding paper** if R2 shows binding flaws are frequent in
+  audits of funded protocols, **and** S1 or held-out v3 gives at least one real
+  target.
+- **Otherwise switch to Plan B:** a measurement paper on the ZK verifier and
+  deployment layer (γ = δ, test verifiers, canonical-input behaviour per
+  generator). This layer has public 2026 losses.
 
 ## Human tasks
 
@@ -65,6 +78,7 @@ git grep -l "bc/bindcheck-zk/" -- '*.py' '*.sh'
 | H2 | **Say where the Honk lead came from**, if you know (file, run, chat). S1 step 0 searches for it anyway. | 18 Nov |
 | H3 | **Ask the advisor today** to send the ZKredential and RacePass disclosures (`findings/*/disclosure-draft.md`) and record the dates. Confirm the advisor can give policy answers on 23–25 Nov and send new disclosures by 27 Nov. | 18 Nov |
 | H4 | **Request the ZKAP artifact** from its authors (needed for the comparison). | 20 Nov |
+| H6 | **Decide whether coders may do read-only value queries** (balance and `balanceOf` reads, no transactions) on deployed consumers found in held-out v3. Without this, the paper cannot state value at risk. | 22 Nov |
 | H5 | **Check that coders can run the toolchains on Mint:** circom 2.1.9, snarkjs, nargo/bb, foundry, hardhat. The macOS binaries in `tools/` will not run; rebuild them from `tools/*-src` at the pinned versions. | 18 Nov |
 
 ## Handoff template (every `reports/<task-id>/REPORT.md`)

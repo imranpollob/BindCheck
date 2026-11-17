@@ -13,6 +13,30 @@ in a widely used generator is the strongest possible headline. A survey table of
 
 **Must not edit:** `bindcheck_zk/`, `findings/`.
 
+## Prior work found by the reviewer (17 Nov) — read first
+
+[Xion PR #608](https://github.com/burnt-labs/xion/pull/608), merged
+4 Sep 2026, says that **native** Barretenberg UltraHonk verification reduces
+public inputs mod r. The cause it gives is `many_from_buffer<uint256_t>`. As a
+result, the input X + r also verifies. Xion fixed only its own Go/FFI wrapper,
+and the reviewer found no upstream Aztec advisory. This changes the questions S1
+must answer:
+
+1. **Solidity HonkVerifier (the main question).** Does the generated Solidity
+   verifier also accept X + r? It can reduce the inputs for the arithmetic but
+   absorb the **raw** bytes into the Fiat–Shamir transcript. Then X + r changes
+   the challenges and the proof fails. Prove the answer by experiment, for each
+   bb version.
+2. **Native and bb.js verification users.** Look for applications that verify
+   Noir/Honk proofs **off-chain or natively** (bb.js `verifyProof`, the bb CLI,
+   bb FFI, or another chain module like Xion) and then authorize an action keyed
+   on a raw public input. Examples are an airdrop backend, a KYC gate or a
+   claim server. Check whether bb.js and the bb CLI reduce inputs the same way.
+   Run the hold-out guard on each repository first.
+3. **Upstream status.** Is the native behaviour documented, fixed, or reported
+   upstream? Cite Xion PR #608 as prior work in every case. The verdict for the
+   native path is at best `CONFIRMED_KNOWN`.
+
 ## Hard rules
 
 - **Hold-out guard.** Before reading any third-party application repository, run
