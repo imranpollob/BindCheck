@@ -8,9 +8,13 @@ then state the toolchain.
 
 **Branch:** `sprint/T0`.
 
-**Start directory:** `$BC/BindCheck`, the main checkout. This is the one place
-where the git-ignored `tools/` directory exists. All worktrees reach `tools/`
-through the `$BC/bindcheck-zk` link.
+**Start directory:** `$BC/wt-T0`, a git worktree on branch `sprint/T0`.
+Commit the script and the report there.
+
+**Install directory:** `$BC/BindCheck/tools/`, the main checkout's git-ignored
+tools folder. Every worktree and script reaches it through the
+`$BC/bindcheck-zk` link. Do **not** switch branches in `$BC/BindCheck`: it has
+uncommitted user changes.
 
 **Owns:**
 
@@ -75,10 +79,10 @@ through the `$BC/bindcheck-zk` link.
    - Compile `circuits/` (the T01 honest fixture) with the built circom.
    - Prove and verify one proof with snarkjs.
    - Run `nargo --version` and `bb --version` for each installed version.
-   - Run the analyzer tests:
+   - Run the analyzer tests, from the worktree:
 
      ```bash
-     BINDCHECK_CIRCOM=$PWD/tools/circom-src/target/release/circom python3 -m unittest discover -s tests -p 'test_bindcheck_zk*.py'
+     BINDCHECK_CIRCOM=$BC/BindCheck/tools/circom-src/target/release/circom python3 -m unittest discover -s tests -p 'test_bindcheck_zk*.py'
      ```
 
 ## Output
