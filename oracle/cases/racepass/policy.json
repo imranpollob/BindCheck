@@ -1,0 +1,35 @@
+{
+  "policy_id": "racepass-credential-binding",
+  "description": "Entitlement-only policy for the RacePass EventPass mint path. Derived from the source comment and README (see findings/racepass/policy.md). States that a minted pass's linked credential is the one established by the KYC proof. States no expected outcome.",
+  "roles": {
+    "kyc_credential": "the credential commitment established by the KYC proof public signals (kyc_pub[1])",
+    "linked_credential": "the credential a minted pass is recorded against for revocation"
+  },
+  "protected_effects": [
+    {
+      "id": "event_pass_mint",
+      "match": {
+        "type": "erc721_transfer",
+        "from": "0x0"
+      },
+      "entitlements": [
+        {
+          "view": {
+            "contract": "pass",
+            "function": "linkedCredential",
+            "args": [
+              "$tokenId"
+            ]
+          },
+          "equals": {
+            "$pubAsBytes32": {
+              "proof": "kyc",
+              "index": 1
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "notes": "The stored/revocation credential == KYC proof commitment has direct README/source-comment support. Recipient==holder and one-pass-per-credential are not asserted here (UNKNOWN per findings/racepass/policy.md), so no recipient or single-use entitlement is stated."
+}

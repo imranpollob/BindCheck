@@ -1,0 +1,24 @@
+{
+  "policy_id": "synthetic-replay",
+  "description": "Entitlement-only policy for a synthetic oracle control. States who may receive the protected mint and how often one authorization may be used. States no verdict.",
+  "roles": {
+    "holder": "the account presenting the credential proof",
+    "mint_recipient": "the account entitled to the minted token"
+  },
+  "protected_effects": [
+    {
+      "id": "synthetic_mint",
+      "match": {
+        "type": "erc20_transfer",
+        "from": "0x0"
+      },
+      "entitlements": [],
+      "single_use": {
+        "key_pub": {
+          "proof": "cred",
+          "index": 0
+        }
+      }
+    }
+  ]
+}

@@ -133,6 +133,7 @@ flowchart TD
     sprint --> r1["R1 incident census [DONE] — labels AI, author review pending"]
     sprint --> r2["R2 audit census [DONE] — Solodit BLOCKED"]
     sprint --> az1["AZ1 Aztec Connect case study [NEXT]"]
+    sprint --> s4["S4 execution oracle [DONE] — ZKredential+RacePass E4 from manifests; repairs clean"]
     d1paper --> lanex["Lane-X exploratory, benchmark, auto-validation v1+v1.1 [DONE]"]
     d207 --> capabilityGate["Automated discovery + E4 capability gate [WAITING]"]
     d1p10 --> d1p10result["Transformed-arm eligibility [UNKNOWN]"]
@@ -625,6 +626,7 @@ slots were executed.
 | 2026-11-17 | T0 Linux toolchains | `[DONE]` PARTIAL | [Report](../reports/T0/REPORT.md): circom 2.2.3/2.1.9, snarkjs 0.7.6, nargo beta.14/beta.22/rc.4, bb 5.0.0/6.0.0 and bb.js run on Linux; 29/29 smoke steps; analyzer tests 9/9. Native bb 3.0.0-manual (Payy) cannot be downloaded; the author accepted the bb.js WASM substitute ([decisions](orchestration/DECISIONS.md)). |
 | 2026-11-17 | R1 incident and bug-bounty census | `[DONE]` / labels `[UNKNOWN]` until author review | [Report](../reports/R1/REPORT.md): 50 cases. Exploited in-class cases: P4 (Veil, FoomCash, ZKSwap, HermesVault) and Aztec Connect (June 2026, about $2.1M, unbound `numRealTxs` extent). No P1/P2/P3 money loss found. Labels are AI-proposed; R1b author review is deferred. |
 | 2026-11-17 | R2 audit-finding census | `[DONE]` with Solodit BLOCKED | [Report](../reports/R2/REPORT.md): 68 audits, 54 findings; 17 High/Critical binding findings (P1–P3, P5) in 7 audits; 38% of binding findings need the circuit. TVL at audit time is UNKNOWN. Labels are AI-proposed. |
+| 2026-11-17 | S4 execution oracle | `[DONE]` / policies provisional, author confirmation `[UNKNOWN]` | [Report](../reports/S4/REPORT.md) and `oracle/`: a local-only, manifest-driven E4 harness (generic ABI driver + Anvil, no per-case test code). From their manifests alone, ZKredential reaches E4-CONFIRMED via `CALLER` and RacePass via `FREE_ARG(credHash)`, each with a real snarkjs proof through the unchanged verifier and consumer; both repaired variants and the correctly-bound synthetic control return NOT_CONFIRMED for all five operators with the honest tx still succeeding; two targeted synthetic controls confirm via exactly `ALIAS` and `REPLAY`. Fork mode built but fail-closed (H1 not approved); policies state entitlement only. Confirmations hold only under the provisional `findings/*/policy.md` interpretations; independent author/advisor confirmation remains pending. |
 
 ## Update rule
 
