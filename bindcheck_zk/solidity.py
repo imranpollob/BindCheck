@@ -300,7 +300,25 @@ def assignments(body: str) -> dict[str, str]:
 
 
 def public_vector(body: str, call: Call) -> PublicVector:
+    masked = mask_comments_and_strings(body)
     expression = call.args[-1].strip() if call.args else ""
+    if len(call.args) > 1:
+        named_public = next((
+            argument.strip() for argument in reversed(call.args)
+            if re.fullmatch(r"[A-Za-z_]\w*", argument.strip())
+            and re.search(r"(?:public[A-Za-z_]*(?:input|signal)|(?:input|signal)s)\b", argument, re.I)
+            and not re.search(r"proof", argument, re.I)
+        ), None)
+        declared_arrays = [
+            argument.strip() for argument in reversed(call.args)
+            if re.fullmatch(r"[A-Za-z_]\w*", argument.strip())
+            and not re.search(r"proof", argument, re.I)
+            and re.search(
+                rf"\b(?:uint(?:256)?|bytes32)\s*\[\s*\d*\s*\]\s+(?:memory|calldata|storage)?\s*{re.escape(argument.strip())}\b",
+                masked,
+            )
+        ]
+        expression = named_public or (declared_arrays[0] if declared_arrays else expression)
     base = expression if re.fullmatch(r"[A-Za-z_]\w*", expression) else None
     items: list[str] = []
     declared_count: int | None = None
@@ -312,31 +330,38 @@ def public_vector(body: str, call: Call) -> PublicVector:
         declared_count = len(items)
         recovered_shape = True
     elif base:
+        if len(call.args) > 1 and re.search(r"proof", base, re.I):
+            return PublicVector(
+                expression, base, [], None, False, None,
+                ["proof-argument-not-public-vector", "public-vector-shape"],
+            )
         decl = re.search(
             rf"\b(?:uint(?:256)?|bytes32)\s*\[\s*(\d*)\s*\]\s+"
             rf"(?:memory|calldata|storage)?\s*{re.escape(base)}\b",
-            body,
+            masked,
         )
         if decl:
             dynamic = decl.group(1) == ""
             declared_count = int(decl.group(1)) if decl.group(1) else None
             recovered_shape = True
-        initializer = re.search(rf"\b{re.escape(base)}\s*=\s*\[", body)
+        initializer = re.search(rf"\b{re.escape(base)}\s*=\s*\[", masked)
         if initializer:
-            opening = body.find("[", initializer.end() - 1)
-            parsed = balanced(body, opening, "[", "]")
+            opening = masked.find("[", initializer.end() - 1)
+            parsed = balanced(masked, opening, "[", "]")
             if parsed:
-                items = split_top_level(parsed[0])
+                items = split_top_level(body[opening + 1:parsed[1] - 1])
                 declared_count = len(items)
                 recovered_shape = True
-        indexed = {
-            int(index): value.strip()
-            for index, value in re.findall(
-                rf"\b{re.escape(base)}\s*\[\s*(\d+)\s*\]\s*(?<![=!<>])=(?!=)\s*([^;]+);", body
-            )
-        }
+        indexed: dict[int, str] = {}
+        indexed_pattern = re.compile(
+            rf"\b{re.escape(base)}\s*\[\s*(\d+)\s*\]\s*(?<![=!<>])=(?!=)\s*([^;]+);"
+        )
+        for indexed_match in indexed_pattern.finditer(masked):
+            indexed[int(indexed_match.group(1))] = body[
+                indexed_match.start(2):indexed_match.end(2)
+            ].strip()
         if indexed:
-            maximum = max(indexed)
+            maximum = max(max(indexed), (declared_count - 1) if declared_count else 0)
             items = [indexed.get(index, f"<unresolved:{base}[{index}]>") for index in range(maximum + 1)]
             unresolved.extend(item for item in items if item.startswith("<unresolved:"))
             if declared_count is None and not dynamic:
@@ -344,7 +369,7 @@ def public_vector(body: str, call: Call) -> PublicVector:
             recovered_shape = True
         allocation = re.search(
             rf"\b{re.escape(base)}\s*=\s*new\s+(?:uint(?:256)?|bytes32)\s*\[\s*\]\s*\(\s*(\d+)\s*\)",
-            body,
+            masked,
         )
         if allocation:
             declared_count = int(allocation.group(1))
@@ -359,13 +384,13 @@ def public_vector(body: str, call: Call) -> PublicVector:
         guard_match = re.search(
             rf"(?:require\s*\(\s*{re.escape(base)}\.length\s*==\s*(\d+)|"
             rf"if\s*\(\s*{re.escape(base)}\.length\s*!=\s*(\d+)\s*\)\s*revert)",
-            body,
+            masked,
         )
     length_guard = int(next(group for group in guard_match.groups() if group)) if guard_match else None
     if base and length_guard is None:
         allocation = re.search(
             rf"\b{re.escape(base)}\s*=\s*new\s+(?:uint(?:256)?|bytes32)\s*\[\s*\]\s*\(\s*(\d+)\s*\)",
-            body,
+            masked,
         )
         if allocation:
             length_guard = int(allocation.group(1))
@@ -409,6 +434,19 @@ def effect_roles(call: Call, source_text: str = "") -> list[tuple[str, str]]:
         return [("recipient", args[0])]
     if name in {"mint", "_mint"} and len(args) >= 3:
         return [("recipient", args[0]), ("amount", args[2])]
+    if name == "transfer" and len(args) >= 2 and call.receiver:
+        receiver_type = next((
+            type_name for type_name, variable in re.findall(
+                r"\b([A-Za-z_]\w*)\s+(?:(?:public|private|internal|external|immutable|constant)\s+)*([A-Za-z_]\w*)\s*(?:[;=,])",
+                mask_comments_and_strings(source_text),
+            )
+            if variable == call.receiver
+        ), "")
+        asset_hint = f"{receiver_type} {call.receiver}"
+        if receiver_type and not re.search(
+            r"(?:token|erc20|erc721|currency|coin|asset|usdc|usdt|dai)", asset_hint, re.I
+        ):
+            return []
     if name in {"transfer", "safetransfer", "handletransfer", "mint", "_mint", "safemint", "_safemint"} and len(args) >= 2:
         return [("recipient", args[0]), ("amount", args[1])]
     if name == "safebatchtransferfrom" and len(args) >= 4:
@@ -454,10 +492,39 @@ def verifier_declarations(text: str) -> list[dict[str, Any]]:
             "opaque": not bool(fixed or dynamic),
             "signature": text[match.start():parsed[1]],
         })
+    reserved_layout_constants = {
+        name: int(value)
+        for name, value in re.findall(
+            r"\b([A-Za-z_]\w*)\s*=\s*(\d+)",
+            masked,
+            re.I,
+        )
+        if re.search(r"(?:PAIRING|AGGREGATION).*SIZE", name, re.I)
+    }
+    external_length_guard = re.search(
+        r"publicInputs\s*\.\s*length[^;{}]*(?:publicInputsSize|NUMBER_OF_PUBLIC_INPUTS)"
+        r"(?P<subtract>(?:\s*-\s*[A-Za-z_]\w*)+)",
+        masked,
+        re.I,
+    )
+    used_reserved = {
+        name: value for name, value in reserved_layout_constants.items()
+        if external_length_guard
+        and re.search(rf"\b{re.escape(name)}\b", external_length_guard.group("subtract"))
+    }
     for constant in re.finditer(r"\bNUMBER_OF_PUBLIC_INPUTS\s*=\s*(\d+)", masked):
+        total = int(constant.group(1))
+        reserved = sum(used_reserved.values())
+        effective = total - reserved
+        if effective < 0:
+            effective = total
+            reserved = 0
         output.append({"name": "constant", "line": text.count("\n", 0, constant.start()) + 1,
-                       "arity": int(constant.group(1)), "dynamic": True, "public_input_like": True,
-                       "opaque": False, "signature": constant.group(0)})
+                       "arity": effective, "dynamic": True, "public_input_like": True,
+                       "opaque": False, "signature": constant.group(0),
+                       "total_layout_words": total, "reserved_layout_words": reserved,
+                       "reserved_layout_constants": used_reserved,
+                       "layout": "honk-pairing-points" if reserved else "direct"})
     ic_counts = {
         int(value) for value in re.findall(
             r"\b(?:vk\s*\.\s*)?IC\s*=\s*new\s+[^;()]+\(\s*(\d+)\s*\)",

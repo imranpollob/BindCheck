@@ -221,6 +221,42 @@ def canonical_guard_positions(text: str) -> dict[str, Any]:
                 offset = int(match.group(2))
                 if offset % 32 == 0:
                     indices.add(offset // 32)
+    # gnark's generated PLONK verifier checks every calldata word through a
+    # nested Yul helper.  Require the exact scalar-minus-one constant, the
+    # full-length loop, the rejecting comparison, and the pointer increment.
+    scalar_minus_one_names = [
+        name for name, value in re.findall(
+            r"\b(?:uint256|bytes32)\s+(?:(?:internal|public|private)\s+)?constant\s+([A-Za-z_]\w*)\s*=\s*(\d+)\s*;",
+            text,
+            re.I,
+        )
+        if int(value) == SCALAR_FIELD - 1
+    ]
+    for name in scalar_minus_one_names:
+        helper = re.search(
+            rf"function\s+check_inputs_size\s*\(\s*(\w+)\s*,\s*(\w+)\s*\)\s*\{{"
+            rf"(?P<body>.*?)\n\s*\}}",
+            text,
+            re.I | re.S,
+        )
+        if not helper:
+            continue
+        size, pointer = map(re.escape, helper.group(1, 2))
+        body = helper.group("body")
+        called = re.search(
+            r"check_inputs_size\s*\(\s*public_inputs\.length\s*,\s*public_inputs\.offset\s*\)",
+            text,
+            re.I,
+        )
+        loops_all = re.search(rf"\bfor\s*\{{[^}}]*\}}\s*lt\s*\(\s*\w+\s*,\s*{size}\s*\)", body, re.I)
+        rejects = re.search(
+            rf"\bif\s+gt\s*\(\s*calldataload\s*\(\s*{pointer}\s*\)\s*,\s*{re.escape(name)}\s*\)\s*\{{[^}}]*\berror",
+            body,
+            re.I | re.S,
+        )
+        advances = re.search(rf"\b{pointer}\s*:=\s*add\s*\(\s*{pointer}\s*,\s*0x20\s*\)", body, re.I)
+        if called and loops_all and rejects and advances:
+            all_positions = True
     return {
         "all_positions": all_positions,
         "indices": sorted(indices),
