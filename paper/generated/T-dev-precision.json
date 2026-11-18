@@ -1,0 +1,93 @@
+{
+  "columns": [
+    "Set H pattern",
+    "Freeze 2 TP/all",
+    "Analyzed",
+    "Unavailable",
+    "Candidate TP/retained"
+  ],
+  "notes": [
+    "DEV, not held-out",
+    "Freeze-2 final labels vs the S2a revision 1 candidate. Denominators differ.",
+    "P2 and P4 key equality have no candidate precision cell in this comparison."
+  ],
+  "raw": {
+    "P1": {
+      "candidate_analyzed": 14,
+      "candidate_coverage_unavailable": 1,
+      "candidate_fp": 1,
+      "candidate_tp": 9,
+      "candidate_tp_violation": 9,
+      "freeze2_fp": 6,
+      "freeze2_tp": 9
+    },
+    "P3": {
+      "candidate_analyzed": 15,
+      "candidate_coverage_unavailable": 0,
+      "candidate_fp": 3,
+      "candidate_tp": 9,
+      "candidate_tp_violation": 9,
+      "freeze2_fp": 6,
+      "freeze2_tp": 9
+    },
+    "P4 canonicality": {
+      "candidate_analyzed": 8,
+      "candidate_coverage_unavailable": 2,
+      "candidate_fp": 0,
+      "candidate_tp": 5,
+      "candidate_tp_violation": 0,
+      "freeze2_fp": 3,
+      "freeze2_tp": 7
+    },
+    "P5": {
+      "candidate_analyzed": 14,
+      "candidate_coverage_unavailable": 1,
+      "candidate_fp": 6,
+      "candidate_tp": 2,
+      "candidate_tp_violation": 2,
+      "freeze2_fp": 13,
+      "freeze2_tp": 2
+    }
+  },
+  "rows": [
+    [
+      "P1",
+      "9/15",
+      14,
+      1,
+      "9/10"
+    ],
+    [
+      "P3",
+      "9/15",
+      15,
+      0,
+      "9/12"
+    ],
+    [
+      "P4 canonicality",
+      "7/10",
+      8,
+      2,
+      "5/5"
+    ],
+    [
+      "P5",
+      "2/15",
+      14,
+      1,
+      "2/8"
+    ]
+  ],
+  "scope": "DEV, not held-out",
+  "sources": {
+    "reports/S2a/revision1/set-h-recomputed-cards.csv": {
+      "parser": "CSV",
+      "sha256": "f32ea5b87e15f0ededb6aa0f4242026d340204ae0fe8d913fa9777bc56322be3"
+    },
+    "reports/labels/set-H-ledger.csv": {
+      "parser": "CSV",
+      "sha256": "d7cd3bc345d2daea3f60df506ef49af460a33a6ab76bf3f69b042793c6a6eb50"
+    }
+  }
+}

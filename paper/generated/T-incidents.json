@@ -1,0 +1,287 @@
+{
+  "caption_note": "USD sums use known amounts. +n U marks unknown amounts.",
+  "columns": [
+    "Class",
+    "Cases",
+    "Yes",
+    "Whitehat",
+    "No",
+    "Claimed USD",
+    "Confirmed USD",
+    "Recovered USD",
+    "At risk USD"
+  ],
+  "notes": [
+    "Other = R1 OUT. Yes/Whitehat/No describe exploitation.",
+    "Monetary columns sum known USD cells. +n U counts unknown amounts."
+  ],
+  "raw": {
+    "All": {
+      "amounts": {
+        "loss_claimed_usd": {
+          "known_sum": 11771466,
+          "unknown": 44
+        },
+        "loss_confirmed_usd": {
+          "known_sum": 2100000,
+          "unknown": 49
+        },
+        "recovered_usd": {
+          "known_sum": 1840000,
+          "unknown": 49
+        },
+        "value_at_risk_usd": {
+          "known_sum": 1905000000,
+          "unknown": 48
+        }
+      },
+      "cases": 50,
+      "exploitation": {
+        "no": 43,
+        "whitehat": 2,
+        "yes": 5
+      }
+    },
+    "Other": {
+      "amounts": {
+        "loss_claimed_usd": {
+          "known_sum": 2197000,
+          "unknown": 34
+        },
+        "loss_confirmed_usd": {
+          "known_sum": 0,
+          "unknown": 35
+        },
+        "recovered_usd": {
+          "known_sum": 0,
+          "unknown": 35
+        },
+        "value_at_risk_usd": {
+          "known_sum": 1905000000,
+          "unknown": 33
+        }
+      },
+      "cases": 35,
+      "exploitation": {
+        "no": 33,
+        "whitehat": 1,
+        "yes": 1
+      }
+    },
+    "P1": {
+      "amounts": {
+        "loss_claimed_usd": {
+          "known_sum": 0,
+          "unknown": 0
+        },
+        "loss_confirmed_usd": {
+          "known_sum": 0,
+          "unknown": 0
+        },
+        "recovered_usd": {
+          "known_sum": 0,
+          "unknown": 0
+        },
+        "value_at_risk_usd": {
+          "known_sum": 0,
+          "unknown": 0
+        }
+      },
+      "cases": 0,
+      "exploitation": {
+        "no": 0,
+        "whitehat": 0,
+        "yes": 0
+      }
+    },
+    "P2": {
+      "amounts": {
+        "loss_claimed_usd": {
+          "known_sum": 0,
+          "unknown": 0
+        },
+        "loss_confirmed_usd": {
+          "known_sum": 0,
+          "unknown": 0
+        },
+        "recovered_usd": {
+          "known_sum": 0,
+          "unknown": 0
+        },
+        "value_at_risk_usd": {
+          "known_sum": 0,
+          "unknown": 0
+        }
+      },
+      "cases": 0,
+      "exploitation": {
+        "no": 0,
+        "whitehat": 0,
+        "yes": 0
+      }
+    },
+    "P3": {
+      "amounts": {
+        "loss_claimed_usd": {
+          "known_sum": 0,
+          "unknown": 7
+        },
+        "loss_confirmed_usd": {
+          "known_sum": 0,
+          "unknown": 7
+        },
+        "recovered_usd": {
+          "known_sum": 0,
+          "unknown": 7
+        },
+        "value_at_risk_usd": {
+          "known_sum": 0,
+          "unknown": 7
+        }
+      },
+      "cases": 7,
+      "exploitation": {
+        "no": 7,
+        "whitehat": 0,
+        "yes": 0
+      }
+    },
+    "P4": {
+      "amounts": {
+        "loss_claimed_usd": {
+          "known_sum": 7294466,
+          "unknown": 0
+        },
+        "loss_confirmed_usd": {
+          "known_sum": 0,
+          "unknown": 4
+        },
+        "recovered_usd": {
+          "known_sum": 1840000,
+          "unknown": 3
+        },
+        "value_at_risk_usd": {
+          "known_sum": 0,
+          "unknown": 4
+        }
+      },
+      "cases": 4,
+      "exploitation": {
+        "no": 0,
+        "whitehat": 1,
+        "yes": 3
+      }
+    },
+    "P5": {
+      "amounts": {
+        "loss_claimed_usd": {
+          "known_sum": 2280000,
+          "unknown": 3
+        },
+        "loss_confirmed_usd": {
+          "known_sum": 2100000,
+          "unknown": 3
+        },
+        "recovered_usd": {
+          "known_sum": 0,
+          "unknown": 4
+        },
+        "value_at_risk_usd": {
+          "known_sum": 0,
+          "unknown": 4
+        }
+      },
+      "cases": 4,
+      "exploitation": {
+        "no": 3,
+        "whitehat": 0,
+        "yes": 1
+      }
+    }
+  },
+  "rows": [
+    [
+      "P1",
+      0,
+      0,
+      0,
+      0,
+      "0",
+      "0",
+      "0",
+      "0"
+    ],
+    [
+      "P2",
+      0,
+      0,
+      0,
+      0,
+      "0",
+      "0",
+      "0",
+      "0"
+    ],
+    [
+      "P3",
+      7,
+      0,
+      0,
+      7,
+      "0 (+7 U)",
+      "0 (+7 U)",
+      "0 (+7 U)",
+      "0 (+7 U)"
+    ],
+    [
+      "P4",
+      4,
+      3,
+      1,
+      0,
+      "7,294,466",
+      "0 (+4 U)",
+      "1,840,000 (+3 U)",
+      "0 (+4 U)"
+    ],
+    [
+      "P5",
+      4,
+      1,
+      0,
+      3,
+      "2,280,000 (+3 U)",
+      "2,100,000 (+3 U)",
+      "0 (+4 U)",
+      "0 (+4 U)"
+    ],
+    [
+      "Other",
+      35,
+      1,
+      1,
+      33,
+      "2,197,000 (+34 U)",
+      "0 (+35 U)",
+      "0 (+35 U)",
+      "1,905,000,000 (+33 U)"
+    ],
+    [
+      "All",
+      50,
+      5,
+      2,
+      43,
+      "11,771,466 (+44 U)",
+      "2,100,000 (+49 U)",
+      "1,840,000 (+49 U)",
+      "1,905,000,000 (+48 U)"
+    ]
+  ],
+  "sources": {
+    "reports/R1/incidents.csv": {
+      "parser": "CSV",
+      "sha256": "fbfa59a2d385c87e53d45e4a003c9d588cb47265f21cf7355f3918833a41009b"
+    }
+  }
+}

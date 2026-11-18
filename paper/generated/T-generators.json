@@ -1,0 +1,18 @@
+{
+  "columns": [
+    "Generator census"
+  ],
+  "missing_optional_sources": [
+    "reports/S1/generators.csv"
+  ],
+  "notes": [
+    "Generator results await a tracked S1 CSV."
+  ],
+  "rows": [
+    [
+      "TODO: tracked S1 generator census unavailable"
+    ]
+  ],
+  "sources": {},
+  "status": "TODO"
+}

@@ -1,0 +1,150 @@
+{
+  "columns": [
+    "Check",
+    "Consumer",
+    "Status / exit",
+    "Credit",
+    "Backing",
+    "Gap"
+  ],
+  "notes": [
+    "Status is the receipt status for consumer rows."
+  ],
+  "raw": [
+    {
+      "check": "Proof and witness controls",
+      "exit_codes": [
+        0,
+        0,
+        1,
+        1
+      ]
+    },
+    {
+      "backing": null,
+      "check": "Tampered signal",
+      "consumer": "faulty",
+      "credit": null,
+      "gap": null,
+      "pool tokens": null,
+      "receipt_status": 0
+    },
+    {
+      "backing": 150,
+      "check": "Honest control",
+      "consumer": "faulty",
+      "credit": 150,
+      "gap": 0,
+      "pool tokens": null,
+      "receipt_status": 1
+    },
+    {
+      "backing": 150,
+      "check": "Coverage violation",
+      "consumer": "faulty",
+      "credit": 1150,
+      "gap": 1000,
+      "pool tokens": 150,
+      "receipt_status": 1
+    },
+    {
+      "backing": null,
+      "check": "Fixed row check",
+      "consumer": "fixed",
+      "credit": null,
+      "gap": null,
+      "pool tokens": null,
+      "receipt_status": 0
+    },
+    {
+      "backing": null,
+      "check": "Fixed balance check",
+      "consumer": "fixed",
+      "credit": null,
+      "gap": null,
+      "pool tokens": null,
+      "receipt_status": 0
+    },
+    {
+      "backing": null,
+      "check": "Honest control",
+      "consumer": "fixed",
+      "credit": null,
+      "gap": 0,
+      "pool tokens": null,
+      "receipt_status": 1
+    }
+  ],
+  "rows": [
+    [
+      "Proof and witness controls",
+      "—",
+      "0, 0, 1, 1",
+      "—",
+      "—",
+      "—"
+    ],
+    [
+      "Tampered signal",
+      "faulty",
+      0,
+      "—",
+      "—",
+      "—"
+    ],
+    [
+      "Honest control",
+      "faulty",
+      1,
+      150,
+      150,
+      0
+    ],
+    [
+      "Coverage violation",
+      "faulty",
+      1,
+      1150,
+      150,
+      1000
+    ],
+    [
+      "Fixed row check",
+      "fixed",
+      0,
+      "—",
+      "—",
+      "—"
+    ],
+    [
+      "Fixed balance check",
+      "fixed",
+      0,
+      "—",
+      "—",
+      "—"
+    ],
+    [
+      "Honest control",
+      "fixed",
+      1,
+      "—",
+      "—",
+      0
+    ]
+  ],
+  "run": {
+    "constraints": 3432,
+    "failed_steps": 0,
+    "private_inputs": 12,
+    "public_outputs": 2,
+    "steps": 53
+  },
+  "scope": "Owned synthetic DEV fixture",
+  "sources": {
+    "reports/AZ1/REPORT.md": {
+      "parser": "Markdown table: Testbed; numeric observations from evidence prose",
+      "sha256": "92c2f5f8662a82ea87e99f750ec41ee42cda5833378405984a58fd181d9460ed"
+    }
+  }
+}

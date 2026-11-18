@@ -1,0 +1,181 @@
+{
+  "columns": [
+    "Pattern",
+    "Applicable",
+    "VIOLATION",
+    "VERIFIED WITHIN SCOPE",
+    "UNKNOWN"
+  ],
+  "dev_families": 56,
+  "identities": {
+    "freeze2_analyzer_content_sha256": "92789fad12050a3058a21cc5c2326e7d41604ad5ade0f09f72a35789437e6c1a",
+    "s2a_revision1_candidate_content_sha256": "8ef7a837f4127bfa57fa44419a39b37eee06b90929ed074e5009bc714c346be3"
+  },
+  "notes": [
+    "DEV, not held-out",
+    "Original freeze-2 development corpus. The S2a spent rerun uses a different roster."
+  ],
+  "raw": {
+    "All": {
+      "APPLICABLE": {
+        "UNKNOWN": 114,
+        "VERIFIED_WITHIN_SCOPE": 27,
+        "VIOLATION": 18
+      },
+      "NOT_APPLICABLE": {
+        "UNKNOWN": 71,
+        "VERIFIED_WITHIN_SCOPE": 0,
+        "VIOLATION": 0
+      },
+      "UNKNOWN": {
+        "UNKNOWN": 50,
+        "VERIFIED_WITHIN_SCOPE": 0,
+        "VIOLATION": 0
+      }
+    },
+    "P1": {
+      "APPLICABLE": {
+        "UNKNOWN": 11,
+        "VERIFIED_WITHIN_SCOPE": 0,
+        "VIOLATION": 6
+      },
+      "NOT_APPLICABLE": {
+        "UNKNOWN": 29,
+        "VERIFIED_WITHIN_SCOPE": 0,
+        "VIOLATION": 0
+      },
+      "UNKNOWN": {
+        "UNKNOWN": 10,
+        "VERIFIED_WITHIN_SCOPE": 0,
+        "VIOLATION": 0
+      }
+    },
+    "P2": {
+      "APPLICABLE": {
+        "UNKNOWN": 27,
+        "VERIFIED_WITHIN_SCOPE": 0,
+        "VIOLATION": 0
+      },
+      "NOT_APPLICABLE": {
+        "UNKNOWN": 19,
+        "VERIFIED_WITHIN_SCOPE": 0,
+        "VIOLATION": 0
+      },
+      "UNKNOWN": {
+        "UNKNOWN": 10,
+        "VERIFIED_WITHIN_SCOPE": 0,
+        "VIOLATION": 0
+      }
+    },
+    "P3": {
+      "APPLICABLE": {
+        "UNKNOWN": 10,
+        "VERIFIED_WITHIN_SCOPE": 7,
+        "VIOLATION": 6
+      },
+      "NOT_APPLICABLE": {
+        "UNKNOWN": 23,
+        "VERIFIED_WITHIN_SCOPE": 0,
+        "VIOLATION": 0
+      },
+      "UNKNOWN": {
+        "UNKNOWN": 10,
+        "VERIFIED_WITHIN_SCOPE": 0,
+        "VIOLATION": 0
+      }
+    },
+    "P4": {
+      "APPLICABLE": {
+        "UNKNOWN": 24,
+        "VERIFIED_WITHIN_SCOPE": 16,
+        "VIOLATION": 6
+      },
+      "NOT_APPLICABLE": {
+        "UNKNOWN": 0,
+        "VERIFIED_WITHIN_SCOPE": 0,
+        "VIOLATION": 0
+      },
+      "UNKNOWN": {
+        "UNKNOWN": 10,
+        "VERIFIED_WITHIN_SCOPE": 0,
+        "VIOLATION": 0
+      }
+    },
+    "P5": {
+      "APPLICABLE": {
+        "UNKNOWN": 42,
+        "VERIFIED_WITHIN_SCOPE": 4,
+        "VIOLATION": 0
+      },
+      "NOT_APPLICABLE": {
+        "UNKNOWN": 0,
+        "VERIFIED_WITHIN_SCOPE": 0,
+        "VIOLATION": 0
+      },
+      "UNKNOWN": {
+        "UNKNOWN": 10,
+        "VERIFIED_WITHIN_SCOPE": 0,
+        "VIOLATION": 0
+      }
+    }
+  },
+  "rows": [
+    [
+      "P1",
+      17,
+      6,
+      0,
+      11
+    ],
+    [
+      "P2",
+      27,
+      0,
+      0,
+      27
+    ],
+    [
+      "P3",
+      23,
+      6,
+      7,
+      10
+    ],
+    [
+      "P4",
+      46,
+      6,
+      16,
+      24
+    ],
+    [
+      "P5",
+      46,
+      0,
+      4,
+      42
+    ],
+    [
+      "All",
+      159,
+      18,
+      27,
+      114
+    ]
+  ],
+  "scope": "DEV, not held-out",
+  "sources": {
+    "docs/FREEZE-2.md": {
+      "parser": "Markdown code block: analyzer content SHA-256",
+      "sha256": "3536be6c16c25da26436b41b5fb4d214e9e07d37426f9d8d524b8ac09a8e7c85"
+    },
+    "reports/S2a/REPORT.md": {
+      "parser": "Markdown prose: S2a revision 1 candidate content SHA-256",
+      "sha256": "d78a24d1d8ce96785d20815381f4c1a86462e5fbee496ca8c06fe7fffafe3fc9"
+    },
+    "reports/freeze2/dev-ledger.csv": {
+      "parser": "CSV",
+      "sha256": "d59def9de2d1d9577fe04558d60f48d26b92411b3a7b514e8822eb8c649cac3f"
+    }
+  }
+}
