@@ -1,18 +1,245 @@
 {
   "columns": [
-    "Generator census"
-  ],
-  "missing_optional_sources": [
-    "reports/S1/generators.csv"
-  ],
-  "notes": [
-    "Generator results await a tracked S1 CSV."
+    "generator",
+    "version",
+    "template",
+    "behaviour",
+    "source_lines",
+    "experiment",
+    "verdict"
   ],
   "rows": [
     [
-      "TODO: tracked S1 generator census unavailable"
+      "bb.js (Solidity)",
+      "3.0.0-manual.20251030",
+      "keccak (UltraHonk non-ZK)",
+      "split (source-read; unconfirmed)",
+      "generated HonkVerifier.sol (sha256 c1412bba…): L540 round0[1+i]=bytes32(publicInputs[i]) raw into transcript; L165-167 fromBytes32 = uint256(value) % MODULUS (no range check); L1923 delta uses fromBytes32",
+      "Anvil, same honest proof: n -> true (1,046,056 gas); n+r -> revert SumcheckFailed (312,016); n+5r -> revert SumcheckFailed (312,016)",
+      "NOT_REPRODUCED (same-proof replay); split acceptance of a re-proved aliased transcript not tested (pending authorization); Solidity guard present from bb.js 4.0.1 (npm marker)"
+    ],
+    [
+      "bb.js (Solidity)",
+      "3.0.0-manual.20251030",
+      "keccakZK (UltraHonk ZK)",
+      "split (source-read; unconfirmed)",
+      "generated HonkVerifier.sol (sha256 4775efe0…): L541 raw publicInputs[i] into transcript; L165-167 fromBytes32 reduces % MODULUS; L1987 delta uses fromBytes32",
+      "Anvil, same honest proof: n -> true (1,947,119 gas); n+r -> revert SumcheckFailed (426,812); n+5r -> revert SumcheckFailed (426,812)",
+      "NOT_REPRODUCED (same-proof replay); split acceptance of a re-proved aliased transcript not tested (pending authorization); Solidity guard present from bb.js 4.0.1 (npm marker)"
+    ],
+    [
+      "bb.js (native WASM verifyProof)",
+      "3.0.0-manual.20251030",
+      "default (Poseidon2 transcript)",
+      "reduce",
+      "native source not read (aztec-packages FORBIDDEN by hold-out guard)",
+      "bb.js verifyProof, same proof: n -> true; n+r -> true; n+5r -> true",
+      "CONFIRMED_KNOWN (burnt-labs/xion PR #608 merged 2026-09-04 reports native UltraHonk reduces public inputs mod r)"
+    ],
+    [
+      "bb.js (native WASM verifyProof)",
+      "3.0.0-manual.20251030",
+      "keccak and keccakZK",
+      "reject or transcript-bound (mechanism not source-read)",
+      "native source not read (aztec-packages FORBIDDEN)",
+      "bb.js verifyProof, same proof: n -> true; n+r -> false; n+5r -> false (both modes)",
+      "NOT_REPRODUCED"
+    ],
+    [
+      "bb (native CLI verify)",
+      "5.0.0",
+      "evm, evm-no-zk, noir-recursive",
+      "reject",
+      "binary string 'Non-canonical public input: value >= field modulus' (first present in bb.js 5.0.0, absent in 4.4.0)",
+      "bb verify exit codes: n -> 0; n+r -> 1; n+5r -> 1 (all three targets; message 'Non-canonical public input')",
+      "PATCHED_IN_5.0.0 (native; dated by npm marker; 4.x native behaviour not run)"
+    ],
+    [
+      "bb (native CLI verify)",
+      "6.0.0",
+      "evm, evm-no-zk, noir-recursive",
+      "reject",
+      "same binary string as 5.0.0",
+      "bb verify exit codes: n -> 0; n+r -> 1; n+5r -> 1 (all three targets)",
+      "PATCHED_IN_5.0.0 (native)"
+    ],
+    [
+      "bb.js (native WASM verifyProof)",
+      "5.0.0",
+      "default, evm, evm-no-zk",
+      "reject",
+      "same string present in package",
+      "bb.js verifyProof: n -> true; n+r -> false; n+5r -> false (all three modes)",
+      "PATCHED_IN_5.0.0 (native)"
+    ],
+    [
+      "bb (Solidity)",
+      "5.0.0",
+      "evm (ZK) plain",
+      "reject",
+      "generated HonkVerifier.sol (sha256 7a85d7d7…): L577 require(uint256(publicInputs[i]) < P, ValueGeFieldOrder) before L578 transcript; L276-279 fromBytes32 requires < MODULUS; L2005",
+      "Anvil: n -> true (1,871,539 gas); n+r -> revert ValueGeFieldOrder (281,005); n+5r -> revert ValueGeFieldOrder (281,005)",
+      "NOT_REPRODUCED (rejects; guard present from bb.js 4.0.1)"
+    ],
+    [
+      "bb (Solidity)",
+      "5.0.0",
+      "evm (ZK) --optimized",
+      "reject",
+      "generated HonkVerifier.sol (sha256 f7e783fa…): L1155 calldatacopy raw inputs into eta transcript; L1528-1530 valid_inputs &= lt(input,p); L1539-1543 revert VALUE_GE_FIELD_ORDER",
+      "Anvil: n -> true (588,940 gas); n+r -> revert ValueGeFieldOrder (183,910); n+5r -> revert ValueGeFieldOrder (183,910)",
+      "NOT_REPRODUCED (rejects)"
+    ],
+    [
+      "bb (Solidity)",
+      "5.0.0",
+      "evm-no-zk plain",
+      "reject",
+      "generated HonkVerifier.sol (sha256 94e182fc…): L574 require < P before L575 transcript; L276-279 fromBytes32 requires < MODULUS; L1928",
+      "Anvil: n -> true (946,673 gas); n+r -> revert ValueGeFieldOrder (169,822); n+5r -> revert ValueGeFieldOrder (169,822)",
+      "NOT_REPRODUCED (rejects)"
+    ],
+    [
+      "bb (Solidity)",
+      "5.0.0",
+      "evm-no-zk --optimized",
+      "reject",
+      "generated HonkVerifier.sol (sha256 211a8608…): L937 raw inputs into eta transcript; L1295-1297 lt(input,p); L1306-1310 revert VALUE_GE_FIELD_ORDER",
+      "Anvil: n -> true (514,402 gas); n+r -> revert ValueGeFieldOrder (148,050); n+5r -> revert ValueGeFieldOrder (148,050)",
+      "NOT_REPRODUCED (rejects)"
+    ],
+    [
+      "bb (Solidity)",
+      "6.0.0",
+      "evm (ZK) plain",
+      "reject",
+      "generated HonkVerifier.sol (sha256 6c50e1fd…): L570 require < P before L571 transcript; L276-279; L2032",
+      "Anvil: n -> true (1,874,293 gas); n+r -> revert ValueGeFieldOrder (281,063); n+5r -> revert ValueGeFieldOrder (281,063)",
+      "NOT_REPRODUCED (rejects)"
+    ],
+    [
+      "bb (Solidity)",
+      "6.0.0",
+      "evm (ZK) --optimized",
+      "reject",
+      "generated HonkVerifier.sol (sha256 4957cc8b…): L1158 raw inputs into eta transcript; L1536-1538 lt(input,p); L1547-1551 revert VALUE_GE_FIELD_ORDER",
+      "Anvil: n -> true (589,511 gas); n+r -> revert ValueGeFieldOrder (183,910); n+5r -> revert ValueGeFieldOrder (183,910)",
+      "NOT_REPRODUCED (rejects)"
+    ],
+    [
+      "bb (Solidity)",
+      "6.0.0",
+      "evm-no-zk plain",
+      "reject",
+      "generated HonkVerifier.sol (sha256 a4656f6f…): L567 require < P before L568 transcript; L276-279; L1952",
+      "Anvil: n -> true (949,167 gas); n+r -> revert ValueGeFieldOrder (169,884); n+5r -> revert ValueGeFieldOrder (169,884)",
+      "NOT_REPRODUCED (rejects)"
+    ],
+    [
+      "bb (Solidity)",
+      "6.0.0",
+      "evm-no-zk --optimized",
+      "reject",
+      "generated HonkVerifier.sol (sha256 9cdd3ad4…): L940 raw inputs into eta transcript; L1303-1305 lt(input,p); L1314-1318 revert VALUE_GE_FIELD_ORDER",
+      "Anvil: n -> true (514,988 gas); n+r -> revert ValueGeFieldOrder (148,050); n+5r -> revert ValueGeFieldOrder (148,050)",
+      "NOT_REPRODUCED (rejects)"
+    ],
+    [
+      "bb.js (Solidity)",
+      "5.0.0",
+      "evm (ZK)",
+      "reject",
+      "generated output byte-identical to bb 5.0.0 evm plain (sha256 7a85d7d7…); same lines",
+      "Anvil: n -> true (1,871,671 gas); n+r -> revert ValueGeFieldOrder (281,137); n+5r -> revert ValueGeFieldOrder (281,137)",
+      "NOT_REPRODUCED (rejects)"
+    ],
+    [
+      "bb.js (Solidity)",
+      "5.0.0",
+      "evm-no-zk",
+      "reject",
+      "generated output byte-identical to bb 5.0.0 evm-no-zk plain (sha256 94e182fc…); same lines",
+      "Anvil: n -> true (946,673 gas); n+r -> revert ValueGeFieldOrder (169,822); n+5r -> revert ValueGeFieldOrder (169,822)",
+      "NOT_REPRODUCED (rejects)"
+    ],
+    [
+      "bb.js (Solidity; npm marker scan only)",
+      "2.1.11, 3.0.0-manual.20251030, 3.0.3",
+      "all packaged templates",
+      "split (marker-based; not generated)",
+      "marker counts: guard 'require(uint256(publicInputs[i]) < P' = 0; reducing 'uint256(value) % MODULUS' > 0",
+      "not run (static marker scan of sha512-verified npm tarballs)",
+      "UNKNOWN (marker only)"
+    ],
+    [
+      "bb.js (Solidity; npm marker scan only)",
+      "4.0.1, 4.1.0, 4.2.0, 4.3.0, 4.4.0",
+      "all packaged templates",
+      "reject (marker-based; not generated)",
+      "marker counts: guard present (12); reducing fromBytes32 absent",
+      "not run (static marker scan)",
+      "PATCHED_IN_4.0.1 (Solidity template; marker-based dating)"
+    ],
+    [
+      "snarkjs (Solidity)",
+      "0.7.6 (npm latest)",
+      "Groth16",
+      "reject",
+      "templates/verifier_groth16.sol.ejs L58-62 checkField(v) lt(v, r) -> return false; L155 checkField(pubSignals[i]); generated Verifier.sol L158",
+      "Anvil: n -> true (214,268 gas); n+r -> false (32,590); n+5r -> false (32,590)",
+      "NOT_REPRODUCED (rejects; known baseline: iden3/snarkjs PR #480 merged 2024-04-08 fixed the q-vs-r bound)"
+    ],
+    [
+      "snarkjs (Solidity)",
+      "0.7.6 (npm latest)",
+      "PLONK",
+      "split (source-read; unconfirmed)",
+      "templates/verifier_plonk.sol.ejs: no checkField on public signals; L281 raw pubSignal into keccak transcript (calculateChallenges); L424-436 calculatePI mulmod(..., q) reduces; generated Verifier.sol L281, L421",
+      "Anvil, same honest proof: n -> true (292,531 gas); n+r -> false (292,977); n+5r -> false (294,225)",
+      "NOT_REPRODUCED (same-proof replay); split acceptance of a re-proved aliased transcript not tested (pending authorization)"
+    ],
+    [
+      "snarkjs (Solidity)",
+      "0.7.6 (npm latest)",
+      "fflonk",
+      "split (source-read; unconfirmed)",
+      "templates/verifier_fflonk.sol.ejs: no checkField on public signals; L270-272 raw pubSignals into keccak transcript (computeChallenges); L528-533 computePi mulmod(..., q) reduces; generated Verifier.sol L419, L671; early false at inverse check L261",
+      "Anvil, same honest proof: n -> true (214,117 gas); n+r -> false (51,090; fails prover-supplied inverse check); n+5r -> false (51,090)",
+      "NOT_REPRODUCED (same-proof replay); split acceptance of a re-proved aliased transcript not tested (pending authorization)"
+    ],
+    [
+      "snarkjs (JS verify)",
+      "0.7.6",
+      "Groth16, PLONK, fflonk",
+      "reject",
+      "src/*_verify.js public-input range checks added by iden3/snarkjs PR #359 (merged 2025-03-18)",
+      "snarkjs <scheme> verify: n -> OK; n+r and n+5r -> 'Public inputs are not valid.' (all three)",
+      "NOT_REPRODUCED (rejects)"
+    ],
+    [
+      "gnark (Solidity)",
+      "v0.16.5 (6c651a19)",
+      "Groth16 bn254",
+      "reject",
+      "backend/groth16/bn254/solidity.go L465 success &= lt(s, R); L476 revert PublicInputNotInField()",
+      "not run (Go toolchain not installed)",
+      "UNKNOWN (source-read reject; no experiment)"
+    ],
+    [
+      "gnark (Solidity)",
+      "v0.16.5 (6c651a19)",
+      "PLONK bn254",
+      "reject",
+      "backend/plonk/bn254/solidity.go L195 check_inputs_size before L201 derive_gamma transcript; L334-338 gt(input, R_MOD-1) -> error_inputs_size",
+      "not run (Go toolchain not installed)",
+      "UNKNOWN (source-read reject; no experiment)"
     ]
   ],
-  "sources": {},
-  "status": "TODO"
+  "sources": {
+    "reports/S1/generators.csv": {
+      "parser": "CSV",
+      "sha256": "6d5720f13b60801abde0dc3be4654c3f06aae99c9fbe61d2b8572c87bd860a34"
+    }
+  },
+  "status": "AVAILABLE"
 }

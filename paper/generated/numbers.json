@@ -211,6 +211,13 @@
       ],
       "value": 728
     },
+    "SOneGeneratorRows": {
+      "definition": "data rows (one row per recorded census entry)",
+      "sources": [
+        "reports/S1/generators.csv"
+      ],
+      "value": 25
+    },
     "SetHCards": {
       "definition": "all labelled cards (both tools)",
       "sources": [
@@ -393,6 +400,10 @@
     "reports/R2/findings.csv": {
       "parser": "CSV",
       "sha256": "bf56f9358633d0b21c94361c91cb276995741336f7eeba3f0decc85772a88ca2"
+    },
+    "reports/S1/generators.csv": {
+      "parser": "CSV",
+      "sha256": "6d5720f13b60801abde0dc3be4654c3f06aae99c9fbe61d2b8572c87bd860a34"
     },
     "reports/S2a/REPORT.md": {
       "parser": "Markdown prose: S2a revision 1 candidate content SHA-256",
