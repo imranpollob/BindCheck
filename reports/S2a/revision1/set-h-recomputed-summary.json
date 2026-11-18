@@ -1,0 +1,210 @@
+{
+  "p5": {
+    "analyzed_cards": 14,
+    "cards": 15,
+    "coverage_unavailable": [
+      {
+        "card_id": "W0658",
+        "final": "FP",
+        "reason": "COVERAGE_HARNESS_TIMEOUT"
+      }
+    ],
+    "coverage_unavailable_cards": 1,
+    "fp_no_longer_violation_analyzed": [
+      "W0430",
+      "W0619",
+      "W0662",
+      "W0672",
+      "W0728",
+      "W0776"
+    ],
+    "fp_no_longer_violation_analyzed_count": 6,
+    "fp_retained": 6,
+    "fp_still_violation": [
+      "W0016",
+      "W0220",
+      "W0253",
+      "W0333",
+      "W0349",
+      "W0461"
+    ],
+    "fp_still_violation_count": 6,
+    "fp_total": 13,
+    "no_longer_warning_analyzed": 6,
+    "not_emitted": 0,
+    "precision": 0.25,
+    "precision_denominator": 8,
+    "retained_warnings": 8,
+    "tp_not_emitted_analyzed": [],
+    "tp_remain_violation": 2,
+    "tp_retained": 2,
+    "tp_still_violation": [
+      "W0412",
+      "W0668"
+    ],
+    "tp_still_violation_count": 2
+  },
+  "strata": {
+    "P1": {
+      "analyzed_cards": 14,
+      "cards": 15,
+      "coverage_unavailable": [
+        {
+          "card_id": "W0294",
+          "final": "FP",
+          "reason": "COVERAGE_HARNESS_TIMEOUT"
+        }
+      ],
+      "coverage_unavailable_cards": 1,
+      "fp_no_longer_violation_analyzed": [
+        "W0036",
+        "W0324",
+        "W0725",
+        "W0765"
+      ],
+      "fp_no_longer_violation_analyzed_count": 4,
+      "fp_retained": 1,
+      "fp_still_violation": [
+        "W0679"
+      ],
+      "fp_still_violation_count": 1,
+      "no_longer_warning_analyzed": 4,
+      "not_emitted": 0,
+      "precision": 0.9,
+      "precision_denominator": 10,
+      "retained_warnings": 10,
+      "tp_not_emitted_analyzed": [],
+      "tp_retained": 9,
+      "tp_still_violation": [
+        "W0095",
+        "W0196",
+        "W0225",
+        "W0241",
+        "W0419",
+        "W0497",
+        "W0555",
+        "W0579",
+        "W0746"
+      ],
+      "tp_still_violation_count": 9
+    },
+    "P3": {
+      "analyzed_cards": 15,
+      "cards": 15,
+      "coverage_unavailable": [],
+      "coverage_unavailable_cards": 0,
+      "fp_no_longer_violation_analyzed": [
+        "W0007",
+        "W0153",
+        "W0618"
+      ],
+      "fp_no_longer_violation_analyzed_count": 3,
+      "fp_retained": 3,
+      "fp_still_violation": [
+        "W0296",
+        "W0482",
+        "W0724"
+      ],
+      "fp_still_violation_count": 3,
+      "no_longer_warning_analyzed": 3,
+      "not_emitted": 0,
+      "precision": 0.75,
+      "precision_denominator": 12,
+      "retained_warnings": 12,
+      "tp_not_emitted_analyzed": [],
+      "tp_retained": 9,
+      "tp_still_violation": [
+        "W0239",
+        "W0388",
+        "W0403",
+        "W0432",
+        "W0460",
+        "W0629",
+        "W0678",
+        "W0700",
+        "W0768"
+      ],
+      "tp_still_violation_count": 9
+    },
+    "P4/PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND": {
+      "analyzed_cards": 8,
+      "cards": 10,
+      "coverage_unavailable": [
+        {
+          "card_id": "W0330",
+          "final": "TP",
+          "reason": "COVERAGE_ACQUISITION_FAILED"
+        },
+        {
+          "card_id": "W0709",
+          "final": "TP",
+          "reason": "COVERAGE_ACQUISITION_FAILED"
+        }
+      ],
+      "coverage_unavailable_cards": 2,
+      "fp_no_longer_violation_analyzed": [
+        "W0102",
+        "W0245",
+        "W0691"
+      ],
+      "fp_no_longer_violation_analyzed_count": 3,
+      "fp_retained": 0,
+      "fp_still_violation": [],
+      "fp_still_violation_count": 0,
+      "no_longer_warning_analyzed": 3,
+      "not_emitted": 3,
+      "precision": 1.0,
+      "precision_denominator": 5,
+      "retained_warnings": 5,
+      "tp_not_emitted_analyzed": [],
+      "tp_retained": 5,
+      "tp_still_violation": [],
+      "tp_still_violation_count": 0
+    },
+    "P5": {
+      "analyzed_cards": 14,
+      "cards": 15,
+      "coverage_unavailable": [
+        {
+          "card_id": "W0658",
+          "final": "FP",
+          "reason": "COVERAGE_HARNESS_TIMEOUT"
+        }
+      ],
+      "coverage_unavailable_cards": 1,
+      "fp_no_longer_violation_analyzed": [
+        "W0430",
+        "W0619",
+        "W0662",
+        "W0672",
+        "W0728",
+        "W0776"
+      ],
+      "fp_no_longer_violation_analyzed_count": 6,
+      "fp_retained": 6,
+      "fp_still_violation": [
+        "W0016",
+        "W0220",
+        "W0253",
+        "W0333",
+        "W0349",
+        "W0461"
+      ],
+      "fp_still_violation_count": 6,
+      "fp_total": 13,
+      "no_longer_warning_analyzed": 6,
+      "not_emitted": 0,
+      "precision": 0.25,
+      "precision_denominator": 8,
+      "retained_warnings": 8,
+      "tp_not_emitted_analyzed": [],
+      "tp_remain_violation": 2,
+      "tp_retained": 2,
+      "tp_still_violation": [
+        "W0412",
+        "W0668"
+      ],
+      "tp_still_violation_count": 2
+    }
+  }
+}

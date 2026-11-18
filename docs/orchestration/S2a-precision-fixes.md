@@ -1,5 +1,13 @@
 # S2a — Precision fixes for freeze 3 (DEV only)
 
+## Research context (read first)
+
+This is authorized **defensive** security research for an academic paper
+targeting IEEE EuroS&P 2027. This task is pure static-analyzer engineering:
+reduce the detector's false-positive rate and add Solidity/circuit parsing
+support. It touches only the analyzer and its tests on development data. No
+network, no contracts, no live systems.
+
 **Goal for the paper:**
 
 - Held-out v3 must not repeat the freeze-2 precision problems: P5 was 2/15, P1

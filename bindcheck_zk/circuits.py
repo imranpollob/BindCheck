@@ -34,11 +34,14 @@ class Circuit:
     temporary_artifacts: pathlib.Path | None = None
 
 
-def _expand_circom_name(name: str, declarations: dict[str, int]) -> list[str]:
-    size = declarations.get(name)
-    if size is None:
+def _expand_circom_name(name: str, declarations: dict[str, tuple[int, ...]]) -> list[str]:
+    dimensions = declarations.get(name)
+    if dimensions is None or not dimensions:
         return [name]
-    return [f"{name}[{index}]" for index in range(size)]
+    expanded = [name]
+    for size in dimensions:
+        expanded = [f"{prefix}[{index}]" for prefix in expanded for index in range(size)]
+    return expanded
 
 
 def is_entry_circuit(path: pathlib.Path) -> bool:
@@ -80,13 +83,17 @@ def parse_circom(path: pathlib.Path, root: pathlib.Path) -> Circuit:
     main_template = main_decl.group(2) if main_decl else None
     scoped = _template_body(text, main_template) if main_template else None
     declaration_text = scoped if scoped is not None else text
-    declarations: dict[str, int] = {}
+    declarations: dict[str, tuple[int, ...]] = {}
     outputs: list[str] = []
-    for match in re.finditer(r"\bsignal\s+(?:private\s+)?(input|output)\s+([A-Za-z_]\w*)\s*(?:\[\s*(\d+)\s*\])?\s*;", declaration_text):
-        direction, name, raw_size = match.groups()
-        declarations[name] = int(raw_size) if raw_size else 0
+    for match in re.finditer(
+        r"\bsignal\s+(?:private\s+)?(input|output)\s+([A-Za-z_]\w*)\s*((?:\[\s*\d+\s*\]\s*)*);",
+        declaration_text,
+    ):
+        direction, name, raw_dimensions = match.groups()
+        dimensions = tuple(int(value) for value in re.findall(r"\d+", raw_dimensions))
+        declarations[name] = dimensions
         if direction == "output":
-            outputs.extend(_expand_circom_name(name, declarations) if raw_size else [name])
+            outputs.extend(_expand_circom_name(name, declarations))
     public_order: list[str] = []
     notes: list[str] = []
     complete = True
@@ -98,7 +105,7 @@ def parse_circom(path: pathlib.Path, root: pathlib.Path) -> Circuit:
                 notes.append(f"public declaration for {name} was not recovered")
                 complete = False
             elif size:
-                public_order.extend(f"{name}[{index}]" for index in range(size))
+                public_order.extend(_expand_circom_name(name, declarations))
             else:
                 public_order.append(name)
     else:
@@ -148,20 +155,39 @@ def parse_noir(path: pathlib.Path, root: pathlib.Path) -> Circuit:
     order: list[str] = []
     notes: list[str] = []
     complete = True
+    supported_scalar = re.compile(r"^(?:Field|bool|u\d+|i\d+)$")
+
+    def flatten_width(type_text: str) -> int | None:
+        value = type_text.strip()
+        if supported_scalar.fullmatch(value):
+            return 1
+        array = re.fullmatch(r"\[(.*);\s*(\d+)\s*\]", value, re.S)
+        if array:
+            inner = flatten_width(array.group(1))
+            return inner * int(array.group(2)) if inner is not None else None
+        return None
+
     if main:
         for part in re.split(r",(?=(?:[^\[]|\[[^\]]*\])*$)", main.group(1)):
             if "pub" not in part:
                 continue
             name = re.search(r"\b([A-Za-z_]\w*)\s*:", part)
-            size = re.search(r";\s*(\d+)\s*\]", part)
             if not name:
                 complete = False
                 notes.append("public Noir parameter name unresolved")
                 continue
-            if size:
-                order.extend(f"{name.group(1)}[{index}]" for index in range(int(size.group(1))))
-            else:
+            type_text = re.sub(r"^pub\s+", "", part.split(":", 1)[1].strip())
+            width = flatten_width(type_text)
+            if width is None:
+                complete = False
+                notes.append(
+                    f"public Noir parameter {name.group(1)} has an unsupported composite type: {type_text}"
+                )
                 order.append(name.group(1))
+            elif width == 1:
+                order.append(name.group(1))
+            else:
+                order.extend(f"{name.group(1)}[{index}]" for index in range(width))
     else:
         notes.append("Noir main signature not recovered")
         complete = False
@@ -171,7 +197,7 @@ def parse_noir(path: pathlib.Path, root: pathlib.Path) -> Circuit:
         language="noir",
         sha256=sha256_file(path),
         public_order=order,
-        public_count=len(order) if order else None,
+        public_count=len(order) if order and complete else None,
         order_complete=complete,
         parse_notes=notes,
         components=[],
