@@ -1,0 +1,24 @@
+report_key,local_id,severity,reason_excluded
+ZNOC,3.4,L,operation with zero joinsplits is accepted with no proof at all; inclusion rule requires a valid accepted proof
+ZPDVN,3.1,H,missing minimum-confirmation check (finality/reorg policy) rather than proof-to-action binding
+TSUCC,7,H,SSZ Merkle (non-ZK) proof length forgery in Solidity; not a ZK proof acceptance
+ZRECL,3.4,C,consumer trusts unsigned extractedParameterValues of an attestor-signed claim; signature not ZK proof
+TAZTEC,13,H,confidentialApprove ECDSA signature replay; signature not ZK proof
+ZMINAE,3.2,C,validator ECDSA signature replay in bridge; signature not ZK proof
+ZMINAE,3.7,H,no domain separation for validator ECDSA signatures; signature not ZK proof
+SEM30,V-SEM-VUL-001,H,zeroValue leaf is an implicit group member; membership-set semantics rather than proof-to-action binding
+SEM30,V-SEM-VUL-008,I,removed member can prove membership within root grace period; root-freshness policy (intended behavior)
+SEM20,W1,I,root history overwritten by another group with identical members; no unauthorized effect described
+PPCIRC,unused-input-signals,M,stateTreeDepth/ASPTreeDepth inputs unconstrained; auditor states soundness gap but no unauthorized effect
+PPUPG,nullifier-reuse-precommitment,M,same nullifier across deposits only harms the depositor (requires their seed)
+ZKSFF,M-01,M,missing field/curve validation of proof elements; auditor recommends hardening but states no concrete forgery
+ZKSFF,L-02,L,two encodings of point at infinity; no concrete exploit stated
+TKC4,H-04,H,prover fee payer not bound (proposer/coinbase); prover-assignment signature, not ZK proof
+TKC4,H-05,H,ECDSA signature replay in withdraw; signature not ZK proof
+TKOZ,C-02,C,bridge signal forgery via retried message skipping checks; storage/Merkle signals, not ZK proof
+TKOZ,L-01,L,assigned prover signature underspecified; signature not ZK proof
+ZSREN1,4,L,duplicate commitments in Merkle tree; auditor describes as unlikely/benign edge case
+ZSREN1,5,L,linking vkey not absorbed in Fiat-Shamir; auditor states no problem with a fixed key
+ZSREN3,4,L,ecrecover signature malleability; signature not ZK proof
+ZSR0SOL,0,L,Groth16 verifier reduces public inputs mod q (non-canonical inputs accepted); auditor states no security impact in context
+ZSALEPH,1,I,missing field check for macSalt/macCommitment; no effect stated
