@@ -152,8 +152,8 @@ price: P2 decided 0 of 27 applicable rows and P5 4 of 46. P3 decided 13 of
 23. Ten rows have \UNK{} applicability for every pattern.%
 % src: paper/zk/data/frozen-dev-stats.json#applicability (P1 5/17, P2 0/27, P3 13/23, P4 17/46, P5 4/46; UNKNOWN applicability 10 each)
 \
-The 17 P4 certifications include the 2 rows affected by mechanism (vi), and
-are not reportable until the constant is fixed.%
+The 17 P4 certifications include the 2 rows affected by the historical key-constant error, and
+remain invalid for that historical revision.%
 % src: paper/zk/data/p4-unsafe-certifications.json
 
 \begin{table}[t]
@@ -219,7 +219,7 @@ EVAL & \MISSING{EVAL} & \MISSING{EVAL} & \MISSING{diff} \\
 
 \subsection{Q3: Held-out sample and gate pairs}\label{sec:res-heldout}
 
-Table~\ref{tab:heldout} is the held-out funnel. Every stage is reported, and
+Table~\ref{tab:heldout} records the earlier sampling plan. The held-out v3 funnel and headline await \TODO{S5}. In the protocol,
 every failure at any stage is \UNK{} rather than an exclusion.
 \MISSING{held-out run on 278 families; per-stratum decided rates with
 family-resampled 95\% intervals; lane EVAL}
@@ -245,7 +245,7 @@ With $\geq 1$ analyzable triple & \MISSING{triples} \\
 \midrule
 P1 / P2 / P3 / P4 / P5: V, S, U & \MISSING{verdicts} \\
 Warnings adjudicated true / false / unclear & \MISSING{adjud.} \\
-Validated to E4 & \MISSING{E4} \\
+Oracle E4 confirmations & \TODO{XR2/S5} \\
 \bottomrule
 \end{tabular}
 % src: reports/groundtruth/CLAIMS.md#A20 (4,968; 1,384); reports/groundtruth/REPORT.md#7 (278)

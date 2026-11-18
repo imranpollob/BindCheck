@@ -20,7 +20,7 @@ snarkjs toolchain~\cite{snarkjs} emits a Solidity verifier with the key as
 constants, a fixed-length \code{uint[\(\ell\)]} public-input array, and calls to
 the EIP-196/197 precompiles~\cite{eip197}. Because scalar multiplication on the
 curve is modulo $r$, the integers $x_i$ and $x_i+r$ yield the same pairing
-check. Current templates therefore reject any public input $\geq r$ with a
+check. The surveyed snarkjs Groth16 Solidity template rejects any public input $\geq r$ with a
 \code{checkField} helper. The key's $\gamma$ and $\delta$ must come from a
 setup ceremony; if both equal the default $G_2$ generator, proofs can be forged
 for arbitrary public inputs, as exploited in 2026 against Veil Cash and

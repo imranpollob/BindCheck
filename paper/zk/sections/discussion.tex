@@ -18,13 +18,12 @@ contract-only rule reaches the same warnings
 % src: RELATED-WORK.md#51; paper/zk/data/frozen-dev-stats.json#violation_reason_codes
 \
 The circuit matters for the opposite verdict and for severity: P1--P3 do not
-certify without a matched circuit, and zk\_voting shows that whether a verifier
-defect is exploitable depends on what the circuit makes public. Relational
+certify without a matched circuit, and whether a verifier
+warning matters to an application depends on what the circuit makes public. Relational
 flaws such as Payy's are where joint reasoning would be needed for
 detection, and \tool{} does not yet implement them.
 
-\para{A fail-closed architecture is not a sound implementation.} Mechanism
-(vi) was a single wrong constant. It passed 122 controls and 18 soundness
+\para{A fail-closed architecture is not a sound implementation.} An incorrect key constant caused false certifications in the historical DEV run. It passed 122 controls and 18 soundness
 cases because no control used a real default-key verifier. We recommend that
 certification-producing analyzers test every positive rule against real
 generated artifacts, not only hand-written fixtures.%
@@ -34,7 +33,7 @@ generated artifacts, not only hand-written fixtures.%
 \emph{Development data.} All validated findings, the pair discrimination
 result and the DEV outcomes come from development data; zkDrops is exposed.
 Transfer requires the held-out run
-\MISSING{held-out results; lane EVAL}.
+\TODO{S5}.
 \emph{Labels.} Synthetic labels, controls, policies and verifier-kind
 classifications were produced with an AI assistant; no human annotation has
 yet been completed (\S\ref{sec:ethics}).
