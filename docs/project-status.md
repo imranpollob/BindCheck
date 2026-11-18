@@ -132,6 +132,9 @@ flowchart TD
     sprint --> t0["T0 Linux toolchains [DONE] — PARTIAL"]
     sprint --> r1["R1 incident census [DONE] — labels AI, author review pending"]
     sprint --> r2["R2 audit census [DONE] — Solodit BLOCKED"]
+    sprint --> s2a["S2a precision fixes [ACTIVE] — DEV rerun; 6 P5 FPs remain"]
+    s2a --> s2aRerun["Spent-family DEV rerun [DONE] — 265/278 analysed"]
+    s2aRerun --> s2aSetH["Set H DEV precision [UNKNOWN] — not held-out"]
     sprint --> az1["AZ1 Aztec Connect case study [NEXT]"]
     d1paper --> lanex["Lane-X exploratory, benchmark, auto-validation v1+v1.1 [DONE]"]
     d207 --> capabilityGate["Automated discovery + E4 capability gate [WAITING]"]
@@ -625,6 +628,7 @@ slots were executed.
 | 2026-11-17 | T0 Linux toolchains | `[DONE]` PARTIAL | [Report](../reports/T0/REPORT.md): circom 2.2.3/2.1.9, snarkjs 0.7.6, nargo beta.14/beta.22/rc.4, bb 5.0.0/6.0.0 and bb.js run on Linux; 29/29 smoke steps; analyzer tests 9/9. Native bb 3.0.0-manual (Payy) cannot be downloaded; the author accepted the bb.js WASM substitute ([decisions](orchestration/DECISIONS.md)). |
 | 2026-11-17 | R1 incident and bug-bounty census | `[DONE]` / labels `[UNKNOWN]` until author review | [Report](../reports/R1/REPORT.md): 50 cases. Exploited in-class cases: P4 (Veil, FoomCash, ZKSwap, HermesVault) and Aztec Connect (June 2026, about $2.1M, unbound `numRealTxs` extent). No P1/P2/P3 money loss found. Labels are AI-proposed; R1b author review is deferred. |
 | 2026-11-17 | R2 audit-finding census | `[DONE]` with Solodit BLOCKED | [Report](../reports/R2/REPORT.md): 68 audits, 54 findings; 17 High/Critical binding findings (P1–P3, P5) in 7 audits; 38% of binding findings need the circuit. TVL at audit time is UNKNOWN. Labels are AI-proposed. |
+| 2026-11-18 | S2a revision 1 spent-family DEV rerun | `[ACTIVE]` task; `[DONE]` 278-row accounting; `[UNKNOWN]` residual FP status | [Report](../reports/S2a/REPORT.md), [278-row ledger](../reports/S2a/revision1/spent-family-ledger-278.csv), and [changed-verdict ledger](../reports/S2a/revision1/spent-family-changed-verdicts.csv): 58/58 aggregate tests pass with Linux Circom 2.1.9; 265 analysed, 7 harness timeouts, 5 unavailable acquisitions, 1 predeclared exclusion. Set H is DEV: P1 9/10 retained, P3 9/12, canonicality-P4 5/5 partial (2 TP unavailable), P5 2/8. Of 13 P5 FP cards, 6 are no longer `VIOLATION`, 6 remain, and 1 is unavailable; both P5 TP cards remain `VIOLATION`. No held-out claim, freeze-3 tag, or contract edit. |
 
 ## Update rule
 

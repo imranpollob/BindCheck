@@ -179,6 +179,52 @@ function Verify(bytes calldata proof, uint256[] calldata public_inputs) public v
         self.assertTrue(_semantic_excluded("docs/crypto/zkCTF/day2/Mixer/Verifier.sol", config))
         self.assertTrue(_semantic_excluded("writeups/example/Verifier.sol", config))
 
+    def test_semantic_exclusion_is_config_driven_and_reported(self) -> None:
+        config = load_config()
+        self.assertIn("ctf", config["semantic_excluded_directories"])
+        self.assertIn("writeup", config["semantic_excluded_directories"])
+        self.assertIn("tutorial", config["semantic_excluded_directories"])
+        self.assertIn("example", config["semantic_excluded_directories"])
+
+    def test_semantically_excluded_file_never_produces_a_safe_verdict(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = pathlib.Path(temporary)
+            (root / "main.nr").write_text("fn main(nullifier: pub Field) {}\n", encoding="utf-8")
+            (root / "Verifier.sol").write_text(f"""
+contract Groth16Verifier {{ function verifyProof(bytes memory, uint256[1] memory input) public returns(bool) {{
+ require(input[0] < {SCALAR_FIELD}); return true;
+}} }}
+""", encoding="utf-8")
+            consumer = """
+contract Consumer { Groth16Verifier verifier; mapping(uint256 => bool) spent; IERC20 token;
+ function submit(bytes memory proof, uint256 nullifier) public {
+  require(!spent[nullifier]); verifier.verifyProof(proof, [nullifier]);
+  spent[nullifier] = true; token.transfer(msg.sender, 1);
+ }}
+"""
+            (root / "ctf").mkdir()
+            (root / "ctf" / "Consumer.sol").write_text(consumer, encoding="utf-8")
+            (root / "Application.sol").write_text(
+                consumer.replace("contract Consumer", "contract Application"), encoding="utf-8"
+            )
+            output = analyze(root)
+            consumer_paths = {item["consumer"]["path"] for item in output["triples"]}
+            finding_paths = {
+                (item.get("location") or {}).get("path", "")
+                for triple in output["triples"]
+                for item in triple["patterns"].values()
+            }
+            self.assertEqual(consumer_paths, {"Application.sol"})
+            self.assertFalse(any(path.startswith("ctf/") for path in finding_paths))
+            self.assertEqual(output["coverage"]["semantic_excluded_count"], 1)
+            self.assertEqual(output["coverage"]["semantic_excluded_paths"], ["ctf/Consumer.sol"])
+            self.assertFalse(any(
+                finding["verdict"] == "VERIFIED_WITHIN_SCOPE"
+                for triple in output["triples"]
+                if triple["consumer"]["path"].startswith("ctf/")
+                for finding in triple["patterns"].values()
+            ))
+
     def test_inherited_verified_guard_propagates_to_wrapper(self) -> None:
         base_source = Source(pathlib.Path("VerifierSig.sol"), "VerifierSig.sol", "contract VerifierSig {}", "a" * 64)
         wrapper_source = Source(

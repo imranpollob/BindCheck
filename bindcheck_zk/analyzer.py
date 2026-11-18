@@ -188,9 +188,23 @@ def _semantic_excluded(relative_path: str, config: dict[str, Any]) -> bool:
     path = pathlib.PurePosixPath(relative_path)
     parts = {part.lower() for part in path.parts}
     excluded = set(config.get("semantic_test_directories", [])) | set(config.get("semantic_script_directories", []))
-    excluded |= {"ctf", "writeup", "writeups", "tutorial", "tutorials", "example", "examples"}
-    ctf_path = any(part == "ctf" or part.endswith("ctf") for part in parts)
-    return bool(parts & excluded) or ctf_path or path.name.lower().endswith((".t.sol", ".s.sol"))
+    excluded |= set(config.get("semantic_excluded_directories", []))
+    suffixes = tuple(
+        str(item).lower()
+        for item in config.get("semantic_excluded_directory_suffixes", [])
+    )
+    matching_suffix = bool(suffixes) and any(
+        part.endswith(suffixes) for part in parts
+    )
+    filename_suffixes = tuple(
+        str(item).lower()
+        for item in config.get("semantic_excluded_filename_suffixes", [])
+    )
+    return (
+        bool(parts & excluded)
+        or matching_suffix
+        or (bool(filename_suffixes) and path.name.lower().endswith(filename_suffixes))
+    )
 
 
 def classify_verifier(
@@ -1603,6 +1617,13 @@ def analyze(
                 })
         inputs["files"] = pinned_files
         coverage["solidity_files_parsed"] = len(sources)
+        semantic_excluded_paths = sorted(
+            source.relative_path
+            for source in sources
+            if _semantic_excluded(source.relative_path, config)
+        )
+        coverage["semantic_excluded_count"] = len(semantic_excluded_paths)
+        coverage["semantic_excluded_paths"] = semantic_excluded_paths
         semantic_sources = [source for source in sources if not _semantic_excluded(source.relative_path, config)]
         circuits = discover_circuits(root, circuit_paths)
         coverage["circuit_files_parsed"] = len(circuits)

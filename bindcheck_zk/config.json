@@ -15,5 +15,10 @@
   ],
   "semantic_test_directories": ["test", "tests", "mocks", "fixtures", "test-fixtures"],
   "semantic_script_directories": ["script", "scripts"],
+  "semantic_excluded_directories": [
+    "ctf", "writeup", "writeups", "tutorial", "tutorials", "example", "examples"
+  ],
+  "semantic_excluded_directory_suffixes": ["ctf"],
+  "semantic_excluded_filename_suffixes": [".t.sol", ".s.sol"],
   "scalar_field": "21888242871839275222246405745257275088548364400416034343698204186575808495617"
 }
