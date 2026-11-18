@@ -1,5 +1,5 @@
 # AZ1 — Detection case study: a binding checker and the Aztec Connect incident
-Status: PARTIAL (steps 1–5 done; open items listed at the end)
+Status: DONE
 Verdict/outcome: Real target: BindCheck freeze 2 `UNKNOWN` on every pattern (no consumer recovered); Slither raises no warning on the fault; R-EXTENT's interface cannot express the case. Testbed: fault reproduced on an owned local chain with a real Groth16 verifier, and the fix removes it; BindCheck P1 `UNKNOWN`/P5 `VERIFIED_WITHIN_SCOPE` on **both** variants (no detection); Slither output identical on both variants (no detection).
 
 AI disclosure: run by Claude Code (Anthropic), model Claude Opus 5.5 (`claude-opus-5-5`), 2026-11-17/18 UTC, worktree `$BC/wt-AZ1`, branch `sprint/AZ1`. The human author has not inspected the outputs yet.
@@ -36,8 +36,8 @@ Sources (fetched 2026-11-18 UTC, `results/raw/AZ1/sources/`):
 
 | source | URL | date | sha256 (raw HTML) |
 |---|---|---|---|
-| Aztec Labs incident report (primary) | https://aztec-labs.com/blog/aztec-connect-incident.html | 2026-06-15 | see `sha256sum results/raw/AZ1/sources/aztec-labs-incident.html` (not printed in this session) |
-| BlockSec weekly | https://blocksec.com/blog/web3-security-aztec-raydium-more | 2026-06-17 | not printed in this session |
+| Aztec Labs incident report (primary) | https://aztec-labs.com/blog/aztec-connect-incident.html | 2026-06-15 | `a84935dc0f2d8646c22039fd1d0e289cfaa9c7cf01468335461dd2cc4ab6d912` |
+| BlockSec weekly | https://blocksec.com/blog/web3-security-aztec-raydium-more | 2026-06-17 | `32abb2d7b0d1dc4c1f6ce07e56a41da9f7a29897f1729fe426c7a001d0d3e583` |
 | Rekt | https://rekt.news/aztec-connect-rekt | 2026-06-18 | `8e1cc96ed2d08cde7885f04a2a91afdd0612a1c4c8321efadb24fda7a20149f7` |
 | Halborn | https://www.halborn.com/blog/post/explained-the-aztec-connect-hack-june-2026 | 2026-06-23 | `a45a7cf1be5b287642dc9c80975e06c79acebbe2fbe22aadd9b4565692cb42eb` |
 | Blockaid | https://blockaid.io/blog/219m-drained-on-aztec-how-blockaid-flagged-an-exploit-before-it-happened | — | `b23e5a7f1458d005bff636aa5cbd46c2edd38b56026a7df28b164ef09334f8d4` |
@@ -45,13 +45,13 @@ Sources (fetched 2026-11-18 UTC, `results/raw/AZ1/sources/`):
 | web3isgoinggreat | https://web3isgoinggreat.com/single/aztec-connect-exploit | — | `7595ae1209684c889249f234977a4232b3920534223e0b83a4c1055b287728d6` |
 | SlowMist (Medium) | https://slowmist.medium.com/analysis-of-the-2-19-million-asset-theft-from-aztec-connect-d867c59b1fc6 | — | **HTTP 403, not obtained** (the stored file is the error page, `b2c36dae…`) |
 
-Real-target tool runs (`results/raw/AZ1/tools-real/`, run by hand; `prototypes/az1/tools_real.sh` scripts the same steps but **has not been executed yet**):
+Real-target tool runs: canonical run `bash prototypes/az1/tools_real.sh` → `results/raw/AZ1/az1-real-20261118T042002Z-1646017/` (guard, clone, checkout and Sourcify fetch all exit 0; correspondence `IDENTICAL` for V3 and Decoder; BindCheck and Slither results identical to the earlier hand runs in `results/raw/AZ1/tools-real/`). Commands:
 
 - Hold-out guard: `python3 scripts/check_holdout.py AztecProtocol/aztec-connect AztecProtocol/aztec-connect-contracts AztecProtocol/aztec-packages` → ALLOWED, ALLOWED, FORBIDDEN (exit 1). aztec-packages was never opened.
 - BindCheck: `./freeze.sh` → `92789fad12050a3058a21cc5c2326e7d41604ad5ade0f09f72a35789437e6c1a`. `python3 -m bindcheck_zk.cli analyze results/raw/AZ1/deployed-source/files --consumer src/core/processors/RollupProcessorV3.sol` → exit 0. The same command on the full checkout with `--consumer contracts/src/core/processors/RollupProcessorV3.sol` → exit 0.
 - Slither 0.11.3 (crytic-compile 0.3.11), solc 0.8.10 (sha256 `c7effacf…6d89`), run on a copy outside the worktree. The worktree `foundry.toml` otherwise overrides the compiler. Command: `slither src/core/processors/RollupProcessorV3.sol --solc <solc0.8.10> --solc-remaps "<Sourcify remappings>" --solc-args "--optimize --optimize-runs 2000 --evm-version london" --json …` → exit 255 (results present), `success: true`.
 
-Testbed: `bash prototypes/az1/run.sh` → exit 0, `steps=53 fail=0`, run `results/raw/AZ1/az1-20261118T022518Z-1603188/`. The run directory holds `steps.tsv`, `environment.txt` and `checksums.sha256` (27 files), plus per-step logs and receipts. Tools: circom 2.2.3 (sha256 `599552d8…cb7`, T0 pin), snarkjs 0.7.6, circomlib 2.0.5, circomlibjs 0.1.7 (root `package-lock.json` `63679f1e…0006`), solc 0.8.11 (`717c239f…cd4f`), anvil/cast 1.4.1-stable, node v24.19.0, Python 3.12.12. The circuit has 3,432 constraints, 12 private inputs and 2 public outputs. The run used a working tree with uncommitted fixture files (`workspace_dirty_files=1`).
+Testbed: `bash prototypes/az1/run.sh` → exit 0, `steps=53 fail=0`. Canonical run on the clean committed tree (`ec688bb`, `workspace_dirty_files=0`): `results/raw/AZ1/az1-20261118T042012Z-1646945/`. It reproduces the first run (`az1-20261118T022518Z-1603188`, dirty tree), with the same state assertions and an identical detector summary. The run directory holds `steps.tsv`, `environment.txt` and `checksums.sha256` (27 files), plus per-step logs and receipts. Tools: circom 2.2.3 (sha256 `599552d8…cb7`, T0 pin), snarkjs 0.7.6, circomlib 2.0.5, circomlibjs 0.1.7 (root `package-lock.json` `63679f1e…0006`), solc 0.8.11 (`717c239f…cd4f`), anvil/cast 1.4.1-stable, node v24.19.0, Python 3.12.12. The circuit has 3,432 constraints, 12 private inputs and 2 public outputs.
 
 ## Results (tables; exact counts)
 
@@ -105,6 +105,8 @@ In June 2026, a deprecated, immutable zk-rollup contract lost about $2.1M withou
 - The R-EXTENT result is an interface-level call on ASSUMED facts, not extraction. R-EXTENT was not run on the testbed because its producer frontend is Noir/ACIR only.
 - Loss figures differ between sources ($2.1M–$2.28M), and so do deprecation dates.
 
+- `AGENTS.md` requires a `docs/project-status.md` checkpoint, but the AZ1 ownership table lists only `prototypes/az1/` and `reports/AZ1/`. I followed `AGENTS.md`: I changed the AZ1 node from `[NEXT]` to `[DONE]` and appended one log row, without touching other rows. The reviewer may drop that hunk at merge.
+
 ## Failed approaches / surprises
 
 - Slither failed twice on the real contract. crytic-compile picked up the worktree `foundry.toml` and tried to download solc (HTTP 403). The fix was to run on a copy outside the worktree with a non-versioned solc symlink.
@@ -115,12 +117,6 @@ In June 2026, a deprecated, immutable zk-rollup contract lost about $2.1M withou
 ## Held-out hygiene statement
 
 Repositories opened: `AztecProtocol/aztec-connect` (guard: ALLOWED). Sourcify's record for one public implementation address was also read (source files only). `AztecProtocol/aztec-packages` (FORBIDDEN) was not opened, cloned or read; Aztec's bb binaries from T0 were not used. No other third-party repository was opened. No live system was contacted, and no transaction was sent outside the local Anvil.
-
-## Open items (why PARTIAL)
-
-1. Run `prototypes/az1/tools_real.sh` once, so the real-target evidence is script-generated (expected to match `results/raw/AZ1/tools-real/`).
-2. Rerun `run.sh` on a clean tree (`workspace_dirty_files=0`) and record hashes for the Aztec Labs and BlockSec pages in the sources table.
-3. Add the `docs/project-status.md` checkpoint row (AGENTS.md); not done.
 
 ## Recommended next task
 
