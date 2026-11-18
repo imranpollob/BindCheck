@@ -1,11 +1,37 @@
 # S1 — Do generated verifiers accept non-canonical public inputs?
 
+## Research context and authorization (read first)
+
+This is authorized **defensive** security research for an academic paper
+targeting IEEE EuroS&P 2027. BindCheck is a static analyzer that **detects** a
+class of smart-contract bug. This task characterizes one root cause of that
+bug class: whether a verifier *generator* accepts a non-canonical public-input
+encoding. The work is a correctness audit of open-source cryptographic
+libraries, like a conformance test, done so the detector and the paper can
+describe the fault and recommend a fix to the library authors.
+
+Scope and safety, which this task does not exceed:
+
+- All experiments run on **owned, synthetic, local** circuits and contracts
+  with test values of no worth. No mainnet fork, no RPC to public chains, no
+  transaction broadcast, no maintainer contact, no disclosure from this task.
+- The target of study is a library's input-validation behaviour, not any
+  deployed application. Any synthetic contract written here is a minimal
+  detector fixture, not a tool pointed at a live system, and carries no real
+  address.
+- A public prior fix already exists (Xion PR #608, below), so this adds
+  measurement, not new offensive knowledge.
+
+This matches how security venues expect library-conformance and
+detector-evaluation work to be done.
+
 **Goal for the paper:** determine whether a verifier generator lets one valid
 proof be accepted under two different public-input encodings (x and x + r).
 When it does, any consumer that keys state on the raw value (a nullifier or
-replay map) can be paid twice from a single proof. A confirmed, unknown instance
-in a widely used generator is the strongest possible headline. A survey table of
-"which generators check canonicality" is a paper result either way.
+replay map) would accept the same proof twice — a correctness fault the
+detector should warn about. A confirmed, unknown instance in a widely used
+generator is the strongest possible headline. A survey table of "which
+generators check canonicality" is a paper result either way.
 
 **Branch:** `sprint/S1`.
 
@@ -92,14 +118,17 @@ Quote file paths and line numbers from the pinned source.
 5. Repeat steps 3–4 with the input at `n + k·r` for the largest k that still
    fits in 256 bits.
 
-### 3. If any generator accepts the aliased input
+### 3. If any generator accepts the aliased input — detector fixture
+
+Build a minimal faulty/fixed testbed pair, the same shape as the existing
+`findings/*/run.sh` fixtures, on a local chain with test tokens:
 
 1. Write a minimal synthetic consumer, `mapping(bytes32 => bool) spent`, keyed
    on the raw public input.
-2. Show two successful withdrawals of synthetic tokens from one proof. That is
-   E4 on a synthetic consumer.
-3. Write the repair (reject ≥ r, or reduce before keying) and show it rejects
-   the second withdrawal while the honest one passes.
+2. Record that one proof settles under two encodings, so the single-use guard
+   does not hold. That is the fault condition at E4 on the owned testbed.
+3. Write the fix (reject ≥ r, or reduce before keying) and show it rejects the
+   second settlement while the honest one still passes.
 
 ### 4. Exposure on allowed code only
 
