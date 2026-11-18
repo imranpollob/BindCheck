@@ -16,6 +16,7 @@ from typing import Any
 
 from . import __version__
 from .circuits import Circuit, attach_or_build, discover as discover_circuits, is_entry_circuit, named_path, parse_r1cs
+from .extent import PATTERN as EXTENT_PATTERN, analyze_consumer as analyze_extent, assembly_findings
 from .freeze import freeze_manifest
 from .models import Budget, aggregate, location, result, sha256_file
 from .p4 import SCALAR_FIELD, analyze_runtime, analyze_source, canonical_guard, fail_closed_verifier, runtime_values_from_bundle
@@ -1587,6 +1588,7 @@ def analyze(
     }
     fatal: str | None = None
     triples_output: list[dict[str, Any]] = []
+    extent_findings: list[dict[str, Any]] = []
     runtime_results: list[dict[str, Any]] = []
     circuits: list[Circuit] = []
     inputs: dict[str, Any] = {
@@ -1659,6 +1661,14 @@ def analyze(
         ]
         if explicit_consumer_paths:
             consumers = [item for item in consumers if item.source.path in explicit_consumer_paths]
+        for consumer in consumers:
+            budget.check()
+            finding = analyze_extent(consumer.source.relative_path, consumer.source.text, consumer.function, consumer.verify_calls)
+            if finding is not None:
+                extent_findings.append(finding)
+        for source in semantic_sources:
+            if source.path in explicit_consumer_paths:
+                extent_findings.extend(assembly_findings(source.relative_path, source.text))
         circuit_ranked = sorted(circuits, key=lambda circuit: (
             -max((
                 _match_score(circuit, verifier, consumer)[0]
@@ -1750,12 +1760,13 @@ def analyze(
         if circuit.temporary_artifacts is not None:
             shutil.rmtree(circuit.temporary_artifacts, ignore_errors=True)
     pattern_summary: dict[str, Any] = {}
-    for pattern in PATTERNS:
-        results = [triple["patterns"][pattern] for triple in triples_output]
+    for pattern in (*PATTERNS, EXTENT_PATTERN):
+        results = extent_findings if pattern == EXTENT_PATTERN else [triple["patterns"][pattern] for triple in triples_output]
         if not results:
             results = [result(
-                pattern, "UNKNOWN", fatal or "NO_APPLICABLE_TRIPLE",
-                "The analyzer could not establish whether an applicable circuit/verifier/consumer triple exists.",
+                pattern, "UNKNOWN", fatal or ("EXTENT_CONSUMER_NOT_FOUND" if pattern == EXTENT_PATTERN else "NO_APPLICABLE_TRIPLE"),
+                "No consumer with a recovered verifier call and loop was found." if pattern == EXTENT_PATTERN
+                else "The analyzer could not establish whether an applicable circuit/verifier/consumer triple exists.",
                 grade="E0", applicability="UNKNOWN",
             )]
         summary = aggregate(results)
@@ -1791,6 +1802,7 @@ def analyze(
             "triples": len(triples_output),
         },
         "triples": triples_output,
+        "extent_findings": extent_findings,
         "runtime_bytecode_checks": runtime_results,
         "patterns": pattern_summary,
         "coverage": coverage,
