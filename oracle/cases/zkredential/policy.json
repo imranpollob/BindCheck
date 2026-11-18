@@ -1,0 +1,29 @@
+{
+  "policy_id": "zkredential-mint",
+  "description": "Entitlement-only policy for the ZKredential ComplianceGateway mint path. Derived from the project README and source (see findings/zkredential/policy.md). States who may receive the minted token; states no expected outcome.",
+  "roles": {
+    "proof_wallet": "the account named by the compliant proof's public walletAddress (pubSignals[10])",
+    "mint_recipient": "the account entitled to receive the minted RWA token"
+  },
+  "protected_effects": [
+    {
+      "id": "rwa_token_mint",
+      "match": {
+        "type": "erc20_transfer",
+        "from": "0x0"
+      },
+      "entitlements": [
+        {
+          "field": "to",
+          "equals": {
+            "$pubAsAddress": {
+              "proof": "propertyfy",
+              "index": 10
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "notes": "The source provides no amount signal or issuance entitlement, so the authorized mint amount cannot be inferred and no amount entitlement is stated. The proof wallet binding (pubSignals[10]) has README/source support; see findings/zkredential/policy.md for the conditional-policy caveats."
+}

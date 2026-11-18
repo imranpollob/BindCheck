@@ -1,0 +1,720 @@
+{
+  "schema_version": 1,
+  "case_id": "zkredential",
+  "safety": {
+    "local_only": true,
+    "fork_enabled": false
+  },
+  "source": {
+    "kind": "git_archive",
+    "repo": "{BC}/bindcheck-zk/feasibility/work/full-dev/DEV-F30--ethpanda-org__ETHShanghai-2025--23917814522b",
+    "commit": "23917814522bac494150c7e99a123aa15a448155"
+  },
+  "policy": "policy.json",
+  "prepare": [
+    {
+      "name": "00_mkdir",
+      "cwd": "{out}",
+      "argv": [
+        "mkdir",
+        "-p",
+        "{out}/proofs/propertyfy",
+        "{out}/circuit-build"
+      ]
+    },
+    {
+      "name": "10_pnpm_install",
+      "cwd": "{work}/source/projects/ZKredential",
+      "argv": [
+        "npx",
+        "--yes",
+        "pnpm@10.18.3",
+        "install",
+        "--frozen-lockfile",
+        "--filter",
+        "zkredential-contracts",
+        "--filter",
+        "zkredential-proof-server"
+      ]
+    },
+    {
+      "name": "11_link_circuit_node_modules",
+      "cwd": "{work}/source/projects/ZKredential/packages/zk-proof-server",
+      "argv": [
+        "bash",
+        "-lc",
+        "test -e circuits/node_modules || ln -s ../node_modules circuits/node_modules"
+      ]
+    }
+  ],
+  "proof": [
+    {
+      "name": "20_compile_circuit",
+      "cwd": "{work}/source/projects/ZKredential/packages/zk-proof-server/circuits",
+      "argv": [
+        "{BC}/bindcheck-zk/tools/circom-src/target/release/circom",
+        "propertyfy_circuit.circom",
+        "--r1cs",
+        "--wasm",
+        "--sym",
+        "-o",
+        "{out}/circuit-build",
+        "-l",
+        "{work}/source/projects/ZKredential/packages/zk-proof-server/node_modules"
+      ]
+    },
+    {
+      "name": "21_zkey_correspondence",
+      "cwd": "{work}/source/projects/ZKredential/packages/zk-proof-server/circuits",
+      "argv": [
+        "{work}/source/projects/ZKredential/packages/zk-proof-server/node_modules/.bin/snarkjs",
+        "zkey",
+        "verify",
+        "{out}/circuit-build/propertyfy_circuit.r1cs",
+        "{work}/source/projects/ZKredential/packages/zk-proof-server/circuits/keys/powersOfTau_final.ptau",
+        "{work}/source/projects/ZKredential/packages/zk-proof-server/circuits/keys/propertyfy_final.zkey"
+      ]
+    },
+    {
+      "name": "22_make_input",
+      "cwd": "{ROOT}",
+      "argv": [
+        "node",
+        "{ROOT}/findings/zkredential/make_input.js",
+        "{out}/proofs/propertyfy/input.json"
+      ]
+    },
+    {
+      "name": "23_fullprove",
+      "cwd": "{work}/source/projects/ZKredential/packages/zk-proof-server/circuits",
+      "argv": [
+        "{work}/source/projects/ZKredential/packages/zk-proof-server/node_modules/.bin/snarkjs",
+        "groth16",
+        "fullprove",
+        "{out}/proofs/propertyfy/input.json",
+        "{out}/circuit-build/propertyfy_circuit_js/propertyfy_circuit.wasm",
+        "{work}/source/projects/ZKredential/packages/zk-proof-server/circuits/keys/propertyfy_final.zkey",
+        "{out}/proofs/propertyfy/proof.json",
+        "{out}/proofs/propertyfy/public.json"
+      ]
+    },
+    {
+      "name": "24_export_vkey",
+      "cwd": "{work}/source/projects/ZKredential/packages/zk-proof-server/circuits",
+      "argv": [
+        "{work}/source/projects/ZKredential/packages/zk-proof-server/node_modules/.bin/snarkjs",
+        "zkey",
+        "export",
+        "verificationkey",
+        "{work}/source/projects/ZKredential/packages/zk-proof-server/circuits/keys/propertyfy_final.zkey",
+        "{out}/proofs/propertyfy/vkey.json"
+      ]
+    },
+    {
+      "name": "25_offchain_verify",
+      "cwd": "{work}/source/projects/ZKredential/packages/zk-proof-server/circuits",
+      "argv": [
+        "{work}/source/projects/ZKredential/packages/zk-proof-server/node_modules/.bin/snarkjs",
+        "groth16",
+        "verify",
+        "{out}/proofs/propertyfy/vkey.json",
+        "{out}/proofs/propertyfy/public.json",
+        "{out}/proofs/propertyfy/proof.json"
+      ]
+    }
+  ],
+  "variants": [
+    {
+      "id": "original",
+      "label": "ZKredential unchanged ComplianceGateway",
+      "build": [
+        {
+          "name": "29_stage_contracts_v2",
+          "cwd": "{work}/source/projects/ZKredential/packages/zk-contracts",
+          "argv": [
+            "bash",
+            "-lc",
+            "set -e; mkdir -p contracts-v2/core contracts-v2/verifiers contracts-v2/demo contracts-v2/interfaces contracts-v2/adapters; cp contracts/core/ComplianceGateway.sol contracts-v2/core/; cp contracts/core/ZKRWARegistry.sol contracts-v2/ZKRWARegistry.sol; cp contracts/verifiers/PropertyFyVerifier.sol contracts-v2/verifiers/; cp contracts/demo/ZKRWATokenERC3643.sol contracts-v2/demo/; cp contracts/adapters/ZKComplianceModule.sol contracts-v2/adapters/; cp contracts/interfaces/*.sol contracts-v2/interfaces/; cp {ROOT}/findings/zkredential/hardhat.config.js hardhat.v2.config.js"
+          ]
+        },
+        {
+          "name": "31_hardhat_compile",
+          "cwd": "{work}/source/projects/ZKredential/packages/zk-contracts",
+          "argv": [
+            "{work}/source/projects/ZKredential/packages/zk-contracts/node_modules/.bin/hardhat",
+            "compile",
+            "--config",
+            "{work}/source/projects/ZKredential/packages/zk-contracts/hardhat.v2.config.js"
+          ]
+        }
+      ],
+      "artifacts": [
+        "{work}/source/projects/ZKredential/packages/zk-contracts/artifacts-v2",
+        "{work}/source/projects/ZKredential/packages/zk-contracts/artifacts"
+      ],
+      "scenario": {
+        "signers": [
+          "deployer",
+          "credentialOwner",
+          "attacker"
+        ],
+        "deployer": "deployer",
+        "deploy": [
+          {
+            "name": "verifier",
+            "artifact": "PropertyFyVerifier",
+            "args": []
+          },
+          {
+            "name": "compliance",
+            "artifact": "ZKComplianceModule",
+            "args": [
+              {
+                "$addr": "verifier"
+              },
+              {
+                "$lit": "0x0000000000000000000000000000000000000000"
+              },
+              {
+                "$lit": "propertyfy"
+              }
+            ]
+          },
+          {
+            "name": "token",
+            "artifact": "ZKRWATokenERC3643",
+            "args": [
+              {
+                "$lit": "Validation RWA"
+              },
+              {
+                "$lit": "VRWA"
+              },
+              {
+                "$signer": "deployer"
+              },
+              {
+                "$addr": "compliance"
+              },
+              {
+                "$signer": "deployer"
+              },
+              {
+                "$tuple": [
+                  {
+                    "$lit": "Local validation asset"
+                  },
+                  {
+                    "$lit": "Synthetic owned-local asset"
+                  },
+                  {
+                    "$uint": "100000000000000000000000000000000000"
+                  },
+                  {
+                    "$uint": "1"
+                  },
+                  {
+                    "$uint": "10000000000000000000000000000000000000000"
+                  },
+                  {
+                    "$lit": "propertyfy"
+                  },
+                  {
+                    "$lit": true
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "gateway",
+            "artifact": "ComplianceGateway",
+            "args": [
+              {
+                "$addr": "verifier"
+              },
+              {
+                "$addr": "verifier"
+              },
+              {
+                "$addr": "verifier"
+              },
+              {
+                "$addr": "token"
+              }
+            ]
+          }
+        ],
+        "post_deploy": [
+          {
+            "target": "token",
+            "function": "transferOwnership",
+            "from": "deployer",
+            "args": [
+              {
+                "$addr": "gateway"
+              }
+            ]
+          }
+        ],
+        "verifier_checks": [
+          {
+            "contract": "verifier",
+            "function": "verifyProof",
+            "args": [
+              {
+                "$proofPart": {
+                  "proof": "propertyfy",
+                  "part": "a"
+                }
+              },
+              {
+                "$proofPart": {
+                  "proof": "propertyfy",
+                  "part": "b"
+                }
+              },
+              {
+                "$proofPart": {
+                  "proof": "propertyfy",
+                  "part": "c"
+                }
+              },
+              {
+                "$pubArray": {
+                  "proof": "propertyfy"
+                }
+              }
+            ]
+          }
+        ],
+        "honest_tx": {
+          "target": "gateway",
+          "function": "verifyAndExecute",
+          "from": "credentialOwner",
+          "args": [
+            {
+              "name": "platform",
+              "class": "fixed",
+              "value": {
+                "$lit": "propertyfy"
+              }
+            },
+            {
+              "name": "proofA",
+              "class": "proof",
+              "value": {
+                "$proofPart": {
+                  "proof": "propertyfy",
+                  "part": "a"
+                }
+              }
+            },
+            {
+              "name": "proofB",
+              "class": "proof",
+              "value": {
+                "$proofPart": {
+                  "proof": "propertyfy",
+                  "part": "b"
+                }
+              }
+            },
+            {
+              "name": "proofC",
+              "class": "proof",
+              "value": {
+                "$proofPart": {
+                  "proof": "propertyfy",
+                  "part": "c"
+                }
+              }
+            },
+            {
+              "name": "pubSignals",
+              "class": "pub",
+              "value": {
+                "$pubArray": {
+                  "proof": "propertyfy"
+                }
+              }
+            },
+            {
+              "name": "targetAction",
+              "class": "fixed",
+              "value": {
+                "$uint": "0"
+              }
+            },
+            {
+              "name": "amount",
+              "class": "free",
+              "value": {
+                "$uint": "1000000000000000000"
+              }
+            }
+          ]
+        },
+        "operators": [
+          "CALLER",
+          "FREE_ARG",
+          "ALIAS",
+          "REPLAY",
+          "DOMAIN"
+        ],
+        "free_args": {
+          "amount": {
+            "mutation": {
+              "$uint": "123456789012345678901234"
+            }
+          }
+        },
+        "alias": {
+          "arg": "pubSignals",
+          "proof": "propertyfy",
+          "positions": [
+            2,
+            10
+          ]
+        },
+        "caller_candidates": [
+          "attacker"
+        ],
+        "domain": {
+          "redeploy": [
+            "verifier",
+            "compliance",
+            "token",
+            "gateway"
+          ],
+          "post_deploy": [
+            {
+              "target": "token",
+              "function": "transferOwnership",
+              "from": "deployer",
+              "args": [
+                {
+                  "$addr": "gateway"
+                }
+              ]
+            }
+          ]
+        },
+        "proofs": {
+          "propertyfy": {
+            "proof": "{out}/proofs/propertyfy/proof.json",
+            "public": "{out}/proofs/propertyfy/public.json"
+          }
+        }
+      }
+    },
+    {
+      "id": "repaired",
+      "label": "ZKredential ComplianceGateway with prospective mint-authorization repair",
+      "transform": [
+        {
+          "name": "29_stage_contracts_v2",
+          "cwd": "{work}/source/projects/ZKredential/packages/zk-contracts",
+          "argv": [
+            "bash",
+            "-lc",
+            "set -e; mkdir -p contracts-v2/core contracts-v2/verifiers contracts-v2/demo contracts-v2/interfaces contracts-v2/adapters; cp contracts/core/ComplianceGateway.sol contracts-v2/core/; cp contracts/core/ZKRWARegistry.sol contracts-v2/ZKRWARegistry.sol; cp contracts/verifiers/PropertyFyVerifier.sol contracts-v2/verifiers/; cp contracts/demo/ZKRWATokenERC3643.sol contracts-v2/demo/; cp contracts/adapters/ZKComplianceModule.sol contracts-v2/adapters/; cp contracts/interfaces/*.sol contracts-v2/interfaces/; cp {ROOT}/findings/zkredential/hardhat.config.js hardhat.v2.config.js"
+          ]
+        },
+        {
+          "name": "40_apply_repair",
+          "cwd": "{work}/source/projects/ZKredential/packages/zk-contracts",
+          "argv": [
+            "python3",
+            "{ROOT}/findings/zkredential/repair.py",
+            "{work}/source/projects/ZKredential/packages/zk-contracts/contracts-v2/core/ComplianceGateway.sol"
+          ]
+        }
+      ],
+      "build": [
+        {
+          "name": "31_hardhat_compile",
+          "cwd": "{work}/source/projects/ZKredential/packages/zk-contracts",
+          "argv": [
+            "{work}/source/projects/ZKredential/packages/zk-contracts/node_modules/.bin/hardhat",
+            "compile",
+            "--config",
+            "{work}/source/projects/ZKredential/packages/zk-contracts/hardhat.v2.config.js"
+          ]
+        }
+      ],
+      "artifacts": [
+        "{work}/source/projects/ZKredential/packages/zk-contracts/artifacts-v2",
+        "{work}/source/projects/ZKredential/packages/zk-contracts/artifacts"
+      ],
+      "scenario": {
+        "signers": [
+          "deployer",
+          "credentialOwner",
+          "attacker"
+        ],
+        "deployer": "deployer",
+        "deploy": [
+          {
+            "name": "verifier",
+            "artifact": "PropertyFyVerifier",
+            "args": []
+          },
+          {
+            "name": "compliance",
+            "artifact": "ZKComplianceModule",
+            "args": [
+              {
+                "$addr": "verifier"
+              },
+              {
+                "$lit": "0x0000000000000000000000000000000000000000"
+              },
+              {
+                "$lit": "propertyfy"
+              }
+            ]
+          },
+          {
+            "name": "token",
+            "artifact": "ZKRWATokenERC3643",
+            "args": [
+              {
+                "$lit": "Validation RWA"
+              },
+              {
+                "$lit": "VRWA"
+              },
+              {
+                "$signer": "deployer"
+              },
+              {
+                "$addr": "compliance"
+              },
+              {
+                "$signer": "deployer"
+              },
+              {
+                "$tuple": [
+                  {
+                    "$lit": "Local validation asset"
+                  },
+                  {
+                    "$lit": "Synthetic owned-local asset"
+                  },
+                  {
+                    "$uint": "100000000000000000000000000000000000"
+                  },
+                  {
+                    "$uint": "1"
+                  },
+                  {
+                    "$uint": "10000000000000000000000000000000000000000"
+                  },
+                  {
+                    "$lit": "propertyfy"
+                  },
+                  {
+                    "$lit": true
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "gateway",
+            "artifact": "ComplianceGateway",
+            "args": [
+              {
+                "$addr": "verifier"
+              },
+              {
+                "$addr": "verifier"
+              },
+              {
+                "$addr": "verifier"
+              },
+              {
+                "$addr": "token"
+              }
+            ]
+          }
+        ],
+        "post_deploy": [
+          {
+            "target": "token",
+            "function": "transferOwnership",
+            "from": "deployer",
+            "args": [
+              {
+                "$addr": "gateway"
+              }
+            ]
+          },
+          {
+            "target": "gateway",
+            "function": "approveMint",
+            "from": "deployer",
+            "args": [
+              {
+                "$signer": "credentialOwner"
+              },
+              {
+                "$uint": "1000000000000000000"
+              }
+            ]
+          }
+        ],
+        "verifier_checks": [
+          {
+            "contract": "verifier",
+            "function": "verifyProof",
+            "args": [
+              {
+                "$proofPart": {
+                  "proof": "propertyfy",
+                  "part": "a"
+                }
+              },
+              {
+                "$proofPart": {
+                  "proof": "propertyfy",
+                  "part": "b"
+                }
+              },
+              {
+                "$proofPart": {
+                  "proof": "propertyfy",
+                  "part": "c"
+                }
+              },
+              {
+                "$pubArray": {
+                  "proof": "propertyfy"
+                }
+              }
+            ]
+          }
+        ],
+        "honest_tx": {
+          "target": "gateway",
+          "function": "verifyAndExecute",
+          "from": "credentialOwner",
+          "args": [
+            {
+              "name": "platform",
+              "class": "fixed",
+              "value": {
+                "$lit": "propertyfy"
+              }
+            },
+            {
+              "name": "proofA",
+              "class": "proof",
+              "value": {
+                "$proofPart": {
+                  "proof": "propertyfy",
+                  "part": "a"
+                }
+              }
+            },
+            {
+              "name": "proofB",
+              "class": "proof",
+              "value": {
+                "$proofPart": {
+                  "proof": "propertyfy",
+                  "part": "b"
+                }
+              }
+            },
+            {
+              "name": "proofC",
+              "class": "proof",
+              "value": {
+                "$proofPart": {
+                  "proof": "propertyfy",
+                  "part": "c"
+                }
+              }
+            },
+            {
+              "name": "pubSignals",
+              "class": "pub",
+              "value": {
+                "$pubArray": {
+                  "proof": "propertyfy"
+                }
+              }
+            },
+            {
+              "name": "targetAction",
+              "class": "fixed",
+              "value": {
+                "$uint": "0"
+              }
+            },
+            {
+              "name": "amount",
+              "class": "free",
+              "value": {
+                "$uint": "1000000000000000000"
+              }
+            }
+          ]
+        },
+        "operators": [
+          "CALLER",
+          "FREE_ARG",
+          "ALIAS",
+          "REPLAY",
+          "DOMAIN"
+        ],
+        "free_args": {
+          "amount": {
+            "mutation": {
+              "$uint": "123456789012345678901234"
+            }
+          }
+        },
+        "alias": {
+          "arg": "pubSignals",
+          "proof": "propertyfy",
+          "positions": [
+            2,
+            10
+          ]
+        },
+        "caller_candidates": [
+          "attacker"
+        ],
+        "domain": {
+          "redeploy": [
+            "verifier",
+            "compliance",
+            "token",
+            "gateway"
+          ],
+          "post_deploy": [
+            {
+              "target": "token",
+              "function": "transferOwnership",
+              "from": "deployer",
+              "args": [
+                {
+                  "$addr": "gateway"
+                }
+              ]
+            }
+          ]
+        },
+        "proofs": {
+          "propertyfy": {
+            "proof": "{out}/proofs/propertyfy/proof.json",
+            "public": "{out}/proofs/propertyfy/public.json"
+          }
+        }
+      }
+    }
+  ]
+}

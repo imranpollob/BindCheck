@@ -1,0 +1,759 @@
+{
+  "schema_version": 1,
+  "case_id": "racepass",
+  "safety": {
+    "local_only": true,
+    "fork_enabled": false
+  },
+  "source": {
+    "kind": "git_archive",
+    "repo": "{BC}/bindcheck-zk/feasibility/work/full-dev/DEV-F39--Servesh21__RacePass--abd54b5c541a",
+    "commit": "abd54b5c541ac9d26f938a6bdbd78545526249e5"
+  },
+  "policy": "policy.json",
+  "prepare": [
+    {
+      "name": "00_mkdir",
+      "cwd": "{out}",
+      "argv": [
+        "mkdir",
+        "-p",
+        "{out}/proofs",
+        "{out}/circuit-build/age",
+        "{out}/circuit-build/kyc"
+      ]
+    },
+    {
+      "name": "10_npm_ci",
+      "cwd": "{work}/source",
+      "argv": [
+        "npm",
+        "ci",
+        "--no-audit",
+        "--no-fund"
+      ]
+    },
+    {
+      "name": "10b_deps",
+      "cwd": "{work}/source",
+      "argv": [
+        "npm",
+        "install",
+        "--no-save",
+        "--package-lock=false",
+        "--no-audit",
+        "--no-fund",
+        "circomlibjs@0.1.7",
+        "@openzeppelin/contracts@5.0.2"
+      ]
+    },
+    {
+      "name": "11_link_circomlib",
+      "cwd": "{work}/source",
+      "argv": [
+        "bash",
+        "-lc",
+        "if [ -d circuits/circomlib ] && [ ! -L circuits/circomlib ]; then rmdir circuits/circomlib; ln -s \"$PWD/node_modules/circomlib\" circuits/circomlib; fi"
+      ]
+    }
+  ],
+  "proof": [
+    {
+      "name": "20_make_inputs",
+      "cwd": "{work}/source",
+      "argv": [
+        "node",
+        "{ROOT}/findings/racepass/make_inputs.js",
+        "{out}/proofs"
+      ],
+      "env": {
+        "NODE_PATH": "{work}/source/node_modules"
+      }
+    },
+    {
+      "name": "21_age_compile",
+      "cwd": "{work}/source",
+      "argv": [
+        "{BC}/bindcheck-zk/tools/circom-2.1.9/target/release/circom",
+        "{work}/source/circuits/age_proof/age_check.circom",
+        "--r1cs",
+        "--wasm",
+        "--sym",
+        "-o",
+        "{out}/circuit-build/age"
+      ]
+    },
+    {
+      "name": "22_age_fullprove",
+      "cwd": "{work}/source",
+      "argv": [
+        "{work}/source/node_modules/.bin/snarkjs",
+        "groth16",
+        "fullprove",
+        "{out}/proofs/age-input.json",
+        "{work}/source/frontend/public/circuits/age_proof/age_check.wasm",
+        "{work}/source/frontend/public/circuits/age_proof/age_check_final.zkey",
+        "{out}/proofs/age-proof.json",
+        "{out}/proofs/age-public.json"
+      ]
+    },
+    {
+      "name": "23_kyc_compile",
+      "cwd": "{work}/source",
+      "argv": [
+        "{BC}/bindcheck-zk/tools/circom-2.1.9/target/release/circom",
+        "{work}/source/circuits/kyc_proof/kyc_check.circom",
+        "--r1cs",
+        "--wasm",
+        "--sym",
+        "-o",
+        "{out}/circuit-build/kyc"
+      ]
+    },
+    {
+      "name": "24_kyc_fullprove",
+      "cwd": "{work}/source",
+      "argv": [
+        "{work}/source/node_modules/.bin/snarkjs",
+        "groth16",
+        "fullprove",
+        "{out}/proofs/kyc-input.json",
+        "{work}/source/frontend/public/circuits/kyc_proof/kyc_check.wasm",
+        "{work}/source/frontend/public/circuits/kyc_proof/kyc_check_final.zkey",
+        "{out}/proofs/kyc-proof.json",
+        "{out}/proofs/kyc-public.json"
+      ]
+    }
+  ],
+  "variants": [
+    {
+      "id": "original",
+      "label": "RacePass unchanged EventPass",
+      "build": [
+        {
+          "name": "30_hardhat_compile",
+          "cwd": "{work}/source",
+          "argv": [
+            "{work}/source/node_modules/.bin/hardhat",
+            "compile",
+            "--config",
+            "{work}/source/hardhat.config.js"
+          ]
+        }
+      ],
+      "artifacts": [
+        "{work}/source/artifacts"
+      ],
+      "scenario": {
+        "signers": [
+          "deployer",
+          "holder",
+          "mallory"
+        ],
+        "deployer": "deployer",
+        "deploy": [
+          {
+            "name": "ageVerifier",
+            "artifact": "AgeVerifier",
+            "args": []
+          },
+          {
+            "name": "kycVerifier",
+            "artifact": "KYCVerifier",
+            "args": []
+          },
+          {
+            "name": "revocation",
+            "artifact": "RevocationRegistry",
+            "args": []
+          },
+          {
+            "name": "pass",
+            "artifact": "EventPass",
+            "args": [
+              {
+                "$lit": "BindCheck local validation"
+              },
+              {
+                "$nowPlus": 3600
+              },
+              {
+                "$nowMinus": 1
+              },
+              {
+                "$nowPlus": 86400
+              },
+              {
+                "$addr": "ageVerifier"
+              },
+              {
+                "$addr": "kycVerifier"
+              },
+              {
+                "$addr": "revocation"
+              },
+              {
+                "$lit": "0x0000000000000000000000000000000000000000"
+              },
+              {
+                "$uint": "0"
+              },
+              {
+                "$lit": true
+              },
+              {
+                "$uint": "100"
+              },
+              {
+                "$uint": "0"
+              },
+              {
+                "$emptyArray": "bytes2[]"
+              },
+              {
+                "$lit": "0x0000000000000000000000000000000000000000"
+              }
+            ]
+          }
+        ],
+        "verifier_checks": [
+          {
+            "contract": "ageVerifier",
+            "function": "verifyProof",
+            "args": [
+              {
+                "$proofPart": {
+                  "proof": "age",
+                  "part": "a"
+                }
+              },
+              {
+                "$proofPart": {
+                  "proof": "age",
+                  "part": "b"
+                }
+              },
+              {
+                "$proofPart": {
+                  "proof": "age",
+                  "part": "c"
+                }
+              },
+              {
+                "$pubArray": {
+                  "proof": "age"
+                }
+              }
+            ]
+          },
+          {
+            "contract": "kycVerifier",
+            "function": "verifyProof",
+            "args": [
+              {
+                "$proofPart": {
+                  "proof": "kyc",
+                  "part": "a"
+                }
+              },
+              {
+                "$proofPart": {
+                  "proof": "kyc",
+                  "part": "b"
+                }
+              },
+              {
+                "$proofPart": {
+                  "proof": "kyc",
+                  "part": "c"
+                }
+              },
+              {
+                "$pubArray": {
+                  "proof": "kyc"
+                }
+              }
+            ]
+          }
+        ],
+        "honest_tx": {
+          "target": "pass",
+          "function": "mintPass",
+          "from": "holder",
+          "args": [
+            {
+              "name": "a_age",
+              "class": "proof",
+              "value": {
+                "$proofPart": {
+                  "proof": "age",
+                  "part": "a"
+                }
+              }
+            },
+            {
+              "name": "b_age",
+              "class": "proof",
+              "value": {
+                "$proofPart": {
+                  "proof": "age",
+                  "part": "b"
+                }
+              }
+            },
+            {
+              "name": "c_age",
+              "class": "proof",
+              "value": {
+                "$proofPart": {
+                  "proof": "age",
+                  "part": "c"
+                }
+              }
+            },
+            {
+              "name": "age_pub",
+              "class": "pub",
+              "value": {
+                "$pubArray": {
+                  "proof": "age"
+                }
+              }
+            },
+            {
+              "name": "a_kyc",
+              "class": "proof",
+              "value": {
+                "$proofPart": {
+                  "proof": "kyc",
+                  "part": "a"
+                }
+              }
+            },
+            {
+              "name": "b_kyc",
+              "class": "proof",
+              "value": {
+                "$proofPart": {
+                  "proof": "kyc",
+                  "part": "b"
+                }
+              }
+            },
+            {
+              "name": "c_kyc",
+              "class": "proof",
+              "value": {
+                "$proofPart": {
+                  "proof": "kyc",
+                  "part": "c"
+                }
+              }
+            },
+            {
+              "name": "kyc_pub",
+              "class": "pub",
+              "value": {
+                "$pubArray": {
+                  "proof": "kyc"
+                }
+              }
+            },
+            {
+              "name": "credHash",
+              "class": "free",
+              "value": {
+                "$pubAsBytes32": {
+                  "proof": "kyc",
+                  "index": 1
+                }
+              }
+            },
+            {
+              "name": "countryCode",
+              "class": "fixed",
+              "value": {
+                "$bytes": "0x0000"
+              }
+            },
+            {
+              "name": "recipient",
+              "class": "free",
+              "value": {
+                "$signer": "holder"
+              }
+            }
+          ]
+        },
+        "operators": [
+          "CALLER",
+          "FREE_ARG",
+          "ALIAS",
+          "REPLAY",
+          "DOMAIN"
+        ],
+        "free_args": {
+          "credHash": {
+            "mutation": {
+              "$keccakUtf8": "unbound-credential"
+            }
+          },
+          "recipient": {
+            "mutation": {
+              "$signer": "mallory"
+            }
+          }
+        },
+        "alias": {
+          "arg": "kyc_pub",
+          "proof": "kyc",
+          "positions": [
+            0,
+            1
+          ]
+        },
+        "caller_candidates": [
+          "mallory"
+        ],
+        "domain": {
+          "redeploy": [
+            "ageVerifier",
+            "kycVerifier",
+            "revocation",
+            "pass"
+          ]
+        },
+        "proofs": {
+          "age": {
+            "proof": "{out}/proofs/age-proof.json",
+            "public": "{out}/proofs/age-public.json"
+          },
+          "kyc": {
+            "proof": "{out}/proofs/kyc-proof.json",
+            "public": "{out}/proofs/kyc-public.json"
+          }
+        }
+      }
+    },
+    {
+      "id": "repaired",
+      "label": "RacePass EventPass with prospective credential-binding repair",
+      "transform": [
+        {
+          "name": "40_apply_repair",
+          "cwd": "{work}/source",
+          "argv": [
+            "python3",
+            "{ROOT}/findings/racepass/repair.py",
+            "{work}/source/contracts/passes/EventPass.sol"
+          ]
+        }
+      ],
+      "build": [
+        {
+          "name": "30_hardhat_compile",
+          "cwd": "{work}/source",
+          "argv": [
+            "{work}/source/node_modules/.bin/hardhat",
+            "compile",
+            "--config",
+            "{work}/source/hardhat.config.js"
+          ]
+        }
+      ],
+      "artifacts": [
+        "{work}/source/artifacts"
+      ],
+      "scenario": {
+        "signers": [
+          "deployer",
+          "holder",
+          "mallory"
+        ],
+        "deployer": "deployer",
+        "deploy": [
+          {
+            "name": "ageVerifier",
+            "artifact": "AgeVerifier",
+            "args": []
+          },
+          {
+            "name": "kycVerifier",
+            "artifact": "KYCVerifier",
+            "args": []
+          },
+          {
+            "name": "revocation",
+            "artifact": "RevocationRegistry",
+            "args": []
+          },
+          {
+            "name": "pass",
+            "artifact": "EventPass",
+            "args": [
+              {
+                "$lit": "BindCheck local validation"
+              },
+              {
+                "$nowPlus": 3600
+              },
+              {
+                "$nowMinus": 1
+              },
+              {
+                "$nowPlus": 86400
+              },
+              {
+                "$addr": "ageVerifier"
+              },
+              {
+                "$addr": "kycVerifier"
+              },
+              {
+                "$addr": "revocation"
+              },
+              {
+                "$lit": "0x0000000000000000000000000000000000000000"
+              },
+              {
+                "$uint": "0"
+              },
+              {
+                "$lit": true
+              },
+              {
+                "$uint": "100"
+              },
+              {
+                "$uint": "0"
+              },
+              {
+                "$emptyArray": "bytes2[]"
+              },
+              {
+                "$lit": "0x0000000000000000000000000000000000000000"
+              }
+            ]
+          }
+        ],
+        "verifier_checks": [
+          {
+            "contract": "ageVerifier",
+            "function": "verifyProof",
+            "args": [
+              {
+                "$proofPart": {
+                  "proof": "age",
+                  "part": "a"
+                }
+              },
+              {
+                "$proofPart": {
+                  "proof": "age",
+                  "part": "b"
+                }
+              },
+              {
+                "$proofPart": {
+                  "proof": "age",
+                  "part": "c"
+                }
+              },
+              {
+                "$pubArray": {
+                  "proof": "age"
+                }
+              }
+            ]
+          },
+          {
+            "contract": "kycVerifier",
+            "function": "verifyProof",
+            "args": [
+              {
+                "$proofPart": {
+                  "proof": "kyc",
+                  "part": "a"
+                }
+              },
+              {
+                "$proofPart": {
+                  "proof": "kyc",
+                  "part": "b"
+                }
+              },
+              {
+                "$proofPart": {
+                  "proof": "kyc",
+                  "part": "c"
+                }
+              },
+              {
+                "$pubArray": {
+                  "proof": "kyc"
+                }
+              }
+            ]
+          }
+        ],
+        "honest_tx": {
+          "target": "pass",
+          "function": "mintPass",
+          "from": "holder",
+          "args": [
+            {
+              "name": "a_age",
+              "class": "proof",
+              "value": {
+                "$proofPart": {
+                  "proof": "age",
+                  "part": "a"
+                }
+              }
+            },
+            {
+              "name": "b_age",
+              "class": "proof",
+              "value": {
+                "$proofPart": {
+                  "proof": "age",
+                  "part": "b"
+                }
+              }
+            },
+            {
+              "name": "c_age",
+              "class": "proof",
+              "value": {
+                "$proofPart": {
+                  "proof": "age",
+                  "part": "c"
+                }
+              }
+            },
+            {
+              "name": "age_pub",
+              "class": "pub",
+              "value": {
+                "$pubArray": {
+                  "proof": "age"
+                }
+              }
+            },
+            {
+              "name": "a_kyc",
+              "class": "proof",
+              "value": {
+                "$proofPart": {
+                  "proof": "kyc",
+                  "part": "a"
+                }
+              }
+            },
+            {
+              "name": "b_kyc",
+              "class": "proof",
+              "value": {
+                "$proofPart": {
+                  "proof": "kyc",
+                  "part": "b"
+                }
+              }
+            },
+            {
+              "name": "c_kyc",
+              "class": "proof",
+              "value": {
+                "$proofPart": {
+                  "proof": "kyc",
+                  "part": "c"
+                }
+              }
+            },
+            {
+              "name": "kyc_pub",
+              "class": "pub",
+              "value": {
+                "$pubArray": {
+                  "proof": "kyc"
+                }
+              }
+            },
+            {
+              "name": "credHash",
+              "class": "free",
+              "value": {
+                "$pubAsBytes32": {
+                  "proof": "kyc",
+                  "index": 1
+                }
+              }
+            },
+            {
+              "name": "countryCode",
+              "class": "fixed",
+              "value": {
+                "$bytes": "0x0000"
+              }
+            },
+            {
+              "name": "recipient",
+              "class": "free",
+              "value": {
+                "$signer": "holder"
+              }
+            }
+          ]
+        },
+        "operators": [
+          "CALLER",
+          "FREE_ARG",
+          "ALIAS",
+          "REPLAY",
+          "DOMAIN"
+        ],
+        "free_args": {
+          "credHash": {
+            "mutation": {
+              "$keccakUtf8": "unbound-credential"
+            }
+          },
+          "recipient": {
+            "mutation": {
+              "$signer": "mallory"
+            }
+          }
+        },
+        "alias": {
+          "arg": "kyc_pub",
+          "proof": "kyc",
+          "positions": [
+            0,
+            1
+          ]
+        },
+        "caller_candidates": [
+          "mallory"
+        ],
+        "domain": {
+          "redeploy": [
+            "ageVerifier",
+            "kycVerifier",
+            "revocation",
+            "pass"
+          ]
+        },
+        "proofs": {
+          "age": {
+            "proof": "{out}/proofs/age-proof.json",
+            "public": "{out}/proofs/age-public.json"
+          },
+          "kyc": {
+            "proof": "{out}/proofs/kyc-proof.json",
+            "public": "{out}/proofs/kyc-public.json"
+          }
+        }
+      }
+    }
+  ]
+}
