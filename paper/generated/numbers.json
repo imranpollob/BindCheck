@@ -1,0 +1,438 @@
+{
+  "macros": {
+    "AztecClaimedLossUSD": {
+      "definition": "R1-005 loss_claimed_usd",
+      "sources": [
+        "reports/R1/incidents.csv"
+      ],
+      "value": 2280000
+    },
+    "AztecLossUSD": {
+      "definition": "R1-005 loss_confirmed_usd",
+      "sources": [
+        "reports/R1/incidents.csv"
+      ],
+      "value": 2100000
+    },
+    "AztecSlitherReports": {
+      "definition": "Tool × target × verdict table, real V3 Slither row",
+      "sources": [
+        "reports/AZ1/REPORT.md"
+      ],
+      "value": 167
+    },
+    "AztecTestbedConstraints": {
+      "definition": "reported circuit dimensions",
+      "sources": [
+        "reports/AZ1/REPORT.md"
+      ],
+      "value": 3432
+    },
+    "AztecTestbedFailedSteps": {
+      "definition": "testbed run summary",
+      "sources": [
+        "reports/AZ1/REPORT.md"
+      ],
+      "value": 0
+    },
+    "AztecTestbedPrivateInputs": {
+      "definition": "reported circuit dimensions",
+      "sources": [
+        "reports/AZ1/REPORT.md"
+      ],
+      "value": 12
+    },
+    "AztecTestbedPublicOutputs": {
+      "definition": "reported circuit dimensions",
+      "sources": [
+        "reports/AZ1/REPORT.md"
+      ],
+      "value": 2
+    },
+    "AztecTestbedSteps": {
+      "definition": "testbed run summary",
+      "sources": [
+        "reports/AZ1/REPORT.md"
+      ],
+      "value": 53
+    },
+    "AztecTestbedUnbackedGap": {
+      "definition": "synthetic testbed coverage-violation row, local token units",
+      "sources": [
+        "reports/AZ1/REPORT.md"
+      ],
+      "value": 1000
+    },
+    "FreezeTwoDevApplicable": {
+      "definition": "applicable freeze-2 pattern cells",
+      "sources": [
+        "reports/freeze2/dev-ledger.csv"
+      ],
+      "value": 159
+    },
+    "FreezeTwoDevDecided": {
+      "definition": "applicable V or VWS cells",
+      "sources": [
+        "reports/freeze2/dev-ledger.csv"
+      ],
+      "value": 45
+    },
+    "FreezeTwoDevFamilies": {
+      "definition": "distinct DEV row IDs",
+      "sources": [
+        "reports/freeze2/dev-ledger.csv"
+      ],
+      "value": 56
+    },
+    "RoneCases": {
+      "definition": "CSV case rows",
+      "sources": [
+        "reports/R1/incidents.csv"
+      ],
+      "value": 50
+    },
+    "RoneClaimedLossUSD": {
+      "definition": "sum of numeric loss_claimed_usd cells",
+      "sources": [
+        "reports/R1/incidents.csv"
+      ],
+      "value": 11771466
+    },
+    "RoneConfirmedLossUSD": {
+      "definition": "sum of numeric loss_confirmed_usd cells",
+      "sources": [
+        "reports/R1/incidents.csv"
+      ],
+      "value": 2100000
+    },
+    "RoneInClassCases": {
+      "definition": "P1–P5 case rows",
+      "sources": [
+        "reports/R1/incidents.csv"
+      ],
+      "value": 15
+    },
+    "RtwoAudits": {
+      "definition": "audit CSV rows",
+      "sources": [
+        "reports/R2/audits_read.csv"
+      ],
+      "value": 68
+    },
+    "RtwoBindingAuditShare": {
+      "definition": "binding audits / all audits",
+      "sources": [
+        "reports/R2/findings.csv",
+        "reports/R2/audits_read.csv"
+      ],
+      "value": "26.5%"
+    },
+    "RtwoBindingAudits": {
+      "definition": "distinct report_url values for binding findings",
+      "sources": [
+        "reports/R2/findings.csv"
+      ],
+      "value": 18
+    },
+    "RtwoBindingFindings": {
+      "definition": "P1–P3 and P5",
+      "sources": [
+        "reports/R2/findings.csv"
+      ],
+      "value": 34
+    },
+    "RtwoBindingNeedsCircuit": {
+      "definition": "yes in binding classes",
+      "sources": [
+        "reports/R2/findings.csv"
+      ],
+      "value": 13
+    },
+    "RtwoBindingNeedsCircuitShare": {
+      "definition": "yes / all binding findings",
+      "sources": [
+        "reports/R2/findings.csv"
+      ],
+      "value": "38.2%"
+    },
+    "RtwoBindingReportTimeTVLKnown": {
+      "definition": "C/H binding findings with known report-time TVL",
+      "sources": [
+        "reports/R2/findings.csv"
+      ],
+      "value": 0
+    },
+    "RtwoFindings": {
+      "definition": "included finding rows",
+      "sources": [
+        "reports/R2/findings.csv"
+      ],
+      "value": 54
+    },
+    "RtwoHighCriticalBinding": {
+      "definition": "C or H in binding classes",
+      "sources": [
+        "reports/R2/findings.csv"
+      ],
+      "value": 17
+    },
+    "RtwoHighCriticalBindingAudits": {
+      "definition": "distinct reports with C/H binding findings",
+      "sources": [
+        "reports/R2/findings.csv"
+      ],
+      "value": 7
+    },
+    "RtwoHighCriticalBindingProtocols": {
+      "definition": "distinct protocols with C/H binding findings",
+      "sources": [
+        "reports/R2/findings.csv"
+      ],
+      "value": 7
+    },
+    "RtwoNeedsCircuit": {
+      "definition": "all needs_circuit_to_detect=yes rows",
+      "sources": [
+        "reports/R2/findings.csv"
+      ],
+      "value": 24
+    },
+    "RtwoNeedsCircuitShare": {
+      "definition": "yes / all included findings",
+      "sources": [
+        "reports/R2/findings.csv"
+      ],
+      "value": "44.4%"
+    },
+    "RtwoTriagedFindings": {
+      "definition": "sum of findings_reviewed",
+      "sources": [
+        "reports/R2/audits_read.csv"
+      ],
+      "value": 728
+    },
+    "SetHCards": {
+      "definition": "all labelled cards (both tools)",
+      "sources": [
+        "reports/labels/set-H-ledger.csv"
+      ],
+      "value": 100
+    },
+    "SetHComparedCards": {
+      "definition": "four re-scored BindCheck strata",
+      "sources": [
+        "reports/S2a/revision1/set-h-recomputed-cards.csv"
+      ],
+      "value": 55
+    },
+    "SetHPFiveCandidatePrecision": {
+      "definition": "P5 retained TP / retained TP+FP",
+      "sources": [
+        "reports/S2a/revision1/set-h-recomputed-cards.csv"
+      ],
+      "value": "2/8"
+    },
+    "SetHPFiveFreezePrecision": {
+      "definition": "P5 final TP / labelled TP+FP",
+      "sources": [
+        "reports/labels/set-H-ledger.csv"
+      ],
+      "value": "2/15"
+    },
+    "SetHPFourCanonicalityCandidatePrecision": {
+      "definition": "P4/PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND retained TP / retained TP+FP",
+      "sources": [
+        "reports/S2a/revision1/set-h-recomputed-cards.csv"
+      ],
+      "value": "5/5"
+    },
+    "SetHPFourCanonicalityFreezePrecision": {
+      "definition": "P4/PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND final TP / labelled TP+FP",
+      "sources": [
+        "reports/labels/set-H-ledger.csv"
+      ],
+      "value": "7/10"
+    },
+    "SetHPOneCandidatePrecision": {
+      "definition": "P1 retained TP / retained TP+FP",
+      "sources": [
+        "reports/S2a/revision1/set-h-recomputed-cards.csv"
+      ],
+      "value": "9/10"
+    },
+    "SetHPOneFreezePrecision": {
+      "definition": "P1 final TP / labelled TP+FP",
+      "sources": [
+        "reports/labels/set-H-ledger.csv"
+      ],
+      "value": "9/15"
+    },
+    "SetHPThreeCandidatePrecision": {
+      "definition": "P3 retained TP / retained TP+FP",
+      "sources": [
+        "reports/S2a/revision1/set-h-recomputed-cards.csv"
+      ],
+      "value": "9/12"
+    },
+    "SetHPThreeFreezePrecision": {
+      "definition": "P3 final TP / labelled TP+FP",
+      "sources": [
+        "reports/labels/set-H-ledger.csv"
+      ],
+      "value": "9/15"
+    },
+    "SetHUnavailableCards": {
+      "definition": "unavailable cards in four re-scored strata",
+      "sources": [
+        "reports/S2a/revision1/set-h-recomputed-cards.csv"
+      ],
+      "value": 4
+    },
+    "SfourBoundWallSeconds": {
+      "definition": "reported synthetic bound wall time",
+      "sources": [
+        "reports/S4/REPORT.md"
+      ],
+      "value": 124
+    },
+    "SfourCEfourCells": {
+      "definition": "E4 cells in the reported operator matrix",
+      "sources": [
+        "reports/S4/REPORT-S4c.md"
+      ],
+      "value": 1
+    },
+    "SfourCMatrixCases": {
+      "definition": "case/variant rows in the reported operator matrix",
+      "sources": [
+        "reports/S4/REPORT-S4c.md"
+      ],
+      "value": 2
+    },
+    "SfourCWallSeconds": {
+      "definition": "reported synthetic obligation wall time",
+      "sources": [
+        "reports/S4/REPORT-S4c.md"
+      ],
+      "value": 371
+    },
+    "SfourEfourCells": {
+      "definition": "E4 cells in the reported operator matrix",
+      "sources": [
+        "reports/S4/REPORT.md"
+      ],
+      "value": 4
+    },
+    "SfourMatrixCases": {
+      "definition": "case/variant rows in the reported operator matrix",
+      "sources": [
+        "reports/S4/REPORT.md"
+      ],
+      "value": 7
+    },
+    "SpentAcquisitionFailures": {
+      "definition": "ACQUISITION_FAILED rows",
+      "sources": [
+        "reports/S2a/revision1/spent-family-ledger-278.csv"
+      ],
+      "value": 5
+    },
+    "SpentAttemptedFamilies": {
+      "definition": "all except pre-analysis exclusion",
+      "sources": [
+        "reports/S2a/revision1/spent-family-ledger-278.csv"
+      ],
+      "value": 277
+    },
+    "SpentCompleteFamilies": {
+      "definition": "ANALYZED rows",
+      "sources": [
+        "reports/S2a/revision1/spent-family-ledger-278.csv"
+      ],
+      "value": 265
+    },
+    "SpentExcludedFamilies": {
+      "definition": "pre-analysis exclusions",
+      "sources": [
+        "reports/S2a/revision1/spent-family-ledger-278.csv"
+      ],
+      "value": 1
+    },
+    "SpentSelectedFamilies": {
+      "definition": "selected family CSV rows",
+      "sources": [
+        "reports/heldout/selected-families.csv"
+      ],
+      "value": 278
+    },
+    "SpentTimeoutFamilies": {
+      "definition": "HARNESS_TIMEOUT rows",
+      "sources": [
+        "reports/S2a/revision1/spent-family-ledger-278.csv"
+      ],
+      "value": 7
+    }
+  },
+  "sources": {
+    "docs/FREEZE-2.md": {
+      "parser": "Markdown code block: analyzer content SHA-256",
+      "sha256": "3536be6c16c25da26436b41b5fb4d214e9e07d37426f9d8d524b8ac09a8e7c85"
+    },
+    "reports/AZ1/REPORT.md": {
+      "parser": "Markdown table: Testbed; numeric observations from evidence prose",
+      "sha256": "92c2f5f8662a82ea87e99f750ec41ee42cda5833378405984a58fd181d9460ed"
+    },
+    "reports/R1/incidents.csv": {
+      "parser": "CSV",
+      "sha256": "fbfa59a2d385c87e53d45e4a003c9d588cb47265f21cf7355f3918833a41009b"
+    },
+    "reports/R2/audits_read.csv": {
+      "parser": "CSV",
+      "sha256": "e40360419c409451d9c9fdd59ce0d5d073d0b055345ff86996a9d16da57bd928"
+    },
+    "reports/R2/findings.csv": {
+      "parser": "CSV",
+      "sha256": "bf56f9358633d0b21c94361c91cb276995741336f7eeba3f0decc85772a88ca2"
+    },
+    "reports/S2a/REPORT.md": {
+      "parser": "Markdown prose: S2a revision 1 candidate content SHA-256",
+      "sha256": "d78a24d1d8ce96785d20815381f4c1a86462e5fbee496ca8c06fe7fffafe3fc9"
+    },
+    "reports/S2a/revision1/set-h-recomputed-cards.csv": {
+      "parser": "CSV",
+      "sha256": "f32ea5b87e15f0ededb6aa0f4242026d340204ae0fe8d913fa9777bc56322be3"
+    },
+    "reports/S2a/revision1/spent-family-ledger-278.csv": {
+      "parser": "CSV",
+      "sha256": "2b0993034637b272eacf2784c90be0493cf1f14552f2ad2ebaac1f4514a2ea43"
+    },
+    "reports/S4/REPORT-S4b.md": {
+      "parser": "Markdown prose: runtimes",
+      "sha256": "eba0d8a552a8c1eb744305cf24c3a58f4aa0c6fece42f219aa5767b7f8a38c6d"
+    },
+    "reports/S4/REPORT-S4c.md": {
+      "parser": "Markdown prose: runtimes",
+      "sha256": "445471274fc371e91b4af884b6b044e5fd8ff212af2940eb271c2efad4275000"
+    },
+    "reports/S4/REPORT.md": {
+      "parser": "Markdown table: Runtimes",
+      "sha256": "c03b14e28cb37eee2d262c10df101f0efdf7aa2f8cf206ff4996b4b5ad363147"
+    },
+    "reports/freeze2/dev-ledger.csv": {
+      "parser": "CSV",
+      "sha256": "d59def9de2d1d9577fe04558d60f48d26b92411b3a7b514e8822eb8c649cac3f"
+    },
+    "reports/heldout/measurement-family-ledger.csv": {
+      "parser": "CSV",
+      "sha256": "4db41b8f90e943ebe2ee05a911e2e1bdac476b29931bc55a3f62f5dc86c5e2a9"
+    },
+    "reports/heldout/selected-families.csv": {
+      "parser": "CSV",
+      "sha256": "cf1b64bc68d90a790e63d965a3e3c607dc6f27e5250ba58d5968d4f792972d8b"
+    },
+    "reports/labels/set-H-ledger.csv": {
+      "parser": "CSV",
+      "sha256": "d7cd3bc345d2daea3f60df506ef49af460a33a6ab76bf3f69b042793c6a6eb50"
+    }
+  }
+}
