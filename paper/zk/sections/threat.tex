@@ -1,53 +1,117 @@
-\section{Threat Model and Binding}\label{sec:threat}
+% S8a threat model and definitions. Must stay consistent with
+% docs/research-contract.md (revision 3) §§4, 5, 8. The IEEE S&P 2027 version
+% of this section is at commit 96a8c7c.
+\section{Threat Model and Definitions}\label{sec:threat}
+
+\para{System.}
+A ZK application has three artifacts. The \emph{circuit} defines a relation
+$R_v(p,w)$ between a public statement $p$ and a witness $w$ for verification
+configuration $v$ (circuit, compiled constraints and key). The
+\emph{generated verifier} accepts a proof for a public vector $x$; the actual
+decoding relation $D_v(p,x)$ fixes the arity, order and encoding of $x$. The
+\emph{consumer} is the contract that assembles $x$, calls the verifier and
+commits effects. We write $T(s,d,\tau,s')$ for a successful consumer
+execution from state $s$ to $s'$ with calldata $d$ and committed trace
+$\tau$.%
+% src: docs/research-contract.md#4-system-model
+\
+\TODO{S0: contract revision 4 must record the Circom/Groth16 scope and the
+Noir/Honk generator survey; revision 3 still names a Noir/ACIR producer.}
 
 \para{Adversary.}
-The adversary is any party that can call the consumer's public entry points. It
-chooses witnesses (and may deviate from the honest witness generator), public
-inputs, proof bytes, calldata and transaction order; it may reuse proofs and
-values it observes; and it may select any reachable pre-state. Case-specific
-capabilities are recorded per case: for example, the historical Payy defect
-requires a registered prover identity~\cite{payy-ghsa}, whereas both of our new
-findings need only an unprivileged caller.%
-% src: docs/research-contract.md#51-adversary-capabilities; reports/groundtruth/CLAIMS.md#A32
+The adversary may choose witnesses (and deviate from the honest witness
+generator), public inputs, proof bytes, calldata and transaction order; call
+every public entry point and role that the evaluated deployment allows; reuse
+any proof or value it observes unless the protocol prevents it; and start from
+any reachable pre-state. Capabilities that a case needs beyond these are
+recorded per case. For example, the historical Payy defect requires a
+registered prover~\cite{payy-ghsa}, while Aztec Connect's last contract
+version let any caller submit a rollup.%
+% src: docs/research-contract.md#51-adversary-capabilities; reports/AZ1/REPORT.md (RollupProcessorV3.sol:665-675)
 
 \para{Trust assumptions.}
-We assume the proof system is sound for the pinned relation and key, the
-analyzed source corresponds to the compiled constraints, key and deployed
-bytecode, stated hash functions are collision resistant, and token contracts
-follow atomic ERC-20/721 semantics. We do not assume a public value is
-constrained because it should be, nor that an effect is bound because it looks
-bound. Breaking the proof system, toxic-waste compromise, compiler or
-consensus faults, and interaction with live deployments are out of scope.%
+We assume that the proof system is sound for the pinned relation and key;
+that the analyzed source corresponds to the compiled constraints, the key and
+the consumer configuration; that stated hash functions are collision
+resistant; that the reviewed policy is correct; and that token contracts
+follow atomic ERC-20/721 semantics. We do \emph{not} assume that a public
+value is constrained because it should be, or that an effect is bound because
+it looks bound. Out of scope are breaking the proof system, consensus,
+compiler or hardware faults, privacy leaks unrelated to execution, liveness,
+non-standard tokens, and any interaction with live deployments. Unsupported
+constructs (proxies, inline assembly, delegate calls, reentrancy) yield \UNK{}.
+A key from an uncontributed setup ($\gamma=\delta$) is a trusted-setup failure
+under the research contract; we report it as a verifier-configuration class
+(P4) and a root cause, never as evidence that joint analysis is needed.%
 % src: docs/research-contract.md#52-trusted-assumptions, #54-initially-out-of-scope
-\
-Default-key ($\gamma=\delta$) verifiers are a trusted-setup failure; we report
-them as a separate verifier-configuration class (P4) and never as evidence that
-joint analysis is needed.%
-% src: reports/groundtruth/CLAIMS.md#A29
+
+\para{Effects, permissions and obligations.}
+A reviewed policy $\sigma$ states which consumer operations are
+\emph{protected effects} (transfers, mints, burns, credential or nullifier
+writes, state-root updates), which values of an accepted statement are
+\emph{permissions}, and which \emph{obligations} an accepted transition
+creates (for example, collecting a deposit that the proof credited). Each
+record carries a kind, identity, asset, quantity, beneficiary and domain. For
+an execution we write $P$ for the multiset of permissions, $O$ for the
+required obligations and $E$ for the committed protected effects. The policy
+names roles and protected operations only. It never states that a value is
+constrained, that an effect is bound, or the expected verdict.%
+% src: docs/research-contract.md#4-system-model, #6-non-circular-specification-boundary
 
 \para{Binding.}
-Let $R_v(p,w)$ be the constraint relation of verifier configuration $v$ for
-public statement $p$ and witness $w$, and let a successful consumer execution
-from state $s$ with calldata $d$ commit a multiset $E$ of protected effects.
-A reviewed policy $\sigma$ states which effects require authorization and from
-which proof values. The execution is \emph{authorized} if every effect in $E$ is
-matched by a distinct permission derived from $p$ under $\sigma$, preserving
-identity, asset, recipient, domain and quantity; it is \emph{covered} if every
-obligation the accepted transition creates is discharged.%
-% src: docs/research-contract.md#4-system-model, #41, #42
+An execution is \emph{authorized} if every effect in $E$ is matched by a
+distinct compatible permission in $P$, preserving identity, asset,
+beneficiary, domain and quantity, and no permission is used beyond its
+multiplicity. It is \emph{covered} if every obligation in $O$ is discharged by
+a compatible committed effect, validly cancelled, or turned into a pending
+obligation that the protocol explicitly permits. A \emph{binding flaw} is a
+reachable state $s$, witness $w$ and calldata $d$ such that $R_v(p,w)$ and
+$D_v(p,x)$ hold, the unchanged verifier accepts, the unchanged consumer
+commits $T(s,d,\tau,s')$, and authorization or coverage fails.%
+% src: docs/research-contract.md#41-authorization, #42-coverage, #4-system-model (joint counterexample)
 \
-A \emph{binding flaw} is a reachable state, witness and calldata such that
-$R_v(p,w)$ holds, the unchanged verifier accepts, the unchanged consumer
-commits, and authorization or coverage fails.
+The one-sentence form used in \S\ref{sec:intro} is the intuition behind
+these definitions. If the effects can change while $p$ and $s$ stay fixed,
+some effect parameter came from outside the proof, and one of the two
+executions is unauthorized unless the policy explicitly lets that parameter
+vary (for example, a faucet that pays any caller). If the same $p$ can be accepted again, the
+multiplicity condition fails. Coverage adds what the one-sentence form
+leaves implicit: an accepted proof can also \emph{create} obligations that
+the consumer must discharge.
 
-\para{Verdicts and evidence.}
-Every analysis returns \VIOL{}, \VWS{} or \UNK{}. Timeouts, build failures,
-unsupported features and missing artifacts are \UNK{} and never count as safe.
-Each candidate carries an evidence grade: E1, a tool warning; E2, a model of
-the compiled relation, decoder and consumer; E3, a real proof accepted by the
-pinned verifier; and E4, that proof accepted by the unchanged consumer from a
-reachable state, producing an unauthorized committed effect checked on
-state.%
-% src: docs/research-contract.md#8-required-result-categories (evidence ladder)
-\
-Only E4 is an end-to-end validated flaw.
+\para{Proof coverage and extent.}
+For a sequence $x[0..L)$ fixed by the public inputs (directly or through a
+commitment in them), the proof \emph{covers} index $i$ if $R_v$ constrains
+$x[i]$. Extent binding asks whether the range the consumer acts on equals the
+covered range. It fails in direction~(a), \emph{reliance beyond binding}, when
+the consumer relies on some $x[i]$ that the proof does not cover. It fails in
+direction~(b), \emph{binding beyond discharge}, when the proof covers and
+applies a non-neutral $x[i]$ for which the consumer discharges no
+obligation, because the consumer's bound comes from a value the proof does not
+fix. Direction~(a) breaks authorization; direction~(b) breaks coverage.%
+% src: reports/AZ1/REPORT.md#extent-binding-pattern-definition
+
+\para{Verdicts.}
+Every analysis returns one of three verdicts. \VIOL{}: a model that satisfies
+the supported assumptions violates authorization or coverage. \VWS{}: no
+violation exists within the declared model, bounds and assumptions, and the
+check is non-vacuous. \UNK{}: extraction, modeling, provenance, the solver or
+validation is insufficient. A timeout, a build failure, an unsupported
+feature or a missing artifact is \UNK{} and never counts as safe. Each
+verdict carries a reason code, the bounds and the assumptions it rests on;
+an unresolved specification is an \UNK{} reason, not a fourth verdict.%
+% src: docs/research-contract.md#8-required-result-categories
+
+\para{Evidence ladder.}
+Each candidate also carries one evidence grade. \textbf{E0}: no report.
+\textbf{E1}: a tool warning. \textbf{E2}: a model that satisfies the actual
+compiled relation, the decoder and the consumer model. \textbf{E3}: a real
+proof of that assignment, accepted by the pinned, unchanged verifier.
+\textbf{E4}: that proof, accepted by the unchanged consumer from an admitted
+or reachable state, produces an unauthorized committed effect or leaves a
+required obligation undischarged, checked on state. Only E4 is an
+\emph{end-to-end validated} binding flaw. A fixed admitted pre-state is a
+narrower mode than all reachable states, and we label it when we use it. The
+same validation process, budget and adjudication apply to \tool{} and to every
+baseline.%
+% src: docs/research-contract.md#8 (evidence ladder), #4 (fixed admitted pre-state)

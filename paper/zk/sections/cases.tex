@@ -34,6 +34,17 @@ zk\_voting & P3/P4/P5 & E1 & any caller\aiop{} & not executed & --- & \MISSING{p
 % src: zk_voting: reports/soundness/REPORT-2.md#case-adjudication-and-limits (source-confirmed E1); paper/zk/data/zkvoting-facts.json
 \end{table*}
 
+% Figure moved here from the S&P introduction by S8a; still names an
+% undisclosed case (S7 decides naming).
+\begin{figure}[t]
+\centering
+\input{figures/f1-zkredential}
+\caption{ZKredential. The proof fixes the wallet $W$ and compliance; the
+gateway mints a calldata \code{amount} to \code{msg.sender}~$=M\neq W$.
+Neither effect parameter is a public input.}
+\label{fig:zkredential}
+\end{figure}
+
 \subsection{ZKredential: a genuine proof mints a caller-chosen amount}\label{sec:case-zkredential}
 
 ZKredential is a project in a 2025 hackathon repository.%

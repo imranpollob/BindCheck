@@ -5,6 +5,14 @@
 45 `\MISSING` placeholders are listed below. Two findings from this lane (§4) need
 human decisions before any result is reused.
 
+> **S8a update (2026-11-18, EuroS&P 2027 framing).** The abstract (`sections/abstract.tex`),
+> introduction, new motivating example (`sections/motivating.tex`, `figures/f0-aztec-extent.tex`),
+> threat model/definitions and taxonomy were rewritten for EuroS&P 2027. `\MISSING` #1 (abstract)
+> and #21 (intro held-out bullet) are now `\TODO{S5}` placeholders; the S8a sections use `\TODO{lane}`.
+> The ZKredential figure moved to `cases.tex`. `main.pdf` was **not** rebuilt in git (compiler output);
+> the S8a build is under ignored `results/raw/S8a/build/`. Details and the placeholder list:
+> [`reports/S8a/REPORT.md`](../../reports/S8a/REPORT.md). The rest of this file describes the S&P draft.
+
 ## 1. Deliverables and build
 
 | File | Content |

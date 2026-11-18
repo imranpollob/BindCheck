@@ -1,112 +1,222 @@
+% S8a taxonomy (EuroS&P 2027 framing). The IEEE S&P 2027 version of this
+% section is at commit 96a8c7c. Class definitions: docs/verdict-rules.md and
+% reports/R2/REPORT.md (labelling rules); extent binding: reports/AZ1/REPORT.md.
+% Numbers: paper/generated/ only (T-incidents, T-audits, numbers.tex).
 \section{A Taxonomy of Binding Flaws}\label{sec:taxonomy}
 
-We group binding flaws by \emph{what the accepted proof fails to fix}.
-Table~\ref{tab:taxonomy} lists the classes, real instances from our benchmark
-and from public incidents, and the corresponding SoK~\cite{sok-snarks}
-integration categories. The classes are operational: each corresponds to one
-\tool{} recognizer (P1--P5) with a stated positive-evidence rule
-(\S\ref{sec:design}). The taxonomy refines rather than replaces the SoK:
-P3 and P4 are known classes and we credit them as such; P1 and P2 fall under
-the SoK's ``integration design errors'' without a named category; P5 is
-adjacent to ``passing unchecked data''.%
-% src: RELATED-WORK.md#4-which-p-classes-are-new-by-the-literature-alone; RELATED-WORK.md#6c item 1
-
-\para{Effect (P1).} The consumer commits a transfer, mint, burn, or protected
-state write whose recipient, amount or identity is neither a public input nor
-equated to one by a guard that dominates the effect. ZKredential mints a
-caller-chosen amount to the caller; RacePass mints a pass to a caller-chosen
-recipient and stores a caller-chosen credential hash instead of the one the
-KYC proof exposes (\S\ref{sec:cases}). \code{msg.sender} is execution context,
-not proof authorization: it binds the recipient only if policy explicitly lets
-any caller receive the effect.%
-% src: docs/verdict-rules.md#recipient_allowed_by_any_caller_policy
-
-\para{Context (P2).} The proof does not fix the chain, the consumer address or
-the application domain, so a proof (or nullifier) valid in one deployment is
-valid in another. Protocol designs routinely add \code{chainid} and
-\code{address(this)} to public inputs~\cite{binding-design-2606}; the class is
-a known design requirement, not a new one.
-
-\para{Uniqueness (P3).} The replay key is not bound to the proof, not
-consumed, or not canonical modulo $r$. zkDrops keyed spent nullifiers on raw
-\code{uint256} values behind a verifier that accepted $n+r$, so one claim
-redeemed twice~\cite{zkdrops-pr2}.
-
-\para{Verifier and key configuration (P4).} The verifier itself accepts too
-much: $\gamma=\delta$ equal to the default $G_2$ generator, duplicate $\mathit{IC}$
-points, or no scalar-field guard on a public input. We add two
-\emph{verifier-generation} defects that we repeatedly observed. A
-\emph{wrong-field range check} compares public inputs with the base-field
-modulus $q$ instead of the scalar-field order $r$; since $q>r$, values in
-$[r,q)$ pass and alias. It appears in the zk\_voting verifier
-(\S\ref{sec:case-zkvoting}) and is the entire Solidity difference between the
-vulnerable and fixed revisions of a zk-email pair in our recall set.%
-% src: reports/groundtruth/REPORT.md#4 item 3 (zk-email q-vs-r: lt(v,q) -> lt(v,r)); reports/soundness/REPORT-2.md#case-adjudication-and-limits (DEV-F34)
+We group binding flaws by \emph{what the accepted proof fails to fix} and pair
+each class with the signature failure it resembles
+(Table~\ref{tab:taxonomy}). The classes are operational: each corresponds to
+a \tool{} rule with a stated positive-evidence condition (\S\ref{sec:design}).
+The taxonomy refines the integration layer of the SNARK SoK~\cite{sok-snarks}
+rather than replacing it. P3 and P4 are known classes and we credit them as
+such. P1 and P2 fall under the SoK's integration design errors without a named
+category, and P5 is close to its ``passing unchecked data''.%
+% src: RELATED-WORK.md#4-which-p-classes-are-new-by-the-literature-alone
 \
-\emph{Placeholder verifiers}---stubs returning \code{true}, ``simplified''
-verifiers without a pairing check, dummy constants---sit where a generated
-verifier belongs. Of 16 warning groups retained from development, 7 matched a
-stand-in verifier that accepts without a pairing check and 1 a placeholder with
-dummy constants.%
-% src: reports/groundtruth/REPORT.md#8-warning-groups-verifier-flags-and-blind-sheet (SIMPLIFIED/STAND-IN 7; PLACEHOLDER 1). Verifier kinds are AI judgements.
-\
-These classifications are AI opinion pending human review.
-
-\para{Interface shape (P5).} The consumer's public vector disagrees with the
-verifier arity or the circuit's public signals in count, order or meaning. In
-zk\_voting the consumer reads \code{input[0]} as a nullifier, but the circuit's
-only public signal is the boolean output \code{isVoteValid}
-(\S\ref{sec:case-zkvoting}).
-
-\para{Beyond P1--P5: relational mismatches (R).} The circuit constrains a
-prefix, mask or representation that differs from what the consumer relies on.
-The historical Payy \code{agg\_agg} defect left a message tail unconstrained
-while the consumer acted on the full array~\cite{payy-ghsa}. The SoK's
-``proof composition'' category is the closest match. \tool{} does not
-implement this class and returns \UNK{}.%
-% src: reports/groundtruth/REPORT.md#3 (Payy: no P1-P5 predicate captures the defect); RELATED-WORK.md#4 (R row)
+The last column of Table~\ref{tab:taxonomy} states which artifacts a checker
+must read to decide the class. It is the design input for \tool{}, and
+Table~\ref{tab:class-census} checks it against what auditors needed.
 
 \begin{table*}[t]
 \centering
-\caption{Binding-flaw taxonomy, grouped by what the accepted proof fails to fix.
-Grades follow the evidence ladder of \S\ref{sec:threat}; ``hist.''\ marks
-historical, previously public defects. \aiop{} marks AI-assistant judgements
-awaiting human review.}
+\caption{Binding-flaw taxonomy. Each class is named by what the accepted proof
+fails to fix and paired with the analogous signature failure. Instances are
+public cases from our incident census (R1) and audit census (R2); class labels
+for census rows are AI-proposed and await author review\aiop{}. ``Must know''
+names the artifacts a checker must read to decide the class.}
 \label{tab:taxonomy}
 \footnotesize
 \setlength{\tabcolsep}{3pt}
-\begin{tabular}{@{}p{1.55cm}p{3.3cm}p{6.6cm}p{2.6cm}p{2.6cm}@{}}
+\renewcommand{\arraystretch}{1.1}
+\begin{tabular}{@{}p{1.5cm}p{2.1cm}p{3.3cm}p{6.1cm}p{3.6cm}@{}}
 \toprule
-\textbf{Class} & \textbf{Proof fails to fix} & \textbf{Instances (evidence grade)} & \textbf{SoK category} & \textbf{\tool{} rule} \\
+\textbf{Class} & \textbf{Signature analogue} & \textbf{Proof fails to fix} &
+\textbf{Public instances (source)} & \textbf{Checker must know} \\
 \midrule
-P1 Effect & recipient, amount, or protected state identity of a committed effect &
-ZKredential caller-chosen mint (E4); RacePass caller-chosen recipient and
-credential hash (E4); 3 further development warnings (E1); synthetic
-effect-recipient, effect-amount, native-value, burn-owner, state-write
-families & integration design error (unnamed) & \reason{EFFECT\_VALUES\_DIRECT\_PUBLIC\_INPUTS} \\
-P2 Context & chain ID, consumer address, application domain &
-synthetic chain- and contract-scope nullifier cases; design
-guidance~\cite{binding-design-2606} & integration design error (unnamed) & \reason{CONTEXT\_BOUND\_*} \\
-P3 Uniqueness & replay key: bound, consumed, canonical &
-zkDrops field alias (E4, hist.); Semaphore alias pair (hist.); zk\_voting
-$q$-vs-$r$ guard (E1) & V7 complementary logic; V4 & \reason{REPLAY\_KEY\_CANONICAL\_AND\_CONSUMED} \\
-P4 Verifier/key & key ceremony output, IC points, scalar guards;
-\emph{generation defects}: wrong-field check, placeholder verifier &
-Veil Cash, FoomCash $\gamma=\delta$ (exploited, 2026); 16 default-key
-verifier files in 8 development repositories; 43 deployed default-key
-verifiers; zk-email $q$-vs-$r$ pair; 8 stand-in/placeholder warning
-groups\aiop{} & V10/V12 setup, unsafe verifier & \reason{VERIFICATION\_KEY\_CHECKS\_PASS} \\
-P5 Interface & count, order, meaning of the public vector &
-synthetic arity and decoding-order cases; zk\_voting nullifier read from a
-boolean output\aiop{} & V4 passing unchecked data & \reason{PUBLIC\_INPUT\_COUNT\_AND\_ORDER\_MATCH} \\
-R Relational & extent, prefix, mask, representation & Payy \code{agg\_agg}
-message tail (E4, hist., privileged prover) & V6 proof composition & not
-implemented (\UNK{}) \\
+P1 Effect & unsigned message field &
+recipient, amount or identity of a committed effect &
+Railgun: inputs-hash preimage omits two output commitments
+(Critical~\cite{abdk-railgun}); Singularity: relayer and fee are not public
+inputs (Critical~\cite{zellic-singularity}); \CaseA{}, \CaseB{} (E4, under
+disclosure) &
+consumer and verifier arity; the circuit when the value is bound through a
+commitment \\
+P1(a) Extent, reliance beyond binding & accepting trailing unsigned bytes &
+elements the consumer reads past the range the circuit constrains &
+Payy \code{agg\_agg}: message tail unconstrained while the consumer acts on
+the full array~\cite{payy-ghsa} &
+both: the consumer's read range and the circuit's constrained range \\
+P1(b) Extent, binding beyond discharge & a signed batch executed in part &
+the count of rows the consumer settles &
+Aztec Connect: proof covers the whole chunk, contract settles a calldata
+prefix (\usdM{\AztecLossUSD} lost~\cite{aztec-incident}) &
+both: the consumer's loop bound and its provenance; the circuit's padding
+semantics \\
+P2 Context & missing domain separation &
+chain, consumer, configuration or note type &
+Singularity: fungible and position notes not domain-separated
+(Critical~\cite{zellic-singularity}); Self: an unknown configuration id
+defaults to an empty policy (High~\cite{zksecurity-self}) &
+both: domain inputs are often mixed inside the circuit \\
+P3 Uniqueness & nonce reuse; malleability &
+a replay key that is bound, consumed and canonical &
+zkDrops~\cite{zkdrops-pr2} and Semaphore~v1~\cite{semaphore-16}: raw
+\code{uint256} keys behind verifiers that accept $n+r$; Singularity: payout
+before the nullifier write (Critical~\cite{zellic-singularity}); Anon
+Aadhaar: nullifier depends on a mutable photo
+(High~\cite{pse-anonaadhaar}) &
+both: consumption order in the consumer, canonicality in the verifier,
+nullifier determinism in the circuit \\
+P4 Verifier/key & weak or rogue key &
+the key and the verifier's own checks &
+Veil Cash and FoomCash: $\gamma=\delta$ keys, exploited in
+2026~\cite{veil-poc,foomcash}; ZKSwap: an exit verifier that performed no
+verification (exploited, 2025) &
+the verifier and key artifacts; the circuit when the verifier is itself a
+recursive circuit \\
+P5 Interface & message-format mismatch &
+count, order or meaning of the public vector &
+Anon Aadhaar: contract passes two revealed outputs in the opposite order
+from the circuit (Critical~\cite{pse-anonaadhaar}) &
+both: the circuit defines the public-signal order \\
 \bottomrule
 \end{tabular}
-% src (P1 E1 count): paper/zk/data/frozen-dev-stats.json#violation_rows (P1: DEV-F14, F35, F49 besides F30/F39)
-% src (P1 synthetic families): reports/redteam/REPORT.md#synthetic-comparison per-pattern table (family names; family-to-class assignment is the authors' reading, expected.json has no class field)
-% src (P4 16 files / 8 repos): feasibility/v2/REPORT.md#5-p4-census; reproduced in paper/zk/data/p4-g2-constant-check.json#summary.files_gamma_eq_delta
-% src (P4 43 deployed): reports/groundtruth/CLAIMS.md#A26; dataset/onchain-census-summary.json
-% src (P4 8 groups): reports/groundtruth/REPORT.md#8 (7 SIMPLIFIED/STAND-IN + 1 PLACEHOLDER)
+% src (P1 Railgun, Singularity 3.8; P2 Singularity 3.3, Self; P3 Singularity 3.2, Anon Aadhaar H1; P5 Anon Aadhaar C1): reports/R2/findings.csv (R2-RGABDK-CVF-20, R2-ZSING-3.8, R2-ZSING-3.3, R2-ZSSELF2-1, R2-ZSING-3.2, R2-AADH-H1, R2-AADH-C1)
+% src (P3 zkDrops, Semaphore v1; P4 Veil, FoomCash, ZKSwap): reports/R1/incidents.csv (R1-011, R1-009, R1-001, R1-002, R1-003)
+% src (P1(a), P1(b)): reports/AZ1/REPORT.md#extent-binding-pattern-definition; R1-005
+% src (Case A/B): reports/impact/REPORT.md (anonymised until S7)
 \end{table*}
+
+\para{Effect (P1).}
+The consumer commits a transfer, mint, burn or protected state write whose
+recipient, amount or identity is neither a public input nor equated to one by
+a guard that dominates the effect. The value may also be bound in name only:
+Railgun's verifier contract computed the public-input hash from a preimage
+that left out two output commitments, so the proof did not fix
+them~\cite{abdk-railgun}. \code{msg.sender} is execution context, not proof
+authorization. It binds a recipient only if the policy lets any caller
+receive the effect.%
+% src: reports/R2/findings.csv#R2-RGABDK-CVF-20; docs/verdict-rules.md#recipient_allowed_by_any_caller_policy
+
+\para{Context (P2).}
+The proof does not fix the chain, the consumer, the configuration or the kind
+of object it speaks about, so a proof valid in one context is accepted in
+another. Protocol designs add \code{chainid} and \code{address(this)} to the
+public inputs for this reason~\cite{binding-design-2606}. The audits show
+subtler contexts: note types inside one pool~\cite{zellic-singularity}, and a
+policy selector whose default is an empty policy~\cite{zksecurity-self}.
+
+\para{Uniqueness (P3).}
+The replay key is not bound to the proof, not consumed before the effect, or
+not canonical modulo the scalar-field order $r$. If the verifier accepts both
+$n$ and $n+r$ and the consumer keys a mapping on the raw \code{uint256}, one
+proof redeems twice~\cite{zkdrops-pr2,semaphore-16}. A nullifier that
+depends on mutable data is the circuit-side variant~\cite{pse-anonaadhaar}.
+
+\para{Verifier and key (P4).}
+The verifier accepts too much: a key with $\gamma=\delta$, duplicate input
+points, a range check against the base-field modulus $q$ instead of $r$, or a
+placeholder that returns \code{true}. A Solidity verifier and its key can be
+checked without the circuit or the consumer; a verifier embedded in a
+recursive or aggregation circuit cannot, which is why the audit census labels
+some P4 findings as needing the circuit. The exploited cases in our census are
+concentrated in this class (Table~\ref{tab:class-census}). We treat them as a root-cause
+class introduced by generators and templates
+(\S\ref{sec:cases}); Table~\ref{tab:generators} will list, per verifier
+generator, which of these checks its template performs by default.
+
+\begin{table}[t]
+\centering
+\caption{Verifier generators and their defaults (P4 root causes).
+\TODO{S1: placeholder until the tracked S1 generator census exists; the
+table is generated from \code{reports/S1/generators.csv} by
+\code{make paper-tables}.}}
+\label{tab:generators}
+\footnotesize
+\input{../generated/T-generators}
+\end{table}
+
+\para{Interface (P5).}
+The consumer's public vector disagrees with the verifier's arity or with the
+circuit's public signals in count, order or meaning. The order is defined by
+the circuit (outputs first, then public inputs in declaration order), so a
+contract-only reader cannot decide it~\cite{pse-anonaadhaar}.
+
+\subsection{Extent binding}\label{sec:extent}
+
+Extent binding is the refinement of P1 in which the unbound effect parameter
+is \emph{which elements} of a proved sequence the consumer acts on
+(\S\ref{sec:threat}). P1 as usually checked looks at the recipient and amount
+of individual effect calls, so it covers neither direction.
+
+\para{(a) Reliance beyond binding.}
+The consumer relies on elements the circuit does not constrain. In the Payy
+\code{agg\_agg} advisory, the circuit constrained messages only up to an
+active count, while the consumer acted on the whole array~\cite{payy-ghsa}.
+This direction breaks authorization: an effect depends on an unconstrained
+value.
+
+\para{(b) Binding beyond discharge.}
+The circuit constrains and applies elements that the consumer never settles.
+In Aztec Connect the proof covered every row of a chunk, while the consumer
+discharged deposits only below a calldata count
+(\S\ref{sec:motivating}). Nothing unauthorized is paid at the moment of
+settlement; a required obligation is silently dropped, and the loss comes
+later. This direction breaks coverage. An extent rule written for direction
+(a) is satisfied by this case, which is why our earlier rule missed it.%
+% src: reports/AZ1/REPORT.md#tool--target--verdict (R-EXTENT interface row)
+
+\para{What a checker must know.}
+Deciding direction (b) needs four facts: the consumer's loop bound and its
+provenance (public input, derived from one, or raw calldata); which elements
+the public inputs or a commitment fix, and over what length; whether the
+circuit forces elements past the true count to be neutral; and which
+per-element effects are required obligations. The first and last are consumer
+facts and give a candidate. The third is a circuit fact and decides it: if
+padding rows are provably neutral, a short settlement loop is safe. In Aztec
+Connect the circuit did force padding to be neutral, but only relative to a
+private count that nothing tied to the consumer's count. A consumer-only
+repair, requiring every skipped row to be a proved no-op, turns the third fact
+into a consumer check; we validate that repair on our reconstruction.%
+% src: reports/AZ1/REPORT.md#extent-binding-pattern-definition ("Facts a checker needs"); #failed-approaches--surprises (BlockSec note on num_txs)
+
+\subsection{Grounding in incidents and audits}\label{sec:grounding}
+
+\begin{table*}[t]
+\centering
+\caption{Binding flaws in public incidents and audits, by class.
+\textbf{Top:} incident and disclosure census (R1), with exploitation and USD
+amounts; ``Other'' is out of scope. \textbf{Bottom:} audit census (R2), by
+severity, and whether deciding the finding needs the circuit. Both samples are
+convenience samples; labels are AI-proposed and await author
+review\aiop{}. R1 records Aztec Connect under P5 with P1 as the alternative;
+we classify it as P1(b) (\S\ref{sec:extent}) and keep the recorded class here
+until that review \TODO{R1b}.}
+\label{tab:class-census}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\input{../generated/T-incidents}\\[6pt]
+\input{../generated/T-audits}
+\end{table*}
+
+Table~\ref{tab:class-census} grounds each class in public cases. The incident
+census holds \RoneCases{} records, \RoneInClassCases{} of them in P1--P5.%
+% src: paper/generated/numbers.tex#RoneCases,RoneInClassCases
+\
+Every exploited in-class case falls in P4, except Aztec Connect, the only exploited
+case in which a valid proof was accepted and the contract acted differently from
+what was proved. The audit census shows that auditors find the other classes
+routinely: \RtwoBindingAudits{} of \RtwoAudits{} audits report a binding flaw
+(\RtwoBindingAuditShare{}), and \RtwoBindingNeedsCircuitShare{} of the
+binding findings could not be decided from the Solidity alone.%
+% src: paper/generated/numbers.tex#RtwoBindingAudits,RtwoAudits,RtwoBindingAuditShare,RtwoBindingNeedsCircuitShare
+\
+That share differs by class in the direction Table~\ref{tab:taxonomy}
+predicts: P1 and P3 findings are mostly visible in the contract, while P2 findings and
+the few P5 findings mostly need the circuit. We do not know how much value the
+audited protocols held at report time, and one protocol contributes most of
+the High or Critical findings \TODO{PP: macro for that share}; the census
+shows that the classes occur in professional practice, not how often they
+occur in deployed code. Prevalence in deployed applications is the question
+of the held-out evaluation (\S\ref{sec:res-heldout}).

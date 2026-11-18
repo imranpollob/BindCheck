@@ -7,7 +7,7 @@
 \usepackage{multirow}
 \usepackage{xcolor}
 \usepackage{tikz}
-\usetikzlibrary{arrows.meta,positioning,fit,shapes.geometric,calc}
+\usetikzlibrary{arrows.meta,positioning,fit,shapes.geometric,calc,decorations.pathreplacing,patterns}
 \usepackage{pgfplots}
 \pgfplotsset{compat=1.17}
 \usepackage{listings}
@@ -39,3 +39,19 @@
   columns=fullflexible, breaklines=true, frame=tb, aboveskip=4pt, belowskip=2pt,
   escapechar=@
 }
+
+% ---------------------------------------------------------------------------
+% S8a (EuroS&P 2027 framing). Placeholder naming the lane that fills it.
+% Every \TODO is listed with its lane in reports/S8a/REPORT.md.
+\newcommand{\TODO}[1]{\textcolor{orange!85!black}{\textbf{[TODO: #1]}}}
+% Generated numbers. Every number in the S8a sections comes from
+% paper/generated/numbers.tex (make paper-tables) or carries a \TODO.
+\input{../generated/numbers}
+\usepackage{xfp}
+% USD amount from a generated macro, in millions with one decimal.
+\newcommand{\usdM}[1]{\$\fpeval{round(#1/1000000,1)}M}
+% Anonymised names for findings whose disclosure is pending (S7 decides).
+\newcommand{\CaseA}{Case~A}
+\newcommand{\CaseB}{Case~B}
+% Signature-lens column helper.
+\newcommand{\sig}[1]{\emph{#1}}

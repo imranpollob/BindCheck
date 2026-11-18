@@ -1,0 +1,33 @@
+% F0: Aztec Connect extent gap ("proved rows vs settled prefix").
+% Facts: reports/AZ1/REPORT.md#mechanism-with-code-lines. Symbolic sizes only:
+% L = rows per proved chunk, k = numRealTxs from calldata. Not to scale.
+{\renewcommand{\code}[1]{\texttt{#1}}%
+\begin{tikzpicture}[
+  font=\scriptsize,
+  row/.style={draw, minimum width=0.95cm, minimum height=0.6cm, inner sep=0pt, fill=white},
+  bad/.style={row, draw=red!70!black, thick, pattern=north east lines, pattern color=red!40},
+  brace/.style={decorate, decoration={brace, amplitude=4pt}, semithick},
+  lab/.style={align=center, font=\scriptsize}
+]
+% rows 0..k-1 settled; rows k..L-1 proved only
+\foreach \i/\t in {0/{$0$},1/{$1$},2/{$\cdots$},3/{$k{-}1$}} {
+  \node[row, fill=green!12] (r\i) at (\i*0.95, 0) {\t};
+}
+\node[bad] (r4) at (4*0.95, 0) {$k$};
+\foreach \i/\t in {5/{$\cdots$},6/{$L{-}1$}} {
+  \node[row] (r\i) at (\i*0.95, 0) {\t};
+}
+% top brace: what the proof binds
+\draw[brace] ([yshift=2pt]r0.north west) -- ([yshift=2pt]r6.north east)
+  node[midway, above=5pt, lab] {\textbf{bound by the proof}: public-input hash over all $L$ rows\\
+  (\code{numRealTxs} is not in the hash)};
+% bottom brace: what the contract settles
+\draw[brace] ([yshift=-2pt]r3.south east) -- ([yshift=-2pt]r0.south west)
+  node[midway, below=5pt, lab] {\textbf{settled by the contract}\\
+  loop over rows $<k$,\\ $k$ = \code{numRealTxs} (calldata)};
+% annotation for the gap
+\node[lab, text width=2.85cm, anchor=north west, red!60!black]
+  at ([xshift=-2pt, yshift=-8pt]r4.south west)
+  {deposit row past $k$: credited in the proved state, \textbf{never collected} on chain};
+\end{tikzpicture}%
+}
