@@ -281,7 +281,14 @@ async function deployAll(spec, resolver, provider, deployScript) {
     const from = resolver.signer(step.from || spec.scenario.deployer || spec.scenario.signers[0]);
     const factory = new ethers.ContractFactory(art.abi, art.bytecode, from);
     const args = (step.args || []).map((a) => resolver.resolve(a));
-    const contract = await factory.deploy(...args);
+    // Fixed gasLimit skips eth_estimateGas on deploys, which can transiently
+    // fail with "missing revert data" against a busy local node. Deploys never
+    // revert here, so a high fixed limit (well under Anvil's 30M block limit) is
+    // safe and deterministic.
+    const contract = await factory.deploy(...args, {
+      nonce: await nextNonce(from),
+      gasLimit: 20000000n,
+    });
     await contract.waitForDeployment();
     const target = await contract.getAddress();
     deployments[step.name] = { contract, target, abi: art.abi };
@@ -299,10 +306,18 @@ function buildArgs(argSpecs, resolver, overrides) {
   });
 }
 
+// Explicit, sequential nonce: every write awaits the prior one, so the mined
+// ("latest") count is the correct next nonce. This removes "nonce has already
+// been used" races from the provider's pending cache on a busy local node.
+async function nextNonce(signer) {
+  return signer.getNonce("latest");
+}
+
 async function sendTx(deployment, func, args, signer, value) {
   const connected = deployment.contract.connect(signer);
-  const overrides = value ? { value } : {};
   try {
+    const overrides = { nonce: await nextNonce(signer) };
+    if (value) overrides.value = value;
     const tx = await connected[func](...args, overrides);
     const receipt = await tx.wait();
     return { succeeded: receipt.status === 1, hash: tx.hash, receipt, error: null };
@@ -365,6 +380,21 @@ async function runTrial(env, trial) {
     const r = await sendTx(dep, step.function, args, from, null);
     if (!r.succeeded) {
       return { ...trial, result: "UNKNOWN", reason: `post_deploy ${step.function} reverted: ${r.error}` };
+    }
+  }
+
+  // Admitted initial state (S4b): manifest-declared setup applied on the owned
+  // local chain before any honest/mutated call, so a confirmed effect's
+  // magnitude is measured against a non-trivial baseline, not a blank chain.
+  const admittedInitialState = [];
+  for (const step of scenario.initial_state || []) {
+    const dep = deployments[step.target];
+    const from = resolver.signer(step.from);
+    const args = (step.args || []).map((a) => resolver.resolve(a));
+    const r = await sendTx(dep, step.function, args, from, step.value ? resolver.resolve(step.value) : null);
+    admittedInitialState.push({ target: step.target, function: step.function, applied: r.succeeded, error: r.error });
+    if (!r.succeeded) {
+      return { ...trial, result: "UNKNOWN", reason: `initial_state ${step.function} reverted: ${r.error}` };
     }
   }
 
@@ -432,10 +462,26 @@ async function runTrial(env, trial) {
   }
   // REPLAY: identical honest tx (no overrides), target unchanged.
 
+  const contractsByAddr = {};
+  for (const dep of Object.values(deployments)) {
+    contractsByAddr[dep.target.toLowerCase()] = dep.contract;
+  }
+  Object.assign(contractsByAddr, domainContracts);
+
+  // Value-at-risk (S4b): snapshot token supply and signer balances immediately
+  // before the mutated tx (i.e. after deploy + initial_state + any prelude) and
+  // again after, so the committed magnitude is exact and signed.
+  const valueBefore = await snapshotValues(contractsByAddr, signers);
+
   // `overrides` maps argName -> value expression; buildArgs resolves them.
   const args = buildArgs(honest.args, resolver, overrides);
   const settled = await sendTx(target, honest.function, args, from, honestValue);
   const stateDiff = await trace(provider, settled.hash);
+  const valueAfter = await snapshotValues(contractsByAddr, signers);
+  const valueAtRisk = {
+    admitted_initial_state: admittedInitialState,
+    deltas: valueDeltas(valueBefore, valueAfter),
+  };
 
   const effects = settled.succeeded ? extractEffects(settled.receipt, deploymentsByAddr) : [];
 
@@ -452,14 +498,24 @@ async function runTrial(env, trial) {
     single_use_double_spend: doubleSpend,
     mutated_sender: from.address,
   };
-  const contractsByAddr = {};
-  for (const dep of Object.values(deployments)) {
-    contractsByAddr[dep.target.toLowerCase()] = dep.contract;
-  }
-  Object.assign(contractsByAddr, domainContracts);
   const violations = settled.succeeded
     ? await evaluatePolicy(spec.policy, effects, context, resolver, contractsByAddr)
     : [];
+
+  // Signed magnitude per protected effect: ERC-20 value, or one unit per ERC-721
+  // token id. Direction is + (value created for / routed to the recipient).
+  for (const effect of effects) {
+    effect.magnitude = effect.kind === "erc20_transfer" ? effect.value : "1";
+    effect.magnitude_unit = effect.kind === "erc20_transfer" ? "token-wei" : "nft-unit";
+  }
+  valueAtRisk.effects = effects.map((e) => ({
+    contract: e.contract,
+    kind: e.kind,
+    recipient: e.to,
+    token_id: e.token_id,
+    magnitude: e.magnitude,
+    magnitude_unit: e.magnitude_unit,
+  }));
 
   let result;
   let reason;
@@ -494,6 +550,7 @@ async function runTrial(env, trial) {
     prelude: prelude ? { succeeded: prelude.succeeded, hash: prelude.hash } : null,
     protected_effects: effects,
     policy_violations: violations,
+    value_at_risk: valueAtRisk,
     authorization_key: authKey,
     events: settled.receipt ? settled.receipt.logs.map((l) => ({ address: l.address, topics: l.topics, data: l.data })) : [],
     state_diff: stateDiff,
@@ -505,6 +562,64 @@ function isMintAny(effect, policy) {
     if (isMint(effect, rule.match || {})) return true;
   }
   return false;
+}
+
+// ---- value-at-risk observation (S4b) ---------------------------------------
+
+// Snapshot totalSupply and each named signer's balanceOf on every token-like
+// contract. Read-only; owned local chain only. ERC-721 balanceOf returns a
+// holdings count; ERC-20 returns a token amount. Missing views are skipped.
+async function snapshotValues(contractsByAddr, signers) {
+  const snap = {};
+  for (const [addr, contract] of Object.entries(contractsByAddr)) {
+    let total = null;
+    try {
+      total = (await contract.totalSupply()).toString();
+    } catch (_) {
+      /* not a supply-bearing token */
+    }
+    const balances = {};
+    for (const [name, wallet] of Object.entries(signers)) {
+      try {
+        balances[name] = (await contract.balanceOf(wallet.address)).toString();
+      } catch (_) {
+        /* no balanceOf */
+      }
+    }
+    if (total !== null || Object.keys(balances).length) {
+      snap[addr] = { total_supply: total, balances };
+    }
+  }
+  return snap;
+}
+
+// Signed deltas between two value snapshots (after - before).
+function valueDeltas(before, after) {
+  const deltas = {};
+  for (const addr of new Set([...Object.keys(before), ...Object.keys(after)])) {
+    const b = before[addr] || { total_supply: null, balances: {} };
+    const a = after[addr] || { total_supply: null, balances: {} };
+    let supplyDelta = null;
+    if (a.total_supply !== null && b.total_supply !== null) {
+      supplyDelta = (BigInt(a.total_supply) - BigInt(b.total_supply)).toString();
+    }
+    const balanceDeltas = {};
+    for (const name of new Set([...Object.keys(b.balances), ...Object.keys(a.balances)])) {
+      const bv = BigInt(b.balances[name] ?? "0");
+      const av = BigInt(a.balances[name] ?? "0");
+      const d = av - bv;
+      if (d !== 0n) balanceDeltas[name] = d.toString();
+    }
+    if ((supplyDelta !== null && supplyDelta !== "0") || Object.keys(balanceDeltas).length) {
+      deltas[addr] = {
+        total_supply_before: b.total_supply,
+        total_supply_after: a.total_supply,
+        total_supply_delta: supplyDelta,
+        balance_deltas: balanceDeltas,
+      };
+    }
+  }
+  return deltas;
 }
 
 // ---- trial enumeration -----------------------------------------------------
@@ -555,7 +670,11 @@ function writeReplayBundle(spec, trial) {
 
 async function main() {
   const spec = readJson(process.env.ORACLE_DRIVER_SPEC);
-  const provider = new ethers.JsonRpcProvider(process.env.ORACLE_RPC_URL);
+  const provider = new ethers.JsonRpcProvider(
+    process.env.ORACLE_RPC_URL,
+    undefined,
+    { staticNetwork: true }
+  );
   await provider.ready;
 
   const scenario = spec.scenario;
@@ -585,11 +704,11 @@ async function main() {
     now: Number((await provider.getBlock("latest")).timestamp),
   });
   const honestDeploy = await deployAll(spec, honestResolver, provider, baseDeploy);
-  for (const step of scenario.post_deploy || []) {
+  for (const step of [...(scenario.post_deploy || []), ...(scenario.initial_state || [])]) {
     const dep = honestDeploy.deployments[step.target];
     const from = honestResolver.signer(step.from);
     const args = (step.args || []).map((a) => honestResolver.resolve(a));
-    await sendTx(dep, step.function, args, from, null);
+    await sendTx(dep, step.function, args, from, step.value ? honestResolver.resolve(step.value) : null);
   }
   const honestVa = await verifierAccepts(scenario, honestDeploy.deployments, honestResolver);
   const honestArgs = buildArgs(scenario.honest_tx.args, honestResolver, null);

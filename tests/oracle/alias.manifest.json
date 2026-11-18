@@ -183,7 +183,22 @@
             "proof": "{source}/fixtures/cred-proof.json",
             "public": "{source}/fixtures/cred-public.json"
           }
-        }
+        },
+        "initial_state": [
+          {
+            "target": "token",
+            "function": "mint",
+            "from": "deployer",
+            "args": [
+              {
+                "$signer": "deployer"
+              },
+              {
+                "$uint": "500000"
+              }
+            ]
+          }
+        ]
       }
     }
   ]
