@@ -13,6 +13,7 @@ import argparse
 import hashlib
 import json
 import os
+import re
 import shutil
 import signal
 import socket
@@ -37,6 +38,8 @@ ALLOWED_OWNED_PREFIXES = (
     ROOT / "tests" / "oracle",
     ROOT / "reports" / "S4",
     ROOT / "results" / "raw" / "S4",
+    ROOT / "reports" / "F2",
+    ROOT / "results" / "raw" / "F2",
 )
 
 # Keys/phrases that would encode the expected verdict into a policy file. The
@@ -63,6 +66,39 @@ FORBIDDEN_POLICY_PHRASES = (
 
 class OracleError(RuntimeError):
     """A fail-closed oracle error."""
+
+
+# XR-08: manifest-provided commands (prepare/proof/transform/build and the
+# driver) run with arbitrary argv/cwd/env. The safety claim is that no step
+# forks a chain, dials a public RPC, or broadcasts. We enforce that at the
+# command layer by rejecting the concrete chain-network vectors — a fork URL, a
+# broadcast flag, or an RPC/URL argument whose host is not loopback — in every
+# command's argv and env values, before it is launched. This is a command-token
+# denylist, not a full network sandbox: it blocks the known fork/public-RPC/
+# broadcast flags while still permitting local Anvil (127.0.0.1) and package
+# installs that take no URL argument. The reports state this boundary explicitly.
+_LOCAL_HOSTS = {"127.0.0.1", "localhost", "0.0.0.0", "::1", "[::1]"}
+_URL_RE = re.compile(r"\b(?:https?|wss?|ftp)://([^/\s:\"']+)", re.IGNORECASE)
+_FORBIDDEN_FLAG_SUBSTRINGS = ("--fork-url", "--broadcast", "--unlocked")
+
+
+def _assert_local_only_command(name: str, tokens: list[str]) -> None:
+    for token in tokens:
+        text = str(token)
+        low = text.lower()
+        for bad in _FORBIDDEN_FLAG_SUBSTRINGS:
+            if bad in low:
+                raise OracleError(
+                    f"command {name!r} uses {bad!r}: fork/broadcast is forbidden "
+                    f"(H1 not approved); prepare/proof/transform/build and the driver "
+                    f"may only touch the local Anvil chain"
+                )
+        for host in _URL_RE.findall(text):
+            if host.lower() not in _LOCAL_HOSTS:
+                raise OracleError(
+                    f"command {name!r} references non-local URL host {host!r}: "
+                    f"no public-chain RPC or network fetch is permitted in oracle commands"
+                )
 
 
 @dataclass
@@ -126,6 +162,12 @@ def _command(
     )
     if extra_env:
         env.update(extra_env)
+    # XR-08: reject fork/broadcast/public-RPC vectors in argv and manifest-set
+    # env before launching. os.environ inherited values are not scanned (they are
+    # the operator's own shell, not manifest-supplied); only argv and the
+    # manifest/driver env additions are attacker-controlled via the manifest.
+    manifest_env_values = list(spec.get("env", {}).values()) + list((extra_env or {}).values())
+    _assert_local_only_command(name, argv + [str(v) for v in manifest_env_values])
     log = logs / f"{len(records):02d}-{name}.log"
     start = time.monotonic()
     with log.open("w", encoding="utf-8") as handle:
@@ -357,6 +399,10 @@ def run(manifest_path: Path, out: Path, fork_url: str | None = None) -> dict[str
                     "ORACLE_DRIVER_SPEC": str(driver_spec_path),
                     "ORACLE_RPC_URL": rpc_url,
                     "NODE_PATH": str(driver_node_modules),
+                    # Pin ethers by absolute path so a repo-root node_modules
+                    # (e.g. installed for an external proof pipeline) cannot
+                    # shadow the driver's pinned 6.x. See evm_runner.cjs.
+                    "ORACLE_ETHERS_PATH": str(driver_node_modules / "ethers"),
                 }
                 driver_command = {
                     "name": f"execute-{variant_id}",

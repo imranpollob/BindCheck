@@ -221,3 +221,180 @@ contract ObligationConsumerFixed {
         fee.mint(treasury, FEE); // effect B: always discharged
     }
 }
+
+/// XR-07 control. The fee amount is a free argument. The honest claim pays the
+/// full fee (+50); a mutated claim can underpay (e.g. +1) while still minting the
+/// reward. A quantity-blind obligation check would mark +1 as discharged; the
+/// quantity-aware check must not.
+contract ObligationConsumerFeeArg {
+    IVerifier public verifier; // canonical
+    MintToken public reward;
+    MintToken public fee;
+    address public treasury;
+    mapping(bytes32 => bool) public spent;
+    uint256 public constant AMOUNT = 1000;
+
+    constructor(IVerifier v, MintToken r, MintToken f, address t) {
+        verifier = v;
+        reward = r;
+        fee = f;
+        treasury = t;
+    }
+
+    function claim(
+        uint256[2] calldata a,
+        uint256[2][2] calldata b,
+        uint256[2] calldata c,
+        uint256[] calldata pub,
+        address recipient,
+        uint256 feeAmount
+    ) external {
+        require(verifier.verifyProof(a, b, c, pub), "proof");
+        bytes32 nullifier = bytes32(pub[0]);
+        require(!spent[nullifier], "spent");
+        spent[nullifier] = true;
+        reward.mint(recipient, AMOUNT); // benefit
+        fee.mint(treasury, feeAmount); // obligation, quantity is caller-chosen
+    }
+}
+
+/// XR-01 negative control. Emits a `Transfer` log that looks like a mint but
+/// NEVER changes `balanceOf`. A verdict path that trusts the event alone would
+/// confirm an unauthorized effect; the state-corroboration gate must refuse it.
+/// The contract is its own token (holds `balanceOf` + `Transfer`), so the oracle
+/// reads this contract's state to corroborate the claimed effect.
+contract FakeEffectConsumer {
+    IVerifier public verifier;
+    mapping(address => uint256) public balanceOf; // never written
+    uint256 public constant AMOUNT = 1000;
+    event Transfer(address indexed from, address indexed to, uint256 value);
+
+    constructor(IVerifier v) {
+        verifier = v;
+    }
+
+    function claim(
+        uint256[2] calldata a,
+        uint256[2][2] calldata b,
+        uint256[2] calldata c,
+        uint256[] calldata pub,
+        address recipient
+    ) external {
+        require(verifier.verifyProof(a, b, c, pub), "proof");
+        // Fake committed effect: a mint-shaped event with no balance change.
+        emit Transfer(address(0), recipient, AMOUNT);
+    }
+}
+
+/// XR-02 negative control. A free `skipVerify` flag selects a branch that mints
+/// WITHOUT calling the verifier and WITHOUT the recipient-binding check. The
+/// honest branch verifies and binds. A verdict path that trusts a standalone
+/// check of the original proof would confirm; the mutated-path verifier gate
+/// must refuse, because the verifier is not called on the mutated path.
+contract SkipVerifyConsumer {
+    IVerifier public verifier;
+    MintToken public token;
+    mapping(bytes32 => bool) public spent;
+    uint256 public constant AMOUNT = 1000;
+
+    constructor(IVerifier v, MintToken t) {
+        verifier = v;
+        token = t;
+    }
+
+    function claim(
+        uint256[2] calldata a,
+        uint256[2][2] calldata b,
+        uint256[2] calldata c,
+        uint256[] calldata pub,
+        address recipient,
+        bool skipVerify
+    ) external {
+        if (skipVerify) {
+            // Bypass branch: no verifier call, no binding. Mints a real effect
+            // (so the state-corroboration gate passes) to the caller.
+            token.mint(msg.sender, AMOUNT);
+            return;
+        }
+        require(verifier.verifyProof(a, b, c, pub), "proof");
+        require(recipient == address(uint160(pub[1])), "recipient not bound to proof");
+        token.mint(recipient, AMOUNT);
+    }
+}
+
+/// S4d view-obligation control (vulnerable). Mirrors the AZ1 fault shape with a
+/// trivial verifier: a claim credits a counter (the benefit, a state effect with
+/// NO Transfer event) by `creditTotal`, then settles backing only over the first
+/// `numRealRows` rows. `numRealRows` is a free argument, so a mutated claim can
+/// grant the full credit while settling less backing — an undischarged VIEW
+/// obligation (settled backing must track the credit). A nullifier guard and a
+/// canonical verifier isolate this from replay/alias.
+contract CreditSettleVulnerable {
+    IVerifier public verifier; // canonical
+    uint256 public totalCredit;    // benefit counter (no event)
+    uint256 public settledBacking; // obligation counter (no event)
+    mapping(bytes32 => bool) public spent;
+    uint256 internal constant M = 4;
+
+    constructor(IVerifier v) {
+        verifier = v;
+    }
+
+    function claim(
+        uint256[2] calldata a,
+        uint256[2][2] calldata b,
+        uint256[2] calldata c,
+        uint256[] calldata pub,
+        uint256 creditTotal,
+        uint256[4] calldata amounts,
+        uint256 numRealRows
+    ) external {
+        require(verifier.verifyProof(a, b, c, pub), "proof");
+        require(numRealRows <= M, "numRealRows");
+        bytes32 nullifier = bytes32(pub[0]);
+        require(!spent[nullifier], "spent");
+        spent[nullifier] = true;
+        totalCredit += creditTotal; // benefit over all rows
+        for (uint256 i = 0; i < numRealRows; i++) {
+            settledBacking += amounts[i]; // obligation only over the settled extent
+        }
+    }
+}
+
+/// S4d view-obligation control (fixed). Same, plus: every row beyond the settled
+/// extent must be a zero-amount no-op, so the settled extent carries the full
+/// credit's backing. The row-count mutation reverts instead of under-settling.
+contract CreditSettleFixed {
+    IVerifier public verifier; // canonical
+    uint256 public totalCredit;
+    uint256 public settledBacking;
+    mapping(bytes32 => bool) public spent;
+    uint256 internal constant M = 4;
+
+    constructor(IVerifier v) {
+        verifier = v;
+    }
+
+    function claim(
+        uint256[2] calldata a,
+        uint256[2][2] calldata b,
+        uint256[2] calldata c,
+        uint256[] calldata pub,
+        uint256 creditTotal,
+        uint256[4] calldata amounts,
+        uint256 numRealRows
+    ) external {
+        require(verifier.verifyProof(a, b, c, pub), "proof");
+        require(numRealRows <= M, "numRealRows");
+        bytes32 nullifier = bytes32(pub[0]);
+        require(!spent[nullifier], "spent");
+        spent[nullifier] = true;
+        totalCredit += creditTotal;
+        for (uint256 i = 0; i < numRealRows; i++) {
+            settledBacking += amounts[i];
+        }
+        for (uint256 i = numRealRows; i < M; i++) {
+            require(amounts[i] == 0, "unsettled row");
+        }
+    }
+}

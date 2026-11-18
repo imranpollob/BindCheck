@@ -10,7 +10,11 @@
 
 const fs = require("fs");
 const path = require("path");
-const ethers = require("ethers");
+// Load the pinned ethers explicitly. NODE_PATH alone is not enough: node
+// resolves a `node_modules/ethers` in an ancestor of the cwd (e.g. a repo-root
+// install pulled in by snarkjs) before NODE_PATH, which can shadow the pinned
+// 6.x with an incompatible 5.x. runner.py sets ORACLE_ETHERS_PATH.
+const ethers = require(process.env.ORACLE_ETHERS_PATH || "ethers");
 
 // BN254 scalar field modulus r (snarkjs/groth16 public-signal field).
 const FIELD_R =
@@ -116,6 +120,9 @@ class Resolver {
         return arg;
       case "$signer":
         return this.signer(arg).address;
+      case "$signerUint":
+        // A signer address as a uint256 (for row-owner fields encoded as uint).
+        return BigInt(this.signer(arg).address);
       case "$addr":
         return this.deployment(arg).target;
       case "$keccakUtf8":
@@ -223,7 +230,27 @@ function matchesObligation(effect, match, resolver) {
     const want = String(resolver.resolve(match.to)).toLowerCase();
     if (!effect.to || effect.to.toLowerCase() !== want) return false;
   }
+  // XR-07: an obligation may fix the quantity. A fee of +1 does not discharge a
+  // required fee of +50. ERC-721 obligations may fix the token id instead.
+  if (match.value !== undefined && match.value !== null) {
+    const want = String(resolver.resolve(match.value));
+    if (effect.value === undefined || String(effect.value) !== want) return false;
+  }
+  if (match.token_id !== undefined && match.token_id !== null) {
+    const want = String(resolver.resolve(match.token_id));
+    if (effect.token_id === undefined || String(effect.token_id) !== want) return false;
+  }
   return true;
+}
+
+// XR-07: occurrence-preserving count of effects discharging an obligation. A
+// single matching event must not satisfy two required obligations of the same
+// shape, so discharge is scored as a multiset: the mutated count must reach the
+// honest count.
+function obligationCount(effects, match, resolver) {
+  let n = 0;
+  for (const e of effects) if (matchesObligation(e, match, resolver)) n += 1;
+  return n;
 }
 
 // ---- policy evaluation -----------------------------------------------------
@@ -282,17 +309,21 @@ async function evaluatePolicy(policy, effects, context, resolver, contractsByAdd
   // different shape from an unauthorized effect. Conditioning on the honest
   // path's own behaviour avoids flagging an obligation the real path never
   // produces (which would overclaim).
+  const honestCounts = context.honest_obligations || {};
   for (const obl of policy.required_obligations || []) {
-    const dischargedHere = effects.some((e) =>
-      matchesObligation(e, obl.match || {}, resolver)
-    );
-    const dischargedHonest = (context.honest_obligations || []).includes(obl.id);
-    if (context.benefit_committed && dischargedHonest && !dischargedHere) {
+    const honestN = honestCounts[obl.id] || 0;
+    const hereN = obligationCount(effects, obl.match || {}, resolver);
+    // Undischarged iff the honest path discharged it to multiplicity honestN,
+    // this tx granted the benefit, and it reaches fewer than honestN here (XR-07:
+    // a wrong amount or missing occurrence counts as undischarged).
+    if (context.benefit_committed && honestN > 0 && hereN < honestN) {
       violations.push({
         rule: obl.id,
         type: "undischarged_obligation",
         obligation: obl.id,
         description: obl.description || null,
+        required_occurrences: honestN,
+        observed_occurrences: hereN,
         discharged_by_honest: true,
         discharged_by_mutation: false,
       });
@@ -330,9 +361,10 @@ async function deployAll(spec, resolver, provider, deployScript) {
     // revert here, so a high fixed limit (well under Anvil's 30M block limit) is
     // safe and deterministic.
     const contract = await factory.deploy(...args, {
-      nonce: await nextNonce(from),
+      nonce: await allocNonce(from),
       gasLimit: 20000000n,
     });
+    bumpNonce(from);
     await contract.waitForDeployment();
     const target = await contract.getAddress();
     deployments[step.name] = { contract, target, abi: art.abi };
@@ -350,22 +382,43 @@ function buildArgs(argSpecs, resolver, overrides) {
   });
 }
 
-// Explicit, sequential nonce: every write awaits the prior one, so the mined
-// ("latest") count is the correct next nonce. This removes "nonce has already
-// been used" races from the provider's pending cache on a busy local node.
-async function nextNonce(signer) {
-  return signer.getNonce("latest");
+// Local per-signer nonce counter. Querying the node for every write (even with
+// "pending") races on a busy local node when several sends happen in quick
+// succession (e.g. a DOMAIN second-instance deploy burst), producing "nonce has
+// already been used". Instead we seed each signer's nonce once from the node and
+// advance it locally: `allocNonce` hands out the next nonce, `bumpNonce` is
+// called only after a tx is actually broadcast (so a tx that reverts at gas
+// estimation, before broadcast, does not consume one), and `resyncNonce`
+// re-reads the node after any failure to recover exactly.
+const _nonces = new Map();
+async function allocNonce(signer) {
+  const addr = signer.address;
+  if (!_nonces.has(addr)) {
+    _nonces.set(addr, Number(await signer.getNonce("pending")));
+  }
+  return _nonces.get(addr);
+}
+function bumpNonce(signer) {
+  const addr = signer.address;
+  if (_nonces.has(addr)) _nonces.set(addr, _nonces.get(addr) + 1);
+}
+async function resyncNonce(signer) {
+  _nonces.set(signer.address, Number(await signer.getNonce("pending")));
 }
 
 async function sendTx(deployment, func, args, signer, value) {
   const connected = deployment.contract.connect(signer);
   try {
-    const overrides = { nonce: await nextNonce(signer) };
+    const overrides = { nonce: await allocNonce(signer) };
     if (value) overrides.value = value;
     const tx = await connected[func](...args, overrides);
+    bumpNonce(signer); // broadcast succeeded: this nonce is now consumed
     const receipt = await tx.wait();
     return { succeeded: receipt.status === 1, hash: tx.hash, receipt, error: null };
   } catch (error) {
+    // A tx that reverts at gas estimation never broadcast, so its nonce is still
+    // free; re-read the node to recover the exact next nonce either way.
+    await resyncNonce(signer);
     return {
       succeeded: false,
       hash: error?.transaction?.hash || error?.receipt?.hash || null,
@@ -385,6 +438,111 @@ async function trace(provider, hash) {
   } catch (error) {
     return { trace_error: String(error.message || error) };
   }
+}
+
+// Call-level trace of a transaction (XR-02). Used to establish that the
+// unchanged verifier contract was actually invoked on the MUTATED execution
+// path and returned true, rather than relying on a standalone check of the
+// original proof (that standalone check is kept only as an E3 preflight).
+async function callTrace(provider, hash) {
+  if (!hash) return null;
+  try {
+    return await provider.send("debug_traceTransaction", [
+      hash,
+      { tracer: "callTracer" },
+    ]);
+  } catch (error) {
+    return { trace_error: String(error.message || error) };
+  }
+}
+
+// Flatten a callTracer tree into a list of {to, type, output, error, revert}.
+function flattenCalls(node, out) {
+  out = out || [];
+  if (!node || typeof node !== "object") return out;
+  if (node.to) {
+    out.push({
+      to: String(node.to).toLowerCase(),
+      type: node.type || null,
+      output: node.output || null,
+      error: node.error || null,
+      revertReason: node.revertReason || null,
+    });
+  }
+  for (const child of node.calls || []) flattenCalls(child, out);
+  return out;
+}
+
+// XR-02: did the mutated tx actually call one of the unchanged verifier
+// addresses, with that call returning boolean true and not reverting? A Groth16
+// `verifyProof`/`verify` returns a 32-byte word; we treat a non-reverting call
+// whose output decodes to 1 as acceptance on the mutated path.
+function verifierOnMutatedPath(callTree, verifierAddrs) {
+  const want = new Set((verifierAddrs || []).map((a) => a.toLowerCase()));
+  if (!want.size || !callTree || callTree.trace_error) {
+    return { established: false, reason: want.size ? "no_call_trace" : "no_verifier_declared", calls: [] };
+  }
+  const calls = flattenCalls(callTree, []);
+  const hits = calls.filter((c) => want.has(c.to));
+  for (const c of hits) {
+    if (c.error || c.revertReason) continue;
+    let truthy = false;
+    try {
+      truthy = c.output != null && BigInt(c.output) === 1n;
+    } catch (_) {
+      truthy = false;
+    }
+    if (truthy) {
+      return { established: true, reason: "verifier_called_true_on_mutated_path", callee: c.to };
+    }
+  }
+  return {
+    established: false,
+    reason: hits.length ? "verifier_called_but_not_true" : "verifier_not_called_on_mutated_path",
+    verifier_calls: hits,
+  };
+}
+
+// XR-01: corroborate a claimed protected effect against chain STATE, not just
+// the emitted event. Reads the recipient's token state immediately before and
+// after the mutated tx's block (historical calls on the owned local chain), so
+// a bare `Transfer` log with no matching balance/ownership change cannot carry
+// an E4. For ERC-20 the recipient balance must rise by exactly the logged value;
+// for ERC-721 the recipient must own the logged token id after the tx.
+async function corroborateEffect(contract, effect, blockNumber) {
+  if (!contract || blockNumber == null) {
+    return { corroborated: false, reason: "no_contract_or_block" };
+  }
+  const before = blockNumber - 1;
+  try {
+    if (effect.kind === "erc20_transfer") {
+      const b = await contract.balanceOf(effect.to, { blockTag: before });
+      const a = await contract.balanceOf(effect.to, { blockTag: blockNumber });
+      const delta = BigInt(a) - BigInt(b);
+      const ok = delta === BigInt(effect.value);
+      return {
+        corroborated: ok,
+        reason: ok ? "balance_delta_matches_value" : "balance_delta_mismatch",
+        recipient_balance_before: b.toString(),
+        recipient_balance_after: a.toString(),
+        recipient_balance_delta: delta.toString(),
+        logged_value: effect.value,
+      };
+    }
+    if (effect.kind === "erc721_transfer") {
+      const owner = await contract.ownerOf(effect.token_id, { blockTag: blockNumber });
+      const ok = String(owner).toLowerCase() === effect.to.toLowerCase();
+      return {
+        corroborated: ok,
+        reason: ok ? "owner_matches_recipient" : "owner_mismatch",
+        owner_after: String(owner),
+        logged_recipient: effect.to,
+      };
+    }
+  } catch (error) {
+    return { corroborated: false, reason: "state_read_failed: " + String(error.shortMessage || error.message || error) };
+  }
+  return { corroborated: false, reason: "unsupported_effect_kind" };
 }
 
 // Verify the proof is accepted by the UNCHANGED verifier contract directly.
@@ -469,6 +627,10 @@ async function runTrial(env, trial) {
   let overrides = null;
   let aliasNote = null;
   const domainContracts = {}; // address -> contract, for DOMAIN second instance
+  // Deployment set whose verifier the mutated tx actually runs against (the
+  // second instance for DOMAIN). Used to establish the verifier call on the
+  // mutated path (XR-02).
+  let verifierDeployments = deployments;
 
   if (trial.operator === "CALLER") {
     from = resolver.signer(trial.caller);
@@ -503,6 +665,7 @@ async function runTrial(env, trial) {
       domainContracts[dep.target.toLowerCase()] = dep.contract;
     }
     target = second.deployments[honest.target];
+    verifierDeployments = second.deployments;
   }
   // REPLAY: identical honest tx (no overrides), target unchanged.
 
@@ -512,22 +675,50 @@ async function runTrial(env, trial) {
   }
   Object.assign(contractsByAddr, domainContracts);
 
+  // Deployment set the mutated tx runs against (second instance for DOMAIN).
+  const activeDeployments = verifierDeployments;
+
   // Value-at-risk (S4b): snapshot token supply and signer balances immediately
   // before the mutated tx (i.e. after deploy + initial_state + any prelude) and
   // again after, so the committed magnitude is exact and signed.
   const valueBefore = await snapshotValues(contractsByAddr, signers);
+  // View-based state effects (S4d): credit/backing-style counters with no event.
+  const viewBefore = await readStateViews(activeDeployments, scenario, resolver);
 
   // `overrides` maps argName -> value expression; buildArgs resolves them.
   const args = buildArgs(honest.args, resolver, overrides);
   const settled = await sendTx(target, honest.function, args, from, honestValue);
   const stateDiff = await trace(provider, settled.hash);
+  const callTree = settled.succeeded ? await callTrace(provider, settled.hash) : null;
   const valueAfter = await snapshotValues(contractsByAddr, signers);
+  const viewAfter = await readStateViews(activeDeployments, scenario, resolver);
+  const viewDeltas = diffViews(viewBefore, viewAfter);
   const valueAtRisk = {
     admitted_initial_state: admittedInitialState,
     deltas: valueDeltas(valueBefore, valueAfter),
   };
 
   const effects = settled.succeeded ? extractEffects(settled.receipt, deploymentsByAddr) : [];
+
+  // XR-02: verifier acceptance on the MUTATED call path, from the call trace of
+  // the mutated tx itself (not the standalone original-proof preflight `va`).
+  const verifierAddrs = (scenario.verifier_checks || [])
+    .map((c) => verifierDeployments[c.contract] && verifierDeployments[c.contract].target)
+    .filter(Boolean);
+  const verifierPath = settled.succeeded
+    ? verifierOnMutatedPath(callTree, verifierAddrs)
+    : { established: false, reason: "mutated_tx_reverted" };
+
+  // XR-01: corroborate each claimed protected effect against chain state (a
+  // recipient balance rise / ownership change at the mutated tx's block). An
+  // event with no matching state cannot carry an E4.
+  const blockNumber = settled.receipt ? settled.receipt.blockNumber : null;
+  for (const effect of effects) {
+    if (isMintAny(effect, spec.policy)) {
+      const contract = contractsByAddr[effect.contract.toLowerCase()];
+      effect.state_corroboration = await corroborateEffect(contract, effect, blockNumber);
+    }
+  }
 
   // single-use double-spend detection
   let doubleSpend = false;
@@ -537,27 +728,32 @@ async function runTrial(env, trial) {
     doubleSpend = true;
   }
 
-  const benefitCommitted = effects.some((e) => isMintAny(e, spec.policy));
+  // A protected effect may be a transfer mint or a declared view increase (S4d).
+  const viewCommitted = settled.succeeded && protectedViewCommitted(spec.policy, viewDeltas);
+  const benefitCommitted = effects.some((e) => isMintAny(e, spec.policy)) || viewCommitted;
+  const honestCounts = env.honestObligations || {};
   const context = {
     authorization_key: authKey,
     single_use_double_spend: doubleSpend,
     mutated_sender: from.address,
-    honest_obligations: env.honestObligations || [],
+    honest_obligations: honestCounts,
     benefit_committed: benefitCommitted,
   };
-  const violations = settled.succeeded
+  const transferViolations = settled.succeeded
     ? await evaluatePolicy(spec.policy, effects, context, resolver, contractsByAddr)
     : [];
+  const viewViolations = settled.succeeded
+    ? evaluateViewObligations(spec.policy, viewDeltas, env.honestViewDeltas)
+    : [];
+  const violations = transferViolations.concat(viewViolations);
 
-  // Per-trial obligation ledger (S4c): for each declared required obligation,
-  // whether the honest reference discharged it and whether this mutated tx did.
+  // Per-trial obligation ledger (S4c/XR-07): honest vs mutated occurrence counts.
   const obligations = (spec.policy.required_obligations || []).map((obl) => ({
     id: obl.id,
     description: obl.description || null,
-    discharged_by_honest: (env.honestObligations || []).includes(obl.id),
-    discharged_by_mutation: effects.some((e) =>
-      matchesObligation(e, obl.match || {}, resolver)
-    ),
+    required_occurrences: honestCounts[obl.id] || 0,
+    discharged_by_honest: (honestCounts[obl.id] || 0) > 0,
+    observed_occurrences: obligationCount(effects, obl.match || {}, resolver),
   }));
 
   // Signed magnitude per protected effect: ERC-20 value, or one unit per ERC-721
@@ -575,31 +771,45 @@ async function runTrial(env, trial) {
     magnitude_unit: e.magnitude_unit,
   }));
 
+  // XR-01: a protected effect used to confirm must be state-corroborated. Any
+  // mint-shaped protected effect with no matching state read is disqualifying.
+  const uncorroborated = effects.filter(
+    (e) => e.state_corroboration && e.state_corroboration.corroborated === false
+  );
+
   let result;
   let reason;
   if (!settled.succeeded) {
     result = "NOT_CONFIRMED";
     reason = `reverted: ${settled.error}`;
-  } else if (effects.length === 0) {
+  } else if (effects.length === 0 && !viewCommitted) {
     result = "NOT_CONFIRMED";
     reason = "effects identical (no protected effect committed)";
   } else if (violations.length === 0) {
     result = "NOT_CONFIRMED";
     reason = "policy-permitted";
-  } else if (!va.accepted) {
+  } else if (uncorroborated.length > 0) {
+    // XR-01: an emitted Transfer not backed by a state change cannot carry E4.
     result = "UNKNOWN";
-    reason = "verifier acceptance not established";
+    reason = `EFFECT_NOT_STATE_CORROBORATED: ${uncorroborated
+      .map((e) => `${e.contract_role || e.contract}:${e.state_corroboration.reason}`)
+      .join("; ")}`;
+  } else if (!verifierPath.established) {
+    // XR-02: the unchanged verifier was not shown to accept on the mutated path.
+    result = "UNKNOWN";
+    reason = `VERIFIER_PATH_NOT_ESTABLISHED: ${verifierPath.reason}`;
   } else {
     result = "E4-CONFIRMED";
-    reason = "mutated tx succeeded through unchanged verifier+consumer and committed a policy violation";
+    reason = "mutated tx succeeded; unchanged verifier accepted on the mutated path; a state-corroborated protected effect violates the policy";
   }
 
   return jsonSafe({
     ...trial,
     result,
     reason,
-    verifier_accepted: va.accepted,
-    verifier_checks: va.results,
+    verifier_accepted_preflight: va.accepted,
+    verifier_checks_preflight: va.results,
+    verifier_on_mutated_path: verifierPath,
     tx_succeeded: settled.succeeded,
     tx_hash: settled.hash,
     tx_error: settled.error,
@@ -609,6 +819,13 @@ async function runTrial(env, trial) {
     protected_effects: effects,
     policy_violations: violations,
     obligations,
+    view_effects: {
+      deltas: Object.fromEntries(Object.entries(viewDeltas).map(([k, v]) => [k, v.toString()])),
+      honest_deltas: Object.fromEntries(
+        Object.entries(env.honestViewDeltas || {}).map(([k, v]) => [k, v.toString()])
+      ),
+      protected_committed: viewCommitted,
+    },
     value_at_risk: valueAtRisk,
     authorization_key: authKey,
     events: settled.receipt ? settled.receipt.logs.map((l) => ({ address: l.address, topics: l.topics, data: l.data })) : [],
@@ -621,6 +838,82 @@ function isMintAny(effect, policy) {
     if (isMint(effect, rule.match || {})) return true;
   }
   return false;
+}
+
+// ---- view-based effects (S4d / AZ1) ----------------------------------------
+//
+// Some protected effects and obligations are state-accounting changes with no
+// Transfer event (e.g. an L2 credit counter, or settled backing). The manifest
+// declares `scenario.state_views: [{name, contract, function, args?}]`; the
+// driver reads each as a uint before and after the mutated tx (and in the honest
+// reference) and works from the signed deltas. These are read-only `view` calls
+// on owned local deployments, so a view effect is state by construction (it
+// needs no separate XR-01 corroboration).
+
+async function readStateViews(deployments, scenario, resolver) {
+  const out = {};
+  for (const v of scenario.state_views || []) {
+    const dep = deployments[v.contract];
+    if (!dep) continue;
+    try {
+      const args = (v.args || []).map((a) => resolver.resolve(a));
+      const raw = await dep.contract[v.function](...args);
+      out[v.name] = BigInt(raw);
+    } catch (_) {
+      /* view missing or reverted: left unset (treated as absent) */
+    }
+  }
+  return out;
+}
+
+function diffViews(before, after) {
+  const deltas = {};
+  for (const name of new Set([...Object.keys(before), ...Object.keys(after)])) {
+    const b = before[name] ?? 0n;
+    const a = after[name] ?? 0n;
+    deltas[name] = a - b; // bigint
+  }
+  return deltas;
+}
+
+// Does any declared protected view effect commit (its delta reaches min_delta)?
+function protectedViewCommitted(policy, viewDeltas) {
+  for (const pe of policy.protected_view_effects || []) {
+    const d = viewDeltas[pe.view] ?? 0n;
+    if (d >= BigInt(pe.min_delta ?? "1")) return true;
+  }
+  return false;
+}
+
+// Undischarged view obligations (S4d). A `view_obligation` says the obligation
+// view's delta must equal the credited protected view's delta (e.g. settled
+// backing must equal the L2 credit granted). It is faulted only when the honest
+// path discharged it (honest backing delta == honest credit delta, credit > 0)
+// and this mutated tx granted the credit but moved the backing by less.
+function evaluateViewObligations(policy, viewDeltas, honestViewDeltas) {
+  const violations = [];
+  const honest = honestViewDeltas || {};
+  for (const obl of policy.view_obligations || []) {
+    const creditDelta = viewDeltas[obl.must_equal_credit_of] ?? 0n;
+    const backingDelta = viewDeltas[obl.view] ?? 0n;
+    const honestCredit = honest[obl.must_equal_credit_of] ?? 0n;
+    const honestBacking = honest[obl.view] ?? 0n;
+    const honestDischarged = honestCredit > 0n && honestBacking === honestCredit;
+    if (honestDischarged && creditDelta > 0n && backingDelta < creditDelta) {
+      violations.push({
+        rule: obl.id,
+        type: "undischarged_view_obligation",
+        obligation: obl.id,
+        description: obl.description || null,
+        credited_view: obl.must_equal_credit_of,
+        credited_delta: creditDelta.toString(),
+        obligation_view: obl.view,
+        obligation_delta: backingDelta.toString(),
+        shortfall: (creditDelta - backingDelta).toString(),
+      });
+    }
+  }
+  return violations;
 }
 
 // ---- value-at-risk observation (S4b) ---------------------------------------
@@ -771,6 +1064,7 @@ async function main() {
   }
   const honestVa = await verifierAccepts(scenario, honestDeploy.deployments, honestResolver);
   const honestArgs = buildArgs(scenario.honest_tx.args, honestResolver, null);
+  const honestViewBefore = await readStateViews(honestDeploy.deployments, scenario, honestResolver);
   const honestSettled = await sendTx(
     honestDeploy.deployments[scenario.honest_tx.target],
     scenario.honest_tx.function,
@@ -778,17 +1072,17 @@ async function main() {
     honestResolver.signer(scenario.honest_tx.from),
     scenario.honest_tx.value ? honestResolver.resolve(scenario.honest_tx.value) : null
   );
+  const honestViewAfter = await readStateViews(honestDeploy.deployments, scenario, honestResolver);
+  env.honestViewDeltas = diffViews(honestViewBefore, honestViewAfter);
   const honestEffects = honestSettled.succeeded
     ? extractEffects(honestSettled.receipt, honestDeploy.deploymentsByAddr)
     : [];
-  // Required obligations the honest path actually discharges (S4c). A mutated
-  // trial can only be faulted for *omitting* an obligation the honest path
-  // itself commits, so this set is the reference the oracle conditions on.
-  const honestObligations = [];
+  // Required obligations the honest path discharges, with multiplicity (S4c +
+  // XR-07). A mutated trial can only be faulted for omitting an obligation the
+  // honest path itself commits, and only down to the honest occurrence count.
+  const honestObligations = {};
   for (const obl of spec.policy.required_obligations || []) {
-    if (honestEffects.some((e) => matchesObligation(e, obl.match || {}, honestResolver))) {
-      honestObligations.push(obl.id);
-    }
+    honestObligations[obl.id] = obligationCount(honestEffects, obl.match || {}, honestResolver);
   }
   env.honestObligations = honestObligations;
 
@@ -800,6 +1094,9 @@ async function main() {
     error: honestSettled.error,
     protected_effects: honestEffects,
     obligations_discharged: honestObligations,
+    view_deltas: Object.fromEntries(
+      Object.entries(env.honestViewDeltas || {}).map(([k, v]) => [k, v.toString()])
+    ),
   });
 
   const trials = [];
@@ -836,9 +1133,24 @@ async function main() {
   if (!honest.succeeded) process.exitCode = 3;
 }
 
-main().catch((error) => {
-  console.error(error);
-  process.exitCode = 2;
-});
+// Run only when executed directly; `require()` (e.g. the unit tests) just loads
+// the exported pure helpers without starting a trial run.
+if (require.main === module) {
+  main().catch((error) => {
+    console.error(error);
+    process.exitCode = 2;
+  });
+}
 
-module.exports = { FIELD_R, extractEffects, evaluatePolicy, matchesObligation };
+module.exports = {
+  FIELD_R,
+  extractEffects,
+  evaluatePolicy,
+  matchesObligation,
+  obligationCount,
+  flattenCalls,
+  verifierOnMutatedPath,
+  diffViews,
+  protectedViewCommitted,
+  evaluateViewObligations,
+};

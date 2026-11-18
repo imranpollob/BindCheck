@@ -1,0 +1,11 @@
+{
+  "policy_id": "synthetic-view-obligation",
+  "description": "Entitlement-only policy for a view-accounting control. States that the settled backing must track the credit each authorization grants. States no verdict.",
+  "roles": { "holder": "presenter of the batch proof" },
+  "protected_view_effects": [
+    { "id": "credit-granted", "view": "credit", "min_delta": "1" }
+  ],
+  "view_obligations": [
+    { "id": "backing-tracks-credit", "description": "the settled backing must equal the L2 credit granted by the authorization", "view": "backing", "must_equal_credit_of": "credit" }
+  ]
+}

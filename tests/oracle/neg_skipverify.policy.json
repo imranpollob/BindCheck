@@ -1,0 +1,14 @@
+{
+  "policy_id": "neg-skipverify",
+  "description": "Entitlement-only policy. The protected mint must reach the proof-bound recipient. States no verdict.",
+  "roles": { "holder": "presenter of the proof", "mint_recipient": "the account entitled to the mint" },
+  "protected_effects": [
+    {
+      "id": "skipverify_mint",
+      "match": { "type": "erc20_transfer", "from": "0x0", "contract_role": "token" },
+      "entitlements": [
+        { "field": "to", "equals": { "$pubAsAddress": { "proof": "cred", "index": 1 } } }
+      ]
+    }
+  ]
+}

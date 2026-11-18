@@ -1,0 +1,830 @@
+{
+  "schema_version": 1,
+  "case_id": "az1-extent-binding",
+  "safety": {
+    "local_only": true,
+    "fork_enabled": false
+  },
+  "source": {
+    "kind": "local_copy",
+    "path": "tests/oracle/az1"
+  },
+  "policy": "az1.policy.json",
+  "prepare": [
+    {
+      "name": "00_mkdir",
+      "cwd": "{out}",
+      "argv": [
+        "mkdir",
+        "-p",
+        "{out}/circuit",
+        "{out}/setup",
+        "{out}/proofs",
+        "{out}/build",
+        "{out}/artifacts",
+        "{out}/contracts"
+      ]
+    }
+  ],
+  "proof": [
+    {
+      "name": "10_circom",
+      "cwd": "{source}",
+      "argv": [
+        "{BC}/bindcheck-zk/tools/circom-src/target/release/circom",
+        "{source}/circuits/batch4.circom",
+        "--r1cs",
+        "--wasm",
+        "--sym",
+        "-l",
+        "{ROOT}/node_modules",
+        "-o",
+        "{out}/circuit"
+      ]
+    },
+    {
+      "name": "11_ptau_new",
+      "cwd": "{out}",
+      "argv": [
+        "{ROOT}/node_modules/.bin/snarkjs",
+        "powersoftau",
+        "new",
+        "bn128",
+        "12",
+        "{out}/setup/pot0.ptau"
+      ]
+    },
+    {
+      "name": "12_ptau_contribute",
+      "cwd": "{out}",
+      "argv": [
+        "{ROOT}/node_modules/.bin/snarkjs",
+        "powersoftau",
+        "contribute",
+        "{out}/setup/pot0.ptau",
+        "{out}/setup/pot1.ptau",
+        "--name=az1",
+        "-e=az1-fixed-toy-entropy"
+      ]
+    },
+    {
+      "name": "13_ptau_prep",
+      "cwd": "{out}",
+      "argv": [
+        "{ROOT}/node_modules/.bin/snarkjs",
+        "powersoftau",
+        "prepare",
+        "phase2",
+        "{out}/setup/pot1.ptau",
+        "{out}/setup/potf.ptau"
+      ]
+    },
+    {
+      "name": "14_setup",
+      "cwd": "{out}",
+      "argv": [
+        "{ROOT}/node_modules/.bin/snarkjs",
+        "groth16",
+        "setup",
+        "{out}/circuit/batch4.r1cs",
+        "{out}/setup/potf.ptau",
+        "{out}/setup/b0.zkey"
+      ]
+    },
+    {
+      "name": "15_zkey_contribute",
+      "cwd": "{out}",
+      "argv": [
+        "{ROOT}/node_modules/.bin/snarkjs",
+        "zkey",
+        "contribute",
+        "{out}/setup/b0.zkey",
+        "{out}/setup/batch.zkey",
+        "--name=az1",
+        "-e=az1-fixed-toy-entropy-2"
+      ]
+    },
+    {
+      "name": "16_vkey",
+      "cwd": "{out}",
+      "argv": [
+        "{ROOT}/node_modules/.bin/snarkjs",
+        "zkey",
+        "export",
+        "verificationkey",
+        "{out}/setup/batch.zkey",
+        "{out}/setup/vkey.json"
+      ]
+    },
+    {
+      "name": "17_verifier_sol",
+      "cwd": "{out}",
+      "argv": [
+        "{ROOT}/node_modules/.bin/snarkjs",
+        "zkey",
+        "export",
+        "solidityverifier",
+        "{out}/setup/batch.zkey",
+        "{out}/contracts/Groth16Verifier.sol"
+      ]
+    },
+    {
+      "name": "18_inputs",
+      "cwd": "{out}",
+      "env": {
+        "NODE_PATH": "{ROOT}/node_modules"
+      },
+      "argv": [
+        "node",
+        "{source}/scripts/fixture.js",
+        "inputs",
+        "{out}/proofs",
+        "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+        "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+        "0x90F79bf6EB2c4f870365E785982E1f101E93b906"
+      ]
+    },
+    {
+      "name": "19_fullprove",
+      "cwd": "{out}",
+      "argv": [
+        "{ROOT}/node_modules/.bin/snarkjs",
+        "groth16",
+        "fullprove",
+        "{out}/proofs/honest-input.json",
+        "{out}/circuit/batch4_js/batch4.wasm",
+        "{out}/setup/batch.zkey",
+        "{out}/proofs/honest-proof.json",
+        "{out}/proofs/honest-public.json"
+      ]
+    },
+    {
+      "name": "20_offchain_verify",
+      "cwd": "{out}",
+      "argv": [
+        "{ROOT}/node_modules/.bin/snarkjs",
+        "groth16",
+        "verify",
+        "{out}/setup/vkey.json",
+        "{out}/proofs/honest-public.json",
+        "{out}/proofs/honest-proof.json"
+      ]
+    },
+    {
+      "name": "21_copy_contracts",
+      "cwd": "{out}",
+      "argv": [
+        "bash",
+        "-lc",
+        "cp {source}/contracts/*.sol {out}/contracts/"
+      ]
+    },
+    {
+      "name": "22_solc",
+      "cwd": "{out}",
+      "argv": [
+        "/home/pollmix/.solc-select/artifacts/solc-0.8.11/solc-0.8.11",
+        "--optimize",
+        "--optimize-runs",
+        "200",
+        "--combined-json",
+        "abi,bin",
+        "--base-path",
+        "{out}/contracts",
+        "-o",
+        "{out}/build",
+        "--overwrite",
+        "{out}/contracts/SettlementFaulty.sol",
+        "{out}/contracts/SettlementFixed.sol"
+      ]
+    },
+    {
+      "name": "23_artifacts",
+      "cwd": "{out}",
+      "argv": [
+        "node",
+        "{source}/scripts/make_artifacts.js",
+        "{out}/build/combined.json",
+        "{out}/proofs/poseidon3.hex",
+        "{out}/proofs/poseidon4.hex",
+        "{out}/artifacts"
+      ]
+    }
+  ],
+  "variants": [
+    {
+      "id": "faulty",
+      "label": "AZ1 faulty: numRealRows unbound by the proof",
+      "build": [],
+      "artifacts": [
+        "{out}/artifacts"
+      ],
+      "scenario": {
+        "signers": [
+          "deployer",
+          "alice",
+          "bob",
+          "carol"
+        ],
+        "deploy": [
+          {
+            "name": "verifier",
+            "artifact": "Groth16Verifier",
+            "args": []
+          },
+          {
+            "name": "token",
+            "artifact": "TestToken",
+            "args": []
+          },
+          {
+            "name": "p3",
+            "artifact": "Poseidon3",
+            "args": []
+          },
+          {
+            "name": "p4",
+            "artifact": "Poseidon4",
+            "args": []
+          },
+          {
+            "name": "consumer",
+            "artifact": "SettlementFaulty",
+            "args": [
+              {
+                "$addr": "verifier"
+              },
+              {
+                "$addr": "token"
+              },
+              {
+                "$addr": "p3"
+              },
+              {
+                "$addr": "p4"
+              }
+            ]
+          }
+        ],
+        "initial_state": [
+          {
+            "target": "token",
+            "function": "mint",
+            "from": "deployer",
+            "args": [
+              {
+                "$signer": "alice"
+              },
+              {
+                "$uint": "1000"
+              }
+            ]
+          },
+          {
+            "target": "token",
+            "function": "mint",
+            "from": "deployer",
+            "args": [
+              {
+                "$signer": "bob"
+              },
+              {
+                "$uint": "1000"
+              }
+            ]
+          },
+          {
+            "target": "token",
+            "function": "approve",
+            "from": "alice",
+            "args": [
+              {
+                "$addr": "consumer"
+              },
+              {
+                "$uint": "1000"
+              }
+            ]
+          },
+          {
+            "target": "token",
+            "function": "approve",
+            "from": "bob",
+            "args": [
+              {
+                "$addr": "consumer"
+              },
+              {
+                "$uint": "1000"
+              }
+            ]
+          },
+          {
+            "target": "consumer",
+            "function": "depositPendingFunds",
+            "from": "alice",
+            "args": [
+              {
+                "$uint": "100"
+              }
+            ]
+          },
+          {
+            "target": "consumer",
+            "function": "depositPendingFunds",
+            "from": "bob",
+            "args": [
+              {
+                "$uint": "50"
+              }
+            ]
+          }
+        ],
+        "state_views": [
+          {
+            "name": "credit",
+            "contract": "consumer",
+            "function": "totalL2Credit"
+          },
+          {
+            "name": "backing",
+            "contract": "consumer",
+            "function": "settledBacking"
+          }
+        ],
+        "verifier_checks": [
+          {
+            "contract": "verifier",
+            "function": "verifyProof",
+            "args": [
+              {
+                "$proofPart": {
+                  "proof": "batch",
+                  "part": "a"
+                }
+              },
+              {
+                "$proofPart": {
+                  "proof": "batch",
+                  "part": "b"
+                }
+              },
+              {
+                "$proofPart": {
+                  "proof": "batch",
+                  "part": "c"
+                }
+              },
+              {
+                "$pubArray": {
+                  "proof": "batch"
+                }
+              }
+            ]
+          }
+        ],
+        "honest_tx": {
+          "target": "consumer",
+          "function": "processBatch",
+          "from": "alice",
+          "args": [
+            {
+              "name": "a",
+              "class": "proof",
+              "value": {
+                "$proofPart": {
+                  "proof": "batch",
+                  "part": "a"
+                }
+              }
+            },
+            {
+              "name": "b",
+              "class": "proof",
+              "value": {
+                "$proofPart": {
+                  "proof": "batch",
+                  "part": "b"
+                }
+              }
+            },
+            {
+              "name": "c",
+              "class": "proof",
+              "value": {
+                "$proofPart": {
+                  "proof": "batch",
+                  "part": "c"
+                }
+              }
+            },
+            {
+              "name": "creditTotal",
+              "class": "proof_pub",
+              "value": {
+                "$pub": {
+                  "proof": "batch",
+                  "index": 1
+                }
+              }
+            },
+            {
+              "name": "kinds",
+              "class": "rows",
+              "value": {
+                "$tuple": [
+                  {
+                    "$uint": "1"
+                  },
+                  {
+                    "$uint": "1"
+                  },
+                  {
+                    "$uint": "0"
+                  },
+                  {
+                    "$uint": "0"
+                  }
+                ]
+              }
+            },
+            {
+              "name": "owners",
+              "class": "rows",
+              "value": {
+                "$tuple": [
+                  {
+                    "$signerUint": "alice"
+                  },
+                  {
+                    "$signerUint": "bob"
+                  },
+                  {
+                    "$uint": "0"
+                  },
+                  {
+                    "$uint": "0"
+                  }
+                ]
+              }
+            },
+            {
+              "name": "amounts",
+              "class": "rows",
+              "value": {
+                "$tuple": [
+                  {
+                    "$uint": "100"
+                  },
+                  {
+                    "$uint": "50"
+                  },
+                  {
+                    "$uint": "0"
+                  },
+                  {
+                    "$uint": "0"
+                  }
+                ]
+              }
+            },
+            {
+              "name": "numRealRows",
+              "class": "free",
+              "value": {
+                "$uint": "2"
+              }
+            }
+          ]
+        },
+        "operators": [
+          "CALLER",
+          "FREE_ARG"
+        ],
+        "free_args": {
+          "numRealRows": {
+            "mutation": {
+              "$uint": "1"
+            }
+          }
+        },
+        "caller_candidates": [
+          "carol"
+        ],
+        "proofs": {
+          "batch": {
+            "proof": "{out}/proofs/honest-proof.json",
+            "public": "{out}/proofs/honest-public.json"
+          }
+        }
+      }
+    },
+    {
+      "id": "fixed",
+      "label": "AZ1 fixed: unsettled rows must be proved no-ops",
+      "build": [],
+      "artifacts": [
+        "{out}/artifacts"
+      ],
+      "scenario": {
+        "signers": [
+          "deployer",
+          "alice",
+          "bob",
+          "carol"
+        ],
+        "deploy": [
+          {
+            "name": "verifier",
+            "artifact": "Groth16Verifier",
+            "args": []
+          },
+          {
+            "name": "token",
+            "artifact": "TestToken",
+            "args": []
+          },
+          {
+            "name": "p3",
+            "artifact": "Poseidon3",
+            "args": []
+          },
+          {
+            "name": "p4",
+            "artifact": "Poseidon4",
+            "args": []
+          },
+          {
+            "name": "consumer",
+            "artifact": "SettlementFixed",
+            "args": [
+              {
+                "$addr": "verifier"
+              },
+              {
+                "$addr": "token"
+              },
+              {
+                "$addr": "p3"
+              },
+              {
+                "$addr": "p4"
+              }
+            ]
+          }
+        ],
+        "initial_state": [
+          {
+            "target": "token",
+            "function": "mint",
+            "from": "deployer",
+            "args": [
+              {
+                "$signer": "alice"
+              },
+              {
+                "$uint": "1000"
+              }
+            ]
+          },
+          {
+            "target": "token",
+            "function": "mint",
+            "from": "deployer",
+            "args": [
+              {
+                "$signer": "bob"
+              },
+              {
+                "$uint": "1000"
+              }
+            ]
+          },
+          {
+            "target": "token",
+            "function": "approve",
+            "from": "alice",
+            "args": [
+              {
+                "$addr": "consumer"
+              },
+              {
+                "$uint": "1000"
+              }
+            ]
+          },
+          {
+            "target": "token",
+            "function": "approve",
+            "from": "bob",
+            "args": [
+              {
+                "$addr": "consumer"
+              },
+              {
+                "$uint": "1000"
+              }
+            ]
+          },
+          {
+            "target": "consumer",
+            "function": "depositPendingFunds",
+            "from": "alice",
+            "args": [
+              {
+                "$uint": "100"
+              }
+            ]
+          },
+          {
+            "target": "consumer",
+            "function": "depositPendingFunds",
+            "from": "bob",
+            "args": [
+              {
+                "$uint": "50"
+              }
+            ]
+          }
+        ],
+        "state_views": [
+          {
+            "name": "credit",
+            "contract": "consumer",
+            "function": "totalL2Credit"
+          },
+          {
+            "name": "backing",
+            "contract": "consumer",
+            "function": "settledBacking"
+          }
+        ],
+        "verifier_checks": [
+          {
+            "contract": "verifier",
+            "function": "verifyProof",
+            "args": [
+              {
+                "$proofPart": {
+                  "proof": "batch",
+                  "part": "a"
+                }
+              },
+              {
+                "$proofPart": {
+                  "proof": "batch",
+                  "part": "b"
+                }
+              },
+              {
+                "$proofPart": {
+                  "proof": "batch",
+                  "part": "c"
+                }
+              },
+              {
+                "$pubArray": {
+                  "proof": "batch"
+                }
+              }
+            ]
+          }
+        ],
+        "honest_tx": {
+          "target": "consumer",
+          "function": "processBatch",
+          "from": "alice",
+          "args": [
+            {
+              "name": "a",
+              "class": "proof",
+              "value": {
+                "$proofPart": {
+                  "proof": "batch",
+                  "part": "a"
+                }
+              }
+            },
+            {
+              "name": "b",
+              "class": "proof",
+              "value": {
+                "$proofPart": {
+                  "proof": "batch",
+                  "part": "b"
+                }
+              }
+            },
+            {
+              "name": "c",
+              "class": "proof",
+              "value": {
+                "$proofPart": {
+                  "proof": "batch",
+                  "part": "c"
+                }
+              }
+            },
+            {
+              "name": "creditTotal",
+              "class": "proof_pub",
+              "value": {
+                "$pub": {
+                  "proof": "batch",
+                  "index": 1
+                }
+              }
+            },
+            {
+              "name": "kinds",
+              "class": "rows",
+              "value": {
+                "$tuple": [
+                  {
+                    "$uint": "1"
+                  },
+                  {
+                    "$uint": "1"
+                  },
+                  {
+                    "$uint": "0"
+                  },
+                  {
+                    "$uint": "0"
+                  }
+                ]
+              }
+            },
+            {
+              "name": "owners",
+              "class": "rows",
+              "value": {
+                "$tuple": [
+                  {
+                    "$signerUint": "alice"
+                  },
+                  {
+                    "$signerUint": "bob"
+                  },
+                  {
+                    "$uint": "0"
+                  },
+                  {
+                    "$uint": "0"
+                  }
+                ]
+              }
+            },
+            {
+              "name": "amounts",
+              "class": "rows",
+              "value": {
+                "$tuple": [
+                  {
+                    "$uint": "100"
+                  },
+                  {
+                    "$uint": "50"
+                  },
+                  {
+                    "$uint": "0"
+                  },
+                  {
+                    "$uint": "0"
+                  }
+                ]
+              }
+            },
+            {
+              "name": "numRealRows",
+              "class": "free",
+              "value": {
+                "$uint": "2"
+              }
+            }
+          ]
+        },
+        "operators": [
+          "CALLER",
+          "FREE_ARG"
+        ],
+        "free_args": {
+          "numRealRows": {
+            "mutation": {
+              "$uint": "1"
+            }
+          }
+        },
+        "caller_candidates": [
+          "carol"
+        ],
+        "proofs": {
+          "batch": {
+            "proof": "{out}/proofs/honest-proof.json",
+            "public": "{out}/proofs/honest-public.json"
+          }
+        }
+      }
+    }
+  ]
+}
