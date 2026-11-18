@@ -20,15 +20,14 @@ import unittest
 from bindcheck_zk.analyzer import (
     Source,
     _contract_identity,
-    Verifier,
     _propagate_inherited_verifier_guards,
     _semantic_excluded,
     _self_balance_debit_bound,
     _state_derived,
     analyze,
+    classify_verifier,
     load_config,
 )
-from bindcheck_zk.models import location, result
 from bindcheck_zk.circuits import parse_circom, parse_noir
 from bindcheck_zk.p4 import SCALAR_FIELD, canonical_guard
 from bindcheck_zk.solidity import Call, effect_calls, effect_roles, public_vector, verifier_declarations
@@ -226,23 +225,40 @@ contract Consumer { Groth16Verifier verifier; mapping(uint256 => bool) spent; IE
             ))
 
     def test_inherited_verified_guard_propagates_to_wrapper(self) -> None:
-        base_source = Source(pathlib.Path("VerifierSig.sol"), "VerifierSig.sol", "contract VerifierSig {}", "a" * 64)
+        base_source = Source(
+            pathlib.Path("Base.sol"), "Base.sol", f"""
+contract BaseGroth16Verifier {{
+    uint256 constant gammax1 = 1;
+    uint256 constant gammax2 = 2;
+    uint256 constant gammay1 = 3;
+    uint256 constant gammay2 = 4;
+    uint256 constant deltax1 = 5;
+    uint256 constant deltax2 = 6;
+    uint256 constant deltay1 = 7;
+    uint256 constant deltay2 = 8;
+
+    function verify(uint256[1] memory input) internal virtual returns (bool) {{
+        require(input[0] < {SCALAR_FIELD});
+        return true;
+    }}
+}}
+""", "a" * 64,
+        )
         wrapper_source = Source(
-            pathlib.Path("VerifierSigWrapper.sol"),
-            "VerifierSigWrapper.sol",
-            "contract VerifierSigWrapper is VerifierSig { function verifyProof(uint[] memory input) public { verify(input); } }",
+            pathlib.Path("Wrapper.sol"), "Wrapper.sol", """
+import {BaseGroth16Verifier} from "./Base.sol";
+contract WrapperGroth16Verifier is BaseGroth16Verifier {
+    function verifyProof(uint256[1] memory input) public returns (bool) {
+        return verify(input);
+    }
+}
+""",
             "b" * 64,
         )
-        verified = {"finding": result(
-            "P4", "VERIFIED_WITHIN_SCOPE", "VERIFICATION_KEY_CHECKS_PASS", "guarded",
-            where=location("VerifierSig.sol", 1),
-        )}
-        missing = {"finding": result(
-            "P4", "VIOLATION", "PUBLIC_INPUT_CANONICALITY_GUARD_NOT_FOUND", "missing",
-            where=location("VerifierSigWrapper.sol", 1),
-        )}
-        base = Verifier(base_source, [], False, "Groth16", verified, {"VerifierSig"})
-        wrapper = Verifier(wrapper_source, [], False, "Groth16", missing, {"VerifierSigWrapper"})
+        base = classify_verifier(base_source)
+        wrapper = classify_verifier(wrapper_source)
+        self.assertEqual(base.p4["finding"]["verdict"], "VERIFIED_WITHIN_SCOPE")
+        self.assertEqual(wrapper.p4["finding"]["verdict"], "UNKNOWN")
         _propagate_inherited_verifier_guards([base, wrapper])
         self.assertEqual(wrapper.p4["finding"]["verdict"], "VERIFIED_WITHIN_SCOPE")
 
@@ -287,9 +303,19 @@ contract Consumer { TwoVerifier twoVerifier; ThreeVerifier threeVerifier; IERC20
  }}
 """, encoding="utf-8")
             output = analyze(root)
-            p5 = [item["patterns"]["P5"] for item in output["triples"]]
-            self.assertTrue(p5)
-            self.assertTrue(all(item["verdict"] != "VIOLATION" for item in p5))
+            expected = {
+                "TwoVerifier.sol": ["a", "b"],
+                "ThreeVerifier.sol": ["a", "b", "c"],
+            }
+            self.assertEqual(len(output["triples"]), len(expected))
+            self.assertEqual({item["verifier"]["path"] for item in output["triples"]}, set(expected))
+            for item in output["triples"]:
+                with self.subTest(verifier=item["verifier"]["path"]):
+                    p5 = item["patterns"]["P5"]
+                    facts = {fact["name"]: fact["value"] for fact in p5["facts"]}
+                    self.assertEqual((p5["verdict"], p5["reason"]),
+                                     ("VERIFIED_WITHIN_SCOPE", "PUBLIC_INPUT_COUNT_AND_ORDER_MATCH"))
+                    self.assertEqual(facts["consumer_order"], expected[item["verifier"]["path"]])
 
     def test_specific_receiver_type_rejects_unrelated_verifier(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:

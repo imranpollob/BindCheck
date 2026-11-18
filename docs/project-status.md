@@ -147,6 +147,7 @@ flowchart TD
     s2aRerun --> s2a2["S2a2 residual P5 [DONE] — six reproduced warnings now UNKNOWN"]
     s2a2 --> s2a2Timeout["W0658 [UNKNOWN] — analyzer timeout"]
     sprint --> s8a["S8a paper framing sections [DONE] — draft; S5/S1/S7 placeholders"]
+    sprint --> f1["F1 analyzer soundness [DONE] — XR controls pass, DEV row verdicts unchanged"]
     d1paper --> lanex["Lane-X exploratory, benchmark, auto-validation v1+v1.1 [DONE]"]
     d207 --> capabilityGate["Automated discovery + E4 capability gate [WAITING]"]
     d1p10 --> d1p10result["Transformed-arm eligibility [UNKNOWN]"]
@@ -651,6 +652,7 @@ slots were executed.
 | 2026-11-18 | S2c extent binding beyond discharge | `[DONE]` DEV rule and tests, `[UNKNOWN]` real V3 and 56 DEV rows | [Report](../reports/S2c/REPORT.md): the new E1 rule warns on AZ1 faulty and verifies the fixed fixture for the extent property. The real V3 assembly verifier is unsupported. All 56 original DEV rows completed, with zero new E1 warnings and 14 E0 diagnostics. All 70 tests passed. Candidate hash recorded. |
 | 2026-11-18 | S8a EuroS&P paper framing sections | `[DONE]` draft sections; paper package `[WAITING]` | [Report](../reports/S8a/REPORT.md): title options, a 174-word abstract plus one S5 placeholder sentence, introduction, Aztec Connect motivating example with figure, threat model and definitions (contract §§4, 5, 8), and taxonomy with extent binding (a)/(b) and generated R1/R2 class tables. Every number comes from `paper/generated/` or carries a `\TODO`. No oracle E4 number cited; undisclosed findings anonymised in the new sections. Tectonic 0.17.0 build exit 0. |
 | 2026-11-18 | S1 verifier canonicality (decision-independent pass) | `[WAITING]` task; `[DONE]` Solidity replay and native check; `[UNKNOWN]` split templates | [Report](../reports/S1/REPORT.md) and [generator table](../reports/S1/generators.csv): 15 generated Solidity verifiers (bb 5.0.0/6.0.0 plain and optimized, bb.js 3.0.0/5.0.0, snarkjs Groth16/PLONK/fflonk) on local Anvil accept the honest proof and reject it at n+r and n+5r (0/30 aliased calls accepted). bb.js 3.0.0 native Poseidon2 verification accepts both aliases (CONFIRMED_KNOWN, Xion PR #608); native bb/bb.js 5.0.0+ reject. bb.js Solidity range guard first present in npm 4.0.1. bb.js ≤3.0.3 keccak/keccakZK and snarkjs 0.7.6 PLONK/fflonk templates are split (source-read, unconfirmed). Detector fixture and exposure list not done; waiting on author decisions. aztec-packages not opened (hold-out FORBIDDEN). No live-chain action. |
+| 2026-11-18 | F1 analyzer soundness from cross-model review | `[DONE]` | [Report](../reports/F1/REPORT.md): 77 tests passed, including the XR counterexamples and AZ1 extent controls. All 56 DEV rows completed with unchanged row verdicts and applicability. Two mismatched P4 triples moved to `UNKNOWN`. PP's five retained P4 warnings have `UNKNOWN` verdicts by design. Candidate hash recorded. |
 
 ## Update rule
 

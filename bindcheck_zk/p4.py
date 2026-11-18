@@ -233,29 +233,30 @@ def canonical_guard_positions(text: str) -> dict[str, Any]:
         if int(value) == SCALAR_FIELD - 1
     ]
     for name in scalar_minus_one_names:
-        helper = re.search(
-            rf"function\s+check_inputs_size\s*\(\s*(\w+)\s*,\s*(\w+)\s*\)\s*\{{"
-            rf"(?P<body>.*?)\n\s*\}}",
-            text,
-            re.I | re.S,
+        header, body = named_bodies.get("check_inputs_size", ("", ""))
+        parameters = re.fullmatch(
+            r"function\s+check_inputs_size\s*\(\s*(\w+)\s*,\s*(\w+)\s*\)\s*",
+            header,
         )
-        if not helper:
+        if not parameters:
             continue
-        size, pointer = map(re.escape, helper.group(1, 2))
-        body = helper.group("body")
-        called = re.search(
-            r"check_inputs_size\s*\(\s*public_inputs\.length\s*,\s*public_inputs\.offset\s*\)",
-            text,
-            re.I,
-        )
-        loops_all = re.search(rf"\bfor\s*\{{[^}}]*\}}\s*lt\s*\(\s*\w+\s*,\s*{size}\s*\)", body, re.I)
-        rejects = re.search(
-            rf"\bif\s+gt\s*\(\s*calldataload\s*\(\s*{pointer}\s*\)\s*,\s*{re.escape(name)}\s*\)\s*\{{[^}}]*\berror",
+        size, pointer = map(re.escape, parameters.groups())
+        # Match the closed loop as one statement. An independent match for the
+        # pointer update would also accept an additional update or a skipped word.
+        loop = re.fullmatch(
+            rf"\s*for\s*\{{\s*let\s+(?P<index>\w+)(?:\s*:=\s*(?:0|0x0))?\s*\}}"
+            rf"\s*lt\s*\(\s*(?P=index)\s*,\s*{size}\s*\)"
+            rf"\s*\{{\s*(?P=index)\s*:=\s*add\s*\(\s*(?P=index)\s*,\s*1\s*\)\s*\}}"
+            rf"\s*\{{\s*if\s+gt\s*\(\s*calldataload\s*\(\s*{pointer}\s*\)"
+            rf"\s*,\s*{re.escape(name)}\s*\)\s*\{{\s*error_inputs_size\s*\(\s*\)\s*\}}"
+            rf"\s*{pointer}\s*:=\s*add\s*\(\s*{pointer}\s*,\s*(?:0x20|32)\s*\)\s*\}}\s*",
             body,
-            re.I | re.S,
         )
-        advances = re.search(rf"\b{pointer}\s*:=\s*add\s*\(\s*{pointer}\s*,\s*0x20\s*\)", body, re.I)
-        if called and loops_all and rejects and advances:
+        called = re.search(
+            r"\bcheck_inputs_size\s*\(\s*public_inputs\.length\s*,\s*public_inputs\.offset\s*\)",
+            guard_text,
+        )
+        if called and loop and loop.group("index") not in parameters.groups():
             all_positions = True
     return {
         "all_positions": all_positions,
