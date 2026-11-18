@@ -1,0 +1,31 @@
+% S8a motivating example (<= 150 words of prose; adapted from the
+% reports/AZ1/REPORT.md "Motivating example" paragraph).
+% Facts: reports/AZ1/REPORT.md#mechanism-with-code-lines (Decoder.sol:342,455-515;
+% RollupProcessorV3.sol:1186-1256, 665-675); numbers: paper/generated/numbers.tex.
+\section{Motivating Example: Aztec Connect}\label{sec:motivating}
+
+\begin{figure}[t]
+\centering
+\input{figures/f0-aztec-extent}
+\caption{Aztec Connect. The public-input hash covers all $L$ rows of a chunk;
+the settlement loop discharges deposits only for rows below $k$, read from
+unhashed calldata. A non-empty row at or beyond $k$ updates the proved rollup
+state, but its deposit is never collected (extent binding, direction~(b)).}
+\label{fig:aztec}
+\end{figure}
+
+In June 2026 the deprecated, immutable Aztec Connect rollup contract lost
+about \usdM{\AztecLossUSD} without any cryptographic
+failure~\cite{aztec-incident,aztec-blocksec,aztec-rekt}. Each rollup proof
+committed, through a hash in its public input, to every row of a fixed-size
+chunk of transactions (Fig.~\ref{fig:aztec}). The settlement loop processed
+only the first $k$ rows, and $k$ came from calldata outside the hash. A row
+inside the chunk but past $k$ updated the proved rollup state, crediting a
+deposit, while the matching on-chain obligation, collecting the deposited
+funds, never ran. Withdrawals then paid out against the unbacked credit. The
+verifier was sound and the contract checked the proof; they disagreed about
+which rows existed. We rebuilt this shape with a real Groth16 verifier on a
+local chain: an accepted proof left \AztecTestbedUnbackedGap{} token units
+credited but unbacked, and neither Slither nor our checker's earlier freeze
+flagged it.%
+% src: paper/generated/numbers.tex#AztecLossUSD,AztecTestbedUnbackedGap; paper/generated/T-aztec-testbed.tex; paper/generated/T-aztec-tools.tex

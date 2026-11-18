@@ -1,0 +1,23 @@
+% S8a abstract (<= 200 words including the S5 sentence; registrable on 25 Nov
+% with that sentence as a placeholder). Plain-text HotCRP version:
+% reports/S8a/abstract.txt. Numbers: paper/generated/numbers.tex.
+Zero-knowledge applications use a proof as a signature: as permission for an
+action. An accepting verifier, however, establishes only that the circuit's
+relation holds for the public inputs, and the contract that acts on the proof
+can act on values the proof never fixed. In June 2026 a zk-rollup contract
+lost about \usdM{\AztecLossUSD} this way: the proof covered every row of a
+transaction chunk, but the contract settled only a prefix whose length came
+from unproven calldata. We call such gaps \emph{binding flaws}. We state the
+property they break and give a taxonomy that mirrors classic signature
+failures (unsigned fields, missing domain separation, nonce reuse, weak keys,
+format mismatch), refined by \emph{extent binding}, which fails in two
+directions. In \RtwoAudits{} public audits of ZK protocols,
+\RtwoBindingAudits{} report \RtwoBindingFindings{} binding flaws,
+\RtwoHighCriticalBinding{} rated High or Critical;
+\RtwoBindingNeedsCircuitShare{} cannot be decided from the contract alone. We
+present \tool{}, which analyzes the circuit, the generated verifier and the
+consuming contract together, fails closed, and checks candidates by
+replaying real proofs against unchanged contracts on a local chain.
+\TODO{S5: one sentence, at most 26 words, on the held-out v3 result (frozen
+tool, E4-confirmed flaws in audited or deployed applications) and the S1 root
+cause}

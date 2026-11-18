@@ -1,139 +1,147 @@
+% S8a introduction (EuroS&P 2027 framing; target about 1.25 pages).
+% The IEEE S&P 2027 version of this section is at commit 96a8c7c.
+% Numbers: paper/generated/numbers.tex (make paper-tables) or \TODO.
 \section{Introduction}\label{sec:intro}
 
-A zero-knowledge proof convinces a smart contract that \emph{some} statement
-holds. It does not tell the contract what to do. Between the moment a verifier
-returns \code{true} and the moment tokens move, the consuming contract decides
-which public values to trust, which caller-supplied values to use, and which
-state to update. If the action depends on a value the proof never fixed, a
-perfectly sound proof authorizes an action nobody intended.
+A zero-knowledge verifier that accepts has established one fact: the
+circuit's relation holds for the public inputs it was given. The contract
+that called it then acts. It mints, pays out, records a nullifier or advances
+a state root. Nothing in the proof system checks that this action is the one
+the proof describes. If the action depends on a value the proof never fixed,
+a valid proof authorizes an action that no prover attested to. We call this a
+\emph{binding flaw}.
 
-\para{A genuine proof, an unintended mint.}
-Consider the \emph{ZKredential} compliance gateway from a 2025 hackathon
-repository (Fig.~\ref{fig:zkredential}). The circuit proves that a public
-wallet address satisfies a KYC predicate and exports an \code{isCompliant}
-signal. The gateway checks the proof with an unmodified snarkjs-generated
-Groth16 verifier, checks \code{isCompliant==1}, records the proof hash, and
-then executes \code{mint(msg.sender, amount)}. Neither the recipient nor the
-amount is a public input. We generated a real proof for one wallet, submitted
-it from a different account, and chose the amount. On a local chain with
-synthetic assets, the unchanged verifier and gateway accepted the proof and
-minted 123\,456\,789\,012\,345\,678\,901\,234 units to the caller, while the account
-named in the proof received
-0~(\S\ref{sec:case-zkredential}).%
-% src: reports/impact/REPORT.md#zkredential--propertyfy-gateway-mint (Effect row)
-% src: reports/groundtruth/CLAIMS.md#A1
+\para{A valid proof, an unproven action.}
+In June 2026 the deprecated Aztec Connect rollup contract lost about
+\usdM{\AztecLossUSD} with no cryptographic failure~\cite{aztec-incident}.%
+% src: paper/generated/numbers.tex#AztecLossUSD (R1-005 loss_confirmed_usd, Aztec Labs' own figure)
 \
-Every layer behaved correctly in isolation. The circuit is satisfiable only
-for compliant witnesses; the verifier is the standard template; the contract
-calls it. The flaw lives in the \emph{binding} between them.
+Each rollup proof committed to every row of a fixed-size chunk of
+transactions. The contract settled only a prefix of those rows, and it read
+the prefix length from calldata that the proof did not cover. A deposit placed
+after the prefix was proved and credited on the rollup, but the contract never
+collected it (\S\ref{sec:motivating}, Fig.~\ref{fig:aztec}). The verifier was
+sound, and the contract checked the proof. The two disagreed about which rows
+existed.
 
-\begin{figure}[t]
-\centering
-\input{figures/f1-zkredential}
-\caption{ZKredential. The proof fixes the wallet $W$ and compliance; the
-gateway mints a calldata \code{amount} to \code{msg.sender}~$=M\neq W$.
-Neither effect parameter is a public input.}
-\label{fig:zkredential}
-\end{figure}
+\para{A proof is used as a signature.}
+Applications use a proof the way protocols use a signature: the proof is the
+permission, the public inputs are the signed message, and the verification
+key is the public key. Under this reading, binding flaws are the classic
+signature failures one layer up. A recipient or amount that is not a public
+input is an \sig{unsigned message field}~(P1). A proof that is also valid in
+another deployment lacks \sig{domain separation}~(P2). A nullifier that can be
+replayed, or presented in two encodings, is \sig{nonce reuse} or
+\sig{malleability}~(P3). A key from an uncontributed setup is a \sig{weak
+key}~(P4). A consumer that reads the public vector in a different order from
+the one the circuit writes has a \sig{message-format mismatch}~(P5). Aztec
+Connect refines the first class. The proof signed the whole batch, and the
+contract executed part of it. We call this \emph{extent binding}. It fails in
+two directions: the contract can rely on more than the proof fixed, or the
+proof can fix more than the contract discharges (\S\ref{sec:taxonomy}). The
+lens is not new cryptography. It tells an auditor which question to ask of
+each value an action depends on (\emph{is it signed?}), and it tells a tool
+which facts it must recover.
 
-\para{Binding spans three artifacts.}
-Whether a proof binds an action is a property of the triple (circuit,
-generated verifier, consumer), not of any single file. The circuit fixes which
-signals are public and how they are constrained; the generated verifier fixes
-the arity, order and field-membership checks of the public vector; the
-consumer fixes how that vector is assembled and which effects follow. A
-recipient that is bound in the circuit is unbound if the consumer takes it from
-calldata; a nullifier that is unique in the field is replayable if the verifier
-accepts non-canonical encodings and the consumer keys a mapping on raw
-\code{uint256} values. The SNARK SoK~\cite{sok-snarks} names this the
-\emph{integration layer}, counts 13 of its 141 vulnerabilities there, and
-reports that the layer has ``no specific defenses''.%
-% src: RELATED-WORK.md#32-studies-benchmarks-and-adjacent-work (SoK row); reports/related/evidence/primary-text-greps.txt
+\para{Single-layer tools cannot see the gap.}
+Binding is a property of three artifacts taken together. The circuit fixes
+which values are public and how they are constrained. The generated verifier
+fixes the arity and encoding of the public vector. The consuming contract
+fixes which effects follow. Each existing tool reads one of them. On the
+deployed Aztec Connect contract, Slither raised \AztecSlitherReports{}
+reports, none about the fault. Our own checker, at its earlier freeze,
+returned \UNK{} on every pattern because the verifier is called from inline
+assembly. An extent rule we had built for an earlier advisory could not
+express the case at all, because it checks the opposite direction.%
+% src: paper/generated/numbers.tex#AztecSlitherReports; reports/AZ1/REPORT.md#tool--target--verdict
 \
-A 2026 evaluation of six circuit tools on 70 Circom bugs explicitly leaves
-integration to future work~\cite{zkp-tools-study}, and the largest executable
-ZK bug collection, zkbugs, has 140 entries of which 0 are located in a
-Solidity file~\cite{zkbugs}.%
-% src: RELATED-WORK.md#32 (tools study row; zkbugs row); reports/related/evidence/zkbugs-census.txt
+Public audits show that such flaws are routine. In a convenience sample of
+\RtwoAudits{} public audits of ZK protocols, \RtwoBindingAudits{} report at
+least one binding flaw; of the \RtwoBindingFindings{} binding findings,
+\RtwoHighCriticalBinding{} are rated High or Critical, spread over
+\RtwoHighCriticalBindingAudits{} audits of
+\RtwoHighCriticalBindingProtocols{} protocols, and
+\RtwoBindingNeedsCircuitShare{} cannot be decided from the Solidity
+alone~(\S\ref{sec:taxonomy}).%
+% src: paper/generated/numbers.tex#RtwoAudits,RtwoBindingAudits,RtwoBindingFindings,RtwoHighCriticalBinding,RtwoHighCriticalBindingAudits,RtwoHighCriticalBindingProtocols,RtwoBindingNeedsCircuitShare
+% Correct count is 7 audits with H/C binding findings, not 16: reports/PP/DISCREPANCIES.md.
 \
-Contract analyzers cannot see the circuit; circuit analyzers cannot see the
-consumer. The one published analyzer that targets ``ZKP-based smart contracts''
-reads Solidity only~\cite{elsa}.%
-% src: RELATED-WORK.md#31-tools (ELSA row: 4,086 .sol files, 0 circuit files)
-
-\para{Naive cross-layer checks give false assurance.}
-The obvious remedy is to compose existing checks. We built such compositions
-and measured them. A consumer-and-verifier rule set with a same-policy
-property-test harness certified 3 of 23 vulnerable synthetic cases as
-safe~(\S\ref{sec:res-benchmark}).%
-% src: reports/redteam/REPORT.md#synthetic-comparison (Arm A, vulnerable misses 3/23)
-\
-A circuit tool answered ``properly constrained'' on all 46 synthetic circuits,
-vulnerable or not, because circuit uniqueness says nothing about what the
-consumer does.%
-% src: reports/redteam/REPORT.md#dev-corpus-and-native-tool-outcomes (Picus exit 8 for all 46)
-\
-On the historical zkDrops pair, whose vulnerable revision we reproduced as a
-double redemption, both composed baselines emitted identical warnings on the
-vulnerable and the repaired revision~(\S\ref{sec:res-pairs}).%
-% src: paper/zk/data/pair-discrimination.json#pairs[0] (arm_A/arm_C identical_output)
-\
-Our own checker was not immune: earlier versions certified the vulnerable
-zkDrops revision and a Semaphore revision with no verifier at all as
-\VWS~(\S\ref{sec:design-failures}).%
-% src: reports/groundtruth/REPORT.md#4-verdict-defects-observed-in-retained-dev-output
+One protocol contributes most of the High or Critical findings
+\TODO{PP: generated macro for the largest single-protocol share of
+High/Critical binding findings}, and the value these protocols held when they
+were audited is unknown. The labels are ours and await author review
+\TODO{R1b/R2: author label review}.
 
 \para{This paper.}
-We present a benchmark and measurement study of circuit--contract binding
-flaws in Circom/Groth16 applications, and \tool{}, a cross-layer checker
-designed around one rule: \emph{certify a binding only with path-sensitive,
-position-exact evidence, and otherwise fail closed}. \tool{} reads the
-circuit (source and compiled R1CS), the snarkjs-generated verifier and the
-consuming contract, and returns, per binding property, \VIOL{},
-\VWS{} or \UNK{} with a reason code. Every positive verdict names the evidence
-it requires (Table~\ref{tab:evidence}); a missing artifact, an unresolved
-modifier, or a guard that does not dominate the effect yields \UNK{}, never a
-pass.
+We make binding a checkable property and build a checker around it. The
+property (\S\ref{sec:threat}) has a one-sentence form: \emph{the same proof
+and public inputs, applied to the same state, must produce the same protected
+effects, and only as often as the policy permits}. Formally, every protected
+effect a successful transition commits must be matched by a distinct
+permission derived from the accepted public inputs (authorization), and every
+obligation the accepted transition creates must be discharged (coverage).
+\tool{} reads the circuit (source and compiled constraints), the generated
+verifier and the consuming contract. For each protected effect it returns
+\VIOL{}, \VWS{} or \UNK{} with an evidence grade, and it is designed to fail
+closed: a missing artifact, an unresolved call or an unsupported construct
+yields \UNK{}, never a pass \TODO{F1: confirm after the XR-03/XR-04
+soundness fixes}. An execution oracle then takes a candidate and an
+honestly accepted proof, changes only what the proof does not fix (the
+sender, free calldata, field aliases, resubmission, the deployment), and
+checks the protected effects on a local chain.
 
 Our contributions are:
 \begin{itemize}
-\item \textbf{A taxonomy} of binding flaws grouped by what the proof fails to
-  fix---the effect, its context, its uniqueness, the verifier and key
-  configuration, and the interface shape---mapped onto the SoK's
-  integration categories and extended with verifier-generation defects
-  (\S\ref{sec:taxonomy}).
-\item \textbf{A benchmark} that pins all three artifacts per case: 46 paired
-  vulnerable/legitimate synthetic cases in 23 families, 56 development
-  repositories including three historical vulnerable/fixed pairs, a 16-pair
-  gate set, a preregistered 278-family held-out sample drawn from 1,384
-  eligible families, and a passive census of 1,027 deployed verifiers
-  (\S\ref{sec:benchmark}).%
-% src: reports/redteam/REPORT.md#synthetic-comparison (23 vulnerable + 23 legitimate); reports/soundness/REPORT-2.md#full-dev-ledger (56 rows)
-% src: reports/groundtruth/CLAIMS.md#A19,A20,A26; reports/groundtruth/REPORT.md#5-gate-manifest (16 rows)
-\item \textbf{\tool{}}, a fail-closed checker with an explicit evidence
-  contract per verdict, and a record of six distinct mechanisms by which
-  certification went wrong without that contract---including one we found in
-  the frozen version while preparing this paper (\S\ref{sec:design}).
-\item \textbf{A measurement} of how single-layer tools, naive compositions and
-  \tool{} behave on the benchmark: decided rates, warning restraint, unsafe
-  certifications and pair discrimination (\S\ref{sec:results}), with
-  held-out results \MISSING{held-out run, lane EVAL}.
-\item \textbf{Validated findings}: two proof-to-effect violations reproduced
-  end to end with real proofs and unchanged consumers on local chains, each
-  with a repair that rejects the attack and preserves a legitimate run
-  (\S\ref{sec:cases}).%
-% src: reports/impact/REPORT.md (ZKredential and RacePass tables)
+\item \textbf{A lens and a property.} We read a proof as a signature over an
+  action and state binding as authorization plus coverage, consistent with
+  the transition model and evidence ladder we use throughout
+  (\S\ref{sec:threat}).
+\item \textbf{A taxonomy grounded in public losses and audits.} Five classes
+  mapped to signature failures, with extent binding as a named refinement of
+  P1 in two directions, and, for each class, which artifacts a checker must
+  read. A census of \RoneCases{} public incident and disclosure records and
+  \RtwoAudits{} audits grounds every class in public cases
+  (\S\ref{sec:taxonomy}).%
+% src: paper/generated/numbers.tex#RoneCases,RtwoAudits
+\item \textbf{\tool{} and an execution oracle.} A cross-layer checker with an
+  explicit evidence rule per verdict, and an oracle designed to take candidates to
+  the top of the evidence ladder (E4) without hand-written tests
+  (\S\ref{sec:design}). \TODO{F2: oracle results are cited only after the
+  XR-01/XR-02 fixes and re-confirmation.} The extent rule was designed on the Aztec Connect
+  case. It flags our reconstruction of that case and returns \UNK{} on the
+  deployed contract, so the case is development data, not evidence of
+  transfer.%
+% src: reports/S2c/REPORT.md (P1-EXTENT: AZ1 faulty VIOLATION E1, fixed VWS E1, deployed V3 UNKNOWN E0)
+\item \textbf{A held-out evaluation.} A frozen tool run once on
+  \TODO{S5: number} audited or deployed application families never used in
+  development, with every \VIOL{} sent to the oracle
+  (\S\ref{sec:res-heldout}). \TODO{S5: headline numbers: families analyzed,
+  E4-confirmed flaws, decided rate}. Precision figures from development data
+  are reported separately and labelled as such.
+\item \textbf{Root causes and fixes upstream.} Binding flaws trace back to
+  generator defaults and copied templates. A Groth16 verifier generated
+  before any contribution to the circuit-specific setup has $\gamma=\delta$
+  and accepts forged proofs~\cite{zeto-186}.
+  \TODO{S1: generator canonicality result and template lineage}. For each
+  root cause we give a fix at the generator or template
+  (\S\ref{sec:cases}).
+\item \textbf{Findings under disclosure.} Previously unreported P1 flaws
+  in development applications (\CaseA{} and \CaseB{}), each reproduced end to
+  end with real proofs and unchanged contracts on a local chain, each with a
+  repair that rejects the attack and keeps a legitimate run working.
+  Disclosure is in progress \TODO{S7: naming and disclosure status}.%
+% src: reports/impact/REPORT.md (hand-run local E4 reproductions and repair controls; not the S4 oracle)
 \end{itemize}
 
-To our knowledge (bounded literature search, November 2026; method in
-\S\ref{sec:related}), \tool{} is the first analyzer that takes a Circom
-circuit's compiled constraints, its generated Groth16 verifier and the
-consuming Solidity contract as joint input and reports, for each protected
-effect, whether the accepted proof fixes it, failing closed to \UNK{} with a
-reason code otherwise.%
-% src: RELATED-WORK.md#6a (scoped priority sentence, hedges kept)
-\
-We make no claim that \tool{} detects more flaws than a purpose-built
-contract-only rule: on our development set every \tool{} violation carries a
-consumer- or verifier-level reason code (\S\ref{sec:res-ablation}). Its value,
-as we show, lies in what it refuses to certify.
+\para{What the reader learns.}
+First, a proof is a permission and should be reviewed like a signature: list
+every value the action depends on, and ask whether the proof fixes it.
+Second, binding is a property of the circuit, the verifier and the contract
+together. Many consequential gaps, including the Aztec Connect loss, are
+invisible to a tool that reads one of them. Third, binding flaws are current
+and costly: \TODO{S5: held-out confirmed flaws in audited or deployed
+applications}. Fourth, many of them are introduced upstream, by generator
+defaults and template code, and are cheapest to fix there.
+We do not claim that \tool{} finds more flaws than a purpose-built
+contract-only rule on every class. The value of joint analysis is in the
+classes that need the circuit, and in what the tool refuses to certify.
