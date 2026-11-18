@@ -85,18 +85,23 @@ def parse_circom(path: pathlib.Path, root: pathlib.Path) -> Circuit:
     declaration_text = scoped if scoped is not None else text
     declarations: dict[str, tuple[int, ...]] = {}
     outputs: list[str] = []
+    notes: list[str] = []
+    complete = True
     for match in re.finditer(
-        r"\bsignal\s+(?:private\s+)?(input|output)\s+([A-Za-z_]\w*)\s*((?:\[\s*\d+\s*\]\s*)*);",
+        r"\bsignal\s+(?:private\s+)?(input|output)\s+([A-Za-z_]\w*)\s*((?:\[[^\]\n]*\]\s*)*);",
         declaration_text,
     ):
         direction, name, raw_dimensions = match.groups()
+        if not re.fullmatch(r"(?:\[\s*\d+\s*\]\s*)*", raw_dimensions):
+            if direction == "output":
+                notes.append(f"public output extent for {name} requires compiled metadata")
+                complete = False
+            continue
         dimensions = tuple(int(value) for value in re.findall(r"\d+", raw_dimensions))
         declarations[name] = dimensions
         if direction == "output":
             outputs.extend(_expand_circom_name(name, declarations))
     public_order: list[str] = []
-    notes: list[str] = []
-    complete = True
     if main_decl and main_decl.group(1) is not None:
         for name in re.findall(r"\b[A-Za-z_]\w*\b", main_decl.group(1)):
             size = declarations.get(name)
@@ -547,17 +552,16 @@ def apply_compiled_public_metadata(circuit: Circuit) -> None:
 
 
 def attach_or_build(circuit: Circuit, root: pathlib.Path, budget: Budget, timeout: float) -> None:
-    candidates = list(root.rglob(circuit.path.stem + ".r1cs"))
-    candidates = [path for path in candidates if path.stat().st_size <= 500_000_000]
-    if candidates:
-        chosen = min(candidates, key=lambda path: len(path.parts))
-        sym = chosen.with_suffix(".sym")
-        circuit.r1cs = chosen
-        circuit.sym = sym if sym.is_file() else None
-        circuit.compiled = circuit.sym is not None
-        circuit.build = {"kind": "existing", "r1cs": str(chosen), "sym": str(sym) if sym.is_file() else None}
-        if circuit.compiled:
-            apply_compiled_public_metadata(circuit)
+    # A repository can contain independent circuits with the same basename.
+    # Only reuse a sibling artifact pair. Otherwise build the selected source.
+    existing_r1cs = circuit.path.with_suffix(".r1cs")
+    existing_sym = circuit.path.with_suffix(".sym")
+    if existing_r1cs.is_file() and existing_sym.is_file() and existing_r1cs.stat().st_size <= 500_000_000:
+        circuit.r1cs = existing_r1cs
+        circuit.sym = existing_sym
+        circuit.compiled = True
+        circuit.build = {"kind": "existing", "r1cs": str(existing_r1cs), "sym": str(existing_sym)}
+        apply_compiled_public_metadata(circuit)
         return
     binary = _circom_binary()
     if binary is None:

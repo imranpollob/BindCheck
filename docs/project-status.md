@@ -136,9 +136,11 @@ flowchart TD
     sprint --> s4["S4 execution oracle [DONE] — ZKredential+RacePass E4 from manifests; repairs clean"]
     s4 --> s4b["S4b value-at-risk + admitted initial state [DONE]"]
     s4b --> s4c["S4c obligation accounting [DONE] — omitted required effect confirmed"]
-    sprint --> s2a["S2a precision fixes [ACTIVE] — DEV rerun; 6 P5 FPs remain"]
+    sprint --> s2a["S2a precision fixes [ACTIVE] — DEV"]
     s2a --> s2aRerun["Spent-family DEV rerun [DONE] — 265/278 analysed"]
     s2aRerun --> s2aSetH["Set H DEV precision [UNKNOWN] — not held-out"]
+    s2aRerun --> s2a2["S2a2 residual P5 [DONE] — six reproduced warnings now UNKNOWN"]
+    s2a2 --> s2a2Timeout["W0658 [UNKNOWN] — analyzer timeout"]
     d1paper --> lanex["Lane-X exploratory, benchmark, auto-validation v1+v1.1 [DONE]"]
     d207 --> capabilityGate["Automated discovery + E4 capability gate [WAITING]"]
     d1p10 --> d1p10result["Transformed-arm eligibility [UNKNOWN]"]
@@ -636,6 +638,7 @@ slots were executed.
 | 2026-11-18 | S4b value-at-risk + admitted initial state | `[DONE]` / deployed value `[UNKNOWN]` (H6) | [Report](../reports/S4/REPORT-S4b.md) and `oracle/`: extend the oracle observer so each `E4-CONFIRMED` trial reports a signed protected-effect magnitude (ERC-20 value / ERC-721 unit, with signer-balance and totalSupply deltas) measured against a manifest-declared admitted initial state, via read-only view calls on the owned local chain only (no deployed-value query; H6). Confirmed magnitudes: ZKredential CALLER +1e18 token-wei to the attacker; RacePass FREE_ARG(credHash) +1 pass to a caller-chosen holder; synthetic alias/replay +1000 against a 500000 baseline. Bound control and both repaired variants stay NOT_CONFIRMED. Also fixed a latent redeploy nonce/estimate-gas race (explicit sequential nonce, fixed deploy gasLimit, static-network provider); reruns are deterministic. |
 | 2026-11-18 | S4c multi-effect and obligation accounting | `[DONE]` / real-case obligation policies `[NEXT]` (S4d) | [Report](../reports/S4/REPORT-S4c.md) and `oracle/`: the oracle now confirms an undischarged required obligation — a required effect the honest path commits but a mutated tx omits — not only an unauthorized effect. A policy may declare `required_obligations` (entitlement-only); scoring is conditioned on the honest reference, which avoids overclaiming, and each trial carries an obligation ledger. On a new synthetic control, the vulnerable consumer (fee gated by a free, non-proof-bound flag) is E4-CONFIRMED via exactly `FREE_ARG(skipFee)` with the omitted obligation `fee-to-treasury` named (benefit reward +1000 granted, fee +50→treasury omitted); the correctly-bound consumer (fee unconditional) stays NOT_CONFIRMED for all five operators. An existing control re-run under the changed driver still returns NOT_CONFIRMED (no regression). Real cases unchanged (neither declares an obligation yet; deferred to S4d). |
 | 2026-11-18 | S2a revision 1 spent-family DEV rerun | `[ACTIVE]` task; `[DONE]` 278-row accounting; `[UNKNOWN]` residual FP status | [Report](../reports/S2a/REPORT.md), [278-row ledger](../reports/S2a/revision1/spent-family-ledger-278.csv), and [changed-verdict ledger](../reports/S2a/revision1/spent-family-changed-verdicts.csv): 58/58 aggregate tests pass with Linux Circom 2.1.9; 265 analysed, 7 harness timeouts, 5 unavailable acquisitions, 1 predeclared exclusion. Set H is DEV: P1 9/10 retained, P3 9/12, canonicality-P4 5/5 partial (2 TP unavailable), P5 2/8. Of 13 P5 FP cards, 6 are no longer `VIOLATION`, 6 remain, and 1 is unavailable; both P5 TP cards remain `VIOLATION`. No held-out claim, freeze-3 tag, or contract edit. |
+| 2026-11-18 | S2a2 residual P5 warnings on pinned DEV code | `[DONE]` bounded analysis, W0658 `[UNKNOWN]` | [Report](../reports/S2a2/REPORT.md): six exact-site warnings reproduced and moved to `UNKNOWN` on the pinned checkouts and real-source fixtures. W0658 exceeded the analyzer budget during circuit ranking. Two P5 TP decisions remain `VIOLATION` on replay from retained inputs. Original DEV rerun leaves all 280 verdict/applicability cells unchanged. Aggregate suite passes 61/61. |
 
 ## Update rule
 

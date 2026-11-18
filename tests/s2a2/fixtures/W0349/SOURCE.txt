@@ -1,0 +1,10 @@
+Repository: Cloakworks-collective/shadow_warfare
+Commit: 9aa1970e1a80ba8d8bfa6ed16e316303e1b1fa69
+Paths relative to the upstream repository root (SHA-256, path):
+d715ee1d0487a63d52a8a01c63203fad8f8deb61d17621eec383c34f329e6d04  circuits/army/src/main.nr
+4933253cd430b83fc88c7e0d970cf90e7f764ab3a065eb187830ad8438387b7d  circuits/battle/src/main.nr
+e557f68f873d844f309d5d4698ad0228b889f2f6bdcf591ef574b4454f244c21  contracts/src/ArmyVerifier.sol
+703cb804d747cfc600a5f02c68d68341ea8b536f57072e8e549ac852fa8b5a9d  contracts/src/AutoBattler.sol
+abf6114b2506a42ca806fe74442837d9aa30c895f05d1b41893931c6d05fe737  contracts/src/BattlerVerifier.sol
+c64530ae99ccaeb1b97daaba3b9a09c6b200c82291f439b0613d1aae5ca83d0a  contracts/src/IAutoBattler.sol
+86b452571a6c4422649df099209bbb21d75211d6297f6cb26d7efc210b5c66a8  contracts/src/IVerifier.sol
