@@ -15,10 +15,10 @@
 
 ## Running a task
 
-1. **Branch.** Start from `sprint/eurosp-2027-plan`:
+1. **Branch.** Start from `main`:
 
    ```bash
-   git switch -c sprint/<task-id> origin/sprint/eurosp-2027-plan
+   git switch -c sprint/<task-id> origin/main
    ```
 
 2. **Prompt the coder:**
@@ -36,7 +36,7 @@
 4. **Push** the branch, then tell the reviewer: "<task-id> pushed". The reviewer
    fetches it, reviews it against the prompt's completion criteria, and replies
    `ACCEPT`, `REVISE: <list>` or `STOP: <reason>`.
-5. **Merge.** Only accepted branches are merged into `sprint/eurosp-2027-plan`.
+5. **Merge.** Only accepted branches are merged into `main` (freeze-2 state is tagged `pre-sprint-freeze2`).
    The human merges, or asks the reviewer to.
 
 **Path note:** if the `bc/` folder sits at a new path on Mint, find the
