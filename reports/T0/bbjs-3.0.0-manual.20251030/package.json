@@ -1,0 +1,10 @@
+{
+  "name": "bindcheck-bbjs-3.0.0-manual.20251030",
+  "version": "0.0.0",
+  "private": true,
+  "description": "T0 pin: @aztec/bb.js 3.0.0-manual.20251030 (same version as the Payy bb pin; WASM CLI substitute); installed into tools/bbjs-3.0.0-manual.20251030 by scripts/setup_linux_tools.sh",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "@aztec/bb.js": "3.0.0-manual.20251030"
+  }
+}
