@@ -1,0 +1,205 @@
+{
+  "schema_version": 1,
+  "case_id": "synthetic-alias",
+  "safety": {
+    "local_only": true,
+    "fork_enabled": false
+  },
+  "source": {
+    "kind": "local_copy",
+    "path": "tests/oracle/synthetic"
+  },
+  "policy": "alias.policy.json",
+  "variants": [
+    {
+      "id": "synthetic",
+      "label": "synthetic-alias synthetic control",
+      "build": [
+        {
+          "name": "forge_build",
+          "cwd": "{source}",
+          "argv": [
+            "forge",
+            "build",
+            "--root",
+            "{source}"
+          ]
+        }
+      ],
+      "artifacts": [
+        "{source}/out"
+      ],
+      "scenario": {
+        "signers": [
+          "deployer",
+          "holder",
+          "mallory"
+        ],
+        "deploy": [
+          {
+            "name": "verifier",
+            "artifact": "PermissiveVerifier",
+            "args": []
+          },
+          {
+            "name": "token",
+            "artifact": "MintToken",
+            "args": []
+          },
+          {
+            "name": "consumer",
+            "artifact": "AliasConsumer",
+            "args": [
+              {
+                "$addr": "verifier"
+              },
+              {
+                "$addr": "token"
+              }
+            ]
+          }
+        ],
+        "verifier_checks": [
+          {
+            "contract": "verifier",
+            "function": "verifyProof",
+            "args": [
+              {
+                "$proofPart": {
+                  "proof": "cred",
+                  "part": "a"
+                }
+              },
+              {
+                "$proofPart": {
+                  "proof": "cred",
+                  "part": "b"
+                }
+              },
+              {
+                "$proofPart": {
+                  "proof": "cred",
+                  "part": "c"
+                }
+              },
+              {
+                "$pubArray": {
+                  "proof": "cred"
+                }
+              }
+            ]
+          }
+        ],
+        "honest_tx": {
+          "target": "consumer",
+          "function": "claim",
+          "from": "holder",
+          "args": [
+            {
+              "name": "a",
+              "class": "proof",
+              "value": {
+                "$proofPart": {
+                  "proof": "cred",
+                  "part": "a"
+                }
+              }
+            },
+            {
+              "name": "b",
+              "class": "proof",
+              "value": {
+                "$proofPart": {
+                  "proof": "cred",
+                  "part": "b"
+                }
+              }
+            },
+            {
+              "name": "c",
+              "class": "proof",
+              "value": {
+                "$proofPart": {
+                  "proof": "cred",
+                  "part": "c"
+                }
+              }
+            },
+            {
+              "name": "pub",
+              "class": "pub",
+              "value": {
+                "$pubArray": {
+                  "proof": "cred"
+                }
+              }
+            },
+            {
+              "name": "recipient",
+              "class": "free",
+              "value": {
+                "$pubAsAddress": {
+                  "proof": "cred",
+                  "index": 1
+                }
+              }
+            }
+          ]
+        },
+        "operators": [
+          "CALLER",
+          "FREE_ARG",
+          "ALIAS",
+          "REPLAY",
+          "DOMAIN"
+        ],
+        "free_args": {
+          "recipient": {
+            "mutation": {
+              "$signer": "mallory"
+            }
+          }
+        },
+        "alias": {
+          "arg": "pub",
+          "proof": "cred",
+          "positions": [
+            0,
+            1
+          ]
+        },
+        "caller_candidates": [
+          "mallory"
+        ],
+        "domain": {
+          "redeploy": [
+            "verifier",
+            "token",
+            "consumer"
+          ]
+        },
+        "proofs": {
+          "cred": {
+            "proof": "{source}/fixtures/cred-proof.json",
+            "public": "{source}/fixtures/cred-public.json"
+          }
+        },
+        "initial_state": [
+          {
+            "target": "token",
+            "function": "mint",
+            "from": "deployer",
+            "args": [
+              {
+                "$signer": "deployer"
+              },
+              {
+                "$uint": "500000"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,5 +1,117 @@
 # BindCheck reproducibility artifact
 
+## EuroS&P paper tables (PP)
+
+From the repository root, run the following with GNU Make and Python 3.12.
+
+```sh
+make paper-tables
+python3 -B scripts/paper/check.py
+```
+
+The commands directly reaggregate tracked evidence and typically finish in
+under a second per command on the PP Linux host. The build produces ten
+booktabs tables and one macros file under [paper/generated](paper/generated/),
+each with a companion JSON. The JSON identifies the input paths, their
+SHA-256 digests, the parser used, and the values behind the table. The checker
+regenerates the expected bytes in memory and fails for a missing, extra, or
+stale generated TeX or JSON file. An absent S1 generator CSV produces a
+visible TODO and an explicit missing-input record.
+
+Load `booktabs`, input `paper/generated/numbers.tex` once, and input individual
+table fragments from the manuscript. Each fragment provides its own
+`tabular`. The manuscript supplies captions and any float wrappers. Adjust
+paths relative to the TeX build directory. Select the prose macros by their
+definitions in [numbers.json](paper/generated/numbers.json). The PP tables
+cover R1, R2, AZ1, freeze-2 DEV, the spent-family S2a comparison, the S4 oracle
+and the optional S1 census. The manuscript and its historical tables have their
+own sources. See the [source inventory](reports/PP/INVENTORY.md) and
+[discrepancy record](reports/PP/DISCREPANCIES.md).
+
+### Linux toolchain and analyzer checks
+
+The table commands require no network or proving tools. For execution checks,
+use the Linux x86-64 setup on an artifact-review machine with the prerequisite
+Git, Rust/Cargo, Node/npm, curl and archive tools. Provision the pinned tools
+and per-checkout npm dependencies while online or from a prepared mirror.
+
+```sh
+export BINDCHECK_TOOLS="$PWD/tools"
+bash scripts/setup_linux_tools.sh --skip-optional
+```
+
+Allow several minutes for a fresh Rust build and downloads. This is a planning
+estimate. T0 documents the expected tool versions and the known partial
+setup exit 3 for the missing Payy native Barretenberg pin. Inspect the report
+and setup output before proceeding. The test paths below use Circom, Node and,
+for execution, Foundry and solc. The Payy native binary is outside those test
+paths. [T0 report](reports/T0/REPORT.md)
+
+On the S2a revision 1 candidate, run from the repository root.
+
+```sh
+export BINDCHECK_CIRCOM="$BINDCHECK_TOOLS/circom-2.1.9/target/release/circom"
+python3 -B -m unittest -v tests.test_bindcheck_zk_cli \
+  tests.test_bindcheck_zk_controls tests.soundness.test_verdict_soundness \
+  tests.soundness.test_followup tests.coverage.test_rules \
+  tests.freeze2.test_p4_key tests.s2a.test_precision_fixes
+```
+
+PP observed 58 passing tests in about five seconds with Circom 2.1.9 and
+the root lockfile dependencies available. The analyzer identity reproduced in
+the PP output describes the historical candidate whose results were tabulated.
+[S2a revision 1 report](reports/S2a/REPORT.md#revision-1--spent-family-rerun-and-semantic-exclusion-refactor)
+
+### AZ1 synthetic testbed
+
+Use the historical AZ1 checkout at `ec688bb41e5e9c9f5a4989bdff1cba0e6dde9a33`.
+The test entry point, `bash prototypes/az1/run.sh`, checks the analyzer against
+the freeze-2 hash and expects the root npm dependencies in that checkout.
+Reusing the reviewer machine's installed tools is fine if the hashes match.
+AZ1 requires the recorded Circom 2.2.3 binary, Foundry 1.4.1-stable, Slither
+0.11.3 with crytic-compile 0.3.11, and the pinned Linux solc 0.8.11 at
+`~/.solc-select/artifacts/solc-0.8.11/solc-0.8.11`. Keep `BINDCHECK_TOOLS`
+pointing to the installed tool directory. Budget several minutes for setup
+and proving with dependencies available. The report records 53 steps and
+zero failures without a total wall time. Expected outputs are a fresh
+`results/raw/AZ1/az1-*/` directory with `steps.tsv`, `environment.txt`, a
+checksum manifest and the detector summary. The testbed uses an owned
+synthetic fixture. The historical real-target comparison is available as
+tracked report evidence for the table build. [AZ1 report](reports/AZ1/REPORT.md)
+
+### Oracle control
+
+Run the local bound control with Node/npm, Foundry 1.4.1-stable and the
+fixture's solc 0.8.20 available. The driver caches ethers 6.13.4 under
+`results/raw/S4/.driver/` and needs npm access on first use if that cache and
+its dependencies are absent. From the repository root, choose a fresh output
+directory each time.
+
+```sh
+python3 -B -m oracle run tests/oracle/bound.manifest.json \
+  --out "results/raw/S4/artifact-bound-$(date -u +%Y%m%dT%H%M%SZ)"
+```
+
+Expect `result.json`, a variant result and per-step logs. The bound control
+should complete with the honest reference successful and no confirmed
+violation. Recorded full-run times for this control are about two to three
+minutes, depending on the revision. The real-case matrix is regenerated
+from the reviewed S4 reports. Re-execution of those cases depends on
+release approval and on access to the reviewed case artifacts and toolchain.
+[Oracle documentation](oracle/README.md) · [S4 report](reports/S4/REPORT.md) · [S4b report](reports/S4/REPORT-S4b.md)
+
+### Public artifact data boundary
+
+Exclude `dataset/onchain-census.csv`, deployment addresses drawn from it,
+and nonpublic disclosure material from the public distribution. Any step
+that needs row-level deployment data, including an independent regeneration
+from that census, requires an approved private copy. The PP pipeline needs
+only its listed evidence sources. Review real-case S4 report inputs and
+generated rows for release approval when assembling the public package.
+Keep the spent-family outputs labeled as DEV.
+
+## Historical D1P-34 and X-AV artifact
+
 This artifact reconstructs the ignored inputs needed by the frozen BindCheck
 v1.1 tests, the D1P-34 30-mutant evaluation, and the X-AV validation driver.
 It fetches only pinned public upstream revisions/tool releases, records every

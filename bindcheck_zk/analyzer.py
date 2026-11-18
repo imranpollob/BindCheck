@@ -16,6 +16,7 @@ from typing import Any
 
 from . import __version__
 from .circuits import Circuit, attach_or_build, discover as discover_circuits, is_entry_circuit, named_path, parse_r1cs
+from .extent import PATTERN as EXTENT_PATTERN, analyze_consumer as analyze_extent, assembly_findings
 from .freeze import freeze_manifest
 from .models import Budget, aggregate, location, result, sha256_file
 from .p4 import SCALAR_FIELD, analyze_runtime, analyze_source, canonical_guard, fail_closed_verifier, runtime_values_from_bundle
@@ -188,16 +189,46 @@ def _semantic_excluded(relative_path: str, config: dict[str, Any]) -> bool:
     path = pathlib.PurePosixPath(relative_path)
     parts = {part.lower() for part in path.parts}
     excluded = set(config.get("semantic_test_directories", [])) | set(config.get("semantic_script_directories", []))
-    return bool(parts & excluded) or path.name.lower().endswith((".t.sol", ".s.sol"))
+    excluded |= set(config.get("semantic_excluded_directories", []))
+    suffixes = tuple(
+        str(item).lower()
+        for item in config.get("semantic_excluded_directory_suffixes", [])
+    )
+    matching_suffix = bool(suffixes) and any(
+        part.endswith(suffixes) for part in parts
+    )
+    filename_suffixes = tuple(
+        str(item).lower()
+        for item in config.get("semantic_excluded_filename_suffixes", [])
+    )
+    return (
+        bool(parts & excluded)
+        or matching_suffix
+        or (bool(filename_suffixes) and path.name.lower().endswith(filename_suffixes))
+    )
 
 
-def classify_verifier(source: Source) -> Verifier | None:
+def classify_verifier(
+    source: Source,
+    inherited_honk_layout: dict[str, Any] | None = None,
+) -> Verifier | None:
     declarations = verifier_declarations(source.text)
     contract_names = set(re.findall(
         r"\b(?:contract|library|interface)\s+([A-Za-z_]\w*)",
         mask_comments_and_strings(source.text),
     ))
     named = any(re.search(r"(?:verifier|groth16|plonk|honk|ultra|snark)", name, re.I) for name in contract_names)
+    if inherited_honk_layout is not None and named and not declarations:
+        declarations.append({
+            **inherited_honk_layout,
+            "name": "verify",
+            "line": 1,
+            "dynamic": True,
+            "public_input_like": True,
+            "opaque": False,
+            "signature": "function verify(bytes calldata proof, bytes32[] calldata publicInputs)",
+            "layout_source": "imported-number-of-public-inputs",
+        })
     strong = any(item["name"].lower() != "verify" and item["name"] != "constant" for item in declarations)
     generic_array = any(item["name"].lower() == "verify" and item.get("public_input_like") for item in declarations)
     if not declarations or not named or not (strong or generic_array):
@@ -227,6 +258,96 @@ def classify_verifier(source: Source) -> Verifier | None:
     return Verifier(source, declarations, interface_only, family, p4, contract_names)
 
 
+def _imported_honk_layouts(sources: list[Source]) -> dict[str, dict[str, Any]]:
+    """Resolve unambiguous imports of generated Honk arity constants.
+
+    Newer bb output separates the concrete verifier wrapper from its generated
+    verification-key file. The wrapper inherits ``verify(bytes,bytes32[])``
+    and imports the key constants, so neither file alone has
+    both the function and the arity. Only exact relative imports with one
+    recovered layout are joined; ambiguous or missing imports remain unknown.
+    """
+    by_path = {pathlib.PurePosixPath(source.relative_path): source for source in sources}
+    resolved: dict[str, dict[str, Any]] = {}
+    import_pattern = re.compile(
+        r"\bimport\s*\{(?P<names>[^}]*)\}\s*from\s*[\"'](?P<path>[^\"']+)[\"']\s*;",
+        re.S,
+    )
+    plain_import_pattern = re.compile(r"\bimport\s*[\"'](?P<path>[^\"']+)[\"']\s*;")
+    for source in sources:
+        masked = mask_comments_and_strings(source.text)
+        declared_names = re.findall(r"\b(?:contract|library)\s+([A-Za-z_]\w*)", masked)
+        if not any(re.search(r"(?:honk|ultra)", name, re.I) for name in declared_names):
+            continue
+        candidates: list[dict[str, Any]] = []
+        imported_paths = [
+            match.group("path") for match in import_pattern.finditer(source.text)
+            if masked[match.start():match.start() + 6] == "import"
+            and "NUMBER_OF_PUBLIC_INPUTS" in identifiers(match.group("names"))
+        ]
+        imported_paths.extend(
+            match.group("path") for match in plain_import_pattern.finditer(source.text)
+            if masked[match.start():match.start() + 6] == "import"
+        )
+        for imported_path in imported_paths:
+            imported = pathlib.PurePosixPath(source.relative_path).parent / imported_path
+            normalized = pathlib.PurePosixPath(*(part for part in imported.parts if part not in {".", ""}))
+            while ".." in normalized.parts:
+                parts = list(normalized.parts)
+                index = parts.index("..")
+                if index == 0:
+                    break
+                parts[index - 1:index + 1] = []
+                normalized = pathlib.PurePosixPath(*parts)
+            imported_source = by_path.get(normalized)
+            if imported_source is None:
+                continue
+            candidates.extend(
+                item for item in verifier_declarations(imported_source.text)
+                if item.get("name") == "constant" and item.get("arity") is not None
+            )
+        unique = {
+            (item["arity"], item.get("total_layout_words"), item.get("reserved_layout_words")): item
+            for item in candidates
+        }
+        if len(unique) == 1:
+            resolved[source.relative_path] = next(iter(unique.values()))
+    return resolved
+
+
+def _propagate_inherited_verifier_guards(verifiers: list[Verifier]) -> None:
+    by_name: dict[str, list[Verifier]] = defaultdict(list)
+    for verifier in verifiers:
+        for name in verifier.contract_names:
+            by_name[name].append(verifier)
+    for wrapper in verifiers:
+        inherited = re.findall(
+            r"\bcontract\s+[A-Za-z_]\w*\s+is\s+([^\{]+)\{",
+            mask_comments_and_strings(wrapper.source.text),
+            re.S,
+        )
+        if not inherited or not re.search(r"\bverify\s*\(", mask_comments_and_strings(wrapper.source.text)):
+            continue
+        bases = [name for clause in inherited for name in re.findall(r"\b[A-Za-z_]\w*\b", clause)]
+        candidates = [item for name in bases for item in by_name.get(name, []) if item is not wrapper]
+        verified = [
+            item for item in candidates
+            if item.p4.get("finding", {}).get("verdict") == "VERIFIED_WITHIN_SCOPE"
+        ]
+        if len(verified) != 1:
+            continue
+        inherited_p4 = json.loads(json.dumps(verified[0].p4))
+        inherited_p4.setdefault("finding", {}).setdefault("facts", []).append({
+            "provenance": "EXTRACTED",
+            "name": "inherited_verifier_guard",
+            "value": {
+                "base_contracts": bases,
+                "base_source": verified[0].source.relative_path,
+            },
+        })
+        wrapper.p4 = inherited_p4
+
+
 def _receiver_types(text: str) -> dict[str, str]:
     output: dict[str, str] = {}
     masked = re.sub(r"//[^\n]*|/\*.*?\*/", " ", text, flags=re.S)
@@ -234,6 +355,8 @@ def _receiver_types(text: str) -> dict[str, str]:
         r"\b([A-Za-z_]\w*)\s+(?:(?:public|private|internal|external|immutable|constant)\s+)*([A-Za-z_]\w*)\s*(?:[;=,])",
         masked,
     ):
+        if type_name.lower() in {"return", "for", "is", "public", "private", "internal", "external"}:
+            continue
         output[variable] = type_name
     return output
 
@@ -249,7 +372,10 @@ def discover_consumers(sources: list[Source]) -> list[Consumer]:
     declarations = [
         (name, source.text, source.path)
         for source in sources
-        for name in re.findall(r"\b(?:abstract\s+)?contract\s+([A-Za-z_]\w*)\b", mask_comments_and_strings(source.text))
+        for name in re.findall(
+            r"\b(?:(?:abstract\s+)?contract|interface)\s+([A-Za-z_]\w*)\b",
+            mask_comments_and_strings(source.text),
+        )
     ]
     declaration_counts: dict[str, int] = defaultdict(int)
     for name, _, _ in declarations:
@@ -261,11 +387,18 @@ def discover_consumers(sources: list[Source]) -> list[Consumer]:
     for source in sources:
         parsed_functions = list(functions(source.text))
         local_function_names = {item.name for item in parsed_functions}
-        helper_vector_parameters: dict[str, list[int]] = defaultdict(list)
+        helper_vector_parameters: dict[str, list[int | None]] = defaultdict(list)
         for helper in parsed_functions:
             parameter_names = list(helper.parameters)
             for direct_call in filter(_supported_verification_call, verification_calls(helper.body)):
                 vector = public_vector(helper.body, direct_call)
+                if (
+                    "proof-argument-not-public-vector" in vector.unresolved
+                    and vector.expression in helper.parameters
+                ):
+                    # Keep the verification path, with no recovered vector to forward.
+                    helper_vector_parameters[helper.name].append(None)
+                    continue
                 if vector.base in helper.parameters:
                     helper_vector_parameters[helper.name].append(parameter_names.index(vector.base))
                     continue
@@ -291,12 +424,12 @@ def discover_consumers(sources: list[Source]) -> list[Consumer]:
                     )
                     for helper_call in helper_calls:
                         for vector_index in vector_indices:
-                            if vector_index >= len(helper_call.args):
+                            if vector_index is not None and vector_index >= len(helper_call.args):
                                 continue
                             verify.append(Call(
                                 name=helper_name,
                                 receiver=helper_call.receiver,
-                                args=[helper_call.args[vector_index]],
+                                args=[] if vector_index is None else [helper_call.args[vector_index]],
                                 line=helper_call.line,
                                 offset=helper_call.offset,
                             ))
@@ -332,6 +465,101 @@ def _tokens(path: str) -> set[str]:
     }
 
 
+def _contract_identity(name: str) -> str:
+    normalized = re.sub(r"[^a-z0-9]", "", name.lower())
+    if re.match(r"^I[A-Z]", name) and any(
+        token in normalized[1:] for token in ("verifier", "groth", "plonk", "honk", "snark")
+    ):
+        normalized = normalized[1:]
+    return normalized
+
+
+def _declaration_shapes(text: str) -> set[tuple[str, int, int]]:
+    shapes: set[tuple[str, int, int]] = set()
+    for declaration in verifier_declarations(text):
+        arity = declaration.get("arity")
+        signature = declaration.get("signature", "")
+        opening = signature.find("(")
+        parsed = balanced(signature, opening) if opening >= 0 else None
+        if declaration.get("name") == "constant" or arity is None or parsed is None:
+            continue
+        shapes.add((str(declaration["name"]).lower(), int(arity), len(split_top_level(parsed[0]))))
+    return shapes
+
+
+def _verifier_correspondence(verifier: Verifier, consumer: Consumer) -> str:
+    """Classify declared receiver-type evidence without guessing across types."""
+    verifier_names = {
+        *(_contract_identity(name) for name in verifier.contract_names),
+        _contract_identity(verifier.source.path.stem),
+    }
+    typed_calls = [
+        consumer.receiver_types[call.receiver]
+        for call in consumer.verify_calls
+        if call.receiver and call.receiver in consumer.receiver_types
+    ]
+    if any(_contract_identity(type_name) in verifier_names for type_name in typed_calls):
+        return "exact"
+    implementation_shapes = _declaration_shapes(verifier.source.text)
+    for type_name in typed_calls:
+        declaration = consumer.repository_contracts.get(type_name)
+        if (
+            declaration
+            and re.search(rf"\binterface\s+{re.escape(type_name)}\b", mask_comments_and_strings(declaration[0]))
+            and implementation_shapes & _declaration_shapes(declaration[0])
+        ):
+            return "exact"
+    specific_types = {
+        _contract_identity(type_name) for type_name in typed_calls
+        if _contract_identity(type_name) not in {"verifier", "zkverifier", "proofverifier"}
+    }
+    if specific_types:
+        return "mismatch"
+    return "unknown"
+
+
+def _vector_for_verifier(verifier: Verifier, consumer: Consumer) -> PublicVector | None:
+    verifier_names = {
+        *(_contract_identity(name) for name in verifier.contract_names),
+        _contract_identity(verifier.source.path.stem),
+    }
+    implementation_shapes = _declaration_shapes(verifier.source.text)
+    matches: list[int] = []
+    for index, call in enumerate(consumer.verify_calls):
+        if not call.receiver or call.receiver not in consumer.receiver_types:
+            continue
+        type_name = consumer.receiver_types[call.receiver]
+        declaration = consumer.repository_contracts.get(type_name)
+        interface_match = bool(declaration and re.search(
+            rf"\binterface\s+{re.escape(type_name)}\b",
+            mask_comments_and_strings(declaration[0]),
+        ) and implementation_shapes & _declaration_shapes(declaration[0]))
+        if _contract_identity(type_name) in verifier_names or interface_match:
+            matches.append(index)
+    if len(matches) == 1 and matches[0] < len(consumer.vectors):
+        return consumer.vectors[matches[0]]
+    if matches:
+        shapes = {
+            (
+                consumer.vectors[index].declared_count,
+                consumer.vectors[index].length_guard,
+                tuple(consumer.vectors[index].items),
+            )
+            for index in matches if index < len(consumer.vectors)
+        }
+        if len(shapes) == 1:
+            return consumer.vectors[matches[0]]
+        return None
+    typed_identities = {
+        _contract_identity(consumer.receiver_types[call.receiver])
+        for call in consumer.verify_calls
+        if call.receiver and call.receiver in consumer.receiver_types
+    }
+    if not typed_identities or typed_identities <= {"verifier", "zkverifier", "proofverifier"}:
+        return consumer.vectors[0] if len(consumer.vectors) == 1 else None
+    return None
+
+
 def _match_score(circuit: Circuit | None, verifier: Verifier | None, consumer: Consumer) -> tuple[float, list[str]]:
     score = 0.2
     reasons = ["consumer contains verifier call and protected effect"]
@@ -340,9 +568,13 @@ def _match_score(circuit: Circuit | None, verifier: Verifier | None, consumer: C
         receiver_names = {call.receiver for call in consumer.verify_calls if call.receiver}
         receiver_types = {consumer.receiver_types.get(name, "") for name in receiver_names}
         verifier_names = {name.lower() for name in verifier.contract_names}
-        if any(value.lower() in verifier_names for value in receiver_types if value):
+        correspondence = _verifier_correspondence(verifier, consumer)
+        if correspondence == "exact":
             score += 0.45
             reasons.append("verifier contract matches the declared receiver type")
+        elif correspondence == "mismatch":
+            score -= 0.6
+            reasons.append("verifier contract conflicts with the declared receiver type")
         elif any(
             receiver.lower() in name.lower() or name.lower() in receiver.lower()
             for receiver in receiver_names for name in verifier.contract_names
@@ -399,7 +631,8 @@ def make_triples(
 ) -> list[dict[str, Any]]:
     triples: list[dict[str, Any]] = []
     for consumer in consumers:
-        verifier_options: list[Verifier | None] = verifiers or [None]
+        exact = [verifier for verifier in verifiers if _verifier_correspondence(verifier, consumer) == "exact"]
+        verifier_options: list[Verifier | None] = exact or verifiers or [None]
         circuit_options: list[Circuit | None] = circuits or [None]
         candidates: list[tuple[float, list[str], Circuit | None, Verifier | None]] = []
         for verifier in verifier_options:
@@ -652,6 +885,34 @@ def _commitment_binding(
     return False, None, None
 
 
+def _state_derived(expression: str, source_text: str) -> bool:
+    mappings = set(re.findall(
+        r"\bmapping\s*\([^;]+?\)\s*(?:(?:public|private|internal|external)\s+)*([A-Za-z_]\w*)\s*;",
+        mask_comments_and_strings(source_text),
+        re.S,
+    ))
+    return any(re.search(rf"\b{re.escape(name)}\s*\[", expression) for name in mappings)
+
+
+def _self_balance_debit_bound(call: Call, expression: str, body: str) -> bool:
+    if call.name != "__state_write__" or len(call.args) != 3 or call.args[2] != "-=":
+        return False
+    key, amount, _ = call.args
+    if normalize_expression(key) != "msg.sender":
+        return False
+    resolved = normalize_expression(expression)
+    if resolved not in {"msg.sender", normalize_expression(amount)}:
+        return False
+    mapping = re.escape(call.receiver or "")
+    amount_pattern = re.escape(normalize_expression(amount)).replace(r"\.", r"\s*\.\s*")
+    prior = body[:call.offset]
+    return bool(re.search(
+        rf"\b(?:require|assert)\s*\(\s*{amount_pattern}\s*<=\s*{mapping}\s*\[\s*msg\s*\.\s*sender\s*\]",
+        mask_comments_and_strings(prior),
+        re.I,
+    ))
+
+
 def analyze_p1(
     circuit: Circuit | None,
     verifier: Verifier | None,
@@ -707,6 +968,8 @@ def analyze_p1(
                 fact["bound_by"].append("policy:any-caller-may-receive")
             if role == "recipient" and resolved_expression == "this":
                 fact["bound_by"].append("contract-self")
+            if _self_balance_debit_bound(call, expression, consumer.function.body):
+                fact["bound_by"].append("caller-owned-balance-debit")
             if any(_direct_bound(expression, vector, aliases) for vector in consumer.vectors):
                 fact["bound_by"].append("direct-public-input")
             guard_bound = any(
@@ -722,12 +985,12 @@ def analyze_p1(
                 reason = "POST_EFFECT_GUARD_SEMANTICS_UNRESOLVED"
                 unknown_reasons.append(reason)
                 fact.setdefault("unresolved", []).append({"reason": reason})
-            if (
-                role == "amount"
-                and "msg.sender" in resolved_recipients
-                and re.search(r"\bmsg\s*\.\s*value\b", _resolve_alias(expression, aliases))
+            resolved_amount = normalize_expression(_resolve_alias(expression, aliases))
+            if role == "amount" and (
+                resolved_amount == "msg.value"
+                or ("msg.sender" in resolved_recipients and "msg.value" in resolved_amount)
             ):
-                fact["bound_by"].append("caller-funded-refund")
+                fact["bound_by"].append("caller-funded-value")
             if not fact["bound_by"]:
                 for vector in consumer.vectors:
                     bound, evidence, reason = _commitment_binding(
@@ -756,7 +1019,15 @@ def analyze_p1(
                     caller_controlled = bool(expression_names & set(consumer.function.parameters)) or bool(
                         re.search(r"\b(?:msg\.(?:sender|value)|tx\.origin)\b", _resolve_alias(expression, aliases))
                     )
-                    if not caller_controlled:
+                    if _state_derived(_resolve_alias(expression, aliases), consumer.source.text):
+                        reason = "STATE_VALUE_PROVENANCE_UNRESOLVED"
+                        unknown_reasons.append(reason)
+                        fact.setdefault("unresolved", []).append({"reason": reason})
+                    elif caller_controlled and re.search(r"\b(?:internal|private)\b", consumer.function.header):
+                        reason = "INTERNAL_CALLER_CONTEXT_UNRESOLVED"
+                        unknown_reasons.append(reason)
+                        fact.setdefault("unresolved", []).append({"reason": reason})
+                    elif not caller_controlled:
                         reason = "CALLER_INDEPENDENCE_UNRESOLVED"
                         unknown_reasons.append(reason)
                         fact.setdefault("unresolved", []).append({"reason": reason})
@@ -991,6 +1262,12 @@ def analyze_p3(circuit: Circuit | None, verifier: Verifier | None, consumer: Con
         )
     if verifier is None or verifier.interface_only:
         return result("P3", "UNKNOWN", "VERIFIER_ARTIFACT_MISSING", "Replay-key canonicality cannot be decided without a matched verifier implementation.", where=where)
+    if _verifier_correspondence(verifier, consumer) == "mismatch":
+        return result(
+            "P3", "UNKNOWN", "VERIFIER_CALL_CORRESPONDENCE_UNRESOLVED",
+            "The recovered verifier implementation conflicts with the consumer's declared receiver type.",
+            where=where,
+        )
     if circuit is None:
         return result("P3", "UNKNOWN", "CIRCUIT_ARTIFACT_MISSING", "Replay-key canonicality cannot be decided without a matched circuit artifact.", where=where)
     facts: list[dict[str, Any]] = []
@@ -1080,11 +1357,21 @@ def analyze_p5(circuit: Circuit | None, verifier: Verifier | None, consumer: Con
         return result("P5", "UNKNOWN", "VERIFIER_MATCH_AMBIGUOUS", "Multiple plausible verifier artifacts expose incompatible public-input shapes.", where=where)
     if verifier is None or verifier.interface_only:
         return result("P5", "UNKNOWN", "VERIFIER_ARTIFACT_MISSING", "Verifier arity/order cannot be checked without an implementation artifact.", where=where)
+    if _verifier_correspondence(verifier, consumer) == "mismatch":
+        return result(
+            "P5", "UNKNOWN", "VERIFIER_CALL_CORRESPONDENCE_UNRESOLVED",
+            "The recovered verifier implementation conflicts with the consumer's declared receiver type.",
+            where=where,
+        )
     if circuit is None:
         return result("P5", "UNKNOWN", "CIRCUIT_ARTIFACT_MISSING", "Circuit public order cannot be checked without a matched circuit artifact.", where=where)
-    vector = consumer.vectors[0] if consumer.vectors else None
+    vector = _vector_for_verifier(verifier, consumer)
     if vector is None:
-        return result("P5", "UNKNOWN", "PUBLIC_INPUT_VECTOR_UNRESOLVED", "No verifier public-input vector was recovered.", where=where)
+        return result(
+            "P5", "UNKNOWN", "VERIFIER_CALL_CORRESPONDENCE_UNRESOLVED",
+            "No unique public-input vector could be associated with the matched verifier declaration.",
+            where=where,
+        )
     verifier_arities = verifier.arities
     expected = next(iter(verifier_arities)) if len(verifier_arities) == 1 else None
     observed = vector.declared_count or vector.length_guard
@@ -1111,8 +1398,14 @@ def analyze_p5(circuit: Circuit | None, verifier: Verifier | None, consumer: Con
                 "The source-level circuit interface is incomplete and no compiled relation is available to establish its public-input count.",
                 where=where, facts=facts,
             )
+        if expected is None:
+            return result(
+                "P5", "UNKNOWN", "CIRCUIT_VERIFIER_CORRESPONDENCE_UNRESOLVED",
+                "The candidate circuit and consumer have different public-input counts, but the matched verifier's arity is unresolved.",
+                where=where, facts=facts,
+            )
         return result("P5", "VIOLATION", "PUBLIC_INPUT_COUNT_MISMATCH", f"Consumer supplies {observed} public inputs but the circuit exposes {circuit.public_count}.", where=where, facts=facts)
-    if vector.items and circuit.public_order and len(vector.items) == len(circuit.public_order):
+    if circuit.order_complete and vector.items and circuit.public_order and len(vector.items) == len(circuit.public_order):
         observed_order = [_semantic_name(item) for item in vector.items]
         circuit_order = [_semantic_name(item) for item in circuit.public_order]
         if observed_order != circuit_order:
@@ -1295,6 +1588,7 @@ def analyze(
     }
     fatal: str | None = None
     triples_output: list[dict[str, Any]] = []
+    extent_findings: list[dict[str, Any]] = []
     runtime_results: list[dict[str, Any]] = []
     circuits: list[Circuit] = []
     inputs: dict[str, Any] = {
@@ -1338,10 +1632,22 @@ def analyze(
                 })
         inputs["files"] = pinned_files
         coverage["solidity_files_parsed"] = len(sources)
+        semantic_excluded_paths = sorted(
+            source.relative_path
+            for source in sources
+            if _semantic_excluded(source.relative_path, config)
+        )
+        coverage["semantic_excluded_count"] = len(semantic_excluded_paths)
+        coverage["semantic_excluded_paths"] = semantic_excluded_paths
         semantic_sources = [source for source in sources if not _semantic_excluded(source.relative_path, config)]
         circuits = discover_circuits(root, circuit_paths)
         coverage["circuit_files_parsed"] = len(circuits)
-        verifiers = [item for source in semantic_sources if (item := classify_verifier(source)) is not None]
+        imported_honk_layouts = _imported_honk_layouts(semantic_sources)
+        verifiers = [
+            item for source in semantic_sources
+            if (item := classify_verifier(source, imported_honk_layouts.get(source.relative_path))) is not None
+        ]
+        _propagate_inherited_verifier_guards(verifiers)
         consumers = discover_consumers(semantic_sources)
         verifier_source_paths = {item.source.path for item in verifiers}
         consumers = [
@@ -1355,6 +1661,14 @@ def analyze(
         ]
         if explicit_consumer_paths:
             consumers = [item for item in consumers if item.source.path in explicit_consumer_paths]
+        for consumer in consumers:
+            budget.check()
+            finding = analyze_extent(consumer.source.relative_path, consumer.source.text, consumer.function, consumer.verify_calls)
+            if finding is not None:
+                extent_findings.append(finding)
+        for source in semantic_sources:
+            if source.path in explicit_consumer_paths:
+                extent_findings.extend(assembly_findings(source.relative_path, source.text))
         circuit_ranked = sorted(circuits, key=lambda circuit: (
             -max((
                 _match_score(circuit, verifier, consumer)[0]
@@ -1446,12 +1760,13 @@ def analyze(
         if circuit.temporary_artifacts is not None:
             shutil.rmtree(circuit.temporary_artifacts, ignore_errors=True)
     pattern_summary: dict[str, Any] = {}
-    for pattern in PATTERNS:
-        results = [triple["patterns"][pattern] for triple in triples_output]
+    for pattern in (*PATTERNS, EXTENT_PATTERN):
+        results = extent_findings if pattern == EXTENT_PATTERN else [triple["patterns"][pattern] for triple in triples_output]
         if not results:
             results = [result(
-                pattern, "UNKNOWN", fatal or "NO_APPLICABLE_TRIPLE",
-                "The analyzer could not establish whether an applicable circuit/verifier/consumer triple exists.",
+                pattern, "UNKNOWN", fatal or ("EXTENT_CONSUMER_NOT_FOUND" if pattern == EXTENT_PATTERN else "NO_APPLICABLE_TRIPLE"),
+                "No consumer with a recovered verifier call and loop was found." if pattern == EXTENT_PATTERN
+                else "The analyzer could not establish whether an applicable circuit/verifier/consumer triple exists.",
                 grade="E0", applicability="UNKNOWN",
             )]
         summary = aggregate(results)
@@ -1487,6 +1802,7 @@ def analyze(
             "triples": len(triples_output),
         },
         "triples": triples_output,
+        "extent_findings": extent_findings,
         "runtime_bytecode_checks": runtime_results,
         "patterns": pattern_summary,
         "coverage": coverage,

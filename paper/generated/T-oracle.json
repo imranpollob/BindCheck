@@ -1,0 +1,222 @@
+{
+  "caption_note": "E4 = E4-CONFIRMED. NOT = NOT CONFIRMED for the recorded trials.",
+  "columns": [
+    "Case / variant",
+    "CALLER",
+    "FREE_ARG",
+    "ALIAS",
+    "ALIAS-0",
+    "ALIAS-1",
+    "REPLAY",
+    "DOMAIN"
+  ],
+  "notes": [
+    "E4 = E4-CONFIRMED; NOT = NOT_CONFIRMED for the recorded trials.",
+    "A dash marks an operator column absent from that report. S4b repeats S4's matrix."
+  ],
+  "raw": [
+    {
+      "case": "ZKredential original",
+      "operators": {
+        "ALIAS": "NOT_CONFIRMED",
+        "CALLER": "E4-CONFIRMED",
+        "DOMAIN": "NOT_CONFIRMED",
+        "FREE_ARG": "NOT_CONFIRMED",
+        "REPLAY": "NOT_CONFIRMED"
+      },
+      "run": "S4"
+    },
+    {
+      "case": "ZKredential repaired",
+      "operators": {
+        "ALIAS": "NOT_CONFIRMED",
+        "CALLER": "NOT_CONFIRMED",
+        "DOMAIN": "NOT_CONFIRMED",
+        "FREE_ARG": "NOT_CONFIRMED",
+        "REPLAY": "NOT_CONFIRMED"
+      },
+      "run": "S4"
+    },
+    {
+      "case": "RacePass original",
+      "operators": {
+        "ALIAS": "NOT_CONFIRMED",
+        "CALLER": "NOT_CONFIRMED",
+        "DOMAIN": "NOT_CONFIRMED",
+        "FREE_ARG": "E4-CONFIRMED",
+        "REPLAY": "NOT_CONFIRMED"
+      },
+      "run": "S4"
+    },
+    {
+      "case": "RacePass repaired",
+      "operators": {
+        "ALIAS": "NOT_CONFIRMED",
+        "CALLER": "NOT_CONFIRMED",
+        "DOMAIN": "NOT_CONFIRMED",
+        "FREE_ARG": "NOT_CONFIRMED",
+        "REPLAY": "NOT_CONFIRMED"
+      },
+      "run": "S4"
+    },
+    {
+      "case": "Synthetic bound",
+      "operators": {
+        "ALIAS": "NOT_CONFIRMED",
+        "CALLER": "NOT_CONFIRMED",
+        "DOMAIN": "NOT_CONFIRMED",
+        "FREE_ARG": "NOT_CONFIRMED",
+        "REPLAY": "NOT_CONFIRMED"
+      },
+      "run": "S4"
+    },
+    {
+      "case": "Synthetic alias",
+      "operators": {
+        "ALIAS": "E4-CONFIRMED",
+        "CALLER": "NOT_CONFIRMED",
+        "DOMAIN": "NOT_CONFIRMED",
+        "FREE_ARG": "NOT_CONFIRMED",
+        "REPLAY": "NOT_CONFIRMED"
+      },
+      "run": "S4"
+    },
+    {
+      "case": "Synthetic replay",
+      "operators": {
+        "ALIAS": "NOT_CONFIRMED",
+        "CALLER": "NOT_CONFIRMED",
+        "DOMAIN": "NOT_CONFIRMED",
+        "FREE_ARG": "NOT_CONFIRMED",
+        "REPLAY": "E4-CONFIRMED"
+      },
+      "run": "S4"
+    },
+    {
+      "case": "Synthetic obligation (vulnerable)",
+      "operators": {
+        "ALIAS-0": "NOT_CONFIRMED",
+        "ALIAS-1": "NOT_CONFIRMED",
+        "CALLER": "NOT_CONFIRMED",
+        "DOMAIN": "NOT_CONFIRMED",
+        "FREE_ARG": "E4-CONFIRMED",
+        "REPLAY": "NOT_CONFIRMED"
+      },
+      "run": "S4c"
+    },
+    {
+      "case": "Synthetic obligation (bound)",
+      "operators": {
+        "ALIAS-0": "NOT_CONFIRMED",
+        "ALIAS-1": "NOT_CONFIRMED",
+        "CALLER": "NOT_CONFIRMED",
+        "DOMAIN": "NOT_CONFIRMED",
+        "FREE_ARG": "NOT_CONFIRMED",
+        "REPLAY": "NOT_CONFIRMED"
+      },
+      "run": "S4c"
+    }
+  ],
+  "rows": [
+    [
+      "ZKredential original",
+      "E4",
+      "NOT",
+      "NOT",
+      "—",
+      "—",
+      "NOT",
+      "NOT"
+    ],
+    [
+      "ZKredential repaired",
+      "NOT",
+      "NOT",
+      "NOT",
+      "—",
+      "—",
+      "NOT",
+      "NOT"
+    ],
+    [
+      "RacePass original",
+      "NOT",
+      "E4",
+      "NOT",
+      "—",
+      "—",
+      "NOT",
+      "NOT"
+    ],
+    [
+      "RacePass repaired",
+      "NOT",
+      "NOT",
+      "NOT",
+      "—",
+      "—",
+      "NOT",
+      "NOT"
+    ],
+    [
+      "Synthetic bound",
+      "NOT",
+      "NOT",
+      "NOT",
+      "—",
+      "—",
+      "NOT",
+      "NOT"
+    ],
+    [
+      "Synthetic alias",
+      "NOT",
+      "NOT",
+      "E4",
+      "—",
+      "—",
+      "NOT",
+      "NOT"
+    ],
+    [
+      "Synthetic replay",
+      "NOT",
+      "NOT",
+      "NOT",
+      "—",
+      "—",
+      "E4",
+      "NOT"
+    ],
+    [
+      "Synthetic obligation (vulnerable)",
+      "NOT",
+      "E4",
+      "—",
+      "NOT",
+      "NOT",
+      "NOT",
+      "NOT"
+    ],
+    [
+      "Synthetic obligation (bound)",
+      "NOT",
+      "NOT",
+      "—",
+      "NOT",
+      "NOT",
+      "NOT",
+      "NOT"
+    ]
+  ],
+  "sources": {
+    "reports/S4/REPORT-S4c.md": {
+      "parser": "Markdown table: Operator × variant",
+      "sha256": "445471274fc371e91b4af884b6b044e5fd8ff212af2940eb271c2efad4275000"
+    },
+    "reports/S4/REPORT.md": {
+      "parser": "Markdown table: Operator × case",
+      "sha256": "c03b14e28cb37eee2d262c10df101f0efdf7aa2f8cf206ff4996b4b5ad363147"
+    }
+  }
+}

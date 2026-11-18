@@ -1,0 +1,535 @@
+{
+  "candidate_family_status": {
+    "ACQUISITION_FAILED": 5,
+    "ANALYZED": 265,
+    "EXCLUDED_BEFORE_ANALYSIS": 1,
+    "HARNESS_TIMEOUT": 7
+  },
+  "columns": [
+    "Scope",
+    "Pattern",
+    "F2 app.",
+    "F2 V",
+    "F2 VWS",
+    "F2 U",
+    "Cand. app.",
+    "Cand. V",
+    "Cand. VWS",
+    "Cand. U"
+  ],
+  "notes": [
+    "Spent freeze-2 sample; DEV, not held-out",
+    "Attempted includes acquisition failures and timeouts.",
+    "V = VIOLATION; VWS = VERIFIED_WITHIN_SCOPE; U = applicable UNKNOWN.",
+    "JSON preserves counts for each applicability category."
+  ],
+  "raw": {
+    "Attempted": {
+      "families": 277,
+      "patterns": {
+        "P1": {
+          "candidate": {
+            "APPLICABLE": {
+              "UNKNOWN": 42,
+              "VERIFIED_WITHIN_SCOPE": 3,
+              "VIOLATION": 15
+            },
+            "NOT_APPLICABLE": {
+              "UNKNOWN": 175,
+              "VERIFIED_WITHIN_SCOPE": 0,
+              "VIOLATION": 0
+            },
+            "UNKNOWN": {
+              "UNKNOWN": 42,
+              "VERIFIED_WITHIN_SCOPE": 0,
+              "VIOLATION": 0
+            }
+          },
+          "freeze2": {
+            "APPLICABLE": {
+              "UNKNOWN": 44,
+              "VERIFIED_WITHIN_SCOPE": 2,
+              "VIOLATION": 17
+            },
+            "NOT_APPLICABLE": {
+              "UNKNOWN": 183,
+              "VERIFIED_WITHIN_SCOPE": 0,
+              "VIOLATION": 0
+            },
+            "UNKNOWN": {
+              "UNKNOWN": 31,
+              "VERIFIED_WITHIN_SCOPE": 0,
+              "VIOLATION": 0
+            }
+          }
+        },
+        "P2": {
+          "candidate": {
+            "APPLICABLE": {
+              "UNKNOWN": 104,
+              "VERIFIED_WITHIN_SCOPE": 3,
+              "VIOLATION": 0
+            },
+            "NOT_APPLICABLE": {
+              "UNKNOWN": 128,
+              "VERIFIED_WITHIN_SCOPE": 0,
+              "VIOLATION": 0
+            },
+            "UNKNOWN": {
+              "UNKNOWN": 42,
+              "VERIFIED_WITHIN_SCOPE": 0,
+              "VIOLATION": 0
+            }
+          },
+          "freeze2": {
+            "APPLICABLE": {
+              "UNKNOWN": 110,
+              "VERIFIED_WITHIN_SCOPE": 3,
+              "VIOLATION": 0
+            },
+            "NOT_APPLICABLE": {
+              "UNKNOWN": 133,
+              "VERIFIED_WITHIN_SCOPE": 0,
+              "VIOLATION": 0
+            },
+            "UNKNOWN": {
+              "UNKNOWN": 31,
+              "VERIFIED_WITHIN_SCOPE": 0,
+              "VIOLATION": 0
+            }
+          }
+        },
+        "P3": {
+          "candidate": {
+            "APPLICABLE": {
+              "UNKNOWN": 36,
+              "VERIFIED_WITHIN_SCOPE": 20,
+              "VIOLATION": 26
+            },
+            "NOT_APPLICABLE": {
+              "UNKNOWN": 153,
+              "VERIFIED_WITHIN_SCOPE": 0,
+              "VIOLATION": 0
+            },
+            "UNKNOWN": {
+              "UNKNOWN": 42,
+              "VERIFIED_WITHIN_SCOPE": 0,
+              "VIOLATION": 0
+            }
+          },
+          "freeze2": {
+            "APPLICABLE": {
+              "UNKNOWN": 34,
+              "VERIFIED_WITHIN_SCOPE": 19,
+              "VIOLATION": 33
+            },
+            "NOT_APPLICABLE": {
+              "UNKNOWN": 160,
+              "VERIFIED_WITHIN_SCOPE": 0,
+              "VIOLATION": 0
+            },
+            "UNKNOWN": {
+              "UNKNOWN": 31,
+              "VERIFIED_WITHIN_SCOPE": 0,
+              "VIOLATION": 0
+            }
+          }
+        },
+        "P4": {
+          "candidate": {
+            "APPLICABLE": {
+              "UNKNOWN": 128,
+              "VERIFIED_WITHIN_SCOPE": 91,
+              "VIOLATION": 16
+            },
+            "NOT_APPLICABLE": {
+              "UNKNOWN": 0,
+              "VERIFIED_WITHIN_SCOPE": 0,
+              "VIOLATION": 0
+            },
+            "UNKNOWN": {
+              "UNKNOWN": 42,
+              "VERIFIED_WITHIN_SCOPE": 0,
+              "VIOLATION": 0
+            }
+          },
+          "freeze2": {
+            "APPLICABLE": {
+              "UNKNOWN": 136,
+              "VERIFIED_WITHIN_SCOPE": 92,
+              "VIOLATION": 18
+            },
+            "NOT_APPLICABLE": {
+              "UNKNOWN": 0,
+              "VERIFIED_WITHIN_SCOPE": 0,
+              "VIOLATION": 0
+            },
+            "UNKNOWN": {
+              "UNKNOWN": 31,
+              "VERIFIED_WITHIN_SCOPE": 0,
+              "VIOLATION": 0
+            }
+          }
+        },
+        "P5": {
+          "candidate": {
+            "APPLICABLE": {
+              "UNKNOWN": 209,
+              "VERIFIED_WITHIN_SCOPE": 1,
+              "VIOLATION": 25
+            },
+            "NOT_APPLICABLE": {
+              "UNKNOWN": 0,
+              "VERIFIED_WITHIN_SCOPE": 0,
+              "VIOLATION": 0
+            },
+            "UNKNOWN": {
+              "UNKNOWN": 42,
+              "VERIFIED_WITHIN_SCOPE": 0,
+              "VIOLATION": 0
+            }
+          },
+          "freeze2": {
+            "APPLICABLE": {
+              "UNKNOWN": 206,
+              "VERIFIED_WITHIN_SCOPE": 2,
+              "VIOLATION": 38
+            },
+            "NOT_APPLICABLE": {
+              "UNKNOWN": 0,
+              "VERIFIED_WITHIN_SCOPE": 0,
+              "VIOLATION": 0
+            },
+            "UNKNOWN": {
+              "UNKNOWN": 31,
+              "VERIFIED_WITHIN_SCOPE": 0,
+              "VIOLATION": 0
+            }
+          }
+        }
+      }
+    },
+    "Both analyzed": {
+      "families": 265,
+      "patterns": {
+        "P1": {
+          "candidate": {
+            "APPLICABLE": {
+              "UNKNOWN": 42,
+              "VERIFIED_WITHIN_SCOPE": 3,
+              "VIOLATION": 15
+            },
+            "NOT_APPLICABLE": {
+              "UNKNOWN": 175,
+              "VERIFIED_WITHIN_SCOPE": 0,
+              "VIOLATION": 0
+            },
+            "UNKNOWN": {
+              "UNKNOWN": 30,
+              "VERIFIED_WITHIN_SCOPE": 0,
+              "VIOLATION": 0
+            }
+          },
+          "freeze2": {
+            "APPLICABLE": {
+              "UNKNOWN": 43,
+              "VERIFIED_WITHIN_SCOPE": 2,
+              "VIOLATION": 16
+            },
+            "NOT_APPLICABLE": {
+              "UNKNOWN": 175,
+              "VERIFIED_WITHIN_SCOPE": 0,
+              "VIOLATION": 0
+            },
+            "UNKNOWN": {
+              "UNKNOWN": 29,
+              "VERIFIED_WITHIN_SCOPE": 0,
+              "VIOLATION": 0
+            }
+          }
+        },
+        "P2": {
+          "candidate": {
+            "APPLICABLE": {
+              "UNKNOWN": 104,
+              "VERIFIED_WITHIN_SCOPE": 3,
+              "VIOLATION": 0
+            },
+            "NOT_APPLICABLE": {
+              "UNKNOWN": 128,
+              "VERIFIED_WITHIN_SCOPE": 0,
+              "VIOLATION": 0
+            },
+            "UNKNOWN": {
+              "UNKNOWN": 30,
+              "VERIFIED_WITHIN_SCOPE": 0,
+              "VIOLATION": 0
+            }
+          },
+          "freeze2": {
+            "APPLICABLE": {
+              "UNKNOWN": 105,
+              "VERIFIED_WITHIN_SCOPE": 3,
+              "VIOLATION": 0
+            },
+            "NOT_APPLICABLE": {
+              "UNKNOWN": 128,
+              "VERIFIED_WITHIN_SCOPE": 0,
+              "VIOLATION": 0
+            },
+            "UNKNOWN": {
+              "UNKNOWN": 29,
+              "VERIFIED_WITHIN_SCOPE": 0,
+              "VIOLATION": 0
+            }
+          }
+        },
+        "P3": {
+          "candidate": {
+            "APPLICABLE": {
+              "UNKNOWN": 36,
+              "VERIFIED_WITHIN_SCOPE": 20,
+              "VIOLATION": 26
+            },
+            "NOT_APPLICABLE": {
+              "UNKNOWN": 153,
+              "VERIFIED_WITHIN_SCOPE": 0,
+              "VIOLATION": 0
+            },
+            "UNKNOWN": {
+              "UNKNOWN": 30,
+              "VERIFIED_WITHIN_SCOPE": 0,
+              "VIOLATION": 0
+            }
+          },
+          "freeze2": {
+            "APPLICABLE": {
+              "UNKNOWN": 33,
+              "VERIFIED_WITHIN_SCOPE": 19,
+              "VIOLATION": 30
+            },
+            "NOT_APPLICABLE": {
+              "UNKNOWN": 154,
+              "VERIFIED_WITHIN_SCOPE": 0,
+              "VIOLATION": 0
+            },
+            "UNKNOWN": {
+              "UNKNOWN": 29,
+              "VERIFIED_WITHIN_SCOPE": 0,
+              "VIOLATION": 0
+            }
+          }
+        },
+        "P4": {
+          "candidate": {
+            "APPLICABLE": {
+              "UNKNOWN": 128,
+              "VERIFIED_WITHIN_SCOPE": 91,
+              "VIOLATION": 16
+            },
+            "NOT_APPLICABLE": {
+              "UNKNOWN": 0,
+              "VERIFIED_WITHIN_SCOPE": 0,
+              "VIOLATION": 0
+            },
+            "UNKNOWN": {
+              "UNKNOWN": 30,
+              "VERIFIED_WITHIN_SCOPE": 0,
+              "VIOLATION": 0
+            }
+          },
+          "freeze2": {
+            "APPLICABLE": {
+              "UNKNOWN": 131,
+              "VERIFIED_WITHIN_SCOPE": 91,
+              "VIOLATION": 14
+            },
+            "NOT_APPLICABLE": {
+              "UNKNOWN": 0,
+              "VERIFIED_WITHIN_SCOPE": 0,
+              "VIOLATION": 0
+            },
+            "UNKNOWN": {
+              "UNKNOWN": 29,
+              "VERIFIED_WITHIN_SCOPE": 0,
+              "VIOLATION": 0
+            }
+          }
+        },
+        "P5": {
+          "candidate": {
+            "APPLICABLE": {
+              "UNKNOWN": 209,
+              "VERIFIED_WITHIN_SCOPE": 1,
+              "VIOLATION": 25
+            },
+            "NOT_APPLICABLE": {
+              "UNKNOWN": 0,
+              "VERIFIED_WITHIN_SCOPE": 0,
+              "VIOLATION": 0
+            },
+            "UNKNOWN": {
+              "UNKNOWN": 30,
+              "VERIFIED_WITHIN_SCOPE": 0,
+              "VIOLATION": 0
+            }
+          },
+          "freeze2": {
+            "APPLICABLE": {
+              "UNKNOWN": 198,
+              "VERIFIED_WITHIN_SCOPE": 2,
+              "VIOLATION": 36
+            },
+            "NOT_APPLICABLE": {
+              "UNKNOWN": 0,
+              "VERIFIED_WITHIN_SCOPE": 0,
+              "VIOLATION": 0
+            },
+            "UNKNOWN": {
+              "UNKNOWN": 29,
+              "VERIFIED_WITHIN_SCOPE": 0,
+              "VIOLATION": 0
+            }
+          }
+        }
+      }
+    }
+  },
+  "rows": [
+    [
+      "Attempted",
+      "P1",
+      63,
+      17,
+      2,
+      44,
+      60,
+      15,
+      3,
+      42
+    ],
+    [
+      "Attempted",
+      "P2",
+      113,
+      0,
+      3,
+      110,
+      107,
+      0,
+      3,
+      104
+    ],
+    [
+      "Attempted",
+      "P3",
+      86,
+      33,
+      19,
+      34,
+      82,
+      26,
+      20,
+      36
+    ],
+    [
+      "Attempted",
+      "P4",
+      246,
+      18,
+      92,
+      136,
+      235,
+      16,
+      91,
+      128
+    ],
+    [
+      "Attempted",
+      "P5",
+      246,
+      38,
+      2,
+      206,
+      235,
+      25,
+      1,
+      209
+    ],
+    [
+      "Both analyzed",
+      "P1",
+      61,
+      16,
+      2,
+      43,
+      60,
+      15,
+      3,
+      42
+    ],
+    [
+      "Both analyzed",
+      "P2",
+      108,
+      0,
+      3,
+      105,
+      107,
+      0,
+      3,
+      104
+    ],
+    [
+      "Both analyzed",
+      "P3",
+      82,
+      30,
+      19,
+      33,
+      82,
+      26,
+      20,
+      36
+    ],
+    [
+      "Both analyzed",
+      "P4",
+      236,
+      14,
+      91,
+      131,
+      235,
+      16,
+      91,
+      128
+    ],
+    [
+      "Both analyzed",
+      "P5",
+      236,
+      36,
+      2,
+      198,
+      235,
+      25,
+      1,
+      209
+    ]
+  ],
+  "scope": "Spent freeze-2 sample; DEV, not held-out",
+  "sources": {
+    "reports/S2a/revision1/spent-family-ledger-278.csv": {
+      "parser": "CSV",
+      "sha256": "2b0993034637b272eacf2784c90be0493cf1f14552f2ad2ebaac1f4514a2ea43"
+    },
+    "reports/heldout/measurement-family-ledger.csv": {
+      "parser": "CSV",
+      "sha256": "4db41b8f90e943ebe2ee05a911e2e1bdac476b29931bc55a3f62f5dc86c5e2a9"
+    },
+    "reports/heldout/selected-families.csv": {
+      "parser": "CSV",
+      "sha256": "cf1b64bc68d90a790e63d965a3e3c607dc6f27e5250ba58d5968d4f792972d8b"
+    }
+  }
+}

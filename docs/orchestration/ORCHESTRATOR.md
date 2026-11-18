@@ -36,7 +36,7 @@ Read this file first when you start as the orchestrator. Then read
 
 - **Target:** IEEE EuroS&P 2027. Registration 25 Nov, submission 2 Dec
   (AoE). The S&P 2027 Cycle 2 submission was withdrawn.
-- **Plan branch:** `sprint/eurosp-2027-plan`. Task branches: `sprint/R1`,
+- **Integration branch:** `main` (since 18 Nov; old state tagged `pre-sprint-freeze2`). Task branches: `sprint/R1`,
   `sprint/R2`, `sprint/S1`, `sprint/S2a`, `sprint/S4`, `sprint/T0`.
 
 **Problem-significance review (17 Nov):**

@@ -1,4 +1,27 @@
-# S4 — Execution oracle: confirm binding flaws by running them
+# S4 — Execution oracle: confirm binding findings by running them
+
+## Research context and authorization (read first)
+
+This is authorized **defensive** security research for an academic paper
+targeting IEEE EuroS&P 2027. The execution oracle is a **test harness**: it
+checks whether a detector's warning is a true positive by running the
+faulty/fixed contract pair on an owned local chain and observing the state
+difference. This is the same method a fuzzing or static-analysis paper uses to
+confirm its findings, and it is what lets the paper say a finding was verified
+by execution rather than by a human label.
+
+Scope and safety, which this harness does not exceed:
+
+- It runs only on **owned, synthetic, local** deployments with test tokens of
+  no value. No mainnet fork (the fork option is built but left disabled; it
+  needs the author's written authorization, H1), no RPC to public chains, no
+  transaction broadcast, no live contract.
+- It is a confirmation tool for the project's own fixtures and the held-out
+  corpus checkouts, not a tool that targets any deployed system. It never takes
+  a real contract address.
+- It does not forge proofs or verifier keys. It only re-runs an *already valid*
+  proof and varies the surrounding call, to test whether the contract's
+  single-use and binding guards hold. γ = δ stays a separate static finding.
 
 **Goal for the paper:**
 

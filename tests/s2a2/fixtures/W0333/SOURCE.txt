@@ -1,0 +1,6 @@
+Repository: mihwuan/H-ZKA
+Commit: 3cdcfd78595d454eb4670009a332d28be43791a1
+Paths relative to the upstream repository root (SHA-256, path):
+a69f93469e016b0d5b47d9e6683c326a298dde3de9fc2023c21140e013855f3a  HZKA/circuits/circom/HZKA_psi.circom
+b3fe3ca3d616d6157fea921dfcd21e48f4fb67d01918d8e2f71dff3be21b549c  HZKA/contracts/libraries/Groth16Verifier.sol
+ff86c4079332ffc31f5d686991e381a799f38ffd9537290be06e86f9f5dfde3a  HZKA/contracts/ordinary_chain/TransferContract.sol

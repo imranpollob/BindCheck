@@ -1,0 +1,121 @@
+{
+  "caption_note": "U = UNKNOWN. VWS = VERIFIED WITHIN SCOPE for the individual check.",
+  "columns": [
+    "Tool",
+    "Target",
+    "Reported result"
+  ],
+  "notes": [
+    "U = UNKNOWN. VWS = VERIFIED_WITHIN_SCOPE for the individual check.",
+    "Slither counts are reported diagnostics. Assumed facts do not establish an AZ1 verdict."
+  ],
+  "raw": [
+    {
+      "display": "P1 U, P2 U, P3 U, P4 U, P5 U",
+      "pattern_verdicts": {
+        "P1": "UNKNOWN",
+        "P2": "UNKNOWN",
+        "P3": "UNKNOWN",
+        "P4": "UNKNOWN",
+        "P5": "UNKNOWN"
+      },
+      "target": "real V3 (verified source; also full checkout)",
+      "tool": "BindCheck freeze 2"
+    },
+    {
+      "display": "167 reports, 0 on fault",
+      "fault_reports": 0,
+      "reports_per_variant": 167,
+      "target": "real V3",
+      "tool": "Slither (default)"
+    },
+    {
+      "display": "UNKNOWN",
+      "target": "real V3",
+      "tool": "D1 R-EXTENT",
+      "verdict": "UNKNOWN"
+    },
+    {
+      "covered": true,
+      "display": "No warning (assumed facts)",
+      "recorded_status": "EXACT",
+      "target": "assumed case shape",
+      "tool": "D1 R-EXTENT interface",
+      "warning_count": 0
+    },
+    {
+      "display": "P1 U, P2 U, P3 U, P4 VWS, P5 VWS",
+      "pattern_verdicts": {
+        "P1": "UNKNOWN",
+        "P2": "UNKNOWN",
+        "P3": "UNKNOWN",
+        "P4": "VERIFIED_WITHIN_SCOPE",
+        "P5": "VERIFIED_WITHIN_SCOPE"
+      },
+      "target": "testbed faulty",
+      "tool": "BindCheck freeze 2"
+    },
+    {
+      "display": "P1 U, P2 U, P3 U, P4 VWS, P5 VWS",
+      "pattern_verdicts": {
+        "P1": "UNKNOWN",
+        "P2": "UNKNOWN",
+        "P3": "UNKNOWN",
+        "P4": "VERIFIED_WITHIN_SCOPE",
+        "P5": "VERIFIED_WITHIN_SCOPE"
+      },
+      "target": "testbed fixed",
+      "tool": "BindCheck freeze 2"
+    },
+    {
+      "display": "54 reports each, 0 on fault",
+      "fault_reports": 0,
+      "reports_per_variant": 54,
+      "target": "testbed faulty / fixed",
+      "tool": "Slither (default)"
+    }
+  ],
+  "rows": [
+    [
+      "BindCheck freeze 2",
+      "real V3",
+      "P1 U, P2 U, P3 U, P4 U, P5 U"
+    ],
+    [
+      "Slither (default)",
+      "real V3",
+      "167 reports, 0 on fault"
+    ],
+    [
+      "D1 R-EXTENT",
+      "real V3",
+      "UNKNOWN"
+    ],
+    [
+      "D1 R-EXTENT interface",
+      "assumed case shape",
+      "No warning (assumed facts)"
+    ],
+    [
+      "BindCheck freeze 2",
+      "testbed faulty",
+      "P1 U, P2 U, P3 U, P4 VWS, P5 VWS"
+    ],
+    [
+      "BindCheck freeze 2",
+      "testbed fixed",
+      "P1 U, P2 U, P3 U, P4 VWS, P5 VWS"
+    ],
+    [
+      "Slither (default)",
+      "testbed faulty / fixed",
+      "54 reports each, 0 on fault"
+    ]
+  ],
+  "sources": {
+    "reports/AZ1/REPORT.md": {
+      "parser": "Markdown table: Tool × target × verdict",
+      "sha256": "92c2f5f8662a82ea87e99f750ec41ee42cda5833378405984a58fd181d9460ed"
+    }
+  }
+}

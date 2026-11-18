@@ -1,0 +1,6 @@
+Repository: bunsenstraat/chainlink-workshop
+Commit: 9ded99d1aa483770cc816d0f0df2c8bd26134421
+Paths relative to the upstream repository root (SHA-256, path):
+cd55d9b5217c5de3a1c1db29f341407baa7559c40e5d8eebe28484decadb496c  contracts/hackergroup.sol
+6c22c2b75acd1adce504a862a522877a680e12e9aa5b52d61c89ab4915cf6bb2  semaphore/contracts/base/SemaphoreVerifier.sol
+525f6aa4ae73423194e06794b43249360cd197d6e6f7e19b51801a39e5e56ecf  zk/circuits/semaphore.circom

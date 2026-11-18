@@ -1,0 +1,94 @@
+{
+  "columns": [
+    "Case",
+    "S4 wall (s)",
+    "S4b wall (s)",
+    "S4c wall (s)"
+  ],
+  "notes": [
+    "Reported full-run wall times. S4 real-case times include dependency install, proving and compile."
+  ],
+  "raw": {
+    "S4": {
+      "per_trial_reported_approx": {
+        "RacePass (2 variants, 14 trials)": "~21 s (orig), ~17 s (repaired); DOMAIN ~37 s",
+        "Synthetic bound / alias / replay": "~16 s; DOMAIN ~29 s",
+        "ZKredential (2 variants, 14 trials)": "~25 s (orig), ~29 s (repaired); DOMAIN ~45 s"
+      },
+      "wall_seconds": {
+        "RacePass": 391,
+        "Synthetic alias": 132,
+        "Synthetic bound": 124,
+        "Synthetic replay": 132,
+        "ZKredential": 434
+      }
+    },
+    "S4b": {
+      "wall_seconds": {
+        "RacePass": 395,
+        "Synthetic alias": 161,
+        "Synthetic bound": 152,
+        "Synthetic replay": 160,
+        "ZKredential": 427
+      }
+    },
+    "S4c": {
+      "trials_per_variant": 6,
+      "wall_seconds": {
+        "Synthetic obligation": 371
+      }
+    }
+  },
+  "rows": [
+    [
+      "ZKredential",
+      434,
+      427,
+      "—"
+    ],
+    [
+      "RacePass",
+      391,
+      395,
+      "—"
+    ],
+    [
+      "Synthetic bound",
+      124,
+      152,
+      "—"
+    ],
+    [
+      "Synthetic alias",
+      132,
+      161,
+      "—"
+    ],
+    [
+      "Synthetic replay",
+      132,
+      160,
+      "—"
+    ],
+    [
+      "Synthetic obligation",
+      "—",
+      "—",
+      371
+    ]
+  ],
+  "sources": {
+    "reports/S4/REPORT-S4b.md": {
+      "parser": "Markdown prose: runtimes",
+      "sha256": "eba0d8a552a8c1eb744305cf24c3a58f4aa0c6fece42f219aa5767b7f8a38c6d"
+    },
+    "reports/S4/REPORT-S4c.md": {
+      "parser": "Markdown prose: runtimes",
+      "sha256": "445471274fc371e91b4af884b6b044e5fd8ff212af2940eb271c2efad4275000"
+    },
+    "reports/S4/REPORT.md": {
+      "parser": "Markdown table: Runtimes",
+      "sha256": "c03b14e28cb37eee2d262c10df101f0efdf7aa2f8cf206ff4996b4b5ad363147"
+    }
+  }
+}
