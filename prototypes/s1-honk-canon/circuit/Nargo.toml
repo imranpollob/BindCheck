@@ -1,0 +1,6 @@
+[package]
+name = "s1_canonicality"
+type = "bin"
+authors = [""]
+
+[dependencies]
