@@ -142,6 +142,7 @@ flowchart TD
     s2aRerun --> s2aSetH["Set H DEV precision [UNKNOWN] — not held-out"]
     s2aRerun --> s2a2["S2a2 residual P5 [DONE] — six reproduced warnings now UNKNOWN"]
     s2a2 --> s2a2Timeout["W0658 [UNKNOWN] — analyzer timeout"]
+    sprint --> f1["F1 analyzer soundness [DONE] — XR controls pass, DEV row verdicts unchanged"]
     d1paper --> lanex["Lane-X exploratory, benchmark, auto-validation v1+v1.1 [DONE]"]
     d207 --> capabilityGate["Automated discovery + E4 capability gate [WAITING]"]
     d1p10 --> d1p10result["Transformed-arm eligibility [UNKNOWN]"]
@@ -641,6 +642,7 @@ slots were executed.
 | 2026-11-18 | S2a revision 1 spent-family DEV rerun | `[ACTIVE]` task; `[DONE]` 278-row accounting; `[UNKNOWN]` residual FP status | [Report](../reports/S2a/REPORT.md), [278-row ledger](../reports/S2a/revision1/spent-family-ledger-278.csv), and [changed-verdict ledger](../reports/S2a/revision1/spent-family-changed-verdicts.csv): 58/58 aggregate tests pass with Linux Circom 2.1.9; 265 analysed, 7 harness timeouts, 5 unavailable acquisitions, 1 predeclared exclusion. Set H is DEV: P1 9/10 retained, P3 9/12, canonicality-P4 5/5 partial (2 TP unavailable), P5 2/8. Of 13 P5 FP cards, 6 are no longer `VIOLATION`, 6 remain, and 1 is unavailable; both P5 TP cards remain `VIOLATION`. No held-out claim, freeze-3 tag, or contract edit. |
 | 2026-11-18 | S2a2 residual P5 warnings on pinned DEV code | `[DONE]` bounded analysis, W0658 `[UNKNOWN]` | [Report](../reports/S2a2/REPORT.md): six exact-site warnings reproduced and moved to `UNKNOWN` on the pinned checkouts and real-source fixtures. W0658 exceeded the analyzer budget during circuit ranking. Two P5 TP decisions remain `VIOLATION` on replay from retained inputs. Original DEV rerun leaves all 280 verdict/applicability cells unchanged. Aggregate suite passes 61/61. |
 | 2026-11-18 | S2c extent binding beyond discharge | `[DONE]` DEV rule and tests, `[UNKNOWN]` real V3 and 56 DEV rows | [Report](../reports/S2c/REPORT.md): the new E1 rule warns on AZ1 faulty and verifies the fixed fixture for the extent property. The real V3 assembly verifier is unsupported. All 56 original DEV rows completed, with zero new E1 warnings and 14 E0 diagnostics. All 70 tests passed. Candidate hash recorded. |
+| 2026-11-18 | F1 analyzer soundness from cross-model review | `[DONE]` | [Report](../reports/F1/REPORT.md): 77 tests passed, including the XR counterexamples and AZ1 extent controls. All 56 DEV rows completed with unchanged row verdicts and applicability. Two mismatched P4 triples moved to `UNKNOWN`. PP's five retained P4 warnings have `UNKNOWN` verdicts by design. Candidate hash recorded. |
 
 ## Update rule
 

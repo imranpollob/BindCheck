@@ -315,6 +315,72 @@ def _imported_honk_layouts(sources: list[Source]) -> dict[str, dict[str, Any]]:
     return resolved
 
 
+def _resolves_inherited_guard(wrapper: Verifier, base: Verifier, base_name: str) -> bool:
+    # Limit source dispatch to a single imported root contract and a wrapper
+    # with one straight-through entry point and no local implementation of verify.
+    if len(wrapper.contract_names) != 1 or base.contract_names != {base_name}:
+        return False
+    masked = mask_comments_and_strings(wrapper.source.text)
+    imports = [
+        match.group(1)
+        for match in re.finditer(
+            rf"\bimport\s*(?:\{{\s*{re.escape(base_name)}\s*\}}\s*from\s*)?[\"']([^'\"\n]+)[\"']\s*;",
+            wrapper.source.text,
+        )
+        if masked[match.start():match.start() + 6] == "import"
+    ]
+    if not any(
+        path.startswith(("./", "../"))
+        and (wrapper.source.path.parent / path).resolve() == base.source.path.resolve()
+        for path in imports
+    ):
+        return False
+    wrapper_name = next(iter(wrapper.contract_names))
+    wrapper_contract = re.search(
+        rf"\bcontract\s+{re.escape(wrapper_name)}\s+is\s+{re.escape(base_name)}\s*\{{",
+        masked,
+    )
+    base_text = mask_comments_and_strings(base.source.text)
+    if wrapper_contract is None or not re.search(rf"\bcontract\s+{re.escape(base_name)}\s*\{{", base_text):
+        return False
+    wrapper_body = balanced(masked, wrapper_contract.end() - 1, "{", "}")
+    if wrapper_body is None:
+        return False
+    forwarding = re.fullmatch(
+        r"\s*function\s+verify(?:Proof|Tx)\s*\(([^()]*)\)\s+"
+        r"(?:external|public)\s+(?:(?:view|pure)\s+)?returns\s*\(\s*bool\s*\)\s*"
+        r"\{\s*return\s+verify\s*\(([^()]*)\)\s*;\s*\}\s*",
+        wrapper_body[0],
+    )
+    methods = [method for method in functions(base_text) if method.name.lower() in {"verify", "verifyproof", "verifytx", "verifyplonk", "validateproof"}]
+    if forwarding is None or len(methods) != 1:
+        return False
+    target = methods[0]
+    signature = re.fullmatch(
+        r"function\s+verify\s*\(([^()]*)\)\s+(?:public|internal)\s+"
+        r"(?:(?:view|pure)\s+)?(?:virtual\s+)?returns\s*\(\s*bool\s*\)\s*",
+        target.header,
+    )
+    if signature is None:
+        return False
+    parameter = re.compile(r"\s*(uint(?:256)?\s*\[\s*([1-9]\d*)\s*\])\s+(?:memory|calldata)\s+(\w+)\s*")
+    entry = parameter.fullmatch(forwarding.group(1))
+    called = parameter.fullmatch(signature.group(1))
+    if entry is None or called is None or entry.group(2) != called.group(2) or forwarding.group(2).strip() != entry.group(3):
+        return False
+    # Confirm that the exact forwarded vector is checked on function entry.
+    # P4's artifact-level guard flag alone cannot establish this fact.
+    guards = re.match(
+        rf"(\s*require\s*\(\s*{re.escape(called.group(3))}\s*\[\s*\d+\s*\]"
+        rf"\s*<\s*{SCALAR_FIELD}\s*\)\s*;)+",
+        target.body,
+    )
+    if guards is None:
+        return False
+    indices = sorted({int(index) for index in re.findall(r"\[\s*(\d+)\s*\]", guards.group(0))})
+    return len(indices) == int(called.group(2)) and all(index == offset for offset, index in enumerate(indices))
+
+
 def _propagate_inherited_verifier_guards(verifiers: list[Verifier]) -> None:
     by_name: dict[str, list[Verifier]] = defaultdict(list)
     for verifier in verifiers:
@@ -330,21 +396,30 @@ def _propagate_inherited_verifier_guards(verifiers: list[Verifier]) -> None:
             continue
         bases = [name for clause in inherited for name in re.findall(r"\b[A-Za-z_]\w*\b", clause)]
         candidates = [item for name in bases for item in by_name.get(name, []) if item is not wrapper]
-        verified = [
-            item for item in candidates
-            if item.p4.get("finding", {}).get("verdict") == "VERIFIED_WITHIN_SCOPE"
-        ]
-        if len(verified) != 1:
+        if wrapper.p4["finding"]["verdict"] != "UNKNOWN" or not any(
+            item.p4["finding"]["verdict"] == "VERIFIED_WITHIN_SCOPE" for item in candidates
+        ):
             continue
-        inherited_p4 = json.loads(json.dumps(verified[0].p4))
-        inherited_p4.setdefault("finding", {}).setdefault("facts", []).append({
+        if (
+            len(bases) != 1 or len(candidates) != 1
+            or not _resolves_inherited_guard(wrapper, candidates[0], bases[0])
+        ):
+            wrapper.p4["finding"] = result(
+                "P4", "UNKNOWN", "INHERITED_VERIFIER_GUARD_UNRESOLVED",
+                "The effective verification method and its inherited public-input guard could not be resolved.",
+                where=location(wrapper.source.relative_path, 1), facts=wrapper.p4["finding"]["facts"],
+            )
+            continue
+        base = candidates[0]
+        inherited_p4 = {**base.p4, "finding": dict(base.p4["finding"])}
+        inherited_p4["finding"]["facts"] = [*base.p4["finding"]["facts"], {
             "provenance": "EXTRACTED",
             "name": "inherited_verifier_guard",
             "value": {
                 "base_contracts": bases,
-                "base_source": verified[0].source.relative_path,
+                "base_source": base.source.relative_path,
             },
-        })
+        }]
         wrapper.p4 = inherited_p4
 
 
@@ -938,6 +1013,12 @@ def analyze_p1(
         )
     if verifier is None or verifier.interface_only:
         return result("P1", "UNKNOWN", "VERIFIER_ARTIFACT_MISSING", "Consumer is analyzed, but the verifier implementation artifact is absent.", where=where)
+    if _verifier_correspondence(verifier, consumer) == "mismatch":
+        return result(
+            "P1", "UNKNOWN", "VERIFIER_CALL_CORRESPONDENCE_UNRESOLVED",
+            "The recovered verifier implementation conflicts with the consumer's declared receiver type.",
+            where=where,
+        )
     if fail_closed_verifier(verifier.source.text):
         return result("P1", "UNKNOWN", "FAIL_CLOSED_VERIFIER_PLACEHOLDER", "A verifier that unconditionally rejects proofs cannot establish a non-vacuous protected-effect binding.", where=where)
     if circuit is None:
@@ -1405,7 +1486,13 @@ def analyze_p5(circuit: Circuit | None, verifier: Verifier | None, consumer: Con
                 where=where, facts=facts,
             )
         return result("P5", "VIOLATION", "PUBLIC_INPUT_COUNT_MISMATCH", f"Consumer supplies {observed} public inputs but the circuit exposes {circuit.public_count}.", where=where, facts=facts)
-    if circuit.order_complete and vector.items and circuit.public_order and len(vector.items) == len(circuit.public_order):
+    if not circuit.order_complete or circuit.public_count is None:
+        return result(
+            "P5", "UNKNOWN", "CIRCUIT_INTERFACE_INCOMPLETE",
+            "The circuit's flattened public-input count and order could not both be established.",
+            where=where, facts=facts,
+        )
+    if vector.items and circuit.public_order and len(vector.items) == len(circuit.public_order):
         observed_order = [_semantic_name(item) for item in vector.items]
         circuit_order = [_semantic_name(item) for item in circuit.public_order]
         if observed_order != circuit_order:
@@ -1416,7 +1503,7 @@ def analyze_p5(circuit: Circuit | None, verifier: Verifier | None, consumer: Con
                 "Counts agree, but differing source-level names do not establish whether consumer and circuit elements have the same meaning.",
                 where=where, facts=facts,
             )
-    elif not vector.items or not circuit.order_complete:
+    else:
         if vector.dynamic and vector.length_guard and expected == vector.length_guard:
             return result("P5", "VERIFIED_WITHIN_SCOPE", "DYNAMIC_PUBLIC_INPUT_LENGTH_GUARDED", "Dynamic public inputs have an exact length guard matching the verifier declaration.", where=where, facts=facts, limitations=["Element meaning/order was not independently named by the dynamic interface."])
         return result("P5", "UNKNOWN", "PUBLIC_INPUT_ORDER_UNRESOLVED", "Counts are compatible, but exact element order/meaning was not recovered.", where=where, facts=facts)
@@ -1713,17 +1800,23 @@ def analyze(
         for path, value in runtime_values:
             runtime_results.append({"path": path, **analyze_runtime(value, path, source_has_p2=source_has_p2)})
         triples = make_triples(circuits, [item for item in verifiers if not item.interface_only] or verifiers, consumers, int(config["max_triples"]))
-        arities_by_consumer: dict[str, set[tuple[int, ...]]] = defaultdict(set)
+        arities_by_vector: dict[tuple[int, int], set[tuple[int, ...]]] = defaultdict(set)
+        vector_keys: dict[tuple[int, int], tuple[int, int]] = {}
         for item in triples:
-            verifier = item["verifier_obj"]
-            if verifier:
-                arities_by_consumer[item["consumer_obj"].source.relative_path + ":" + item["consumer_obj"].function.name].add(tuple(sorted(verifier.arities)))
+            verifier, consumer = item["verifier_obj"], item["consumer_obj"]
+            pair = id(consumer), id(verifier)
+            if verifier is not None and pair not in vector_keys:
+                vector = _vector_for_verifier(verifier, consumer)
+                if vector is not None:
+                    key = id(consumer), id(vector)
+                    vector_keys[pair] = key
+                    arities_by_vector[key].add(tuple(sorted(verifier.arities)))
         for item in triples:
             budget.check()
             circuit: Circuit | None = item.pop("circuit_obj")
             verifier: Verifier | None = item.pop("verifier_obj")
             consumer: Consumer = item.pop("consumer_obj")
-            key = consumer.source.relative_path + ":" + consumer.function.name
+            vector_key = vector_keys.get((id(consumer), id(verifier)))
             if verifier is None:
                 p4_result = result("P4", "UNKNOWN", "VERIFIER_ARTIFACT_MISSING", "No verifier implementation artifact was matched.", grade="E0", where=location(consumer.source.relative_path, consumer.function.line))
             elif verifier.interface_only:
@@ -1733,12 +1826,20 @@ def analyze(
             significant_runtime = next((entry["finding"] for entry in runtime_results if entry["finding"]["reason"] in {"DEFAULT_G2_RUNTIME_SIGNATURE", "PAIRING_LIBRARY_GENERATOR_EXCLUDED", "RUNTIME_BYTECODE_PARSE_INCOMPLETE"}), None)
             if significant_runtime is not None and p4_result.get("verdict") != "VIOLATION":
                 p4_result = significant_runtime
+            if verifier is not None and not verifier.interface_only and _verifier_correspondence(verifier, consumer) == "mismatch":
+                p4_result = result(
+                    "P4", "UNKNOWN", "VERIFIER_CALL_CORRESPONDENCE_UNRESOLVED",
+                    "The recovered verifier implementation conflicts with the consumer's declared receiver type.",
+                    where=location(consumer.source.relative_path, consumer.function.line),
+                )
             pattern_results = {
                 "P1": analyze_p1(circuit, verifier, consumer, policy),
                 "P2": analyze_p2(circuit, verifier, consumer),
                 "P3": analyze_p3(circuit, verifier, consumer),
                 "P4": p4_result,
-                "P5": analyze_p5(circuit, verifier, consumer, ambiguous=len(arities_by_consumer[key]) > 1),
+                "P5": analyze_p5(circuit, verifier, consumer, ambiguous=(
+                    vector_key is not None and len(arities_by_vector[vector_key]) > 1
+                )),
             }
             item.update({
                 "circuit": _serialize_circuit(circuit),
