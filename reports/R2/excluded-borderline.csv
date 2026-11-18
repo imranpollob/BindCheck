@@ -13,12 +13,18 @@ PPCIRC,unused-input-signals,M,stateTreeDepth/ASPTreeDepth inputs unconstrained; 
 PPUPG,nullifier-reuse-precommitment,M,same nullifier across deposits only harms the depositor (requires their seed)
 ZKSFF,M-01,M,missing field/curve validation of proof elements; auditor recommends hardening but states no concrete forgery
 ZKSFF,L-02,L,two encodings of point at infinity; no concrete exploit stated
-TKC4,H-04,H,prover fee payer not bound (proposer/coinbase); prover-assignment signature, not ZK proof
+TKC4,H-04,H,"prover fee payer not bound (proposer/coinbase); prover-assignment signature, not ZK proof"
 TKC4,H-05,H,ECDSA signature replay in withdraw; signature not ZK proof
-TKOZ,C-02,C,bridge signal forgery via retried message skipping checks; storage/Merkle signals, not ZK proof
+TKOZ,C-02,C,"bridge signal forgery via retried message skipping checks; storage/Merkle signals, not ZK proof"
 TKOZ,L-01,L,assigned prover signature underspecified; signature not ZK proof
 ZSREN1,4,L,duplicate commitments in Merkle tree; auditor describes as unlikely/benign edge case
 ZSREN1,5,L,linking vkey not absorbed in Fiat-Shamir; auditor states no problem with a fixed key
 ZSREN3,4,L,ecrecover signature malleability; signature not ZK proof
 ZSR0SOL,0,L,Groth16 verifier reduces public inputs mod q (non-canonical inputs accepted); auditor states no security impact in context
 ZSALEPH,1,I,missing field check for macSalt/macCommitment; no effect stated
+C4ZKS23,M-05,M,EIP-155 not enforced allows transaction replay; transaction signature not ZK proof
+C4ZKS24,M-04,M,"double withdrawal across bridge migration; Merkle log-inclusion proof and migration state, not ZK proof binding"
+C4SUCC,M-06,M,nonce clobbering only causes valid proofs to be rejected (auditor: does not enable acceptance of invalid proofs)
+RGABDK,CVF-9,H,"missing range/field checks for amount, pubkeys, serials; recommendation only, no stated effect"
+RGABDK,CVF-21,H,"missing field-element checks on verifier parameters; recommendation only, no stated effect"
+RGABDK,CVF-22,M,owner-set verification key not validated as curve points; no stated effect
