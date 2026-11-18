@@ -128,6 +128,11 @@ flowchart TD
     zkHeldout -.-> evaluation
     integrationDatasetV2 -.-> zkHeldout
     d220 --> manuscript
+    d220 --> sprint["EuroS&P 2027 sprint [ACTIVE]"]
+    sprint --> t0["T0 Linux toolchains [DONE] — PARTIAL"]
+    sprint --> r1["R1 incident census [DONE] — labels AI, author review pending"]
+    sprint --> r2["R2 audit census [DONE] — Solodit BLOCKED"]
+    sprint --> az1["AZ1 Aztec Connect case study [NEXT]"]
     d1paper --> lanex["Lane-X exploratory, benchmark, auto-validation v1+v1.1 [DONE]"]
     d207 --> capabilityGate["Automated discovery + E4 capability gate [WAITING]"]
     d1p10 --> d1p10result["Transformed-arm eligibility [UNKNOWN]"]
@@ -181,6 +186,9 @@ flowchart TD
     classDef unknown fill:#FFE0C2,stroke:#FF9E42
 
     class foundation,fixture,payy,sourceCheck,coneGate,nineCases,failureAnalysis,v3Rerun,generalGate,tracking,livingTree,d100,d101,d102,d103preflight,d103review,d103typed,d103boundary,d103guards,d103guardreview,d103concrete,d103replayreview,d103recovery,d1p00,d1p01,d1p01artifact,d1p02,d1p03,d1p04,d1p05,d1p04elig,d1p07,d1p08,d1p09,d1p10,d1p11,d1p12,warptoadRecovery,d1p12r,d1p13,d1p14a,d1p14b,d1p14c,d1p14d,d1p17,d1pint1,d1p16,d1p18,d1p15,d1p19,d1p20,d1p21a,d1p21b,d1p30,d1p31,d1p34,d1p33,d1p35,d1p36,d1p40,d1p41,d1p42,payyFidelity,lanex,d1p43,d200,d201,d202,d203,d204,d205,d206,d207,d20810,d21114,d21517,d218,d219,d220,circomFeas,circomV2,integrationDataset,integrationDatasetV2,t23,t24,t25,t26 done
+    class t0,r1,r2 done
+    class sprint active
+    class az1 next
     class analysis,d1,d1paper,d103,d103impl,d103consumer,d103effects active
     class d103linkreview,zkHeldout next
     class evaluation,history,heldOut,baselines,manuscript,claims,artifacts,draft,transferCase,sensitivity,submit,t22,acirSummary,d104,d105,d106,d107,d108,d103symbolic,d1p09decision,d1p10decision,warptoadJoint,capabilityGate,taxonomyHumans,gateB,gateC waiting
@@ -614,6 +622,9 @@ slots were executed.
 | 2026-10-30 | D1P-41 preliminary novelty ablation | `[DONE]` preliminary task / `[WAITING]` corrected-tool rerun / `[UNKNOWN]` capability and security | [Report](../reports/D1P-41-ablation-preliminary.md), [frozen examples](ablations/d1p-41-discriminating-examples.md), and [protocol](../protocols/d1/d1p-41-ablation-preliminary.json): mask unchanged v1.2 facts/outputs across producer-only, consumer-only, unjoined-union and full arms on eight exposed development positives plus one control. Producer and consumer arms each match 3/8; union and full each match 6/8. R-EFFECT adds no detected example, but adds one related effect-naming warning and one irrelevant Payy warning; wrong state/domain relationships remain unsupported. Noir lint and Slither are separate external baselines. All results are E1/UNKNOWN, not security verdicts. AI 1 fact audit and a one-command corrected frozen-tool rerun remain required. |
 | 2026-10-30 | D1P-42 conditional extent facts and `R-EXTENT` | `[DONE]` bounded development implementation / `[UNKNOWN]` capability and security | [Report](../reports/D1P-42.md), [facts interface](../protocols/d1/d1p-42-extent-facts-interface.json), and ignored raw evidence: replay 1,630 bridge polynomial identities to certify Payy's exact 1,005-to-1,003 mapping; extract proof-enforced and consumer-reliance conditions per word; warn on the earlier Payy uncovered region `active_messages_count <= word_offset < messages_length`; and remain silent for check-added's all-word tail-zero binding. WT-C02's max-fee undercount concern is not a bug. The unchanged benchmark remains 11 detected / 19 unsupported / 0 misses / 13 warning objects. The implementation is unfrozen and bounded to development/synthetic inputs; no held-out, capability, security, or D1 verdict follows. |
 | 2026-10-30 | D1P-43 typed state/domain correspondence | `[DONE]` bounded implementation and preliminary rerun / `[NEXT]` Payy fidelity and frozen rerun / `[UNKNOWN]` capability and security | [Report](../reports/D1P-43.md), [interface](d1/role-binding-interface.md), [frozen targets](ablations/d1p-43-role-targets.md), and [protocol](../protocols/d1/d1p-43-role-binding-preliminary.json): add separate `R-ROLE` producer/consumer word roles for tree/state/domain/polarity/effect correspondence without changing AI 1 frontends or analyzer. On seven supported D1P-41 positives, producer 3, consumer 2, union 5 and full 7 detect; the clean control is silent. Six WarpToad role targets match and PY-S03/PY-S05 fail closed at public-input mapping, so 8/8 expected outcomes match. Development E1 only; no proof/replay/held-out/security verdict. Final conclusions await exact Payy mapping/memory fidelity and a corrected frozen-tool rerun. |
+| 2026-11-17 | T0 Linux toolchains | `[DONE]` PARTIAL | [Report](../reports/T0/REPORT.md): circom 2.2.3/2.1.9, snarkjs 0.7.6, nargo beta.14/beta.22/rc.4, bb 5.0.0/6.0.0 and bb.js run on Linux; 29/29 smoke steps; analyzer tests 9/9. Native bb 3.0.0-manual (Payy) cannot be downloaded; the author accepted the bb.js WASM substitute ([decisions](orchestration/DECISIONS.md)). |
+| 2026-11-17 | R1 incident and bug-bounty census | `[DONE]` / labels `[UNKNOWN]` until author review | [Report](../reports/R1/REPORT.md): 50 cases. Exploited in-class cases: P4 (Veil, FoomCash, ZKSwap, HermesVault) and Aztec Connect (June 2026, about $2.1M, unbound `numRealTxs` extent). No P1/P2/P3 money loss found. Labels are AI-proposed; R1b author review is deferred. |
+| 2026-11-17 | R2 audit-finding census | `[DONE]` with Solodit BLOCKED | [Report](../reports/R2/REPORT.md): 68 audits, 54 findings; 17 High/Critical binding findings (P1–P3, P5) in 7 audits; 38% of binding findings need the circuit. TVL at audit time is UNKNOWN. Labels are AI-proposed. |
 
 ## Update rule
 
