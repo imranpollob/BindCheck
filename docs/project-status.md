@@ -132,7 +132,7 @@ flowchart TD
     sprint --> t0["T0 Linux toolchains [DONE] — PARTIAL"]
     sprint --> r1["R1 incident census [DONE] — labels AI, author review pending"]
     sprint --> r2["R2 audit census [DONE] — Solodit BLOCKED"]
-    sprint --> az1["AZ1 Aztec Connect case study [NEXT]"]
+    sprint --> az1["AZ1 Aztec Connect case study [DONE] — fixture E4; BindCheck/Slither do not flag it"]
     d1paper --> lanex["Lane-X exploratory, benchmark, auto-validation v1+v1.1 [DONE]"]
     d207 --> capabilityGate["Automated discovery + E4 capability gate [WAITING]"]
     d1p10 --> d1p10result["Transformed-arm eligibility [UNKNOWN]"]
@@ -625,6 +625,7 @@ slots were executed.
 | 2026-11-17 | T0 Linux toolchains | `[DONE]` PARTIAL | [Report](../reports/T0/REPORT.md): circom 2.2.3/2.1.9, snarkjs 0.7.6, nargo beta.14/beta.22/rc.4, bb 5.0.0/6.0.0 and bb.js run on Linux; 29/29 smoke steps; analyzer tests 9/9. Native bb 3.0.0-manual (Payy) cannot be downloaded; the author accepted the bb.js WASM substitute ([decisions](orchestration/DECISIONS.md)). |
 | 2026-11-17 | R1 incident and bug-bounty census | `[DONE]` / labels `[UNKNOWN]` until author review | [Report](../reports/R1/REPORT.md): 50 cases. Exploited in-class cases: P4 (Veil, FoomCash, ZKSwap, HermesVault) and Aztec Connect (June 2026, about $2.1M, unbound `numRealTxs` extent). No P1/P2/P3 money loss found. Labels are AI-proposed; R1b author review is deferred. |
 | 2026-11-17 | R2 audit-finding census | `[DONE]` with Solodit BLOCKED | [Report](../reports/R2/REPORT.md): 68 audits, 54 findings; 17 High/Critical binding findings (P1–P3, P5) in 7 audits; 38% of binding findings need the circuit. TVL at audit time is UNKNOWN. Labels are AI-proposed. |
+| 2026-11-18 | AZ1 Aztec Connect extent-binding case study | `[DONE]` / detection `[UNKNOWN]` | [Report](../reports/AZ1/REPORT.md) and [fixture](../prototypes/az1/): mechanism located at pinned `aztec-connect@69de49b` (calldata `numRealTxs` outside the hashed header; settlement loop bound; private circuit `num_txs`); deployed V3 verified source byte-identical. Owned synthetic Circom/Groth16 faulty/fixed pair on local Anvil: 53/53 steps, faulty consumer leaves 1000 unbacked credit, fixed consumer rejects the same proof. BindCheck freeze 2: real target UNKNOWN (no consumer recovered, assembly verifier call); testbed P1 UNKNOWN on both variants. Slither: no target warning. R-EXTENT cannot express the converse direction. Development fixture only; no held-out, disclosure or live-chain action. |
 
 ## Update rule
 
