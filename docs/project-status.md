@@ -137,6 +137,10 @@ flowchart TD
     sprint --> s4["S4 execution oracle [DONE] — ZKredential+RacePass E4 from manifests; repairs clean"]
     s4 --> s4b["S4b value-at-risk + admitted initial state [DONE]"]
     s4b --> s4c["S4c obligation accounting [DONE] — omitted required effect confirmed"]
+    sprint --> s1["S1 verifier canonicality [WAITING] — PARTIAL; author decisions pending"]
+    s1 --> s1Sol["Generated Solidity verifiers [DONE] — 15/15 reject same-proof aliases on Anvil"]
+    s1 --> s1Native["Native bb.js 3.0.0 Poseidon2 path [DONE] — accepts aliases; known (Xion PR 608)"]
+    s1 --> s1Split["Four split templates [UNKNOWN] — source-read, unconfirmed"]
     sprint --> s2a["S2a precision fixes [ACTIVE] — DEV"]
     s2a --> s2aRerun["Spent-family DEV rerun [DONE] — 265/278 analysed"]
     s2aRerun --> s2aSetH["Set H DEV precision [UNKNOWN] — not held-out"]
@@ -197,6 +201,9 @@ flowchart TD
 
     class foundation,fixture,payy,sourceCheck,coneGate,nineCases,failureAnalysis,v3Rerun,generalGate,tracking,livingTree,d100,d101,d102,d103preflight,d103review,d103typed,d103boundary,d103guards,d103guardreview,d103concrete,d103replayreview,d103recovery,d1p00,d1p01,d1p01artifact,d1p02,d1p03,d1p04,d1p05,d1p04elig,d1p07,d1p08,d1p09,d1p10,d1p11,d1p12,warptoadRecovery,d1p12r,d1p13,d1p14a,d1p14b,d1p14c,d1p14d,d1p17,d1pint1,d1p16,d1p18,d1p15,d1p19,d1p20,d1p21a,d1p21b,d1p30,d1p31,d1p34,d1p33,d1p35,d1p36,d1p40,d1p41,d1p42,payyFidelity,lanex,d1p43,d200,d201,d202,d203,d204,d205,d206,d207,d20810,d21114,d21517,d218,d219,d220,circomFeas,circomV2,integrationDataset,integrationDatasetV2,t23,t24,t25,t26 done
     class t0,r1,r2 done
+    class s1 waiting
+    class s1Sol,s1Native done
+    class s1Split unknown
     class sprint active
     class az1 next
     class analysis,d1,d1paper,d103,d103impl,d103consumer,d103effects active
@@ -643,6 +650,7 @@ slots were executed.
 | 2026-11-18 | S2a2 residual P5 warnings on pinned DEV code | `[DONE]` bounded analysis, W0658 `[UNKNOWN]` | [Report](../reports/S2a2/REPORT.md): six exact-site warnings reproduced and moved to `UNKNOWN` on the pinned checkouts and real-source fixtures. W0658 exceeded the analyzer budget during circuit ranking. Two P5 TP decisions remain `VIOLATION` on replay from retained inputs. Original DEV rerun leaves all 280 verdict/applicability cells unchanged. Aggregate suite passes 61/61. |
 | 2026-11-18 | S2c extent binding beyond discharge | `[DONE]` DEV rule and tests, `[UNKNOWN]` real V3 and 56 DEV rows | [Report](../reports/S2c/REPORT.md): the new E1 rule warns on AZ1 faulty and verifies the fixed fixture for the extent property. The real V3 assembly verifier is unsupported. All 56 original DEV rows completed, with zero new E1 warnings and 14 E0 diagnostics. All 70 tests passed. Candidate hash recorded. |
 | 2026-11-18 | S8a EuroS&P paper framing sections | `[DONE]` draft sections; paper package `[WAITING]` | [Report](../reports/S8a/REPORT.md): title options, a 174-word abstract plus one S5 placeholder sentence, introduction, Aztec Connect motivating example with figure, threat model and definitions (contract §§4, 5, 8), and taxonomy with extent binding (a)/(b) and generated R1/R2 class tables. Every number comes from `paper/generated/` or carries a `\TODO`. No oracle E4 number cited; undisclosed findings anonymised in the new sections. Tectonic 0.17.0 build exit 0. |
+| 2026-11-18 | S1 verifier canonicality (decision-independent pass) | `[WAITING]` task; `[DONE]` Solidity replay and native check; `[UNKNOWN]` split templates | [Report](../reports/S1/REPORT.md) and [generator table](../reports/S1/generators.csv): 15 generated Solidity verifiers (bb 5.0.0/6.0.0 plain and optimized, bb.js 3.0.0/5.0.0, snarkjs Groth16/PLONK/fflonk) on local Anvil accept the honest proof and reject it at n+r and n+5r (0/30 aliased calls accepted). bb.js 3.0.0 native Poseidon2 verification accepts both aliases (CONFIRMED_KNOWN, Xion PR #608); native bb/bb.js 5.0.0+ reject. bb.js Solidity range guard first present in npm 4.0.1. bb.js ≤3.0.3 keccak/keccakZK and snarkjs 0.7.6 PLONK/fflonk templates are split (source-read, unconfirmed). Detector fixture and exposure list not done; waiting on author decisions. aztec-packages not opened (hold-out FORBIDDEN). No live-chain action. |
 
 ## Update rule
 
