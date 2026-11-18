@@ -1,0 +1,45 @@
+% Count evidence rows in PP's generated table. Each row may cover several
+% modes or versions. Read as text so long experiment cells are never typeset.
+\ExplSyntaxOn
+\ior_new:N \l_survey_input_ior
+\prop_new:N \l_survey_counts_prop
+\ior_open:Nn \l_survey_input_ior {../generated/T-generators.tex}
+\ior_str_map_inline:Nn \l_survey_input_ior
+  {
+    \regex_split:nnN {\s \& \s} {#1} \l_tmpa_seq
+    \int_compare:nNnT {\seq_count:N \l_tmpa_seq} > {3}
+      {
+        \str_set:Nx \l_tmpa_str {\seq_item:Nn \l_tmpa_seq {4}}
+        \str_if_eq:VnF \l_tmpa_str {behaviour}
+          {
+            \prop_get:NVNF \l_survey_counts_prop \l_tmpa_str \l_tmpa_tl
+              {\tl_set:Nn \l_tmpa_tl {0}}
+            \prop_put:NVx \l_survey_counts_prop \l_tmpa_str
+              {\int_eval:n {\l_tmpa_tl + 1}}
+          }
+      }
+  }
+\ior_close:N \l_survey_input_ior
+\NewDocumentCommand \SurveyCount {m}
+  {
+    \prop_if_in:NnTF \l_survey_counts_prop {#1}
+      {\prop_item:Nn \l_survey_counts_prop {#1}}
+      {\PackageError{generator-survey}{Missing~survey~category:~#1}
+        {Review~the~behaviour~column~of~T-generators.tex.}}
+  }
+\ExplSyntaxOff
+\begin{tabular}{@{}lp{0.71\columnwidth}@{}}
+\toprule
+Behaviour & Evidence in the surveyed interfaces \\
+\midrule
+Reject & \SurveyCount{reject} rows classify a range check or rejection in bb, bb.js,
+snarkjs or gnark. The gnark templates were read only.
+A further package-marker row indicates a guard. \\
+Split & \SurveyCount{split (source-read; unconfirmed)} generated templates use the
+input bytes in the transcript and a field element in arithmetic. All rejected
+the altered encoding with the original proof. An older package-marker row
+adds no execution evidence. \\
+Reduce & \SurveyCount{reduce} native bb.js row accepted alternate encodings with the
+original proof in the default Poseidon2 transcript mode. \\
+\bottomrule
+\end{tabular}

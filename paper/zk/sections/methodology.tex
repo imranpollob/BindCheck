@@ -9,16 +9,14 @@ census of deployed verifiers show? We make no claim that any tool is
 ``better''; we measure what each one can and cannot tell an analyst.%
 % src: docs/FREEZE-2026-11-09.md (framing decision: no comparative claims)
 
-\para{Analyzer freeze.} All \tool{} results reported as frozen use analyzer
-content hash \code{8ea6d223\ldots}, declared before any held-out analysis. Any
-later analyzer change requires a new declaration stating which results it
-invalidates; a change motivated by a held-out or gate outcome marks the
-affected cases \emph{exposed}.%
-% src: docs/FREEZE-2026-11-09.md
-\
-Synthetic-set results in \S\ref{sec:res-benchmark} were produced at the
-earlier development revision \code{2741c40e\ldots}; we label them as such.%
-% src: paper/zk/data/redteam-arms.json#analyzer_tree
+\para{Analyzer revisions.} The design in \S\ref{sec:design} describes the
+candidate with content hash \code{753c6e2a\ldots}. The freeze declaration
+for the held-out run is pending. Earlier DEV tables in
+\S\ref{sec:res-dev} refer to the historical freeze \code{8ea6d223\ldots}.
+The earlier synthetic screening run used \code{2741c40e\ldots}. Each table
+retains the revision that produced it. A change motivated by a held-out
+result exposes the affected family for subsequent comparisons.
+% src: reports/F1/REPORT.md; docs/orchestration/DECISIONS.md; docs/FREEZE-2026-11-09.md; docs/FREEZE-2.md
 
 \para{Tool arms.} Every applicable baseline runs in a generic/default arm and,
 where it has a property interface, a same-policy arm with the same policy file
@@ -92,15 +90,14 @@ groups and all held-out warnings; human raters}.%
 Labels produced by an AI assistant during development are reported as
 \emph{AI opinion} and never as annotation.
 
-\para{Validation.} For a subset of warnings we attempt E3/E4 validation:
-compile the pinned circuit, generate a real proof with a key whose
-correspondence to the pinned verifier is checked, and submit it to the
-unchanged verifier and consumer on a local Anvil or Hardhat chain with
-synthetic assets, recording committed state. A repair is validated only if it
-rejects the attack \emph{and} a legitimate proof still succeeds.%
-% src: reports/impact/REPORT.md (zkey correspondence logs; repair and legitimate-run rows)
+\para{Validation.} We distinguish historical hand-run development records
+from trials of the local oracle in \S\ref{sec:oracle}. A repair must reject
+the policy-violating trial and preserve the legitimate reference call.
+The held-out oracle evaluation awaits re-review and the frozen run
+\TODO{XR2/S5}.
+% src: reports/impact/REPORT.md; oracle/README.md; reports/F2/REPORT.md
 
-\para{Environment.} Python 3.13.9, Circom 2.2.3 and snarkjs 0.7.6 for the
+\para{Historical DEV environment.} Python 3.13.9, Circom 2.2.3 and snarkjs 0.7.6 for the
 frozen DEV run; exact tool hashes, per-row commands and exit statuses are in
 the artifact manifests.%
 % src: reports/soundness/REPORT-2.md#verification-and-exact-provenance

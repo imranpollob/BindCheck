@@ -29,7 +29,7 @@ names the artifacts a checker must read to decide the class.}
 \footnotesize
 \setlength{\tabcolsep}{3pt}
 \renewcommand{\arraystretch}{1.1}
-\begin{tabular}{@{}p{1.5cm}p{2.1cm}p{3.3cm}p{6.1cm}p{3.6cm}@{}}
+\begin{tabular}{@{}p{1.5cm}p{2.1cm}p{3.3cm}p{5.8cm}p{3.6cm}@{}}
 \toprule
 \textbf{Class} & \textbf{Signature analogue} & \textbf{Proof fails to fix} &
 \textbf{Public instances (source)} & \textbf{Checker must know} \\
@@ -38,8 +38,7 @@ P1 Effect & unsigned message field &
 recipient, amount or identity of a committed effect &
 Railgun: inputs-hash preimage omits two output commitments
 (Critical~\cite{abdk-railgun}); Singularity: relayer and fee are not public
-inputs (Critical~\cite{zellic-singularity}); \CaseA{}, \CaseB{} (E4, under
-disclosure) &
+inputs (Critical~\cite{zellic-singularity}); \CaseA{}, \CaseB{} (development cases) &
 consumer and verifier arity; the circuit when the value is bound through a
 commitment \\
 P1(a) Extent, reliance beyond binding & accepting trailing unsigned bytes &
@@ -123,25 +122,35 @@ recursive or aggregation circuit cannot, which is why the audit census labels
 some P4 findings as needing the circuit. The exploited cases in our census are
 concentrated in this class (Table~\ref{tab:class-census}). We treat them as a root-cause
 class introduced by generators and templates
-(\S\ref{sec:cases}); Table~\ref{tab:generators} will list, per verifier
-generator, which of these checks its template performs by default.
-
-\begin{table}[t]
-\centering
-\caption{Verifier generators and their defaults (P4 root causes).
-\TODO{S1: placeholder until the tracked S1 generator census exists; the
-table is generated from \code{reports/S1/generators.csv} by
-\code{make paper-tables}.}}
-\label{tab:generators}
-\footnotesize
-\input{../generated/T-generators}
-\end{table}
+(Table~\ref{tab:generators}).
 
 \para{Interface (P5).}
 The consumer's public vector disagrees with the verifier's arity or with the
 circuit's public signals in count, order or meaning. The order is defined by
 the circuit (outputs first, then public inputs in declaration order), so a
 contract-only reader cannot decide it~\cite{pse-anonaadhaar}.
+
+\subsection{How verifier interfaces handle field encodings}\label{sec:generators}
+
+The survey follows a public input across the verifier interface. A range
+check enforces a unique integer representation. Reduction admits different
+integers as the same field element. In a split template the transcript uses
+the supplied bytes while field arithmetic uses their residue. The generated
+bb.js manual 3.0.0 Keccak templates and the snarkjs 0.7.6 PLONK and FFLONK templates exhibited
+that split on source inspection. Later bb Solidity releases in the survey checked the scalar range explicitly. Their same-proof trials rejected the
+changed input. Acceptance under a differently constructed proof remains
+unconfirmed. The observed reduction occurred in a native verifier. It
+establishes no corresponding Solidity or consumer behaviour.
+% src: paper/generated/T-generators.tex; reports/S1/REPORT.md
+\begin{table}[t]
+\centering
+\caption{Public-input handling by behaviour. Counts are survey rows. A row
+may cover several modes or releases. The older native Keccak modes rejected
+the changed encoding in trials, with the mechanism unresolved.}
+\label{tab:generators}
+\footnotesize
+\input{figures/generator-survey}
+\end{table}
 
 \subsection{Extent binding}\label{sec:extent}
 
@@ -216,7 +225,7 @@ That share differs by class in the direction Table~\ref{tab:taxonomy}
 predicts: P1 and P3 findings are mostly visible in the contract, while P2 findings and
 the few P5 findings mostly need the circuit. We do not know how much value the
 audited protocols held at report time, and one protocol contributes most of
-the High or Critical findings \TODO{PP: macro for that share}; the census
+the High or Critical findings \TODO{PP}; the census
 shows that the classes occur in professional practice, not how often they
 occur in deployed code. Prevalence in deployed applications is the question
 of the held-out evaluation (\S\ref{sec:res-heldout}).

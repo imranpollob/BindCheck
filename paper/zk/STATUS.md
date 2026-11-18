@@ -5,6 +5,8 @@
 45 `\MISSING` placeholders are listed below. Two findings from this lane (§4) need
 human decisions before any result is reused.
 
+> **S8 update (2026-11-18).** The A4 draft builds to 12 pages including references and appendices. The official EuroS&P template archive still needs comparison. The generator table, candidate analyzer and oracle design, related work, disclosure placeholders and page budget are documented in the [S8 handoff](../../reports/S8/REPORT.md). The current rendered PDF is the ignored `results/raw/S8/after/main.pdf`. The tracked PDF and the inventories below describe earlier drafts.
+
 > **S8a update (2026-11-18, EuroS&P 2027 framing).** The abstract (`sections/abstract.tex`),
 > introduction, new motivating example (`sections/motivating.tex`, `figures/f0-aztec-extent.tex`),
 > threat model/definitions and taxonomy were rewritten for EuroS&P 2027. `\MISSING` #1 (abstract)
