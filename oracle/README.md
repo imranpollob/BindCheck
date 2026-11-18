@@ -77,14 +77,26 @@ signers, prior deployments and the loaded proofs.
 A trial is `E4-CONFIRMED` iff **both**:
 
 1. the mutated tx succeeds through the **unchanged** verifier and consumer; and
-2. its committed protected effects violate the policy — an effect reaches
-   someone not entitled to it, an amount differs from one the proof fixes, or a
-   single-use authorization is consumed twice (canonical key reduced mod r).
+2. its committed effects violate the policy — an **unauthorized effect** (an
+   effect reaches someone not entitled to it, an amount differs from one the
+   proof fixes, or a single-use authorization is consumed twice, canonical key
+   reduced mod r), **or** an **undischarged required obligation** (the mutated tx
+   grants the protected benefit but omits an obligation the honest path commits,
+   e.g. a fee transfer to the treasury or a nullifier-marking effect).
 
 Otherwise `NOT_CONFIRMED` (`reverted` / `effects identical` / `policy-permitted`)
 or `UNKNOWN` (build/proof/deploy failure, or verifier acceptance not
 established). The policy file states **entitlement only**; it never states the
 expected verdict, and `runner.py` refuses a policy that does.
+
+**Required obligations (S4c).** A policy may declare `required_obligations:
+[{id, description, match}]`, where `match` ({`type`, `from`, `contract_role`,
+`to`}) names the committed effect each authorization must produce alongside its
+benefit. The oracle conditions on the honest reference: an obligation is faulted
+only when the honest path discharges it, this mutated tx grants the protected
+effect, and the obligation effect is absent — so a declared obligation the real
+path never produces is never flagged. Each trial carries an `obligations` ledger
+(`discharged_by_honest` / `discharged_by_mutation`).
 
 ## Mutation operators
 
@@ -106,5 +118,5 @@ oracle/
   runner.py         orchestration, safety gates, Anvil lifecycle
   evm_runner.cjs    generic ethers v6 driver: deploy / mutate / observe / judge
   cases/<case>/     manifest.json + policy.json for the two real findings
-tests/oracle/       three synthetic controls (Foundry) + manifests + run_synthetic.sh
+tests/oracle/       synthetic controls (Foundry): bound / alias / replay / obligation
 ```

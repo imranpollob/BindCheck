@@ -1,0 +1,34 @@
+{
+  "policy_id": "synthetic-obligation",
+  "description": "Entitlement-only policy for a synthetic oracle control. States who may receive the protected reward mint and which obligation each authorization must discharge alongside it. States no verdict.",
+  "roles": {
+    "holder": "the account presenting the credential proof",
+    "mint_recipient": "the account entitled to the minted reward",
+    "treasury": "the account the required fee obligation must be paid to"
+  },
+  "protected_effects": [
+    {
+      "id": "synthetic_reward_mint",
+      "match": {
+        "type": "erc20_transfer",
+        "from": "0x0",
+        "contract_role": "reward"
+      },
+      "entitlements": []
+    }
+  ],
+  "required_obligations": [
+    {
+      "id": "fee-to-treasury",
+      "description": "each authorization that mints the reward must also commit the fee to the treasury",
+      "match": {
+        "type": "erc20_transfer",
+        "from": "0x0",
+        "contract_role": "fee",
+        "to": {
+          "$signer": "treasury"
+        }
+      }
+    }
+  ]
+}

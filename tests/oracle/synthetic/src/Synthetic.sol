@@ -143,3 +143,81 @@ contract ReplayConsumer {
         token.mint(recipient, AMOUNT);
     }
 }
+
+/// Obligation-accounting control (vulnerable). An honest claim both mints the
+/// reward (the benefit, effect A) and pays the required fee to the treasury (the
+/// obligation, effect B). The fee is gated by a free `skipFee` flag that is NOT
+/// bound to the proof, so a claim can mint the reward while omitting the fee:
+/// the benefit is granted without the required obligation being discharged. A
+/// canonical verifier and a proper single-use nullifier guard isolate this from
+/// alias/replay, so FREE_ARG(skipFee) is the only operator that should confirm.
+contract ObligationConsumerVulnerable {
+    IVerifier public verifier; // canonical
+    MintToken public reward;
+    MintToken public fee;
+    address public treasury;
+    mapping(bytes32 => bool) public spent;
+    uint256 public constant AMOUNT = 1000;
+    uint256 public constant FEE = 50;
+
+    constructor(IVerifier v, MintToken r, MintToken f, address t) {
+        verifier = v;
+        reward = r;
+        fee = f;
+        treasury = t;
+    }
+
+    function claim(
+        uint256[2] calldata a,
+        uint256[2][2] calldata b,
+        uint256[2] calldata c,
+        uint256[] calldata pub,
+        address recipient,
+        bool skipFee
+    ) external {
+        require(verifier.verifyProof(a, b, c, pub), "proof");
+        bytes32 nullifier = bytes32(pub[0]);
+        require(!spent[nullifier], "spent");
+        spent[nullifier] = true;
+        reward.mint(recipient, AMOUNT); // effect A: the benefit
+        if (!skipFee) {
+            fee.mint(treasury, FEE); // effect B: the required obligation
+        }
+    }
+}
+
+/// Obligation-accounting control (bound). Identical to the vulnerable consumer
+/// but the fee obligation is always discharged, ignoring the free flag. No
+/// operator should confirm.
+contract ObligationConsumerFixed {
+    IVerifier public verifier; // canonical
+    MintToken public reward;
+    MintToken public fee;
+    address public treasury;
+    mapping(bytes32 => bool) public spent;
+    uint256 public constant AMOUNT = 1000;
+    uint256 public constant FEE = 50;
+
+    constructor(IVerifier v, MintToken r, MintToken f, address t) {
+        verifier = v;
+        reward = r;
+        fee = f;
+        treasury = t;
+    }
+
+    function claim(
+        uint256[2] calldata a,
+        uint256[2][2] calldata b,
+        uint256[2] calldata c,
+        uint256[] calldata pub,
+        address recipient,
+        bool // skipFee is accepted but ignored: the obligation is unconditional
+    ) external {
+        require(verifier.verifyProof(a, b, c, pub), "proof");
+        bytes32 nullifier = bytes32(pub[0]);
+        require(!spent[nullifier], "spent");
+        spent[nullifier] = true;
+        reward.mint(recipient, AMOUNT); // effect A: the benefit
+        fee.mint(treasury, FEE); // effect B: always discharged
+    }
+}

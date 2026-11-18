@@ -206,6 +206,26 @@ function isMint(effect, spec) {
   return true;
 }
 
+// Does an observed effect discharge a declared required obligation (S4c)? An
+// obligation match names the kind of committed effect that an authorization must
+// produce alongside its benefit (e.g. a fee transfer to the treasury, or a
+// nullifier-marking mint). `to` is a value expression resolved to the required
+// recipient. All checks are over already-observed local effects; nothing is
+// queried off-chain.
+function matchesObligation(effect, match, resolver) {
+  if (match.type && effect.kind !== match.type) return false;
+  if (match.from === "0x0") {
+    if (!effect.from || effect.from.toLowerCase() !== ZERO) return false;
+  }
+  if (match.contract_role && effect.contract_role !== match.contract_role)
+    return false;
+  if (match.to) {
+    const want = String(resolver.resolve(match.to)).toLowerCase();
+    if (!effect.to || effect.to.toLowerCase() !== want) return false;
+  }
+  return true;
+}
+
 // ---- policy evaluation -----------------------------------------------------
 
 async function evaluatePolicy(policy, effects, context, resolver, contractsByAddr) {
@@ -251,6 +271,30 @@ async function evaluatePolicy(policy, effects, context, resolver, contractsByAdd
         authorization_key: context.authorization_key,
         occurrences: 2,
         max_occurrences: 1,
+      });
+    }
+  }
+
+  // Undischarged required obligations (S4c): an authorization that grants the
+  // protected benefit must also commit each required obligation. If the honest
+  // path discharged the obligation but this mutated tx granted the benefit while
+  // omitting it, the required effect went undischarged — a violation of a
+  // different shape from an unauthorized effect. Conditioning on the honest
+  // path's own behaviour avoids flagging an obligation the real path never
+  // produces (which would overclaim).
+  for (const obl of policy.required_obligations || []) {
+    const dischargedHere = effects.some((e) =>
+      matchesObligation(e, obl.match || {}, resolver)
+    );
+    const dischargedHonest = (context.honest_obligations || []).includes(obl.id);
+    if (context.benefit_committed && dischargedHonest && !dischargedHere) {
+      violations.push({
+        rule: obl.id,
+        type: "undischarged_obligation",
+        obligation: obl.id,
+        description: obl.description || null,
+        discharged_by_honest: true,
+        discharged_by_mutation: false,
       });
     }
   }
@@ -493,14 +537,28 @@ async function runTrial(env, trial) {
     doubleSpend = true;
   }
 
+  const benefitCommitted = effects.some((e) => isMintAny(e, spec.policy));
   const context = {
     authorization_key: authKey,
     single_use_double_spend: doubleSpend,
     mutated_sender: from.address,
+    honest_obligations: env.honestObligations || [],
+    benefit_committed: benefitCommitted,
   };
   const violations = settled.succeeded
     ? await evaluatePolicy(spec.policy, effects, context, resolver, contractsByAddr)
     : [];
+
+  // Per-trial obligation ledger (S4c): for each declared required obligation,
+  // whether the honest reference discharged it and whether this mutated tx did.
+  const obligations = (spec.policy.required_obligations || []).map((obl) => ({
+    id: obl.id,
+    description: obl.description || null,
+    discharged_by_honest: (env.honestObligations || []).includes(obl.id),
+    discharged_by_mutation: effects.some((e) =>
+      matchesObligation(e, obl.match || {}, resolver)
+    ),
+  }));
 
   // Signed magnitude per protected effect: ERC-20 value, or one unit per ERC-721
   // token id. Direction is + (value created for / routed to the recipient).
@@ -550,6 +608,7 @@ async function runTrial(env, trial) {
     prelude: prelude ? { succeeded: prelude.succeeded, hash: prelude.hash } : null,
     protected_effects: effects,
     policy_violations: violations,
+    obligations,
     value_at_risk: valueAtRisk,
     authorization_key: authKey,
     events: settled.receipt ? settled.receipt.logs.map((l) => ({ address: l.address, topics: l.topics, data: l.data })) : [],
@@ -722,6 +781,17 @@ async function main() {
   const honestEffects = honestSettled.succeeded
     ? extractEffects(honestSettled.receipt, honestDeploy.deploymentsByAddr)
     : [];
+  // Required obligations the honest path actually discharges (S4c). A mutated
+  // trial can only be faulted for *omitting* an obligation the honest path
+  // itself commits, so this set is the reference the oracle conditions on.
+  const honestObligations = [];
+  for (const obl of spec.policy.required_obligations || []) {
+    if (honestEffects.some((e) => matchesObligation(e, obl.match || {}, honestResolver))) {
+      honestObligations.push(obl.id);
+    }
+  }
+  env.honestObligations = honestObligations;
+
   const honest = jsonSafe({
     succeeded: honestSettled.succeeded,
     verifier_accepted: honestVa.accepted,
@@ -729,6 +799,7 @@ async function main() {
     tx_hash: honestSettled.hash,
     error: honestSettled.error,
     protected_effects: honestEffects,
+    obligations_discharged: honestObligations,
   });
 
   const trials = [];
@@ -770,4 +841,4 @@ main().catch((error) => {
   process.exitCode = 2;
 });
 
-module.exports = { FIELD_R, extractEffects, evaluatePolicy };
+module.exports = { FIELD_R, extractEffects, evaluatePolicy, matchesObligation };
