@@ -1,0 +1,371 @@
+{
+  "schema_version": 1,
+  "case_id": "synthetic-view-obligation",
+  "safety": {
+    "local_only": true,
+    "fork_enabled": false
+  },
+  "source": {
+    "kind": "local_copy",
+    "path": "tests/oracle/synthetic"
+  },
+  "policy": "view_oblig.policy.json",
+  "variants": [
+    {
+      "id": "vulnerable",
+      "label": "row-count-gated backing (vulnerable)",
+      "build": [
+        {
+          "name": "forge_build",
+          "cwd": "{source}",
+          "argv": [
+            "forge",
+            "build",
+            "--root",
+            "{source}"
+          ]
+        }
+      ],
+      "artifacts": [
+        "{source}/out"
+      ],
+      "scenario": {
+        "signers": [
+          "deployer",
+          "holder",
+          "mallory"
+        ],
+        "deploy": [
+          {
+            "name": "verifier",
+            "artifact": "CanonicalVerifier",
+            "args": []
+          },
+          {
+            "name": "consumer",
+            "artifact": "CreditSettleVulnerable",
+            "args": [
+              {
+                "$addr": "verifier"
+              }
+            ]
+          }
+        ],
+        "state_views": [
+          {
+            "name": "credit",
+            "contract": "consumer",
+            "function": "totalCredit"
+          },
+          {
+            "name": "backing",
+            "contract": "consumer",
+            "function": "settledBacking"
+          }
+        ],
+        "verifier_checks": [
+          {
+            "contract": "verifier",
+            "function": "verifyProof",
+            "args": [
+              {
+                "$proofPart": {
+                  "proof": "cred",
+                  "part": "a"
+                }
+              },
+              {
+                "$proofPart": {
+                  "proof": "cred",
+                  "part": "b"
+                }
+              },
+              {
+                "$proofPart": {
+                  "proof": "cred",
+                  "part": "c"
+                }
+              },
+              {
+                "$pubArray": {
+                  "proof": "cred"
+                }
+              }
+            ]
+          }
+        ],
+        "honest_tx": {
+          "target": "consumer",
+          "function": "claim",
+          "from": "holder",
+          "args": [
+            {
+              "name": "a",
+              "class": "proof",
+              "value": {
+                "$proofPart": {
+                  "proof": "cred",
+                  "part": "a"
+                }
+              }
+            },
+            {
+              "name": "b",
+              "class": "proof",
+              "value": {
+                "$proofPart": {
+                  "proof": "cred",
+                  "part": "b"
+                }
+              }
+            },
+            {
+              "name": "c",
+              "class": "proof",
+              "value": {
+                "$proofPart": {
+                  "proof": "cred",
+                  "part": "c"
+                }
+              }
+            },
+            {
+              "name": "pub",
+              "class": "pub",
+              "value": {
+                "$pubArray": {
+                  "proof": "cred"
+                }
+              }
+            },
+            {
+              "name": "creditTotal",
+              "class": "proof_fixed",
+              "value": {
+                "$uint": "200"
+              }
+            },
+            {
+              "name": "amounts",
+              "class": "proof_fixed",
+              "value": {
+                "$lit": [
+                  "100",
+                  "50",
+                  "30",
+                  "20"
+                ]
+              }
+            },
+            {
+              "name": "numRealRows",
+              "class": "free",
+              "value": {
+                "$uint": "4"
+              }
+            }
+          ]
+        },
+        "operators": [
+          "CALLER",
+          "FREE_ARG",
+          "REPLAY"
+        ],
+        "free_args": {
+          "numRealRows": {
+            "mutation": {
+              "$uint": "2"
+            }
+          }
+        },
+        "caller_candidates": [
+          "mallory"
+        ],
+        "proofs": {
+          "cred": {
+            "proof": "{source}/fixtures/cred-proof.json",
+            "public": "{source}/fixtures/cred-public.json"
+          }
+        }
+      }
+    },
+    {
+      "id": "fixed",
+      "label": "unsettled rows must be no-ops (fixed)",
+      "build": [
+        {
+          "name": "forge_build",
+          "cwd": "{source}",
+          "argv": [
+            "forge",
+            "build",
+            "--root",
+            "{source}"
+          ]
+        }
+      ],
+      "artifacts": [
+        "{source}/out"
+      ],
+      "scenario": {
+        "signers": [
+          "deployer",
+          "holder",
+          "mallory"
+        ],
+        "deploy": [
+          {
+            "name": "verifier",
+            "artifact": "CanonicalVerifier",
+            "args": []
+          },
+          {
+            "name": "consumer",
+            "artifact": "CreditSettleFixed",
+            "args": [
+              {
+                "$addr": "verifier"
+              }
+            ]
+          }
+        ],
+        "state_views": [
+          {
+            "name": "credit",
+            "contract": "consumer",
+            "function": "totalCredit"
+          },
+          {
+            "name": "backing",
+            "contract": "consumer",
+            "function": "settledBacking"
+          }
+        ],
+        "verifier_checks": [
+          {
+            "contract": "verifier",
+            "function": "verifyProof",
+            "args": [
+              {
+                "$proofPart": {
+                  "proof": "cred",
+                  "part": "a"
+                }
+              },
+              {
+                "$proofPart": {
+                  "proof": "cred",
+                  "part": "b"
+                }
+              },
+              {
+                "$proofPart": {
+                  "proof": "cred",
+                  "part": "c"
+                }
+              },
+              {
+                "$pubArray": {
+                  "proof": "cred"
+                }
+              }
+            ]
+          }
+        ],
+        "honest_tx": {
+          "target": "consumer",
+          "function": "claim",
+          "from": "holder",
+          "args": [
+            {
+              "name": "a",
+              "class": "proof",
+              "value": {
+                "$proofPart": {
+                  "proof": "cred",
+                  "part": "a"
+                }
+              }
+            },
+            {
+              "name": "b",
+              "class": "proof",
+              "value": {
+                "$proofPart": {
+                  "proof": "cred",
+                  "part": "b"
+                }
+              }
+            },
+            {
+              "name": "c",
+              "class": "proof",
+              "value": {
+                "$proofPart": {
+                  "proof": "cred",
+                  "part": "c"
+                }
+              }
+            },
+            {
+              "name": "pub",
+              "class": "pub",
+              "value": {
+                "$pubArray": {
+                  "proof": "cred"
+                }
+              }
+            },
+            {
+              "name": "creditTotal",
+              "class": "proof_fixed",
+              "value": {
+                "$uint": "200"
+              }
+            },
+            {
+              "name": "amounts",
+              "class": "proof_fixed",
+              "value": {
+                "$lit": [
+                  "100",
+                  "50",
+                  "30",
+                  "20"
+                ]
+              }
+            },
+            {
+              "name": "numRealRows",
+              "class": "free",
+              "value": {
+                "$uint": "4"
+              }
+            }
+          ]
+        },
+        "operators": [
+          "CALLER",
+          "FREE_ARG",
+          "REPLAY"
+        ],
+        "free_args": {
+          "numRealRows": {
+            "mutation": {
+              "$uint": "2"
+            }
+          }
+        },
+        "caller_candidates": [
+          "mallory"
+        ],
+        "proofs": {
+          "cred": {
+            "proof": "{source}/fixtures/cred-proof.json",
+            "public": "{source}/fixtures/cred-public.json"
+          }
+        }
+      }
+    }
+  ]
+}

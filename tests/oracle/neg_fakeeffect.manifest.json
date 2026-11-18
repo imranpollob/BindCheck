@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "case_id": "neg-fakeeffect",
+  "safety": { "local_only": true, "fork_enabled": false },
+  "source": { "kind": "local_copy", "path": "tests/oracle/synthetic" },
+  "policy": "neg_fakeeffect.policy.json",
+  "variants": [
+    {
+      "id": "fakeeffect",
+      "label": "XR-01 negative control: Transfer event with no state change",
+      "build": [ { "name": "forge_build", "cwd": "{source}", "argv": ["forge","build","--root","{source}"] } ],
+      "artifacts": ["{source}/out"],
+      "scenario": {
+        "signers": ["deployer","holder","mallory"],
+        "deploy": [
+          { "name": "verifier", "artifact": "CanonicalVerifier", "args": [] },
+          { "name": "consumer", "artifact": "FakeEffectConsumer", "args": [ { "$addr": "verifier" } ] }
+        ],
+        "verifier_checks": [
+          { "contract": "verifier", "function": "verifyProof", "args": [
+            { "$proofPart": { "proof": "cred", "part": "a" } },
+            { "$proofPart": { "proof": "cred", "part": "b" } },
+            { "$proofPart": { "proof": "cred", "part": "c" } },
+            { "$pubArray": { "proof": "cred" } } ] }
+        ],
+        "honest_tx": {
+          "target": "consumer", "function": "claim", "from": "holder",
+          "args": [
+            { "name": "a", "class": "proof", "value": { "$proofPart": { "proof": "cred", "part": "a" } } },
+            { "name": "b", "class": "proof", "value": { "$proofPart": { "proof": "cred", "part": "b" } } },
+            { "name": "c", "class": "proof", "value": { "$proofPart": { "proof": "cred", "part": "c" } } },
+            { "name": "pub", "class": "pub", "value": { "$pubArray": { "proof": "cred" } } },
+            { "name": "recipient", "class": "bound", "value": { "$pubAsAddress": { "proof": "cred", "index": 1 } } }
+          ]
+        },
+        "operators": ["CALLER","FREE_ARG"],
+        "free_args": { "recipient": { "mutation": { "$signer": "mallory" } } },
+        "caller_candidates": ["mallory"],
+        "proofs": { "cred": { "proof": "{source}/fixtures/cred-proof.json", "public": "{source}/fixtures/cred-public.json" } }
+      }
+    }
+  ]
+}

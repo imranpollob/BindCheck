@@ -1,0 +1,11 @@
+{
+  "policy_id": "az1-extent-binding",
+  "description": "Entitlement-only policy for the AZ1 extent-binding testbed. The L2 credit granted by an authorization must be fully backed: settled backing must equal the credit. States no verdict.",
+  "roles": { "submitter": "any caller that submits a batch proof" },
+  "protected_view_effects": [
+    { "id": "l2-credit", "view": "credit", "min_delta": "1" }
+  ],
+  "view_obligations": [
+    { "id": "backing-tracks-credit", "description": "the settled backing must equal the L2 credit granted by the batch", "view": "backing", "must_equal_credit_of": "credit" }
+  ]
+}

@@ -74,20 +74,31 @@ signers, prior deployments and the loaded proofs.
 
 ## Confirmation rule (research-contract §8, E4)
 
-A trial is `E4-CONFIRMED` iff **both**:
+A trial is `E4-CONFIRMED` iff **all** of:
 
-1. the mutated tx succeeds through the **unchanged** verifier and consumer; and
-2. its committed effects violate the policy — an **unauthorized effect** (an
+1. the mutated tx **succeeds**;
+2. the **unchanged verifier is shown to accept on the mutated call path** — its
+   contract is invoked and returns true in the mutated tx's `callTracer` trace
+   (XR-02). The standalone check of the original proof is only an E3 preflight;
+3. every protected transfer effect used to confirm is **state-corroborated** —
+   the recipient's `balanceOf`/`ownerOf` actually changed by the logged amount at
+   the mutated tx's block (XR-01); and
+4. its committed effects violate the policy — an **unauthorized effect** (an
    effect reaches someone not entitled to it, an amount differs from one the
    proof fixes, or a single-use authorization is consumed twice, canonical key
-   reduced mod r), **or** an **undischarged required obligation** (the mutated tx
-   grants the protected benefit but omits an obligation the honest path commits,
-   e.g. a fee transfer to the treasury or a nullifier-marking effect).
+   reduced mod r), an **undischarged required obligation** (the mutated tx grants
+   the protected benefit but omits — or under-pays, by value/occurrence — an
+   obligation the honest path commits), or an **undischarged view obligation** (a
+   state-accounting counter the honest path keeps balanced, e.g. settled backing
+   == granted credit, falls short).
 
 Otherwise `NOT_CONFIRMED` (`reverted` / `effects identical` / `policy-permitted`)
-or `UNKNOWN` (build/proof/deploy failure, or verifier acceptance not
-established). The policy file states **entitlement only**; it never states the
-expected verdict, and `runner.py` refuses a policy that does.
+or `UNKNOWN` — build/proof/deploy failure, `EFFECT_NOT_STATE_CORROBORATED`
+(an event with no matching state), or `VERIFIER_PATH_NOT_ESTABLISHED` (the
+verifier was not shown to accept on the mutated path). The policy file states
+**entitlement only**; it never states the expected verdict, and `runner.py`
+refuses a policy that does, and rejects any manifest command that references a
+fork URL, a non-local RPC, or a broadcast flag (XR-08).
 
 **Required obligations (S4c).** A policy may declare `required_obligations:
 [{id, description, match}]`, where `match` ({`type`, `from`, `contract_role`,
@@ -96,7 +107,21 @@ benefit. The oracle conditions on the honest reference: an obligation is faulted
 only when the honest path discharges it, this mutated tx grants the protected
 effect, and the obligation effect is absent — so a declared obligation the real
 path never produces is never flagged. Each trial carries an `obligations` ledger
-(`discharged_by_honest` / `discharged_by_mutation`).
+(`required_occurrences` / `observed_occurrences`). Obligation matches compare
+`value` and `token_id` and are scored as an occurrence-preserving multiset, so a
++1 fee does not discharge a required +50 and one event cannot satisfy two
+same-shaped obligations (XR-07).
+
+**View-based effects and obligations (S4d).** For state-accounting effects with
+no event, a scenario declares `state_views: [{name, contract, function, args?}]`
+(read as uints before/after the mutated tx), and a policy declares
+`protected_view_effects: [{id, view, min_delta}]` and `view_obligations:
+[{id, view, must_equal_credit_of}]`. A view obligation is faulted when the honest
+path keeps the obligation view's delta equal to the credited view's delta and the
+mutated tx grants the credit while moving less backing. This is how the AZ1
+extent-binding testbed (settled backing must equal granted L2 credit) is
+confirmed. A view effect is state by construction, so it needs no XR-01
+corroboration.
 
 ## Mutation operators
 

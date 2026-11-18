@@ -1,0 +1,19 @@
+{
+  "policy_id": "neg-underpay",
+  "description": "Entitlement-only policy. Each reward mint must be accompanied by the full fee obligation (value 50) to the treasury. States no verdict.",
+  "roles": { "holder": "presenter of the proof", "treasury": "the account owed the fee" },
+  "protected_effects": [
+    {
+      "id": "reward_mint",
+      "match": { "type": "erc20_transfer", "from": "0x0", "contract_role": "reward" },
+      "entitlements": []
+    }
+  ],
+  "required_obligations": [
+    {
+      "id": "full-fee-to-treasury",
+      "description": "each reward mint must commit the full fee (value 50) to the treasury",
+      "match": { "type": "erc20_transfer", "from": "0x0", "contract_role": "fee", "to": { "$signer": "treasury" }, "value": { "$uint": "50" } }
+    }
+  ]
+}
