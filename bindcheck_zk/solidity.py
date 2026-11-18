@@ -332,7 +332,7 @@ def public_vector(body: str, call: Call) -> PublicVector:
     elif base:
         if len(call.args) > 1 and re.search(r"proof", base, re.I):
             return PublicVector(
-                expression, base, [], None, False, None,
+                expression, None, [], None, False, None,
                 ["proof-argument-not-public-vector", "public-vector-shape"],
             )
         decl = re.search(

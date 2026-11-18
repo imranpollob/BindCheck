@@ -1,0 +1,7 @@
+Repository: oxor-io/zk-layer-vote
+Commit: 0589519133e9e8398fbb3c3bdf5fc8465996a49a
+Paths relative to the upstream repository root (SHA-256, path):
+c2e1cd01cb72993fa3aa48b5470c5cd7b579eec2f966c8446dcd5a110c2c18c3  aztec/circuits/src/main.nr
+aa9c19d1378dd9fb81fe64b8f1c930941ef917ba25f38f0ce99c092e4c0dc299  aztec/recursion/src/main.nr
+f37a3b5a83efb98c824a2b3644cb2dce84e5f3b534c9e7ecad5a6ed9fb8ca220  on-chain/contracts/GovernorL1.sol
+692bb52f19e253e8863acdd00c81e0ea5708455d36d9065d78c04e10a42e035e  on-chain/contracts/verifier/plonk_vk.sol

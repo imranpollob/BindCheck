@@ -386,11 +386,18 @@ def discover_consumers(sources: list[Source]) -> list[Consumer]:
     for source in sources:
         parsed_functions = list(functions(source.text))
         local_function_names = {item.name for item in parsed_functions}
-        helper_vector_parameters: dict[str, list[int]] = defaultdict(list)
+        helper_vector_parameters: dict[str, list[int | None]] = defaultdict(list)
         for helper in parsed_functions:
             parameter_names = list(helper.parameters)
             for direct_call in filter(_supported_verification_call, verification_calls(helper.body)):
                 vector = public_vector(helper.body, direct_call)
+                if (
+                    "proof-argument-not-public-vector" in vector.unresolved
+                    and vector.expression in helper.parameters
+                ):
+                    # Keep the verification path, with no recovered vector to forward.
+                    helper_vector_parameters[helper.name].append(None)
+                    continue
                 if vector.base in helper.parameters:
                     helper_vector_parameters[helper.name].append(parameter_names.index(vector.base))
                     continue
@@ -416,12 +423,12 @@ def discover_consumers(sources: list[Source]) -> list[Consumer]:
                     )
                     for helper_call in helper_calls:
                         for vector_index in vector_indices:
-                            if vector_index >= len(helper_call.args):
+                            if vector_index is not None and vector_index >= len(helper_call.args):
                                 continue
                             verify.append(Call(
                                 name=helper_name,
                                 receiver=helper_call.receiver,
-                                args=[helper_call.args[vector_index]],
+                                args=[] if vector_index is None else [helper_call.args[vector_index]],
                                 line=helper_call.line,
                                 offset=helper_call.offset,
                             ))
@@ -1390,8 +1397,14 @@ def analyze_p5(circuit: Circuit | None, verifier: Verifier | None, consumer: Con
                 "The source-level circuit interface is incomplete and no compiled relation is available to establish its public-input count.",
                 where=where, facts=facts,
             )
+        if expected is None:
+            return result(
+                "P5", "UNKNOWN", "CIRCUIT_VERIFIER_CORRESPONDENCE_UNRESOLVED",
+                "The candidate circuit and consumer have different public-input counts, but the matched verifier's arity is unresolved.",
+                where=where, facts=facts,
+            )
         return result("P5", "VIOLATION", "PUBLIC_INPUT_COUNT_MISMATCH", f"Consumer supplies {observed} public inputs but the circuit exposes {circuit.public_count}.", where=where, facts=facts)
-    if vector.items and circuit.public_order and len(vector.items) == len(circuit.public_order):
+    if circuit.order_complete and vector.items and circuit.public_order and len(vector.items) == len(circuit.public_order):
         observed_order = [_semantic_name(item) for item in vector.items]
         circuit_order = [_semantic_name(item) for item in circuit.public_order]
         if observed_order != circuit_order:
