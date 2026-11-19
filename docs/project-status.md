@@ -155,6 +155,8 @@ flowchart TD
     sprint --> f1["F1 analyzer soundness [DONE] — XR controls pass, DEV row verdicts unchanged"]
     f1 --> s0["S0 contract revision 4 and freeze-3 preparation [DONE] — 77 analyzer tests passed"]
     s0 --> s0Tag["Reviewer freeze-3 tag [WAITING]"]
+    sprint --> s5h["S5H reserve harness [DONE] — offline code and tests only"]
+    s5h --> s5run["S5 reserve run [WAITING] — author record and freeze-3 HEAD"]
     d1paper --> lanex["Lane-X exploratory, benchmark, auto-validation v1+v1.1 [DONE]"]
     d207 --> capabilityGate["Automated discovery + E4 capability gate [WAITING]"]
     d1p10 --> d1p10result["Transformed-arm eligibility [UNKNOWN]"]
@@ -208,7 +210,7 @@ flowchart TD
     classDef unknown fill:#FFE0C2,stroke:#FF9E42
 
     class foundation,fixture,payy,sourceCheck,coneGate,nineCases,failureAnalysis,v3Rerun,generalGate,tracking,livingTree,d100,d101,d102,d103preflight,d103review,d103typed,d103boundary,d103guards,d103guardreview,d103concrete,d103replayreview,d103recovery,d1p00,d1p01,d1p01artifact,d1p02,d1p03,d1p04,d1p05,d1p04elig,d1p07,d1p08,d1p09,d1p10,d1p11,d1p12,warptoadRecovery,d1p12r,d1p13,d1p14a,d1p14b,d1p14c,d1p14d,d1p17,d1pint1,d1p16,d1p18,d1p15,d1p19,d1p20,d1p21a,d1p21b,d1p30,d1p31,d1p34,d1p33,d1p35,d1p36,d1p40,d1p41,d1p42,payyFidelity,lanex,d1p43,d200,d201,d202,d203,d204,d205,d206,d207,d20810,d21114,d21517,d218,d219,d220,circomFeas,circomV2,integrationDataset,integrationDatasetV2,t23,t24,t25,t26 done
-    class t0,r1,r2 done
+    class t0,r1,r2,s5h done
     class s1 waiting
     class s1Sol,s1Native done
     class s1Split unknown
@@ -216,7 +218,7 @@ flowchart TD
     class az1 next
     class analysis,d1,d1paper,d103,d103impl,d103consumer,d103effects active
     class d103linkreview,zkHeldout next
-    class evaluation,history,heldOut,baselines,manuscript,claims,artifacts,draft,transferCase,sensitivity,submit,t22,acirSummary,d104,d105,d106,d107,d108,d103symbolic,d1p09decision,d1p10decision,warptoadJoint,capabilityGate,taxonomyHumans,gateB,gateC waiting
+    class evaluation,history,heldOut,baselines,manuscript,claims,artifacts,draft,transferCase,sensitivity,submit,t22,acirSummary,d104,d105,d106,d107,d108,d103symbolic,d1p09decision,d1p10decision,warptoadJoint,capabilityGate,taxonomyHumans,gateB,gateC,s5run waiting
     class contribution,primaryResult,generalResult,d103gate,d103recoveryresult,d1p06,d1p10result,d1p14bresult,d1p14cresult,d1p14dresult,d1p17result unknown
 ```
 
@@ -665,6 +667,7 @@ slots were executed.
 | 2026-11-18 | S8 A4 manuscript and generator survey | `[WAITING]` official template comparison | [S8 report](../reports/S8/REPORT.md) records the 12-page A4 build, condensed generator table and outstanding evidence. |
 | 2026-11-18 | S0 contract revision 4 and analyzer freeze-3 preparation | `[DONE]` preparation, `[WAITING]` reviewer tag | [S0 report](../reports/S0/REPORT.md) and [freeze declaration](FREEZE-3.md) record the reviewed analyzer hash, 77 passing tests, the 1,106-family reserve and the separate F3/XR3 oracle gate. |
 | 2026-11-18 | F4 rule-bound single use and final-verdict tests | `[DONE]` implementation / `[WAITING]` reviewer EVM and XR3 re-review | [F4 report](../reports/F4/REPORT.md), [XR3 gate](../reports/XR3/GATE.md), and ignored `results/raw/F4/reversion.log`: per-rule replay accounting closes the source-level XR3-01 counterexample; 36 oracle tests pass and eight scratch reversion probes each fail as intended. The mixed-rule manifest validates and synthetic Solidity builds. No F4 Anvil run or held-out E4 is claimed. F3's reviewer addendum records its 17 successful local EVM manifest runs, superseding that row's earlier environment-limited status; the oracle gate remains waiting on F4 re-review. |
+| 2026-11-19 | S5H reserve harness code | `[DONE]` offline implementation and refusal tests; S5 run `[WAITING]` | [S5H report](../reports/S5H/REPORT.md): 18 offline tests and 15 in-memory revert probes pass; the F1 regression set passes 77 tests with explicit Linux Circom. The 1,105-unit reserve was not acquired, built, analyzed, or evaluated. The current HEAD differs from `freeze-3`, and the author authorization file is absent. |
 
 ## Update rule
 

@@ -43,6 +43,47 @@ def selected() -> list[dict[str, str]]:
     return frozen
 
 
+def prebuild_checkout(family: dict[str, str], family_dir: pathlib.Path,
+                      checkout: pathlib.Path, circom: pathlib.Path) -> dict:
+    """Compile recorded Circom entry points in an already acquired checkout."""
+    base = {"compile_attempts": []}
+    paths = [checkout / path for path in family["circuit_paths"].split("|") if path.endswith(".circom")]
+    entries = [path for path in paths if path.is_file() and is_entry_circuit(path)]
+    base["recorded_circom_paths"] = len(paths)
+    base["entry_circom_paths"] = len(entries)
+    if not entries:
+        base["status"] = "NO_ENTRY_CIRCOM"
+        return base
+    for path in entries[:MAX_BUILDS]:
+        relative = path.relative_to(checkout).as_posix()
+        circuit = Circuit(path, relative, "circom", sha256_file(path), [], None, False, [], [])
+        with tempfile.TemporaryDirectory(prefix="prebuild-circom-", dir=family_dir) as temporary:
+            temp = pathlib.Path(temporary)
+            overlay = temp / "includes"
+            include_dirs, include_resolution = resolve_circom_includes(circuit, checkout, overlay)
+            include_dirs.extend([checkout / "node_modules", path.parent / "node_modules"])
+            argv = [str(circom), str(path), "--r1cs", "--sym", "-o", str(temp)]
+            seen: set[pathlib.Path] = set()
+            for include in include_dirs:
+                if include.is_dir() and include.resolve() not in seen:
+                    seen.add(include.resolve())
+                    argv.extend(["-l", str(include)])
+            command = run_command(argv, cwd=checkout, timeout=BUILD_TIMEOUT)
+            r1cs = temp / (path.stem + ".r1cs")
+            sym = temp / (path.stem + ".sym")
+            success = command["exit_status"] == 0 and not command["timed_out"] and r1cs.is_file() and sym.is_file()
+            base["compile_attempts"].append({
+                "circuit": relative, "source_sha256": circuit.sha256,
+                "include_resolution": include_resolution,
+                "command": command,
+                "r1cs_bytes": r1cs.stat().st_size if r1cs.is_file() else None,
+                "sym_bytes": sym.stat().st_size if sym.is_file() else None,
+                "success": success,
+            })
+    base["status"] = "BUILT" if any(item["success"] for item in base["compile_attempts"]) else "BUILD_FAILED"
+    return base
+
+
 def prebuild_family(family: dict[str, str], output: pathlib.Path, circom: pathlib.Path) -> dict:
     rank = int(family["rank"])
     family_dir = output / "families" / f"{rank:03d}-{family['sample_hash'][:12]}"
@@ -68,40 +109,7 @@ def prebuild_family(family: dict[str, str], output: pathlib.Path, circom: pathli
             base["status"] = "ACQUISITION_FAILED"
             return base
         base["dependency_setup"] = prepare_pinned_vendor(checkout, family_dir, ROOT / "node_modules/circomlib")
-        paths = [checkout / path for path in family["circuit_paths"].split("|") if path.endswith(".circom")]
-        entries = [path for path in paths if path.is_file() and is_entry_circuit(path)]
-        base["recorded_circom_paths"] = len(paths)
-        base["entry_circom_paths"] = len(entries)
-        if not entries:
-            base["status"] = "NO_ENTRY_CIRCOM"
-            return base
-        for path in entries[:MAX_BUILDS]:
-            relative = path.relative_to(checkout).as_posix()
-            circuit = Circuit(path, relative, "circom", sha256_file(path), [], None, False, [], [])
-            with tempfile.TemporaryDirectory(prefix="prebuild-circom-", dir=family_dir) as temporary:
-                temp = pathlib.Path(temporary)
-                overlay = temp / "includes"
-                include_dirs, include_resolution = resolve_circom_includes(circuit, checkout, overlay)
-                include_dirs.extend([checkout / "node_modules", path.parent / "node_modules"])
-                argv = [str(circom), str(path), "--r1cs", "--sym", "-o", str(temp)]
-                seen: set[pathlib.Path] = set()
-                for include in include_dirs:
-                    if include.is_dir() and include.resolve() not in seen:
-                        seen.add(include.resolve())
-                        argv.extend(["-l", str(include)])
-                command = run_command(argv, cwd=checkout, timeout=BUILD_TIMEOUT)
-                r1cs = temp / (path.stem + ".r1cs")
-                sym = temp / (path.stem + ".sym")
-                success = command["exit_status"] == 0 and not command["timed_out"] and r1cs.is_file() and sym.is_file()
-                base["compile_attempts"].append({
-                    "circuit": relative, "source_sha256": circuit.sha256,
-                    "include_resolution": include_resolution,
-                    "command": command,
-                    "r1cs_bytes": r1cs.stat().st_size if r1cs.is_file() else None,
-                    "sym_bytes": sym.stat().st_size if sym.is_file() else None,
-                    "success": success,
-                })
-        base["status"] = "BUILT" if any(item["success"] for item in base["compile_attempts"]) else "BUILD_FAILED"
+        base.update(prebuild_checkout(family, family_dir, checkout, circom))
         return base
     except Exception as exc:
         base["status"] = "PREFLIGHT_ERROR"
@@ -117,10 +125,14 @@ def prebuild_family(family: dict[str, str], output: pathlib.Path, circom: pathli
 
 def main() -> int:
     parser = argparse.ArgumentParser()
+    parser.add_argument("--sample", type=pathlib.Path, default=SAMPLE,
+                        help="historical sample CSV; reserve uses eval/reserve.py")
     parser.add_argument("--output", type=pathlib.Path, default=ROOT / "results/raw/heldout/prebuild-v1")
     parser.add_argument("--circom", type=pathlib.Path, required=True)
     parser.add_argument("--jobs", type=int, default=2)
     args = parser.parse_args()
+    if args.sample.resolve() != SAMPLE.resolve():
+        parser.error("only the historical sample is accepted here; use eval/reserve.py for the reserve")
     if not args.circom.is_file() or not 1 <= args.jobs <= 2:
         parser.error("circom must exist and jobs must be 1 or 2")
     vendor = ROOT / "node_modules/circomlib"

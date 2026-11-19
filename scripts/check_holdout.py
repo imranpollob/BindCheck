@@ -12,6 +12,7 @@ freeze-2 sample (reports/heldout/selected-families.csv). Those families are
 reserved for the held-out v3 run and must not be read before it.
 """
 import csv
+import inspect
 import pathlib
 import sys
 
@@ -45,6 +46,20 @@ def reserved_index() -> dict[str, str]:
                 if value:
                     index[norm(value)] = family
     return index
+
+
+def reserve_decision(repository: str, permit: object) -> bool:
+    """Narrow in-process hook; the ordinary CLI never passes a permit.
+
+    A permit is made by the gated reserve entry point.  Keep this hook out of
+    command-line arguments so callers cannot opt themselves out of the guard.
+    """
+    caller = pathlib.Path(inspect.stack()[1].filename).resolve()
+    if caller != ROOT / "eval" / "reserve.py":
+        return False
+    from eval.reserve import ReservePermit
+
+    return isinstance(permit, ReservePermit) and permit.allows(repository)
 
 
 def main(argv: list[str]) -> int:
