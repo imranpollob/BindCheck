@@ -114,6 +114,8 @@ class GateTests(unittest.TestCase):
         def run(argv, **kwargs):
             if argv[:3] == ["git", "status", "--porcelain"]:
                 return subprocess.CompletedProcess(argv, 0, harness_dirty, "")
+            if argv[:2] == ["git", "ls-tree"]:
+                return subprocess.CompletedProcess(argv, 0, "\n".join(reserve.HARNESS_FILES) + "\n", "")
             if argv[:2] == ["git", "rev-parse"]:
                 if argv[2] == "HEAD":
                     value = "same"
@@ -463,3 +465,66 @@ class S5RRecheckTests(unittest.TestCase):
         result = self._analyzable(verifier_present=False)
         self.assertEqual(result["source_capture"], "INCOMPLETE")
         self.assertIn("MISSING", result["source_capture_problems"])
+
+
+
+class S5RRecheck2Tests(unittest.TestCase):
+    """Regressions for the S5R re-check 2 residual (S5R-03)."""
+
+    def setUp(self) -> None:
+        self.temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temporary.cleanup)
+        self.root = pathlib.Path(self.temporary.name)
+
+    def git(self, *args: str) -> str:
+        return subprocess.run(["git", *args], cwd=self.root, check=True, text=True,
+                              capture_output=True).stdout.strip()
+
+    def make_repo(self) -> None:
+        self.git("init", "-q")
+        self.git("config", "user.email", "t@example.invalid")
+        self.git("config", "user.name", "t")
+        for name in (*reserve.HARNESS_FILES, "eval/run_arm_c.py"):
+            path = self.root / name
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(f"# {name}\n")
+        self.git("add", "-A")
+        self.git("commit", "-q", "-m", "harness")
+
+    def test_deleted_tracked_harness_file_refused(self) -> None:
+        self.make_repo()
+        self.assertIn("eval/run_arm_c.py", reserve.harness_files(self.root))
+        (self.root / "eval/run_arm_c.py").unlink()
+        with self.assertRaisesRegex(reserve.GateError, "missing from the working tree"):
+            reserve.harness_files(self.root)
+
+    def test_altered_same_gate_result_refused_on_resume(self) -> None:
+        units = reserve.read_csv(reserve.ROOT / reserve.MANIFEST)[:1]
+        output = self.root / "out"
+        reserve.run_units(units, lambda u: {"status": "UNSUPPORTED", "reason": "X"}, output, "gate-a")
+        path = output / "units" / units[0]["unit_id"] / "result.json"
+        record = json.loads(path.read_text())
+        record["status"] = "ANALYZABLE"
+        path.write_text(json.dumps(record))
+        with self.assertRaisesRegex(reserve.EvaluationError, "run ledger"):
+            reserve.run_units(units, lambda u: {"status": "ANALYZABLE"}, output, "gate-a")
+
+    def test_unaltered_resume_accepted(self) -> None:
+        units = reserve.read_csv(reserve.ROOT / reserve.MANIFEST)[:2]
+        output = self.root / "out"
+        reserve.run_units(units[:1], lambda u: {"status": "UNSUPPORTED", "reason": "X"}, output, "gate-a")
+        records = reserve.run_units(units, lambda u: {"status": "ANALYZABLE"}, output, "gate-a")
+        self.assertEqual([r["status"] for r in records], ["UNSUPPORTED", "ANALYZABLE"])
+
+    def test_second_fresh_start_after_erased_output_refused(self) -> None:
+        self.make_repo()
+        reserve.claim_start(self.root, fresh=True)
+        with self.assertRaisesRegex(reserve.GateError, "already started"):
+            reserve.claim_start(self.root, fresh=True)
+
+    def test_resume_requires_start_marker(self) -> None:
+        self.make_repo()
+        with self.assertRaisesRegex(reserve.GateError, "start marker missing"):
+            reserve.claim_start(self.root, fresh=False)
+        reserve.claim_start(self.root, fresh=True)
+        reserve.claim_start(self.root, fresh=False)
