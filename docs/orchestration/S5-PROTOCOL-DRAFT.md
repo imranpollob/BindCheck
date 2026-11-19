@@ -41,7 +41,7 @@ it. These reports are listed in `reports/` and cited by file.
 - Option A: exclude WarpToad from held-out v3; record the prior exposure.
 - Option B: keep it, and report all results with and without it.
 
-**Author choice:** [ ] A  [ ] B  — (blank until decided)
+**Author choice (WarpToad): A — exclude.** Record the prior-exposure reports listed above.
 
 Any family with prior exposure beyond the guard list is recorded before the run
 and is never silently dropped.
