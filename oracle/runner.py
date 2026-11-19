@@ -1,8 +1,9 @@
 """Manifest-driven, local-only execution oracle.
 
-The runner deliberately has no network-fetch or public-RPC mode for *chain*
-access: contracts run only on a private Anvil node this process starts and
-stops. Source inputs must already exist locally at their pinned revision. The
+The runner has no public-RPC mode for *chain* access: contracts run only on a
+private Anvil node this process starts and stops. Manifest commands are guarded
+by a token denylist, not a network sandbox. Source inputs must already exist
+locally at their pinned revision. The
 fork CLI shape is reserved for a future authorized implementation but is
 fail-closed while H1 is not approved.
 """
@@ -31,7 +32,7 @@ TOOLS = BC / "BindCheck" / "tools"
 ANVIL = Path.home() / ".foundry" / "bin" / "anvil"
 # Pinned ethers for the generic driver, installed into an ignored cache.
 ETHERS_VERSION = "6.13.4"
-DRIVER_DEPS = ROOT / "results" / "raw" / "S4" / ".driver"
+DRIVER_DEPS = ROOT / "results" / "raw" / "F3" / ".driver"
 
 ALLOWED_OWNED_PREFIXES = (
     ROOT / "oracle",
@@ -40,6 +41,8 @@ ALLOWED_OWNED_PREFIXES = (
     ROOT / "results" / "raw" / "S4",
     ROOT / "reports" / "F2",
     ROOT / "results" / "raw" / "F2",
+    ROOT / "reports" / "F3",
+    ROOT / "results" / "raw" / "F3",
 )
 
 # Keys/phrases that would encode the expected verdict into a policy file. The
@@ -69,9 +72,8 @@ class OracleError(RuntimeError):
 
 
 # XR-08: manifest-provided commands (prepare/proof/transform/build and the
-# driver) run with arbitrary argv/cwd/env. The safety claim is that no step
-# forks a chain, dials a public RPC, or broadcasts. We enforce that at the
-# command layer by rejecting the concrete chain-network vectors — a fork URL, a
+# driver) run with arbitrary argv/cwd/env. At the command layer we reject
+# concrete chain-network vectors — a fork URL, a
 # broadcast flag, or an RPC/URL argument whose host is not loopback — in every
 # command's argv and env values, before it is launched. This is a command-token
 # denylist, not a full network sandbox: it blocks the known fork/public-RPC/
@@ -133,7 +135,7 @@ def _owned_output(path: Path) -> Path:
         resolved == prefix or prefix in resolved.parents
         for prefix in ALLOWED_OWNED_PREFIXES
     ):
-        raise OracleError(f"output path is not S4-owned: {resolved}")
+        raise OracleError(f"output path is not an oracle task output: {resolved}")
     return resolved
 
 
@@ -241,24 +243,13 @@ def _validate_manifest(manifest: dict[str, Any], path: Path) -> dict[str, Any]:
 
 
 def ensure_driver_deps() -> Path:
-    """Install the pinned ethers used by the generic driver, into an ignored cache."""
+    """Use an already provisioned pinned ethers; never fetch during a run."""
     marker = DRIVER_DEPS / "node_modules" / "ethers" / "package.json"
-    if marker.exists():
-        return DRIVER_DEPS / "node_modules"
-    DRIVER_DEPS.mkdir(parents=True, exist_ok=True)
-    (DRIVER_DEPS / "package.json").write_text(
-        json.dumps({"name": "s4-oracle-driver-deps", "private": True}) + "\n",
-        encoding="utf-8",
-    )
-    completed = subprocess.run(
-        ["npm", "install", "--no-audit", "--no-fund", "--save-exact", f"ethers@{ETHERS_VERSION}"],
-        cwd=DRIVER_DEPS,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.STDOUT,
-        check=False,
-    )
-    if completed.returncode != 0 or not marker.exists():
-        raise OracleError(f"failed to install ethers@{ETHERS_VERSION}: {completed.stdout.decode(errors='replace')[-800:]}")
+    if not marker.exists():
+        raise OracleError(f"offline driver dependency missing: ethers@{ETHERS_VERSION} at {marker}")
+    package = _json(marker)
+    if package.get("version") != ETHERS_VERSION:
+        raise OracleError(f"driver requires ethers@{ETHERS_VERSION}, found {package.get('version')!r}")
     return DRIVER_DEPS / "node_modules"
 
 

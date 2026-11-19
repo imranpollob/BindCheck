@@ -131,7 +131,9 @@ def _node(expr: str):
     script = (
         f"const m=require({json.dumps(str(DRIVER))});"
         f"const out=({expr});"
-        "process.stdout.write(JSON.stringify(out));"
+        "Promise.resolve(typeof out==='function'?out():out)"
+        ".then(v=>process.stdout.write(JSON.stringify(v)))"
+        ".catch(e=>{console.error(e);process.exitCode=1});"
     )
     proc = subprocess.run(
         ["node", "-e", script],
@@ -179,28 +181,83 @@ def test_obligation_multiplicity_counts_each_occurrence():
 def test_verifier_not_called_on_mutated_path():
     # XR-02: no verifier call in the trace -> not established.
     tree = {"to": "0xconsumer", "type": "CALL", "calls": [{"to": "0xtoken", "type": "CALL", "output": "0x"}]}
-    res = _node(f"m.verifierOnMutatedPath({json.dumps(tree)},['0xVERIFIER'])")
+    res = _node(f"m.verifierOnMutatedPath({json.dumps(tree)},[{{address:'0xverifier',input:'0x1234'}}],'0xconsumer')")
     assert res["established"] is False
 
 
 def test_verifier_called_but_false_not_established():
     tree = {"to": "0xconsumer", "type": "CALL",
             "calls": [{"to": "0xverifier", "type": "STATICCALL",
-                       "output": "0x0000000000000000000000000000000000000000000000000000000000000000"}]}
-    res = _node(f"m.verifierOnMutatedPath({json.dumps(tree)},['0xVERIFIER'])")
+                       "input": "0x1234", "output": "0x0000000000000000000000000000000000000000000000000000000000000000"}]}
+    res = _node(f"m.verifierOnMutatedPath({json.dumps(tree)},[{{address:'0xverifier',input:'0x1234'}}],'0xconsumer')")
     assert res["established"] is False
 
 
 def test_verifier_called_true_is_established():
     tree = {"to": "0xconsumer", "type": "CALL",
             "calls": [{"to": "0xverifier", "type": "STATICCALL",
-                       "output": "0x0000000000000000000000000000000000000000000000000000000000000001"}]}
-    res = _node(f"m.verifierOnMutatedPath({json.dumps(tree)},['0xVERIFIER'])")
+                       "input": "0x1234", "output": "0x0000000000000000000000000000000000000000000000000000000000000001"}]}
+    res = _node(f"m.verifierOnMutatedPath({json.dumps(tree)},[{{address:'0xverifier',input:'0x1234'}}],'0xconsumer')")
     assert res["established"] is True
 
 
 def test_verifier_reverted_not_established():
     tree = {"to": "0xconsumer", "type": "CALL",
-            "calls": [{"to": "0xverifier", "type": "STATICCALL", "error": "execution reverted"}]}
-    res = _node(f"m.verifierOnMutatedPath({json.dumps(tree)},['0xVERIFIER'])")
+            "calls": [{"to": "0xverifier", "type": "STATICCALL", "input": "0x1234", "error": "execution reverted"}]}
+    res = _node(f"m.verifierOnMutatedPath({json.dumps(tree)},[{{address:'0xverifier',input:'0x1234'}}],'0xconsumer')")
     assert res["established"] is False
+
+
+def test_xr02_requires_every_check_and_exact_mutated_input():
+    tree = {"to": "0xconsumer", "type": "CALL", "calls": [
+        {"to": "0xv1", "input": "0xaaaa", "output": "0x01"},
+        {"to": "0xv2", "input": "0xbbbb", "output": "0x01"},
+    ]}
+    checks = [{"address": "0xv1", "input": "0xaaaa"}, {"address": "0xv2", "input": "0xbbbb"}]
+    assert _node(f"m.verifierOnMutatedPath({json.dumps(tree)},{json.dumps(checks)},'0xconsumer')")["established"] is True
+    assert _node(f"m.verifierOnMutatedPath({json.dumps({**tree, 'calls': tree['calls'][:1]})},{json.dumps(checks)},'0xconsumer')")["established"] is False
+    changed = [{"address": "0xv1", "input": "0xaaab"}, checks[1]]
+    assert _node(f"m.verifierOnMutatedPath({json.dumps(tree)},{json.dumps(changed)},'0xconsumer')")["established"] is False
+    nested = {"to": "0xconsumer", "calls": [{"to": "0xhelper", "calls": tree["calls"]}]}
+    assert _node(f"m.verifierOnMutatedPath({json.dumps(nested)},{json.dumps(checks)},'0xconsumer')")["established"] is False
+
+
+def test_xr01_existing_erc721_owner_is_not_corroborated():
+    code = """async()=>{const addr='0x0000000000000000000000000000000000000001';
+      const contract={balanceOf:async()=>1n,ownerOf:async()=>addr};
+      return await m.corroborateEffect(contract,{kind:'erc721_transfer',from:'0x0000000000000000000000000000000000000000',to:addr,token_id:'1'},2)}"""
+    # The node helper accepts a Promise and serializes its resolved value.
+    assert _node(code)["corroborated"] is False
+
+
+def test_xr01_new_erc721_owner_is_corroborated():
+    code = """async()=>{const addr='0x0000000000000000000000000000000000000001';
+      const contract={balanceOf:async(_a,o)=>o.blockTag===1?0n:1n,
+        ownerOf:async(_id,o)=>{if(o.blockTag===1)throw Error('nonexistent');return addr}};
+      return await m.corroborateEffect(contract,{kind:'erc721_transfer',from:'0x0000000000000000000000000000000000000000',to:addr,token_id:'1'},2)}"""
+    assert _node(code)["corroborated"] is True
+
+
+def test_xr02_alias_expected_verifier_input_carries_mutation():
+    code = """()=>{const scenario={alias:{arg:'pub',proof:'p'},
+      verifier_checks:[{contract:'v',function:'verifyProof',args:[{$proofPart:{proof:'p',part:'a'}},{$pubArray:{proof:'p'}}]}]};
+      const deployments={v:{target:'0xv',contract:{interface:{encodeFunctionData:(_f,args)=>JSON.stringify(args)}}}};
+      const resolver={resolve:x=>x.$lit??(x.$pubArray?['7']:['proof'])};
+      return m.expectedVerifierCalls(scenario,deployments,resolver,{operator:'ALIAS'},
+        {arg:'pub',position:0},{pub:{$lit:['8']}})[0].input}"""
+    assert _node(code) == '[["proof"],["8"]]'
+
+
+def test_xr2_01_missing_view_baseline_fails_closed():
+    code = """()=>{try{m.diffViews({credit:{error:'reverted'}},{credit:150n},[{name:'credit'}]);
+      return 'accepted'}catch(e){return e.message}}"""
+    assert "credit" in _node(code)
+
+
+def test_xr07_same_event_cannot_discharge_two_clauses():
+    event = {"kind": "erc20_transfer", "from": "0x0000000000000000000000000000000000000000",
+             "contract_role": "fee", "to": "0xt", "value": "50"}
+    match = {"type": "erc20_transfer", "from": "0x0", "contract_role": "fee", "to": "0xt", "value": "50"}
+    clauses = [{"id": "a", "match": match}, {"id": "b", "match": match}]
+    assert sorted(_node(f"Object.values(m.obligationCounts([{json.dumps(event)}],{json.dumps(clauses)},{{resolve:{ID}}}))")) == [0, 1]
+    assert sorted(_node(f"Object.values(m.obligationCounts([{json.dumps(event)},{json.dumps(event)}],{json.dumps(clauses)},{{resolve:{ID}}}))")) == [1, 1]
