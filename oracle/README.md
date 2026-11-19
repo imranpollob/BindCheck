@@ -18,8 +18,11 @@ Summary of the hard limits this code enforces:
 - **No forged proofs.** The oracle never forges a proof or a verifier key. It
   re-runs an *already valid* snarkjs proof against the **unchanged** verifier and
   consumer, and only varies the surrounding call (the mutation operators).
-- **No public RPC, no broadcast.** There is no network-fetch or public-RPC path.
-  Source must already exist locally at its pinned revision.
+- **Command gate.** Manifest argv and manifest-set environment values reject
+  known fork, broadcast, and non-loopback URL tokens. This is a denylist, not a
+  network sandbox: wrapper scripts, inherited environment variables, and
+  redirects are outside its guarantee. EVM access by the driver is to its
+  private loopback Anvil node. Source must already exist locally.
 
 ## Why Anvil + a standalone ethers driver (not Hardhat tests)
 
@@ -77,12 +80,14 @@ signers, prior deployments and the loaded proofs.
 A trial is `E4-CONFIRMED` iff **all** of:
 
 1. the mutated tx **succeeds**;
-2. the **unchanged verifier is shown to accept on the mutated call path** — its
-   contract is invoked and returns true in the mutated tx's `callTracer` trace
-   (XR-02). The standalone check of the original proof is only an E3 preflight;
+2. **every declared required verifier check** appears as a direct call from the
+   mutated consumer with the expected calldata (including an ALIAS mutation), returns
+   true, and is matched to a distinct call occurrence. The standalone check of
+   the original proof is only an E3 preflight;
 3. every protected transfer effect used to confirm is **state-corroborated** —
-   the recipient's `balanceOf`/`ownerOf` actually changed by the logged amount at
-   the mutated tx's block (XR-01); and
+   ERC-20 recipient balance rises by the logged amount; for a mint-shaped
+   ERC-721 log the recipient newly owns the token and its balance rises by one
+   under the declared standard-token assumption (XR-01); and
 4. its committed effects violate the policy — an **unauthorized effect** (an
    effect reaches someone not entitled to it, an amount differs from one the
    proof fixes, or a single-use authorization is consumed twice, canonical key
@@ -93,7 +98,8 @@ A trial is `E4-CONFIRMED` iff **all** of:
    == granted credit, falls short).
 
 Otherwise `NOT_CONFIRMED` (`reverted` / `effects identical` / `policy-permitted`)
-or `UNKNOWN` — build/proof/deploy failure, `EFFECT_NOT_STATE_CORROBORATED`
+or `UNKNOWN` — build/proof/deploy failure, `VIEW_READ_FAILED` (either side of a
+declared state view failed), `EFFECT_NOT_STATE_CORROBORATED`
 (an event with no matching state), or `VERIFIER_PATH_NOT_ESTABLISHED` (the
 verifier was not shown to accept on the mutated path). The policy file states
 **entitlement only**; it never states the expected verdict, and `runner.py`
@@ -108,7 +114,7 @@ only when the honest path discharges it, this mutated tx grants the protected
 effect, and the obligation effect is absent — so a declared obligation the real
 path never produces is never flagged. Each trial carries an `obligations` ledger
 (`required_occurrences` / `observed_occurrences`). Obligation matches compare
-`value` and `token_id` and are scored as an occurrence-preserving multiset, so a
+`value` and `token_id` and allocate effects across obligations as an occurrence-preserving multiset, so a
 +1 fee does not discharge a required +50 and one event cannot satisfy two
 same-shaped obligations (XR-07).
 

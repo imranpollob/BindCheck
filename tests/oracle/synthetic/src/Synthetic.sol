@@ -398,3 +398,65 @@ contract CreditSettleFixed {
         }
     }
 }
+
+/// A mint-shaped ERC-721 log can name an existing owner without changing state.
+contract ExistingOwnerLog {
+    IVerifier public verifier;
+    mapping(uint256 => address) public ownerOf;
+    mapping(address => uint256) public balanceOf;
+    event Transfer(address indexed from, address indexed to, uint256 indexed tokenId);
+    constructor(IVerifier v) { verifier = v; }
+    function seed(address recipient, uint256 id) external {
+        ownerOf[id] = recipient; balanceOf[recipient] += 1;
+    }
+    function claim(uint256[2] calldata a, uint256[2][2] calldata b,
+        uint256[2] calldata c, uint256[] calldata pub, address recipient) external {
+        require(verifier.verifyProof(a, b, c, pub), "proof");
+        if (ownerOf[1] != recipient) {
+            balanceOf[ownerOf[1]] -= 1;
+            ownerOf[1] = recipient;
+            balanceOf[recipient] += 1;
+        }
+        emit Transfer(address(0), recipient, 1);
+    }
+}
+
+/// The mutated branch invokes only the first of two required proof checks.
+contract TwoVerifierBypass {
+    IVerifier public first;
+    IVerifier public second;
+    MintToken public token;
+    constructor(IVerifier a, IVerifier b, MintToken t) { first = a; second = b; token = t; }
+    function claim(uint256[2] calldata a, uint256[2][2] calldata b,
+        uint256[2] calldata c, uint256[] calldata pub, address recipient,
+        bool skipSecond) external {
+        require(first.verifyProof(a, b, c, pub), "first proof");
+        if (!skipSecond) {
+            require(second.verifyProof(a, b, c, pub), "second proof");
+            require(recipient == address(uint160(pub[1])), "recipient");
+        }
+        token.mint(skipSecond ? msg.sender : recipient, 1000);
+    }
+}
+
+/// Both getters revert until initialized; the mutated branch enables reads
+/// without changing either stored counter.
+contract LateReadableCounters {
+    IVerifier public verifier;
+    uint256 private credit = 150;
+    uint256 private backing = 100;
+    bool private initialized;
+    constructor(IVerifier v) { verifier = v; }
+    function totalCredit() external view returns (uint256) {
+        require(initialized, "uninitialized"); return credit;
+    }
+    function settledBacking() external view returns (uint256) {
+        require(initialized, "uninitialized"); return backing;
+    }
+    function claim(uint256[2] calldata a, uint256[2][2] calldata b,
+        uint256[2] calldata c, uint256[] calldata pub, bool omitBacking) external {
+        require(verifier.verifyProof(a, b, c, pub), "proof");
+        if (!omitBacking) backing = 150;
+        initialized = true;
+    }
+}
