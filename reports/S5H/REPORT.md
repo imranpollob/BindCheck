@@ -88,3 +88,11 @@ Checks: Ran 38 tests OK; revert proof 28/28 DETECTED; analyzer files identical t
 - **Residual, stated honestly:** an operator who deliberately deletes both the output tree and the local ref can still restart. Procedural control: the reviewer records the start time and run commit in `docs/orchestration/DECISIONS.md` and pushes `refs/s5/started` to origin before analysis output is read, so a second start would be visible in the public record.
 
 Checks: Ran 43 tests OK; revert proof 32/32 DETECTED; analyzer files identical to `freeze-3`.
+
+## Re-check 3 response (orchestrator, 2026-11-19)
+
+- **Crash window, marker before gate file:** a fresh invocation that finds `refs/s5/started` at HEAD continues only when no unit result and no ledger exist (nothing ran, so nothing can repeat); otherwise it refuses. Tests: `test_crash_after_marker_before_gate_can_continue_when_nothing_ran`, `test_marker_with_existing_ledger_but_no_gate_refused`.
+- **Crash window, result before ledger line:** on resume, a result with a matching gate and valid status but no ledger line is adopted, not rerun, and its ledger line is marked `"recovered": true`, so the recovery is visible in the record. Test: `test_crash_after_result_before_ledger_is_recovered_visibly`.
+- **Deliberate rewriting of local evidence by the operator: ruled out of scope** (orchestrator, under the author's delegation; recorded in `reports/S5/PREREG.md` and `DECISIONS.md`). Code on the operator's own machine cannot stop the operator from deleting their own output and ledger. This is handled the way research handles it: by preregistration and disclosure, with the procedural controls stated in the preregistration.
+
+Checks: Ran 51 tests OK; revert proof 35/35 DETECTED; analyzer files identical to `freeze-3`.

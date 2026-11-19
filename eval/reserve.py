@@ -180,7 +180,7 @@ LEDGER = "ledger.jsonl"
 START_REF = "refs/s5/started"
 
 
-def claim_start(root: pathlib.Path, fresh: bool) -> None:
+def claim_start(root: pathlib.Path, fresh: bool, output: pathlib.Path | None = None) -> None:
     """One-shot marker outside the output tree. A fresh start creates the ref only if it is
     absent; a resume requires it to exist at HEAD. Erasing results/raw/S5 cannot reset it."""
     head = subprocess.run(["git", "rev-parse", "HEAD"], cwd=root, text=True,
@@ -191,6 +191,14 @@ def claim_start(root: pathlib.Path, fresh: bool) -> None:
         created = subprocess.run(["git", "update-ref", START_REF, head, ""], cwd=root,
                                  text=True, capture_output=True, check=False)
         if created.returncode:
+            # Crash window: the marker was created but the gate file was not written. Continue
+            # only if nothing ran yet (no unit results and no ledger), so no unit can repeat.
+            current = subprocess.run(["git", "rev-parse", "--verify", "--quiet", START_REF], cwd=root,
+                                     text=True, capture_output=True, check=False).stdout.strip()
+            untouched = output is not None and not (output / LEDGER).exists() and not any(
+                (output / "units").glob("*/result.json"))
+            if current == head and untouched:
+                return
             raise GateError("a reserve run was already started (start marker exists) but its output is missing")
         return
     current = subprocess.run(["git", "rev-parse", "--verify", "--quiet", START_REF], cwd=root,
@@ -232,8 +240,16 @@ def run_units(units: list[dict[str, str]], runner: Callable[[dict[str, str]], Ma
             # S5R-03: a resumed result must come from the same gate and carry a valid status.
             if record.get("gate_sha256") != gate_sha256 or record.get("status") not in FUNNEL:
                 raise EvaluationError(f"resume result not produced under this gate: {unit_id}")
+            digest = sha256_file(path)
+            if unit_id not in ledger:
+                # Crash window: result.json was written but the process stopped before its
+                # ledger line. Adopt it (gate and status already checked) and mark it recovered.
+                with (output / LEDGER).open("a") as handle:
+                    handle.write(json.dumps({"unit_id": unit_id, "result_sha256": digest,
+                                             "recovered": True}, sort_keys=True) + "\n")
+                ledger[unit_id] = digest
             # Append-only ledger: a result altered after it was written no longer matches.
-            if ledger.get(unit_id) != sha256_file(path):
+            if ledger.get(unit_id) != digest:
                 raise EvaluationError(f"resume result does not match the run ledger: {unit_id}")
         else:
             try:
@@ -343,7 +359,7 @@ def main(argv: list[str] | None = None) -> int:
         output.mkdir(parents=True, exist_ok=True)
         gate_record = {**gate, "circom": str(args.circom.resolve()), "circom_sha256": circom_digest}
         gate_path = output / "reserve-gate.json"
-        claim_start(ROOT, fresh=not gate_path.exists())
+        claim_start(ROOT, fresh=not gate_path.exists(), output=output)
         if gate_path.exists():
             prior = load_json(gate_path)
             if any(prior.get(key) != value for key, value in gate_record.items()):
