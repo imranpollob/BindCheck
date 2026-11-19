@@ -30,9 +30,9 @@ as the held-out v3 population.
 Whichever is chosen, a dated contract amendment must state it before the run,
 with the exclusion counts and the reason the other set is not used.
 
-**Author choice:** [ ] A  [ ] B  — (blank until decided)
+**Author choice (population): A — the contract's 1,106, with WarpToad excluded (1,105 families).** Reporting stratum, fixed before the run: audited or deployed families, defined as `maturity` in {`audited-production`, `deployed-address-in-docs`} in `dataset/source-corpus-v2.csv` (535 families by corpus count). The sprint plan's 391 could not be reproduced from the corpus and is not used.
 
-## 4. Exclusions — DECISION 2
+## 4. Exclusions — DECISION 2 (decided: A)
 
 WarpToad (`warptoad/warp-toad`) is guard-classified FORBIDDEN as a reserved v3
 family, but at least eight earlier reports describe hands-on development work on
@@ -42,6 +42,8 @@ it. These reports are listed in `reports/` and cited by file.
 - Option B: keep it, and report all results with and without it.
 
 **Author choice (WarpToad): A — exclude.** Record the prior-exposure reports listed above.
+
+Sibling check: `jimjimvalkema/zktranswarp` is a separate reserved family (guard `v2-family:cc3c0f35…`), distinct from WarpToad (`v2-family:45bae315…`). Neither is among the 278 spent freeze-2 families. The guard forbids opening either before the run, so a circuit-blob comparison is not possible before approval; the guard's family index is the authority. zktranswarp stays in the 1,105.
 
 Any family with prior exposure beyond the guard list is recorded before the run
 and is never silently dropped.
