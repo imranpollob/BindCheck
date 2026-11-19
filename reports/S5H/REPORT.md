@@ -79,3 +79,12 @@ Checks: `python3 -m unittest discover -s tests/s5h` (Ran 29 tests, OK); `tests/s
 | S5R-04 family.json and completeness | `family.json` (with verifier paths) written before tools run; capture completeness recorded; any non-`COPIED` source marks the unit `source_capture: INCOMPLETE` (quarantined and counted in the funnel) | `test_s5r04_real_capture_retains_verifier_source_via_family_json` (real capture, verifier reachable only through family.json), `test_s5r04_missing_source_is_quarantined` |
 
 Checks: Ran 38 tests OK; revert proof 28/28 DETECTED; analyzer files identical to `freeze-3`.
+
+## Fix for the S5R re-check 2 residual, S5R-03 (orchestrator, 2026-11-19)
+
+- **Deleted harness file:** the seal list now comes from `git ls-tree -r --name-only HEAD` (every tracked `eval/*.py`, `baselines/strong/*.py`, guard). A tracked file missing from the working tree fails the gate. Test: `test_deleted_tracked_harness_file_refused` (real git repo).
+- **Altered same-gate result:** `results/raw/S5/ledger.jsonl` is append-only, one entry per unit with the SHA-256 of its `result.json` at write time. A resume refuses any result whose bytes differ from its ledger entry, and refuses a ledger entry whose result is missing. Tests: `test_altered_same_gate_result_refused_on_resume`, `test_unaltered_resume_accepted`.
+- **Second start after erasing output:** a git ref `refs/s5/started` is created atomically at the run commit on a fresh start (`git update-ref <ref> HEAD ""`, which fails if it already exists). A fresh start with the ref present is refused; a resume requires it at HEAD. Tests: `test_second_fresh_start_after_erased_output_refused`, `test_resume_requires_start_marker` (real git repo).
+- **Residual, stated honestly:** an operator who deliberately deletes both the output tree and the local ref can still restart. Procedural control: the reviewer records the start time and run commit in `docs/orchestration/DECISIONS.md` and pushes `refs/s5/started` to origin before analysis output is read, so a second start would be visible in the public record.
+
+Checks: Ran 43 tests OK; revert proof 32/32 DETECTED; analyzer files identical to `freeze-3`.

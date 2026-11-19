@@ -42,10 +42,21 @@ HARNESS_GLOBS = ("eval/*.py", "baselines/strong/*.py", "scripts/check_holdout.py
 
 
 def harness_files(root: pathlib.Path) -> tuple[str, ...]:
-    files = sorted({str(path.relative_to(root)) for pattern in HARNESS_GLOBS for path in root.glob(pattern)})
+    """Seal list taken from the tracked tree at HEAD, so a deleted file cannot drop out of it."""
+    listed = subprocess.run(["git", "ls-tree", "-r", "--name-only", "HEAD", "--",
+                             "eval", "baselines/strong", "scripts/check_holdout.py"],
+                            cwd=root, text=True, capture_output=True, check=False)
+    if listed.returncode:
+        raise GateError("cannot list tracked harness files at HEAD")
+    files = sorted(name for name in listed.stdout.split()
+                   if pathlib.PurePosixPath(name).match("*.py")
+                   and any(pathlib.PurePosixPath(name).match(pattern) for pattern in HARNESS_GLOBS))
     missing = [name for name in HARNESS_FILES if name not in files]
     if missing:
         raise GateError(f"core harness files missing from seal: {missing}")
+    absent = [name for name in files if not (root / name).is_file()]
+    if absent:
+        raise GateError(f"tracked harness files are missing from the working tree: {absent}")
     return tuple(files)
 
 
@@ -165,12 +176,49 @@ def authorized_repository(repository: str, permit: ReservePermit) -> bool:
     return reserve_decision(repository, permit) and norm(repository) in reserved_index()
 
 
+LEDGER = "ledger.jsonl"
+START_REF = "refs/s5/started"
+
+
+def claim_start(root: pathlib.Path, fresh: bool) -> None:
+    """One-shot marker outside the output tree. A fresh start creates the ref only if it is
+    absent; a resume requires it to exist at HEAD. Erasing results/raw/S5 cannot reset it."""
+    head = subprocess.run(["git", "rev-parse", "HEAD"], cwd=root, text=True,
+                          capture_output=True, check=False).stdout.strip()
+    if not head:
+        raise GateError("cannot resolve HEAD for the start marker")
+    if fresh:
+        created = subprocess.run(["git", "update-ref", START_REF, head, ""], cwd=root,
+                                 text=True, capture_output=True, check=False)
+        if created.returncode:
+            raise GateError("a reserve run was already started (start marker exists) but its output is missing")
+        return
+    current = subprocess.run(["git", "rev-parse", "--verify", "--quiet", START_REF], cwd=root,
+                             text=True, capture_output=True, check=False).stdout.strip()
+    if current != head:
+        raise GateError("resume refused: start marker missing or not at the run commit")
+
+
+def _read_ledger(output: pathlib.Path) -> dict[str, str]:
+    entries: dict[str, str] = {}
+    path = output / LEDGER
+    if path.is_file():
+        for line in path.read_text().splitlines():
+            if line.strip():
+                item = json.loads(line)
+                if item["unit_id"] in entries:
+                    raise EvaluationError(f"ledger has two entries for {item['unit_id']}")
+                entries[item["unit_id"]] = item["result_sha256"]
+    return entries
+
+
 def run_units(units: list[dict[str, str]], runner: Callable[[dict[str, str]], Mapping[str, Any]],
               output: pathlib.Path, gate_sha256: str = "") -> list[dict[str, Any]]:
     """Persist one funnel row per declared unit, including runner exceptions."""
     records: list[dict[str, Any]] = []
     seen: set[str] = set()
     output.mkdir(parents=True, exist_ok=True)
+    ledger = _read_ledger(output)
     for unit in units:
         unit_id = unit["unit_id"]
         if unit_id in seen:
@@ -184,6 +232,9 @@ def run_units(units: list[dict[str, str]], runner: Callable[[dict[str, str]], Ma
             # S5R-03: a resumed result must come from the same gate and carry a valid status.
             if record.get("gate_sha256") != gate_sha256 or record.get("status") not in FUNNEL:
                 raise EvaluationError(f"resume result not produced under this gate: {unit_id}")
+            # Append-only ledger: a result altered after it was written no longer matches.
+            if ledger.get(unit_id) != sha256_file(path):
+                raise EvaluationError(f"resume result does not match the run ledger: {unit_id}")
         else:
             try:
                 outcome = dict(runner(unit))
@@ -197,7 +248,13 @@ def run_units(units: list[dict[str, str]], runner: Callable[[dict[str, str]], Ma
             record = {"unit_id": unit_id, "repository": unit["repository"],
                       "commit": unit["commit"], "maturity": unit["maturity"], **outcome,
                       "gate_sha256": gate_sha256}
+            if unit_id in ledger:
+                raise EvaluationError(f"ledger already holds {unit_id} but its result is missing")
             atomic_write_json(path, record)
+            digest = sha256_file(path)
+            with (output / LEDGER).open("a") as handle:
+                handle.write(json.dumps({"unit_id": unit_id, "result_sha256": digest}, sort_keys=True) + "\n")
+            ledger[unit_id] = digest
         records.append(record)
     if len(records) != len(units) or len({item["unit_id"] for item in records}) != len(units):
         raise EvaluationError("reserve funnel lost or duplicated a unit")
@@ -286,6 +343,7 @@ def main(argv: list[str] | None = None) -> int:
         output.mkdir(parents=True, exist_ok=True)
         gate_record = {**gate, "circom": str(args.circom.resolve()), "circom_sha256": circom_digest}
         gate_path = output / "reserve-gate.json"
+        claim_start(ROOT, fresh=not gate_path.exists())
         if gate_path.exists():
             prior = load_json(gate_path)
             if any(prior.get(key) != value for key, value in gate_record.items()):
