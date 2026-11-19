@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import importlib
 import inspect
+import textwrap
 import io
 import os
 import pathlib
@@ -54,6 +55,18 @@ PROBES = (
      "GuardTests.test_default_cli_still_refuses_reserved_repository"),
     (check_holdout, "reserve_decision", "return isinstance(permit, ReservePermit) and permit.allows(repository)",
      "return True", "GuardTests.test_reserve_hook_requires_manifest_unit_and_valid_record"),
+    (reserve, "run_unit", "if not permit.allows_pair(unit[\"repository\"], unit[\"commit\"]):", "if False:",
+     "S5RFindingTests.test_s5r01_manifest_repository_with_other_commit_refused"),
+    (reserve.ReservePermit, "allows_pair", "return (norm(repository), commit.lower()) in self.pairs and self.allows(repository)", "return self.allows(repository)",
+     "S5RFindingTests.test_s5r01_exact_manifest_pair_allowed"),
+    (reserve, "run_unit", "if harness_failure:", "if False:",
+     "S5RFindingTests.test_s5r02_subprocess_failure_is_harness_error"),
+    (reserve, "run_unit", "return {\"status\": \"HARNESS_ERROR\", \"reason\": \"ANALYZER_RAW_OUTPUT_MISSING_OR_CORRUPT\"}", "payload = {}",
+     "S5RFindingTests.test_s5r02_missing_raw_output_is_harness_error"),
+    (reserve, "run_unit", "sources = capture_warning_sources(checkout, unit_dir)", "sources = None",
+     "S5RFindingTests.test_s5r04_warning_sources_captured_before_checkout_deleted"),
+    (reserve, "check_reserve_gate", "if dirty.returncode or dirty.stdout.strip():", "if False:",
+     "GateTests.test_uncommitted_harness_change_refused"),
     (reserve, "run_units", "for unit in units:", "for unit in units[:-1]:",
      "RunnerTests.test_fake_runner_accounts_for_every_unit_once"),
 )
@@ -62,11 +75,12 @@ PROBES = (
 def main() -> int:
     failures = 0
     for module, name, old, new, test_name in PROBES:
-        source = inspect.getsource(getattr(module, name))
+        source = textwrap.dedent(inspect.getsource(getattr(module, name)))
         if source.count(old) != 1:
             raise RuntimeError(f"mutation site changed: {name}: {old}")
         namespace: dict[str, object] = {}
-        exec(compile(source.replace(old, new), f"<mutated {name}>", "exec"), module.__dict__, namespace)
+        module_globals = vars(sys.modules[module.__module__]) if isinstance(module, type) else module.__dict__
+        exec(compile(source.replace(old, new), f"<mutated {name}>", "exec"), module_globals, namespace)
         target = reserve if name == "reserve_decision" else module
         with mock.patch.object(target, name, namespace[name]):
             case = unittest.defaultTestLoader.loadTestsFromName(test_name, tests)

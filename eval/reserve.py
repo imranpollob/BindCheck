@@ -20,8 +20,8 @@ if __package__ in {None, ""}:
 from eval.common import (ROOT, EvaluationError, GateError, atomic_write_json,
                          load_json, read_csv, sha256_file, utc_now)
 from eval.prebuild_heldout import prebuild_checkout
-from eval.run_heldout import (TOOLS, acquire_once, prepare_pinned_vendor,
-                              run_tool_once)
+from eval.run_heldout import (TOOLS, acquire_once, capture_warning_sources,
+                              prepare_pinned_vendor, run_tool_once)
 from scripts.check_holdout import norm, reserve_decision, reserved_index
 
 MANIFEST_SHA256 = "b1752eede4ccabaf5dea45d827fbdd0c388346349a51129b2ace125322374278"
@@ -33,6 +33,11 @@ AUTHORIZATION = pathlib.Path("reports/S5/AUTHORIZATION.json")
 STRATUM = {"audited-production", "deployed-address-in-docs"}
 FUNNEL = {"ACQUISITION_FAILED", "BUILD_FAILED", "HARNESS_TIMEOUT", "HARNESS_ERROR", "UNSUPPORTED", "ANALYZABLE"}
 RUN_TAG = "s5-reserve-run"
+# S5R-02: analyzer results that mean the harness, not the application, failed.
+HARNESS_FAILURE_REASONS = {"HARNESS_SUBPROCESS_FAILED", "NON_JSON_OUTPUT"}
+# S5R-03: harness code sealed into the gate record; must be committed and clean at HEAD.
+HARNESS_FILES = ("eval/reserve.py", "eval/common.py", "eval/run_heldout.py",
+                 "eval/prebuild_heldout.py", "scripts/check_holdout.py")
 
 
 def load_manifest(root: pathlib.Path = ROOT) -> list[dict[str, str]]:
@@ -88,6 +93,11 @@ def check_reserve_gate(root: pathlib.Path = ROOT) -> dict[str, str]:
     matches = re.findall(r"^BINDCHECK_ZK_CONTENT_SHA256=([0-9a-f]{64})$", result.stdout, re.M)
     if result.returncode or len(matches) != 1 or matches[0] != ANALYZER_SHA256:
         raise GateError("freeze-3 analyzer content hash mismatch")
+    dirty = subprocess.run(["git", "status", "--porcelain", "--", *HARNESS_FILES],
+                           cwd=root, text=True, capture_output=True, check=False)
+    if dirty.returncode or dirty.stdout.strip():
+        raise GateError("harness files have uncommitted changes at HEAD")
+    harness = {name: sha256_file(root / name) for name in HARNESS_FILES}
     path = root / AUTHORIZATION
     if not path.is_file():
         raise GateError("author AUTHORIZATION.json is missing")
@@ -102,7 +112,8 @@ def check_reserve_gate(root: pathlib.Path = ROOT) -> dict[str, str]:
         raise GateError("authorization lacks approved_by or approved_on")
     return {"head": head, "tag": tag, "analyzer_content_sha256": matches[0],
             "manifest_sha256": MANIFEST_SHA256, "authorization_sha256": sha256_file(path),
-            "approved_by": authorization["approved_by"], "approved_on": authorization["approved_on"]}
+            "approved_by": authorization["approved_by"], "approved_on": authorization["approved_on"],
+            "harness_sha256": json.dumps(harness, sort_keys=True)}
 
 
 @dataclass(frozen=True)
@@ -110,6 +121,11 @@ class ReservePermit:
     root: pathlib.Path
     repositories: frozenset[str]
     gate: Mapping[str, str]
+    pairs: frozenset[tuple[str, str]] = frozenset()
+
+    def allows_pair(self, repository: str, commit: str) -> bool:
+        """S5R-01: a unit must match a manifest (repository, commit) pair exactly."""
+        return (norm(repository), commit.lower()) in self.pairs and self.allows(repository)
 
     def allows(self, repository: str) -> bool:
         # Recheck authorization, tag and analyzer at the moment of use.
@@ -171,6 +187,8 @@ def run_unit(unit: dict[str, str], output: pathlib.Path, circom: pathlib.Path,
              permit: ReservePermit) -> dict[str, Any]:
     if not authorized_repository(unit["repository"], permit):
         raise GateError(f"reserve guard refused {unit['unit_id']}")
+    if not permit.allows_pair(unit["repository"], unit["commit"]):
+        raise GateError(f"unit {unit['unit_id']} is not a manifest (repository, commit) pair")
     unit_dir = output / "units" / unit["unit_id"]
     unit_dir.mkdir(parents=True, exist_ok=True)
     checkout = output / "work" / unit["unit_id"]
@@ -188,16 +206,21 @@ def run_unit(unit: dict[str, str], output: pathlib.Path, circom: pathlib.Path,
         analyzer = tools["bindcheck-zk"]
         if "HARNESS_TIMEOUT" in analyzer.get("reasons", []):
             return {"status": "HARNESS_TIMEOUT", "reason": "ANALYZER_TIMEOUT"}
+        harness_failure = HARNESS_FAILURE_REASONS.intersection(analyzer.get("reasons", []))
+        if harness_failure:
+            return {"status": "HARNESS_ERROR", "reason": sorted(harness_failure)[0]}
         if analyzer.get("run_status") != "completed":
             return {"status": "UNSUPPORTED", "reason": analyzer.get("fatal_reason") or "ANALYZER_INCOMPLETE"}
         raw = unit_dir / "bindcheck-zk-raw.json"
         try:
             payload = load_json(raw)
         except (OSError, ValueError):
-            payload = {}
+            return {"status": "HARNESS_ERROR", "reason": "ANALYZER_RAW_OUTPUT_MISSING_OR_CORRUPT"}
+        # S5R-04: keep warning-location source before the checkout is deleted.
+        sources = capture_warning_sources(checkout, unit_dir)
         if not payload.get("triples"):
             return {"status": "UNSUPPORTED", "reason": analyzer.get("fatal_reason") or "NO_RECOVERED_TRIPLE"}
-        return {"status": "ANALYZABLE", "patterns": analyzer["patterns"],
+        return {"status": "ANALYZABLE", "patterns": analyzer["patterns"], "warning_sources": sources,
                 "tool_results": {name: result.get("raw_result") for name, result in tools.items()}}
     finally:
         if checkout.exists():
@@ -216,7 +239,8 @@ def main(argv: list[str] | None = None) -> int:
         circom_digest = sha256_file(args.circom)
         if circom_digest != CIRCOM_SHA256:
             raise GateError("Circom executable differs from pinned Linux 2.1.9 binary")
-        permit = ReservePermit(ROOT, frozenset(norm(unit["repository"]) for unit in units), gate)
+        permit = ReservePermit(ROOT, frozenset(norm(unit["repository"]) for unit in units), gate,
+                               frozenset((norm(unit["repository"]), unit["commit"].lower()) for unit in units))
         output = ROOT / "results/raw/S5"
         output.mkdir(parents=True, exist_ok=True)
         gate_record = {**gate, "circom": str(args.circom.resolve()), "circom_sha256": circom_digest}

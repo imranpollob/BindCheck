@@ -97,6 +97,10 @@ class GateTests(unittest.TestCase):
         path = self.root / reserve.AUTHORIZATION
         path.parent.mkdir(parents=True)
         self.auth_path = path
+        for name in reserve.HARNESS_FILES:
+            harness = self.root / name
+            harness.parent.mkdir(parents=True, exist_ok=True)
+            harness.write_text(f"# stand-in for {name}\n")
 
     def authorize(self, **overrides: str) -> None:
         record = {"manifest_sha256": reserve.MANIFEST_SHA256,
@@ -105,8 +109,11 @@ class GateTests(unittest.TestCase):
         self.auth_path.write_text(json.dumps(record))
 
     @staticmethod
-    def commands(*, tag: str = "same", digest: str = reserve.ANALYZER_SHA256, analyzer_diff: int = 0):
+    def commands(*, tag: str = "same", digest: str = reserve.ANALYZER_SHA256, analyzer_diff: int = 0,
+                 harness_dirty: str = ""):
         def run(argv, **kwargs):
+            if argv[:3] == ["git", "status", "--porcelain"]:
+                return subprocess.CompletedProcess(argv, 0, harness_dirty, "")
             if argv[:2] == ["git", "rev-parse"]:
                 if argv[2] == "HEAD":
                     value = "same"
@@ -163,6 +170,24 @@ class GateTests(unittest.TestCase):
         with mock.patch.object(reserve.subprocess, "run", side_effect=self.commands()):
             gate = reserve.check_reserve_gate(self.root)
         self.assertEqual(gate["head"], "same")
+
+    def test_uncommitted_harness_change_refused(self) -> None:
+        # S5R-03
+        self.authorize()
+        with mock.patch.object(reserve.subprocess, "run",
+                               side_effect=self.commands(harness_dirty=" M eval/common.py\n")):
+            with self.assertRaisesRegex(reserve.GateError, "uncommitted changes"):
+                reserve.check_reserve_gate(self.root)
+
+    def test_gate_records_harness_digests(self) -> None:
+        # S5R-03: a resumed run with different harness bytes yields a different gate record.
+        self.authorize()
+        with mock.patch.object(reserve.subprocess, "run", side_effect=self.commands()):
+            first = reserve.check_reserve_gate(self.root)
+            (self.root / "eval/common.py").write_text("# changed\n")
+            second = reserve.check_reserve_gate(self.root)
+        self.assertIn("eval/common.py", first["harness_sha256"])
+        self.assertNotEqual(first["harness_sha256"], second["harness_sha256"])
 
     def test_wrong_analyzer_hash_refused(self) -> None:
         self.authorize()
@@ -262,3 +287,74 @@ class RunnerTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class S5RFindingTests(unittest.TestCase):
+    """Regressions for the S5R review findings S5R-01, S5R-02 and S5R-04."""
+
+    def setUp(self) -> None:
+        self.unit = dict(reserve.read_csv(reserve.ROOT / reserve.MANIFEST)[0])
+        self.temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temporary.cleanup)
+        self.output = pathlib.Path(self.temporary.name)
+
+    def permit(self):
+        return reserve.ReservePermit(
+            reserve.ROOT, frozenset({reserve.norm(self.unit["repository"])}), {},
+            frozenset({(reserve.norm(self.unit["repository"]), self.unit["commit"].lower())}))
+
+    def test_s5r01_manifest_repository_with_other_commit_refused(self) -> None:
+        permit = self.permit()
+        swapped = dict(self.unit, commit="0" * 40)
+        with (mock.patch.object(reserve, "authorized_repository", return_value=True),
+              mock.patch.object(reserve.ReservePermit, "allows", return_value=True),
+              mock.patch.object(reserve, "acquire_once") as acquire):
+            with self.assertRaisesRegex(reserve.GateError, "not a manifest"):
+                reserve.run_unit(swapped, self.output, pathlib.Path("/unused"), permit)
+        acquire.assert_not_called()
+
+    def test_s5r01_exact_manifest_pair_allowed(self) -> None:
+        with mock.patch.object(reserve.ReservePermit, "allows", return_value=True):
+            self.assertTrue(self.permit().allows_pair(self.unit["repository"], self.unit["commit"]))
+            self.assertFalse(self.permit().allows_pair(self.unit["repository"], "1" * 40))
+
+    def _run(self, analyzer: dict, raw: str | None):
+        def fake_tool(tool, checkout, family_dir):
+            if tool == "bindcheck-zk":
+                if raw is not None:
+                    (family_dir / "bindcheck-zk-raw.json").write_text(raw)
+                return analyzer
+            return {"raw_result": None}
+        with (mock.patch.object(reserve, "authorized_repository", return_value=True),
+              mock.patch.object(reserve, "acquire_once", return_value={"status": "ready"}),
+              mock.patch.object(reserve, "prepare_pinned_vendor"),
+              mock.patch.object(reserve, "prebuild_checkout", return_value={"status": "BUILT"}),
+              mock.patch.object(reserve, "run_tool_once", side_effect=fake_tool),
+              mock.patch.object(reserve, "capture_warning_sources", return_value={"files": 1}) as capture):
+            result = reserve.run_unit(self.unit, self.output, pathlib.Path("/unused"), mock.Mock())
+        return result, capture
+
+    def test_s5r02_subprocess_failure_is_harness_error(self) -> None:
+        for reason in sorted(reserve.HARNESS_FAILURE_REASONS):
+            with self.subTest(reason=reason):
+                result, _ = self._run({"reasons": [reason], "run_status": "UNKNOWN", "patterns": {}}, None)
+                self.assertEqual(result["status"], "HARNESS_ERROR")
+                self.assertEqual(result["reason"], reason)
+
+    def test_s5r02_missing_raw_output_is_harness_error(self) -> None:
+        result, _ = self._run({"reasons": [], "run_status": "completed", "patterns": {}}, None)
+        self.assertEqual(result["status"], "HARNESS_ERROR")
+        result, _ = self._run({"reasons": [], "run_status": "completed", "patterns": {}}, "{not json")
+        self.assertEqual(result["status"], "HARNESS_ERROR")
+
+    def test_s5r02_genuine_analyzer_fatal_stays_unsupported(self) -> None:
+        result, _ = self._run({"reasons": ["UNSUPPORTED_INPUT"], "run_status": "UNKNOWN",
+                               "fatal_reason": "UNSUPPORTED_INPUT", "patterns": {}}, None)
+        self.assertEqual(result["status"], "UNSUPPORTED")
+
+    def test_s5r04_warning_sources_captured_before_checkout_deleted(self) -> None:
+        result, capture = self._run({"reasons": [], "run_status": "completed", "patterns": {"P1": {}}},
+                                    json.dumps({"triples": [{}]}))
+        self.assertEqual(result["status"], "ANALYZABLE")
+        capture.assert_called_once()
+        self.assertEqual(result["warning_sources"], {"files": 1})
