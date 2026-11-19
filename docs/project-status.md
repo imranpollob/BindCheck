@@ -142,7 +142,9 @@ flowchart TD
     s1 --> s1Native["Native bb.js 3.0.0 Poseidon2 path [DONE] — accepts aliases; known (Xion PR 608)"]
     s1 --> s1Split["Four split templates [UNKNOWN] — source-read, unconfirmed"]
     s4c --> f2["F2 oracle soundness + S4d [DONE] — historical F2 results; XR2 residuals open"]
-    f2 --> f3["F3 residual oracle gates [WAITING] — source checks pass; EVM reruns UNKNOWN (Anvil blocked)"]
+    f2 --> f3["F3 residual oracle gates [DONE] — reviewer EVM controls pass; XR3-01 found"]
+    f3 --> f4["F4 rule-bound single use + verdict tests [DONE] — chain-free controls pass"]
+    f4 --> f4Gate["XR3 oracle re-review [WAITING] — F4 EVM controls not run"]
     sprint --> s2a["S2a precision fixes [ACTIVE] — DEV"]
     s2a --> s2aRerun["Spent-family DEV rerun [DONE] — 265/278 analysed"]
     s2aRerun --> s2aSetH["Set H DEV precision [UNKNOWN] — not held-out"]
@@ -662,6 +664,7 @@ slots were executed.
 | 2026-11-18 | F1 analyzer soundness from cross-model review | `[DONE]` | [Report](../reports/F1/REPORT.md): 77 tests passed, including the XR counterexamples and AZ1 extent controls. All 56 DEV rows completed with unchanged row verdicts and applicability. Two mismatched P4 triples moved to `UNKNOWN`. PP's five retained P4 warnings have `UNKNOWN` verdicts by design. Candidate hash recorded. |
 | 2026-11-18 | S8 A4 manuscript and generator survey | `[WAITING]` official template comparison | [S8 report](../reports/S8/REPORT.md) records the 12-page A4 build, condensed generator table and outstanding evidence. |
 | 2026-11-18 | S0 contract revision 4 and analyzer freeze-3 preparation | `[DONE]` preparation, `[WAITING]` reviewer tag | [S0 report](../reports/S0/REPORT.md) and [freeze declaration](FREEZE-3.md) record the reviewed analyzer hash, 77 passing tests, the 1,106-family reserve and the separate F3/XR3 oracle gate. |
+| 2026-11-18 | F4 rule-bound single use and final-verdict tests | `[DONE]` implementation / `[WAITING]` reviewer EVM and XR3 re-review | [F4 report](../reports/F4/REPORT.md), [XR3 gate](../reports/XR3/GATE.md), and ignored `results/raw/F4/reversion.log`: per-rule replay accounting closes the source-level XR3-01 counterexample; 36 oracle tests pass and eight scratch reversion probes each fail as intended. The mixed-rule manifest validates and synthetic Solidity builds. No F4 Anvil run or held-out E4 is claimed. F3's reviewer addendum records its 17 successful local EVM manifest runs, superseding that row's earlier environment-limited status; the oracle gate remains waiting on F4 re-review. |
 
 ## Update rule
 

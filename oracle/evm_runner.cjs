@@ -321,11 +321,12 @@ async function evaluatePolicy(policy, effects, context, resolver, contractsByAdd
         }
       }
     }
-    if (rule.single_use && context.single_use_double_spend) {
+    const replay = (context.single_use_replays || []).find((entry) => entry.rule === rule.id);
+    if (rule.single_use && replay) {
       violations.push({
         rule: rule.id,
         type: "single_use_exceeded",
-        authorization_key: context.authorization_key,
+        authorization_key: replay.authorization_key,
         occurrences: 2,
         max_occurrences: 1,
       });
@@ -363,17 +364,52 @@ async function evaluatePolicy(policy, effects, context, resolver, contractsByAdd
   return violations;
 }
 
-// Canonical single-use key: the policy's pub position reduced mod r.
-function authorizationKey(policy, pubArrayByProof) {
-  for (const rule of policy.protected_effects || []) {
+// Attribute every protected occurrence to exactly one rule. The rule supplies
+// its own authorization key; a different rule's effect cannot spend it.
+function attributeEffects(policy, effects, pubArrayByProof) {
+  const attributed = [];
+  for (const effect of effects) {
+    const matches = (policy.protected_effects || []).filter((rule) => isMint(effect, rule.match || {}));
+    if (matches.length > 1) return { attributed, error: "EFFECT_RULE_AMBIGUOUS" };
+    if (matches.length === 0) continue;
+    const rule = matches[0];
+    let authorization_key = null;
     if (rule.single_use) {
       const src = rule.single_use.key_pub;
-      const pub = pubArrayByProof[src.proof];
-      if (!pub) return null;
-      return (BigInt(pub[src.index]) % FIELD_R).toString();
+      const pub = src && pubArrayByProof[src.proof];
+      if (!pub || pub[src.index] === undefined) return { attributed, error: "AUTHORIZATION_KEY_UNRESOLVED" };
+      try {
+        authorization_key = (BigInt(pub[src.index]) % FIELD_R).toString();
+      } catch (_) {
+        return { attributed, error: "AUTHORIZATION_KEY_UNRESOLVED" };
+      }
+    }
+    attributed.push({ rule: rule.id, authorization_key, effect });
+  }
+  return { attributed, error: null };
+}
+
+function singleUseReplays(policy, preludeEffects, effects, pubArrayByProof) {
+  const before = attributeEffects(policy, preludeEffects, pubArrayByProof);
+  const after = attributeEffects(policy, effects, pubArrayByProof);
+  if (before.error || after.error) return { replays: [], authorization_keys: {}, error: before.error || after.error };
+  const authorization_keys = Object.fromEntries(
+    after.attributed.filter((entry) => entry.authorization_key !== null)
+      .map((entry) => [entry.rule, entry.authorization_key])
+  );
+  const replays = [];
+  for (const rule of policy.protected_effects || []) {
+    if (!rule.single_use) continue;
+    const prior = before.attributed.filter((entry) => entry.rule === rule.id);
+    const current = after.attributed.filter((entry) => entry.rule === rule.id);
+    for (const entry of current) {
+      if (prior.some((earlier) => earlier.authorization_key === entry.authorization_key)) {
+        replays.push({ rule: rule.id, authorization_key: entry.authorization_key });
+        break;
+      }
     }
   }
-  return null;
+  return { replays, authorization_keys, error: null };
 }
 
 // ---- transaction plumbing --------------------------------------------------
@@ -632,6 +668,38 @@ async function verifierAccepts(scenario, deployments, resolver) {
 
 // ---- one trial -------------------------------------------------------------
 
+// Final verdict boundary. Callers supply recorded observations, never a
+// preselected verdict. Keeping this pure lets regressions exercise the exact
+// E4 gate without a local chain.
+function decideTrial(observation) {
+  const { honest_succeeded, tx_succeeded, tx_error, effects, view_committed,
+    violations, verifier_path, view_read_failure, rule_error, matched_effects } = observation;
+  if (!honest_succeeded) return { result: "UNKNOWN", reason: "HONEST_TX_FAILED" };
+  if (view_read_failure) return { result: "UNKNOWN", reason: `VIEW_READ_FAILED: ${view_read_failure}` };
+  if (rule_error) return { result: "UNKNOWN", reason: rule_error };
+  if (!Array.isArray(matched_effects)) return { result: "UNKNOWN", reason: "PROTECTED_EFFECT_ATTRIBUTION_MISSING" };
+  if (!tx_succeeded) return { result: "NOT_CONFIRMED", reason: `reverted: ${tx_error}` };
+  if (effects.length === 0 && !view_committed) {
+    return { result: "NOT_CONFIRMED", reason: "effects identical (no protected effect committed)" };
+  }
+  if (violations.length === 0) return { result: "NOT_CONFIRMED", reason: "policy-permitted" };
+  const uncorroborated = (matched_effects || []).filter(
+    (effect) => !effect.state_corroboration || effect.state_corroboration.corroborated !== true
+  );
+  if (uncorroborated.length > 0) {
+    return { result: "UNKNOWN", reason: `EFFECT_NOT_STATE_CORROBORATED: ${uncorroborated
+      .map((effect) => `${effect.contract_role || effect.contract}:${effect.state_corroboration?.reason || "missing_corroboration"}`)
+      .join("; ")}` };
+  }
+  if (!verifier_path?.established) {
+    return { result: "UNKNOWN", reason: `VERIFIER_PATH_NOT_ESTABLISHED: ${verifier_path?.reason || "missing_trace"}` };
+  }
+  return {
+    result: "E4-CONFIRMED",
+    reason: "mutated tx succeeded; unchanged verifier accepted on the mutated path; a state-corroborated protected effect violates the policy",
+  };
+}
+
 async function runTrial(env, trial) {
   const { spec, provider, signers, proofs, baseDeploy } = env;
   const scenario = spec.scenario;
@@ -675,10 +743,8 @@ async function runTrial(env, trial) {
 
   // optional prelude (consumes the honest authorization once)
   let prelude = null;
-  let authKey = authorizationKey(spec.policy, { [Object.keys(proofs)[0]]: null }) ; // placeholder
   const pubByProof = {};
   for (const [name, p] of Object.entries(proofs)) pubByProof[name] = p.pub;
-  authKey = authorizationKey(spec.policy, pubByProof);
 
   if (trial.prelude_honest) {
     const args = buildArgs(honest.args, resolver, null);
@@ -687,6 +753,7 @@ async function runTrial(env, trial) {
       return { ...trial, result: "UNKNOWN", reason: `honest prelude reverted: ${prelude.error}`, verifier_accepted: va.accepted };
     }
   }
+  const preludeEffects = prelude ? extractEffects(prelude.receipt, deploymentsByAddr) : [];
 
   // Build the mutated invocation
   let target = deployments[honest.target];
@@ -760,11 +827,13 @@ async function runTrial(env, trial) {
   const valueAfter = await snapshotValues(contractsByAddr, signers);
   const viewAfter = await readStateViews(activeDeployments, scenario, resolver);
   let viewDeltas;
+  let viewReadFailure = null;
   try {
     viewDeltas = diffViews(viewBefore, viewAfter, scenario.state_views || [], spec.policy);
     if (env.honestViewReadFailure) throw new Error(env.honestViewReadFailure);
   } catch (error) {
-    return { ...trial, result: "UNKNOWN", reason: `VIEW_READ_FAILED: ${String(error.message || error)}`, tx_succeeded: settled.succeeded, tx_hash: settled.hash };
+    viewReadFailure = String(error.message || error);
+    viewDeltas = {};
   }
   const valueAtRisk = {
     admitted_initial_state: admittedInitialState,
@@ -791,14 +860,16 @@ async function runTrial(env, trial) {
       effect.state_corroboration = await corroborateEffect(contract, effect, blockNumber);
     }
   }
-
-  // single-use double-spend detection
-  let doubleSpend = false;
-  if (trial.prelude_honest && settled.succeeded && effects.some((e) => isMintAny(e, spec.policy))) {
-    // the honest prelude already consumed authKey; a second committed mint
-    // under the same canonical key is a double spend
-    doubleSpend = true;
+  for (const effect of preludeEffects) {
+    if (isMintAny(effect, spec.policy)) {
+      const contract = contractsByAddr[effect.contract.toLowerCase()];
+      effect.state_corroboration = await corroborateEffect(contract, effect, prelude.receipt.blockNumber);
+    }
   }
+  const singleUse = singleUseReplays(spec.policy, preludeEffects, effects, pubByProof);
+  const preludeUncorroborated = preludeEffects.some(
+    (effect) => effect.state_corroboration && effect.state_corroboration.corroborated === false
+  );
 
   // A protected effect may be a transfer mint or a declared view increase (S4d).
   const viewCommitted = settled.succeeded && protectedViewCommitted(spec.policy, viewDeltas);
@@ -806,13 +877,12 @@ async function runTrial(env, trial) {
   const honestCounts = env.honestObligations || {};
   const observedObligations = obligationCounts(effects, spec.policy.required_obligations || [], resolver, honestCounts);
   const context = {
-    authorization_key: authKey,
-    single_use_double_spend: doubleSpend,
+    single_use_replays: singleUse.replays,
     mutated_sender: from.address,
     honest_obligations: honestCounts,
     benefit_committed: benefitCommitted,
   };
-  const transferViolations = settled.succeeded
+  const transferViolations = settled.succeeded && !singleUse.error
     ? await evaluatePolicy(spec.policy, effects, context, resolver, contractsByAddr)
     : [];
   const viewViolations = settled.succeeded
@@ -846,40 +916,23 @@ async function runTrial(env, trial) {
 
   // XR-01: a protected effect used to confirm must be state-corroborated. Any
   // mint-shaped protected effect with no matching state read is disqualifying.
-  const uncorroborated = effects.filter(
-    (e) => e.state_corroboration && e.state_corroboration.corroborated === false
-  );
-
-  let result;
-  let reason;
-  if (!settled.succeeded) {
-    result = "NOT_CONFIRMED";
-    reason = `reverted: ${settled.error}`;
-  } else if (effects.length === 0 && !viewCommitted) {
-    result = "NOT_CONFIRMED";
-    reason = "effects identical (no protected effect committed)";
-  } else if (violations.length === 0) {
-    result = "NOT_CONFIRMED";
-    reason = "policy-permitted";
-  } else if (uncorroborated.length > 0) {
-    // XR-01: an emitted Transfer not backed by a state change cannot carry E4.
-    result = "UNKNOWN";
-    reason = `EFFECT_NOT_STATE_CORROBORATED: ${uncorroborated
-      .map((e) => `${e.contract_role || e.contract}:${e.state_corroboration.reason}`)
-      .join("; ")}`;
-  } else if (!verifierPath.established) {
-    // XR-02: the unchanged verifier was not shown to accept on the mutated path.
-    result = "UNKNOWN";
-    reason = `VERIFIER_PATH_NOT_ESTABLISHED: ${verifierPath.reason}`;
-  } else {
-    result = "E4-CONFIRMED";
-    reason = "mutated tx succeeded; unchanged verifier accepted on the mutated path; a state-corroborated protected effect violates the policy";
-  }
+  const decision = decideTrial({
+    honest_succeeded: env.honestSucceeded,
+    tx_succeeded: settled.succeeded,
+    tx_error: settled.error,
+    effects,
+    matched_effects: effects.filter((effect) => isMintAny(effect, spec.policy)),
+    view_committed: viewCommitted,
+    violations,
+    verifier_path: verifierPath,
+    view_read_failure: viewReadFailure,
+    rule_error: singleUse.error || (preludeUncorroborated ? "PRELUDE_EFFECT_NOT_STATE_CORROBORATED" : null),
+  });
 
   return jsonSafe({
     ...trial,
-    result,
-    reason,
+    result: decision.result,
+    reason: decision.reason,
     verifier_accepted_preflight: va.accepted,
     verifier_checks_preflight: va.results,
     verifier_on_mutated_path: verifierPath,
@@ -900,7 +953,9 @@ async function runTrial(env, trial) {
       protected_committed: viewCommitted,
     },
     value_at_risk: valueAtRisk,
-    authorization_key: authKey,
+    authorization_key: Object.values(singleUse.authorization_keys).length === 1
+      ? Object.values(singleUse.authorization_keys)[0] : null,
+    authorization_keys: singleUse.authorization_keys,
     events: settled.receipt ? settled.receipt.logs.map((l) => ({ address: l.address, topics: l.topics, data: l.data })) : [],
     state_diff: stateDiff,
   });
@@ -1153,6 +1208,7 @@ async function main() {
     honestResolver.signer(scenario.honest_tx.from),
     scenario.honest_tx.value ? honestResolver.resolve(scenario.honest_tx.value) : null
   );
+  env.honestSucceeded = honestSettled.succeeded;
   const honestViewAfter = await readStateViews(honestDeploy.deployments, scenario, honestResolver);
   try {
     env.honestViewDeltas = diffViews(honestViewBefore, honestViewAfter, scenario.state_views || [], spec.policy);
@@ -1229,6 +1285,9 @@ module.exports = {
   FIELD_R,
   extractEffects,
   evaluatePolicy,
+  attributeEffects,
+  singleUseReplays,
+  decideTrial,
   matchesObligation,
   obligationCount,
   obligationCounts,
