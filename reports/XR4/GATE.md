@@ -1,0 +1,63 @@
+# XR4 — narrow F4 oracle gate
+
+**Status:** DONE (read-only source review); **S5 oracle gate blocked**.
+
+**AI disclosure:** OpenAI Codex, GPT-6 family (exact serving model ID unavailable) performed this AI source review. The finding is a source-level counterexample and in-memory helper result, not an EVM trial or independent human policy annotation. An author must inspect the policy and code before using any E4 claim.
+
+## Scope and provenance
+
+Reviewed only `git diff 726938f -- oracle/ tests/oracle/` at `e40e6d5a34a8a837c63bb6efd615484677a45039`, against the controlling research contract and the recorded XR3/F4 evidence. The diff changes five files (459 insertions, 56 deletions). The driver SHA-256 is `07131fb34663c1021f721c2f96c87f6f6e09e53a436ff522485c03ab6dc2d08a`, matching F4; the runner and test hashes also match F4 (`27395f6f429feca0cb8e860014957d4894d8b5e12d30676e48919317b501b269`, `cda698d61ade32a26d0beb83f15eee2c0c72400eb37fba8bc1a2384df01ebf1e`). Python 3.12.12, pytest 9.0.1, Node v24.19.0. The worktree was clean before this report.
+
+`PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' python3 -m pytest tests/oracle -q` exited **0: 36 passed in 2.93 s**. The two environment variables suppressed test cache and bytecode writes outside `reports/XR4/`. No Anvil run was attempted. F4's recorded reviewer EVM evidence reports a B-only mixed-rule `NOT_CONFIRMED` on F4, a genuine A replay `E4-CONFIRMED`, and 18 re-confirmation manifests. Those receipts are absent here (`results/raw/F4/` does not exist); this review treats them as recorded evidence, not independently reproduced EVM results. The supplied F4 fixture uses distinct rule IDs, so its EVM control does not exercise the finding below.
+
+## Answers to the five review questions
+
+1. **XR3-01 is closed only when protected-effect rule IDs are unique.** `attributeEffects` matches each effect to one rule and resolves that rule's `key_pub` (`oracle/evm_runner.cjs:369-389`); `singleUseReplays` requires the same rule ID and canonical key in the prelude and mutation (`:392-411`). But a rule-ID collision makes B's effect count as A's effect; `evaluatePolicy` then applies the replay to A (`:324-331`). There is no uniqueness check in `oracle/runner.py:215-244`. See XR4-01.
+2. **The `decideTrial` extraction did not remove an existing gate or create another permissive ordering path.** The previous reverted/no-effect/no-violation/corroboration/verifier sequence appears at `oracle/evm_runner.cjs:681-700`. F4 adds earlier fail-closed honest-success, view-read, rule-error, and attribution checks at `:677-680`. A failed view read formerly returned `UNKNOWN` directly from `runTrial`; it now reaches `decideTrial` as `view_read_failure` and still returns `UNKNOWN` (`:829-837,919-930`). The collision in answer 1 is in the new rule association, not the moved verdict ordering.
+3. **`runTrial` supplies the observations the final gate reads.** `env.honestSucceeded` is set from the honest transaction (`:1204-1211`); `runTrial` passes it, mutated success/error, extracted effects, protected matches, view commitment, policy violations, verifier-path result, view failure, and rule error (`:919-930`). Corroboration is attached to matching mutated effects (`:853-862`). Missing `matched_effects` fails closed in `decideTrial` (`:680`); absent corroboration on a matched effect fails closed (`:686-692`). The missing input validation is **unique rule identity**, which is not represented in the `rule_error` value.
+4. **Two independent in-memory reversion spot-checks failed the corresponding assertions as F4 claims.** Removing the honest-success branch made a failed honest observation return `E4-CONFIRMED`, contradicting `tests/oracle/test_oracle_gates.py:381-382`. Replacing per-rule prior/current filtering with all attributed effects made a B-only prelude and mutation produce a `single_A` replay, contradicting `:335-353`. Both checks exited 0 after detecting the expected assertion failures. They compile modified source only in memory; they are not a rerun of F4's missing scratch-copy pytest log or an EVM receipt.
+5. **Yes: XR4-01 is an F4 ID-association path to a false E4 for a project-authored policy with colliding IDs.** No other new false-E4 path was established within this diff and the declared standard-token model. The recorded F4 EVM matrix does not cover ID collisions.
+
+## XR4-01 — High — Colliding rule IDs revive the unrelated single-use violation
+
+**Files:** `oracle/evm_runner.cjs:324-331,369-411,869-891,919-930`; `oracle/runner.py:215-244`.
+
+Take disjoint protected rules A (`single_use`, `contract_role: a`) and B (repeatable, `contract_role: b`), but give both `id: "shared"`. A project's held-out manifest/policy can express this because `_validate_manifest` checks safety flags and forbidden verdict phrases, but does not reject duplicate protected-effect IDs. A successful honest prelude and `REPLAY` can each commit a real, state-corroborated B mint while A never fires. Attribution correctly chooses B by effect match but stores only its non-unique ID and `authorization_key: null`. `singleUseReplays` compares entries by ID and null key, then reports a replay for A. `evaluatePolicy` adds A's `single_use_exceeded`; with an established mutated verifier path, `decideTrial` reaches `E4-CONFIRMED` although the policy permits repeating B. The ambiguous-effect check does not help because each B effect matches only B's rule.
+
+The focused helper call on the unchanged driver exited 0 and returned `replays:[{"rule":"shared","authorization_key":null}]`, one `single_use_exceeded` for `shared` with null key, and `E4-CONFIRMED`. An in-memory `_validate_manifest` call with the same duplicate IDs exited 0 and returned `duplicate_ids_accepted=True`. This demonstrates the source path and accepted policy shape; a full EVM transaction with colliding IDs was not run. **Confidence:** high for the source-level false verdict; conditional on a project-authored held-out policy with non-unique IDs and an otherwise successful, state-corroborated B replay and verifier trace. Existing F4 fixtures are not claimed affected.
+
+## Evidence commands and observations
+
+The exact review command was `git diff 726938f -- oracle/ tests/oracle/` (exit 0). `git status --short --branch` showed `## sprint/XR4...origin/main` before writing. `sha256sum oracle/evm_runner.cjs oracle/runner.py tests/oracle/test_oracle_gates.py tests/oracle/f4_mixed_rules.manifest.json tests/oracle/f4_mixed_rules.policy.json` exited 0 and matched the five F4 hashes. The full-suite command and result appear above.
+
+The focused Node counterexample used the unchanged module and this exact JavaScript expression (run with `ORACLE_ETHERS_PATH=/home/pollmix/Coding/bc/wt-XR4/results/raw/F3/.driver/node_modules/ethers node -e '<expression>'`):
+
+```js
+const m=require("./oracle/evm_runner.cjs"); const z="0x0000000000000000000000000000000000000000"; const p={protected_effects:[{id:"shared",match:{type:"erc20_transfer",from:"0x0",contract_role:"a"},single_use:{key_pub:{proof:"cred",index:0}}},{id:"shared",match:{type:"erc20_transfer",from:"0x0",contract_role:"b"}}]}; const e={kind:"erc20_transfer",from:z,contract_role:"b",state_corroboration:{corroborated:true}}; (async()=>{const s=m.singleUseReplays(p,[e],[e],{cred:["7"]}); const v=await m.evaluatePolicy(p,[e],{single_use_replays:s.replays},{resolve:x=>x},{}); const d=m.decideTrial({honest_succeeded:true,tx_succeeded:true,effects:[e],matched_effects:[e],view_committed:false,violations:v,verifier_path:{established:true},rule_error:s.error}); console.log(JSON.stringify({replays:s.replays,violations:v,decision:d}));})().catch(e=>{console.error(e);process.exitCode=1})
+```
+
+The policy acceptance probe used:
+
+```sh
+PYTHONDONTWRITEBYTECODE=1 python3 -c 'from pathlib import Path; from oracle import runner; p={"protected_effects":[{"id":"shared","match":{"contract_role":"a"},"single_use":{"key_pub":{"proof":"cred","index":0}}},{"id":"shared","match":{"contract_role":"b"}}]}; runner._json=lambda _: p; m={"schema_version":1,"safety":{"local_only":True,"fork_enabled":False},"variants":[{}],"policy":"unused.json"}; print("duplicate_ids_accepted=" + str(runner._validate_manifest(m, Path("tests/oracle/f4_mixed_rules.manifest.json")) is p))'
+```
+
+For the two reversion probes, `node -e` read the driver with `fs.readFileSync`, replaced only `if (!honest_succeeded) return ...` for the first probe and the `before.attributed.filter(...rule.id)` / `after.attributed.filter(...rule.id)` pair with unfiltered attribution for the second, then used `Module._compile` in memory. The first test-equivalent `assert.strictEqual(result,"UNKNOWN")` failed because the result was `E4-CONFIRMED`. The second test-equivalent `assert.deepStrictEqual(replays,[])` failed because the replays array contained `single_A` with a null key. The probe process exited 0 after verifying that both assertions failed as expected; no source or test file changed.
+
+Exact in-memory reversion command:
+
+```sh
+ORACLE_ETHERS_PATH=/home/pollmix/Coding/bc/wt-XR4/results/raw/F3/.driver/node_modules/ethers node -e 'const fs=require("fs"),Module=require("module"),path=require("path"),assert=require("assert");const filename=path.resolve("oracle/evm_runner.cjs"),source=fs.readFileSync(filename,"utf8");function load(s){const mod=new Module(filename,module);mod.filename=filename;mod.paths=Module._nodeModulePaths(path.dirname(filename));mod._compile(s,filename);return mod.exports}const honestSource=source.replace("if (!honest_succeeded) return { result: \"UNKNOWN\", reason: \"HONEST_TX_FAILED\" };","");assert.notStrictEqual(honestSource,source);const h=load(honestSource).decideTrial({honest_succeeded:false,tx_succeeded:true,effects:[{state_corroboration:{corroborated:true}}],matched_effects:[{state_corroboration:{corroborated:true}}],view_committed:false,violations:[{type:"entitlement_mismatch"}],verifier_path:{established:true}});let honestTestFailed=false;try{assert.strictEqual(h.result,"UNKNOWN")}catch(e){honestTestFailed=true}const old="const prior = before.attributed.filter((entry) => entry.rule === rule.id);\n    const current = after.attributed.filter((entry) => entry.rule === rule.id);";const replaySource=source.replace(old,"const prior = before.attributed;\n    const current = after.attributed;");assert.notStrictEqual(replaySource,source);const m=load(replaySource),z="0x0000000000000000000000000000000000000000",p={protected_effects:[{id:"single_A",match:{type:"erc20_transfer",from:"0x0",contract_role:"a"},single_use:{key_pub:{proof:"cred",index:0}}},{id:"repeatable_B",match:{type:"erc20_transfer",from:"0x0",contract_role:"b"}}]},e={kind:"erc20_transfer",from:z,contract_role:"b",state_corroboration:{corroborated:true}},replay=m.singleUseReplays(p,[e],[e],{cred:["7"]});let replayTestFailed=false;try{assert.deepStrictEqual(replay.replays,[])}catch(e){replayTestFailed=true}console.log(JSON.stringify({honest_gate_reversion:{decision:h.result,assertion_failed:honestTestFailed},rule_binding_reversion:{replays:replay.replays,assertion_failed:replayTestFailed}}));if(!honestTestFailed||!replayTestFailed)process.exitCode=1'
+```
+
+One setup attempt with a **relative** `ORACLE_ETHERS_PATH` exited 1 (`Cannot find module`); rerunning with the absolute pinned path above succeeded. No network access, dependency installation, live system, fork, broadcast, code edit, or held-out case was involved.
+
+## Out of scope / minor
+
+XR-08 and earlier closed findings were not reopened; the README's top-level revision-3 prose trails the current revision-4 research contract, outside this F4 diff.
+
+## Gate and handoff
+
+**ORACLE BLOCKED: XR4-01**
+
+Only `reports/XR4/GATE.md` changed. No raw receipt was produced; the focused result and limitations are recorded above. **Recommended next bounded task:** reject missing or duplicate protected-effect rule IDs before oracle execution (or use unambiguous rule positions throughout replay accounting), then add a collision negative control. Completion criterion: B-only replay with colliding IDs is rejected as `UNKNOWN` or at manifest validation, unique-ID B-only replay remains `NOT_CONFIRMED`, genuine A replay remains `E4-CONFIRMED`, and `tests/oracle` plus a fresh owned-local EVM control pass. Re-review the oracle before S5 E4 counting.
