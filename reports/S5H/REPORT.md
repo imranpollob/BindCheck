@@ -68,3 +68,14 @@ Result: `python3 -m unittest discover -s tests/s5h` 21 passed; `tests/s5h/revert
 | S5R-04 warning sources lost | `capture_warning_sources` runs before the checkout is deleted; result carries `warning_sources` | `test_s5r04_warning_sources_captured_before_checkout_deleted` |
 
 Checks: `python3 -m unittest discover -s tests/s5h` (Ran 29 tests, OK); `tests/s5h/revert_proof.py` 23/23 DETECTED; analyzer files identical to `freeze-3`. S5R minor (prebuild BUILT if any entry circuit builds) left as recorded behavior from freeze 2.
+
+## Fixes for the S5R re-check residuals (orchestrator, 2026-11-19)
+
+| Residual | Fix | Test (revert-proven) |
+|---|---|---|
+| S5R-01 caller-supplied pairs | `allows_pair` re-reads the hash-pinned manifest at use time and also requires the pair to be in the permit | `test_s5r01_forged_pair_not_in_pinned_manifest_refused`, `test_s5r01_manifest_pair_outside_permit_refused` |
+| S5R-02 interrupted attempts | `INTERRUPTED_ATTEMPT`, `UNNORMALIZED_ATTEMPT` → `HARNESS_ERROR`; any non-completed analyzer result without its own raw output → `HARNESS_ERROR` | `test_s5r02_interrupted_attempts_are_harness_errors`, `test_s5r02_incomplete_result_without_raw_output_is_harness_error` |
+| S5R-03 seal and resume | seal covers every `eval/*.py`, `baselines/strong/*.py` and the guard (including `run_arm_c.py`, `adjudicate.py`); each result records `gate_sha256`; resume refuses a result from another gate or with an invalid status | `test_s5r03_seal_covers_comparison_arms_and_adjudicator`, `test_s5r03_resume_from_other_gate_refused`, `test_s5r03_resume_with_invalid_status_refused` |
+| S5R-04 family.json and completeness | `family.json` (with verifier paths) written before tools run; capture completeness recorded; any non-`COPIED` source marks the unit `source_capture: INCOMPLETE` (quarantined and counted in the funnel) | `test_s5r04_real_capture_retains_verifier_source_via_family_json` (real capture, verifier reachable only through family.json), `test_s5r04_missing_source_is_quarantined` |
+
+Checks: Ran 38 tests OK; revert proof 28/28 DETECTED; analyzer files identical to `freeze-3`.

@@ -349,8 +349,14 @@ class S5RFindingTests(unittest.TestCase):
 
     def test_s5r02_genuine_analyzer_fatal_stays_unsupported(self) -> None:
         result, _ = self._run({"reasons": ["UNSUPPORTED_INPUT"], "run_status": "UNKNOWN",
-                               "fatal_reason": "UNSUPPORTED_INPUT", "patterns": {}}, None)
+                               "fatal_reason": "UNSUPPORTED_INPUT", "patterns": {}},
+                              json.dumps({"run": {"fatal_reason": "UNSUPPORTED_INPUT"}}))
         self.assertEqual(result["status"], "UNSUPPORTED")
+
+    def test_s5r02_incomplete_result_without_raw_output_is_harness_error(self) -> None:
+        result, _ = self._run({"reasons": ["SOMETHING"], "run_status": "UNKNOWN",
+                               "fatal_reason": "SOMETHING", "patterns": {}}, None)
+        self.assertEqual(result["status"], "HARNESS_ERROR")
 
     def test_s5r04_warning_sources_captured_before_checkout_deleted(self) -> None:
         result, capture = self._run({"reasons": [], "run_status": "completed", "patterns": {"P1": {}}},
@@ -358,3 +364,102 @@ class S5RFindingTests(unittest.TestCase):
         self.assertEqual(result["status"], "ANALYZABLE")
         capture.assert_called_once()
         self.assertEqual(result["warning_sources"], {"files": 1})
+
+
+
+class S5RRecheckTests(unittest.TestCase):
+    """Regressions for the S5R re-check residuals."""
+
+    def setUp(self) -> None:
+        self.rows = reserve.read_csv(reserve.ROOT / reserve.MANIFEST)
+        self.unit = dict(self.rows[0])
+        self.temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temporary.cleanup)
+        self.output = pathlib.Path(self.temporary.name)
+
+    def test_s5r01_forged_pair_not_in_pinned_manifest_refused(self) -> None:
+        forged = (reserve.norm(self.unit["repository"]), "f" * 40)
+        permit = reserve.ReservePermit(reserve.ROOT, frozenset({forged[0]}), {}, frozenset({forged}))
+        with mock.patch.object(reserve.ReservePermit, "allows", return_value=True):
+            self.assertFalse(permit.allows_pair(self.unit["repository"], "f" * 40))
+
+    def test_s5r01_manifest_pair_outside_permit_refused(self) -> None:
+        # A real manifest pair that this permit was not issued for is refused.
+        other = self.rows[1]
+        permit = reserve.ReservePermit(
+            reserve.ROOT, frozenset({reserve.norm(self.unit["repository"]), reserve.norm(other["repository"])}), {},
+            frozenset({(reserve.norm(self.unit["repository"]), self.unit["commit"].lower())}))
+        with mock.patch.object(reserve.ReservePermit, "allows", return_value=True):
+            self.assertTrue(permit.allows_pair(self.unit["repository"], self.unit["commit"]))
+            self.assertFalse(permit.allows_pair(other["repository"], other["commit"]))
+
+    def test_s5r02_interrupted_attempts_are_harness_errors(self) -> None:
+        self.assertTrue({"INTERRUPTED_ATTEMPT", "UNNORMALIZED_ATTEMPT"} <= reserve.HARNESS_FAILURE_REASONS)
+
+    def test_s5r03_seal_covers_comparison_arms_and_adjudicator(self) -> None:
+        sealed = reserve.harness_files(reserve.ROOT)
+        for name in ("eval/run_arm_c.py", "eval/adjudicate.py", "baselines/strong/arm_c.py",
+                     *reserve.HARNESS_FILES):
+            self.assertIn(name, sealed)
+
+    def test_s5r03_resume_from_other_gate_refused(self) -> None:
+        units = self.rows[:1]
+        reserve.run_units(units, lambda u: {"status": "UNSUPPORTED", "reason": "X"}, self.output, "gate-a")
+        with self.assertRaisesRegex(reserve.EvaluationError, "not produced under this gate"):
+            reserve.run_units(units, lambda u: {"status": "ANALYZABLE"}, self.output, "gate-b")
+        again = reserve.run_units(units, lambda u: {"status": "ANALYZABLE"}, self.output, "gate-a")
+        self.assertEqual(again[0]["status"], "UNSUPPORTED")
+
+    def test_s5r03_resume_with_invalid_status_refused(self) -> None:
+        units = self.rows[:1]
+        path = self.output / "units" / units[0]["unit_id"] / "result.json"
+        path.parent.mkdir(parents=True)
+        path.write_text(json.dumps({"repository": units[0]["repository"], "commit": units[0]["commit"],
+                                    "status": "MADE_UP", "gate_sha256": "gate-a"}))
+        with self.assertRaisesRegex(reserve.EvaluationError, "not produced under this gate"):
+            reserve.run_units(units, lambda u: {"status": "ANALYZABLE"}, self.output, "gate-a")
+
+    def _analyzable(self, verifier_present: bool):
+        checkout_files = {}
+        verifier = "contracts/Verifier.sol"
+        consumer = "contracts/Pool.sol"
+        unit = dict(self.unit, verifier_paths=verifier)
+        def fake_acquire(unit_arg, unit_dir, checkout):
+            checkout.mkdir(parents=True, exist_ok=True)
+            (checkout / "contracts").mkdir()
+            (checkout / consumer).write_text("contract Pool {}\n")
+            if verifier_present:
+                (checkout / verifier).write_text("contract Verifier {}\n")
+            return {"status": "ready"}
+        def fake_tool(tool, checkout, family_dir):
+            if tool == "bindcheck-zk":
+                (family_dir / "bindcheck-zk-raw.json").write_text(json.dumps({"triples": [{}]}))
+                return {"reasons": [], "run_status": "completed", "patterns": {}}
+            if tool == "arm-c":
+                (family_dir / "arm-c-raw.json").write_text(json.dumps(
+                    {"run": {"status": "completed"},
+                     "result": {"findings": [{"location": {"path": consumer}}]}}))
+            return {"raw_result": None}
+        with (mock.patch.object(reserve, "authorized_repository", return_value=True),
+              mock.patch.object(reserve, "acquire_once", side_effect=fake_acquire),
+              mock.patch.object(reserve, "prepare_pinned_vendor"),
+              mock.patch.object(reserve, "prebuild_checkout", return_value={"status": "BUILT"}),
+              mock.patch.object(reserve, "run_tool_once", side_effect=fake_tool)):
+            return reserve.run_unit(unit, self.output, pathlib.Path("/unused"), mock.Mock())
+
+    def test_s5r04_real_capture_retains_verifier_source_via_family_json(self) -> None:
+        result = self._analyzable(verifier_present=True)
+        self.assertEqual(result["status"], "ANALYZABLE")
+        self.assertEqual(result["source_capture"], "COMPLETE")
+        by_path = {item["source_path"]: item for item in result["warning_sources"]["sources"]}
+        # The verifier is reachable only through family.json (the finding is in the consumer).
+        self.assertEqual(sorted(by_path), ["contracts/Pool.sol", "contracts/Verifier.sol"])
+        self.assertEqual({item["status"] for item in by_path.values()}, {"COPIED"})
+        retained = self.output / "units" / self.unit["unit_id"] / by_path["contracts/Verifier.sol"]["retained_path"]
+        self.assertTrue(retained.is_file())
+        self.assertFalse((self.output / "work" / self.unit["unit_id"]).exists())
+
+    def test_s5r04_missing_source_is_quarantined(self) -> None:
+        result = self._analyzable(verifier_present=False)
+        self.assertEqual(result["source_capture"], "INCOMPLETE")
+        self.assertIn("MISSING", result["source_capture_problems"])
