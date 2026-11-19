@@ -1158,6 +1158,7 @@ function writeReplayBundle(spec, trial) {
 
 async function main() {
   const spec = readJson(process.env.ORACLE_DRIVER_SPEC);
+  assertUniqueRuleIds(spec.policy || {});
   const provider = new ethers.JsonRpcProvider(
     process.env.ORACLE_RPC_URL,
     undefined,
@@ -1281,6 +1282,22 @@ if (require.main === module) {
   });
 }
 
+// XR4-01: rule-keyed replay and obligation accounting needs one non-empty,
+// policy-wide unique id per rule. Refuse to run otherwise (fail closed).
+function assertUniqueRuleIds(policy) {
+  const seen = new Map();
+  for (const listName of ["protected_effects", "required_obligations", "protected_view_effects", "view_obligations"]) {
+    const rules = policy[listName] || [];
+    if (!Array.isArray(rules)) throw new Error(`POLICY_RULE_IDS_INVALID: ${listName} is not a list`);
+    rules.forEach((rule, index) => {
+      const id = rule && rule.id;
+      if (typeof id !== "string" || id.trim() === "") throw new Error(`POLICY_RULE_IDS_INVALID: ${listName}[${index}] has no id`);
+      if (seen.has(id)) throw new Error(`POLICY_RULE_IDS_INVALID: id ${JSON.stringify(id)} used by ${seen.get(id)} and ${listName}[${index}]`);
+      seen.set(id, `${listName}[${index}]`);
+    });
+  }
+}
+
 module.exports = {
   FIELD_R,
   extractEffects,
@@ -1298,4 +1315,5 @@ module.exports = {
   diffViews,
   protectedViewCommitted,
   evaluateViewObligations,
+  assertUniqueRuleIds,
 };

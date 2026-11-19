@@ -209,6 +209,29 @@ def _wait_local_rpc(port: int, process: subprocess.Popen, timeout: float = 20.0)
     raise OracleError("local Anvil RPC did not become ready")
 
 
+POLICY_RULE_LISTS = ("protected_effects", "required_obligations", "protected_view_effects", "view_obligations")
+
+
+def _check_rule_ids(policy: dict[str, Any]) -> None:
+    """XR4-01: replay and obligation accounting are keyed by rule id, so every
+    rule needs a non-empty id that is unique across the whole policy. Fail
+    closed before execution rather than let two rules share an attribution."""
+    seen: dict[str, str] = {}
+    for list_name in POLICY_RULE_LISTS:
+        rules = policy.get(list_name, [])
+        if not isinstance(rules, list):
+            raise OracleError(f"policy {list_name} must be a list")
+        for index, rule in enumerate(rules):
+            rule_id = rule.get("id") if isinstance(rule, dict) else None
+            if not isinstance(rule_id, str) or not rule_id.strip():
+                raise OracleError(f"policy {list_name}[{index}] has no rule id")
+            if rule_id in seen:
+                raise OracleError(
+                    f"policy rule id {rule_id!r} is used by both {seen[rule_id]} and {list_name}[{index}]"
+                )
+            seen[rule_id] = f"{list_name}[{index}]"
+
+
 def _validate_manifest(manifest: dict[str, Any], path: Path) -> dict[str, Any]:
     if manifest.get("schema_version") != 1:
         raise OracleError("unsupported manifest schema_version")
@@ -235,6 +258,7 @@ def _validate_manifest(manifest: dict[str, Any], path: Path) -> dict[str, Any]:
                 check_keys(item)
 
     check_keys(policy)
+    _check_rule_ids(policy)
     serialized = json.dumps(policy).lower()
     for phrase in FORBIDDEN_POLICY_PHRASES:
         if phrase in serialized:

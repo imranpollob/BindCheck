@@ -392,3 +392,68 @@ def test_f4_mixed_rules_manifest_validates():
 def test_f4_output_namespace_is_owned():
     path = ROOT / "results/raw/F4/reviewer-mixed-rules"
     assert runner._owned_output(path) == path.resolve()
+
+
+# ---------------------------------------------------------------------------
+# XR4-01: rule ids must be present and unique policy-wide (fail closed)
+# ---------------------------------------------------------------------------
+
+def _xr4_policy(second_id):
+    return {
+        "policy_id": "x",
+        "protected_effects": [
+            {"id": "shared", "match": {"type": "erc20_transfer", "contract_role": "a"},
+             "single_use": {"key_pub": {"proof": "cred", "index": 0}}},
+            {"id": second_id, "match": {"type": "erc20_transfer", "contract_role": "b"}},
+        ],
+    }
+
+
+def test_xr4_01_duplicate_rule_ids_rejected_before_execution(tmp_path):
+    mp = _write(tmp_path, BASE_MANIFEST, _xr4_policy("shared"))
+    with pytest.raises(runner.OracleError, match="used by both"):
+        runner._validate_manifest(runner._json(mp), mp)
+
+
+def test_xr4_01_duplicate_ids_across_rule_lists_rejected(tmp_path):
+    pol = {"policy_id": "x",
+           "protected_effects": [{"id": "dup", "match": {"type": "erc20_transfer"}}],
+           "required_obligations": [{"id": "dup", "match": {"type": "erc20_transfer"}}]}
+    mp = _write(tmp_path, BASE_MANIFEST, pol)
+    with pytest.raises(runner.OracleError, match="used by both"):
+        runner._validate_manifest(runner._json(mp), mp)
+
+
+@pytest.mark.parametrize("bad_id", [None, "", "  "])
+def test_xr4_01_missing_rule_id_rejected(tmp_path, bad_id):
+    pol = _xr4_policy("b")
+    if bad_id is None:
+        del pol["protected_effects"][1]["id"]
+    else:
+        pol["protected_effects"][1]["id"] = bad_id
+    mp = _write(tmp_path, BASE_MANIFEST, pol)
+    with pytest.raises(runner.OracleError, match="no rule id"):
+        runner._validate_manifest(runner._json(mp), mp)
+
+
+def test_xr4_01_distinct_ids_accepted(tmp_path):
+    mp = _write(tmp_path, BASE_MANIFEST, _xr4_policy("b"))
+    assert len(runner._validate_manifest(runner._json(mp), mp)["protected_effects"]) == 2
+
+
+def test_xr4_01_every_committed_policy_has_unique_ids():
+    paths = sorted((ROOT / "tests/oracle").glob("*.manifest.json")) + sorted((ROOT / "oracle/cases").glob("*/manifest.json"))
+    assert paths
+    for path in paths:
+        runner._validate_manifest(runner._json(path), path)
+
+
+def test_xr4_01_driver_refuses_duplicate_ids():
+    pol = json.dumps(_xr4_policy("shared"))
+    out = _node(
+        f"(()=>{{try{{m.assertUniqueRuleIds({pol});return 'accepted'}}"
+        f"catch(e){{return String(e.message)}}}})()"
+    )
+    assert out.startswith("POLICY_RULE_IDS_INVALID")
+    ok = json.dumps(_xr4_policy("b"))
+    assert _node(f"(()=>{{m.assertUniqueRuleIds({ok});return 'accepted'}})()") == "accepted"
