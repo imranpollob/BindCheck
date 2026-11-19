@@ -73,9 +73,12 @@ were audited is unknown. The labels are ours and await author review
 
 \para{This paper.}
 We make binding a checkable property and build a checker around it. The
-property (\S\ref{sec:threat}) has a one-sentence form: \emph{the same proof
-and public inputs, applied to the same state, must produce the same protected
-effects, and only as often as the policy permits}. Formally, every protected
+property (\S\ref{sec:threat}) has a one-sentence form: \emph{every protected
+effect a successful transition commits must be permitted by the policy, and
+every obligation the accepted public inputs create must be discharged or
+deliberately deferred under that policy}. The policy, not the observed
+execution, decides which behaviours are legitimate, so deferral and delegation
+are not flagged by construction. Formally, every protected
 effect a successful transition commits must be matched by a distinct
 permission derived from the accepted public inputs (authorization), and every
 obligation the accepted transition creates must be discharged (coverage).
