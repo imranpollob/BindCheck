@@ -528,3 +528,35 @@ class S5RRecheck2Tests(unittest.TestCase):
             reserve.claim_start(self.root, fresh=False)
         reserve.claim_start(self.root, fresh=True)
         reserve.claim_start(self.root, fresh=False)
+
+
+class S5RRecheck3Tests(S5RRecheck2Tests):
+    """Crash-window recovery (S5R re-check 3): recoverable without repeating a unit."""
+
+    def test_crash_after_marker_before_gate_can_continue_when_nothing_ran(self) -> None:
+        self.make_repo()
+        output = self.root / "out"
+        reserve.claim_start(self.root, fresh=True, output=output)
+        # Crash: no gate file, no results. A fresh invocation may continue.
+        reserve.claim_start(self.root, fresh=True, output=output)
+
+    def test_marker_with_existing_ledger_but_no_gate_refused(self) -> None:
+        self.make_repo()
+        output = self.root / "out"
+        reserve.claim_start(self.root, fresh=True, output=output)
+        output.mkdir()
+        (output / reserve.LEDGER).write_text('{"result_sha256": "x", "unit_id": "reserve-0001"}\n')
+        with self.assertRaisesRegex(reserve.GateError, "already started"):
+            reserve.claim_start(self.root, fresh=True, output=output)
+
+    def test_crash_after_result_before_ledger_is_recovered_visibly(self) -> None:
+        units = reserve.read_csv(reserve.ROOT / reserve.MANIFEST)[:1]
+        output = self.root / "out"
+        reserve.run_units(units, lambda u: {"status": "UNSUPPORTED", "reason": "X"}, output, "gate-a")
+        (output / reserve.LEDGER).write_text("")  # simulate the crash before the ledger line
+        calls = []
+        records = reserve.run_units(units, lambda u: calls.append(u) or {"status": "ANALYZABLE"}, output, "gate-a")
+        self.assertEqual(calls, [])  # the completed unit is not run again
+        self.assertEqual(records[0]["status"], "UNSUPPORTED")
+        entry = json.loads((output / reserve.LEDGER).read_text().splitlines()[0])
+        self.assertTrue(entry["recovered"])
