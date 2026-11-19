@@ -1,6 +1,6 @@
 # S5 held-out v3 protocol — DRAFT (not approved, not run)
 
-Status: DRAFT prepared 2026-11-19 in response to the EuroS&P reviewer assessment
+Status: APPROVED by the author 2026-11-19 (frozen; see Approval). Originally drafted 2026-11-19 in response to the EuroS&P reviewer assessment
 (`bindcheck-eurosp-review-2026-11-19.md`). Nothing here authorises a run. The
 author must resolve every item marked **DECISION** before the run. Once approved
 and committed, this protocol is frozen and is not edited after the run starts.
@@ -95,5 +95,5 @@ their labels.
 
 ## Approval
 
-Protocol approved by the author on: ______ (blank)
-Commit of approved protocol: ______ (blank)
+Protocol approved by the author on: 2026-11-19 (chat approval, author's words: "i approve")
+Frozen at the commit that adds this approval; that commit hash is recorded in `docs/orchestration/DECISIONS.md` (entry dated 2026-11-19).
