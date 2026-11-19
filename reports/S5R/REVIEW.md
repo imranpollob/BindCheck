@@ -99,3 +99,20 @@ HARNESS BLOCKED: S5R-03
 **Next measurable task:** Make start/gate creation and result/ledger persistence recoverable after interruption without rerunning a completed unit; anchor per-unit attempt/result hashes in an independent append-only record before accepting a resume; and provide an externally checkable unique run-start event rather than a ref pointing only at the same commit. Offline tests must cover both crash intervals, removal of one recorded unit plus its local ledger line, and deletion/recreation of the local start ref. This AI-assisted review requires author inspection before research use.
 
 HARNESS BLOCKED: S5R-03
+
+## Re-check 4
+
+**Scope and status (2026-11-19):** Reviewed only `git diff 7ba2bba HEAD -- eval/ tests/s5h/` at S5R HEAD `a166641857310efcebb8711754a927dedce6bc7f`, incorporating S5H commit `c4c04c7`. This narrow review covers the two crash windows from Re-check 3 under normal, non-adversarial operator behavior. The earlier gate lines remain historical. No reserve repository was opened and no reserve evaluation was run.
+
+1. **Start marker before gate file — CLOSED.** When `refs/s5/started` already points to the same HEAD but `reserve-gate.json` is absent, `claim_start` proceeds only if there is no ledger and no per-unit `result.json` (`eval/reserve.py:183-207,358-370`). In the specified interruption window, unit execution has not begun; the next invocation can write the gate and start without repeating a completed unit. A marker at another commit or a visible ledger/result still refuses. The new real-Git test exercises the same-HEAD recovery and the refusal with an existing ledger.
+2. **Result before ledger line — CLOSED.** On resume, `run_units` validates the existing result's repository, commit, gate hash, and funnel status, then appends a ledger entry with `recovered: true` if that unit has no ledger line (`eval/reserve.py:235-253`). It does not call the runner for that unit (`eval/reserve.py:254-269`). The new test verifies both the no-rerun behavior and the visible recovery marker. A conflicting existing ledger digest still refuses. Within the stated interruption window, this does not open a new normal-operation contamination, bypass, drop, or repeat path.
+
+**New-path check:** No new contamination, bypass, drop, or repeat path was identified in these two changes under the delegated normal-operator scope. Deliberate rewriting of local evidence is outside this code review's scope as expressly delegated; the earlier discussion remains historical and is not part of this gate.
+
+**Procedure clarity:** `reports/S5/PREREG.md:70-90` states the pre-run annotated tag, nonce/time, ref push and decision log, the final ledger/funnel hashes, and disclosure of interruptions and recoveries clearly enough for the operator to follow; those steps still have to be performed and recorded.
+
+**Commands and observed results:** `git diff 7ba2bba HEAD -- eval/ tests/s5h/` covers `eval/reserve.py` and two S5H test files; `git diff --check 7ba2bba HEAD -- eval/ tests/s5h/` exited 0. `PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests/s5h -v` exited 0: 51 tests passed in 4.039 s. `PYTHONDONTWRITEBYTECODE=1 python3 tests/s5h/revert_proof.py` exited 0: 34/34 probes detected. Python 3.12.12; Git 2.43.0. Reviewed `eval/reserve.py` SHA-256 `b586eda37962a322089747496b3e792024965a1cadaca1f04cdf08e52472345d`; preregistration SHA-256 `567d227533d99fe3914792827a4ebab8c8b7afad913c0dda5f38202edefb1b05`. The worktree was clean before this append. No code or prior evidence was edited.
+
+**Handoff:** S5R-03's two normal interruption residuals are closed. The next measurable task is the separately authorized run gate: verify and record the actual `s5-reserve-run` HEAD tag, frozen analyzer hash, manifest hash, author `AUTHORIZATION.json`, Circom digest, and the preregistered start record before any reserve output is read. This review is AI-assisted and requires author inspection before research use.
+
+HARNESS CLEAR FOR S5
