@@ -34,6 +34,10 @@ amendment, not an edit.
    `BUILD_FAILED`, with its reason.
 3. Run the frozen analyzer once per unit. Timeout is `HARNESS_TIMEOUT`. A unit
    with no recovered triple is `UNSUPPORTED` and is still counted.
+   Harness failures (crashes, interrupted or unnormalised analyzer attempts,
+   missing raw output) are `HARNESS_ERROR`, reported separately from
+   `UNSUPPORTED`. Units whose warning source could not be retained are flagged
+   `source_capture: INCOMPLETE` and counted.
 4. Warnings: each VIOLATION or P4 warning is written as a blind card (code,
    location, applicable rule) for the author's adjudication. Tool identity and
    confidence are hidden from the rater.
@@ -60,6 +64,28 @@ is reported separately. WarpToad is excluded and listed with its reason.
   `reports/S5/AUTHORIZATION.json` that names the author's approval.
 - Any unit whose (repository, commit) appears in the 278 spent set is refused.
 - No unit outside the manifest is opened.
+
+## One-shot integrity: threat model and procedural controls
+
+The harness (`eval/reserve.py`) refuses spent pairs, non-manifest pairs, a
+non-frozen analyzer, changed or deleted harness files, results from another
+gate, results that differ from the append-only ledger, and a second fresh start
+while `refs/s5/started` exists. Interruptions are recoverable without rerunning
+a completed unit; recovered ledger lines are marked `recovered: true`.
+
+**Out of scope:** deliberate rewriting of local evidence by the operator (for
+example, deleting the output tree, ledger lines and local start ref, then
+restarting). Code running on the operator's machine cannot prevent this. It is
+handled by procedure:
+
+1. Before the run, the reviewer creates an annotated tag `s5-started` whose
+   message records the UTC start time and a random nonce, and pushes it with
+   `refs/s5/started` to the shared remote; the start is logged in
+   `docs/orchestration/DECISIONS.md` and pushed before any analyzer output is read.
+2. At the end, the SHA-256 of `results/raw/S5/ledger.jsonl` and of
+   `funnel.json` are recorded in `DECISIONS.md` and pushed.
+3. Any restart, recovery (`recovered: true`) or interruption is disclosed in
+   the paper with its cause.
 
 ## Unresolved items (author)
 
