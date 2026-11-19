@@ -5,6 +5,14 @@ submission. It is a navigation aid, not an evidence source. The
 [research contract](research-contract.md), [README](../README.md), and linked
 task reports remain authoritative.
 
+**Current work sequence (2026-11-13):** follow the
+[research roadmap](research-roadmap-2026-11-13.md). The author has removed the
+November submission target. R00 (contract and evidence alignment) is next;
+technical novelty and independent capability remain UNKNOWN. The older branches
+and task narratives below preserve checkpoint-era status, including obsolete
+"EVAL unopened" and next-task labels; they are not current scheduling instructions.
+R00 will reconcile the prospective contract without relabeling historical runs.
+
 Status labels mean:
 
 - `[DONE]` — the bounded task is complete at its stated evidence level;
@@ -24,6 +32,15 @@ flowchart TD
     submit -->|"Requires"| contribution
     submit -->|"Requires"| manuscript["Paper package [WAITING]"]
     submit -.->|"Tracks"| tracking["Visual checkpoints [DONE]"]
+
+    contribution --> researchPlan["2026-11-13 research roadmap [DONE]"]
+    researchPlan --> r00["R00 contract + evidence alignment [NEXT]"]
+    r00 --> r01["R01 gap + natural feasibility [WAITING]"]
+    r01 --> r02["R02 formal property + vertical slice [WAITING]"]
+    r02 --> r03["R03 reliability + benchmark [WAITING]"]
+    r03 --> r04["R04 independent evaluation freeze [WAITING]"]
+    r04 --> r05["R05 comparison + real-proof validation [WAITING]"]
+    r05 --> r06["R06 paper + independent reproduction [WAITING]"]
 
     contribution --> foundation["Evidence foundation [DONE]"]
     contribution --> analysis["Analysis method [ACTIVE]"]
@@ -187,7 +204,10 @@ flowchart TD
     class contribution,primaryResult,generalResult,d103gate,d103recoveryresult,d1p06,d1p10result,d1p14bresult,d1p14cresult,d1p14dresult,d1p17result unknown
 ```
 
-## Immediate path
+## Historical task narrative
+
+The dated checkpoints below are retained as history. The current immediate
+task is R00 in the [2026-11-13 roadmap](research-roadmap-2026-11-13.md#5-immediate-execution-checklist).
 
 1. Done: the running-flag false positive and both `UNKNOWN` classes are explained in [T22 Section 3.2](../reports/T22.md).
 2. Done: the [T22-v3 rerun and audit](../reports/T22-v3.md), frozen before output, returns 4 `VIOLATION` and 5 `UNKNOWN` (4/9 expected outcomes matched). Seven synthetic regressions and four SAT replays pass; the running-flag probe false positive is fixed, but its full case remains unresolved. Prior evidence and compiled inputs are unchanged.
@@ -614,6 +634,7 @@ slots were executed.
 | 2026-10-30 | D1P-41 preliminary novelty ablation | `[DONE]` preliminary task / `[WAITING]` corrected-tool rerun / `[UNKNOWN]` capability and security | [Report](../reports/D1P-41-ablation-preliminary.md), [frozen examples](ablations/d1p-41-discriminating-examples.md), and [protocol](../protocols/d1/d1p-41-ablation-preliminary.json): mask unchanged v1.2 facts/outputs across producer-only, consumer-only, unjoined-union and full arms on eight exposed development positives plus one control. Producer and consumer arms each match 3/8; union and full each match 6/8. R-EFFECT adds no detected example, but adds one related effect-naming warning and one irrelevant Payy warning; wrong state/domain relationships remain unsupported. Noir lint and Slither are separate external baselines. All results are E1/UNKNOWN, not security verdicts. AI 1 fact audit and a one-command corrected frozen-tool rerun remain required. |
 | 2026-10-30 | D1P-42 conditional extent facts and `R-EXTENT` | `[DONE]` bounded development implementation / `[UNKNOWN]` capability and security | [Report](../reports/D1P-42.md), [facts interface](../protocols/d1/d1p-42-extent-facts-interface.json), and ignored raw evidence: replay 1,630 bridge polynomial identities to certify Payy's exact 1,005-to-1,003 mapping; extract proof-enforced and consumer-reliance conditions per word; warn on the earlier Payy uncovered region `active_messages_count <= word_offset < messages_length`; and remain silent for check-added's all-word tail-zero binding. WT-C02's max-fee undercount concern is not a bug. The unchanged benchmark remains 11 detected / 19 unsupported / 0 misses / 13 warning objects. The implementation is unfrozen and bounded to development/synthetic inputs; no held-out, capability, security, or D1 verdict follows. |
 | 2026-10-30 | D1P-43 typed state/domain correspondence | `[DONE]` bounded implementation and preliminary rerun / `[NEXT]` Payy fidelity and frozen rerun / `[UNKNOWN]` capability and security | [Report](../reports/D1P-43.md), [interface](d1/role-binding-interface.md), [frozen targets](ablations/d1p-43-role-targets.md), and [protocol](../protocols/d1/d1p-43-role-binding-preliminary.json): add separate `R-ROLE` producer/consumer word roles for tree/state/domain/polarity/effect correspondence without changing AI 1 frontends or analyzer. On seven supported D1P-41 positives, producer 3, consumer 2, union 5 and full 7 detect; the clean control is silent. Six WarpToad role targets match and PY-S03/PY-S05 fail closed at public-input mapping, so 8/8 expected outcomes match. Development E1 only; no proof/replay/held-out/security verdict. Final conclusions await exact Payy mapping/memory fidelity and a corrected frozen-tool rerun. |
+| 2026-11-13 | Research roadmap after deadline removal | `[DONE]` planning / `[NEXT]` R00 / `[UNKNOWN]` contribution | [Roadmap](research-roadmap-2026-11-13.md): defines R00–R06, natural-applicability and strong-baseline gates, independent evaluation, scoped validation, and reproduction requirements. Inspected the unmerged relational report; no analyzer change, merge, new experiment, or contract revision. Older checkpoint-era schedules are historical; the original held-out results retain their interpretation and are exposed for future development. |
 
 ## Update rule
 

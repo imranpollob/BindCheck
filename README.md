@@ -1,5 +1,15 @@
 # BindCheck
 
+**Research direction, 2026-11-13:** the author is no longer targeting the
+November submission deadline. The [new research roadmap](docs/research-roadmap-2026-11-13.md)
+sets the prospective work sequence: align the contract and evidence inventory,
+test a substantive semantic-analysis contribution on natural applications,
+then build and independently evaluate it. **R00 is next; the contribution is
+unproven.** Older status sections below retain their historical context and
+must not be used to infer that previously analyzed EVAL data is still unseen.
+The canonical contract and immutable reports retain their existing authority;
+R00 will reconcile the prospective scope before new semantic experiments.
+
 BindCheck investigates whether the guarantees of an accepted zero-knowledge proof justify the effects a blockchain application executes. Under D1 research contract revision 3, the prospective target includes a **taxonomy of proof-to-execution binding failures** and **actionable cross-layer diagnostics**, alongside automated discovery and end-to-end validation from producer constraints, public-input decoding, and consumer effects. Consumer-directed selection and refinement remain a secondary efficiency question (RQ5), not an established advantage. D1P-30 supplies bounded development-case E4 validations and D1P-31 supplies a 30-mutant development benchmark, but comparative baselines, supported held-out transfer, and the overall capability claim have not been established.
 
 The current integration checkout is the linked worktree
