@@ -34,8 +34,22 @@ STRATUM = {"audited-production", "deployed-address-in-docs"}
 FUNNEL = {"ACQUISITION_FAILED", "BUILD_FAILED", "HARNESS_TIMEOUT", "HARNESS_ERROR", "UNSUPPORTED", "ANALYZABLE"}
 RUN_TAG = "s5-reserve-run"
 # S5R-02: analyzer results that mean the harness, not the application, failed.
-HARNESS_FAILURE_REASONS = {"HARNESS_SUBPROCESS_FAILED", "NON_JSON_OUTPUT"}
+HARNESS_FAILURE_REASONS = {"HARNESS_SUBPROCESS_FAILED", "NON_JSON_OUTPUT",
+                           "INTERRUPTED_ATTEMPT", "UNNORMALIZED_ATTEMPT"}
 # S5R-03: harness code sealed into the gate record; must be committed and clean at HEAD.
+# Every executed harness, comparison-arm and guard module (S5R-03 re-check).
+HARNESS_GLOBS = ("eval/*.py", "baselines/strong/*.py", "scripts/check_holdout.py")
+
+
+def harness_files(root: pathlib.Path) -> tuple[str, ...]:
+    files = sorted({str(path.relative_to(root)) for pattern in HARNESS_GLOBS for path in root.glob(pattern)})
+    missing = [name for name in HARNESS_FILES if name not in files]
+    if missing:
+        raise GateError(f"core harness files missing from seal: {missing}")
+    return tuple(files)
+
+
+# Core files that must always be in the seal.
 HARNESS_FILES = ("eval/reserve.py", "eval/common.py", "eval/run_heldout.py",
                  "eval/prebuild_heldout.py", "scripts/check_holdout.py")
 
@@ -93,11 +107,12 @@ def check_reserve_gate(root: pathlib.Path = ROOT) -> dict[str, str]:
     matches = re.findall(r"^BINDCHECK_ZK_CONTENT_SHA256=([0-9a-f]{64})$", result.stdout, re.M)
     if result.returncode or len(matches) != 1 or matches[0] != ANALYZER_SHA256:
         raise GateError("freeze-3 analyzer content hash mismatch")
-    dirty = subprocess.run(["git", "status", "--porcelain", "--", *HARNESS_FILES],
+    sealed = harness_files(root)
+    dirty = subprocess.run(["git", "status", "--porcelain", "--", *sealed],
                            cwd=root, text=True, capture_output=True, check=False)
     if dirty.returncode or dirty.stdout.strip():
         raise GateError("harness files have uncommitted changes at HEAD")
-    harness = {name: sha256_file(root / name) for name in HARNESS_FILES}
+    harness = {name: sha256_file(root / name) for name in sealed}
     path = root / AUTHORIZATION
     if not path.is_file():
         raise GateError("author AUTHORIZATION.json is missing")
@@ -125,7 +140,15 @@ class ReservePermit:
 
     def allows_pair(self, repository: str, commit: str) -> bool:
         """S5R-01: a unit must match a manifest (repository, commit) pair exactly."""
-        return (norm(repository), commit.lower()) in self.pairs and self.allows(repository)
+        pair = (norm(repository), commit.lower())
+        if pair not in self.pairs or not self.allows(repository):
+            return False
+        try:
+            # Re-read the hash-pinned manifest at use time; caller-supplied pairs are not trusted.
+            pinned = {(norm(row["repository"]), row["commit"].lower()) for row in load_manifest(self.root)}
+        except (GateError, OSError):
+            return False
+        return pair in pinned
 
     def allows(self, repository: str) -> bool:
         # Recheck authorization, tag and analyzer at the moment of use.
@@ -143,7 +166,7 @@ def authorized_repository(repository: str, permit: ReservePermit) -> bool:
 
 
 def run_units(units: list[dict[str, str]], runner: Callable[[dict[str, str]], Mapping[str, Any]],
-              output: pathlib.Path) -> list[dict[str, Any]]:
+              output: pathlib.Path, gate_sha256: str = "") -> list[dict[str, Any]]:
     """Persist one funnel row per declared unit, including runner exceptions."""
     records: list[dict[str, Any]] = []
     seen: set[str] = set()
@@ -158,6 +181,9 @@ def run_units(units: list[dict[str, str]], runner: Callable[[dict[str, str]], Ma
             record = load_json(path)
             if record.get("repository") != unit["repository"] or record.get("commit") != unit["commit"]:
                 raise EvaluationError(f"resume unit differs: {unit_id}")
+            # S5R-03: a resumed result must come from the same gate and carry a valid status.
+            if record.get("gate_sha256") != gate_sha256 or record.get("status") not in FUNNEL:
+                raise EvaluationError(f"resume result not produced under this gate: {unit_id}")
         else:
             try:
                 outcome = dict(runner(unit))
@@ -169,7 +195,8 @@ def run_units(units: list[dict[str, str]], runner: Callable[[dict[str, str]], Ma
             if outcome.get("status") not in FUNNEL:
                 raise EvaluationError(f"invalid funnel status for {unit_id}: {outcome.get('status')}")
             record = {"unit_id": unit_id, "repository": unit["repository"],
-                      "commit": unit["commit"], "maturity": unit["maturity"], **outcome}
+                      "commit": unit["commit"], "maturity": unit["maturity"], **outcome,
+                      "gate_sha256": gate_sha256}
             atomic_write_json(path, record)
         records.append(record)
     if len(records) != len(units) or len({item["unit_id"] for item in records}) != len(units):
@@ -178,6 +205,8 @@ def run_units(units: list[dict[str, str]], runner: Callable[[dict[str, str]], Ma
         "schema": "bindcheck-zk.reserve-funnel/v1", "manifest_sha256": MANIFEST_SHA256,
         "units": len(records), "stratum_units": sum(item["maturity"] in STRATUM for item in records),
         "status_counts": dict(sorted(Counter(item["status"] for item in records).items())),
+        "source_capture_incomplete": sum(item.get("source_capture") == "INCOMPLETE" for item in records),
+        "gate_sha256": gate_sha256,
         "results": records,
     })
     return records
@@ -198,6 +227,11 @@ def run_unit(unit: dict[str, str], output: pathlib.Path, circom: pathlib.Path,
         if acquisition.get("status") != "ready":
             return {"status": "ACQUISITION_FAILED", "reason": acquisition.get("status")}
         prepare_pinned_vendor(checkout, unit_dir, ROOT / "node_modules/circomlib")
+        # S5R-04: capture_warning_sources reads verifier paths from family.json.
+        atomic_write_json(unit_dir / "family.json", {
+            "unit_id": unit["unit_id"], "repository": unit["repository"], "commit": unit["commit"],
+            "maturity": unit["maturity"], "circuit_paths": unit.get("circuit_paths", ""),
+            "verifier_paths": unit.get("verifier_paths", ""), "consumer_paths": unit.get("consumer_paths", "")})
         prebuild = prebuild_checkout(unit, unit_dir, checkout, circom)
         atomic_write_json(unit_dir / "prebuild.json", prebuild)
         if prebuild["status"] == "BUILD_FAILED":
@@ -209,18 +243,25 @@ def run_unit(unit: dict[str, str], output: pathlib.Path, circom: pathlib.Path,
         harness_failure = HARNESS_FAILURE_REASONS.intersection(analyzer.get("reasons", []))
         if harness_failure:
             return {"status": "HARNESS_ERROR", "reason": sorted(harness_failure)[0]}
-        if analyzer.get("run_status") != "completed":
-            return {"status": "UNSUPPORTED", "reason": analyzer.get("fatal_reason") or "ANALYZER_INCOMPLETE"}
         raw = unit_dir / "bindcheck-zk-raw.json"
+        if analyzer.get("run_status") != "completed":
+            # A genuine analyzer refusal leaves its own raw output; without it, the harness failed.
+            if not raw.is_file():
+                return {"status": "HARNESS_ERROR", "reason": "ANALYZER_RESULT_WITHOUT_RAW_OUTPUT"}
+            return {"status": "UNSUPPORTED", "reason": analyzer.get("fatal_reason") or "ANALYZER_INCOMPLETE"}
         try:
             payload = load_json(raw)
         except (OSError, ValueError):
             return {"status": "HARNESS_ERROR", "reason": "ANALYZER_RAW_OUTPUT_MISSING_OR_CORRUPT"}
         # S5R-04: keep warning-location source before the checkout is deleted.
         sources = capture_warning_sources(checkout, unit_dir)
+        incomplete = sorted({item.get("status") for item in sources.get("sources", [])} - {"COPIED"})
         if not payload.get("triples"):
             return {"status": "UNSUPPORTED", "reason": analyzer.get("fatal_reason") or "NO_RECOVERED_TRIPLE"}
         return {"status": "ANALYZABLE", "patterns": analyzer["patterns"], "warning_sources": sources,
+                # Quarantine flag: cards whose source was not retained are reported, never silently used.
+                "source_capture": "COMPLETE" if not incomplete else "INCOMPLETE",
+                "source_capture_problems": incomplete,
                 "tool_results": {name: result.get("raw_result") for name, result in tools.items()}}
     finally:
         if checkout.exists():
@@ -251,7 +292,8 @@ def main(argv: list[str] | None = None) -> int:
                 raise GateError("existing S5 output uses a different gate or toolchain")
         else:
             atomic_write_json(gate_path, {**gate_record, "started_utc": utc_now()})
-        run_units(units, lambda unit: run_unit(unit, output, args.circom.resolve(), permit), output)
+        gate_sha256 = sha256_file(gate_path)
+        run_units(units, lambda unit: run_unit(unit, output, args.circom.resolve(), permit), output, gate_sha256)
     except (EvaluationError, OSError, ValueError) as exc:
         print(f"RESERVE REFUSED: {exc}", file=sys.stderr)
         return 3
