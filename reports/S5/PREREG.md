@@ -60,7 +60,9 @@ is reported separately. WarpToad is excluded and listed with its reason.
 
 - The guard `scripts/check_holdout.py` refuses reserved families. The run may
   open them only through the authorized reserve entry point, which requires:
-  the manifest hash above, the freeze-3 tag at HEAD, and an authorization record
+  the manifest hash above, the run tag `s5-reserve-run` at HEAD with analyzer
+  files byte-identical to the `freeze-3` tag (and the freeze-3 content hash),
+  committed and clean harness files, and an authorization record
   `reports/S5/AUTHORIZATION.json` that names the author's approval.
 - Any unit whose (repository, commit) appears in the 278 spent set is refused.
 - No unit outside the manifest is opened.
