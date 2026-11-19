@@ -57,3 +57,14 @@ Author review of the gate and funnel semantics before any reserve execution. Com
 2. **Harness failures are not "unsupported".** A runner exception is now `HARNESS_ERROR` (new funnel status), not `UNSUPPORTED`, so harness failures cannot inflate the application-support count. New test and revert probe.
 
 Result: `python3 -m unittest discover -s tests/s5h` 21 passed; `tests/s5h/revert_proof.py` 17/17 DETECTED; the F1 analyzer suite passes with `BINDCHECK_CIRCOM` set; analyzer hash unchanged (`753c6e2a…`). The PREREG funnel list gains `HARNESS_ERROR` by amendment at approval time.
+
+## Fixes for the S5R review (orchestrator, 2026-11-19)
+
+| Finding | Fix | Test (revert-proven) |
+|---|---|---|
+| S5R-01 manifest repository with another commit | `ReservePermit.pairs` + `allows_pair`; `run_unit` refuses any unit not exactly a manifest (repository, commit) pair, before acquisition | `test_s5r01_manifest_repository_with_other_commit_refused`, `test_s5r01_exact_manifest_pair_allowed` |
+| S5R-02 harness failures counted as UNSUPPORTED | `HARNESS_SUBPROCESS_FAILED`/`NON_JSON_OUTPUT` → `HARNESS_ERROR`; missing/corrupt raw output → `HARNESS_ERROR`; genuine analyzer fatal stays `UNSUPPORTED` | `test_s5r02_*` (3 tests) |
+| S5R-03 harness not sealed | gate refuses uncommitted changes to the five harness files and records their SHA-256 in the gate record; a resume with different harness bytes no longer matches | `test_uncommitted_harness_change_refused`, `test_gate_records_harness_digests` |
+| S5R-04 warning sources lost | `capture_warning_sources` runs before the checkout is deleted; result carries `warning_sources` | `test_s5r04_warning_sources_captured_before_checkout_deleted` |
+
+Checks: `python3 -m unittest discover -s tests/s5h` (Ran 29 tests, OK); `tests/s5h/revert_proof.py` 23/23 DETECTED; analyzer files identical to `freeze-3`. S5R minor (prebuild BUILT if any entry circuit builds) left as recorded behavior from freeze 2.
