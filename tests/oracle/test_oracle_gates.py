@@ -15,6 +15,7 @@ Each gate test is written so it fails if the corresponding fix is reverted.
 from __future__ import annotations
 
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -26,7 +27,7 @@ sys.path.insert(0, str(ROOT))
 
 from oracle import runner  # noqa: E402
 
-DRIVER = ROOT / "oracle" / "evm_runner.cjs"
+DRIVER = Path(os.environ.get("ORACLE_TEST_DRIVER", ROOT / "oracle" / "evm_runner.cjs"))
 
 
 # ---------------------------------------------------------------------------
@@ -142,7 +143,7 @@ def _node(expr: str):
             "NODE_PATH": str(deps),
             # Pin ethers by path so a repo-root ethers 5.x cannot shadow it.
             "ORACLE_ETHERS_PATH": str(deps / "ethers"),
-            "PATH": __import__("os").environ.get("PATH", ""),
+            "PATH": os.environ.get("PATH", ""),
         },
         capture_output=True,
         text=True,
@@ -261,3 +262,133 @@ def test_xr07_same_event_cannot_discharge_two_clauses():
     clauses = [{"id": "a", "match": match}, {"id": "b", "match": match}]
     assert sorted(_node(f"Object.values(m.obligationCounts([{json.dumps(event)}],{json.dumps(clauses)},{{resolve:{ID}}}))")) == [0, 1]
     assert sorted(_node(f"Object.values(m.obligationCounts([{json.dumps(event)},{json.dumps(event)}],{json.dumps(clauses)},{{resolve:{ID}}}))")) == [1, 1]
+
+
+# F4: test the exported final verdict with recorded trial observations. These
+# assertions exercise the last E4 decision, not only its individual helpers.
+def _verdict(**changes):
+    observation = {
+        "honest_succeeded": True,
+        "tx_succeeded": True,
+        "tx_error": None,
+        "effects": [{"contract_role": "token", "state_corroboration": {"corroborated": True}}],
+        "matched_effects": [{"contract_role": "token", "state_corroboration": {"corroborated": True}}],
+        "view_committed": False,
+        "violations": [{"rule": "r", "type": "entitlement_mismatch"}],
+        "verifier_path": {"established": True},
+        "view_read_failure": None,
+        "rule_error": None,
+    }
+    observation.update(changes)
+    return _node(f"m.decideTrial({json.dumps(observation)})")
+
+
+def test_f4_xr01_fake_mint_cannot_reach_final_e4():
+    effect = {"contract_role": "token", "state_corroboration": {"corroborated": False, "reason": "balance_delta_mismatch"}}
+    decision = _verdict(effects=[effect], matched_effects=[effect])
+    assert decision["result"] == "UNKNOWN"
+    assert decision["reason"].startswith("EFFECT_NOT_STATE_CORROBORATED")
+
+
+def test_f4_xr02_missing_or_mismatched_verifier_call_cannot_reach_final_e4():
+    for path in ({"established": False, "reason": "call_missing"},
+                 {"established": False, "reason": "calldata_mismatch"}):
+        decision = _verdict(verifier_path=path)
+        assert decision["result"] == "UNKNOWN"
+        assert decision["reason"].startswith("VERIFIER_PATH_NOT_ESTABLISHED")
+
+
+def test_f4_xr07_underpayment_reaches_final_e4():
+    policy = {"protected_effects": [], "required_obligations": [{"id": "fee", "match": {"type": "erc20_transfer", "value": "50", "contract_role": "fee"}}]}
+    fee = {"kind": "erc20_transfer", "contract_role": "fee", "value": "1"}
+    benefit = {"kind": "erc20_transfer", "contract_role": "reward", "state_corroboration": {"corroborated": True}}
+    code = f"""async()=>{{const p={json.dumps(policy)},f={json.dumps(fee)},b={json.dumps(benefit)};
+      const v=await m.evaluatePolicy(p,[b,f],{{honest_obligations:{{fee:1}},benefit_committed:true}},{{resolve:x=>x}},{{}});
+      return {{violations:v,decision:m.decideTrial({{honest_succeeded:true,tx_succeeded:true,
+        effects:[b,f],matched_effects:[b],view_committed:false,violations:v,verifier_path:{{established:true}}}})}}}}"""
+    result = _node(code)
+    assert [v["type"] for v in result["violations"]] == ["undischarged_obligation"]
+    assert result["decision"]["result"] == "E4-CONFIRMED"
+
+
+def test_f4_xr07_one_effect_cannot_discharge_two_clauses_at_final_gate():
+    match = {"type": "erc20_transfer", "value": "50", "contract_role": "fee"}
+    policy = {"protected_effects": [], "required_obligations": [{"id": "a", "match": match}, {"id": "b", "match": match}]}
+    fee = {"kind": "erc20_transfer", "contract_role": "fee", "value": "50"}
+    benefit = {"kind": "erc20_transfer", "contract_role": "reward", "state_corroboration": {"corroborated": True}}
+    code = f"""async()=>{{const p={json.dumps(policy)},f={json.dumps(fee)},b={json.dumps(benefit)};
+      const v=await m.evaluatePolicy(p,[b,f],{{honest_obligations:{{a:1,b:1}},benefit_committed:true}},{{resolve:x=>x}},{{}});
+      return {{violations:v,decision:m.decideTrial({{honest_succeeded:true,tx_succeeded:true,
+        effects:[b,f],matched_effects:[b],view_committed:false,violations:v,verifier_path:{{established:true}}}})}}}}"""
+    result = _node(code)
+    assert len(result["violations"]) == 1
+    assert result["violations"][0]["type"] == "undischarged_obligation"
+    assert result["decision"]["result"] == "E4-CONFIRMED"
+
+
+def test_f4_xr2_01_failed_view_read_is_unknown_at_final_gate():
+    decision = _verdict(view_read_failure="credit: before=object, after=150")
+    assert decision["result"] == "UNKNOWN"
+    assert decision["reason"].startswith("VIEW_READ_FAILED")
+
+
+def test_f4_xr3_01_repeatable_b_replay_is_not_e4_but_a_replay_is():
+    policy = {"protected_effects": [
+        {"id": "single_A", "match": {"type": "erc20_transfer", "from": "0x0", "contract_role": "a"},
+         "single_use": {"key_pub": {"proof": "cred", "index": 0}}},
+        {"id": "repeatable_B", "match": {"type": "erc20_transfer", "from": "0x0", "contract_role": "b"}},
+    ]}
+    code = f"""async()=>{{const p={json.dumps(policy)},z='0x0000000000000000000000000000000000000000';
+      const out={{}};for(const role of ['a','b']){{const e={{kind:'erc20_transfer',from:z,contract_role:role,
+        state_corroboration:{{corroborated:true}}}};
+        const replay=m.singleUseReplays(p,[e],[e],{{cred:['7']}});
+        const v=await m.evaluatePolicy(p,[e],{{single_use_replays:replay.replays}},{{resolve:x=>x}},{{}});
+        out[role]={{replay,violations:v,decision:m.decideTrial({{honest_succeeded:true,tx_succeeded:true,
+          effects:[e],matched_effects:[e],view_committed:false,violations:v,verifier_path:{{established:true}},rule_error:replay.error}})}};
+      }}return out}}"""
+    result = _node(code)
+    assert result["b"]["replay"]["replays"] == []
+    assert result["b"]["decision"]["result"] == "NOT_CONFIRMED"
+    assert result["a"]["violations"][0]["authorization_key"] == "7"
+    assert result["a"]["decision"]["result"] == "E4-CONFIRMED"
+
+
+def test_f4_ambiguous_rule_match_is_unknown():
+    policy = {"protected_effects": [{"id": "a", "match": {"type": "erc20_transfer", "from": "0x0"}},
+                                     {"id": "b", "match": {"type": "erc20_transfer", "from": "0x0"}}]}
+    effect = {"kind": "erc20_transfer", "from": "0x0000000000000000000000000000000000000000"}
+    code = f"""()=>{{const attribution=m.singleUseReplays({json.dumps(policy)},[],[{json.dumps(effect)}],{{}});
+      return m.decideTrial({{honest_succeeded:true,tx_succeeded:true,effects:[{json.dumps(effect)}],
+        matched_effects:[{json.dumps(effect)}],view_committed:false,violations:[{{type:'entitlement_mismatch'}}],verifier_path:{{established:true}},
+        rule_error:attribution.error}})}}"""
+    assert _node(code) == {"result": "UNKNOWN", "reason": "EFFECT_RULE_AMBIGUOUS"}
+
+
+def test_f4_each_single_use_rule_uses_its_own_canonical_key():
+    policy = {"protected_effects": [
+        {"id": "a", "match": {"type": "erc20_transfer", "from": "0x0", "contract_role": "a"},
+         "single_use": {"key_pub": {"proof": "cred", "index": 0}}},
+        {"id": "c", "match": {"type": "erc20_transfer", "from": "0x0", "contract_role": "c"},
+         "single_use": {"key_pub": {"proof": "cred", "index": 1}}},
+    ]}
+    effect = {"kind": "erc20_transfer", "from": "0x0000000000000000000000000000000000000000", "contract_role": "c"}
+    code = f"m.singleUseReplays({json.dumps(policy)},[{json.dumps(effect)}],[{json.dumps(effect)}],{{cred:['7',(m.FIELD_R+9n).toString()]}})"
+    result = _node(code)
+    assert result["error"] is None
+    assert result["replays"] == [{"rule": "c", "authorization_key": "9"}]
+
+
+def test_f4_failed_honest_transaction_is_unknown_at_final_gate():
+    assert _verdict(honest_succeeded=False)["result"] == "UNKNOWN"
+
+
+def test_f4_mixed_rules_manifest_validates():
+    path = ROOT / "tests/oracle/f4_mixed_rules.manifest.json"
+    policy = runner._validate_manifest(runner._json(path), path)
+    assert len(policy["protected_effects"]) == 2
+    assert policy["protected_effects"][0]["single_use"]["key_pub"]["index"] == 0
+
+
+def test_f4_output_namespace_is_owned():
+    path = ROOT / "results/raw/F4/reviewer-mixed-rules"
+    assert runner._owned_output(path) == path.resolve()

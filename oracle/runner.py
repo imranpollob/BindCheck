@@ -43,6 +43,8 @@ ALLOWED_OWNED_PREFIXES = (
     ROOT / "results" / "raw" / "F2",
     ROOT / "reports" / "F3",
     ROOT / "results" / "raw" / "F3",
+    ROOT / "reports" / "F4",
+    ROOT / "results" / "raw" / "F4",
 )
 
 # Keys/phrases that would encode the expected verdict into a policy file. The
