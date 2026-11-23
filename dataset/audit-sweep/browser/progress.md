@@ -1,0 +1,12 @@
+# browser progress
+- [done] Source 1 Consensys Diligence: 148 enumerated (sitemap.xml + index), 9 IN, KEEP 2, BORDERLINE 5 (v1.2 re-check applied), 17 findings logged.
+- [next] Source 2 Solodit 16 terms.
+- then Sherlock 805, 618; Cantina 5 competitions.
+- [done] Sherlock 805/618 (private, no findings), Cantina x5 (findings not public). [next] Solodit retry, then Hacken.
+- [active] Hacken: sitemap-audits.xml lists 2365 URLs, 1414 report pages (depth 3). In-browser scan (2 s spacing) started 2026-11-23T02:58:16Z, ~48 min. Consensys/Sherlock/Cantina/Solodit-attempt done.
+- 2026-11-23T03:18:47Z Chrome extension stopped responding (tabs_context_mcp timeouts x3; the author's MacBook may be asleep). Hacken scan was at ~200+/1414 in page memory (window.__ht, not persisted; the 2 s-spaced worker-timer scan may have continued or been lost). Hacken NOT finished, no Hacken rows written yet.
+- Pending after Hacken: CertiK skynet search (16 terms, certik- prefix); Quantstamp reports from dataset/audit-sweep/firms-3/browser_queue.csv (file existence not yet checked).
+- Solodit: still on maintenance page; 16 queries logged UNAVAILABLE.
+- 2026-11-23T12:48:28Z orchestrator-requested single retry of tabs_context_mcp: no response. Stopped as instructed.
+- 2026-11-23T12:51:37Z User switched to browser POLLDELL (Linux); MacBook Hacken scan state lost. Hacken scan restarted from zero on POLLDELL (1414 report pages, 1.8 s spacing, worker timer). Cannot resume: prior state was in page memory on another browser.
+- 2026-11-23T14:00:26Z wrap-up: notes.md written, Hacken 44 rows, DONE (partial).

@@ -1,0 +1,5 @@
+agent,report_key,field,old,new,reason
+rescreen,zellic-nori-bridge-2026-07,screen1,OUT,IN,"Screen-1 NON-EVM was wrong: the audited Ethereum contracts include MinaStateSettlement.sol (updateChain verifies a Mina state proof through Aligned Layer batch inclusion and records verifiedLedgerHashes) plus NoriTokenBridge.sol. Note: the orchestrator brief said the Ethereum contract verifies SP1 proofs; the report shows the SP1 PLONK proof is verified in o1js on Mina (non-EVM), so the two critical SP1-wrapper findings have a Mina consumer. Report is IN under protocol s3 via the EVM updateChain path; findings carry that caveat."
+rescreen,zellic-nori-bridge-2026-07,screen1_reason,NON-EVM,IN,"see screen1 correction"
+rescreen,zellic-nori-bridge-2026-07,audit_scope_side,,both,"Scope lists circuits (proof-conversion) and application contracts incl. Ethereum Solidity"
+rescreen,zellic-nori-bridge-2026-07,findings_total,,23,"Report states 'we discovered 23 findings' (1.4 Results)"

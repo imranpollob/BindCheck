@@ -1,0 +1,4 @@
+source,term,result_count,retrieved_utc,notes
+Code4rena,(enumeration) code4rena.com/sitemap.xml,412,2026-11-22T00:00Z,all /reports/<slug> URLs; cross-checked with /reports index page (415 slugs incl. 3 non-sitemap)
+Sherlock,(enumeration) audits.sherlock.xyz/api/contests pages 1-31,301,2026-11-22T00:00Z,all public contests; detail via /api/contests/<id> (scope+report text)
+Cantina,(enumeration) cantina.xyz/sitemap-0.xml competitions/<uuid>,116,2026-11-22T00:00Z,competition pages only carry description/scope; findings not public there

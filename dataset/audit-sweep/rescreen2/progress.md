@@ -1,0 +1,9 @@
+# rescreen2 progress
+- 2026-11-22: protocol v1.2 and rescreen notes read; 92 targets converted to text in scratchpad. Starting with screen1-recheck (15) then new-IN.
+- 2026-11-23: resumed; 3 Consensys no-path reports skipped (covered-by:browser). Doing screen1-recheck next.
+- screen1-recheck done (14 OUT, 1 corrected). Next: new-IN batches (order: LA, Zokyo, ABDK, Halborn, Ackee, Cyfrin, Rarimo; Consensys/Cantina excerpts last).
+- ToB Aligned set IN (v1.3) and screen-2 done (6 DROP). Next: ABDK batch (44), then Halborn, Ackee, Cyfrin, Rarimo, Consensys/Cantina excerpts.
+- done so far: recheck 15; LA limitless; zokyo x3; abdk: composable, manta, matterlabs part2+v9, morphose, nebra x3, railgun. Next abdk: edgeswap x2, mystiko x2, nil, semaphore, starkware x4, termstructure x13, tornado x4, zeropool x3, zklink x7, zkswap x3, zksync x2; then halborn x4, ackee, cyfrin x6, rarimo. Consensys x3 no-path skipped; consensys excerpts & cantina comps last.
+- 2026-11-23 mid: ABDK done: composable, edgeswap x2, manta, matterlabs x2, morphose, mystiko v3, nebra x3, railgun, starkware os/perp-v1/v3.1/v3.2, zeropool x3, zkswap v3/phase2/solidity(partial: only top Crit/Major read), tornado x4, zklink mergetoken, zksync solidityrust. Remaining: abdk mystiko-v2, nil, semaphore, termstructure x13, zklink x6, zksync-june-2020; halborn x4; ackee; cyfrin x6; rarimo; consensys excerpts x6; cantina comps x5.
+- ABDK block fully done (all 44 ABDK + corrections: 5 TermMax/TMX -> OUT). Next: halborn x4, ackee, cyfrin x6, rarimo; consensys excerpts x6; cantina comps x5
+- 2026-11-23 DONE: all 92 targets handled (3 Consensys no-path skipped per orchestrator, 5 Cantina comps + 6 Cyfrin + 6 Consensys excerpts unreadable offline, see notes.md). 65 findings rows (2 KEEP / 26 BORDERLINE / 37 DROP), 14 correction rows, 4 disagreements.

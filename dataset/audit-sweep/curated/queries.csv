@@ -1,0 +1,49 @@
+source,term,result_count,retrieved_utc,notes
+GitHub Advisories (reviewed),circom,1,2026-11-23T01:26Z,pages capped at 6; advisories NOT yet screened into reports.csv
+GitHub Advisories (reviewed),noir,6,2026-11-23T01:26Z,pages capped at 6; advisories NOT yet screened into reports.csv
+GitHub Advisories (reviewed),groth16,6,2026-11-23T01:27Z,pages capped at 6; advisories NOT yet screened into reports.csv
+GitHub Advisories (reviewed),plonk verifier,2,2026-11-23T01:27Z,pages capped at 6; advisories NOT yet screened into reports.csv
+GitHub Advisories (reviewed),zk proof,6,2026-11-23T01:28Z,pages capped at 6; advisories NOT yet screened into reports.csv
+GitHub Advisories (reviewed),public input,150,2026-11-23T01:31Z,pages capped at 6; advisories NOT yet screened into reports.csv
+GitHub Advisories (reviewed),public signals,10,2026-11-23T01:31Z,pages capped at 6; advisories NOT yet screened into reports.csv
+GitHub Advisories (reviewed),nullifier,2,2026-11-23T01:32Z,pages capped at 6; advisories NOT yet screened into reports.csv
+GitHub Advisories (reviewed),verifyProof,2,2026-11-23T01:32Z,pages capped at 6; advisories NOT yet screened into reports.csv
+GitHub Advisories (reviewed),front-run proof,1,2026-11-23T01:33Z,pages capped at 6; advisories NOT yet screened into reports.csv
+GitHub Advisories (reviewed),proof replay,63,2026-11-23T01:34Z,pages capped at 6; advisories NOT yet screened into reports.csv
+GitHub Advisories (reviewed),not bound to proof,150,2026-11-23T01:37Z,pages capped at 6; advisories NOT yet screened into reports.csv
+GitHub Advisories (reviewed),snarkjs,1,2026-11-23T01:38Z,pages capped at 6; advisories NOT yet screened into reports.csv
+GitHub Advisories (reviewed),halo2,4,2026-11-23T01:38Z,pages capped at 6; advisories NOT yet screened into reports.csv
+GitHub Advisories (reviewed),gnark,13,2026-11-23T01:39Z,pages capped at 6; advisories NOT yet screened into reports.csv
+GitHub Advisories (reviewed),sp1,150,2026-11-23T01:42Z,pages capped at 6; advisories NOT yet screened into reports.csv
+GitHub Advisories (unreviewed),circom,1,2026-11-23T01:42Z,pages capped at 6; advisories NOT yet screened into reports.csv
+GitHub Advisories (unreviewed),noir,6,2026-11-23T01:43Z,pages capped at 6; advisories NOT yet screened into reports.csv
+GitHub Advisories (unreviewed),groth16,6,2026-11-23T01:43Z,pages capped at 6; advisories NOT yet screened into reports.csv
+GitHub Advisories (unreviewed),plonk verifier,2,2026-11-23T01:44Z,pages capped at 6; advisories NOT yet screened into reports.csv
+GitHub Advisories (unreviewed),zk proof,6,2026-11-23T01:44Z,pages capped at 6; advisories NOT yet screened into reports.csv
+GitHub Advisories (unreviewed),public input,150,2026-11-23T01:47Z,pages capped at 6; advisories NOT yet screened into reports.csv
+GitHub Advisories (unreviewed),public signals,10,2026-11-23T01:48Z,pages capped at 6; advisories NOT yet screened into reports.csv
+GitHub Advisories (unreviewed),nullifier,2,2026-11-23T01:48Z,pages capped at 6; advisories NOT yet screened into reports.csv
+GitHub Advisories (unreviewed),verifyProof,2,2026-11-23T01:49Z,pages capped at 6; advisories NOT yet screened into reports.csv
+GitHub Advisories (unreviewed),front-run proof,1,2026-11-23T01:49Z,pages capped at 6; advisories NOT yet screened into reports.csv
+GitHub Advisories (unreviewed),proof replay,63,2026-11-23T01:51Z,pages capped at 6; advisories NOT yet screened into reports.csv
+GitHub Advisories (unreviewed),not bound to proof,150,2026-11-23T01:54Z,pages capped at 6; advisories NOT yet screened into reports.csv
+GitHub Advisories (unreviewed),snarkjs,1,2026-11-23T01:55Z,pages capped at 6; advisories NOT yet screened into reports.csv
+GitHub Advisories (unreviewed),halo2,4,2026-11-23T01:55Z,pages capped at 6; advisories NOT yet screened into reports.csv
+GitHub Advisories (unreviewed),gnark,13,2026-11-23T01:56Z,pages capped at 6; advisories NOT yet screened into reports.csv
+GitHub Advisories (unreviewed),sp1,75,2026-11-23T01:57Z,pages capped at 6; advisories NOT yet screened into reports.csv
+Solodit,circom,,,BLOCKED (Vercel checkpoint); not queried
+Solodit,noir,,,BLOCKED (Vercel checkpoint); not queried
+Solodit,groth16,,,BLOCKED (Vercel checkpoint); not queried
+Solodit,plonk verifier,,,BLOCKED (Vercel checkpoint); not queried
+Solodit,zk proof,,,BLOCKED (Vercel checkpoint); not queried
+Solodit,public input,,,BLOCKED (Vercel checkpoint); not queried
+Solodit,public signals,,,BLOCKED (Vercel checkpoint); not queried
+Solodit,nullifier,,,BLOCKED (Vercel checkpoint); not queried
+Solodit,verifyProof,,,BLOCKED (Vercel checkpoint); not queried
+Solodit,front-run proof,,,BLOCKED (Vercel checkpoint); not queried
+Solodit,proof replay,,,BLOCKED (Vercel checkpoint); not queried
+Solodit,not bound to proof,,,BLOCKED (Vercel checkpoint); not queried
+Solodit,snarkjs,,,BLOCKED (Vercel checkpoint); not queried
+Solodit,halo2,,,BLOCKED (Vercel checkpoint); not queried
+Solodit,gnark,,,BLOCKED (Vercel checkpoint); not queried
+Solodit,sp1,,,BLOCKED (Vercel checkpoint); not queried
