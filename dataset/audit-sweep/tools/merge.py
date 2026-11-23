@@ -22,10 +22,10 @@ it exists (finding_key,group_with or finding_key,SPLIT).
 import csv, os, re, difflib, collections, pathlib
 
 BASE = pathlib.Path(__file__).resolve().parents[1]
-AGENTS = ["firms-1", "firms-2", "firms-3", "contests", "curated", "browser", "rescreen", "rescreen2"]
+AGENTS = ["firms-1", "firms-2", "firms-3", "contests", "curated", "browser", "rescreen", "rescreen2", "quantstamp", "certik"]
 OUT = BASE / "merged"
 OUT.mkdir(exist_ok=True)
-OWNER_RANK = {"firms-1": 0, "firms-2": 0, "firms-3": 0, "contests": 0, "browser": 1, "rescreen": 1, "rescreen2": 1, "curated": 2}
+OWNER_RANK = {"firms-1": 0, "firms-2": 0, "firms-3": 0, "contests": 0, "browser": 1, "rescreen": 1, "rescreen2": 1, "quantstamp": 0, "certik": 0, "curated": 2}
 DEC_RANK = {"KEEP": 0, "BORDERLINE": 1, "DROP": 2}
 
 STOP = {"the", "audit", "report", "security", "review", "assessment", "of", "and",
@@ -210,8 +210,15 @@ for k in sorted(src_rep):
     c = collections.Counter(f["decision"] for f in fs)
     lines.append(f"| {k[0]} | {k[1]} | {len(rs)} | {sum(r['screen1']=='IN' for r in rs)} | {len(fs)} | {c['KEEP']} | {c['BORDERLINE']} | {c['DROP']} |")
 c_all = collections.Counter(f["decision"] for f in findings)
+unit = []
+up = OUT / "unitemized.csv"
+if up.exists():
+    unit = list(csv.DictReader(open(up)))
+    for u in unit:
+        lines.append(f"| {u['agent']} | {u['source']} (no per-report row: {u['reason'][:60]}…) | {u['enumerated_without_row']} | 0 | 0 | 0 | 0 | 0 |")
+n_unit = sum(int(u["enumerated_without_row"]) for u in unit)
 lines += ["", "## Overall", "",
-          f"- Unique audits enumerated (all agents; {len(reports)-len(reports_f)} dup-of rows excluded): **{len(reports_f)}**",
+          f"- Unique audits enumerated (all agents; {len(reports)-len(reports_f)} dup-of rows excluded; {n_unit} keyword-screened OUT without per-report rows, see unitemized.csv): **{len(reports_f)+n_unit}**",
           f"- Reports IN scope: **{sum(r['screen1']=='IN' for r in reports_f)}**",
           f"- Finding rows logged: **{len(findings)}** (KEEP {c_all['KEEP']}, BORDERLINE {c_all['BORDERLINE']}, DROP {c_all['DROP']})",
           f"- Unique finding groups after dedup: **{len(groups)}**",
