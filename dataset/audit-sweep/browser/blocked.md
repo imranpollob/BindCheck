@@ -1,0 +1,7 @@
+# blocked
+- diligence.security via curl: HTTP 403 Cloudflare "Just a moment" challenge. Not bypassed. All page text was read in the author's Chrome (same-origin fetch of pages listed in the site's sitemap.xml, 2.5 s apart) and PDFs were not downloaded.
+- solodit.cyfrin.io: redirected to maintenance.cyfrin.io (maintenance page, 'We're making things better'), 2026-11-23T02:55:56Z. Not a login/captcha. Will retry once after the other sources.
+- Sherlock contests 805, 618 and the 5 Cantina competitions: no findings or reports are public in the browser (Sherlock shows 'Private'; Cantina shows Instructions + Leaderboard tabs only). Not a login wall; nothing bypassed.
+- solodit retry at 2026-11-23T02:57:40Z: still maintenance.cyfrin.io. All 16 queries logged UNAVAILABLE.
+- PARTIAL (wrap-up ordered by orchestrator, 2026-11-23T14:00:26Z): CertiK skynet search NOT run (16 terms unqueried); the 18 Quantstamp reports in firms-3/browser_queue.csv NOT read; Hacken: all 1414 report pages were fetched in the browser (3 fetch errors) but only the 44 pages with ZK-like keyword hits were written as rows. The other ~1370 pages (no keyword hits) are not itemized because their text lived only in browser memory and the file download to disk did not land. Chrome extension was unreachable on the MacBook; work continued on browser POLLDELL.
+- hacken.io: curl not tried (Cloudflare-protected); read via same-origin fetch in the author's Chrome at ~2 s spacing. A 2-way parallel scan was refused by the permission classifier and was not run.

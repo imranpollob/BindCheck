@@ -1,0 +1,17 @@
+source,term,result_count,retrieved_utc,notes
+Solodit,circom,UNAVAILABLE,2026-11-23T02:57Z,site served maintenance.cyfrin.io on two attempts; query not run
+Solodit,noir,UNAVAILABLE,2026-11-23T02:57Z,site served maintenance.cyfrin.io on two attempts; query not run
+Solodit,groth16,UNAVAILABLE,2026-11-23T02:57Z,site served maintenance.cyfrin.io on two attempts; query not run
+Solodit,plonk verifier,UNAVAILABLE,2026-11-23T02:57Z,site served maintenance.cyfrin.io on two attempts; query not run
+Solodit,zk proof,UNAVAILABLE,2026-11-23T02:57Z,site served maintenance.cyfrin.io on two attempts; query not run
+Solodit,public input,UNAVAILABLE,2026-11-23T02:57Z,site served maintenance.cyfrin.io on two attempts; query not run
+Solodit,public signals,UNAVAILABLE,2026-11-23T02:57Z,site served maintenance.cyfrin.io on two attempts; query not run
+Solodit,nullifier,UNAVAILABLE,2026-11-23T02:57Z,site served maintenance.cyfrin.io on two attempts; query not run
+Solodit,verifyProof,UNAVAILABLE,2026-11-23T02:57Z,site served maintenance.cyfrin.io on two attempts; query not run
+Solodit,front-run proof,UNAVAILABLE,2026-11-23T02:57Z,site served maintenance.cyfrin.io on two attempts; query not run
+Solodit,proof replay,UNAVAILABLE,2026-11-23T02:57Z,site served maintenance.cyfrin.io on two attempts; query not run
+Solodit,not bound to proof,UNAVAILABLE,2026-11-23T02:57Z,site served maintenance.cyfrin.io on two attempts; query not run
+Solodit,snarkjs,UNAVAILABLE,2026-11-23T02:57Z,site served maintenance.cyfrin.io on two attempts; query not run
+Solodit,halo2,UNAVAILABLE,2026-11-23T02:57Z,site served maintenance.cyfrin.io on two attempts; query not run
+Solodit,gnark,UNAVAILABLE,2026-11-23T02:57Z,site served maintenance.cyfrin.io on two attempts; query not run
+Solodit,sp1,UNAVAILABLE,2026-11-23T02:57Z,site served maintenance.cyfrin.io on two attempts; query not run

@@ -5,6 +5,14 @@ submission. It is a navigation aid, not an evidence source. The
 [research contract](research-contract.md), [README](../README.md), and linked
 task reports remain authoritative.
 
+**Current work sequence (2026-11-13):** follow the
+[research roadmap](research-roadmap-2026-11-13.md). The author has removed the
+November submission target. R00 (contract and evidence alignment) is next;
+technical novelty and independent capability remain UNKNOWN. The older branches
+and task narratives below preserve checkpoint-era status, including obsolete
+"EVAL unopened" and next-task labels; they are not current scheduling instructions.
+R00 will reconcile the prospective contract without relabeling historical runs.
+
 Status labels mean:
 
 - `[DONE]` — the bounded task is complete at its stated evidence level;
@@ -24,6 +32,19 @@ flowchart TD
     submit -->|"Requires"| contribution
     submit -->|"Requires"| manuscript["Paper package [WAITING]"]
     submit -.->|"Tracks"| tracking["Visual checkpoints [DONE]"]
+
+    contribution --> researchPlan["2026-11-13 research roadmap [DONE]"]
+    contribution --> buildSpec["2026-11-20 build spec: binding class + agent tool [ACTIVE]"]
+    buildSpec --> auditSweep["Audit-report sweep, acquisition, triage [DONE]"]
+    auditSweep --> auditLabel["Human labeling of audit candidates [NEXT]"]
+    auditLabel --> auditRepro["Study-set E4 reproduction [WAITING]"]
+    researchPlan --> r00["R00 contract + evidence alignment [NEXT]"]
+    r00 --> r01["R01 gap + natural feasibility [WAITING]"]
+    r01 --> r02["R02 formal property + vertical slice [WAITING]"]
+    r02 --> r03["R03 reliability + benchmark [WAITING]"]
+    r03 --> r04["R04 independent evaluation freeze [WAITING]"]
+    r04 --> r05["R05 comparison + real-proof validation [WAITING]"]
+    r05 --> r06["R06 paper + independent reproduction [WAITING]"]
 
     contribution --> foundation["Evidence foundation [DONE]"]
     contribution --> analysis["Analysis method [ACTIVE]"]
@@ -222,7 +243,10 @@ flowchart TD
     class contribution,primaryResult,generalResult,d103gate,d103recoveryresult,d1p06,d1p10result,d1p14bresult,d1p14cresult,d1p14dresult,d1p17result unknown
 ```
 
-## Immediate path
+## Historical task narrative
+
+The dated checkpoints below are retained as history. The current immediate
+task is R00 in the [2026-11-13 roadmap](research-roadmap-2026-11-13.md#5-immediate-execution-checklist).
 
 1. Done: the running-flag false positive and both `UNKNOWN` classes are explained in [T22 Section 3.2](../reports/T22.md).
 2. Done: the [T22-v3 rerun and audit](../reports/T22-v3.md), frozen before output, returns 4 `VIOLATION` and 5 `UNKNOWN` (4/9 expected outcomes matched). Seven synthetic regressions and four SAT replays pass; the running-flag probe false positive is fixed, but its full case remains unresolved. Prior evidence and compiled inputs are unchanged.
@@ -668,6 +692,9 @@ slots were executed.
 | 2026-11-18 | S0 contract revision 4 and analyzer freeze-3 preparation | `[DONE]` preparation, `[WAITING]` reviewer tag | [S0 report](../reports/S0/REPORT.md) and [freeze declaration](FREEZE-3.md) record the reviewed analyzer hash, 77 passing tests, the 1,106-family reserve and the separate F3/XR3 oracle gate. |
 | 2026-11-18 | F4 rule-bound single use and final-verdict tests | `[DONE]` implementation / `[WAITING]` reviewer EVM and XR3 re-review | [F4 report](../reports/F4/REPORT.md), [XR3 gate](../reports/XR3/GATE.md), and ignored `results/raw/F4/reversion.log`: per-rule replay accounting closes the source-level XR3-01 counterexample; 36 oracle tests pass and eight scratch reversion probes each fail as intended. The mixed-rule manifest validates and synthetic Solidity builds. No F4 Anvil run or held-out E4 is claimed. F3's reviewer addendum records its 17 successful local EVM manifest runs, superseding that row's earlier environment-limited status; the oracle gate remains waiting on F4 re-review. |
 | 2026-11-19 | S5H reserve harness code | `[DONE]` offline implementation and refusal tests; S5 run `[WAITING]` | [S5H report](../reports/S5H/REPORT.md): 18 offline tests and 15 in-memory revert probes pass; the F1 regression set passes 77 tests with explicit Linux Circom. The 1,105-unit reserve was not acquired, built, analyzed, or evaluated. The current HEAD differs from `freeze-3`, and the author authorization file is absent. |
+| 2026-11-13 | Research roadmap after deadline removal | `[DONE]` planning / `[NEXT]` R00 / `[UNKNOWN]` contribution | [Roadmap](research-roadmap-2026-11-13.md): defines R00–R06, natural-applicability and strong-baseline gates, independent evaluation, scoped validation, and reproduction requirements. Inspected the unmerged relational report; no analyzer change, merge, new experiment, or contract revision. Older checkpoint-era schedules are historical; the original held-out results retain their interpretation and are exposed for future development. |
+| 2026-11-23 | Audit-report sweep for auditor-confirmed binding findings | `[DONE]` sweep, acquisition, triage / `[NEXT]` human labeling / `[UNKNOWN]` contribution and security | [Protocol v1.3](../dataset/audit-sweep/PROTOCOL.md), [funnel](../dataset/audit-sweep/merged/FUNNEL.md), [recall check](../dataset/audit-sweep/merged/RECALL-R2.md), [exposure log](../dataset/audit-sweep/EXPOSURE.md), [provenance ledger](../reports/R-ledger.md). Orchestrated AI agents enumerated 7,190 public audits (firms, contests, curated lists) and found 340 in scope and 284 unique candidates (AI labels: 51 KEEP, 205 BORDERLINE, 28 scope-question). Recall against the independent R2 census is 49/50. Acquisition pinned 21 vulnerable/fixed pairs at metadata level only. BORDERLINE triage is in [TRIAGE.md](../dataset/audit-sweep/TRIAGE.md). All labels are AI and await human labeling. Partial sources: Hacken, CertiK, Quantstamp (18), Solodit, yAcademy. No code read for any held-out family; metadata and report-text touches are logged. No experiment, analyzer change, transaction, or disclosure. |
+| 2026-11-23 | Labeling package for audit candidates | `[DONE]` package / `[NEXT]` rater A and B labeling and seal / `[UNKNOWN]` contribution and security | [Package](../dataset/audit-sweep/labeling/README.md), [guide](../dataset/audit-sweep/labeling/GUIDE.md), [coverage](../dataset/audit-sweep/merged/COVERAGE.md). 264 blind items (FULL 51, LIGHT 152, PSS 61) for rater A and an 81-item 30% stratified overlap for rater B. AI labels are only in `labeling/key/`; seal-before-analysis procedure as in the earlier labeling round. No labels have been collected yet. |
 
 ## Update rule
 

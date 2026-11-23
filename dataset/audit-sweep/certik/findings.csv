@@ -1,0 +1,1 @@
+finding_key,report_key,finding_id,title,severity,page_or_anchor,finding_url,quote,mechanism_one_line,consumer_effect,unbound_value,pattern_guess,decision,reason_code,repo,vuln_commit,vuln_commit_http,fix_commit,fix_commit_http,fix_source,circuit_present,verifier_present,consumer_present,proof_system,circuit_lang,acquirability,holdout_flag,label_source,notes

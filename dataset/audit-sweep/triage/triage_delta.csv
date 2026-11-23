@@ -1,0 +1,12 @@
+group_id,finding_key,c1,c2,c3,triage,proposed_pattern,proof_system_soundness,reason,source_checked
+G0360,hacken-sca-zilliqa-zilliqa-ownership-proof-aug2026-2026-09-F-2026-1902,met,met,unclear,UNSURE,P1,no,newAddr and domain public inputs not range-checked; title says proof desynchronizes from on-chain address. Report names no attacker.,yes
+G0629,quantstamp-hinkal-protocol-2023-10-HNKL-7,unclear,met,unclear,UNSURE,P4,no,Compromised owner registers a constant-true verifier and drains funds; needs a privileged-owner compromise (Rule 9).,yes
+G0632,quantstamp-hinkal-protocol-2023-10-HNKL-11,met,met,unclear,UNSURE,P1,no,"Consumer checks balanceDif >= proved amountChanges, not equality; incomplete withdrawals possible, but the report names no attacker or beneficiary.",yes
+G0637,quantstamp-hinkal-protocol-2023-10-HNKL-30,fails,met,met,LIKELY-NOT,P4,no,"Swapper sums wrap mod p, enabling forged large notes, but the auditor says the attack does not exist for the implemented circuits.",yes
+G0638,quantstamp-hinkal-protocol-2023-10-HNKL-31,unclear,met,met,UNSURE,P2,no,"Internal Merkle nodes pass as access tokens, bypassing KYC whitelist; auditor says it may not currently impact the protocol.",yes
+G0646,quantstamp-hinkal-protocol-2-2026-09-HIN-4,met,met,unclear,UNSURE,P1,no,"Wallet-mode signature omits destination, fee and token list; client says these are bound by calldataHash or public signals.",yes
+G0649,quantstamp-hinkal-protocol-2-2026-09-HIN-8,unclear,met,unclear,UNSURE,P4,no,"Spending key and R8 not checked on Baby-Jubjub; auditor demonstrates no practical forgery, only possible unexpected behaviour.",yes
+G0652,quantstamp-hinkal-protocol-2-2026-09-HIN-11,met,met,unclear,UNSURE,P1,no,Min0 proof with signer zero runs arbitrary Emporium calls stealing stranded assets; client says Emporium must never hold assets.,yes
+G0653,quantstamp-hinkal-protocol-2-2026-09-HIN-12,unclear,met,unclear,UNSURE,P4,no,Admins can swap verifier or hinkalHelper without timelock; exploit needs a privileged role (Rule 9).,yes
+G0658,quantstamp-datachain-lcp-zkdcap-2025-04-DCAP-3,unclear,met,met,UNSURE,P4,no,"Guest skips critical X.509 extension checks, so rogue certs could be attested on-chain; certs must still chain to Intel's root.",yes
+G0659,quantstamp-datachain-lcp-zkdcap-2025-04-DCAP-4,unclear,met,met,UNSURE,P4,no,Guest matches certificate chain by CN not DN; auditor says colliding CN unlikely because Intel root must sign.,yes

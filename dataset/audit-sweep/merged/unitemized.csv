@@ -1,0 +1,2 @@
+agent,source,enumerated_without_row,screen1,reason
+browser,Hacken,1370,OUT,"All 1414 report pages in hacken.io sitemap-audits.xml were fetched in-browser and keyword-scanned (word-boundary regex over the protocol keywords); only the 44 with hits were itemized. The other 1370 had no ZK keyword hit and are OUT (NO-ZK-COMPONENT) without per-report rows. See browser/notes.md."

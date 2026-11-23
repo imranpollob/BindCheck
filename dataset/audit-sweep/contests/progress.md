@@ -1,0 +1,21 @@
+# contests progress (protocol v1)
+- 2026-11-22: started. `hc` CLI not found in PATH -> cannot send orchestrator notes (logged in blocked.md).
+- C4: slug list (415 contests with reports on code4rena.com/reports index) at /tmp/claude-1000/audit-sweep/contests/c4_slugs.txt. Downloading HTML to /tmp/.../c4/<slug>.html, then full-text keyword scan.
+- NEXT: finish C4 download+scan -> screen1 -> screen2 of IN reports. Then Sherlock, Cantina.
+- guard rule from orchestrator (run guard alone, read output, then fetch) acknowledged; slip logged in blocked.md
+- 2026-11-22: **Code4rena DONE.** 412 sitemap reports (+3 spurious/dup index slugs) enumerated in reports.csv (415 rows); full-text keyword scan; IN=5 (zksync x4, succinct), findings.csv 14 rows (0 KEEP, 1 BORDERLINE = succinct M-01, 13 DROP). Quotes verified verbatim programmatically.
+- NEXT: Sherlock (audits.sherlock.xyz/contests; sherlock-audit/*-judging, org has 460 repos), then Cantina competitions.
+- API calls used so far: 2 (org repo counts, code-423n4 and sherlock-audit).
+- hc path /home/pollmix/.local/bin/hc; status sent to t3z after C4 done
+- Sherlock: 301 contests (api /api/contests pages 1-31). Detail API /api/contests/<id> has description, scope (repo, commit, files), judging_repo_name and `report` (full issue text) -> using it for full-text keyword scan (screen 1). Detail JSONs in /tmp/.../shd/. Page HTML (shp/) was thin, not used.
+- Sherlock candidates so far: MorphL2 (207; KEEP H-2 prevStateRoot), Gamma Brevis Rewarder (496; H-1 DROP), Brevis Pico ZKVM (873), ZKP2P V2 (805), Avail (146), Covalent EWM LC (618). Non-EVM: Aleo, Privacy Cash (Solana), Babylon, Allora.
+- Guard run (ALLOWED): sherlock-audit/{2024-10-gamma-rewarder,2024-08-morphl2,2023-12-avail,2023-11-covalent}-judging, sherlock-audit/2024-08-morphl2, morph-l2/morph. API calls used: 7 (org counts x2 + 5 org repo pages).
+- 2026-11-22 (usage limit hit, stopping): Sherlock detail JSON downloaded for 301 contests (1 non-200 in shd.log, check). Full-text keyword scan done. Hits needing screen-1 reading: 1140 Fusaka, 873 Brevis Pico (IN: gnark/Groth16/SP1 verifier; judging repo sherlock-audit/2025-08-pico-judging, guard first), 967 Symbiotic Relay, 1029 Malda (zk hits), 225 PoolTogether, 109 Allo V2, 118 Real Wagmi #2, 326 TITLES, 207 MorphL2 (IN), 496 Gamma Brevis (IN), 805 ZKP2P V2 (not scanned for hits; check), 146 Avail, 618 Covalent EWM LC, Optimism/Perennial/Mellow/Metric (verifier hits, likely not ZK). Most 'zk' hits likely zkSync mentions.
+- NOT YET DONE: sherlock reports.csv rows (301), findings.csv rows for MorphL2 (H-2 KEEP: prevStateRoot unbound, audit commit 98e0ec4c.. exists 200, fix PR morph-l2/morph#616 lists commit 63a25436.. 200, acquirability PARTIAL; M-2,M-4,M-5 DROP) and Gamma H-1 (DROP OTHER), Pico findings, queries.csv for Sherlock, Cantina competitions (not started), notes.md, final hc message.
+- Draft rows live only in this log; reports.csv/findings.csv currently contain Code4rena only.
+- Sherlock DONE for screen-1/2 (rows written): 301 reports (5 IN: MorphL2, Gamma Brevis Rewarder, Brevis Pico, Symbiotic Relay, Malda; 2 NON-EVM; 229 NO-ZK; 65 UNREADABLE incl. 62 with empty API report text and unresolved ZKP2P V2 / Covalent LC / Avail). KEEP: morphl2 H-2, symbiotic Z-1. findings.csv now has 14 C4 + 21 Sherlock rows.
+- NEXT: Cantina competitions (enumerate), then notes.md, then hc DONE message.
+- Sherlock recovery pass (t3z request): 65 UNREADABLE repos guarded ALLOWED; 50 judging READMEs 404, 15 empty. Avail now IN (0 labelled issues, 2 API calls -> total API calls 9). ZKP2P V2 and Covalent LC stay UNREADABLE (repos 404). NEXT: Cantina (116 competition UUIDs in sitemap-0.xml; pages are JS-rendered; need findings source).
+- Cantina screen-1 done: 116 competitions (5 IN, 2 NON-EVM, 109 OUT); findings unreadable from page. NEXT: notes.md + hc DONE.
+- notes.md written; DONE message sent.
+- QA fix: Z-1 source saved (contest JSON + issue page), sha256 set in reports.csv; quote verbatim.
