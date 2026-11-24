@@ -1,0 +1,69 @@
+family,split,full_binding_items
+Aleph Zero Shielder,test,1
+Anon Aadhaar,test,2
+Arianee,test,1
+Automata DCAP,dev,0
+Ava Labs EncryptedERC,dev,1
+Axiom,dev,0
+Aztec,dev,0
+Brevis / Pico,dev,0
+Data Ownership Protocol,dev,0
+Datachain LCP-zkDCAP,dev,0
+EY Nightfall,dev,0
+EZKL,test,3
+EdgeSwap,dev,0
+EigenDA Hokulea,test,0
+Fluent,dev,0
+Hinkal,test,0
+IBC Eureka,test,0
+Intmax,dev,0
+Jovay,test,0
+Lido ZK oracle,dev,0
+Lighter,dev,0
+Linea rollup contracts,test,0
+Linea verifier / gnark,dev,0
+MACI,test,1
+Malda,test,0
+MorphL2,dev,1
+Morphose,test,0
+Mystiko,dev,0
+Nebra,test,0
+Nocturne,test,2
+Nori Bridge,test,0
+OpenVM,dev,0
+Oxorio SAMM,dev,1
+Panther,dev,2
+Polyhedra zk light client,dev,0
+PrivacyBoost,test,0
+RISC Zero / Boundless,test,2
+Railgun,dev,0
+Renegade,dev,0
+"SP1 apps (Contract Call, Helios)",dev,1
+SP1 zkVM,test,0
+Scroll,test,0
+Self,test,1
+Semaphore,dev,0
+Silent Protocol,test,0
+Singularity,dev,0
+StarkWare Perpetual,test,0
+StealthDrop,test,0
+Succinct Blobstream,dev,1
+Succinct Telepathy,test,0
+Symbiotic Relay,test,0
+Taiko / Surge,dev,2
+Term Structure,dev,0
+Tornado Cash,dev,0
+Unirep,test,0
+Webb bridge,test,0
+"World (ID, PBH, grants)",test,0
+ZK Email,dev,0
+ZKSwap,test,0
+ZKsync,test,0
+ZKsync SSO,test,0
+ZeroPool,test,0
+Zilliqa,dev,0
+ZkDrops,dev,1
+Zkopru,dev,0
+iden3 / Polygon ID / Privado,dev,0
+vlayer,dev,3
+zkLink,test,0

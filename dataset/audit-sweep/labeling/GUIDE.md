@@ -35,7 +35,7 @@ A finding is a **binding flaw** when all three of these hold:
 | Code | Pattern | Typical shape |
 |---|---|---|
 | **P1** | Unbound effect | Recipient, amount, refund, fee, identity or stored value is caller-chosen, not a public input or hash-committed |
-| **P2** | Context binding | Caller, chain ID, contract address, config or policy ID, or domain is not bound, so a proof works in a context it was not made for |
+| **P2** | Context binding | Caller, chain ID, contract address, config or policy ID, domain, or the starting/prior state is not bound to the consumer's context or stored state, so a proof works in a context it was not made for |
 | **P3** | Replay | Nullifier or replay key not bound to the proof, aliasable through the field (`x` and `x + r`), or no replay protection at all |
 | **P4** | Verifier invariants (integration level) | The deployed verifier or its configuration is wrong: missing public-input range checks, constant-true result, unchecked pairing result, forgeable key (γ = δ), vk or program ID not pinned in the consumer, misrouting gateway |
 | **P5** | Interface mismatch | The consumer passes public inputs in a different count, order, endianness or encoding than the circuit expects |
@@ -46,7 +46,7 @@ A finding is a **binding flaw** when all three of these hold:
 
 - **P1, ZKredential (our own finding).** The gateway mints to a caller-supplied recipient. The proof's public `walletAddress` is checked by the registry but not by the gateway, and the replay key covers the proof, not the caller. Anyone who submits an unused proof first receives the mint. C1 met, C2 met (mint), C3 met (recipient not fixed).
 - **P1/P3, RacePass (our own finding).** The contract stores and revocation-checks a caller-supplied `credHash` that is never tied to the KYC proof's `credentialHash`. The effect is acted on for an unproven credential.
-- **OTHER (extent), Payy message tail.** The circuit leaves the tail of a 1000-word public array unconstrained, while the consumer parses the whole array. The prover controls values the consumer acts on.
+- **P1 (stored value; v1.1, was OTHER), Payy message tail.** The circuit leaves the tail of a 1000-word public array unconstrained, while the consumer parses the whole array. The prover controls values the consumer acts on.
 - **P4, synthetic.** `verifyProof` computes the pairing but returns `true` regardless of the result. Every proof is accepted, so every effect is unauthorized.
 - **P5, synthetic.** The circuit outputs `[state, pinCode]`, but the contract reads index 0 as `pinCode`. The consumer acts on swapped identity attributes.
 - **P3, synthetic.** The contract marks `spent[nullifier]` using the raw uint, while the verifier reduces inputs mod r. Then `nullifier + r` passes as a fresh nullifier.
@@ -94,3 +94,6 @@ Label `binding` **independently** of this column: say whether, under §1, it bin
 - **Signature instead of proof.** If the issue is purely an ECDSA/EIP-712 signature with no ZK proof involved, C1 `fails`, so `binding = N`, unless the signature is checked *inside* the circuit or bound to the proof's statement.
 - **Several issues in one finding.** Label the main mechanism and mention the rest in `notes`.
 - **The report is unavailable or the link is dead.** Set `binding = U` and `notes = "source unavailable"`. Do not search for other sources.
+
+---
+**Change log.** v1.1 (2026-11-24, after labeling closed): P2 wording gains "starting/prior state"; the Payy example moves from OTHER to P1. Raters labeled against v1.0. Decisions are in `dataset/labels-v1/DECISIONS.md`.

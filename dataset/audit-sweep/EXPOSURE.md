@@ -36,3 +36,12 @@ The protocol allowed reading audit-report text for FORBIDDEN families (only thei
 - (b) move the families out of the held-out pool and allow their audit candidates.
 
 `merged/candidates.csv` carries `holdout_flag`; filter on it at split time.
+
+## 2026-11-24: orchestrator exposure to final labels (before the dev/test split)
+
+While inspecting `/home/pollmix/Coding/labeling-a`, the orchestrator (Claude session 9003cfe6) read:
+- `code-review-rater-A.csv` header plus the first three rows, which hold code evidence for **L001, L041, L019**;
+- `NOTES_FOR_AUTHOR.md`, `PATTERN_CANDIDATES.md` and `PROTOCOL.md` (mechanism one-liners, some naming functions/fields, for several FULL items).
+
+It did not read `discussion/` or the rest of `code-review-rater-A.csv`.
+Mitigation: L001, L041 and L019 (and their project families) are assigned to the **dev** set before the seeded split. The tool builder must not be the orchestrator session; build lanes get no access to labeling-a.
