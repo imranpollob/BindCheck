@@ -21,9 +21,9 @@ for p in pats:
     out.append(f"| {p} | " + " | ".join(str(t[(p, s)]) for s in sevs) + f" | {sum(t[(p, s)] for s in sevs)} |")
 low = [r for r in Y if sev(r["severity"]) in ("Low", "Info")]
 out += ["", f"- Binding findings the auditor rated Low/Info: {len(low)} of {len(Y)}", ""]
-a = C.Counter(r["auditor"] for r in Y)
+a = C.Counter({"zksecurity": "zkSecurity"}.get(r["auditor"].lower(), r["auditor"]) for r in Y)
 out += ["## Binding findings by auditor/source", ""] + [f"- {k}: {v}" for k, v in a.most_common()]
-yrs = C.Counter((r["report_date"] or "")[:4] or "n/a" for r in Y)
+yrs = C.Counter((re.search(r"20\d\d", r["report_date"] or "") or [None])[0] or "n/a" for r in Y)
 out += ["", "## Binding findings by report year", ""] + [f"- {k}: {v}" for k, v in sorted(yrs.items())]
 (here / "CHARACTERIZATION.md").write_text("\n".join(out) + "\n")
 print("\n".join(out[:22]))

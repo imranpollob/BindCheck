@@ -23,7 +23,7 @@
 - Zellic: 20
 - Trail of Bits: 10
 - ABDK Consulting: 10
-- zkSecurity: 8
+- zkSecurity: 9
 - OpenZeppelin: 6
 - Nethermind Security: 4
 - Consensys Diligence: 3
@@ -41,29 +41,15 @@
 - Aztec Team: 1
 - BlockHeader: 1
 - Code4rena: 1
-- ZKSecurity: 1
 - Cantina: 1
 - Nguyen Thoi Minh Quan: 1
 
 ## Binding findings by report year
 
-- 16 O: 1
 - 2021: 5
 - 2022: 1
-- 2023: 10
-- 2024: 15
-- 2025: 16
-- 2026: 5
-- Apri: 6
-- Augu: 2
-- Febr: 4
-- July: 2
-- June: 5
-- Marc: 4
-- May : 6
-- Nove: 2
-- Octo: 2
-- Peri: 1
-- UNKN: 14
-- n/a: 1
-- unkn: 1
+- 2023: 13
+- 2024: 20
+- 2025: 39
+- 2026: 9
+- n/a: 16
