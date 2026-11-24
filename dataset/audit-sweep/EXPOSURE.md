@@ -45,3 +45,10 @@ While inspecting `/home/pollmix/Coding/labeling-a`, the orchestrator (Claude ses
 
 It did not read `discussion/` or the rest of `code-review-rater-A.csv`.
 Mitigation: L001, L041 and L019 (and their project families) are assigned to the **dev** set before the seeded split. The tool builder must not be the orchestrator session; build lanes get no access to labeling-a.
+
+## 2026-11-24: orchestrator exposure to round-1 test outputs
+
+After round 1, the orchestrator read `mvp/eval/GT-locations.csv` (test GT) and the tool's per-item test warnings for the 14 test positives, to diagnose the result. Consequences:
+- Round 1 numbers are final as reported (original scoring and any declared amendment, side by side).
+- Any tool v2 is driven by dev only, built by a fresh lane whose brief names no test mechanism or miss.
+- The clean re-test is round 2 on the 16 newly pinned test items (Pass 2 by the rater).
