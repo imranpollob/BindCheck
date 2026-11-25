@@ -7,7 +7,7 @@ fixed.
 
 \subsection{Collecting audit findings}\label{sec:study-collect}
 
-\paragraph{Sources}
+\para{Sources}
 We enumerated 8,578 unique public audit reports from 68 audit firms, contest
 platforms and advisory databases, including the report archives of firms
 that audit ZK systems (e.g., Veridise, Zellic, zkSecurity, Trail of Bits,
@@ -18,7 +18,7 @@ Some sources could not be fully enumerated during the collection window. We
 list them with their coverage in the artifact.
 \TODO{W6}{one-line coverage statement per missing source (Solodit, CertiK, yAcademy) from COVERAGE.md}
 
-\paragraph{Screening}
+\para{Screening}
 A report is in scope if it audits an application that verifies a ZK proof and
 acts on it. 343 reports passed this screen. From them we logged 698 findings
 that touch proof verification, public inputs, nullifiers, verifier keys or the
@@ -32,7 +32,7 @@ As a completeness check, the sweep recovered 49 of 50 binding findings in an
 independently assembled list of known cases.
 % src: merged/RECALL-R2.md (49/50)
 
-\paragraph{Labeling}
+\para{Labeling}
 Each candidate was labeled against a written guide that defines C1--C3, the
 five patterns, the exclusions of Section~\ref{sec:definition}, and worked
 examples. Each label records binding (Y/N/U), pattern, whether the issue is a
@@ -188,13 +188,13 @@ source contributes more than 21. Binding is therefore a class that many
 experienced auditors encounter, not the checklist item of one firm.
 % src: CHARACTERIZATION.md by auditor (24 sources; max Veridise 21)
 
-\paragraph{Which layers are needed}
+\para{Which layers are needed}
 \DEMO{For 61\% of the FULL-tier binding findings, deciding the flaw required
 reading both the circuit (or its public-input specification) and the
 consumer. Only 23\% could be decided from the consumer alone.}
 \TODO{D3}{for FULL binding items, code which layer(s) the Pass-2 evidence needed}
 
-\paragraph{How they were fixed}
+\para{How they were fixed}
 \DEMO{Fixes follow the signature analogy. 70\% of the fixed findings add the
 missing value to the public inputs or to a hashed commitment, and the rest add
 a context check (chain, contract, root) or a statement-derived replay key.}

@@ -12,7 +12,7 @@ tools miss?
 
 \subsection{Setup}\label{sec:eval-setup}
 
-\paragraph{Development and test split}
+\para{Development and test split}
 We split the labeled findings by project family, never by item, so that no
 project appears in both sets. The split is seeded and was fixed before anyone
 read the test code. Families seen by the authors before the split were forced
@@ -21,7 +21,7 @@ into development.
 \tool{} was built and tuned on the development split only, and frozen before
 any test run.
 
-\paragraph{Benchmarks}
+\para{Benchmarks}
 We use two benchmarks.
 \begin{itemize}
 \item \textbf{B1, audit test set.} These are the audited vulnerable
@@ -49,7 +49,7 @@ tests of the removed check. The unmodified host is the clean control.
 All targets are cleaned snapshots: the version history, audit reports and
 audit references are removed, so no tool can read the answer.
 
-\paragraph{Tools}
+\para{Tools}
 We compare against the tools a ZK project would use today.
 \begin{itemize}
 \item Static Solidity analyzers: Slither~\cite{slither} and
@@ -67,7 +67,7 @@ generic binding invariant of Section~\ref{sec:design-validator} wired by hand.
 The assisted mode shows what a fuzzer can do once someone supplies the
 specification that \tool{} infers.
 
-\paragraph{Scoring}
+\para{Scoring}
 The matching rules were committed before each tool ran. One amendment (v1.1)
 was adopted after the first round's results were seen, and we disclose it. It
 adds a case-insensitive matcher and the separate mechanism-level metric, and
@@ -135,7 +135,7 @@ Plain LLM (same model) & 26/26 & 3/14 (0.08--0.48) & \TBD & 6/6 & 6/6 \\
 \TODO{E1}{BindCheck v2 frozen run on B1 round 1 + round 2 and B2 (in progress); replace red cells}
 \TODO{E8}{static tools and the plain LLM on the round-2 targets, for complete columns}
 
-\paragraph{Existing tools miss binding flaws}
+\para{Existing tools miss binding flaws}
 Table~\ref{tab:b1} shows the result on real audited flaws. Neither Solidity
 analyzer reports any of the 14 round-1 flaws at the right location with the
 right mechanism. Slither and Mythril report something at the flaw's location
@@ -148,7 +148,7 @@ and Picus could not compile any. Out of the box, the fuzzer found none of the
 crash anything: the contract works exactly as written.
 % src: mvp/eval/RESULTS-static.md; fuzz/RESULTS-fuzz.md
 
-\paragraph{The missing piece is the specification}
+\para{The missing piece is the specification}
 Given our binding invariant, the same fuzzer finds 5 of the 13 flaws and raises no alarm on 3 of 3 hard negatives. One fixed version
 is flagged. Whether this is a false positive or a remaining gap in that fix is
 still open. The
@@ -158,7 +158,7 @@ exactly what \tool{}'s ledgers make explicit. Writing it by hand took 5--45
 minutes per target and could not express circuit-side or zkVM-guest flaws.
 % src: fuzz/RESULTS-fuzz.md (assisted HITs L035, L015, L010, L042, L193; L024 fixed flagged)
 
-\paragraph{\tool{} finds what the others miss}
+\para{\tool{} finds what the others miss}
 \DEMO{\tool{} finds 8 of the 14 round-1 flaws and 6 of the 8 round-2 flaws at
 the exact location and mechanism, against 3 of 14 for the same model without
 the skill procedure. It does so without a single warning on any fixed
@@ -190,7 +190,7 @@ Picus & -- & 0 & -- & -- & -- & 0 \\
 % src: benchmarks/binding-mutants-v2/RESULTS-static.md
 \end{table}
 
-\paragraph{Mutants}
+\para{Mutants}
 B2 tests every pattern on hosts outside the dataset (Table~\ref{tab:b2}).
 Slither and Mythril again report no binding flaw at the mechanism level:
 Mythril returns zero issues on all 23 consumer mutants, and Slither fails to
@@ -229,7 +229,7 @@ is an engineering limit of our syntactic tools (Section~\ref{sec:disc-limits}).
 % src: mvp/tool/FREEZE-v2.md known weaknesses 3 (L003 parser differential, L008 SDK method)
 \TODO{E1}{classify the test misses into these causes}
 
-\paragraph{Case study}
+\para{Case study}
 \DEMO{In a round-2 proof marketplace, \tool{}'s effect ledger lists the
 fulfillment entry with the value \emph{request identifier} and the verdict
 \emph{needs statement}. The statement ledger shows that the proof's journal
@@ -314,13 +314,13 @@ per target before its first run.
 
 \subsection{Variance and contamination}\label{sec:eval-validity}
 
-\paragraph{Run-to-run variance}
+\para{Run-to-run variance}
 LLM output varies between runs.
 \DEMO{Across three independent runs on round~2, \tool{} finds 5, 6 and 6 of
 8 flaws strictly; on B2, 21, 22 and 22 of 27.} We report the median.
 \TODO{E2}{three full runs on B1 and B2; report min/median/max}
 
-\paragraph{Training-data contamination}
+\para{Training-data contamination}
 The audit reports are public and may be in the model's training data. Three
 results argue against memorization.
 \begin{itemize}

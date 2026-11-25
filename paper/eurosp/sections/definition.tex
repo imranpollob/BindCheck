@@ -13,13 +13,13 @@ consumer state $\sigma$, extracts a public-input vector $\vec{u} =
 \mathsf{pi}(x,\sigma)$, calls $\mathsf{Verify}(\mathit{vk},\vec{u},\pi)$, and,
 on acceptance, commits a state transition $\sigma' = \delta(x,s,\sigma)$.
 
-\paragraph{Statement ledger}
+\para{Statement ledger}
 The \emph{statement ledger} $\mathcal{S}(\vec{u})$ is the set of facts an
 accepting proof establishes. It contains the public inputs $\vec{u}$ and every
 value the circuit's relation $R$ uniquely determines from $\vec{u}$, such as a
 recipient address hashed into a public commitment.
 
-\paragraph{Effect ledger}
+\para{Effect ledger}
 The \emph{effect ledger} $\mathcal{E}(f)$ lists every value that $\delta$ uses
 to decide \emph{who} receives or is affected, \emph{how much} moves,
 \emph{what} is recorded, \emph{which} state or policy applies, and \emph{how
@@ -48,7 +48,7 @@ own state. Each red edge is a binding flaw.}
 \label{fig:ledgers}
 \end{figure}
 
-\paragraph{Definition}
+\para{Definition}
 A consumer is \emph{bound} if for every accepting call, every value in
 $\mathcal{E}(f)$ is a function of $\mathcal{S}(\vec{u})$ and the consumer
 state $\sigma$ alone. A \emph{binding flaw} is a reachable violation, that is,
@@ -67,7 +67,7 @@ redirect an effect by front-running is therefore a binding flaw, not an
 ordering bug.
 \TODO{T1}{state the definition as a short formal property over $(R,\mathsf{pi},\delta)$ and show that C1--C3 is exactly its negation}
 
-\paragraph{Why neither layer suffices}
+\para{Why neither layer suffices}
 The definition relates two artifacts written in different languages. The
 circuit determines $\mathcal{S}$. The consumer determines $\mathcal{E}$ and
 $\mathsf{pi}$. A circuit analyzer can prove that $R$ is fully constrained, yet
@@ -107,7 +107,7 @@ Other & -- & -- & 2 \\
 % src: dataset/labels-v1/CHARACTERIZATION.md (pattern x severity); P4 split: LABELS-v1.csv proof_system_soundness (17 N, 16 Y)
 \end{table}
 
-\paragraph{P1: Unbound effect (unsigned field)}
+\para{P1: Unbound effect (unsigned field)}
 The consumer uses a caller-supplied recipient, amount, fee, refund address or
 stored value that is neither a public input nor hash-committed into one.
 \begin{lstlisting}[language=Java]
@@ -118,20 +118,20 @@ function claim(Proof p, uint root, uint nf, address to) {
 }
 \end{lstlisting}
 
-\paragraph{P2: Context (missing domain separation)}
+\para{P2: Context (missing domain separation)}
 The proof does not commit to the chain, contract, configuration, policy or
 \emph{prior state} in which the consumer uses it, so a proof made for one
 context is accepted in another. Accepting a proof about a stale or
 attacker-chosen state root falls here.
 
-\paragraph{P3: Replay and alias (nonce reuse)}
+\para{P3: Replay and alias (nonce reuse)}
 The replay key is missing, is not derived from the statement (for example,
 $\mathsf{keccak}(\pi)$ instead of a nullifier, which a re-randomized proof
 evades), or aliases through the field: a contract that stores
 \texttt{spent[nf]} on the raw 256-bit integer while the verifier reduces
 inputs modulo $r$ accepts $nf$ and $nf+r$ as distinct.
 
-\paragraph{P4: Verifier integration (weak or unpinned key)}
+\para{P4: Verifier integration (weak or unpinned key)}
 The deployed verifier, or the consumer's use of it, accepts statements it
 should reject. Examples: unchecked pairing results, a verifier that returns
 \texttt{true} regardless of the outcome, missing range checks on public inputs,
@@ -143,13 +143,13 @@ have the same effect on the consumer, but their root cause is cryptographic,
 so we report them as \emph{adjacent} and exclude them from the core class.
 \TODO{W3}{author confirms the P4 split: 17 core plus 16 adjacent}
 
-\paragraph{P5: Interface mismatch (format confusion)}
+\para{P5: Interface mismatch (format confusion)}
 The consumer and the circuit disagree on the count, order, width or encoding
 of public inputs, and the honest proof is still accepted while the consumer
 reads a different value than the circuit proved. A mismatch that only makes
 honest proofs fail is a liveness bug, not a binding flaw.
 
-\paragraph{What is not a binding flaw}
+\para{What is not a binding flaw}
 Reentrancy and ordering issues where every effect value is fixed; denial of
 service against one's own claim; trust in an administrator; and
 circuit-internal under-constraints that do not change what the consumer is told

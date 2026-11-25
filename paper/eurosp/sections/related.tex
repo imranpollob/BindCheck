@@ -1,6 +1,6 @@
 \section{Related Work}\label{sec:related}
 
-\paragraph{Bugs in ZK circuits and proof systems}
+\para{Bugs in ZK circuits and proof systems}
 Chaliasos et al.\ systematize vulnerabilities in SNARK systems and
 applications~\cite{sok-snark-bugs}. Their taxonomy is organized by the layer
 where a bug lives (circuit, front end, back end, integration), and
@@ -16,7 +16,7 @@ by characterizing and detecting the integration-level class that circuit
 tools cannot see.
 \TODO{W4}{literature search: ZK integration/verifier-misuse papers 2024--2026, zkVM integration bugs, recent circuit fuzzers; verify every citation}
 
-\paragraph{Smart-contract analysis}
+\para{Smart-contract analysis}
 Static analyzers such as Slither~\cite{slither}, symbolic executors such as
 Mythril~\cite{mythril}, and fuzzers such as Echidna~\cite{echidna} and Foundry
 find reentrancy, access-control and arithmetic flaws in contracts. They can
@@ -26,7 +26,7 @@ evaluation confirms this: with generic properties they find none of the
 binding flaws, and a fuzzer becomes effective only once it is given the
 binding invariant.
 
-\paragraph{LLM-based vulnerability detection}
+\para{LLM-based vulnerability detection}
 LLMs have been combined with static analysis to detect logic flaws in smart
 contracts~\cite{gptscan} and used as agents that explore code with
 tools~\cite{llm4vuln}. These systems rely on general vulnerability knowledge.
@@ -34,7 +34,7 @@ tools~\cite{llm4vuln}. These systems rely on general vulnerability knowledge.
 definition and forces exhaustive, checkable ledgers instead of free-form
 review, and it upgrades warnings to executable evidence.
 
-\paragraph{Cross-chain verification}
+\para{Cross-chain verification}
 Bridges and light clients also act on verified messages, and several large
 bridge incidents involved a message being accepted without being bound to the
 intended source, recipient or verifier~\cite{bridge-sok}. ZK bridges and zkVM
@@ -42,7 +42,7 @@ light clients inherit this risk at the proof-to-effect interface. Our P2 and
 P4 patterns capture it, and several findings in our dataset come from such
 systems.
 
-\paragraph{Signature and cryptographic API misuse}
+\para{Signature and cryptographic API misuse}
 The patterns of Section~\ref{sec:definition} mirror long-studied misuse of
 signatures and cryptographic APIs: unsigned fields, missing domain separation,
 and nonce reuse~\cite{egele-crypto-misuse,cryptoguard}. Front-running, which

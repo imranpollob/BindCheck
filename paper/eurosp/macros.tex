@@ -1,7 +1,6 @@
 % Placeholders and notes. Red = something must be executed, built or decided.
-\usepackage{xcolor}
-% bold run-in paragraph headings
-\renewcommand{\paragraph}[1]{\par\smallskip\noindent\textbf{#1.}\enspace}
+% bold run-in heading (content macro; the class is not modified)
+\newcommand{\para}[1]{\par\smallskip\noindent\textbf{#1.}\enspace}
 \newcommand{\tool}{\textsc{BindCheck}}
 % \TBD{} : a value we do not have yet (shown red)
 \DeclareRobustCommand{\TBD}{\textcolor{red}{\textbf{TBD}}}

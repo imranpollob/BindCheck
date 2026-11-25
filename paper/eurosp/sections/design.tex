@@ -80,13 +80,13 @@ before it continues.}
 
 \subsection{Skill procedure}\label{sec:design-skills}
 
-\paragraph{Step 0: Inventory}
+\para{Step 0: Inventory}
 A deterministic prepass lists the entry points that commit effects ($E_1,
 E_2,\dots$) and the producers of public statements ($S_1, S_2,\dots$): the
 verifier calls, the public-input arrays, and the circuit or guest-program
 outputs. The list bounds the work and becomes the coverage target.
 
-\paragraph{Step 1: Effect ledger}
+\para{Step 1: Effect ledger}
 For each entry $E_i$ the brain writes one row per (entry, effect, value). The
 row names the effect (transfer, mint, state write, grant), the value that
 decides it, where the value comes from (public input, hash-committed input,
@@ -94,14 +94,14 @@ storage, calldata, \texttt{msg.sender}), and a verdict: \emph{bound},
 \emph{unbound}, or \emph{needs statement}. If an entry has no row, the
 controller re-prompts for it, at most twice.
 
-\paragraph{Step 2: Statement ledger}
+\para{Step 2: Statement ledger}
 For each public value the brain records what the circuit or guest constrains
 it to mean, which consumer value it is supposed to fix, and whether the
 consumer actually compares the two. This step catches what the consumer alone
 cannot show. A recipient that the circuit hashes into a commitment is bound
 only if the consumer recomputes and checks the same commitment.
 
-\paragraph{Step 3: Pattern checks and follow-through}
+\para{Step 3: Pattern checks and follow-through}
 For every unbound or unresolved row, the brain runs the playbook of the
 matching pattern: recipient and fee provenance (P1); chain, contract, root and
 prior-state checks (P2); replay-key derivation and field aliasing (P3);
@@ -110,7 +110,7 @@ order, width and encoding (P5). It then follows the value into libraries,
 helpers and record writers. Many flaws in our dataset sit one call below the
 entry point.
 
-\paragraph{Step 4: Attacker pass and final review}
+\para{Step 4: Attacker pass and final review}
 The brain takes the view of an attacker who holds an observed valid proof and
 asks what it can change. The final review drops warnings that fail C1--C3,
 for example admin-only paths or self-inflicted denial of service, and emits
@@ -118,7 +118,7 @@ one warning per root cause. Each warning carries the pattern, the consumer
 file and function, the effect, the unbound value, an explanation, and the
 related locations (verifier, circuit, helpers).
 
-\paragraph{Where the skills come from}
+\para{Where the skills come from}
 The procedure and the five playbooks were written from the development split
 only (Section~\ref{sec:eval-setup}). We split the development families again,
 with a fixed seed, into a \emph{tune} part and a \emph{check} part. In the second
@@ -157,11 +157,11 @@ circuit's \texttt{main} signature.}
 An LLM warning is a claim. To make every reported flaw trustworthy, \tool{}
 climbs an evidence ladder.
 
-\paragraph{E1: Ledger claim}
+\para{E1: Ledger claim}
 The warning names an effect row whose value is unbound. This is what the brain
 produces.
 
-\paragraph{E2: Assisted fuzzing}
+\para{E2: Assisted fuzzing}
 \DEMO{\tool{} generates a Foundry harness from the effect ledger. A mock
 verifier accepts exactly the honest public-input vector, which stands in for
 ``a valid proof of the honest statement''. The fuzzer varies the sender and
@@ -170,7 +170,7 @@ an effect whose recipient, amount, state or count differs from the honest
 one.} A violation is a concrete witness that the effect is not bound.
 \TODO{A2}{automatic harness generation from ledger rows (the invariant and template exist; wiring is manual today)}
 
-\paragraph{E4: Real proof on a local chain}
+\para{E4: Real proof on a local chain}
 \DEMO{\tool{} generates an honest proof with the project's own prover, deploys
 the unmodified verifier and consumer on a local Anvil chain, and replays the
 proof from a second account with the attacker's arguments. A warning reaches

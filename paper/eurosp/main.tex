@@ -1,13 +1,22 @@
 % EuroS&P submission draft. Format: IEEE conference, A4, 13 body pages.
-\documentclass[conference,compsoc,a4paper]{IEEEtran}
-\usepackage{amsmath,amssymb,booktabs,graphicx,listings,url,tikz,multirow}
+\documentclass[compsoc,conference,a4paper,10pt,times]{IEEEtran}
+% Class options and IEEEtran.cls exactly as in the official EuroS&P 2027 template (zip sha256 5f074285...).
+\IEEEoverridecommandlockouts
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx,textcomp,xcolor}
+\usepackage{booktabs,listings,tikz,multirow}
 \usetikzlibrary{positioning,arrows.meta,fit,shapes.misc}
 \input{macros}
+\usepackage[colorlinks=true,urlcolor=black]{hyperref}
 \begin{document}
-\title{\TODO{W1}{title}}
+\title{\TODO{W1}{title}\thanks{NB: appendices, if any, did not benefit from peer review.}}
 \author{\IEEEauthorblockN{Anonymous submission}}
 \maketitle
 \begin{abstract}\input{sections/abstract}\end{abstract}
+\begin{IEEEkeywords}
+zero-knowledge proofs, smart contracts, binding, vulnerability detection, large language models
+\end{IEEEkeywords}
 \input{sections/intro}
 \input{sections/background}
 \input{sections/definition}

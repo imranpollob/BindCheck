@@ -37,7 +37,7 @@ Every red `\TODO{ID}{...}` in the LaTeX has a row here with the same ID. Red `\D
 | F1 | F | must | §1 | Fig. 1 from a real, already-fixed audited case (dev split), in three panels: circuit, consumer, attack | Fig. 1 | author picks the case | open |
 | T1 | T | nice | §3.1 | Short formal property over (R, pi, delta); C1–C3 as its negation | – | – | open |
 | W1 | W | must | title | Title | – | author | open |
-| W2 | W | must | all | Official EuroS&P template + LaTeX toolchain (none installed locally); compile; body ≤13 pages | – | tooling | open |
+| W2 | W | must | all | Official EuroS&P 2027 template (zip sha256 5f074285…; IEEEtran.cls V1.8b + class options copied); build via local docker image `authguard-paper-tex:2022`; body ≤13 pages | – | – | done |
 | W3 | W | must | §3.2 | Confirm the P4 split (17 core + 16 adjacent) | – | author | open |
 | W4 | W | must | §8, refs | Literature search; verify every citation (several marked VERIFY) | – | – | open |
 | W5 | W | must | Open Science | Anonymized artifact link | – | – | open |

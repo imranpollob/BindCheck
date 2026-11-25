@@ -48,12 +48,12 @@ prevented 41\% and effect commitments 63\%.}
 
 \subsection{Threats to validity}\label{sec:disc-threats}
 
-\paragraph{Selection}
+\para{Selection}
 We study public audits of projects that chose to publish them. Projects
 without audits may have more binding flaws, and audit firms differ in which
 findings they publish. Some sources could not be fully enumerated.
 
-\paragraph{Labels}
+\para{Labels}
 Labels were proposed by an LLM and adjudicated by two raters who discussed
 every item, so they are not independent annotations. We mitigate this with a
 written guide fixed before labeling, a code-level second pass for every
@@ -61,18 +61,18 @@ evaluated item, \DEMO{and an independent blind relabel of 30 items
 ($\kappa=0.78$)}. Pattern boundaries (especially P2 versus P1 for stored
 values) involve judgment, so we release all labels with their notes.
 
-\paragraph{Ground-truth locations}
+\para{Ground-truth locations}
 A flaw can often be fixed at more than one place. Strict scoring requires the
 location the auditors or fix authors chose, which undercounts warnings at an
 equally valid place. We therefore also report mechanism-level hits.
 
-\paragraph{LLM judge and variance}
+\para{LLM judge and variance}
 An LLM judge decides whether a warning describes the same mechanism. In a
 re-judging test about one verdict in twenty changed. Detection itself varies
 by $\pm$1--2 items between runs, which is why we report repeated runs.
 % src: mvp/tool/FREEZE-v2.md known weaknesses 1, 9
 
-\paragraph{Leakage}
+\para{Leakage}
 The people who built the benchmark also saw the test results of an earlier
 tool version. To keep the tool independent, every tool version was built by a
 separate process that could read only development data, under enforced access
