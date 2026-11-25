@@ -1,0 +1,333 @@
+\section{Evaluation}\label{sec:eval}
+
+We evaluate \tool{} against the tools a ZK project would use today. Four
+research questions guide the evaluation:
+\begin{description}
+\item[RQ2] Detection: does \tool{} find known binding flaws that existing
+tools miss?
+\item[RQ3] New flaws: does it find binding flaws that auditors missed?
+\item[RQ4] Confirmation: how many warnings reach executable evidence?
+\item[RQ5] Cost: what does a scan cost in money, time and human effort?
+\end{description}
+
+\subsection{Setup}\label{sec:eval-setup}
+
+\paragraph{Development and test split}
+We split the labeled findings by project family, never by item, so that no
+project appears in both sets. The split is seeded and was fixed before anyone
+read the test code. Families seen by the authors before the split were forced
+into development.
+% src: dataset/labels-v1/build_v1.py (SEED 20261124; FORCED_DEV)
+\tool{} was built and tuned on the development split only, and frozen before
+any test run.
+
+\paragraph{Benchmarks}
+We use two benchmarks.
+\begin{itemize}
+\item \textbf{B1, audit test set.} These are the audited vulnerable
+commits of the test families, with the flaw located in code by the
+code-level labeling pass.
+  \begin{itemize}
+  \item \emph{Round~1}: 14 binding flaws, 6 hard negatives (proof-related
+  findings that are not binding, at their own locations) and 6 fixed
+  versions.
+  \item \emph{Round~2}: 8 binding flaws and 8 hard negatives located by a
+  later code-level pass whose results the tool-building process could not
+  read. Round~2 is our clean retest.
+  \end{itemize}
+\item \textbf{B2, binding mutants.} 27 binding flaws injected into three
+small hosts (a privacy vault, a red-packet claim, and an oracle claim, one of
+them a proof of concept) that belong to no dataset family. There are at least
+four per pattern (P1 4, P2 8, P3 5, P4 5, P5 5), and 4 of them are
+circuit-side edits. Each mutant is designed to keep the honest path
+accepting. All 27 compile, and for one host the existing test suite confirms
+it: the clean host passes 32 of 32 tests, and each mutant fails only the
+tests of the removed check. The unmodified host is the clean control.
+\TODO{E9}{honest-path check for the other two hosts}
+\end{itemize}
+% src: mvp/eval/GT-locations.csv; benchmarks/binding-mutants-v2/README.md
+All targets are cleaned snapshots: the version history, audit reports and
+audit references are removed, so no tool can read the answer.
+
+\paragraph{Tools}
+We compare against the tools a ZK project would use today.
+\begin{itemize}
+\item Static Solidity analyzers: Slither~\cite{slither} and
+Mythril~\cite{mythril}.
+\item Circuit analyzers: circomspect~\cite{circomspect} and
+Picus~\cite{picus}.
+\item Property-based fuzzing: Foundry invariant testing~\cite{foundry}.
+\item The same LLM used as a plain auditor, without skills or tools.
+\end{itemize}
+Every tool sees the same snapshots. We give the static tools build-enabled
+copies, with dependencies installed at the pinned versions, because most
+snapshots do not compile without them. We run the fuzzer in two modes:
+\emph{out of the box}, with generic properties, and \emph{assisted}, with the
+generic binding invariant of Section~\ref{sec:design-validator} wired by hand.
+The assisted mode shows what a fuzzer can do once someone supplies the
+specification that \tool{} infers.
+
+\paragraph{Scoring}
+The matching rules were committed before each tool ran. One amendment (v1.1)
+was adopted after the first round's results were seen, and we disclose it. It
+adds a case-insensitive matcher and the separate mechanism-level metric, and
+it applies to all tools equally.
+\begin{itemize}
+\item \emph{Strict} hit: the warning names the flaw's file and function, and
+an LLM judge confirms the same mechanism.
+\item \emph{Loose} hit: the location alone matches.
+\item \emph{Mechanism-level} hit: the right mechanism is reported anywhere in
+the repository.
+\end{itemize}
+A target that a tool cannot build or analyze is \emph{unsupported}. It is
+reported separately and never counted as a miss. Intervals are 95\% Wilson
+intervals.
+% src: BindCheck/dataset/labels-v1/SCORING.md; mvp/eval/SCORING-v1.1.md
+
+\subsection{RQ2: Detection}\label{sec:eval-rq2}
+
+\begin{table}[t]
+\centering
+\caption{What each tool can see. \checkmark{} = analyzes the layer;
+$\circ$ = partial; -- = not at all.}
+\label{tab:capability}
+\footnotesize
+\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+\textbf{Tool} & \textbf{Circuit} & \textbf{Verifier} & \textbf{Consumer} & \textbf{Proof$\to$effect} \\
+\midrule
+Slither, Mythril & -- & \checkmark & \checkmark & -- \\
+circomspect, Picus & \checkmark & -- & -- & -- \\
+Foundry (out of box) & -- & $\circ$ & \checkmark & -- \\
+Foundry (assisted) & -- & mock & \checkmark & manual \\
+Plain LLM & $\circ$ & $\circ$ & \checkmark & $\circ$ \\
+\tool{} & \checkmark & \checkmark & \checkmark & \checkmark \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table*}[t]
+\centering
+\caption{Detection on the audit test set B1 (strict hits / positives;
+95\% Wilson interval). ``Sup.'' = targets the tool could analyze, out of
+26 in round~1. Specificity counts fixed versions and hard negatives without a
+warning at the flaw's location. Red cells are pending runs.}
+\label{tab:b1}
+\footnotesize
+\begin{tabular}{@{}lccccc@{}}
+\toprule
+\textbf{Tool} & \textbf{Sup.\ (R1)} & \textbf{Round 1 strict} & \textbf{Round 2 strict} & \textbf{Fixed-version spec.} & \textbf{Hard-neg.\ spec.} \\
+\midrule
+Slither & 15/26 & 0/14 (0.00--0.22) & \TBD & 6/6 & 3/6 \\
+Mythril & 13/26 & 0/14 (0.00--0.22) & \TBD & 6/6 & 6/6 \\
+circomspect & 1/26 & 0/14 (0.00--0.22) & \TBD & 6/6 & 5/6 \\
+Picus & 0/26 & unsupported & unsupported & -- & -- \\
+Foundry, out of box$^\dagger$ & 13 & \multicolumn{2}{c}{0/13 (R1+R2)} & -- & -- \\
+Foundry, assisted$^\dagger$ & 13 & \multicolumn{2}{c}{5/13 (0.18--0.64)} & 4/5 & 3/3 \\
+Plain LLM (same model) & 26/26 & 3/14 (0.08--0.48) & \TBD & 6/6 & 6/6 \\
+\tool{} & 26/26 & \DEMO{8/14 (0.33--0.79)} & \DEMO{6/8 (0.41--0.93)} & \DEMO{6/6} & \DEMO{13/14} \\
+\bottomrule
+\multicolumn{6}{@{}l}{\scriptsize $^\dagger$Fuzzing covers EVM-side flaws of both rounds; circuit- and guest-side flaws are unsupported. Harnesses were wired by hand in 5--45 min per target.}
+\end{tabular}
+% src: mvp/eval/COMPARISON.md (slither-build, mythril-build, circomspect-build, baseline-default); mvp/eval/RESULTS-static.md (supported counts); mvp/eval/fuzz/RESULTS-fuzz.md
+\end{table*}
+\TODO{E1}{BindCheck v2 frozen run on B1 round 1 + round 2 and B2 (in progress); replace red cells}
+\TODO{E8}{static tools and the plain LLM on the round-2 targets, for complete columns}
+
+\paragraph{Existing tools miss binding flaws}
+Table~\ref{tab:b1} shows the result on real audited flaws. Neither Solidity
+analyzer reports any of the 14 round-1 flaws at the right location with the
+right mechanism. Slither and Mythril report something at the flaw's location
+for 3 and 2 of the 14 flaws, but the judge finds that none of these reports
+describes the binding mechanism. The circuit analyzers fail for a different reason: most test
+flaws do not live in a circuit at all. circomspect could analyze one target,
+and Picus could not compile any. Out of the box, the fuzzer found none of the
+13 flaws it could run on, despite up to millions of calls per target. Its generic properties
+(no revert, no panic) are never violated, because a binding flaw does not
+crash anything: the contract works exactly as written.
+% src: mvp/eval/RESULTS-static.md; fuzz/RESULTS-fuzz.md
+
+\paragraph{The missing piece is the specification}
+Given our binding invariant, the same fuzzer finds 5 of the 13 flaws and raises no alarm on 3 of 3 hard negatives. One fixed version
+is flagged. Whether this is a false positive or a remaining gap in that fix is
+still open. The
+difference between 0 and 5 is entirely the specification. That
+specification, which effect values must follow from the statement, is
+exactly what \tool{}'s ledgers make explicit. Writing it by hand took 5--45
+minutes per target and could not express circuit-side or zkVM-guest flaws.
+% src: fuzz/RESULTS-fuzz.md (assisted HITs L035, L015, L010, L042, L193; L024 fixed flagged)
+
+\paragraph{\tool{} finds what the others miss}
+\DEMO{\tool{} finds 8 of the 14 round-1 flaws and 6 of the 8 round-2 flaws at
+the exact location and mechanism, against 3 of 14 for the same model without
+the skill procedure. It does so without a single warning on any fixed
+version.} Round~2 matters most here, because the tool-building process
+never had access to these flaws or their locations.
+\DEMO{On the 6 positives that no other tool found and that are in scope for
+the fuzzer, \tool{} finds 4.}
+
+\begin{table}[t]
+\centering
+\caption{Detection of injected binding mutants (B2) by pattern
+(strict hits / mutants). ``uns.'' = the tool cannot analyze the layer or
+the run failed. Red cells are pending.}
+\label{tab:b2}
+\footnotesize
+\begin{tabular}{@{}lcccccc@{}}
+\toprule
+\textbf{Tool} & \textbf{P1} & \textbf{P2} & \textbf{P3} & \textbf{P4} & \textbf{P5} & \textbf{All} \\
+ & (4) & (8) & (5) & (5) & (5) & (27) \\
+\midrule
+Slither & 0 & 0 & 0 & 0 & 0 & 0 (12 uns.) \\
+Mythril & 0 & 0 & 0 & 0 & 0 & 0 (4 uns.) \\
+circomspect & -- & 1$^*$ & -- & -- & -- & 1 \\
+Picus & -- & 0 & -- & -- & -- & 0 \\
+\tool{} & \DEMO{4} & \DEMO{6} & \DEMO{4} & \DEMO{5} & \DEMO{3} & \DEMO{22} \\
+\bottomrule
+\multicolumn{7}{@{}l}{\scriptsize $^*$a style warning (\texttt{<--}) at the edited line, not a binding diagnosis.}
+\end{tabular}
+% src: benchmarks/binding-mutants-v2/RESULTS-static.md
+\end{table}
+
+\paragraph{Mutants}
+B2 tests every pattern on hosts outside the dataset (Table~\ref{tab:b2}).
+Slither and Mythril again report no binding flaw at the mechanism level:
+Mythril returns zero issues on all 23 consumer mutants, and Slither fails to
+analyze one of the hosts. The only circuit-tool hit is a style warning that
+happens to sit on the edited line.
+% src: binding-mutants-v2/RESULTS-static.md
+\DEMO{\tool{} detects 22 of the 27 mutants and reports no binding warning on
+any of the three clean hosts. Its misses are two P5 mutants that rely on
+truncating a 256-bit value, two circuit-only P2 mutants, where the brain did
+not connect the edited constraint to the consumer, and one P3 mutant whose
+replay key is derived in a library.}
+
+\finding{Existing analyzers find none of the binding flaws, and a fuzzer finds
+them only when a human supplies the binding specification. \tool{} infers
+that specification and \DEMO{finds 6 of 8 held-out audited flaws and 22 of 27
+injected ones}.}
+
+\subsection{Why \tool{} misses}\label{sec:eval-misses}
+
+We inspected every positive that \tool{} missed, on development and test
+data. Three causes recur. They are confirmed on development data and
+\DEMO{account for 4 of the 6 test misses}.
+\begin{itemize}
+\item \emph{Parser differentials.} The proof covers one parse of the bytes,
+and the application acts on another. In the vlayer email case, the DKIM-signed
+region and the body that the application reads are parsed by different code.
+No ledger row is wrong, and the flaw lies inside a parser.
+\item \emph{SDK-level validation.} The missing check sits in a client SDK
+method that the consumer trusts, outside the analyzed contract (an SP1 log
+method without anchor resolution).
+\item \emph{Deep dependencies.} A replay key or encoding is derived in a
+library that is not vendored, so the brain cannot read it.
+\end{itemize}
+The first two causes need analyses beyond the proof-to-effect link. The third
+is an engineering limit of our syntactic tools (Section~\ref{sec:disc-limits}).
+% src: mvp/tool/FREEZE-v2.md known weaknesses 3 (L003 parser differential, L008 SDK method)
+\TODO{E1}{classify the test misses into these causes}
+
+\paragraph{Case study}
+\DEMO{In a round-2 proof marketplace, \tool{}'s effect ledger lists the
+fulfillment entry with the value \emph{request identifier} and the verdict
+\emph{needs statement}. The statement ledger shows that the proof's journal
+does not commit to that identifier. The final warning names the function, the
+unbound identifier, and the attack: anyone who observes a valid fulfillment
+can attach it to a different request and collect that request's payment.
+Neither analyzer reports anything at that location, and the assisted fuzzer
+confirms the same flaw only after a 30-minute manual harness.}
+\TODO{E1}{replace with a real round-2 detection once results are in}
+
+\subsection{RQ3: New binding flaws}\label{sec:eval-rq3}
+
+\DEMO{We ran \tool{} on the latest audited commits of 25 ZK applications
+from our collection that were not used in development, and on the current
+versions of the same projects. It reported 41 warnings, of which we confirmed
+11 as binding flaws by manual review. Three are previously unreported, in two
+projects, and all three reach E4. In one, a recovery module accepts a proof
+over an account's guardians but takes the new owner set and threshold from
+calldata, so any party that observes a valid recovery proof can install its
+own owners. Table~\ref{tab:new} lists them. We reported all three to the
+maintainers.}
+\TODO{E3}{hunt: run frozen BindCheck on the hunt pool, triage, E4-confirm, disclose; the author decides the live-version scope}
+
+\begin{table}[t]
+\centering
+\caption{Previously unreported binding flaws found by \tool{}.
+Projects are anonymized until disclosure completes.}
+\label{tab:new}
+\footnotesize
+\begin{tabular}{@{}llllc@{}}
+\toprule
+\textbf{ID} & \textbf{App type} & \textbf{Pattern} & \textbf{Effect} & \textbf{Evidence} \\
+\midrule
+\DEMO{N1} & \DEMO{account recovery} & \DEMO{P1} & \DEMO{owner takeover} & \DEMO{E4} \\
+\DEMO{N2} & \DEMO{\TBD} & \DEMO{\TBD} & \DEMO{\TBD} & \DEMO{\TBD} \\
+\DEMO{N3} & \DEMO{\TBD} & \DEMO{\TBD} & \DEMO{\TBD} & \DEMO{\TBD} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{RQ4: Confirmation}\label{sec:eval-rq4}
+
+\DEMO{Of the 39 test-set warnings that matched a known flaw or were confirmed
+by manual review, 31 (79\%) reached E2 with an automatically generated
+harness, and 18 (46\%) reached E4. Every E4 attempt on a false positive failed
+to commit an unauthorized effect, so no false positive was upgraded. The
+warnings that stop at E1 are mostly circuit-side or zkVM-guest flaws, for
+which we cannot yet generate an attacker transaction automatically.}
+
+\begin{table}[t]
+\centering
+\caption{Evidence reached by confirmed warnings (RQ4). Red: pending.}
+\label{tab:evidence}
+\footnotesize
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+\textbf{Benchmark} & \textbf{Confirmed} & \textbf{E1 only} & \textbf{E2} & \textbf{E4} \\
+\midrule
+B1 round 1 & \DEMO{8} & \DEMO{3} & \DEMO{5} & \DEMO{3} \\
+B1 round 2 & \DEMO{6} & \DEMO{2} & \DEMO{4} & \DEMO{3} \\
+B2 mutants & \DEMO{22} & \DEMO{3} & \DEMO{19} & \DEMO{12} \\
+New flaws (RQ3) & \DEMO{3} & \DEMO{0} & \DEMO{3} & \DEMO{3} \\
+\midrule
+Total & \DEMO{39} & \DEMO{8} & \DEMO{31} & \DEMO{18}\textsuperscript{a} \\
+\bottomrule
+\multicolumn{5}{@{}l}{\scriptsize \textsuperscript{a}E4 needs the project's prover; E2 counts include E4.}
+\end{tabular}
+\end{table}
+\TODO{E5}{run the validator (A2, A3) on all confirmed test warnings and report the E1/E2/E4 shares}
+
+\subsection{RQ5: Cost}\label{sec:eval-rq5}
+
+On the development split, a scan costs \$1.05 on average and takes a median
+of 267\,s, with a maximum of about 11 minutes. Large monorepos cost \$2--3.
+% src: mvp/tool/FREEZE-v2.md
+\DEMO{On the test set, the median is 290\,s and \$1.10 per target.} The
+static analyzers run in seconds to minutes, but only after a human has made
+each project build. The assisted fuzzer needs 5--45 minutes of expert wiring
+per target before its first run.
+% src: fuzz/RESULTS-fuzz.md (wiring minutes)
+\TODO{E1}{test-set cost and time from the v2 run}
+
+\subsection{Variance and contamination}\label{sec:eval-validity}
+
+\paragraph{Run-to-run variance}
+LLM output varies between runs.
+\DEMO{Across three independent runs on round~2, \tool{} finds 5, 6 and 6 of
+8 flaws strictly; on B2, 21, 22 and 22 of 27.} We report the median.
+\TODO{E2}{three full runs on B1 and B2; report min/median/max}
+
+\paragraph{Training-data contamination}
+The audit reports are public and may be in the model's training data. Three
+results argue against memorization.
+\begin{itemize}
+\item The same model without the procedure finds only 3 of 14 round-1 flaws,
+so the knowledge alone does not produce the detections.
+\item B2 mutants are new code that no model has seen.
+\item \DEMO{Detection on findings published after the model's training cutoff
+is not lower than on older findings (5/7 vs.\ 9/15).}
+\end{itemize}
+\TODO{E6}{contamination split: detection by report date vs.\ model cutoff}

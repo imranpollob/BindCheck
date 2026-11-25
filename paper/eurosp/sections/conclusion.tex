@@ -1,0 +1,11 @@
+\section{Conclusion}\label{sec:conclusion}
+
+A valid proof certifies a statement, not an effect. We defined binding as the
+requirement that every value deciding an effect follows from the statement,
+classified its violations into five patterns that mirror classic signature
+misuse, and showed that they make up 103 auditor-reported findings, 81\% of
+them rated Critical or High. Existing analyzers do not find them, because
+neither the circuit nor the contract alone carries the specification. \tool{}
+reconstructs that specification as two explicit ledgers and \DEMO{finds most
+held-out flaws, confirms them on a local chain, and uncovered three new ones}.
+Binding should be checked as routinely as a signature.

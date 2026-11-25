@@ -1,0 +1,94 @@
+\section{Discussion}\label{sec:discussion}
+
+\subsection{Lessons for developers}\label{sec:disc-lessons}
+
+The signature analogy of Section~\ref{sec:definition} doubles as a checklist.
+\begin{itemize}
+\item \textbf{Sign everything you act on.} Every recipient, amount, fee and
+refund address must be a public input or be hashed into one, and the consumer
+must recompute that hash (P1).
+\item \textbf{Separate domains.} The statement should commit to the chain,
+the consumer contract, and the configuration or policy it is valid for. Roots
+and prior states must be checked against the consumer's own storage (P2).
+\item \textbf{Derive nonces from the statement.} Replay keys must come from
+the statement, not from the proof bytes, and must be reduced into the field
+before they are stored (P3).
+\item \textbf{Pin the key.} The consumer must fix the verification key or
+zkVM program ID, and must check the verifier's result (P4).
+\item \textbf{Test with a malicious caller.} An honest proof submitted by a
+second account with changed arguments must fail. This single test, the
+invariant of Section~\ref{sec:design-validator}, would have caught
+\DEMO{every flaw in B1 that our fuzzing harness could express}.
+\end{itemize}
+\TODO{D4}{back the checklist with the fix-pattern counts from Section 4}
+
+\subsection{Toward binding by construction}\label{sec:disc-construction}
+
+Detection is a stopgap. Binding flaws exist because the public-input vector
+is an untyped array whose meaning is restated by hand in the circuit, the
+verifier wrapper and the consumer. Three changes would remove most of the
+class by construction.
+\begin{itemize}
+\item \textbf{Typed statements.} Circuit languages could export a statement
+schema (names, types, widths, order). Verifier generators could emit a
+consumer interface that accepts the named fields instead of a raw array. This
+removes P5 and makes P1 visible, because every effect argument that is not a
+schema field stands out.
+\item \textbf{Effect commitments.} A standard \emph{effect hash} over
+recipient, amount, chain, contract and nonce, computed in the circuit and
+recomputed in the consumer, would play the role that EIP-712 typed data plays
+for signatures and address P1--P3 together.
+\item \textbf{Pinned verification.} Libraries could make the verification
+key or program ID an immutable constructor argument and refuse to accept it
+per call (P4).
+\end{itemize}
+\DEMO{Applied to the 87 core-class findings, typed statements would have
+prevented 41\% and effect commitments 63\%.}
+\TODO{D6}{estimate per finding which construction would have prevented it}
+
+\subsection{Threats to validity}\label{sec:disc-threats}
+
+\paragraph{Selection}
+We study public audits of projects that chose to publish them. Projects
+without audits may have more binding flaws, and audit firms differ in which
+findings they publish. Some sources could not be fully enumerated.
+
+\paragraph{Labels}
+Labels were proposed by an LLM and adjudicated by two raters who discussed
+every item, so they are not independent annotations. We mitigate this with a
+written guide fixed before labeling, a code-level second pass for every
+evaluated item, \DEMO{and an independent blind relabel of 30 items
+($\kappa=0.78$)}. Pattern boundaries (especially P2 versus P1 for stored
+values) involve judgment, so we release all labels with their notes.
+
+\paragraph{Ground-truth locations}
+A flaw can often be fixed at more than one place. Strict scoring requires the
+location the auditors or fix authors chose, which undercounts warnings at an
+equally valid place. We therefore also report mechanism-level hits.
+
+\paragraph{LLM judge and variance}
+An LLM judge decides whether a warning describes the same mechanism. In a
+re-judging test about one verdict in twenty changed. Detection itself varies
+by $\pm$1--2 items between runs, which is why we report repeated runs.
+% src: mvp/tool/FREEZE-v2.md known weaknesses 1, 9
+
+\paragraph{Leakage}
+The people who built the benchmark also saw the test results of an earlier
+tool version. To keep the tool independent, every tool version was built by a
+separate process that could read only development data, under enforced access
+rules, and the test benchmark lives in a separate repository. The round-2
+labels existed before the freeze and were read by the coordinating author, but
+never by the tool-building process. Every exposure is logged in the
+artifact.
+
+\subsection{Limitations}\label{sec:disc-limits}
+
+\tool{} needs an LLM and costs about one dollar per scan. Its tools are
+syntactic, so deep library internals and dependencies that are not vendored
+are blind spots. It misses parser differentials (where two components parse
+the same bytes differently) and validation gaps inside SDK methods. Our
+executable validation targets EVM consumers. Flaws whose effect is committed
+in a zkVM host or off chain stop at E1. Finally, binding is relative to
+intent. When the developer never meant a value to be bound, for example a
+deliberately open relayer fee, \tool{} must infer that from code and
+documentation, and it can be wrong.

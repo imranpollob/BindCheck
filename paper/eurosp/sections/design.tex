@@ -1,0 +1,188 @@
+\section{\tool{} Design}\label{sec:design}
+
+Section~\ref{sec:study} shows that binding flaws are decided by comparing
+two artifacts that no single analyzer reads together, and that auditors find
+them by reasoning about intent. \tool{} mechanizes that reasoning. An LLM
+\emph{brain} reads the target. A fixed \emph{skill procedure} forces the brain
+to build the two ledgers of Section~\ref{sec:def-ledgers} explicitly, row by
+row. A set of \emph{analysis tools} supplies facts the brain should not guess,
+and a \emph{validator} upgrades each warning from a claim to executable
+evidence. Figure~\ref{fig:arch} shows the architecture.
+
+\begin{figure*}[t]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tikzpicture}[font=\scriptsize, node distance=0.35cm and 0.5cm,
+  st/.style={draw,rounded corners,align=center,minimum height=0.85cm,text width=2.05cm,fill=gray!8},
+  tl/.style={draw,align=center,minimum height=0.6cm,text width=1.75cm,fill=blue!6},
+  ev/.style={draw,align=center,minimum height=0.85cm,text width=1.8cm,fill=green!8},
+  ar/.style={-{Latex}}]
+\node[draw,align=center,text width=1.6cm,minimum height=1cm] (t) {Target\\(circuit, verifier, consumer)};
+\node[st,right=of t] (s0) {0. Inventory\\entries $E_i$, statements $S_j$};
+\node[st,right=of s0] (s1) {1. Effect ledger\\(entry, effect, value, verdict)};
+\node[st,right=of s1] (s2) {2. Statement ledger\\(public value, meaning, constraint)};
+\node[st,right=of s2] (s3) {3. Pattern checks\\P1--P5 playbooks, follow-through};
+\node[st,right=of s3] (s4) {4. Attacker pass\\and final review};
+\draw[ar] (t)--(s0); \draw[ar] (s0)--(s1); \draw[ar] (s1)--(s2); \draw[ar] (s2)--(s3); \draw[ar] (s3)--(s4);
+\draw[ar,dashed] (s2.south) to[bend left=25] node[below,font=\tiny]{coverage re-prompt} (s1.south);
+\node[tl,below=0.75cm of s0] (a) {inventory: entries, effects, publics};
+\node[tl,below=0.75cm of s1] (b) {verifiers, pins, decode};
+\node[tl,below=0.75cm of s2] (c) {def / callers / callees};
+\node[tl,below=0.75cm of s3] (d) {replay, P4 checks};
+\node[draw,dashed,fit=(a)(b)(c)(d),inner sep=3pt,label={[font=\tiny]below:analysis tools (deterministic)}] (tools) {};
+\foreach \x in {a,b,c,d} \draw[{Latex}-{Latex},blue!50] (\x) -- (\x |- s0.south);
+\node[ev,right=0.6cm of s4,yshift=0.9cm] (e1) {E1 claim\\(ledger row + location)};
+\node[ev,below=0.25cm of e1,dashed,draw=red] (e2) {E2 assisted fuzz\\(binding invariant)};
+\node[ev,below=0.25cm of e2,dashed,draw=red] (e4) {E4 real proof on\\local chain};
+\draw[ar] (s4) -- (e1.west); \draw[ar] (e1)--(e2); \draw[ar] (e2)--(e4);
+\end{tikzpicture}}
+\caption{\tool{} architecture. A skill procedure drives the LLM through
+explicit ledgers (top). Deterministic analysis tools answer factual queries
+(bottom). A validator upgrades each warning from a claim (E1) to fuzzing
+evidence (E2) and to a real proof replayed against the unmodified verifier
+and consumer (E4). \DEMO{Dashed: automation in progress.}}
+\label{fig:arch}
+\end{figure*}
+
+\subsection{Why a procedure and not a prompt}\label{sec:design-why}
+
+A plain LLM asked to ``find binding bugs'' reads the consumer, notices the
+most salient issue, and stops. On our test set it finds 3 of 14 known flaws
+(Section~\ref{sec:eval}). The failure is not knowledge but coverage: a target
+has many entry points, each with several effect values, and a flaw hides in
+one row of a table that the model never writes down. The skill procedure turns
+the definition into that table and makes omissions visible
+(Figure~\ref{fig:controller}). Every step emits
+structured rows (\texttt{BINDCHECK\_LEDGER}, \texttt{BINDCHECK\_STMT}), and the
+controller checks the rows against the inventory before it lets the brain
+proceed.
+
+\begin{figure}[t]
+\begin{lstlisting}[mathescape]
+Scan(target):
+  copy target read-only; I := Inventory(copy)   // E_i, S_j
+  L_E := Brain(step1, I)                         // effect ledger
+  for r in 1..2: U := I.E \ entries(L_E)
+      if U = {}: break;  L_E += Brain(reprompt, U)
+  L_S := Brain(step2, I, L_E)                    // statement ledger
+  for r in 1..2: U := I.S \ values(L_S)
+      if U = {}: break;  L_S += Brain(reprompt, U)
+  W := Brain(step3, L_E, L_S)  // playbooks P1-P5, follow-through
+  if cost < SOFT and time < T_soft: W += Brain(step3b, W)
+  W := Brain(final, W)         // drop C1-C3 failures, 1 per root cause
+  return [Validate(w) for w in W]                // E1 -> E2 -> E4
+\end{lstlisting}
+\caption{The \tool{} controller. Every \texttt{Brain} step returns
+structured rows that the controller checks against the inventory
+before it continues.}
+\label{fig:controller}
+\end{figure}
+
+\subsection{Skill procedure}\label{sec:design-skills}
+
+\paragraph{Step 0: Inventory}
+A deterministic prepass lists the entry points that commit effects ($E_1,
+E_2,\dots$) and the producers of public statements ($S_1, S_2,\dots$): the
+verifier calls, the public-input arrays, and the circuit or guest-program
+outputs. The list bounds the work and becomes the coverage target.
+
+\paragraph{Step 1: Effect ledger}
+For each entry $E_i$ the brain writes one row per (entry, effect, value). The
+row names the effect (transfer, mint, state write, grant), the value that
+decides it, where the value comes from (public input, hash-committed input,
+storage, calldata, \texttt{msg.sender}), and a verdict: \emph{bound},
+\emph{unbound}, or \emph{needs statement}. If an entry has no row, the
+controller re-prompts for it, at most twice.
+
+\paragraph{Step 2: Statement ledger}
+For each public value the brain records what the circuit or guest constrains
+it to mean, which consumer value it is supposed to fix, and whether the
+consumer actually compares the two. This step catches what the consumer alone
+cannot show. A recipient that the circuit hashes into a commitment is bound
+only if the consumer recomputes and checks the same commitment.
+
+\paragraph{Step 3: Pattern checks and follow-through}
+For every unbound or unresolved row, the brain runs the playbook of the
+matching pattern: recipient and fee provenance (P1); chain, contract, root and
+prior-state checks (P2); replay-key derivation and field aliasing (P3);
+verifier result handling, key and program-ID pinning (P4); public-input
+order, width and encoding (P5). It then follows the value into libraries,
+helpers and record writers. Many flaws in our dataset sit one call below the
+entry point.
+
+\paragraph{Step 4: Attacker pass and final review}
+The brain takes the view of an attacker who holds an observed valid proof and
+asks what it can change. The final review drops warnings that fail C1--C3,
+for example admin-only paths or self-inflicted denial of service, and emits
+one warning per root cause. Each warning carries the pattern, the consumer
+file and function, the effect, the unbound value, an explanation, and the
+related locations (verifier, circuit, helpers).
+
+\paragraph{Where the skills come from}
+The procedure and the five playbooks were written from the development split
+only (Section~\ref{sec:eval-setup}). We split the development families again,
+with a fixed seed, into a \emph{tune} part and a \emph{check} part. In the second
+design round, changes were motivated by misses on the tune part. A change was
+kept only if it did not hurt the check part. The check part is not a clean
+holdout. The first version's skills were written on all development items,
+and two check-part misses of that version were named in the second round's
+brief. On development data, the frozen version finds 9 of 13 flaws at the
+exact location and mechanism, 5 of 6 on the check part, up from 4 of 6 for
+the first version. The held-out evidence is the test set
+(Section~\ref{sec:eval}).
+% src: mvp/tool/FREEZE-v2.md (ALL 9/13; CHECK 5/6; v1 CHECK 4/6)
+
+\subsection{Analysis tools}\label{sec:design-tools}
+
+The brain can query deterministic tools instead of guessing. These tools
+include:
+\begin{itemize}
+\item an inventory of entry points, effects and public-input arrays;
+\item a verifier locator that reports how each verifier is called and whether
+its result is checked;
+\item a key and program-ID pin check;
+\item a public-input decoder;
+\item a replay-key extractor;
+\item cross-file definition, caller and callee lookup.
+\end{itemize}
+The current tools work at the syntactic level, over contract and circuit
+sources alike.
+\DEMO{An AST-based extractor replaces the syntactic inventory for Solidity and
+Circom and resolves public-input indices across the verifier call and the
+circuit's \texttt{main} signature.}
+\TODO{A1}{AST-based extractor for Solidity/Circom public-input index resolution}
+
+\subsection{Validator: from claim to evidence}\label{sec:design-validator}
+
+An LLM warning is a claim. To make every reported flaw trustworthy, \tool{}
+climbs an evidence ladder.
+
+\paragraph{E1: Ledger claim}
+The warning names an effect row whose value is unbound. This is what the brain
+produces.
+
+\paragraph{E2: Assisted fuzzing}
+\DEMO{\tool{} generates a Foundry harness from the effect ledger. A mock
+verifier accepts exactly the honest public-input vector, which stands in for
+``a valid proof of the honest statement''. The fuzzer varies the sender and
+every other argument, under one generic invariant: no accepted call may commit
+an effect whose recipient, amount, state or count differs from the honest
+one.} A violation is a concrete witness that the effect is not bound.
+\TODO{A2}{automatic harness generation from ledger rows (the invariant and template exist; wiring is manual today)}
+
+\paragraph{E4: Real proof on a local chain}
+\DEMO{\tool{} generates an honest proof with the project's own prover, deploys
+the unmodified verifier and consumer on a local Anvil chain, and replays the
+proof from a second account with the attacker's arguments. A warning reaches
+E4 when the unauthorized effect is committed on chain.}
+\TODO{A3}{E4 oracle: honest proof generation and attacker replay, no live network}
+
+\subsection{Guards and isolation}\label{sec:design-guards}
+
+Each scan runs on a fresh, read-only copy of the target. The brain gets only
+read-only tools and has a 20-minute limit. The controller tracks the cost
+of the session. Past a soft limit it skips the optional passes, and past a
+hard limit it asks for the final answer at once. The brain is a commercial
+model (Claude Sonnet, high reasoning effort). Any model that supports tool use
+can be swapped in.
+\TODO{E7}{optional: open-weight brain on B1/B2 (lab machine)}

@@ -52,3 +52,8 @@ After round 1, the orchestrator read `mvp/eval/GT-locations.csv` (test GT) and t
 - Round 1 numbers are final as reported (original scoring and any declared amendment, side by side).
 - Any tool v2 is driven by dev only, built by a fresh lane whose brief names no test mechanism or miss.
 - The clean re-test is round 2 on the 16 newly pinned test items (Pass 2 by the rater).
+
+## 2026-11-24/25 addendum: orchestrator exposure to round-2 labels
+- After the rater's Pass 2 commit (labeling-a `74ea48e`, 2026-11-24 14:51 -0500), the orchestrator read the round-2 test labels to verify the positive/negative split (8/8) and read `labeling-a/PASS2-TODO.md`. This happened while the v2 build lane was still running; the v2 freeze is `f49bc3c` at 21:44 -0500.
+- The orchestrator's messages to the build lane in that window covered only dev TUNE/CHECK numbers and the freeze rule. No test item, location or label was sent. The build lane's deny rules blocked `labeling-a`, `mvp/eval` and `BindCheck`.
+- Consequence for the paper: round 2 is clean with respect to the tool-building process. It is not "located after freeze" in time.

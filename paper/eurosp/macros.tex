@@ -1,0 +1,14 @@
+% Placeholders and notes. Red = something must be executed, built or decided.
+\usepackage{xcolor}
+% bold run-in paragraph headings
+\renewcommand{\paragraph}[1]{\par\smallskip\noindent\textbf{#1.}\enspace}
+\newcommand{\tool}{\textsc{BindCheck}}
+% \TBD{} : a value we do not have yet (shown red)
+\DeclareRobustCommand{\TBD}{\textcolor{red}{\textbf{TBD}}}
+% \TODO{ID}{what must be done} : ID matches paper/eurosp/TODO.md
+\DeclareRobustCommand{\TODO}[2]{\textcolor{red}{[\textbf{#1}: #2]}}
+% \DEMO{text}: a strong final-style sentence whose values are expected, not yet measured (red).
+\DeclareRobustCommand{\DEMO}[1]{\textcolor{red}{#1}}
+\newcommand{\Pone}{P1}\newcommand{\Ptwo}{P2}\newcommand{\Pthree}{P3}\newcommand{\Pfour}{P4}\newcommand{\Pfive}{P5}
+\newcommand{\finding}[1]{\par\smallskip\noindent\fbox{\parbox{\dimexpr\columnwidth-2\fboxsep-2\fboxrule}{\small\textbf{Takeaway.} #1}}\par\smallskip}
+\lstset{basicstyle=\ttfamily\scriptsize,columns=fullflexible,breaklines=true,frame=tb,numbers=none,xleftmargin=2pt}

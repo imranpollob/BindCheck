@@ -1,0 +1,62 @@
+\section{Background and Threat Model}\label{sec:background}
+
+\subsection{ZK applications}\label{sec:bg-apps}
+
+A ZK application lets a user prove a statement about private data and have a
+contract act on it. Examples include withdrawing from a privacy pool, minting
+to the holder of a credential, voting once per identity, settling a rollup
+batch, and accepting a zkVM execution result. Such an application has three
+parts.
+
+\paragraph{Circuit}
+The circuit, or zkVM guest program, defines a relation $R(\vec{u},\vec{w})$
+over public inputs $\vec{u}$ and private witnesses $\vec{w}$. It is written
+in a circuit language (Circom, Noir, gnark, halo2) or as an ordinary program
+for a zkVM (RISC Zero, SP1). A proof $\pi$ convinces a verifier that the
+prover knows some $\vec{w}$ with $R(\vec{u},\vec{w})=1$, and it reveals
+nothing else.
+
+\paragraph{Verifier}
+The verifier is usually generated from the circuit's verification key and
+deployed as a contract (Groth16~\cite{groth16}, PLONK~\cite{plonk}), or reached
+through a router or an aggregation layer. It takes $(\vec{u},\pi)$ and returns
+accept or reject. It knows nothing about what $\vec{u}$ means.
+
+\paragraph{Consumer}
+The consumer is the contract that calls the verifier and, on acceptance,
+commits effects. It assembles $\vec{u}$ from calldata and storage, so the
+consumer decides which of its values are covered by the proof. Every other
+value it uses comes from the transaction sender.
+
+The public-input vector is the only interface between the three parts. Each
+circuit and each consumer defines its own meaning for the entries. There is no
+type system, no shared schema, and usually no test that exercises a
+malicious caller with an honest proof.
+
+\subsection{Threat model}\label{sec:bg-threat}
+
+\paragraph{Attacker}
+The attacker is any account that can send transactions. It controls all
+calldata, its own address, and the value it sends, and it can observe pending
+and past transactions, including other users' valid proofs. It can resubmit an
+observed proof with different arguments and can try to be included first.
+
+\paragraph{Assumptions}
+The attacker cannot break the cryptographic assumptions of the proof system or
+the hash functions, and it cannot forge proofs for false statements of a sound
+verifier. Administrators and deployers are trusted. Findings that require a
+malicious owner are out of scope.
+
+\paragraph{Goal}
+The attacker obtains an effect that the proved statement does not authorize:
+funds or rights sent to itself, a larger amount, a repeated effect, an effect
+in a context the statement was not made for, or a change to another user's
+state.
+
+\paragraph{Out of scope}
+Soundness bugs inside a proof system (transcript, polynomial commitment, or
+recursion constraints), circuit under-constraints that do not change what the
+consumer is told, prover-side bugs, trusted-setup issues, and denial of
+service against one's own transaction. Prior work and existing tools target
+the first two classes~\cite{sok-snark-bugs,picus,circomspect}. We study the
+layer above them.

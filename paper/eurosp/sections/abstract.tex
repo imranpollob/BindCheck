@@ -1,0 +1,20 @@
+Smart contracts accept zero-knowledge (ZK) proofs as permission to act: they
+release funds, mint credentials, and settle state when a proof verifies. A
+proof, however, certifies only a statement, and the contract's action can
+depend on values the statement never fixed, such as a recipient taken from
+calldata, a state root the contract does not check, or a replay key derived
+from the proof bytes. Any party that observes a valid proof can then redirect
+or repeat the effect. We call these \emph{binding flaws}. We define binding
+as a relation between a \emph{statement ledger} and an \emph{effect ledger},
+and classify its violations into five patterns that mirror classic signature
+misuse. From 8,578 public audit reports, we identify 103 auditor-reported
+binding flaws across 44 project families; 81\% of those with a severity rating are
+Critical or High. Existing tools do not see them. On audited flaws, Slither,
+Mythril, circomspect, Picus and generic fuzzing find none, because the
+specification lives between the circuit and the contract. We present
+\tool{}, which drives an LLM through an explicit ledger procedure, backs it
+with deterministic analyses, and confirms warnings by replaying real proofs
+against unmodified contracts on a local chain. \DEMO{\tool{} finds 6 of 8
+held-out audited flaws and 22 of 27 injected ones, and it uncovered three
+previously unknown binding flaws, all confirmed on a local chain and
+disclosed.}

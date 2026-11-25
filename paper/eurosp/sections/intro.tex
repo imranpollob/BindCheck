@@ -1,0 +1,101 @@
+\section{Introduction}\label{sec:intro}
+
+Zero-knowledge (ZK) proofs now guard real money on public blockchains.
+Privacy pools release deposits to whoever proves membership, rollups settle
+state on a proof of correct execution, identity systems mint credentials to
+the holder of a proved attribute, and zkVM markets pay provers for proved
+computations. In each case a smart contract, the \emph{consumer}, accepts a
+proof and then acts: it transfers, mints, records or grants. A great deal of
+work makes sure that proofs are sound, that circuits are fully constrained,
+and that verifiers are generated correctly~\cite{sok-snark-bugs,picus,circomspect,zkap}.
+Much less attention goes to a simpler question: does the contract's action
+follow from what was proved?
+
+It often does not. A proof certifies a \emph{statement}, the public inputs
+and what the circuit fixes about them. The consumer performs an \emph{effect},
+which depends on a recipient, an amount, a fee, a state root, a replay key,
+and a verification key. When an effect value is not fixed by the statement,
+whoever submits the proof chooses it. Valid proofs are public once broadcast,
+so that submitter can be an attacker who copies a victim's proof and changes
+one argument. Figure~\ref{fig:motivating} shows the shape of such a flaw. We
+call it a \emph{binding flaw}: the proof is valid, the verifier is correct,
+and the effect is still unauthorized.
+
+\begin{figure}[t]
+\begin{lstlisting}[language=Java]
+// Circuit: public [root, nullifierHash]; proves membership
+function withdraw(bytes proof, uint root, uint nfHash,
+                  address recipient, uint fee) external {
+  require(isKnownRoot(root) && !spent[nfHash]);
+  require(verifier.verify(proof, [root, nfHash]));
+  spent[nfHash] = true;
+  token.transfer(recipient, DENOM - fee);   // not in the statement
+  token.transfer(msg.sender, fee);          // not in the statement
+}
+\end{lstlisting}
+\caption{\DEMO{A binding flaw of the kind auditors report (simplified).}
+The proof fixes the root and nullifier but not the recipient or the fee. Any
+party that sees the transaction in the mempool can resubmit the proof with its
+own recipient. \TODO{F1}{replace with a real, already-fixed audited case (dev split), with circuit, consumer and attack in three panels}}
+\label{fig:motivating}
+\end{figure}
+
+\paragraph{Binding flaws are common and severe, and today's tools are blind
+to them}
+We collected 8,578 public audit reports and labeled 264 candidate
+findings about proof use. 103 of them are binding flaws, spread over 44 of the 68 project
+families, and 81\% of those with a severity rating are Critical or High
+(Section~\ref{sec:study}). Yet, on the audited flaws of our test set, the
+Solidity analyzers Slither and Mythril report none at the right location and
+mechanism. The circuit analyzers circomspect and Picus cannot analyze most
+targets, because most binding flaws are not in a circuit. A property-based
+fuzzer with generic properties finds none of them
+(Section~\ref{sec:eval}). The reason is structural. A binding flaw breaks no
+rule of the contract and no constraint of the circuit. It breaks an
+\emph{intended correspondence} between the two, which neither artifact states.
+
+\paragraph{This is not input validation}
+Input validation checks a value against the program's own rules. Binding
+checks a value against a statement that was proven elsewhere, in a different
+language, by a different component. A recipient that passes every
+contract-level check (non-zero, not blacklisted) is still unbound if the proof
+did not commit to it. That is why taint analysis, symbolic execution and
+generic fuzzing do not flag it, and why a fuzzer finds these flaws once it is
+given the binding specification: 5 of 13, against 0 without it.
+
+\paragraph{This work}
+We first make the property precise. We describe a consumer by two ledgers: a
+\emph{statement ledger} of what the accepted proof fixes, and an \emph{effect
+ledger} of every value that decides who, how much, what, which state and how
+often. A binding flaw is an effect value that the attacker controls and that
+the statement does not determine. Its forms mirror well-known signature
+misuse: unsigned fields, missing domain separation, nonce reuse, weak or
+unpinned keys, and format confusion.
+
+We then build \tool{}, which makes an LLM construct both ledgers explicitly,
+row by row, under a fixed procedure derived from development data only. The
+LLM queries deterministic analysis tools for facts, and a validator upgrades
+each warning from a claim to fuzzing evidence and to a real proof replayed
+against the unmodified contracts on a local chain.
+\DEMO{On held-out audited flaws located only after the tool was frozen,
+\tool{} finds 6 of 8. On 27 injected binding mutants it finds 22, while every
+existing analyzer finds none. On 25 recently audited applications it found
+three previously unknown binding flaws, all confirmed with real proofs on a
+local chain and reported to the maintainers.}
+
+\paragraph{Contributions}
+\begin{itemize}
+\item \textbf{A definition and taxonomy} of proof-to-effect binding flaws:
+two ledgers, three conditions, and five patterns with signature-misuse
+analogues (Section~\ref{sec:definition}).
+\item \textbf{To our knowledge, the first measurement study} of the class: 8,578 audit reports,
+264 labeled findings, and 103 binding flaws, with prevalence, severity,
+patterns, and trends (Section~\ref{sec:study}).
+\item \textbf{\tool{}}, a detector that combines an LLM with a ledger-based
+skill procedure, deterministic tools, and an evidence ladder from claim to
+on-chain confirmation (Section~\ref{sec:design}).
+\item \textbf{An evaluation} against static, circuit, fuzzing and LLM
+baselines on real audited flaws and on a new binding-mutant benchmark,
+\DEMO{including three new flaws confirmed at E4} (Section~\ref{sec:eval}).
+We release the dataset, the benchmark and the tool.
+\end{itemize}

@@ -1,0 +1,158 @@
+\section{Binding Flaws}\label{sec:definition}
+
+A ZK application uses a proof the way a protocol uses a signature: as
+permission to perform an action. The verifier certifies a \emph{statement}.
+The consumer, however, performs an \emph{effect}. A binding flaw is a gap
+between the two. This section defines the gap precisely and classifies the
+ways it arises.
+
+\subsection{Two ledgers}\label{sec:def-ledgers}
+
+Consider a consumer function $f$ that, on input calldata $x$, sender $s$ and
+consumer state $\sigma$, extracts a public-input vector $\vec{u} =
+\mathsf{pi}(x,\sigma)$, calls $\mathsf{Verify}(\mathit{vk},\vec{u},\pi)$, and,
+on acceptance, commits a state transition $\sigma' = \delta(x,s,\sigma)$.
+
+\paragraph{Statement ledger}
+The \emph{statement ledger} $\mathcal{S}(\vec{u})$ is the set of facts an
+accepting proof establishes. It contains the public inputs $\vec{u}$ and every
+value the circuit's relation $R$ uniquely determines from $\vec{u}$, such as a
+recipient address hashed into a public commitment.
+
+\paragraph{Effect ledger}
+The \emph{effect ledger} $\mathcal{E}(f)$ lists every value that $\delta$ uses
+to decide \emph{who} receives or is affected, \emph{how much} moves,
+\emph{what} is recorded, \emph{which} state or policy applies, and \emph{how
+often} the effect may occur. Recipients, amounts, fees, refund addresses,
+nullifier keys, root identifiers, chain and contract identifiers, and
+verification-key selectors all belong to the effect ledger.
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[font=\scriptsize, box/.style={draw,rounded corners,minimum height=4.6cm,minimum width=2.9cm,align=center}, row/.style={draw,minimum width=2.5cm,minimum height=0.42cm}]
+\node[box,label={[font=\small\bfseries]above:Statement ledger $\mathcal{S}$}] (S) at (0,0) {};
+\node[box,label={[font=\small\bfseries]above:Effect ledger $\mathcal{E}$}] (E) at (4.6,0) {};
+\foreach \i/\y/\t in {1/1.6/nullifier,2/0.9/Merkle root,3/0.2/amount,4/-0.5/{commit(recipient)}} \node[row] (s\i) at (0,\y) {\t};
+\foreach \i/\y/\t in {1/1.6/{spent[key]},2/0.9/{root accepted?},3/0.2/{transfer amount},4/-0.5/{transfer to},5/-1.2/{fee, relayer},6/-1.9/{chain / contract}} \node[row] (e\i) at (4.6,\y) {\t};
+\draw[-{Latex}] (s1) -- node[above]{bound} (e1);
+\draw[-{Latex}] (s2) -- (e2);
+\draw[-{Latex}] (s3) -- (e3);
+\draw[-{Latex},dashed,red] (s4) -- node[above,red]{not checked} (e4);
+\node[red,align=center] (att) at (1.2,-1.55) {attacker-chosen\\(no entry in $\mathcal{S}$)};
+\draw[-{Latex},red] (att.east) -- (e5.west);
+\draw[-{Latex},red] (att.east) -- (e6.west);
+\end{tikzpicture}
+\caption{The two ledgers of a ZK consumer. Binding holds when every
+effect-ledger value is determined by the statement ledger and the consumer's
+own state. Each red edge is a binding flaw.}
+\label{fig:ledgers}
+\end{figure}
+
+\paragraph{Definition}
+A consumer is \emph{bound} if for every accepting call, every value in
+$\mathcal{E}(f)$ is a function of $\mathcal{S}(\vec{u})$ and the consumer
+state $\sigma$ alone. A \emph{binding flaw} is a reachable violation, that is,
+an execution in which three conditions hold:
+\begin{description}
+\item[C1] a proof is accepted, or the verifier accepts what it should reject;
+\item[C2] the consumer commits an effect (a transfer, mint, state write, or
+grant of access);
+\item[C3] some value $e \in \mathcal{E}(f)$ that decides who, how much, what,
+which state, or how often is chosen by the transaction sender and is not fixed
+by $\mathcal{S}(\vec{u})$ and $\sigma$.
+\end{description}
+Because valid proofs are public once broadcast, any party can resubmit an
+observed proof with different calldata. A flaw that lets a third party
+redirect an effect by front-running is therefore a binding flaw, not an
+ordering bug.
+\TODO{T1}{state the definition as a short formal property over $(R,\mathsf{pi},\delta)$ and show that C1--C3 is exactly its negation}
+
+\paragraph{Why neither layer suffices}
+The definition relates two artifacts written in different languages. The
+circuit determines $\mathcal{S}$. The consumer determines $\mathcal{E}$ and
+$\mathsf{pi}$. A circuit analyzer can prove that $R$ is fully constrained, yet
+it cannot know which consumer values the relation was meant to fix. A contract
+analyzer can follow taint from calldata to a transfer, yet it cannot know that
+the recipient was supposed to be a public input. Binding is a property of the
+pair, and it holds only when the developer's intent, the circuit and the
+consumer all agree.
+
+\subsection{Taxonomy}\label{sec:def-taxonomy}
+
+The flaws we observe fall into five patterns. Each mirrors a classic
+signature-misuse failure (Table~\ref{tab:taxonomy}). The analogy is
+predictive: for every pattern, the remedy is the one that fixes the
+corresponding signature bug. The counts come from the measurement study in
+Section~\ref{sec:study}.
+
+\begin{table}[t]
+\centering
+\caption{Binding-flaw patterns, their signature-misuse analogues, and their
+frequency among the 103 binding findings of Section~\ref{sec:study}.}
+\label{tab:taxonomy}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}p{2.0cm}p{1.75cm}p{2.45cm}r@{}}
+\toprule
+\textbf{Pattern} & \textbf{Signature analogue} & \textbf{Unbound value (example)} & \textbf{n} \\
+\midrule
+P1 Unbound effect & unsigned field & recipient, amount, fee, stored record & 23 \\
+P2 Context & missing domain separation & chain, contract, policy, prior state & 23 \\
+P3 Replay / alias & nonce reuse & nullifier key, $x$ vs.\ $x{+}r$ & 15 \\
+P4 Verifier integration & weak or unpinned key & vk, program ID, pairing result & 17\,(+16) \\
+P5 Interface mismatch & format confusion & order, width, encoding & 7 \\
+Other & -- & -- & 2 \\
+\bottomrule
+\end{tabular}
+% src: dataset/labels-v1/CHARACTERIZATION.md (pattern x severity); P4 split: LABELS-v1.csv proof_system_soundness (17 N, 16 Y)
+\end{table}
+
+\paragraph{P1: Unbound effect (unsigned field)}
+The consumer uses a caller-supplied recipient, amount, fee, refund address or
+stored value that is neither a public input nor hash-committed into one.
+\begin{lstlisting}[language=Java]
+function claim(Proof p, uint root, uint nf, address to) {
+  require(verifier.verify(p, [root, nf]));   // `to` is not in the statement
+  require(!spent[nf]); spent[nf] = true;
+  token.transfer(to, AMOUNT);                 // anyone can copy p and redirect
+}
+\end{lstlisting}
+
+\paragraph{P2: Context (missing domain separation)}
+The proof does not commit to the chain, contract, configuration, policy or
+\emph{prior state} in which the consumer uses it, so a proof made for one
+context is accepted in another. Accepting a proof about a stale or
+attacker-chosen state root falls here.
+
+\paragraph{P3: Replay and alias (nonce reuse)}
+The replay key is missing, is not derived from the statement (for example,
+$\mathsf{keccak}(\pi)$ instead of a nullifier, which a re-randomized proof
+evades), or aliases through the field: a contract that stores
+\texttt{spent[nf]} on the raw 256-bit integer while the verifier reduces
+inputs modulo $r$ accepts $nf$ and $nf+r$ as distinct.
+
+\paragraph{P4: Verifier integration (weak or unpinned key)}
+The deployed verifier, or the consumer's use of it, accepts statements it
+should reject. Examples: unchecked pairing results, a verifier that returns
+\texttt{true} regardless of the outcome, missing range checks on public inputs,
+forgeable keys ($\gamma=\delta$), and a verification key or zkVM program ID
+that the consumer does not pin. We count the 17 integration-level findings as
+binding flaws. Another 16 findings are soundness bugs inside a proof system or
+recursion verifier (transcript, FRI, or recursion-circuit constraints). They
+have the same effect on the consumer, but their root cause is cryptographic,
+so we report them as \emph{adjacent} and exclude them from the core class.
+\TODO{W3}{author confirms the P4 split: 17 core plus 16 adjacent}
+
+\paragraph{P5: Interface mismatch (format confusion)}
+The consumer and the circuit disagree on the count, order, width or encoding
+of public inputs, and the honest proof is still accepted while the consumer
+reads a different value than the circuit proved. A mismatch that only makes
+honest proofs fail is a liveness bug, not a binding flaw.
+
+\paragraph{What is not a binding flaw}
+Reentrancy and ordering issues where every effect value is fixed; denial of
+service against one's own claim; trust in an administrator; and
+circuit-internal under-constraints that do not change what the consumer is told
+are all outside the class. One exception is that a proof consuming or
+blocking \emph{another} user's state (e.g., spending a victim's nullifier) is
+binding, because the affected party is not fixed by the statement.

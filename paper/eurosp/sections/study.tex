@@ -1,0 +1,205 @@
+\section{Binding Flaws in Audited Applications}\label{sec:study}
+
+We ask how common binding flaws are in practice, how severe they are, and
+which patterns dominate (RQ1). Professional audits are the best available
+record: each finding was found by an expert, argued in writing, and usually
+fixed.
+
+\subsection{Collecting audit findings}\label{sec:study-collect}
+
+\paragraph{Sources}
+We enumerated 8,578 unique public audit reports from 68 audit firms, contest
+platforms and advisory databases, including the report archives of firms
+that audit ZK systems (e.g., Veridise, Zellic, zkSecurity, Trail of Bits,
+ABDK, OpenZeppelin, Consensys Diligence) and the public results of
+Code4rena, Sherlock and Cantina.
+% src: dataset/audit-sweep/merged/FUNNEL.md Overall (8,578 unique audits); all_reports.csv (68 auditor_or_platform values)
+Some sources could not be fully enumerated during the collection window. We
+list them with their coverage in the artifact.
+\TODO{W6}{one-line coverage statement per missing source (Solodit, CertiK, yAcademy) from COVERAGE.md}
+
+\paragraph{Screening}
+A report is in scope if it audits an application that verifies a ZK proof and
+acts on it. 343 reports passed this screen. From them we logged 698 findings
+that touch proof verification, public inputs, nullifiers, verifier keys or the
+use of verified values (662 after merging findings shared across reports).
+After screening against the binding criteria, 300 candidates remained. An
+initial triage rated each candidate. We labeled every candidate except those
+triaged as likely not binding. Of those we labeled a random sample of 14, to
+check the triage. This gave 264 items to label.
+% src: merged/FUNNEL.md Overall (343 IN; 698 rows; 662 groups; 300 candidates); labeling/key/MANIFEST.md (264; inclusion reasons incl. triage-LN-sample 14)
+As a completeness check, the sweep recovered 49 of 50 binding findings in an
+independently assembled list of known cases.
+% src: merged/RECALL-R2.md (49/50)
+
+\paragraph{Labeling}
+Each candidate was labeled against a written guide that defines C1--C3, the
+five patterns, the exclusions of Section~\ref{sec:definition}, and worked
+examples. Each label records binding (Y/N/U), pattern, whether the issue is a
+proof-system soundness bug, C1--C3 individually, the effect, the unbound
+value, and confidence. Labels were proposed by an LLM and adjudicated by two
+human raters who discussed every item and fixed the final label. The raters
+read the auditor's text for all items, and for the 51 items with a public
+repository and vulnerable commit (\emph{FULL} tier) they also recorded the
+intended policy. For every item used in the tool evaluation, a second
+code-level pass checked the vulnerable location in the source.
+\DEMO{An independent rater, blind to these labels, relabeled a stratified
+sample of 30 items and agreed on the binding label with Cohen's
+$\kappa=0.78$ and on the pattern with $\kappa=0.71$.}
+\TODO{D1}{independent relabel of 30 stratified items; compute $\kappa$ for binding and pattern}
+
+Of the 264 labeled items, 4 duplicate an earlier item and 5 could not be
+decided from the report (U), leaving 255 findings for analysis.
+% src: dataset/labels-v1/SUMMARY.md (264 items; Y 103, N 156, U 5; dups 4)
+
+\begin{table}[t]
+\centering
+\caption{From audit reports to binding findings.}
+\label{tab:funnel}
+\footnotesize
+\begin{tabular}{@{}lr@{}}
+\toprule
+\textbf{Stage} & \textbf{Count} \\
+\midrule
+Audit reports enumerated (68 sources) & 8,578 \\
+Reports on ZK-consuming applications & 343 \\
+Proof-related findings logged (unique) & 698 (662) \\
+Candidates after screening & 300 \\
+Labeled items (FULL 51 / LIGHT 152 / PSS 61) & 264 \\
+Decidable, non-duplicate findings & 255 \\
+\textbf{Binding flaws} & \textbf{103} \\
+\quad core class (excl.\ proof-system soundness) & 87 \\
+\bottomrule
+\end{tabular}
+% src: merged/*.csv; labels-v1/SUMMARY.md; labels-v1/CHARACTERIZATION.md
+\end{table}
+
+\subsection{Prevalence}\label{sec:study-prev}
+
+103 of the 255 labeled findings (40\%) are binding flaws, which is 15\% of
+all 698 proof-related findings logged. They occur in 44 of the 68 project
+families in the labeled set, so they are not concentrated in a few careless
+codebases.
+% src: CHARACTERIZATION.md (103 of 255; 44 of 68 families)
+For contrast, 48 of the non-binding findings are circuit-internal soundness
+issues (under-constrained signals with no effect on what the consumer is
+told), which is the class that existing ZK tools target.
+% src: CHARACTERIZATION.md (tagged circuit-soundness N: 48)
+
+\finding{Binding flaws are a major class of ZK application vulnerabilities:
+103 auditor-reported instances, in two thirds of the project families we
+studied.}
+
+\subsection{Severity}\label{sec:study-sev}
+
+Table~\ref{tab:severity} breaks the binding findings down by pattern and
+auditor severity. 56 of the 103 are rated Critical or High, which is 81\% of
+the 69 findings with a rating. Only 7 are rated Low or Informational.
+% src: CHARACTERIZATION.md pattern x severity (Critical 32, High 24, unrated 34, Low/Info 7)
+A binding flaw usually means an attacker obtains funds or rights that the
+proof did not grant, so the severity is direct.
+
+\begin{table}[t]
+\centering
+\caption{Binding findings by pattern and auditor severity
+(C critical, H high, M medium, L low, I informational, -- unrated).}
+\label{tab:severity}
+\footnotesize
+\begin{tabular}{@{}lrrrrrrr@{}}
+\toprule
+\textbf{Pattern} & \textbf{C} & \textbf{H} & \textbf{M} & \textbf{L} & \textbf{I} & \textbf{--} & \textbf{Total} \\
+\midrule
+P1 Unbound effect & 7 & 5 & 3 & 2 & 0 & 6 & 23 \\
+P2 Context & 6 & 4 & 2 & 2 & 1 & 8 & 23 \\
+P3 Replay / alias & 6 & 3 & 0 & 1 & 0 & 5 & 15 \\
+P4 Verifier integration & 11 & 9 & 1 & 1 & 0 & 11 & 33 \\
+P5 Interface mismatch & 1 & 2 & 0 & 0 & 0 & 4 & 7 \\
+Other & 1 & 1 & 0 & 0 & 0 & 0 & 2 \\
+\midrule
+Total & 32 & 24 & 6 & 6 & 1 & 34 & 103 \\
+\bottomrule
+\end{tabular}
+% src: dataset/labels-v1/CHARACTERIZATION.md
+\end{table}
+
+\finding{Binding flaws are severe: 81\% of rated binding findings are Critical
+or High.}
+
+\subsection{Patterns}\label{sec:study-patterns}
+
+Verifier integration (P4) is the largest pattern with 33 findings, but about
+half of them (16) are proof-system soundness bugs that we report as adjacent.
+Among the core class, unbound effects (P1, 23) and missing context (P2, 23)
+dominate, followed by replay and aliasing (P3, 15). Interface mismatches (P5,
+7) are rare, partly because a mismatch usually makes honest proofs fail, which
+developers notice in testing.
+Table~\ref{tab:examples} shows representative findings. Their variety is
+the point. The unbound value can be a refund address, a bond receiver, a
+prior state root, a chain ID, a zkVM program ID, or the position of an
+attribute in the public-input array. Yet each is the same failure: the
+consumer acts on something the statement does not fix.
+
+\begin{table*}[t]
+\centering
+\caption{Representative auditor-reported binding flaws (public reports; all
+fixed or acknowledged). Severity is the auditor's.}
+\label{tab:examples}
+\footnotesize
+\begin{tabular}{@{}llllp{4.3cm}p{4.6cm}@{}}
+\toprule
+\textbf{Pattern} & \textbf{Project} & \textbf{Auditor} & \textbf{Sev.} & \textbf{Effect} & \textbf{Unbound value} \\
+\midrule
+P1 & Nocturne & Zellic & Low & pays the reserved gas refund & refund recipient = \texttt{msg.sender} of the bundle \\
+P1 & Taiko / Surge & Nethermind & High & records the bond receiver of a proven batch & bond receiver = \texttt{msg.sender} of the prover call \\
+P1 & Arianee & Veridise & Critical & spends an issuer credit via a nullifier & the action the credit pays for \\
+P2 & MorphL2 & Sherlock & High & resolves a state challenge & previous state root of the batch \\
+P2 & vlayer & Veridise & Critical & acts on a proven contract-call result & chain ID of the proven execution \\
+P2 & MACI & HashCloak & Critical & stores the new tally commitment & starting tally of the first batch \\
+P3 & Anon Aadhaar & PSE & High & marks a vote nullifier used & nullifier derived from the photo only \\
+P3 & ZkDrops & K.\ Gurkan & -- & transfers an airdrop, marks nullifier & raw 256-bit nullifier ($x$ and $x{+}p$ both verify) \\
+P4 & Taiko / Surge & OpenZeppelin & Critical & accepts a proof for a batch of L2 blocks & guest program ID not pinned \\
+P5 & Anon Aadhaar & PSE & Critical & acts on revealed identity attributes & which attribute sits at which index \\
+\bottomrule
+\end{tabular}
+% src: dataset/labels-v1/LABELS-v1.csv (FULL, binding Y): L015, L041, L043, L014, L050, L048, L020, L049, L019, L007
+\end{table*}
+
+\DEMO{Most P1 findings concern a recipient or fee that the contract takes from
+calldata; most P2 findings concern a root or prior state that the consumer
+does not check against its own storage.}
+\TODO{D5}{tabulate the unbound value per pattern from LABELS-v1 \texttt{unbound\_value}}
+
+\finding{Unbound recipients and amounts (P1) and missing context (P2) account
+for over half of the core class. Both are the ZK analogues of signing too
+little.}
+
+\subsection{Trend and who finds them}\label{sec:study-trend}
+
+Binding findings appear more often in recent reports: 13 come from 2023, 20
+from 2024 and 39 from 2025. 2026 is a partial year (9), and 16 findings have
+no report date. Raw counts also reflect how many ZK audits were published each
+year.
+% src: CHARACTERIZATION.md by report year
+\DEMO{Normalized by the number of in-scope ZK reports per year, the rate
+rises from 0.21 to 0.34 binding findings per report.}
+\TODO{D2}{normalize the yearly counts by in-scope reports per year}
+The 103 findings come from 24 different auditors and advisory sources, and no
+source contributes more than 21. Binding is therefore a class that many
+experienced auditors encounter, not the checklist item of one firm.
+% src: CHARACTERIZATION.md by auditor (24 sources; max Veridise 21)
+
+\paragraph{Which layers are needed}
+\DEMO{For 61\% of the FULL-tier binding findings, deciding the flaw required
+reading both the circuit (or its public-input specification) and the
+consumer. Only 23\% could be decided from the consumer alone.}
+\TODO{D3}{for FULL binding items, code which layer(s) the Pass-2 evidence needed}
+
+\paragraph{How they were fixed}
+\DEMO{Fixes follow the signature analogy. 70\% of the fixed findings add the
+missing value to the public inputs or to a hashed commitment, and the rest add
+a context check (chain, contract, root) or a statement-derived replay key.}
+\TODO{D4}{classify fix commits of FULL binding items}
+
+\finding{Binding findings are found by many auditors and \DEMO{usually require
+reasoning across the circuit and the consumer}. That cross-layer
+reasoning is what Section~\ref{sec:design} automates.}
