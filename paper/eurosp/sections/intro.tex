@@ -77,11 +77,14 @@ row by row, under a fixed procedure derived from development data only. The
 LLM queries deterministic analysis tools for facts, and a validator upgrades
 each warning from a claim to fuzzing evidence and to a real proof replayed
 against the unmodified contracts on a local chain.
-\DEMO{On held-out audited flaws located only after the tool was frozen,
-\tool{} finds 6 of 8. On 27 injected binding mutants it finds 22, while every
-existing analyzer finds none. On 25 recently audited applications it found
-three previously unknown binding flaws, all confirmed with real proofs on a
-local chain and reported to the maintainers.}
+On 27 injected binding mutants \tool{} finds 22, and on 22 held-out audited
+flaws it finds 6 at the exact location and mechanism (9 at the mechanism
+level). The existing analyzers find none of the mutants and none of the
+round-1 flaws. Real flaws remain hard:
+most misses sit in zkVM guest programs.
+\DEMO{On 25 recently audited applications it found three previously unknown
+binding flaws, all confirmed with real proofs on a local chain and reported to
+the maintainers.}
 
 \para{Contributions}
 \begin{itemize}
