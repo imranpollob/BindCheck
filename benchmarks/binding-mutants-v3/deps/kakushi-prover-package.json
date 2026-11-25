@@ -1,0 +1,1 @@
+{"name":"b3-kakushi-prover","private":true,"dependencies":{"@aztec/bb.js":"^5.0.0-nightly.20260522","@noir-lang/noir_js":"^1.0.0-beta.22","@zkpassport/poseidon2":"^0.6.2","viem":"^2.38.0"}}

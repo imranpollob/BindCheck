@@ -57,3 +57,9 @@ After round 1, the orchestrator read `mvp/eval/GT-locations.csv` (test GT) and t
 - After the rater's Pass 2 commit (labeling-a `74ea48e`, 2026-11-24 14:51 -0500), the orchestrator read the round-2 test labels to verify the positive/negative split (8/8) and read `labeling-a/PASS2-TODO.md`. This happened while the v2 build lane was still running; the v2 freeze is `f49bc3c` at 21:44 -0500.
 - The orchestrator's messages to the build lane in that window covered only dev TUNE/CHECK numbers and the freeze rule. No test item, location or label was sent. The build lane's deny rules blocked `labeling-a`, `mvp/eval` and `BindCheck`.
 - Consequence for the paper: round 2 is clean with respect to the tool-building process. It is not "located after freeze" in time.
+
+## Addendum 2026-11-25 (v3 launch)
+- The orchestrator has seen the v2 test results (round 1, round 2, B2; eval d6beff4c), including the per-item misses.
+- The v3 briefs (`mvp/tool/BRIEF-v3.md`, `mvp/validator/BRIEF.md`) were written to contain dev-only motivation. One test-derived phrase was in the first brief version for under a minute: "typical miss is right function, wrong value" (from the round-1 loose-vs-strict gap). The builder lane mvp-build3 (t5q) may have read it before the correction. A correction was sent, telling it to disregard the phrase.
+- The planned A1 extractor predates the test results (see the paper plan, 2026-11-25).
+- Consequence: v3 reruns on round 1, round 2 and B2 are **not blind** and are reported as such. Blind v3 numbers come only from B3 (mutants3, a fresh lane that never sees the tool) and from round 3 (frozen before the v3 freeze).

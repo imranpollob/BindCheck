@@ -1,0 +1,47 @@
+[profile.default]
+src = "src"
+out = "out"
+libs = ["lib"]
+auto_detect_solc = false
+solc_version = "0.8.34"
+evm_version = "cancun"
+optimizer = true
+optimizer_runs = 200
+bytecode_hash = "none" # deterministic CREATE2 deployment
+cbor_metadata = false # deterministic bytecode for CREATE2
+ignored_error_codes = [8417]
+via-ir = true
+
+remappings = [
+    "forge-std/=lib/forge-std/src/",
+    "risc0-ethereum/=lib/risc0-ethereum/contracts/src/",
+    "openzeppelin/contracts/=lib/risc0-ethereum/lib/openzeppelin-contracts/contracts/"
+]
+
+fs_permissions = [
+    { access = "read", path = "./broadcast" },
+    { access = "read-write", path = "./deployments" },
+    { access = "read", path = "./reports" },
+]
+
+
+[profile.echidna]
+src = "src"
+out = "out-echidna"
+libs = ["lib"]
+auto_detect_solc = false
+solc_version = "0.8.34"
+evm_version = "cancun"
+optimizer = true
+optimizer_runs = 200
+bytecode_hash = "none"
+cbor_metadata = false
+via-ir = true
+# Only compile the fuzzing target and its dependencies
+test = "test/fuzzing"
+
+[dependencies]
+"@openzeppelin-contracts" = "5.5.0"
+"@openzeppelin-contracts-upgradeable" = "5.5.0"
+forge-std = "1.9.6"
+perimetersec-fuzzlib = "1.0.0"

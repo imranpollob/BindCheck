@@ -8,7 +8,7 @@ fixed.
 \subsection{Collecting audit findings}\label{sec:study-collect}
 
 \para{Sources}
-We enumerated 8,578 unique public audit reports from 68 audit firms, contest
+We enumerated 8,578 unique public audit reports from 68 audit sources: firms, contest
 platforms and advisory databases, including the report archives of firms
 that audit ZK systems (e.g., Veridise, Zellic, zkSecurity, Trail of Bits,
 ABDK, OpenZeppelin, Consensys Diligence) and the public results of
@@ -156,7 +156,7 @@ P2 & MorphL2 & Sherlock & High & resolves a state challenge & previous state roo
 P2 & vlayer & Veridise & Critical & acts on a proven contract-call result & chain ID of the proven execution \\
 P2 & MACI & HashCloak & Critical & stores the new tally commitment & starting tally of the first batch \\
 P3 & Anon Aadhaar & PSE & High & marks a vote nullifier used & nullifier derived from the photo only \\
-P3 & ZkDrops & K.\ Gurkan & -- & transfers an airdrop, marks nullifier & raw 256-bit nullifier ($x$ and $x{+}p$ both verify) \\
+P3 & ZkDrops & K.\ Gurkan & -- & transfers an airdrop, marks nullifier & raw 256-bit nullifier ($x$ and $x{+}r$ both verify) \\
 P4 & Taiko / Surge & OpenZeppelin & Critical & accepts a proof for a batch of L2 blocks & guest program ID not pinned \\
 P5 & Anon Aadhaar & PSE & Critical & acts on revealed identity attributes & which attribute sits at which index \\
 \bottomrule
@@ -175,8 +175,8 @@ little.}
 
 \subsection{Trend and who finds them}\label{sec:study-trend}
 
-Binding findings appear more often in recent reports: 13 come from 2023, 20
-from 2024 and 39 from 2025. 2026 is a partial year (9), and 16 findings have
+Binding findings appear more often in recent reports: 6 come from 2021--2022,
+13 from 2023, 20 from 2024 and 39 from 2025. 2026 is a partial year (9), and 16 findings have
 no report date. Raw counts also reflect how many ZK audits were published each
 year.
 % src: CHARACTERIZATION.md by report year

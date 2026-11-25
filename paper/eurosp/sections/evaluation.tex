@@ -33,7 +33,7 @@ code-level labeling pass.
   versions.
   \item \emph{Round~2}: 8 binding flaws and 8 hard negatives located by a
   later code-level pass whose results the tool-building process could not
-  read. Round~2 is our clean retest.
+  read, plus 6 fixed versions. Round~2 is our clean retest.
   \end{itemize}
 \item \textbf{B2, binding mutants.} 27 binding flaws injected into three
 small hosts (a privacy vault, a red-packet claim, and an oracle claim, one of
@@ -102,7 +102,7 @@ circomspect, Picus & \checkmark & -- & -- & -- \\
 Foundry (out of box) & -- & $\circ$ & \checkmark & -- \\
 Foundry (assisted) & -- & mock & \checkmark & manual \\
 Plain LLM & $\circ$ & $\circ$ & \checkmark & $\circ$ \\
-\tool{} & \checkmark & \checkmark & \checkmark & \checkmark \\
+\tool{} & $\circ$ & \checkmark & \checkmark & $\circ$ \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -112,7 +112,7 @@ Plain LLM & $\circ$ & $\circ$ & \checkmark & $\circ$ \\
 \caption{Detection on the audit test set B1 (strict hits / positives;
 95\% Wilson interval). ``Sup.'' = targets the tool could analyze, out of
 26 in round~1. Specificity counts fixed versions and hard negatives without a
-warning at the flaw's location (both rounds for \tool{}). The plain-LLM arm
+warning at the flaw's location (both rounds for Slither and \tool{}, round~1 otherwise). The plain-LLM arm
 was run on round~1 only. Red cells are pending runs.}
 \label{tab:b1}
 \footnotesize
@@ -120,9 +120,9 @@ was run on round~1 only. Red cells are pending runs.}
 \toprule
 \textbf{Tool} & \textbf{Sup.\ (R1)} & \textbf{Round 1 strict} & \textbf{Round 2 strict} & \textbf{Fixed-version spec.} & \textbf{Hard-neg.\ spec.} \\
 \midrule
-Slither & 15/26 & 0/14 (0.00--0.22) & \TBD & 6/6 & 3/6 \\
-Mythril & 13/26 & 0/14 (0.00--0.22) & \TBD & 6/6 & 6/6 \\
-circomspect & 1/26 & 0/14 (0.00--0.22) & \TBD & 6/6 & 5/6 \\
+Slither & 15/26 & 0/14 (0.00--0.22) & 0/8 (0.00--0.32) & 12/12 & 11/14 \\
+Mythril & 13/26 & 0/14 (0.00--0.22) & \TBD$^\ddagger$ & 6/6 & 6/6 \\
+circomspect & 1/26 & 0/14 (0.00--0.22) & \TBD$^\ddagger$ & 6/6 & 5/6 \\
 Picus & 0/26 & unsupported & unsupported & -- & -- \\
 Foundry, out of box$^\dagger$ & 13 & \multicolumn{2}{c}{0/13 (R1+R2)} & -- & -- \\
 Foundry, assisted$^\dagger$ & 13 & \multicolumn{2}{c}{5/13 (0.18--0.64)} & 4/5 & 3/3 \\
@@ -130,7 +130,7 @@ Plain LLM (same model) & 26/26 & 3/14 (0.08--0.48) & -- & 6/6 & 6/6 \\
 \tool{} & 26/26 & 4/14 (0.12--0.55) & 2/8 (0.07--0.59) & 12/12 & 12/14 \\
 \quad mechanism-level & & 5/14 & 4/8 & & \\
 \bottomrule
-\multicolumn{6}{@{}l}{\scriptsize $^\dagger$Fuzzing covers EVM-side flaws of both rounds; circuit- and guest-side flaws are unsupported. Harnesses were wired by hand in 5--45 min per target.}
+\multicolumn{6}{@{}p{0.95\textwidth}}{\scriptsize $^\dagger$Fuzzing covers EVM-side flaws of both rounds; circuit- and guest-side flaws are unsupported. Harnesses were wired by hand in 5--45 min per target. $^\ddagger$Round-2 run stopped by memory limits; resumable.}
 \end{tabular}
 % src: mvp/eval/COMPARISON.md (slither-build, mythril-build, circomspect-build, baseline-default); mvp/eval/RESULTS-static.md (supported counts); mvp/eval/fuzz/RESULTS-fuzz.md; mvp/eval/RESULTS-tool-v2.md (eval commit d6beff4c)
 \end{table*}
@@ -171,8 +171,27 @@ for every analyzer. Against the same model without the procedure, the gain
 on round~1 is small at the strict level (4 vs.\ 3 of 14) and larger at the
 location level (8 vs.\ 5). The procedure mainly makes the model look in the
 right place. It does not yet make it name the right mechanism.
-\DEMO{With the validator and the extractor, \tool{} v3 finds 9 of 14 and 5 of
-8.}
+
+\para{Against an expert-wired fuzzer}
+The fair non-LLM comparison is the fuzzer that a human has given the binding
+invariant. On the 13 EVM-side flaws it supports, \tool{} finds 6 at the
+strict level (7 at the mechanism level) with no human setup, the assisted
+fuzzer finds 5 after 5--45 minutes of expert wiring per target, and the
+fuzzer out of the box finds none. The two overlap on 3 flaws; 4 are found
+only by \tool{} and 2 only by the fuzzer, so they complement each other.
+% src: mvp/eval/RESULTS-vs-fuzz.md (eval 7b5fa137): both L015 L010 L193; v2-only L039 L020 L024 L180; fuzz-only L035 L042; neither L013 L040 L007 L021
+
+\para{Warning volume}
+\tool{} emits 1.5 warnings per scan on round~1 and 1.2 on round~2. Only
+about one warning in ten is the audited flaw, but most of the others are not
+noise: an LLM triage of every warning (not re-verified by hand) judges 77\%
+(round~1) and 58\% (round~2) to be true or plausible binding issues, and 3
+of 26 on round~2 to be clearly not binding.
+\TODO{RV5}{hand-verify the triage of the 65 test warnings; report as precision with a second rater}
+% src: mvp/eval/RESULTS-precision.md (eval 7b5fa137): R1 39/26, TP+plausible 30/39; R2 26/22, 15/26, not-binding 3
+Because the miss analysis below inspects round-1 and round-2 items, no later
+version of \tool{} is evaluated on them; later versions are evaluated only on
+fresh benchmarks (Section~\ref{sec:eval-b3}).
 \TODO{E1b}{v3 (A1--A3 and guest-side support) built on dev only, one run on a fresh held-out round 3}
 
 \begin{table}[t]
@@ -211,21 +230,40 @@ where it finds 2 of 5 verifier-integration mutants. It raises no warning on a
 removed public-input range check. For the other two, it reports the right
 mechanism at another location or the right location with another mechanism.
 It also misses one P3 mutant (no warning) and one P5 mutant at the strict
-level. \DEMO{On the three unmodified hosts it reports no
-binding warning.}
-% src: mvp/eval/RESULTS-tool-v2.md B2 table (RP-S03 P3 0 warnings; RP-S05, OR-S10, PV-S06 P4; PV-S08 P5)
-\TODO{E10}{scan the three clean B2 hosts for a false-alarm rate}
+level. On the three unmodified hosts it reports no
+warning on two and three warnings on the privacy vault (a scan that reached
+the time cap). None of the three is a false alarm in the usual sense: one
+flags a loan amount that the borrow proof does not fix (the host's own
+documentation treats it as policy, bounded by an on-chain loan-to-value check),
+and two flag nullifiers stored on the raw 256-bit value while the verifier
+reduces public inputs modulo~$r$ (P3 aliasing), which we judge plausible but
+have not confirmed.
+\TODO{E3/A3}{confirm or refute the two aliasing warnings with a real proof (E4); if confirmed, this is a new flaw in a third-party repository and goes through the disclosure process}
+% src: mvp/eval/RESULTS-tool-v2.md B2 table (RP-S03 P3 0 warnings; RP-S05, OR-S10, PV-S06 P4; PV-S08 P5); eval ff6c7fe8 E10 (orc 0, redpacket 0, privacyvault 3, partial); triage eval 67c4009c RESULTS-cleanhost.md
 
 \finding{Existing analyzers find none of the binding flaws, and a fuzzer finds
 them only when a human supplies the binding specification. \tool{} infers
-that specification and finds 22 of 27 injected flaws and 6 of 22 held-out
-audited ones (9 at the mechanism level). Real flaws remain hard: most misses
-are zkVM guest-side and cross-deployment context flaws.}
+that specification and finds 22 of 27 injected flaws and 6 of 22 test-set
+audited ones (2 of 8 on the clean round; 9 of 22 at the mechanism level). Real
+flaws remain hard: half of the round-2 misses are zkVM guest-side.}
+
+\subsection{Fresh benchmarks for \tool{} v3}\label{sec:eval-b3}
+
+\DEMO{\tool{} v3 adds a deterministic ledger extractor and the executable
+validator (Section~\ref{sec:design}). It was built on development data only
+and evaluated once on two benchmarks frozen before its freeze: B3, 35 binding
+mutants injected into five open-source applications by operators derived from
+the labeled findings, with clean hosts and bound decoys as controls, and
+round~3, \TBD{} audited flaws from test families located by a new code-level
+pass. On B3, v3 finds \TBD{} of 35 with \TBD{} false alarms on controls; on
+round~3, \TBD{} of \TBD{}.}
+\TODO{E12/D7}{B3 (mutants3 lane) and round 3; protocol pre-registered before the v3 freeze (RV20)}
 
 \subsection{Why \tool{} misses}\label{sec:eval-misses}
 
 We inspected every positive that \tool{} missed, on development and test
-data. On round~2, three of the six misses are flaws whose unbound value lives
+data. This analysis uses test items, which is why no later version is
+evaluated on rounds~1 and~2. On round~2, three of the six misses are flaws whose unbound value lives
 in a zkVM guest program or host configuration (Rust), not in the consumer
 contract. One is a cross-deployment context flaw (chain ID and contract address
 not in the statement) for which \tool{} raised no warning. The other two are
@@ -325,8 +363,8 @@ of 267\,s, with a maximum of about 11 minutes. Large monorepos cost \$2--3.
 % src: mvp/tool/FREEZE-v2.md
 On the test set, a scan costs \$0.84 on average, with a median of
 292--324\,s per round. Mutant hosts are small and cost \$0.28 per scan.
-% src: mvp/eval/RESULTS-tool-v2.md (round 1 mean $0.91, median 292 s; round 2 mean $0.76, median 324 s; total $40.4 over 48 scans; B2 $0.28) The
-static analyzers run in seconds to minutes, but only after a human has made
+% src: mvp/eval/RESULTS-tool-v2.md (round 1 mean $0.91, median 292 s; round 2 mean $0.76, median 324 s; total $40.4 over 48 scans; B2 $0.28)
+The static analyzers run in seconds to minutes, but only after a human has made
 each project build. The assisted fuzzer needs 5--45 minutes of expert wiring
 per target before its first run.
 % src: fuzz/RESULTS-fuzz.md (wiring minutes)
