@@ -33,6 +33,7 @@ def cmd_for(m):
 def failing(log):
     log = re.sub(r"\x1b\[[0-9;]*m", "", log)
     fails = set(re.findall(r"Testing ([\w:]+) \.\.\. FAIL", log))
+    fails |= set(re.findall(r"^\s*([\w:]+) --- FAILED", log, re.M)) | set(re.findall(r"^test ([\w:]+) \.\.\. FAILED", log, re.M))
     fails |= set(re.findall(r"\[FAIL[^\]]*\]\s+(\w+)", log)) | set(re.findall(r"^\s*\d+\) .*?\n\s+(.+?):\s*$", log, re.M))
     fails |= {x for x in re.findall(r"^\[(?:FAIL|fail)\].*?(\w+)$", log, re.M)}
     fails |= set(re.findall(r"^\[[\w_]+\] Testing (\w+)\.\.\. .*?FAIL", log, re.M))
@@ -40,6 +41,8 @@ def failing(log):
 
 def run(dirpath, cmd, logf, env_extra=None):
     t = time.time(); env = dict(os.environ, **(env_extra or {}))
+    if cmd[0] == "cargo":   # shared target dir: force a rebuild of this tree's workspace crates (mtime-based fingerprints)
+        for f in pathlib.Path(dirpath).rglob("*.rs"): f.touch()
     p = subprocess.run(MEM + cmd, cwd=dirpath, capture_output=True, text=True, env=env, timeout=1500)
     out = p.stdout + p.stderr; logf.write_text(out); return p.returncode, out, round(time.time() - t)
 

@@ -6,11 +6,12 @@ them by reasoning about intent. \tool{} mechanizes that reasoning. An LLM
 \emph{brain} reads the target. A fixed \emph{skill procedure} forces the brain
 to build the two ledgers of Section~\ref{sec:def-ledgers} explicitly, row by
 row. A set of \emph{analysis tools} supplies facts the brain should not guess.
-\DEMO{An \emph{exploration loop} then lets the brain work like an auditor writing a
-proof of concept: it plans an attack on each warning, writes it as a test,
+An \emph{exploration loop} then lets the brain work like an auditor writing a
+proof of concept: it plans an attack on each unbound row, writes it as a test,
 runs it in a sandbox, reads the outcome, and tries another path when the test
-fails. Each warning leaves \tool{} as an \emph{evidence package} that a human
-can check in minutes.} Figure~\ref{fig:arch} shows the architecture.
+fails. The loop only adds evidence; it never removes a warning. Each warning
+leaves \tool{} as an \emph{evidence package} that a human can check in
+minutes. Figure~\ref{fig:arch} shows the architecture.
 
 \begin{figure*}[t]
 \centering
@@ -35,8 +36,8 @@ can check in minutes.} Figure~\ref{fig:arch} shows the architecture.
 \node[draw,dashed,fit=(a)(b)(c)(d),inner sep=3pt,label={[font=\tiny]below:analysis tools (deterministic)}] (tools) {};
 \foreach \x in {a,b,c,d} \draw[{Latex}-{Latex},blue!50] (\x) -- (\x |- s0.south);
 \node[ev,right=0.6cm of s4,yshift=0.9cm] (e1) {Warning\\(ledger row, reasoning)};
-\node[ev,below=0.25cm of e1,dashed,draw=red] (e2) {Exploration loop\\plan, test, run, retry};
-\node[ev,below=0.25cm of e2,dashed,draw=red] (e4) {Evidence package\\(paths tried, executed test)};
+\node[ev,below=0.25cm of e1] (e2) {Exploration loop\\template, test, run, retry};
+\node[ev,below=0.25cm of e2] (e4) {Evidence package\\(paths tried, executed test)};
 \draw[ar] (s4) -- (e1.west); \draw[ar] (e1)--(e2); \draw[ar] (e2)--(e4);
 \end{tikzpicture}}
 \caption{\tool{} architecture. A skill procedure drives the LLM through
@@ -44,7 +45,7 @@ explicit ledgers (top). Deterministic analysis tools answer factual queries
 (bottom). For each warning, an exploration loop writes attack tests, runs
 them in a sandbox (local chain, the project's own prover), and attaches the
 paths tried and any executed test. Humans adjudicate the package; no LLM
-verdict serves as ground truth. \DEMO{Dashed: automation in progress.}}
+verdict serves as ground truth.}
 \label{fig:arch}
 \end{figure*}
 
@@ -74,16 +75,18 @@ Scan(target):
   W := Brain(step3, L_E, L_S)  // playbooks P1-P5, follow-through
   if cost < SOFT and time < T_soft: W += Brain(step3b, W)
   W := Brain(final, W)         // drop C1-C3 failures, 1 per root cause
-  for w in W:                     // exploration loop
-    for k in 1..K: t := Brain(attack, w, trace(w))
-      o := Sandbox(t); trace(w) += (t, o)
-      if Effect(o.attack) != Effect(o.honest): break
+  U := unbound rows of W, fixed ledger order
+  for k in 0..K:                 // breadth-first rounds
+    for u in U not yet settled:
+      t := (k = 0) ? Template(u) : Brain(attack, u, trace(u))
+      o := Sandbox(t); trace(u) += (t, o)   // oracle verdict
   return [(w, trace(w)) for w in W]   // evidence package
 \end{lstlisting}
 \caption{The \tool{} controller. Every \texttt{Brain} step returns
 structured rows that the controller checks against the inventory
-before it continues. The sandbox, not the brain, computes whether an attack
-test changed the effect.}
+before it continues. Attempt 0 is generated from a pattern template without
+the LLM. The sandbox, not the brain, computes whether an attack test changed
+the effect.}
 \label{fig:controller}
 \end{figure}
 
@@ -162,46 +165,93 @@ circuit's \texttt{main} signature.}
 \TODO{A1}{AST-based extractor for Solidity/Circom public-input index resolution}
 
 \subsection{Exploration loop and evidence package}\label{sec:design-explore}
-\DEMO{A warning on its own is a claim. Auditors do not stop at a claim: they write a
+A warning on its own is a claim. Auditors do not stop at a claim: they write a
 proof of concept, and when one attack path fails they try another. \tool{}
-gives the brain the same loop. For every warning that survives the final
-review, the brain plans an attack, writes it as a test, and passes it to a
-sandbox, which runs it and returns the outcome. The brain reads the outcome
-and either stops or revises the attack, for up to $K$ attempts. Failed paths
-are kept, because they tell the auditor what was ruled out.}
+gives the brain the same loop, with one rule taken from our design
+constraints: the loop adds evidence and never removes a warning. A warning
+whose attacks all fail stays in the report, ranked lower.
+
+\para{Attack units}
+The loop attacks each unbound ledger row that has an on-chain entry point,
+not each merged warning, so that the sandbox knows exactly which value is
+under test. Rows are processed in fixed ledger order and breadth-first:
+every row gets its first attempt before any row gets a retry, so a cost cap
+never starves the last rows of a large target. Attempt~0 is filled in from
+the playbook of the row's pattern without calling the LLM: resubmit the
+honest proof from a second account (P1), change a context argument (P2),
+replay it or add the field modulus to the replay key (P3), or supply another
+verifier or key (P4). Up to $K=3$ further attempts are written by the brain,
+which sees only the row, the entry function, the test scaffold's hooks and
+the labeled outcome of earlier attempts. A give-up is accepted only after an
+LLM attempt and must cite an earlier outcome.
 
 \para{The sandbox}
-\DEMO{Every attack test submits the same accepted proof twice on the same state:
-once as the honest call, and once from a second account with the
-attacker-chosen value of the suspect effect row. The test succeeds when both
-calls are accepted and the committed effects differ in recipient, amount,
-state written, or count. This is condition C3 of
-Section~\ref{sec:def-ledgers}, made executable. The sandbox offers two
-strengths of proof. A \emph{mock-verifier test} replaces the verifier with one
-that accepts exactly the honest public-input vector. A \emph{real-proof test}
-generates the honest proof with the project's own prover and submits it to the
-unmodified verifier and consumer on a local Anvil chain. No test touches a
-live network.}
+For each target the sandbox drafts a test scaffold once per (contract, entry
+point) and caches it: it deploys the system on a local chain, produces an
+honest call, and checks that the honest call succeeds before any attack runs.
+An attack test submits the same accepted proof twice from the same state:
+once as the honest call, and once with the attacker's change. The test
+succeeds when both calls are accepted and the committed effects differ in
+recipient, amount, state written, or count. This is condition C3 of
+Section~\ref{sec:def-ledgers}, made executable. A success is rerun with the
+honest value plugged back in, and must then show no difference. The sandbox
+offers two strengths of proof. A \emph{mock-verifier test} replaces the
+verifier with one that accepts exactly the honest public-input vector. A
+\emph{real-proof test} generates the honest proof with the project's own
+prover and submits it to the unmodified verifier and consumer. A mock success
+is escalated to a real-proof test whenever the target ships proving
+artifacts. No test touches a live network.
+
+\para{Closing the sandbox's own loopholes}
+A pass rule that an LLM can satisfy by accident is worthless, so we ran the
+loop on fixed versions and hard negatives before building on it. The first
+version produced a false pass: a scaffold deployed the contract from the
+honest account, which made that account the owner, and the owner's repeated
+call to an owner-only mint looked like a replay. We added six guards. (O1)
+Before a replay or same-sender success counts, the honest call is retried
+from a fresh account; if access control rejects it, the entry is privileged
+and the success is void. (O2) Scaffolds deploy and grant roles from a
+separate administrator account. (O3) A replay success requires a replay-key
+row, and the second effect must touch that key. (O4) A scaffold whose honest
+run fails any check is redrafted, not used. (O5) The brain cannot give up
+before trying. (O6) The mock verifier cannot tell verifiers apart, so a
+success that swaps the verifier, proof type or key counts only on the real
+verifier. With these guards, the loop reports no success on any of 10 rows
+it attacked at the location of a fixed or hard-negative flaw, and none on 24
+adversarial test harnesses written to fool it.
+% src: mvp/tool/BASE-REPORT.md (gate 1: 10 exercised, 0 E2/E3; adversarial 24/24 E1 after O6, b5272fb)
 
 \para{Evidence package}
-\DEMO{\tool{} reports every warning with (i) the ledger row and code location,
+\tool{} reports every warning with (i) the ledger row and code location,
 (ii) the brain's reasoning, (iii) the trace of attack paths tried, failed
 ones included, and (iv) the executed test and its output, when one succeeded.
 We label a package by its strongest content: \emph{E1} (claim only),
 \emph{E2} (a mock-verifier test succeeded), or \emph{E3} (a real-proof test
-succeeded).}
+succeeded).
 
 \para{Who decides}
-\DEMO{The brain may judge its own results, and \tool{} uses that judgment to drop
-and rank warnings. No number in this paper rests on it. Whether a test
-succeeded is computed by the sandbox from the two executions, not read from
-the brain's summary, so a test that asserts nothing, or one that mocks away
-the check under test, cannot succeed. Ground truth comes only from the audit
-labels and from human adjudication of the evidence package
-(Section~\ref{sec:eval-setup}).
-The exploration loop and the sandbox support Solidity consumers with
-Circom, gnark and Noir circuits.}
-\TODO{A2}{fold the frozen validator v1.1 drivers (mock verifier, per-toolchain proof drivers) into the brain's toolbox as a sandbox tool; add the exploration loop with K attempts}
+The brain may judge its own results, and \tool{} uses that judgment to rank
+warnings. No number in this paper rests on it. Whether a test succeeded is
+computed by the sandbox from the two executions, not read from the brain's
+summary. Ground truth comes only from the audit labels and from human
+adjudication of the evidence package (Section~\ref{sec:eval-setup}). The loop
+supports Solidity consumers with Circom, gnark and Noir circuits.
+Circuit-only and zkVM-guest flaws have no on-chain attack call and stay at E1.
+
+\para{Design alternatives}
+We kept the ledger procedure of the frozen second version unchanged and
+compared discovery stages on development data, under a selection rule fixed
+before any run. A coverage check that hands every extractor row the ledgers
+missed back to the brain found 70 such rows and judged none unbound. An
+execution sweep that runs the template attack on every on-chain effect row,
+including rows judged bound, attacked 60 of 645 and found no success. Neither
+changed recall. The ledgers are nearly complete; the remaining misses sit
+deeper, in parsers and dependencies.
+% src: mvp-va/tool/VA-REPORT.md; mvp-vb/tool/VB-REPORT.md; mvp/tool/VARIANTS-RULE.md
+\DEMO{A depth pass, which vendors the target's pinned dependencies and
+follows each value whose binding rests on library code into that code, adds
+\TBD{} strict hits on development data and is part of the frozen version.}
+\TODO{VC}{V-C depth variant result; drop this sentence and keep v3 = base if it adds nothing}
 
 \subsection{Guards and isolation}\label{sec:design-guards}
 

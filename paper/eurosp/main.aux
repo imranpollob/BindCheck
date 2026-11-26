@@ -1,0 +1,226 @@
+\relax 
+\providecommand\hyper@newdestlabel[2]{}
+\providecommand\HyperFirstAtBeginDocument{\AtBeginDocument}
+\HyperFirstAtBeginDocument{\ifx\hyper@anchor\@undefined
+\global\let\oldcontentsline\contentsline
+\gdef\contentsline#1#2#3#4{\oldcontentsline{#1}{#2}{#3}}
+\global\let\oldnewlabel\newlabel
+\gdef\newlabel#1#2{\newlabelxx{#1}#2}
+\gdef\newlabelxx#1#2#3#4#5#6{\oldnewlabel{#1}{{#2}{#3}}}
+\AtEndDocument{\ifx\hyper@anchor\@undefined
+\let\contentsline\oldcontentsline
+\let\newlabel\oldnewlabel
+\fi}
+\fi}
+\global\let\hyper@last\relax 
+\gdef\HyperFirstAtBeginDocument#1{#1}
+\providecommand\HyField@AuxAddToFields[1]{}
+\providecommand\HyField@AuxAddToCoFields[2]{}
+\citation{sok-snark-bugs,picus,circomspect,zkap}
+\citation{sok-snark-bugs}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}{section.1}\protected@file@percent }
+\newlabel{sec:intro}{{1}{1}{Introduction}{section.1}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces \DEMO  {A binding flaw of the kind auditors report (simplified).} The proof fixes the root and nullifier but not the recipient or the fee. Any party that sees the transaction in the mempool can resubmit the proof with its own recipient. \TODO  {F1}{replace with a real, already-fixed audited case (dev split), with circuit, consumer and attack in three panels}}}{1}{figure.1}\protected@file@percent }
+\newlabel{fig:motivating}{{1}{1}{\DEMO {A binding flaw of the kind auditors report (simplified).} The proof fixes the root and nullifier but not the recipient or the fee. Any party that sees the transaction in the mempool can resubmit the proof with its own recipient. \TODO {F1}{replace with a real, already-fixed audited case (dev split), with circuit, consumer and attack in three panels}}{figure.1}{}}
+\citation{groth16}
+\citation{plonk}
+\citation{sok-snark-bugs,picus,circomspect}
+\@writefile{toc}{\contentsline {section}{\numberline {2}Background and Threat Model}{2}{section.2}\protected@file@percent }
+\newlabel{sec:background}{{2}{2}{Background and Threat Model}{section.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}ZK applications}{2}{subsection.2.1}\protected@file@percent }
+\newlabel{sec:bg-apps}{{2.1}{2}{ZK applications}{subsection.2.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Threat model}{2}{subsection.2.2}\protected@file@percent }
+\newlabel{sec:bg-threat}{{2.2}{2}{Threat model}{subsection.2.2}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Binding Flaws}{2}{section.3}\protected@file@percent }
+\newlabel{sec:definition}{{3}{2}{Binding Flaws}{section.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Two ledgers}{2}{subsection.3.1}\protected@file@percent }
+\newlabel{sec:def-ledgers}{{3.1}{2}{Two ledgers}{subsection.3.1}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces The two ledgers of a ZK consumer. Binding holds when every effect-ledger value is determined by the statement ledger and the consumer's own state. Each red edge is a binding flaw.}}{3}{figure.2}\protected@file@percent }
+\newlabel{fig:ledgers}{{2}{3}{The two ledgers of a ZK consumer. Binding holds when every effect-ledger value is determined by the statement ledger and the consumer's own state. Each red edge is a binding flaw}{figure.2}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Binding-flaw patterns, their signature-misuse analogues, and their frequency among the 103 binding findings of Section\nobreakspace  {}\ref  {sec:study}.}}{3}{table.1}\protected@file@percent }
+\newlabel{tab:taxonomy}{{1}{3}{Binding-flaw patterns, their signature-misuse analogues, and their frequency among the 103 binding findings of Section~\ref {sec:study}}{table.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Taxonomy}{3}{subsection.3.2}\protected@file@percent }
+\newlabel{sec:def-taxonomy}{{3.2}{3}{Taxonomy}{subsection.3.2}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Binding Flaws in Audited Applications}{4}{section.4}\protected@file@percent }
+\newlabel{sec:study}{{4}{4}{Binding Flaws in Audited Applications}{section.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Collecting audit findings}{4}{subsection.4.1}\protected@file@percent }
+\newlabel{sec:study-collect}{{4.1}{4}{Collecting audit findings}{subsection.4.1}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces From audit reports to binding findings.}}{4}{table.2}\protected@file@percent }
+\newlabel{tab:funnel}{{2}{4}{From audit reports to binding findings}{table.2}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Binding findings by pattern and auditor severity (C critical, H high, M medium, L low, I informational, -- unrated).}}{4}{table.3}\protected@file@percent }
+\newlabel{tab:severity}{{3}{4}{Binding findings by pattern and auditor severity (C critical, H high, M medium, L low, I informational, -- unrated)}{table.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Prevalence}{4}{subsection.4.2}\protected@file@percent }
+\newlabel{sec:study-prev}{{4.2}{4}{Prevalence}{subsection.4.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Severity}{4}{subsection.4.3}\protected@file@percent }
+\newlabel{sec:study-sev}{{4.3}{4}{Severity}{subsection.4.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Patterns}{4}{subsection.4.4}\protected@file@percent }
+\newlabel{sec:study-patterns}{{4.4}{4}{Patterns}{subsection.4.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.5}Trend and who finds them}{5}{subsection.4.5}\protected@file@percent }
+\newlabel{sec:study-trend}{{4.5}{5}{Trend and who finds them}{subsection.4.5}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}\textsc  {BindCheck}{} Design}{5}{section.5}\protected@file@percent }
+\newlabel{sec:design}{{5}{5}{\tool {} Design}{section.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Why a procedure and not a prompt}{5}{subsection.5.1}\protected@file@percent }
+\newlabel{sec:design-why}{{5.1}{5}{Why a procedure and not a prompt}{subsection.5.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Skill procedure}{5}{subsection.5.2}\protected@file@percent }
+\newlabel{sec:design-skills}{{5.2}{5}{Skill procedure}{subsection.5.2}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Representative auditor-reported binding flaws (public reports; all fixed or acknowledged). Severity is the auditor's.}}{6}{table.4}\protected@file@percent }
+\newlabel{tab:examples}{{4}{6}{Representative auditor-reported binding flaws (public reports; all fixed or acknowledged). Severity is the auditor's}{table.4}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces \textsc  {BindCheck}{} architecture. A skill procedure drives the LLM through explicit ledgers (top). Deterministic analysis tools answer factual queries (bottom). For each warning, an exploration loop writes attack tests, runs them in a sandbox (local chain, the project's own prover), and attaches the paths tried and any executed test. Humans adjudicate the package; no LLM verdict serves as ground truth.}}{6}{figure.3}\protected@file@percent }
+\newlabel{fig:arch}{{3}{6}{\tool {} architecture. A skill procedure drives the LLM through explicit ledgers (top). Deterministic analysis tools answer factual queries (bottom). For each warning, an exploration loop writes attack tests, runs them in a sandbox (local chain, the project's own prover), and attaches the paths tried and any executed test. Humans adjudicate the package; no LLM verdict serves as ground truth}{figure.3}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces The \textsc  {BindCheck}{} controller. Every \texttt  {Brain} step returns structured rows that the controller checks against the inventory before it continues. Attempt 0 is generated from a pattern template without the LLM. The sandbox, not the brain, computes whether an attack test changed the effect.}}{6}{figure.4}\protected@file@percent }
+\newlabel{fig:controller}{{4}{6}{The \tool {} controller. Every \texttt {Brain} step returns structured rows that the controller checks against the inventory before it continues. Attempt 0 is generated from a pattern template without the LLM. The sandbox, not the brain, computes whether an attack test changed the effect}{figure.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Analysis tools}{7}{subsection.5.3}\protected@file@percent }
+\newlabel{sec:design-tools}{{5.3}{7}{Analysis tools}{subsection.5.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.4}Exploration loop and evidence package}{7}{subsection.5.4}\protected@file@percent }
+\newlabel{sec:design-explore}{{5.4}{7}{Exploration loop and evidence package}{subsection.5.4}{}}
+\citation{slither}
+\citation{mythril}
+\citation{circomspect}
+\citation{picus}
+\citation{foundry}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.5}Guards and isolation}{8}{subsection.5.5}\protected@file@percent }
+\newlabel{sec:design-guards}{{5.5}{8}{Guards and isolation}{subsection.5.5}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}Evaluation}{8}{section.6}\protected@file@percent }
+\newlabel{sec:eval}{{6}{8}{Evaluation}{section.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}Setup}{8}{subsection.6.1}\protected@file@percent }
+\newlabel{sec:eval-setup}{{6.1}{8}{Setup}{subsection.6.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}RQ2: Detection}{8}{subsection.6.2}\protected@file@percent }
+\newlabel{sec:eval-rq2}{{6.2}{8}{RQ2: Detection}{subsection.6.2}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces What each tool can see. \text  {$\mathsurround \z@ \mathchar "458$}{} = analyzes the layer; $\circ $ = partial; -- = not at all.}}{9}{table.5}\protected@file@percent }
+\newlabel{tab:capability}{{5}{9}{What each tool can see. \checkmark {} = analyzes the layer; $\circ $ = partial; -- = not at all}{table.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.3}Fresh benchmarks for \textsc  {BindCheck}{} v3}{9}{subsection.6.3}\protected@file@percent }
+\newlabel{sec:eval-b3}{{6.3}{9}{Fresh benchmarks for \tool {} v3}{subsection.6.3}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces Detection on the audit test set B1 (strict hits / positives; 95\% Wilson interval). ``Sup.'' = targets the tool could analyze, out of 26 in round\nobreakspace  {}1. Specificity counts fixed versions and hard negatives without a warning at the flaw's location (both rounds for Slither and \textsc  {BindCheck}{}, round\nobreakspace  {}1 otherwise). The plain-LLM arm was run on round\nobreakspace  {}1 only. Red cells are pending runs.}}{10}{table.6}\protected@file@percent }
+\newlabel{tab:b1}{{6}{10}{Detection on the audit test set B1 (strict hits / positives; 95\% Wilson interval). ``Sup.'' = targets the tool could analyze, out of 26 in round~1. Specificity counts fixed versions and hard negatives without a warning at the flaw's location (both rounds for Slither and \tool {}, round~1 otherwise). The plain-LLM arm was run on round~1 only. Red cells are pending runs}{table.6}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {7}{\ignorespaces Detection of injected binding mutants (B2) by pattern (strict hits / mutants). ``uns.'' = the tool cannot analyze the layer or the run failed.}}{10}{table.7}\protected@file@percent }
+\newlabel{tab:b2}{{7}{10}{Detection of injected binding mutants (B2) by pattern (strict hits / mutants). ``uns.'' = the tool cannot analyze the layer or the run failed}{table.7}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.4}Why \textsc  {BindCheck}{} misses}{10}{subsection.6.4}\protected@file@percent }
+\newlabel{sec:eval-misses}{{6.4}{10}{Why \tool {} misses}{subsection.6.4}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {8}{\ignorespaces Previously unreported binding flaws found by \textsc  {BindCheck}{}. Projects are anonymized until disclosure completes.}}{10}{table.8}\protected@file@percent }
+\newlabel{tab:new}{{8}{10}{Previously unreported binding flaws found by \tool {}. Projects are anonymized until disclosure completes}{table.8}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.5}RQ3: New binding flaws}{10}{subsection.6.5}\protected@file@percent }
+\newlabel{sec:eval-rq3}{{6.5}{10}{RQ3: New binding flaws}{subsection.6.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.6}RQ4: Precision and evidence}{10}{subsection.6.6}\protected@file@percent }
+\newlabel{sec:eval-rq4}{{6.6}{10}{RQ4: Precision and evidence}{subsection.6.6}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {9}{\ignorespaces Two-phase scoring of all warnings (RQ4). Ph.\,1: matched a label. Ph.\,2: adjudicated by two raters. Test: a succeeding attack test (E2 or E3). Red: pending.}}{11}{table.9}\protected@file@percent }
+\newlabel{tab:evidence}{{9}{11}{Two-phase scoring of all warnings (RQ4). Ph.\,1: matched a label. Ph.\,2: adjudicated by two raters. Test: a succeeding attack test (E2 or E3). Red: pending}{table.9}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.7}RQ5: Cost}{11}{subsection.6.7}\protected@file@percent }
+\newlabel{sec:eval-rq5}{{6.7}{11}{RQ5: Cost}{subsection.6.7}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.8}Variance and contamination}{11}{subsection.6.8}\protected@file@percent }
+\newlabel{sec:eval-validity}{{6.8}{11}{Variance and contamination}{subsection.6.8}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {7}Discussion}{11}{section.7}\protected@file@percent }
+\newlabel{sec:discussion}{{7}{11}{Discussion}{section.7}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.1}Lessons for developers}{11}{subsection.7.1}\protected@file@percent }
+\newlabel{sec:disc-lessons}{{7.1}{11}{Lessons for developers}{subsection.7.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.2}Toward binding by construction}{11}{subsection.7.2}\protected@file@percent }
+\newlabel{sec:disc-construction}{{7.2}{11}{Toward binding by construction}{subsection.7.2}{}}
+\citation{sok-snark-bugs}
+\citation{zkp-vuln-audit,zk-bug-tracker,zkbugs}
+\citation{zkvm-study}
+\citation{zk-bug-tracker}
+\citation{circomspect}
+\citation{ecne}
+\citation{picus}
+\citation{zkap}
+\citation{civer}
+\citation{coda}
+\citation{zkfuzz}
+\citation{circuzz,mtzk}
+\citation{arguzz,beak,zkvm-miscompile}
+\citation{zk-tools-sok}
+\citation{slither,securify}
+\citation{mythril,manticore}
+\citation{echidna,ityfuzz,foundry}
+\citation{smartbugs}
+\citation{exploitable-bugs}
+\citation{smartinv}
+\citation{propertygpt}
+\citation{lasir}
+\citation{gptscan}
+\citation{llm4vuln}
+\citation{iaudit}
+\citation{a1-agent,rex,poco}
+\citation{sig-of-knowledge,snarky-sigs}
+\citation{groth16}
+\citation{groth16-randomization}
+\citation{weak-fs}
+\citation{portal}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.3}Threats to validity}{12}{subsection.7.3}\protected@file@percent }
+\newlabel{sec:disc-threats}{{7.3}{12}{Threats to validity}{subsection.7.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.4}Limitations}{12}{subsection.7.4}\protected@file@percent }
+\newlabel{sec:disc-limits}{{7.4}{12}{Limitations}{subsection.7.4}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {8}Related Work}{12}{section.8}\protected@file@percent }
+\newlabel{sec:related}{{8}{12}{Related Work}{section.8}{}}
+\citation{egele-crypto-misuse,cryptoguard,crysl,cognicrypt}
+\citation{sso-flaws}
+\citation{eip712}
+\citation{flashboys}
+\citation{bridge-sok}
+\citation{xscope,smartaxe}
+\citation{interop-sok}
+\bibstyle{IEEEtran}
+\bibdata{refs}
+\bibcite{sok-snark-bugs}{1}
+\bibcite{picus}{2}
+\bibcite{circomspect}{3}
+\bibcite{zkap}{4}
+\bibcite{groth16}{5}
+\bibcite{plonk}{6}
+\bibcite{slither}{7}
+\bibcite{mythril}{8}
+\bibcite{foundry}{9}
+\bibcite{zkp-vuln-audit}{10}
+\bibcite{zk-bug-tracker}{11}
+\bibcite{zkbugs}{12}
+\bibcite{zkvm-study}{13}
+\bibcite{ecne}{14}
+\bibcite{civer}{15}
+\bibcite{coda}{16}
+\bibcite{zkfuzz}{17}
+\bibcite{circuzz}{18}
+\bibcite{mtzk}{19}
+\bibcite{arguzz}{20}
+\bibcite{beak}{21}
+\@writefile{toc}{\contentsline {section}{\numberline {9}Conclusion}{13}{section.9}\protected@file@percent }
+\newlabel{sec:conclusion}{{9}{13}{Conclusion}{section.9}{}}
+\@writefile{toc}{\contentsline {section}{References}{13}{section*.3}\protected@file@percent }
+\bibcite{zkvm-miscompile}{22}
+\bibcite{zk-tools-sok}{23}
+\bibcite{securify}{24}
+\bibcite{manticore}{25}
+\bibcite{echidna}{26}
+\bibcite{ityfuzz}{27}
+\bibcite{smartbugs}{28}
+\bibcite{exploitable-bugs}{29}
+\bibcite{smartinv}{30}
+\bibcite{propertygpt}{31}
+\bibcite{lasir}{32}
+\bibcite{gptscan}{33}
+\bibcite{llm4vuln}{34}
+\bibcite{iaudit}{35}
+\bibcite{a1-agent}{36}
+\bibcite{rex}{37}
+\bibcite{poco}{38}
+\bibcite{sig-of-knowledge}{39}
+\bibcite{snarky-sigs}{40}
+\bibcite{groth16-randomization}{41}
+\bibcite{weak-fs}{42}
+\bibcite{portal}{43}
+\bibcite{egele-crypto-misuse}{44}
+\bibcite{cryptoguard}{45}
+\bibcite{crysl}{46}
+\bibcite{cognicrypt}{47}
+\bibcite{sso-flaws}{48}
+\bibcite{eip712}{49}
+\bibcite{flashboys}{50}
+\bibcite{bridge-sok}{51}
+\bibcite{xscope}{52}
+\bibcite{smartaxe}{53}
+\bibcite{interop-sok}{54}
+\@writefile{toc}{\contentsline {section}{Appendix\nobreakspace  A: Labeling Guide Summary}{14}{section*.4}\protected@file@percent }
+\newlabel{app:labels}{{A}{14}{\appendixname \nobreakspace \thesectiondis \\* Labeling Guide Summary}{section*.4}{}}
+\@writefile{toc}{\contentsline {section}{Appendix\nobreakspace  B: Matching Rules}{15}{section*.5}\protected@file@percent }
+\newlabel{app:matching}{{B}{15}{\appendixname \nobreakspace \thesectiondis \\* Matching Rules}{section*.5}{}}
+\@writefile{toc}{\contentsline {section}{Appendix\nobreakspace  C: Per-Item Results}{15}{section*.6}\protected@file@percent }
+\newlabel{app:items}{{C}{15}{\appendixname \nobreakspace \thesectiondis \\* Per-Item Results}{section*.6}{}}
+\gdef \@abspage@last{15}
