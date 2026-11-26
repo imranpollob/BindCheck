@@ -16,15 +16,21 @@ Every red `\TODO{ID}{...}` in the LaTeX has a row here with the same ID. Red `\D
 
 **Status:** open / running / done.
 
+## Decisions
+
+- **DEC-1 (2026-11-25, author): no separate validator stage.** BindCheck's brain works like an auditor: it plans, writes attack tests, runs them in a sandbox and retries, and reports each warning as an evidence package (ledger row, reasoning, paths tried, executed test). Evaluation is two-phase: phase 1 = match against audit labels (recall, specificity); phase 2 = two humans adjudicate every unmatched warning from its package (precision, new bugs, κ). The LLM's self-judgment may filter and rank, never score. The validator v1.2 lane is stopped; v1.1 (768a0b2) drivers are reused as the sandbox. Evidence levels: E1 claim, E2 mock-verifier test, E3 real-proof test (old E4). Paper updated: abstract, intro, §5 (sec:design-explore), §6 setup, RQ3, RQ4.
+
+- **DEC-2 (2026-11-25, author): v3 architecture.** Pipeline: recon (deterministic extractor, queryable) → ledgers (every extractor row needs a verdict; extractor is a floor, brain may add rows) → investigate (budgeted tool loop on unsure/unbound rows) → attack (pattern playbooks P1–P5, template-first tests: sandbox supplies the honest call, brain writes only the attacker variation; K=3 tries) → evidence package. A failed attack never drops a warning (stays E1, ranked lower). Cost cap ≈ $3/scan. Circuit-only / zkVM-guest flaws stay E1, stated openly. v3 freeze moves 1–2 days past 11-28 12:00; B3/round-3 protocol is pre-registered before the freeze.
+
 | ID | Type | Prio | Section | What | DEMO text it replaces | Blocked on | Status |
 |---|---|---|---|---|---|---|---|
 | E1 | E | must | §6, App | BindCheck v2 frozen run on B1 (round 1 + round 2) and B2; cost/time on test; per-item table | Table 4 tool row, Table 5 tool row, RQ2 text, abstract and intro numbers | – | done (eval d6beff4c): R1 4/14, R2 2/8, B2 22/27 |
 | E2 | E | must | §6.6 | 3 independent runs on B1 and B2; min/median/max | variance paragraph | E1 | open |
 | E3 | E | must | §6.3, Ethics | Hunt on non-dev audited commits (lead: safe-recovery-noir); triage; E4 confirm; disclose | RQ3 text, Table 6, abstract, conclusion | author: hunt scope + disclosure | open |
 | A1 | A | must | §5.3 | Deterministic ledger extractor (sinks, PI provenance classes, statement interfaces incl. zkVM journal, cross-layer join) feeding mandatory rows | extractor sentence | – | running (mvp-build3 t5q, freeze 11-28 12:00) |
-| A2 | A | must | §5.4, §6.4 | Differential binding oracle: same PI + state, attacker-varied value ⇒ different effect (E2, recording mock verifier) | E2 paragraph, RQ4 | – | running (mvp-validator t5r) |
-| A3 | A | must | §5.4, §6.4 | E4 oracle: honest proof + attacker replay on local Anvil | E4 paragraph, RQ4 | – | running (mvp-validator t5r) |
-| E5 | E | must | §6.4 | Run the validator on all confirmed test warnings; E1/E2/E4 shares | RQ4 text | A2, A3 | open |
+| A2 | A | must | §5.4, §6.4 | Exploration loop + sandbox tool in the brain's toolbox: brain plans attack → writes test → sandbox runs honest vs attacker call on same proof/state → brain retries up to K; sandbox (not brain) computes success; evidence package = ledger row, reasoning, paths tried, executed test. Reuse frozen validator v1.1 (768a0b2) drivers: mock verifier (E2), per-toolchain real-proof drivers (E3). Part of the v3 architecture talk. | design.tex sec:design-explore DEMO | author: v3 architecture talk | open (reshaped 2026-11-25, DEC-1) |
+| A3 | A | nice | §5.4 | Real-proof sandbox mode (old E4, now E3): honest proof with project prover, unmodified verifier+consumer on local Anvil | E3 rows in Tables 6/9 | A2 | v1.1 drivers exist (circom, gnark, Noir); folded into A2; no coverage target any more (DEC-1) |
+| E5 | E | must | §6.1, §6.4 | Phase-2 adjudication: every warning not matching a label → 2 authors judge independently from the evidence package (rubric C1–C3, blind to tool ranking and each other); κ before discussion; TP / policy-bounded / FP; minutes per warning; protocol pre-registered before the v3 freeze | Table 9 (tab:evidence), RQ4 text, Two-phase ground truth para | rater time (author) | open (reshaped 2026-11-25, DEC-1) |
 | E6 | E | must | §6.6 | Contamination split: detection by report date vs. model cutoff | contamination bullet 3 | E1 | open |
 | E7 | E | nice | §5.5 | Open-weight brain on B1/B2 (lab machine) | – | labmate PC | open |
 | E8 | E | must | §6.2 | Static tools on round-2 targets (no new LLM baseline, per author) | Table 4 round-2 column | – | partial (ff6c7fe8): Slither R2 done (0/8 strict, 3/8 loose; fixed 6/6, HN 8/8); Mythril 1/22, circomspect 0/22 killed by memory reaper; resume via mvp/eval/RESULTS-followup notes; Picus not run |
@@ -32,8 +38,8 @@ Every red `\TODO{ID}{...}` in the LaTeX has a row here with the same ID. Red `\D
 | E10 | E | must | §6.2 | BindCheck on the 3 clean B2 hosts (false-alarm rate) | clean-host sentence | – | partial (ff6c7fe8): orc 0, redpacket 0, privacyvault 3 (time cap); triaged 67c4009c: 1 real-but-policy (borrow amount), 2 plausible P3 aliasing → E4 confirm; done |
 | E11 | E | must | §6.3 | Classify all 16 test misses by cause, with counts | miss analysis | – | open |
 | D1 | D | must | §4.1, §7.2 | Independent blind relabel of 30 stratified items; κ for binding and pattern | κ sentences | second rater | open |
-| D2 | D | must | §4.5 | Normalize yearly counts by in-scope reports per year | trend sentence | – | open |
-| D3 | D | must | §4.5 | Which layer(s) each FULL binding item needs (consumer / circuit / both) | layers paragraph | – | open |
+| D2 | D | must | §4.5 | Normalize yearly counts by in-scope reports per year | trend sentence | – | done (datajobs t62): 0.17→0.27 share of reports, p=0.12, not significant; §4 reworded to "about one in four", no rising claim |
+| D3 | D | must | §4.5 | Which layer(s) each FULL binding item needs (consumer / circuit / both) | layers paragraph | – | partial (datajobs t62): core 49% contract / 23% circuit / 8% both / 20% verifier-offchain (fix-side 32/–/25); in §4; AI-proposed, author 15-item spot-check open |
 | D4 | D | nice | §4.5, §7.1 | Classify fix commits of FULL binding items | fixes paragraph, developer checklist | – | open |
 | D6 | D | nice | §7.1 | Per core finding, which construction (typed statements / effect commitments / pinning) would have prevented it | construction percentages | – | open |
 | D5 | D | nice | §4.4 | Unbound value per pattern from LABELS-v1 | P1/P2 sentence | – | open |
@@ -42,7 +48,7 @@ Every red `\TODO{ID}{...}` in the LaTeX has a row here with the same ID. Red `\D
 | W1 | W | must | title | Title | – | author | open |
 | W2 | W | must | all | Official EuroS&P 2027 template (zip sha256 5f074285…; IEEEtran.cls V1.8b + class options copied); build via local docker image `authguard-paper-tex:2022`; body ≤13 pages | – | – | done |
 | W3 | W | must | §3.2 | Confirm the P4 split (17 core + 16 adjacent) | – | author | open |
-| W4 | W | must | §8, refs | Literature search; verify every citation (several marked VERIFY) | – | – | open |
+| W4 | W | must | §8, refs | Literature search; verify every citation (several marked VERIFY) | – | – | done (relwork t61): 54 verified, 36 added, 9 fixed; closest prior = Chaliasos SoK (13 integration bugs); intro positioning sentence added; RELWORK-SCAN.md |
 | W5 | W | must | Open Science | Anonymized artifact link | – | – | open |
 | W6 | W | nice | §4.1 | Coverage statement for missing sources | – | – | open |
 | W7 | W | nice | App A | Condense the labeling guide | – | – | open |
@@ -60,8 +66,8 @@ Every red `\TODO{ID}{...}` in the LaTeX has a row here with the same ID. Red `\D
 | RV7 | D | must | §4.1–4.2 | Report the outcome of the 14-item triage sample and extrapolate to the 36 unlabeled candidates. Phrase prevalence over the enriched set. | – | – | open |
 | RV8 | E | nice | §6.2 | Non-LLM "binding taint" baseline: a Slither custom detector (calldata or `msg.sender` → transfer/mint/write argument not among the verifier-call inputs) on B1 and B2. It answers "is a trivial rule enough?" and gives a deterministic floor. | – | – | open |
 | RV9 | W | must | §1, §6.2 takeaway | Remove "most misses sit in zkVM guest programs" and "most misses are zkVM guest-side…" until E11 gives counts. Only the 6 R2 misses are classified (3 guest-side), and the 10 R1 misses are not. | – | E11 | open |
-| RV10 | W | must | abstract, §5.4, §6.5 | Validator wording: make the abstract conditional on A2/A3 status; explain the E3 gap or renumber; state the mock-verifier limit of E2; add the count of unconfirmed warnings attempted and rejected to Table 9. | E2/E4 paragraphs, RQ4 text | A2, A3 | open |
-| RV11 | W | must | §8, §1 | Related-work matrix (layer / spec source / evidence / real-world eval). Map the findings onto the Chaliasos et al. categories to quantify overlap with their integration layer. Add PropertyGPT, SmartInv and zkFuzz (verified via index) and signature-replay/EIP-712 work. At least 35 references. | – | W4 | open |
+| RV10 | W | must | abstract, §5.4, §6.5 | Validator wording | – | – | superseded by DEC-1: E-levels renumbered E1/E2/E3 (no gap); validator is now a sandbox tool; RQ4 is two-phase precision |
+| RV11 | W | must | §8, §1 | Related-work matrix (layer / spec source / evidence / real-world eval). Map the findings onto the Chaliasos et al. categories to quantify overlap with their integration layer. Add PropertyGPT, SmartInv and zkFuzz (verified via index) and signature-replay/EIP-712 work. At least 35 references. | – | W4 | done (datajobs t62, AI-proposed): 49/103 in SoK integration layer (3.8x their 13), 30 circuit V1, 22 backend V12, 2 none; P1 has no SoK category; intro sentence uses 3.8x (red until author check) |
 | RV12 | W | must | §6.6 | Fix the rendering bug at `evaluation.tex:328`: "The" sits inside the `% src:` comment, so the PDF reads "static analyzers" mid-sentence. Move the comment to its own line. | – | – | open |
 | RV13 | F | nice | §3, §5 | Fix label collisions in Fig. 2 ("attacker-chosen (no entry in 𝒮)") and Fig. 3 ("coverage re-prompt"); enlarge Fig. 3 text; keep the P1 listing in one column or drop it. | – | – | open |
 | RV14 | W | must | §4.5 | Year counts sum to 97, not 103 (13+20+39+9+16). Find the missing 6 or correct them. | – | – | open |
@@ -90,3 +96,5 @@ Every red `\TODO{ID}{...}` in the LaTeX has a row here with the same ID. Red `\D
    - the L024 wording is neutral;
    - the Wilson interval is corrected;
    - E2/E4 are drawn dashed in Fig. 4.
+| E13 | E | must | §1, §6.2, Table 4/5 | Recheck B1/B2 Mythril logs for vacuous runs (no contract created / ~2% coverage) with the mutants3 signature; reword "Mythril finds 0" to "supported on k of n, 0 hits; n-k unsupported" | Mythril cells, intro gap sentence | mutants3 RESULTS-static.md signature | open |
+| D5 | D | must | §4 | Author 15-item spot-check of D3 layer tags (D3-SPOTCHECK.md); D3 shares stay red until done | D3 layers paragraph | author | open |

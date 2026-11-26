@@ -63,6 +63,15 @@ did not commit to it. That is why taint analysis, symbolic execution and
 generic fuzzing do not flag it, and why a fuzzer finds these flaws once it is
 given the binding specification: 5 of 13, against 0 without it.
 
+The problem has been observed before. Chaliasos et al.\ report 13
+integration-layer bugs among SNARK vulnerabilities, 9 of them unchecked public
+inputs, and note that no existing defense covers that layer~\cite{sok-snark-bugs};
+bug trackers document single instances such as nullifiers aliased modulo the
+field order. We make the property precise, measure it at a larger scale
+\DEMO{(49 of our findings fall in their integration layer, 3.8 times their
+count, and one of our two most common patterns has no category of its own there)}, and
+build the detector that this line of work calls for.
+
 \para{This work}
 We first make the property precise. We describe a consumer by two ledgers: a
 \emph{statement ledger} of what the accepted proof fixes, and an \emph{effect
@@ -74,9 +83,10 @@ unpinned keys, and format confusion.
 
 We then build \tool{}, which makes an LLM construct both ledgers explicitly,
 row by row, under a fixed procedure derived from development data only. The
-LLM queries deterministic analysis tools for facts, and a validator upgrades
-each warning from a claim to fuzzing evidence and to a real proof replayed
-against the unmodified contracts on a local chain.
+LLM queries deterministic analysis tools for facts and, like an auditor
+\DEMO{writing a proof of concept, writes and runs attack tests on a local chain,
+reporting each warning with the paths it tried and the test it ran. Humans
+adjudicate every warning that matches no audit label.}
 On 27 injected binding mutants \tool{} finds 22, and on 22 test-set audited
 flaws it finds 6 at the exact location and mechanism (2 of 8 on the clean
 round; 9 of 22 at the mechanism level). The existing analyzers find none of the mutants and none of the
@@ -95,10 +105,10 @@ analogues (Section~\ref{sec:definition}).
 264 labeled findings, and 103 binding flaws, with prevalence, severity,
 patterns, and trends (Section~\ref{sec:study}).
 \item \textbf{\tool{}}, a detector that combines an LLM with a ledger-based
-skill procedure, deterministic tools, and an evidence ladder from claim to
-on-chain confirmation (Section~\ref{sec:design}).
+skill procedure, deterministic tools, and \DEMO{an exploration loop that attaches
+executed attack tests to its warnings} (Section~\ref{sec:design}).
 \item \textbf{An evaluation} against static, circuit, fuzzing and LLM
 baselines on real audited flaws and on a new binding-mutant benchmark,
-\DEMO{including three new flaws confirmed at E4} (Section~\ref{sec:eval}).
+\DEMO{including three new flaws confirmed with real-proof tests} (Section~\ref{sec:eval}).
 We release the dataset, the benchmark and the tool.
 \end{itemize}

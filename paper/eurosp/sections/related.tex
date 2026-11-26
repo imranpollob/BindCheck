@@ -1,52 +1,91 @@
 \section{Related Work}\label{sec:related}
 
-\para{Bugs in ZK circuits and proof systems}
-Chaliasos et al.\ systematize vulnerabilities in SNARK systems and
-applications~\cite{sok-snark-bugs}. Their taxonomy is organized by the layer
-where a bug lives (circuit, front end, back end, integration), and
-under-constrained circuits dominate it. Tools follow this focus.
-circomspect~\cite{circomspect} lints Circom for dangerous constructs,
-Picus~\cite{picus} uses SMT solving to decide whether a circuit uniquely
-determines its outputs, ZKAP~\cite{zkap} detects circuit anti-patterns
-statically, and zkFuzz~\cite{zkfuzz} fuzzes circuits for under- and
-over-constraints. All of these analyze the relation $R$. A binding flaw can
-exist with a perfectly constrained circuit, because it concerns which consumer
-values the relation is \emph{meant} to fix. We complement this line of work
-by characterizing and detecting the integration-level class that circuit
-tools cannot see.
-\TODO{W4}{literature search: ZK integration/verifier-misuse papers 2024--2026, zkVM integration bugs, recent circuit fuzzers; verify every citation}
+\para{ZK vulnerability studies}
+Chaliasos et al.\ classify 141 vulnerabilities in SNARK systems by layer
+(circuit, front end, back end, integration)~\cite{sok-snark-bugs}. Their
+integration layer holds 13 bugs, 9 of them public inputs the application
+does not check, and they report that no defense targets this layer. Other
+studies and trackers catalog circuit and auditing
+flaws~\cite{zkp-vuln-audit,zk-bug-tracker,zkbugs} and zkVM
+vulnerabilities~\cite{zkvm-study}. Individual binding flaws therefore appear
+in this literature: the tracker documents an airdrop whose nullifier aliases
+modulo $r$ (our P3) and describes how a proof can be replayed with a changed
+public input that the compiler optimized out of the circuit (our
+P1)~\cite{zk-bug-tracker}.
+These works catalog flaws by layer, root cause or broken proof-system
+property, and report instances one at a time. We define the class by
+the property it violates, a correspondence between the statement and the
+effect that spans layers, and we measure that class on 103 findings.
+
+\para{Circuit, compiler and zkVM analysis}
+Most ZK tools check the relation $R$. circomspect~\cite{circomspect} lints
+Circom, Ecne~\cite{ecne} and Picus~\cite{picus} decide whether a circuit
+uniquely determines its outputs, ZKAP~\cite{zkap} queries a circuit
+dependence graph for anti-patterns, CIVER~\cite{civer} and
+Coda~\cite{coda} verify circuit specifications, and zkFuzz~\cite{zkfuzz}
+fuzzes circuits for under- and over-constraints. Circuzz and
+MTZK~\cite{circuzz,mtzk} test circuit compilers, and Arguzz, Beak and a
+miscompilation study~\cite{arguzz,beak,zkvm-miscompile} target zkVMs. A
+recent evaluation finds that most such tools target Circom and that their
+detection rate drops from 45.7\% on isolated targets to 19.6\% on full
+codebases; practitioners name system integration as a major gap~\cite{zk-tools-sok}.
+A binding flaw can exist under a fully constrained, correctly compiled
+circuit, because it concerns which consumer values the statement was meant
+to fix. \tool{} analyzes the circuit and the consumer together.
 
 \para{Smart-contract analysis}
-Static analyzers such as Slither~\cite{slither}, symbolic executors such as
-Mythril~\cite{mythril}, and fuzzers such as Echidna~\cite{echidna} and Foundry
-find reentrancy, access-control and arithmetic flaws in contracts. They can
-follow taint from calldata to a transfer, but they have no notion of a proved
-statement, so an unbound recipient looks like an ordinary parameter. Our
-evaluation confirms this: with generic properties they find none of the
-binding flaws, and a fuzzer becomes effective only once it is given the
-binding invariant.
+Static analyzers~\cite{slither,securify}, symbolic
+executors~\cite{mythril,manticore} and fuzzers~\cite{echidna,ityfuzz,foundry}
+find reentrancy, access-control and arithmetic flaws. Yet nine such tools
+together detect only 42\% of annotated vulnerabilities~\cite{smartbugs}, and
+over 80\% of exploitable bugs in audit contests are beyond existing
+tools~\cite{exploitable-bugs}.
+Invariant inference~\cite{smartinv} and LLM-generated
+properties~\cite{propertygpt} supply some missing specifications, and
+LASiR~\cite{lasir} detects signature replay, the closest contract-level
+analogue of P3. None of these has a notion of a proved statement, so an
+unbound recipient looks like an ordinary parameter. Our evaluation confirms
+this: generic properties find no binding flaw, and a fuzzer becomes
+effective only once given the binding invariant.
 
-\para{LLM-based vulnerability detection}
-LLMs have been combined with static analysis to detect logic flaws in smart
-contracts~\cite{gptscan} and used as agents that explore code with
-tools~\cite{llm4vuln}. These systems rely on general vulnerability knowledge.
-\tool{} differs in two ways. Its procedure is derived from a precise
-definition and forces exhaustive, checkable ledgers instead of free-form
-review, and it upgrades warnings to executable evidence.
+\para{LLM-based auditing}
+GPTScan~\cite{gptscan} combines an LLM with static analysis to confirm logic
+flaws, LLM4Vuln~\cite{llm4vuln} separates an LLM's vulnerability reasoning
+from its knowledge, and iAudit~\cite{iaudit} uses fine-tuned agents that
+justify findings. A1, ReX and PoCo~\cite{a1-agent,rex,poco} let agents write
+exploits or proofs of concept and validate them by execution. \tool{} shares the
+execution loop but differs in where its reasoning comes from: its procedure
+is derived from a precise definition and forces exhaustive, checkable ledgers
+over two artifacts, instead of applying general vulnerability knowledge to
+one contract.
 
-\para{Cross-chain verification}
-Bridges and light clients also act on verified messages, and several large
-bridge incidents involved a message being accepted without being bound to the
-intended source, recipient or verifier~\cite{bridge-sok}. ZK bridges and zkVM
-light clients inherit this risk at the proof-to-effect interface. Our P2 and
-P4 patterns capture it, and several findings in our dataset come from such
-systems.
+\para{Malleability, replay and binding in cryptography}
+Signatures of knowledge~\cite{sig-of-knowledge,snarky-sigs} bind a proof to a
+message, and simulation extractability prevents an adversary from mauling a
+proof into one for a new statement. Groth16~\cite{groth16} proofs are
+re-randomizable but still statement non-malleable~\cite{groth16-randomization},
+which is why a contract that uses $\mathsf{keccak}(\pi)$ as its replay key
+fails (P3). Weak Fiat--Shamir~\cite{weak-fs} omits public values from the
+transcript and so breaks soundness. Portal~\cite{portal} shows replay of ZK
+proofs at identity contracts and fixes it with a time-bound construction. These
+results protect the statement. A binding flaw arises when a value the effect
+depends on was never part of the statement, which no proof-system property can
+repair; the fix is to put the value in the statement, as signatures of
+knowledge do for the message.
 
-\para{Signature and cryptographic API misuse}
-The patterns of Section~\ref{sec:definition} mirror long-studied misuse of
-signatures and cryptographic APIs: unsigned fields, missing domain separation,
-and nonce reuse~\cite{egele-crypto-misuse,cryptoguard}. Front-running, which
-turns an unbound recipient into a theft, is well documented in
-DeFi~\cite{flashboys}. To our knowledge, we are the first to define binding
-between a ZK proof's statement and a contract's effect as a property, to
-measure its prevalence, and to detect it automatically.
+\para{Signature, API and protocol misuse}
+Our patterns mirror misuse of cryptographic
+APIs~\cite{egele-crypto-misuse,cryptoguard,crysl,cognicrypt} and of signed
+tokens: a single-sign-on flaw in which the relying party uses an email
+address that the identity provider's signature does not cover~\cite{sso-flaws}
+is P1 for signatures.
+EIP-712~\cite{eip712} adds domain separation to signed messages and
+leaves replay protection to the application. Front-running~\cite{flashboys}
+is what turns an unbound recipient into theft. Bridges act on verified
+messages as ZK consumers act on proofs; the Wormhole exploit let the caller
+supply the signature-verification account~\cite{bridge-sok}, the P4 pattern,
+and bridge analyzers~\cite{xscope,smartaxe} and
+surveys~\cite{interop-sok} study such flaws for messages. To our knowledge we
+are the first to define statement-to-effect binding for ZK consumers as a
+property, to measure its prevalence across audits, and to detect it
+automatically.

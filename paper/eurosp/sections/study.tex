@@ -175,24 +175,37 @@ little.}
 
 \subsection{Trend and who finds them}\label{sec:study-trend}
 
-Binding findings appear more often in recent reports: 6 come from 2021--2022,
+Raw counts of binding findings grow over time: 6 come from 2021--2022,
 13 from 2023, 20 from 2024 and 39 from 2025. 2026 is a partial year (9), and 16 findings have
 no report date. Raw counts also reflect how many ZK audits were published each
 year.
 % src: CHARACTERIZATION.md by report year
-\DEMO{Normalized by the number of in-scope ZK reports per year, the rate
-rises from 0.21 to 0.34 binding findings per report.}
-\TODO{D2}{normalize the yearly counts by in-scope reports per year}
+The number of in-scope ZK audit reports grows too, from 60 in 2023 to 94 in
+2025. Normalized by those reports, the share of reports with at least one
+binding finding moves from 0.17 (95\% Wilson CI 0.09--0.28) to 0.27
+(0.19--0.36). The change is not significant (Cochran--Armitage over
+2023--2025, $p=0.12$; core class $p=0.22$), so we do not claim a rising rate.
+The stable picture is that roughly one in four recent ZK application audits
+reports at least one binding flaw.
+% src: dataset/labels-v1/D2-TREND.md (analysis/d2_trend.py)
 The 103 findings come from 24 different auditors and advisory sources, and no
 source contributes more than 21. Binding is therefore a class that many
 experienced auditors encounter, not the checklist item of one firm.
 % src: CHARACTERIZATION.md by auditor (24 sources; max Veridise 21)
 
 \para{Which layers are needed}
-\DEMO{For 61\% of the FULL-tier binding findings, deciding the flaw required
-reading both the circuit (or its public-input specification) and the
-consumer. Only 23\% could be decided from the consumer alone.}
-\TODO{D3}{for FULL binding items, code which layer(s) the Pass-2 evidence needed}
+\DEMO{Given the report's description of what the proved statement exposes, 43
+of the 87 core findings (49\%) can be decided from the consumer contract
+alone, 20 (23\%) from the circuit alone, and 7 (8\%) only by comparing the
+two. The remaining 17 (20\%) lie in verifier, recursion or off-chain
+framework code. If a finding counts as cross-layer whenever its fix adds the
+missing value to the statement, the contract-only share falls to 32\% and the
+cross-layer share rises to 25\%. The contract-only half is not ordinary
+contract analysis: deciding it still requires knowing \emph{which values the
+statement fixes}, which is exactly what contract analyzers do not model
+(Section~\ref{sec:eval}).}
+% src: dataset/labels-v1/D3-LAYERS.md, D3-layers.csv (AI-proposed tags)
+\TODO{D3}{author spot-check of the 15-item stratified sample in D3-LAYERS.md; re-tag under amendment A3 if more than 2 of 15 disagree}
 
 \para{How they were fixed}
 \DEMO{Fixes follow the signature analogy. 70\% of the fixed findings add the
@@ -200,6 +213,7 @@ missing value to the public inputs or to a hashed commitment, and the rest add
 a context check (chain, contract, root) or a statement-derived replay key.}
 \TODO{D4}{classify fix commits of FULL binding items}
 
-\finding{Binding findings are found by many auditors and \DEMO{usually require
-reasoning across the circuit and the consumer}. That cross-layer
-reasoning is what Section~\ref{sec:design} automates.}
+\finding{About one in four recent ZK application audits reports a binding
+flaw, found by many different auditors. Deciding one requires knowing what the
+proof's statement fixes, whether the flaw sits in the contract, the circuit,
+or between them. That reasoning is what Section~\ref{sec:design} automates.}

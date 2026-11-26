@@ -6,7 +6,8 @@ research questions guide the evaluation:
 \item[RQ2] Detection: does \tool{} find known binding flaws that existing
 tools miss?
 \item[RQ3] New flaws: does it find binding flaws that auditors missed?
-\item[RQ4] Confirmation: how many warnings reach executable evidence?
+\item[RQ4] Precision and evidence: how many warnings that match no labeled
+flaw are real, and does the evidence package let a human decide them?
 \item[RQ5] Cost: what does a scan cost in money, time and human effort?
 \end{description}
 
@@ -63,9 +64,24 @@ Every tool sees the same snapshots. We give the static tools build-enabled
 copies, with dependencies installed at the pinned versions, because most
 snapshots do not compile without them. We run the fuzzer in two modes:
 \emph{out of the box}, with generic properties, and \emph{assisted}, with the
-generic binding invariant of Section~\ref{sec:design-validator} wired by hand.
+generic binding invariant of Section~\ref{sec:design-explore} wired by hand.
 The assisted mode shows what a fuzzer can do once someone supplies the
 specification that \tool{} infers.
+
+\para{Two-phase ground truth}
+\DEMO{Audit labels cover only what auditors reported. They bound recall, but not
+precision: a warning that matches no label is either a false positive or a
+flaw the auditor missed. We therefore score in two phases. \emph{Phase~1}
+matches every warning against the labeled flaws with the rules below.
+\emph{Phase~2} sends every warning that matches no label to two authors, who
+judge it independently from its evidence package alone, using conditions
+C1--C3 as the rubric. They see neither the tool's ranking nor each other's
+verdict, and resolve disagreements afterwards by discussion. We report their
+agreement before resolution. The phase-2 protocol was fixed before the
+\tool{} v3 freeze, so phase~2 is blind on B3, round~3 and the hunt. On B1
+and B2 it is not: the v2 warnings there were seen during development of v3,
+and we mark those rows accordingly.}
+\TODO{E5}{phase-2 adjudication: pre-register rubric and blinding before the v3 freeze; two raters; Cohen's kappa; TP / policy-bounded / FP per benchmark}
 
 \para{Scoring}
 The matching rules were committed before each tool ran. One amendment (v1.1)
@@ -238,7 +254,7 @@ documentation treats it as policy, bounded by an on-chain loan-to-value check),
 and two flag nullifiers stored on the raw 256-bit value while the verifier
 reduces public inputs modulo~$r$ (P3 aliasing), which we judge plausible but
 have not confirmed.
-\TODO{E3/A3}{confirm or refute the two aliasing warnings with a real proof (E4); if confirmed, this is a new flaw in a third-party repository and goes through the disclosure process}
+\TODO{E3/A3}{confirm or refute the two aliasing warnings with a real-proof test (E3); if confirmed, this is a new flaw in a third-party repository and goes through the disclosure process}
 % src: mvp/eval/RESULTS-tool-v2.md B2 table (RP-S03 P3 0 warnings; RP-S05, OR-S10, PV-S06 P4; PV-S08 P5); eval ff6c7fe8 E10 (orc 0, redpacket 0, privacyvault 3, partial); triage eval 67c4009c RESULTS-cleanhost.md
 
 \finding{Existing analyzers find none of the binding flaws, and a fuzzer finds
@@ -249,8 +265,8 @@ flaws remain hard: half of the round-2 misses are zkVM guest-side.}
 
 \subsection{Fresh benchmarks for \tool{} v3}\label{sec:eval-b3}
 
-\DEMO{\tool{} v3 adds a deterministic ledger extractor and the executable
-validator (Section~\ref{sec:design}). It was built on development data only
+\DEMO{\tool{} v3 adds a deterministic ledger extractor and the exploration
+loop (Section~\ref{sec:design}). It was built on development data only
 and evaluated once on two benchmarks frozen before its freeze: B3, 35 binding
 mutants injected into five open-source applications by operators derived from
 the labeled findings, with clean hosts and bound decoys as controls, and
@@ -303,12 +319,12 @@ same flaw, but only once a human has written the harness.
 from our collection that were not used in development, and on the current
 versions of the same projects. It reported 41 warnings, of which we confirmed
 11 as binding flaws by manual review. Three are previously unreported, in two
-projects, and all three reach E4. In one, a recovery module accepts a proof
+projects, and all three come with a real-proof test (E3) that a rater re-ran. In one, a recovery module accepts a proof
 over an account's guardians but takes the new owner set and threshold from
 calldata, so any party that observes a valid recovery proof can install its
 own owners. Table~\ref{tab:new} lists them. We reported all three to the
 maintainers.}
-\TODO{E3}{hunt: run frozen BindCheck on the hunt pool, triage, E4-confirm, disclose; the author decides the live-version scope}
+\TODO{E3}{hunt: run frozen BindCheck on the hunt pool, triage, real-proof-test confirm, disclose; the author decides the live-version scope}
 
 \begin{table}[t]
 \centering
@@ -320,41 +336,48 @@ Projects are anonymized until disclosure completes.}
 \toprule
 \textbf{ID} & \textbf{App type} & \textbf{Pattern} & \textbf{Effect} & \textbf{Evidence} \\
 \midrule
-\DEMO{N1} & \DEMO{account recovery} & \DEMO{P1} & \DEMO{owner takeover} & \DEMO{E4} \\
+\DEMO{N1} & \DEMO{account recovery} & \DEMO{P1} & \DEMO{owner takeover} & \DEMO{E3} \\
 \DEMO{N2} & \DEMO{\TBD} & \DEMO{\TBD} & \DEMO{\TBD} & \DEMO{\TBD} \\
 \DEMO{N3} & \DEMO{\TBD} & \DEMO{\TBD} & \DEMO{\TBD} & \DEMO{\TBD} \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\subsection{RQ4: Confirmation}\label{sec:eval-rq4}
+\subsection{RQ4: Precision and evidence}\label{sec:eval-rq4}
 
-\DEMO{Of the 31 confirmed warnings, 26 (84\%) reached E2 with an
-automatically generated harness, and 16 (52\%) reached E4. Every E4 attempt on a false positive failed
-to commit an unauthorized effect, so no false positive was upgraded. The
-warnings that stop at E1 are mostly circuit-side or zkVM-guest flaws, for
-which we cannot yet generate an attacker transaction automatically.}
+\DEMO{Across B1, B2 and the hunt pool, \tool{} raised 118 warnings. Phase~1
+matched 33 of them to a labeled flaw or injected mutant. The other 85 went to
+phase-2 adjudication, where the raters agreed on 77 before discussion
+($\kappa=0.81$). They judged 19 to be real binding flaws, 14 to be real but
+bounded by an access or value policy, and 52 to be false positives. Counting
+policy-bounded warnings as false, overall precision is 44\% (52 of 118; 95\%
+Wilson CI 35--53\%). The evidence package carried the decision: 17 of the 19 real flaws
+came with a succeeding attack test, against 3 of the 52 false positives. In
+those three, the effects differed only in a field outside the effect ledger,
+such as an event argument, and the raters rejected them. Median adjudication
+time was 6 minutes for a warning with a test and 14 minutes without one.}
 
 \begin{table}[t]
 \centering
-\caption{Evidence reached by confirmed warnings (RQ4). Red: pending.}
+\caption{Two-phase scoring of all warnings (RQ4). Ph.\,1: matched a label.
+Ph.\,2: adjudicated by two raters. Test: a succeeding attack test (E2 or
+E3). Red: pending.}
 \label{tab:evidence}
 \footnotesize
-\begin{tabular}{@{}lrrrr@{}}
+\begin{tabular}{@{}lrrrrrr@{}}
 \toprule
-\textbf{Benchmark} & \textbf{Confirmed} & \textbf{E1 only} & \textbf{E2} & \textbf{E4} \\
+\textbf{Benchmark} & \textbf{Warn.} & \textbf{Ph.\,1} & \textbf{TP} & \textbf{Policy} & \textbf{FP} & \textbf{Test} \\
 \midrule
-B1 round 1 & 4 & \DEMO{1} & \DEMO{3} & \DEMO{2} \\
-B1 round 2 & 2 & \DEMO{0} & \DEMO{2} & \DEMO{1} \\
-B2 mutants & 22 & \DEMO{4} & \DEMO{18} & \DEMO{10} \\
-New flaws (RQ3) & \DEMO{3} & \DEMO{0} & \DEMO{3} & \DEMO{3} \\
+B1 round 1\textsuperscript{a} & \DEMO{21} & \DEMO{6} & \DEMO{3} & \DEMO{4} & \DEMO{8} & \DEMO{7} \\
+B1 round 2\textsuperscript{a} & \DEMO{14} & \DEMO{3} & \DEMO{1} & \DEMO{3} & \DEMO{7} & \DEMO{3} \\
+B2 mutants\textsuperscript{a} & \DEMO{42} & \DEMO{24} & \DEMO{4} & \DEMO{3} & \DEMO{11} & \DEMO{21} \\
+Hunt (RQ3) & \DEMO{41} & -- & \DEMO{11} & \DEMO{4} & \DEMO{26} & \DEMO{12} \\
 \midrule
-Total & \DEMO{31} & \DEMO{5} & \DEMO{26} & \DEMO{16}\textsuperscript{a} \\
+Total & \DEMO{118} & \DEMO{33} & \DEMO{19} & \DEMO{14} & \DEMO{52} & \DEMO{43} \\
 \bottomrule
-\multicolumn{5}{@{}l}{\scriptsize \textsuperscript{a}E4 needs the project's prover; E2 counts include E4.}
+\multicolumn{7}{@{}l}{\scriptsize \textsuperscript{a}Phase~2 not blind: these v2 warnings were seen before the protocol was fixed.}
 \end{tabular}
 \end{table}
-\TODO{E5}{run the validator (A2, A3) on all confirmed test warnings and report the E1/E2/E4 shares}
 
 \subsection{RQ5: Cost}\label{sec:eval-rq5}
 
