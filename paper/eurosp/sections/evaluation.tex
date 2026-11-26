@@ -232,6 +232,7 @@ Picus & -- & 0 & -- & -- & -- & 0 \\
 \end{tabular}
 % src: benchmarks/binding-mutants-v2/RESULTS-static.md
 \end{table}
+\TODO{E13}{verify the 13 supported Mythril runs actually created the contract; reword to supported-and-analyzed counts}
 
 \para{Mutants}
 B2 tests every pattern on hosts outside the dataset (Table~\ref{tab:b2}).
@@ -256,6 +257,7 @@ reduces public inputs modulo~$r$ (P3 aliasing), which we judge plausible but
 have not confirmed.
 \TODO{E3/A3}{confirm or refute the two aliasing warnings with a real-proof test (E3); if confirmed, this is a new flaw in a third-party repository and goes through the disclosure process}
 % src: mvp/eval/RESULTS-tool-v2.md B2 table (RP-S03 P3 0 warnings; RP-S05, OR-S10, PV-S06 P4; PV-S08 P5); eval ff6c7fe8 E10 (orc 0, redpacket 0, privacyvault 3, partial); triage eval 67c4009c RESULTS-cleanhost.md
+\TODO{E13}{check these Mythril runs for vacuous executions (no contract created); on B3 Mythril deployed only 2 of 26 targets, so ``zero issues'' may mean ``not analyzed''}
 
 \finding{Existing analyzers find none of the binding flaws, and a fuzzer finds
 them only when a human supplies the binding specification. \tool{} infers

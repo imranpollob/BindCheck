@@ -208,10 +208,19 @@ statement fixes}, which is exactly what contract analyzers do not model
 \TODO{D3}{author spot-check of the 15-item stratified sample in D3-LAYERS.md; re-tag under amendment A3 if more than 2 of 15 disagree}
 
 \para{How they were fixed}
-\DEMO{Fixes follow the signature analogy. 70\% of the fixed findings add the
-missing value to the public inputs or to a hashed commitment, and the rest add
-a context check (chain, contract, root) or a statement-derived replay key.}
-\TODO{D4}{classify fix commits of FULL binding items}
+\DEMO{Fixes for the core findings mostly mirror signature-misuse remedies.
+56\% (49 of 87; 95\% CI 46--66\%) add the missing value to the statement,
+bind a context such as chain, contract, root or configuration, or make the
+replay key unique. Another 34\% pin the verifier or program, check its
+result, or enforce a canonical encoding, the analogues of verifying against
+the right key and of signature malleability. Most fix classes are inferred
+from the reported flaw; on the 21 findings whose fix is stated explicitly,
+the shares are 10 of 21 for the three classic remedies and 19 of 21 for the
+broader set. The ZK-specific residue is 6 findings fixed by constraining a
+value the circuit already exposed, which has no signature counterpart:
+whatever is signed is fixed.}
+% src: dataset/labels-v1/D4-FIXES.md, D4-fixes.csv (AI-proposed, report text only)
+\TODO{D4}{author check of the AI-proposed fix classes (D4-FIXES.md)}
 
 \finding{About one in four recent ZK application audits reports a binding
 flaw, found by many different auditors. Deciding one requires knowing what the
