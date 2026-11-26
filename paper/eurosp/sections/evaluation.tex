@@ -208,7 +208,7 @@ of 26 on round~2 to be clearly not binding.
 Because the miss analysis below inspects round-1 and round-2 items, no later
 version of \tool{} is evaluated on them; later versions are evaluated only on
 fresh benchmarks (Section~\ref{sec:eval-b3}).
-\TODO{E1b}{v3 (A1--A3 and guest-side support) built on dev only, one run on a fresh held-out round 3}
+\TODO{E1b}{v3 (v2 + exploration loop, O1--O6, depth pass if V-C wins) built on dev only, one run on a fresh held-out round 3}
 
 \begin{table}[t]
 \centering
@@ -267,8 +267,8 @@ flaws remain hard: half of the round-2 misses are zkVM guest-side.}
 
 \subsection{Fresh benchmarks for \tool{} v3}\label{sec:eval-b3}
 
-\DEMO{\tool{} v3 adds a deterministic ledger extractor and the exploration
-loop (Section~\ref{sec:design}). It was built on development data only
+\DEMO{\tool{} v3 keeps the frozen ledger procedure and adds the exploration
+loop (Section~\ref{sec:design-explore}). It was built on development data only
 and evaluated once on two benchmarks frozen before its freeze: B3, 35 binding
 mutants injected into five open-source applications by operators derived from
 the labeled findings, with clean hosts and bound decoys as controls, and
@@ -389,6 +389,11 @@ of 267\,s, with a maximum of about 11 minutes. Large monorepos cost \$2--3.
 On the test set, a scan costs \$0.84 on average, with a median of
 292--324\,s per round. Mutant hosts are small and cost \$0.28 per scan.
 % src: mvp/eval/RESULTS-tool-v2.md (round 1 mean $0.91, median 292 s; round 2 mean $0.76, median 324 s; total $40.4 over 48 scans; B2 $0.28)
+The exploration loop adds a median of \$0.39 and a maximum of \$2.40 per scan
+on development data, most of it for drafting test scaffolds (80\%); the
+template attempts cost nothing.
+% src: mvp/tool/BASE-REPORT.md (gate 4 cost split)
+\DEMO{On the test benchmarks, v3 costs \$\TBD{} per scan in total.}
 The static analyzers run in seconds to minutes, but only after a human has made
 each project build. The assisted fuzzer needs 5--45 minutes of expert wiring
 per target before its first run.

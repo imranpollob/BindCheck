@@ -87,8 +87,12 @@ artifact.
 syntactic, so deep library internals and dependencies that are not vendored
 are blind spots. It misses parser differentials (where two components parse
 the same bytes differently) and validation gaps inside SDK methods. Our
-executable validation targets EVM consumers. Flaws whose effect is committed
-in a zkVM host or off chain stop at E1. Finally, binding is relative to
+exploration loop targets EVM consumers. Flaws whose effect is committed
+in a zkVM host or off chain stop at E1. Its reach is limited by what can be
+deployed automatically: on development data, real-proof tests were possible
+on 2 of 11 targets, because most projects do not ship proving artifacts, and
+several targets could not be deployed at all. Most warnings therefore leave
+\tool{} as claims, which human adjudication must judge. Finally, binding is relative to
 intent. When the developer never meant a value to be bound, for example a
 deliberately open relayer fee, \tool{} must infer that from code and
 documentation, and it can be wrong.
