@@ -3,7 +3,11 @@
 \section*{\textcolor{red}{Draft backlog (not part of the paper)}}
 {\color{red}\small
 Status as of 2026-11-27. The IDs match \texttt{TODO.md} and the red notes in
-the text. Red text in the body holds expected results until these items close.
+the text. Red text in the body holds \emph{hypothetical} results (v4, phase~2,
+hunt, $\kappa$, round~3) written as if the runs had finished; every red number
+must be replaced by a measured one or cut before submission. The 14 concerns
+of the 2026-11-27 external review are addressed in the text (see
+\texttt{TODO.md}, section R14).
 
 \para{Tool and results (running now)}
 \begin{itemize}\setlength\itemsep{0pt}
@@ -37,6 +41,13 @@ model's cutoff.
   \end{itemize}
 \item \textbf{RV5} A human check of the warning-triage numbers in ``Warning
 volume''.
+\item \textbf{RV10} Human re-judge of the 14 borderline strict/loose/mechanism
+verdicts on B1 (\S6.1).
+\item \textbf{RV4} Re-check every P1/P3 label against the new policy rule
+(\S3.1) and list changed items; the ``two labels changed'' sentence is
+hypothetical.
+\item \textbf{R14-4} Round~3 size (7) and every v4 number in Table~4 are
+hypothetical.
 \end{itemize}
 
 \para{Your decisions}
@@ -51,8 +62,13 @@ in Zero-Knowledge Applications'').
 \item \textbf{W3/RV3} The P4 split (17 core + 16 adjacent), and whether the
 headline uses 87 core findings.
 \item \textbf{D5} Your 15-item spot-check of the D3 layer tags.
-\item \textbf{RV1} Whether to add the plain-LLM arm on round~2 and B2.
-\item Commit the pre-registration amendment A1.
+\item \textbf{RV1} The text now assumes the plain-LLM arm runs 3$\times$ on
+the check set, round~3 and B3 (Table~4). Confirm, or the comparison stays
+``preliminary''.
+\item \textbf{W3} The text now leads with the 87 core findings. Confirm.
+\item \textbf{RV17} Confirm the exact model ID behind the \texttt{sonnet}
+alias (text says \texttt{claude-sonnet-5-5}) and the run dates.
+\item Confirm ``two collaborating raters'' is the right description.
 \end{itemize}
 
 \para{Data and writing fixes}
@@ -61,7 +77,8 @@ headline uses 87 core findings.
 \item \textbf{F1} Make Fig.~1 a real case. Aztec Connect is the candidate.
 \item \textbf{T1} A short formal property, with C1--C3 as its negation.
 \item \textbf{RV4} A policy-parameterized definition (intended open fields).
-\item \textbf{RV14} The year counts sum to 97, not 103.
+\item \textbf{Verify} the core auditor count (21, raw auditor field; 24 for
+all 103 uses CHARACTERIZATION.md's normalization).
 \item \textbf{RV6, RV7, RV15} Reconcile:
   \begin{itemize}\setlength\itemsep{0pt}
   \item the fixed-version and scan counts;

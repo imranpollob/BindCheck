@@ -48,24 +48,50 @@ own state. Each red edge is a binding flaw.}
 \label{fig:ledgers}
 \end{figure}
 
+\para{Intended policy}
+Not every caller-chosen value is a flaw. Many applications deliberately let a
+party choose a value: a relayer sets its fee up to a cap that the user signed,
+a user picks the recipient of its own withdrawal, or a credential may be
+presented many times. We make this explicit with an \emph{intended policy}
+$\Pi$, which lists the \emph{open} fields of $\mathcal{E}(f)$ and, for each
+open field $e$, the party $\Pi.\mathit{who}(e)$ allowed to choose it, the
+range $\Pi.\mathit{rng}(e,\mathcal{S},\sigma)$ it may take, and how often the
+effect may repeat. Fields not listed are \emph{closed}. $\Pi$ comes from
+the project's documentation and tests, or from the auditor's description.
+
 \para{Definition}
-A consumer is \emph{bound} if for every accepting call, every value in
-$\mathcal{E}(f)$ is a function of $\mathcal{S}(\vec{u})$ and the consumer
-state $\sigma$ alone. A \emph{binding flaw} is a reachable violation, that is,
-an execution in which three conditions hold:
+A consumer is \emph{bound} under $\Pi$ if, for every accepting call, every
+closed value in $\mathcal{E}(f)$ is a function of $\mathcal{S}(\vec{u})$ and
+the consumer state $\sigma$, and every open value $e$ is chosen by
+$\Pi.\mathit{who}(e)$ and lies in $\Pi.\mathit{rng}(e,\mathcal{S},\sigma)$.
+Formally, with $g_e$ fixed per effect field and $s$ the sender,
+\[
+\begin{aligned}
+&\forall\, x,s,\sigma,\pi:\ \mathsf{Verify}(\mathit{vk},\vec{u},\pi)=1
+\land \sigma'\neq\sigma \;\Rightarrow\\
+&\quad \forall e\in\mathcal{E}(f):\ e = g_e(\mathcal{S},\sigma)\ \lor\ \bigl(e\in\Pi.\mathit{open}\\
+&\qquad \land\ s\in\Pi.\mathit{who}(e) \land e\in\Pi.\mathit{rng}(e,\mathcal{S},\sigma)\bigr).
+\end{aligned}
+\]
+A \emph{binding flaw} is a reachable execution that violates this property,
+that is, one in which three conditions hold:
 \begin{description}
 \item[C1] a proof is accepted, or the verifier accepts what it should reject;
 \item[C2] the consumer commits an effect (a transfer, mint, state write, or
 grant of access);
 \item[C3] some value $e \in \mathcal{E}(f)$ that decides who, how much, what,
-which state, or how often is chosen by the transaction sender and is not fixed
-by $\mathcal{S}(\vec{u})$ and $\sigma$.
+which state, or how often is chosen by the transaction sender, is not fixed
+by $\mathcal{S}(\vec{u})$ and $\sigma$, and is either closed under $\Pi$ or
+chosen by a party or within a range that $\Pi$ does not allow.
 \end{description}
-Because valid proofs are public once broadcast, any party can resubmit an
-observed proof with different calldata. A flaw that lets a third party
-redirect an effect by front-running is therefore a binding flaw, not an
-ordering bug.
-\TODO{T1}{state the definition as a short formal property over $(R,\mathsf{pi},\delta)$ and show that C1--C3 is exactly its negation}
+C1 and C2 instantiate the premise; C3 names a sender-controlled value for
+which both disjuncts fail, so C1--C3 are the attacker-drivable violations. A
+capped relayer fee or a credential meant for reuse is therefore not a flaw,
+while the same fee taken uncapped from calldata, or a one-time permission that
+can be used twice, is. Because valid proofs are public once broadcast, any
+party can resubmit an observed proof with different calldata. A flaw that
+lets a third party redirect an effect by front-running is therefore a binding
+flaw, not an ordering bug.
 
 \para{Why neither layer suffices}
 The definition relates two artifacts written in different languages. The
@@ -88,7 +114,8 @@ Section~\ref{sec:study}.
 \begin{table}[t]
 \centering
 \caption{Binding-flaw patterns, their signature-misuse analogues, and their
-frequency among the 103 binding findings of Section~\ref{sec:study}.}
+frequency among the 87 core binding findings of Section~\ref{sec:study}
+(the 16 adjacent proof-system findings in parentheses).}
 \label{tab:taxonomy}
 \footnotesize
 \setlength{\tabcolsep}{3pt}
@@ -141,7 +168,8 @@ binding flaws. Another 16 findings are soundness bugs inside a proof system or
 recursion verifier (transcript, FRI, or recursion-circuit constraints). They
 have the same effect on the consumer, but their root cause is cryptographic,
 so we report them as \emph{adjacent} and exclude them from the core class.
-\TODO{W3}{author confirms the P4 split: 17 core plus 16 adjacent}
+All claims in this paper refer to the 87 core findings unless we say
+otherwise; we give the totals with the adjacent findings only for comparison.
 
 \para{P5: Interface mismatch (format confusion)}
 The consumer and the circuit disagree on the count, order, width or encoding

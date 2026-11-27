@@ -3,30 +3,19 @@
 \subsection{ZK applications}\label{sec:bg-apps}
 
 A ZK application lets a user prove a statement about private data and have a
-contract act on it. Examples include withdrawing from a privacy pool, minting
-to the holder of a credential, voting once per identity, settling a rollup
-batch, and accepting a zkVM execution result. Such an application has three
-parts.
-
-\para{Circuit}
-The circuit, or zkVM guest program, defines a relation $R(\vec{u},\vec{w})$
-over public inputs $\vec{u}$ and private witnesses $\vec{w}$. It is written
-in a circuit language (Circom, Noir, gnark, halo2) or as an ordinary program
-for a zkVM (RISC Zero, SP1). A proof $\pi$ convinces a verifier that the
-prover knows some $\vec{w}$ with $R(\vec{u},\vec{w})=1$, and it reveals
-nothing else.
-
-\para{Verifier}
-The verifier is usually generated from the circuit's verification key and
-deployed as a contract (Groth16~\cite{groth16}, PLONK~\cite{plonk}), or reached
-through a router or an aggregation layer. It takes $(\vec{u},\pi)$ and returns
-accept or reject. It knows nothing about what $\vec{u}$ means.
-
-\para{Consumer}
-The consumer is the contract that calls the verifier and, on acceptance,
-commits effects. It assembles $\vec{u}$ from calldata and storage, so the
-consumer decides which of its values are covered by the proof. Every other
-value it uses comes from the transaction sender.
+contract act on it: withdrawing from a privacy pool, minting to a credential
+holder, voting once per identity, settling a rollup batch, or accepting a
+zkVM result. It has three parts. The \emph{circuit}, or zkVM guest program,
+defines a relation $R(\vec{u},\vec{w})$ over public inputs $\vec{u}$ and
+private witnesses $\vec{w}$, written in a circuit language (Circom, Noir,
+gnark, halo2) or as a program for a zkVM (RISC Zero, SP1); a proof $\pi$
+shows that the prover knows a $\vec{w}$ with $R(\vec{u},\vec{w})=1$. The
+\emph{verifier}, usually generated from the verification key
+(Groth16~\cite{groth16}, PLONK~\cite{plonk}) or reached through a router,
+accepts or rejects $(\vec{u},\pi)$ without knowing what $\vec{u}$ means. The
+\emph{consumer} calls the verifier and, on acceptance, commits effects. It
+assembles $\vec{u}$ from calldata and storage, so it decides which of its
+values the proof covers; every other value comes from the sender.
 
 The public-input vector is the only interface between the three parts. Each
 circuit and each consumer defines its own meaning for the entries. There is no

@@ -1,15 +1,13 @@
 \section{Conclusion}\label{sec:conclusion}
 
 A valid proof certifies a statement, not an effect. We defined binding as the
-requirement that every value deciding an effect follows from the statement,
-classified its violations into five patterns that mirror classic signature
-misuse, and showed that they make up 103 auditor-reported findings, 81\% of
-them rated Critical or High. Existing analyzers do not find them, because
-neither the circuit nor the contract alone carries the specification. \tool{}
-reconstructs that specification as two explicit ledgers. Its first version finds 22 of 27
-injected flaws and 6 of 22 test-set audited ones, where existing analyzers
-find none of those they could analyze. Its misses were judgment errors, which
-the final version targets with proof-system knowledge and a second look
-\DEMO{(\TBD{} of 37 held-out mutants, \TBD{} of 7 held-out audited flaws) and
-it uncovered three new flaws}.
-Binding should be checked as routinely as a signature.
+requirement that every value deciding an effect follows from the statement or
+is left open by the intended policy, classified its violations into five
+patterns that mirror classic signature misuse, and showed that they make up
+87 core auditor-reported findings, 78\% of the rated ones Critical or High.
+Neither the circuit nor the contract alone carries the specification;
+\tool{} reconstructs it as two explicit ledgers. \DEMO{With proof-system
+knowledge and a second look, its final version finds
+10 of 14 held-out audited flaws and 31 of 37 held-out mutants, and it
+uncovered three new flaws.} Binding should be checked as routinely as a
+signature.

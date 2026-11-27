@@ -29,6 +29,7 @@ hard negatives), chosen by a seeded draw, as a \emph{held check set} that the
 building process never sees and that is scored once. The final version
 (Section~\ref{sec:eval-final}) is evaluated on that check set, on fresh
 benchmarks, and in the hunt.
+Appendix~\ref{app:timeline} gives the full exposure timeline.
 % src: BindCheck/paper/eurosp/PREREG-v3.md amendment A1; mvp/tool/dev/split-v4.json (seed 20261126)
 
 \para{Benchmarks}
@@ -46,6 +47,8 @@ code-level labeling pass.
   later code-level pass whose results the tool-building process could not
   read, plus 6 fixed versions. Round~2 is our clean retest.
   \end{itemize}
+  The 22 flaws cover 13 project families; 15 lie in Solidity consumers, 2 in
+  circom circuits and 5 in Rust (4 of them in zkVM guest or host programs).
 \item \textbf{B2, binding mutants.} 27 binding flaws injected into three
 small hosts (a privacy vault, a red-packet claim, and an oracle claim, one of
 them a proof of concept) that belong to no dataset family. There are at least
@@ -54,6 +57,9 @@ circuit-side edits. Each mutant is designed to keep the honest path
 accepting. All 27 compile, and for one host the existing test suite confirms
 it: the clean host passes 32 of 32 tests, and each mutant fails only the
 tests of the removed check. The unmodified host is the clean control.
+B2 hosts are small (one to three contracts each) and contain no zkVM guest
+code, so B2 says little about guest-side flaws. Appendix~\ref{app:coverage}
+lists hosts, layers and patterns for every benchmark.
 \TODO{E9}{honest-path check for the other two hosts}
 \end{itemize}
 % src: mvp/eval/GT-locations.csv; benchmarks/binding-mutants-v2/README.md
@@ -105,6 +111,19 @@ an LLM judge confirms the same mechanism.
 \item \emph{Mechanism-level} hit: the right mechanism is reported anywhere in
 the repository.
 \end{itemize}
+The levels differ in practice. On an attestation contract (L013), v2 warns
+in the labeled function about another issue, an alignment search that skips
+the equality check when nothing matches, while the labeled flaw is a
+field-modulus reduction: a loose hit, but neither a strict nor a
+mechanism-level one. On an anonymous-voting contract (L020), one v2 warning
+in the labeled function blames a caller-chosen nullifier seed, while another
+describes the labeled mechanism, a nullifier that one person can vary through
+the photo bytes, but places it in the extractor circuit: a mechanism-level
+hit, not a strict one. \DEMO{A second author re-judged all 14 borderline verdicts of
+\tool{} and the plain LLM on B1 (every pair where the levels disagree) without
+seeing the judge's output; one verdict changed, for the plain LLM, and no
+strict comparison in this section changes.}
+\TODO{RV10}{human re-judge of the borderline (strict vs.\ loose vs.\ mechanism) verdicts}
 A target that a tool cannot build or analyze is \emph{unsupported}. It is
 reported separately and never counted as a miss. Intervals are 95\% Wilson
 intervals.
@@ -112,51 +131,33 @@ intervals.
 
 \subsection{RQ2: Detection}\label{sec:eval-rq2}
 
-\begin{table}[t]
-\centering
-\caption{What each tool can see. \checkmark{} = analyzes the layer;
-$\circ$ = partial; -- = not at all.}
-\label{tab:capability}
-\footnotesize
-\setlength{\tabcolsep}{3.5pt}
-\begin{tabular}{@{}lcccc@{}}
-\toprule
-\textbf{Tool} & \textbf{Circuit} & \textbf{Verifier} & \textbf{Consumer} & \textbf{Proof$\to$effect} \\
-\midrule
-Slither, Mythril & -- & \checkmark & \checkmark & -- \\
-circomspect, Picus & \checkmark & -- & -- & -- \\
-Foundry (out of box) & -- & $\circ$ & \checkmark & -- \\
-Foundry (assisted) & -- & mock & \checkmark & manual \\
-Plain LLM & $\circ$ & $\circ$ & \checkmark & $\circ$ \\
-\tool{} & $\circ$ & \checkmark & \checkmark & $\circ$ \\
-\bottomrule
-\end{tabular}
-\end{table}
 
 \begin{table*}[t]
 \centering
-\caption{Detection by \tool{} v2 and the baselines on the audit test set B1 (strict hits / positives;
-95\% Wilson interval). ``Sup.'' = targets the tool could analyze, out of
-26 in round~1. Specificity counts fixed versions and hard negatives without a
+\caption{Detection by \tool{} v2 and the baselines on the audit test set B1
+(strict hits / positives; 95\% Wilson interval). ``Analyzed'' = round-1
+positives whose target the tool could build and analyze, out of 14; a
+positive it could not analyze is unsupported, not missed, and the column
+``of analyzed'' gives strict hits among the analyzed positives. Specificity counts fixed versions and hard negatives without a
 warning at the flaw's location (both rounds for Slither and \tool{}, round~1 otherwise). The plain-LLM arm
 was run on round~1 only. Red cells are pending runs.}
 \label{tab:b1}
 \footnotesize
-\begin{tabular}{@{}lccccc@{}}
+\begin{tabular}{@{}lcccccc@{}}
 \toprule
-\textbf{Tool} & \textbf{Sup.\ (R1)} & \textbf{Round 1 strict} & \textbf{Round 2 strict} & \textbf{Fixed-version spec.} & \textbf{Hard-neg.\ spec.} \\
+\textbf{Tool} & \textbf{Analyzed (R1)} & \textbf{Round 1 strict} & \textbf{of analyzed} & \textbf{Round 2 strict} & \textbf{Fixed spec.} & \textbf{HN spec.} \\
 \midrule
-Slither & 15/26 & 0/14 (0.00--0.22) & 0/8 (0.00--0.32) & 12/12 & 11/14 \\
-Mythril & 13/26 & 0/14 (0.00--0.22) & \TBD$^\ddagger$ & 6/6 & 6/6 \\
-circomspect & 1/26 & 0/14 (0.00--0.22) & \TBD$^\ddagger$ & 6/6 & 5/6 \\
-Picus & 0/26 & unsupported & unsupported & -- & -- \\
-Foundry, out of box$^\dagger$ & 13 & \multicolumn{2}{c}{0/13 (R1+R2)} & -- & -- \\
-Foundry, assisted$^\dagger$ & 13 & \multicolumn{2}{c}{5/13 (0.18--0.64)} & 4/5 & 3/3 \\
-Plain LLM (same model) & 26/26 & 3/14 (0.08--0.48) & -- & 6/6 & 6/6 \\
-\tool{} v2 & 26/26 & 4/14 (0.12--0.55) & 2/8 (0.07--0.59) & 12/12 & 12/14 \\
-\quad mechanism-level & & 5/14 & 4/8 & & \\
+Slither & 8/14 & 0/14 (0.00--0.22) & 0/8 & 0/8 (0.00--0.32) & 12/12 & 11/14 \\
+Mythril$^\S$ & 8/14 & 0/14 (0.00--0.22) & 0/8 & \TBD$^\ddagger$ & 6/6 & 6/6 \\
+circomspect & 0/14 & unsupported & -- & \TBD$^\ddagger$ & 6/6 & 5/6 \\
+Picus & 0/14 & unsupported & -- & unsupported & -- & -- \\
+Foundry, out of box$^\dagger$ & 11/14 & \multicolumn{3}{c}{0/13 analyzed (R1+R2)} & -- & -- \\
+Foundry, assisted$^\dagger$ & 11/14 & \multicolumn{3}{c}{5/13 analyzed (0.18--0.64)} & 2/4$^\P$ & 3/3 \\
+Plain LLM, 1 run & 14/14 & 3/14 (0.08--0.48) & 3/14 & -- & 6/6 & 6/6 \\
+\tool{} v2, 1 run & 14/14 & 4/14 (0.12--0.55) & 4/14 & 2/8 (0.07--0.59) & 12/12 & 12/14 \\
+\quad mechanism-level & & 5/14 & & 4/8 & & \\
 \bottomrule
-\multicolumn{6}{@{}p{0.95\textwidth}}{\scriptsize $^\dagger$Fuzzing covers EVM-side flaws of both rounds; circuit- and guest-side flaws are unsupported. Harnesses were wired by hand in 5--45 min per target. $^\ddagger$Round-2 run stopped by memory limits; resumable.}
+\multicolumn{7}{@{}p{0.95\textwidth}}{\scriptsize $^\dagger$Fuzzing covers the 13 EVM-side flaws of both rounds (11 in round~1); circuit- and guest-side flaws are unsupported. Harnesses were wired by hand in 5--45 min per target; a fuzzer hit uses the fuzz lane's own matching rule (a property violation at the labeled mechanism), not the LLM judge. $^\ddagger$Round-2 run stopped by memory limits; resumable. $^\S$Some Mythril runs may not have deployed the contract (Section~\ref{sec:eval-rq2}). $^\P$Fixed versions of L010 and L024 are flagged; that of L021 timed out (inconclusive).}
 \end{tabular}
 % src: mvp/eval/COMPARISON.md (slither-build, mythril-build, circomspect-build, baseline-default); mvp/eval/RESULTS-static.md (supported counts); mvp/eval/fuzz/RESULTS-fuzz.md; mvp/eval/RESULTS-tool-v2.md (eval commit d6beff4c)
 \end{table*}
@@ -176,9 +177,10 @@ crash anything: the contract works exactly as written.
 % src: mvp/eval/RESULTS-static.md; fuzz/RESULTS-fuzz.md
 
 \para{The missing piece is the specification}
-Given our binding invariant, the same fuzzer finds 5 of the 13 flaws and raises no alarm on 3 of 3 hard negatives. One fixed version
-is flagged. Whether this is a false positive or a remaining gap in that fix is
-still open. The
+Given our binding invariant, the same fuzzer finds 5 of the 13 flaws and raises no alarm on 3 of 3 hard negatives. Two of four
+decided fixed versions are flagged: in one the fix is not visible at the
+level the harness exercises, and in the other the fix changed which configuration is
+trusted, so the invariant no longer matches the intended policy. The
 difference between 0 and 5 is entirely the specification. That
 specification, which effect values must follow from the statement, is
 exactly what \tool{}'s ledgers make explicit. Writing it by hand took 5--45
@@ -195,16 +197,22 @@ modest, and we read them as follows. Against the non-LLM tools the gap is
 categorical: on round~1, 4 strict and 5 mechanism-level detections against 0
 for every analyzer. Against the same model without the procedure, the gain
 on round~1 is small at the strict level (4 vs.\ 3 of 14) and larger at the
-location level (8 vs.\ 5). The procedure mainly makes the model look in the
-right place. It does not yet make it name the right mechanism.
+location level (8 vs.\ 5). This rests on one run of each on one benchmark
+that we have since inspected, so we treat it as preliminary; the comparison
+under equal runs on held-out data is in Section~\ref{sec:eval-final}. The
+procedure mainly made v2 look in the right place. It did not yet make it name
+the right mechanism.
 
 \para{Against an expert-wired fuzzer}
 The fair non-LLM comparison is the fuzzer that a human has given the binding
 invariant. On the 13 EVM-side flaws it supports, \tool{} finds 6 at the
 strict level (7 at the mechanism level) with no human setup, the assisted
 fuzzer finds 5 after 5--45 minutes of expert wiring per target, and the
-fuzzer out of the box finds none. The two overlap on 3 flaws; 4 are found
-only by \tool{} and 2 only by the fuzzer, so they complement each other.
+fuzzer out of the box finds none. At the strict level the two overlap on 3
+flaws, 3 are found only by \tool{} and 2 only by the fuzzer; at the
+mechanism level one more flaw is \tool{}-only. They complement each other.
+The two columns use different matching rules (the fuzzer's property
+violation versus the LLM judge), so we compare sets, not rates.
 % src: mvp/eval/RESULTS-vs-fuzz.md (eval 7b5fa137): both L015 L010 L193; v2-only L039 L020 L024 L180; fuzz-only L035 L042; neither L013 L040 L007 L021
 
 \para{Warning volume}
@@ -218,60 +226,29 @@ of 26 on round~2 to be clearly not binding.
 Because we later inspected the round-1 and round-2 misses, these items count
 as development data for any later version (Section~\ref{sec:eval-setup}).
 
-\begin{table}[t]
-\centering
-\caption{Detection of injected binding mutants (B2) by pattern
-(strict hits / mutants). ``uns.'' = the tool cannot analyze the layer or
-the run failed.}
-\label{tab:b2}
-\footnotesize
-\begin{tabular}{@{}lcccccc@{}}
-\toprule
-\textbf{Tool} & \textbf{P1} & \textbf{P2} & \textbf{P3} & \textbf{P4} & \textbf{P5} & \textbf{All} \\
- & (4) & (8) & (5) & (5) & (5) & (27) \\
-\midrule
-Slither & 0 & 0 & 0 & 0 & 0 & 0 (12 uns.) \\
-Mythril & 0 & 0 & 0 & 0 & 0 & 0 (4 uns.) \\
-circomspect & -- & 1$^*$ & -- & -- & -- & 1 \\
-Picus & -- & 0 & -- & -- & -- & 0 \\
-\tool{} & 4 & 8 & 4 & 2 & 4 & 22 \\
-\bottomrule
-\multicolumn{7}{@{}l}{\scriptsize $^*$a style warning (\texttt{<--}) at the edited line, not a binding diagnosis.}
-\end{tabular}
-% src: benchmarks/binding-mutants-v2/RESULTS-static.md
-\end{table}
 \TODO{E13}{verify the 13 supported Mythril runs actually created the contract; reword to supported-and-analyzed counts}
 
 \para{Mutants}
-B2 tests every pattern on hosts outside the dataset (Table~\ref{tab:b2}).
-Slither and Mythril again report no binding flaw at the mechanism level:
-Mythril returns zero issues on all 23 consumer mutants, and Slither fails to
-analyze one of the hosts. The only circuit-tool hit is a style warning that
-happens to sit on the edited line.
-% src: binding-mutants-v2/RESULTS-static.md
-\tool{} detects 22 of the 27 mutants (0.63--0.92), 23 at the mechanism
-level, including all 4 circuit-side mutants. Its misses concentrate in P4,
-where it finds 2 of 5 verifier-integration mutants. It raises no warning on a
-removed public-input range check. For the other two, it reports the right
-mechanism at another location or the right location with another mechanism.
-It also misses one P3 mutant (no warning) and one P5 mutant at the strict
-level. On the three unmodified hosts it reports no
-warning on two and three warnings on the privacy vault (a scan that reached
-the time cap). None of the three is a false alarm in the usual sense: one
-flags a loan amount that the borrow proof does not fix (the host's own
-documentation treats it as policy, bounded by an on-chain loan-to-value check),
-and two flag nullifiers stored on the raw 256-bit value while the verifier
-reduces public inputs modulo~$r$ (P3 aliasing), which we judge plausible but
-have not confirmed.
-\TODO{E3/A3}{confirm or refute the two aliasing warnings with a real-proof test (E3); if confirmed, this is a new flaw in a third-party repository and goes through the disclosure process}
-% src: mvp/eval/RESULTS-tool-v2.md B2 table (RP-S03 P3 0 warnings; RP-S05, OR-S10, PV-S06 P4; PV-S08 P5); eval ff6c7fe8 E10 (orc 0, redpacket 0, privacyvault 3, partial); triage eval 67c4009c RESULTS-cleanhost.md
-\TODO{E13}{check these Mythril runs for vacuous executions (no contract created); on B3 Mythril deployed only 2 of 26 targets, so ``zero issues'' may mean ``not analyzed''}
+B2 tests every pattern on hosts outside the dataset (Table~\ref{tab:b2} in
+Appendix~\ref{app:extra}). Slither and Mythril again report no binding flaw;
+the only circuit-tool hit is a style warning that happens to sit on the
+edited line. \tool{} detects 22 of the 27 mutants (0.63--0.92), 23 at the
+mechanism level, including all 4 circuit-side ones. Its misses concentrate in
+P4 (2 of 5), where it raises no warning on a removed public-input range
+check. On the three unmodified hosts it reports no warning on two and three
+on the privacy vault: a loan amount that the host documents as policy,
+bounded by a loan-to-value check, and two nullifiers stored on the raw
+256-bit value while the verifier reduces inputs modulo~$r$ (P3 aliasing),
+which we judge plausible but have not confirmed.
+% src: mvp/eval/RESULTS-tool-v2.md B2 table; eval ff6c7fe8 E10; RESULTS-cleanhost.md
+\TODO{E3/A3/E13}{confirm or refute the two aliasing warnings with E3; check Mythril runs for vacuous executions}
 
 \finding{Existing analyzers find none of the binding flaws, and a fuzzer finds
 them only when a human supplies the binding specification. \tool{} infers
 that specification: v2 finds 22 of 27 injected flaws and 6 of 22 test-set
 audited ones (2 of 8 on the clean round; 9 of 22 at the mechanism level). Real
-flaws remain hard: half of the round-2 misses are zkVM guest-side.}
+flaws remain hard: all six strict hits are in Solidity consumers, and v2 finds
+none of the 7 circuit or Rust flaws.}
 
 \subsection{Why \tool{} v2 misses}\label{sec:eval-misses}
 
@@ -299,90 +276,164 @@ identifier, while the assessor's journal commits only to the request digest,
 and nothing compares the two. Its warning spells out the attack: an attacker
 proves its own cheap, signed request but sets the identifier to a victim's
 unlocked request, so the victim is charged the attacker's price and its
-request is marked fulfilled. This matches the auditors' finding. Slither and
-Mythril report nothing at that location. The assisted fuzzer confirms the
-same flaw, but only once a human has written the harness.
+request is marked fulfilled. This matches the auditors' finding. The two
+ledgers show why the flaw is easy to miss. The statement ledger has a row
+\emph{journal: digest(request)}, and the effect ledger has a row
+\emph{charge: account of requests[id], id from calldata}. Each row is correct
+on its own: the guest commits the right digest, and the contract charges the
+account the identifier names. The flaw is the missing equality
+$\mathit{id} = \mathsf{id}(\mathit{request})$ between them, which no single
+layer states. Slither and Mythril report nothing at that location. The
+assisted fuzzer confirms the same flaw, but only once a human has written
+the harness.
 % src: mvp/eval/runs/tool-v2/L193/vuln.json (warning text); RESULTS-tool-v2.md (L193 strict Y); fuzz/RESULTS-fuzz.md (L193 HIT)
 
 
 \subsection{The final version on held-out data}\label{sec:eval-final}
 
-\DEMO{The final version adds the second look and the stack knowledge to v2 and
-keeps the exploration loop. It was built on the 28 development flaws and
-evaluated once on three held-out sets fixed before its freeze: the 7 flaws of
-the held check set; B3, 37 binding mutants (11 circuit- or guest-side) injected
-into five open-source applications by operators derived from the labeled
-findings, with five decoys and five clean hosts; and round~3, \TBD{} audited
-flaws from test families never used before. On development data it finds
-\TBD{} of 28 (v2: 13). On the check set it finds \TBD{} of 7 (v2: 2); on B3,
-\TBD{} of 37 with \TBD{} false alarms on decoys; on round~3, \TBD{} of
-\TBD{}. Each result is the median of three runs.}
-\TODO{E12/D7}{freeze v4; v4-check once; B3 and round 3 x3 runs under PREREG A1}
+The final version (v4) adds the stack knowledge and the second look to v2.
+The held-out sets are too small to separate the two, so we claim only their
+joint effect; per-step results on development data are in the artifact.
+\DEMO{v4 was frozen before it ran on three held-out sets, all fixed before
+the freeze:}
+\begin{itemize}
+\item the \emph{check set}, 7 audited flaws and 3 hard negatives from 7 B1
+families that the building process never saw (v2 found 2 of the 7);
+\item \emph{round~3}, \DEMO{7 audited flaws from test families never used
+before, code-located after the freeze;}
+\item \emph{B3}, 37 binding mutants (11 circuit- or guest-side) injected into
+five open-source applications outside every dataset family, by operators
+derived from the labeled findings, with five decoys that keep binding and
+the five clean hosts as controls.
+\end{itemize}
+\DEMO{Each number is the median of three runs. The plain LLM, the same model
+with a one-paragraph ``find binding bugs'' prompt, ran three times on the
+same snapshots.}
+
+\begin{table}[t]
+\centering
+\caption{\DEMO{The final version (v4) on held-out data, median of three runs
+(min--max).} Fresh audited = check set + round~3. Dev-v4 is in-sample.}
+\label{tab:final}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}lccc@{}}
+\toprule
+\textbf{Set (positives)} & \textbf{v2} & \textbf{Plain LLM} & \textbf{v4} \\
+\midrule
+Dev-v4, in-sample (28) & 13 & -- & \DEMO{23 (22--24)} \\
+Check set (7) & 2 & \DEMO{2} & \DEMO{5 (4--6)} \\
+Round~3 (\DEMO{7}) & -- & \DEMO{2} & \DEMO{5 (5--5)} \\
+\textbf{Fresh audited (\DEMO{14})} & -- & \DEMO{4 (3--5)} & \DEMO{\textbf{10} (9--11)} \\
+\quad Wilson 95\% & & \DEMO{0.12--0.55} & \DEMO{0.45--0.88} \\
+\quad mechanism-level & & \DEMO{6} & \DEMO{11} \\
+\quad Solidity / circuit / Rust & & & \DEMO{7/8, 1/2, 2/4} \\
+B3 mutants (37) & -- & \DEMO{13} & \DEMO{31 (29--32)} \\
+\quad circuit- or guest-side (11) & & \DEMO{2} & \DEMO{8} \\
+\midrule
+Decoys flagged (5) & -- & \DEMO{2} & \DEMO{1} \\
+Hard neg.\ / fixed flagged (\DEMO{3 / 6}) & -- & \DEMO{0 / 1} & \DEMO{1 / 0} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\DEMO{On the 14 fresh audited flaws v4 finds 10 (71\%), against 4 for the
+plain LLM; the gap holds in every run (9--11 against 3--5). On the check set,
+where v2 and the plain LLM each found 2 of 7 in their single round-1 run, v4
+finds 5. Rust guest and host flaws, where v2 found 1 of 6 on development data, are
+found in 2 of 4 held-out cases, so the guest side remains the weakest
+layer. On B3, v4 finds
+31 of 37 mutants (84\%), 8 of the 11 circuit- or guest-side ones, and flags
+one of five decoys and one hard negative. The fresh audited interval is wide
+(45--88\%); B3 is larger but injected.}
+\TODO{E12/D7/RV1}{freeze v4; v4-check once; B3 and round 3 x3 runs under PREREG A1; plain-LLM arm at equal runs (your decision)}
 
 \subsection{RQ3: New binding flaws}\label{sec:eval-rq3}
 
-\DEMO{We ran \tool{} on the latest audited commits of 25 ZK applications
-from our collection that were not used in development, and on the current
-versions of the same projects. It reported 41 warnings, of which we confirmed
-11 as binding flaws by manual review. Three are previously unreported, in two
-projects, and all three come with a real-proof test (E3) that a rater re-ran. In one, a recovery module accepts a proof
-over an account's guardians but takes the new owner set and threshold from
-calldata, so any party that observes a valid recovery proof can install its
-own owners. Table~\ref{tab:new} lists them. We reported all three to the
-maintainers.}
+\DEMO{We ran the frozen final version once on the latest audited commits of
+25 ZK applications from our collection that were not used in development.
+It reported 41 warnings. Phase-2 review judged 11 to be binding flaws; 8 of
+them match findings the auditors had already reported, and 3 are previously
+unreported, in two projects. For each of the three, Table~\ref{tab:new}
+separates what we established from what the maintainers said. We confirmed
+all three with a real-proof test (E3) that a second author re-ran, checked
+whether the current release is still affected, and reported them to the
+maintainers through their security contacts. In N1, a recovery module accepts
+a proof over an account's guardians but takes the new owner set and threshold
+from calldata, so any party that observes a valid recovery proof can install
+its own owners.}
 \TODO{E3}{hunt: run frozen BindCheck on the hunt pool, triage, real-proof-test confirm, disclose; the author decides the live-version scope}
 
 \begin{table}[t]
 \centering
-\caption{Previously unreported binding flaws found by \tool{}.
-Projects are anonymized until disclosure completes.}
+\caption{Previously unreported binding flaws found by \tool{}. Ours = what
+the authors established (E3: real-proof test, re-run by a second author);
+Affected = audited commit and/or current release; Maintainer = response at
+submission (ack.\ = acknowledged). Projects are anonymized until disclosure
+completes.}
 \label{tab:new}
 \footnotesize
-\begin{tabular}{@{}llllc@{}}
+\setlength{\tabcolsep}{2.5pt}
+\begin{tabular}{@{}lllll@{}}
 \toprule
-\textbf{ID} & \textbf{App type} & \textbf{Pattern} & \textbf{Effect} & \textbf{Evidence} \\
+\textbf{ID} & \textbf{App, pattern, effect} & \textbf{Ours} & \textbf{Affected} & \textbf{Maintainer} \\
 \midrule
-\DEMO{N1} & \DEMO{account recovery} & \DEMO{P1} & \DEMO{owner takeover} & \DEMO{E3} \\
-\DEMO{N2} & \DEMO{\TBD} & \DEMO{\TBD} & \DEMO{\TBD} & \DEMO{\TBD} \\
-\DEMO{N3} & \DEMO{\TBD} & \DEMO{\TBD} & \DEMO{\TBD} & \DEMO{\TBD} \\
+\DEMO{N1} & \DEMO{recovery, P1, takeover} & \DEMO{E3} & \DEMO{aud.+curr.} & \DEMO{ack., fixed} \\
+\DEMO{N2} & \DEMO{bridge, P2, replay} & \DEMO{E3} & \DEMO{aud.+curr.} & \DEMO{ack.} \\
+\DEMO{N3} & \DEMO{bridge, P3, double claim} & \DEMO{E3} & \DEMO{audited} & \DEMO{no reply (40\,d)} \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 \subsection{RQ4: Precision and evidence}\label{sec:eval-rq4}
 
-\DEMO{Across B1, B2 and the hunt pool, \tool{} raised 118 warnings. Phase~1
-matched 33 of them to a labeled flaw or injected mutant. The other 85 went to
-phase-2 adjudication, where the raters agreed on 77 before discussion
-($\kappa=0.81$). They judged 19 to be real binding flaws, 14 to be real but
-bounded by an access or value policy, and 52 to be false positives. Counting
-policy-bounded warnings as false, overall precision is 44\% (52 of 118; 95\%
-Wilson CI 35--53\%). The evidence package carried the decision: 17 of the 19 real flaws
-came with a succeeding attack test, against 3 of the 52 false positives. Median adjudication
-time was 6 minutes with a test and 14 without.}
+\DEMO{Table~\ref{tab:evidence} scores every warning per benchmark. A
+warning is \emph{correct} if phase~1 matches it to a labeled flaw or mutant,
+or if both phase-2 raters judge it a real binding flaw;
+\emph{policy-bounded} if $\Pi$ allows it; \emph{uncertain} if the raters
+could not decide it within 30 minutes; and false otherwise. The raters agreed on 89
+of the phase-2 warnings before discussion (88\%, $\kappa=0.81$). On the blind
+held-out sets, 62 of the final version's 128 warnings are correct (48\%;
+95\% CI 40--57\%), 10 remain uncertain, and 44 are false. Precision depends
+on the benchmark: 69\% on injected mutants, 42\% on the audited check and
+round-3 targets, whose other warnings are often real but policy-bounded, and
+27\% in the hunt, where the code has already passed an audit and most
+warnings concern paths the audit had covered.
+51 of the 62 correct warnings came with a succeeding attack test, against 3
+of the 44 false ones. Review took a median of 16 minutes per audited project
+and 27 per hunt project, next to a scan cost of \$0.90--2.60; per warning, 6
+minutes with a test and 14 without. This is an observation, not an effect of
+the test, since warnings with a test may be easier; within B3, where mutants
+are alike, the gap is 7 against 11 minutes.}
 
 \begin{table}[t]
 \centering
-\caption{Two-phase scoring of all warnings (RQ4). Ph.\,1: matched a label.
-Ph.\,2: adjudicated by two raters. Test: a succeeding attack test (E2 or
-E3). Red: pending.}
+\caption{Every warning, per benchmark (RQ4). Corr.\ = matched a label in
+phase~1 or judged a real binding flaw in phase~2; Pol.\ = real but
+policy-bounded; Unc.\ = undecided; Test = correct warnings with a succeeding
+attack test (E2/E3); Min = median human review minutes per project; \$ =
+mean scan cost per project. Red: pending.}
 \label{tab:evidence}
-\footnotesize
-\begin{tabular}{@{}lrrrrrr@{}}
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\begin{tabular}{@{}lrrrrrrrrr@{}}
 \toprule
-\textbf{Benchmark} & \textbf{Warn.} & \textbf{Ph.\,1} & \textbf{TP} & \textbf{Policy} & \textbf{FP} & \textbf{Test} \\
+\textbf{Set} & \textbf{Warn.} & \textbf{Corr.} & \textbf{Pol.} & \textbf{Unc.} & \textbf{FP} & \textbf{Prec.} & \textbf{Test} & \textbf{Min} & \textbf{\$} \\
 \midrule
-B1 round 1\textsuperscript{a} & \DEMO{21} & \DEMO{6} & \DEMO{3} & \DEMO{4} & \DEMO{8} & \DEMO{7} \\
-B1 round 2\textsuperscript{a} & \DEMO{14} & \DEMO{3} & \DEMO{1} & \DEMO{3} & \DEMO{7} & \DEMO{3} \\
-B2 mutants\textsuperscript{a} & \DEMO{42} & \DEMO{24} & \DEMO{4} & \DEMO{3} & \DEMO{11} & \DEMO{21} \\
-Hunt (RQ3) & \DEMO{41} & -- & \DEMO{11} & \DEMO{4} & \DEMO{26} & \DEMO{12} \\
+\multicolumn{10}{@{}l}{\emph{v2, phase~2 not blind}\textsuperscript{a}} \\
+B1 round 1 & 39 & \DEMO{17} & \DEMO{7} & \DEMO{5} & \DEMO{10} & \DEMO{44\%} & \DEMO{9} & \DEMO{15} & 0.91 \\
+B1 round 2 & 26 & \DEMO{10} & \DEMO{4} & \DEMO{4} & \DEMO{8} & \DEMO{38\%} & \DEMO{3} & \DEMO{18} & 0.76 \\
+B2 mutants & \DEMO{42} & \DEMO{27} & \DEMO{3} & \DEMO{2} & \DEMO{10} & \DEMO{64\%} & \DEMO{20} & \DEMO{6} & 0.28 \\
+\multicolumn{10}{@{}l}{\emph{v4, blind}} \\
+Check + R3 & \DEMO{33} & \DEMO{14} & \DEMO{5} & \DEMO{4} & \DEMO{10} & \DEMO{42\%} & \DEMO{11} & \DEMO{16} & \DEMO{2.30} \\
+B3 mutants & \DEMO{54} & \DEMO{37} & \DEMO{3} & \DEMO{3} & \DEMO{11} & \DEMO{69\%} & \DEMO{31} & \DEMO{8} & \DEMO{0.90} \\
+Hunt (RQ3) & \DEMO{41} & \DEMO{11} & \DEMO{4} & \DEMO{3} & \DEMO{23} & \DEMO{27\%} & \DEMO{9} & \DEMO{27} & \DEMO{2.60} \\
 \midrule
-Total & \DEMO{118} & \DEMO{33} & \DEMO{19} & \DEMO{14} & \DEMO{52} & \DEMO{43} \\
+v4 total & \DEMO{128} & \DEMO{62} & \DEMO{12} & \DEMO{10} & \DEMO{44} & \DEMO{48\%} & \DEMO{51} & & \\
 \bottomrule
-\multicolumn{7}{@{}l}{\scriptsize \textsuperscript{a}Phase~2 not blind: these v2 warnings were seen before the protocol was fixed.}
+\multicolumn{10}{@{}l}{\scriptsize \textsuperscript{a}These v2 warnings were seen during later development.}
 \end{tabular}
 \end{table}
-
 \subsection{RQ5: Cost}\label{sec:eval-rq5}
 
 On the development split, a scan costs \$1.05 on average and takes a median
@@ -395,7 +446,10 @@ The exploration loop adds a median of \$0.39 and a maximum of \$2.40 per scan
 on development data, most of it for drafting test scaffolds (80\%); the
 template attempts cost nothing.
 % src: mvp/tool/BASE-REPORT.md (gate 4 cost split)
-\DEMO{The final version costs \$\TBD{} per scan in total on the held-out benchmarks.}
+\DEMO{The final version costs \$1.90 per scan on average on the held-out
+benchmarks (median 8.5 minutes), about twice v2, because the second look
+re-reads every lenient verdict; per project this is below the human review
+time of Table~\ref{tab:evidence}.}
 The static analyzers run in seconds to minutes, but only after a human has made
 each project build. The assisted fuzzer needs 5--45 minutes of expert wiring
 per target before its first run.
@@ -405,17 +459,26 @@ per target before its first run.
 
 \para{Run-to-run variance}
 LLM output varies between runs.
-The B1 and B2 numbers above come from one run per target.
-\DEMO{Across three independent runs, \tool{} finds 2--3 of 8 round-2 flaws
-strictly and 21--23 of 27 mutants.}
+The v2 numbers on B1 and B2 come from one run per target; \DEMO{all
+final-version numbers are medians of three} (Table~\ref{tab:final}).
+\DEMO{Across three independent runs, v2 finds 2--3 of 8 round-2 flaws
+strictly and 21--23 of 27 mutants; v4 finds 9--11 of the 14 fresh audited
+flaws, and 2 of them are found in only some runs.}
 \TODO{E2}{three full runs on B1 and B2; report min/median/max}
 
 \para{Training-data contamination}
-The audit reports are public and may be in the model's training data. Two
+The audit reports are public and may be in the model's training data. We
+cannot inspect that data, so the only verifiable facts are dates: the
+model's published training cutoff and each report's publication date. Three
 results argue against memorization.
 \begin{itemize}
-\item B2 mutants are new code that no model has seen.
-\item \DEMO{Detection on findings published after the model's training cutoff
-is not lower than on older findings.}
+\item The B2 and B3 mutants are new code, written after the model's cutoff.
+\item The snapshots contain no audit text, history or comments that name the
+flaw (Section~\ref{sec:eval-setup}).
+\item \DEMO{All check-set reports predate the cutoff; on round~3, whose
+reports were all published after it, v4 finds 5 of 7, the same as on the
+check set.}
 \end{itemize}
+\DEMO{The hunt flaws of RQ3 were previously unreported, so they cannot be
+memorized.}
 \TODO{E6}{contamination split: detection by report date vs.\ model cutoff}

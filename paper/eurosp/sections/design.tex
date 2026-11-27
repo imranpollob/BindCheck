@@ -57,44 +57,16 @@ verdict serves as ground truth.}
 \subsection{Why a procedure and not a prompt}\label{sec:design-why}
 
 A plain LLM asked to ``find binding bugs'' reads the consumer, notices the
-most salient issue, and stops. On our test set it finds 3 of 14 known flaws
-(Section~\ref{sec:eval}). The failure is not knowledge but coverage: a target
+most salient issue, and stops. In one run on our test set it finds 3 of 14 known
+flaws (Section~\ref{sec:eval}). The failure is not knowledge but coverage: a target
 has many entry points, each with several effect values, and a flaw hides in
 one row of a table that the model never writes down. The skill procedure turns
 the definition into that table and makes omissions visible
-(Figure~\ref{fig:controller}). Every step emits
+(Figure~\ref{fig:controller} in Appendix~\ref{app:extra}). Every step emits
 structured rows (\texttt{BINDCHECK\_LEDGER}, \texttt{BINDCHECK\_STMT}), and the
 controller checks the rows against the inventory before it lets the brain
 proceed.
 
-\begin{figure}[t]
-\begin{lstlisting}[mathescape]
-Scan(target):
-  copy target read-only; I := Inventory(copy)   // E_i, S_j
-  L_E := Brain(step1, I)                         // effect ledger
-  for r in 1..2: U := I.E \ entries(L_E)
-      if U = {}: break;  L_E += Brain(reprompt, U)
-  L_S := Brain(step2, I, L_E, K) // statement ledger + stack knowledge K
-  for r in 1..2: U := I.S \ values(L_S)
-      if U = {}: break;  L_S += Brain(reprompt, U)
-  W := Brain(step3, L_E, L_S)  // playbooks P1-P5, follow-through
-  if cost < SOFT and time < T_soft: W += Brain(step3b, W)
-  W := Brain(final, W)         // drop C1-C3 failures, 1 per root cause
-  W := SecondLook(W, L_E, L_S) // no-drop, both ends, challenge, probes
-  U := unbound rows of W, fixed ledger order
-  for k in 0..K:                 // breadth-first rounds
-    for u in U not yet settled:
-      t := (k = 0) ? Template(u) : Brain(attack, u, trace(u))
-      o := Sandbox(t); trace(u) += (t, o)   // oracle verdict
-  return [(w, trace(w)) for w in W]   // evidence package
-\end{lstlisting}
-\caption{The \tool{} controller. Every \texttt{Brain} step returns
-structured rows that the controller checks against the inventory
-before it continues. Attempt 0 is generated from a pattern template without
-the LLM. The sandbox, not the brain, computes whether an attack test changed
-the effect.}
-\label{fig:controller}
-\end{figure}
 
 \subsection{Skill procedure}\label{sec:design-skills}
 

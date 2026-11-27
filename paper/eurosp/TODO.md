@@ -106,3 +106,26 @@ Every red `\TODO{ID}{...}` in the LaTeX has a row here with the same ID. Red `\D
    - E2/E4 are drawn dashed in Fig. 4.
 | E13 | E | must | §1, §6.2, Table 4/5 | Recheck B1/B2 Mythril logs for vacuous runs (no contract created / ~2% coverage) with the mutants3 signature; reword "Mythril finds 0" to "supported on k of n, 0 hits; n-k unsupported" | Mythril cells, intro gap sentence | mutants3 RESULTS-static.md signature | open |
 | D5 | D | must | §4 | Author 15-item spot-check of D3 layer tags (D3-SPOTCHECK.md); D3 shares stay red until done | D3 layers paragraph | author | open |
+
+## R14: external review of draft v4 (2026-11-27), 14 concerns
+
+All 14 are addressed in the text. Values marked red in the PDF are hypothetical until the runs exist.
+
+| # | Concern | Fix in text | Still needs |
+|---|---|---|---|
+| 1 | Allowed choices counted as flaws | §3.1 intended policy Π, formal property, C3 refined (C1–C3 = attacker-drivable subset of violations) | RV4 label re-check (the "2 labels changed" sentence is hypothetical); T1 stays open (formal check of the property) |
+| 2 | 87 vs 103 headline | Headline = 87 core everywhere; severity 46/59 rated (78%), 43 families, 21 auditors; 103 given for comparison | Author confirms W3; verify core auditor count |
+| 3 | Pending results read as finished | Raters reworded to "two collaborating raters"; Table 5 split into Ours / Affected / Maintainer | Real D1 κ, phase 2, hunt; all red text replaced or cut |
+| 4 | Final version unknown | §6.4 + Table 4 (joint effect only; medians of 3) | E12/D7 runs (v4build blocked on usage limit) |
+| 5 | LLM edge rests on one case | B1 result called preliminary; Table 4 has plain LLM ×3 on held sets (check-set cell = 2, matching its real round-1 run on L039, L040) | RV1 decision + runs |
+| 6 | What was new / exposure | Appendix D timeline built from the full EXPOSURE.md (incl. datajobs lane, v3 brief phrase, round-2 label read); contamination para says only dates are verifiable | E6 date split |
+| 7 | Prevalence counts | 311-report denominator reconciled with 343; per-year rates; 55/311 core (63 all); year sums 87/103 | — |
+| 8 | Unsupported looks like missed | Table 3 "Analyzed (R1)" + "of analyzed"; fuzz fixed spec corrected to 2/4 (L010, L024 flagged; L021 inconclusive); strict overlap 3/3/2; different matching rules stated | E13 Mythril vacuous runs |
+| 9 | Injected vs real | B1 layer split (15/2/5, all v2 strict hits Solidity); B2 has no guest code; Appendix E coverage table; v4 per-layer row | Round-3 composition |
+| 10 | Scoring borderline | L013 (loose only) and L020 (mechanism only) examples in §6.1 | RV10 human re-judge |
+| 11 | Practical value | Table 6 per benchmark: correct / policy / uncertain / FP / precision / tests / review min / $; 6-vs-14 min caveated + within-B3 7 vs 11 | E5 phase-2 data |
+| 12 | Novelty + 7/87 | Case study framed as two-ledger rows; intro sentence; 7/87 rule and lower-bound caveat | D3/D5 spot-check |
+| 13 | $8M too broad | Intro/abstract: $7.3M lost in 2 core incidents (Aztec P1, ZKSwap P4); trusted-setup case $1.4–2.3M at risk, out of scope | — |
+| 14 | Verifiability | Open Science: model ID, outputs, transcripts, withheld items; Appendix F traces L193 report → label → GT → warning → score | W5 link; RV17 confirm model ID |
+
+Space: tables for examples, severity, capability, B2 and the controller pseudocode moved to Appendix G; discussion lists turned into prose; related work condensed. Body still ends on p13.

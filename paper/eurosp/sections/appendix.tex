@@ -18,3 +18,200 @@ guide in the artifact.
 
 \section{Per-Item Results}\label{app:items}
 \TODO{E1}{per-item table for B1 and B2: tool $\times$ item, strict/loose/unsupported}
+
+\section{What the Builders Saw}\label{app:timeline}
+Table~\ref{tab:timeline} lists, for each version, which data had been seen
+before its freeze. ``Builder'' is the separate tool-building process, which
+could read only development data; ``author'' is the coordinating author;
+``lane'' is any other automated process. Every exposure, including
+metadata-only touches, is logged in the artifact.
+
+\begin{table}[!htb]
+\centering
+\caption{Exposure timeline (2026, all dates in November unless noted).}
+\label{tab:timeline}
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\begin{tabular}{@{}lp{3.0cm}p{3.5cm}@{}}
+\toprule
+\textbf{Date} & \textbf{Event} & \textbf{Seen, and consequence} \\
+\midrule
+22 & Audit sweep & author: titles of 3 reserved families' pages (metadata only) \\
+24 & Labels frozen; family split & author: code evidence of 3 items $\Rightarrow$ their families forced to dev before the split \\
+24 & v1 and plain LLM on round~1 & author: round-1 GT and per-item warnings $\Rightarrow$ v2 built by a fresh lane from dev only \\
+24 & v2 frozen; run on rounds 1--2, B2 & author: round-2 labels while v2 was being built (never sent to the builder) \\
+25 & B3 frozen; v3 launched & builder: one test-derived phrase in a brief for under a minute, then retracted $\Rightarrow$ v3 reruns on B1/B2 not blind \\
+25 & Characterization (§4) & lane: report text of all 103 binding labels, incl.\ test, for D3/D4 tags; no code, no tool work \\
+26 & v3 frozen; pre-registration & builder: dev only \\
+26 & Amendment A1 & author: v2 per-item results, incl.\ the check set; B1 families released to dev; check set (seed 20261126) withheld from the builder \\
+26-- & v4 built on dev-v4 & builder: dev-v4 (28 flaws); never the check set, B3, round~3 \\
+\DEMO{30} & \DEMO{v4 frozen; round-3 list appended} & \DEMO{author: round-3 labels} \\
+\DEMO{Dec 1} & \DEMO{v4 on check set (once), B3, round~3, hunt} & \DEMO{builder: none of them} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Benchmark Coverage}\label{app:coverage}
+\begin{table}[h]
+\centering
+\caption{What each benchmark covers. Layers count positives by the location
+of the flaw.}
+\label{tab:coverage}
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\begin{tabular}{@{}lrrp{3.6cm}@{}}
+\toprule
+\textbf{Benchmark} & \textbf{Pos.} & \textbf{Hosts} & \textbf{Layers (Solidity / circuit / Rust guest or host)} \\
+\midrule
+B1 (rounds 1--2) & 22 & 13 fam. & 15 / 2 / 5 \\
+B2 mutants & 27 & 3 small & 23 / 4 / 0 \\
+Check set (from B1) & 7 & 7 fam. & 5 / 1 / 1 \\
+Round~3 & \DEMO{7} & \DEMO{5 fam.} & \DEMO{3 / 1 / 3} \\
+B3 mutants & 37 & 5 apps & 26 / 9 / 2 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{One Finding End to End}\label{app:trace}
+\DEMO{We trace the proof-marketplace flaw of Section~\ref{sec:eval-misses}
+through the artifact.}
+\begin{enumerate}
+\item \emph{Audit report.} Veridise, April 2025, finding V-BML-VUL-001:
+fulfillment does not validate request identifiers.
+\item \emph{Label.} Item L193 in \texttt{LABELS-v1.csv}: binding Y, P1,
+C1--C3 met, family RISC Zero/Boundless, test split, round~2.
+\item \emph{Ground truth.} Row L193 in the round-2 location file:
+\texttt{BoundlessMarket.sol}, function \texttt{\_fulfillAndPay}; unbound value
+\texttt{Fulfillment.id}.
+\item \emph{Warning.} Warning 1 of \texttt{tool-v2/L193/vuln.json}, at
+the same function, naming the calldata identifier and the journal digest.
+\item \emph{Score.} Strict, loose and mechanism-level hit; the judge prompt
+hash and verdict are in the scoring log, and the fixed version raises no
+warning.
+\end{enumerate}
+
+\section{Additional Figures and Tables}\label{app:extra}
+These floats support Sections~\ref{sec:study}--\ref{sec:eval}; they are
+moved here for space.
+
+\begin{figure}[!htb]
+\begin{lstlisting}[mathescape]
+Scan(target):
+  copy target read-only; I := Inventory(copy)   // E_i, S_j
+  L_E := Brain(step1, I)                         // effect ledger
+  for r in 1..2: U := I.E \ entries(L_E)
+      if U = {}: break;  L_E += Brain(reprompt, U)
+  L_S := Brain(step2, I, L_E, K) // statement ledger + stack knowledge K
+  for r in 1..2: U := I.S \ values(L_S)
+      if U = {}: break;  L_S += Brain(reprompt, U)
+  W := Brain(step3, L_E, L_S)  // playbooks P1-P5, follow-through
+  if cost < SOFT and time < T_soft: W += Brain(step3b, W)
+  W := Brain(final, W)         // drop C1-C3 failures, 1 per root cause
+  W := SecondLook(W, L_E, L_S) // no-drop, both ends, challenge, probes
+  U := unbound rows of W, fixed ledger order
+  for k in 0..K:                 // breadth-first rounds
+    for u in U not yet settled:
+      t := (k = 0) ? Template(u) : Brain(attack, u, trace(u))
+      o := Sandbox(t); trace(u) += (t, o)   // oracle verdict
+  return [(w, trace(w)) for w in W]   // evidence package
+\end{lstlisting}
+\caption{The \tool{} controller. Every \texttt{Brain} step returns
+structured rows that the controller checks against the inventory
+before it continues. Attempt 0 is generated from a pattern template without
+the LLM. The sandbox, not the brain, computes whether an attack test changed
+the effect.}
+\label{fig:controller}
+\end{figure}
+
+\begin{table*}[!htb]
+\centering
+\caption{Representative auditor-reported binding flaws (public reports; all
+fixed or acknowledged). Severity is the auditor's.}
+\label{tab:examples}
+\footnotesize
+\begin{tabular}{@{}llllp{4.3cm}p{4.6cm}@{}}
+\toprule
+\textbf{Pattern} & \textbf{Project} & \textbf{Auditor} & \textbf{Sev.} & \textbf{Effect} & \textbf{Unbound value} \\
+\midrule
+P1 & Nocturne & Zellic & Low & pays the reserved gas refund & refund recipient = \texttt{msg.sender} of the bundle \\
+P1 & Taiko / Surge & Nethermind & High & records the bond receiver of a proven batch & bond receiver = \texttt{msg.sender} of the prover call \\
+P1 & Arianee & Veridise & Critical & spends an issuer credit via a nullifier & the action the credit pays for \\
+P2 & MorphL2 & Sherlock & High & resolves a state challenge & previous state root of the batch \\
+P2 & vlayer & Veridise & Critical & acts on a proven contract-call result & chain ID of the proven execution \\
+P2 & MACI & HashCloak & Critical & stores the new tally commitment & starting tally of the first batch \\
+P3 & Anon Aadhaar & PSE & High & marks a vote nullifier used & nullifier derived from the photo only \\
+P3 & ZkDrops & K.\ Gurkan & -- & transfers an airdrop, marks nullifier & raw 256-bit nullifier ($x$ and $x{+}r$ both verify) \\
+P4 & Taiko / Surge & OpenZeppelin & Critical & accepts a proof for a batch of L2 blocks & guest program ID not pinned \\
+P5 & Anon Aadhaar & PSE & Critical & acts on revealed identity attributes & which attribute sits at which index \\
+\bottomrule
+\end{tabular}
+% src: dataset/labels-v1/LABELS-v1.csv (FULL, binding Y): L015, L041, L043, L014, L050, L048, L020, L049, L019, L007
+\end{table*}
+
+\begin{table}[!htb]
+\centering
+\caption{What each tool can see. \checkmark{} = analyzes the layer;
+$\circ$ = partial; -- = not at all.}
+\label{tab:capability}
+\footnotesize
+\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+\textbf{Tool} & \textbf{Circuit} & \textbf{Verifier} & \textbf{Consumer} & \textbf{Proof$\to$effect} \\
+\midrule
+Slither, Mythril & -- & \checkmark & \checkmark & -- \\
+circomspect, Picus & \checkmark & -- & -- & -- \\
+Foundry (out of box) & -- & $\circ$ & \checkmark & -- \\
+Foundry (assisted) & -- & mock & \checkmark & manual \\
+Plain LLM & $\circ$ & $\circ$ & \checkmark & $\circ$ \\
+\tool{} & $\circ$ & \checkmark & \checkmark & $\circ$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[!htb]
+\centering
+\caption{Detection of injected binding mutants (B2) by pattern
+(strict hits / mutants). ``uns.'' = the tool cannot analyze the layer or
+the run failed.}
+\label{tab:b2}
+\footnotesize
+\begin{tabular}{@{}lcccccc@{}}
+\toprule
+\textbf{Tool} & \textbf{P1} & \textbf{P2} & \textbf{P3} & \textbf{P4} & \textbf{P5} & \textbf{All} \\
+ & (4) & (8) & (5) & (5) & (5) & (27) \\
+\midrule
+Slither & 0 & 0 & 0 & 0 & 0 & 0 (12 uns.) \\
+Mythril & 0 & 0 & 0 & 0 & 0 & 0 (4 uns.) \\
+circomspect & -- & 1$^*$ & -- & -- & -- & 1 \\
+Picus & -- & 0 & -- & -- & -- & 0 \\
+\tool{} & 4 & 8 & 4 & 2 & 4 & 22 \\
+\bottomrule
+\multicolumn{7}{@{}l}{\scriptsize $^*$a style warning (\texttt{<--}) at the edited line, not a binding diagnosis.}
+\end{tabular}
+% src: benchmarks/binding-mutants-v2/RESULTS-static.md
+\end{table}
+
+\begin{table}[!htb]
+\centering
+\caption{Binding findings by pattern and auditor severity
+(C critical, H high, M medium, L low, I informational, -- unrated).}
+\label{tab:severity}
+\footnotesize
+\begin{tabular}{@{}lrrrrrrr@{}}
+\toprule
+\textbf{Pattern} & \textbf{C} & \textbf{H} & \textbf{M} & \textbf{L} & \textbf{I} & \textbf{--} & \textbf{Total} \\
+\midrule
+P1 Unbound effect & 7 & 5 & 3 & 2 & 0 & 6 & 23 \\
+P2 Context & 6 & 4 & 2 & 2 & 1 & 8 & 23 \\
+P3 Replay / alias & 6 & 3 & 0 & 1 & 0 & 5 & 15 \\
+P4 Verifier integration & 11 & 9 & 1 & 1 & 0 & 11 & 33 \\
+P5 Interface mismatch & 1 & 2 & 0 & 0 & 0 & 4 & 7 \\
+Other & 1 & 1 & 0 & 0 & 0 & 0 & 2 \\
+\midrule
+Total & 32 & 24 & 6 & 6 & 1 & 34 & 103 \\
+Core (P4 adj.\ excl.) & 27 & 19 & 6 & 6 & 1 & 28 & 87 \\
+\bottomrule
+\end{tabular}
+% src: dataset/labels-v1/CHARACTERIZATION.md
+\end{table}

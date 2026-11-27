@@ -20,13 +20,16 @@ list them with their coverage in the artifact.
 
 \para{Screening}
 A report is in scope if it audits an application that verifies a ZK proof and
-acts on it. 343 reports passed this screen. From them we logged 698 findings
+acts on it. 343 reports passed this screen. A stricter deduplication by
+report URL gives 322 distinct reports, of which 311 publish their finding
+text; 311 is the denominator for every per-report rate below.
+% src: labels-v1/D2-TREND.md reconciliation (345 IN rows -> 322 URLs; 11 without public text -> 311)
+ From them we logged 698 findings
 that touch proof verification, public inputs, nullifiers, verifier keys or the
 use of verified values (662 after merging findings shared across reports).
-After screening against the binding criteria, 300 candidates remained. An
-initial triage rated each candidate. We labeled every candidate except those
-triaged as likely not binding. Of those we labeled a random sample of 14, to
-check the triage. This gave 264 items to label.
+After screening, 300 candidates remained. We labeled all of them except
+those triaged as likely not binding, plus a random sample of 14 of those to
+check the triage: 264 items.
 % src: merged/FUNNEL.md Overall (343 IN; 698 rows; 662 groups; 300 candidates); labeling/key/MANIFEST.md (264; inclusion reasons incl. triage-LN-sample 14)
 As a completeness check, the sweep recovered 49 of 50 binding findings in an
 independently assembled list of known cases.
@@ -38,15 +41,23 @@ five patterns, the exclusions of Section~\ref{sec:definition}, and worked
 examples. Each label records binding (Y/N/U), pattern, whether the issue is a
 proof-system soundness bug, C1--C3 individually, the effect, the unbound
 value, and confidence. Labels were proposed by an LLM and adjudicated by two
-human raters who discussed every item and fixed the final label. The raters
-read the auditor's text for all items, and for the 51 items with a public
-repository and vulnerable commit (\emph{FULL} tier) they also recorded the
-intended policy. For every item used in the tool evaluation, a second
+collaborating raters who discussed every item and fixed the final label, so
+the labels are not independent annotations. The raters read the auditor's
+text for all items, and for the 51 items with a public repository and
+vulnerable commit (\emph{FULL} tier) they also recorded the intended policy
+$\Pi$ of Section~\ref{sec:def-ledgers}. For the other items, $\Pi$ comes
+from the auditor's description of the intended behavior. For every item used in the tool evaluation, a second
 code-level pass checked the vulnerable location in the source.
 \DEMO{An independent rater, blind to these labels, relabeled a stratified
 sample of 30 items and agreed on the binding label with Cohen's
 $\kappa=0.78$ and on the pattern with $\kappa=0.71$.}
 \TODO{D1}{independent relabel of 30 stratified items; compute $\kappa$ for binding and pattern}
+\DEMO{We then re-applied the policy rule to all 103 binding labels and to the
+17 non-binding items labeled policy-bounded. Two labels changed: a capped
+relayer fee became non-binding, and a reusable attestation that the
+documentation describes as single-use became binding, which leaves the counts
+below unchanged.}
+\TODO{RV4}{re-check every P1/P3 label against the policy rule; list changed items}
 
 Of the 264 labeled items, 4 duplicate an earlier item and 5 could not be
 decided from the report (U), leaving 255 findings for analysis.
@@ -67,8 +78,8 @@ Proof-related findings logged (unique) & 698 (662) \\
 Candidates after screening & 300 \\
 Labeled items (FULL 51 / LIGHT 152 / PSS 61) & 264 \\
 Decidable, non-duplicate findings & 255 \\
-\textbf{Binding flaws} & \textbf{103} \\
-\quad core class (excl.\ proof-system soundness) & 87 \\
+Binding flaws (with adjacent proof-system bugs) & 103 \\
+\quad \textbf{core class (excl.\ proof-system soundness)} & \textbf{87} \\
 \bottomrule
 \end{tabular}
 % src: merged/*.csv; labels-v1/SUMMARY.md; labels-v1/CHARACTERIZATION.md
@@ -76,53 +87,36 @@ Decidable, non-duplicate findings & 255 \\
 
 \subsection{Prevalence}\label{sec:study-prev}
 
-103 of the 255 labeled findings (40\%) are binding flaws, which is 15\% of
-all 698 proof-related findings logged. They occur in 44 of the 68 project
-families in the labeled set, so they are not concentrated in a few careless
-codebases.
-% src: CHARACTERIZATION.md (103 of 255; 44 of 68 families)
+87 of the 255 labeled findings (34\%) are core binding flaws. With the 16
+adjacent proof-system findings the total is 103 (40\%), which is 15\% of all
+698 proof-related findings logged. The core findings occur in 43 of the 68
+project families in the labeled set (44 with the adjacent ones), so they are
+not concentrated in a few careless codebases.
+% src: CHARACTERIZATION.md (103 of 255; 44 of 68 families); LABELS-v1.csv PSS!=Y: 87, 43 families
 For contrast, 48 of the non-binding findings are circuit-internal soundness
 issues (under-constrained signals with no effect on what the consumer is
 told), which is the class that existing ZK tools target.
 % src: CHARACTERIZATION.md (tagged circuit-soundness N: 48)
 
 \finding{Binding flaws are a major class of ZK application vulnerabilities:
-103 auditor-reported instances, in two thirds of the project families we
+87 auditor-reported core instances, in 43 of the 68 project families we
 studied.}
 
 \subsection{Severity}\label{sec:study-sev}
 
-Table~\ref{tab:severity} breaks the binding findings down by pattern and
-auditor severity. 56 of the 103 are rated Critical or High, which is 81\% of
-the 69 findings with a rating. Only 7 are rated Low or Informational.
-% src: CHARACTERIZATION.md pattern x severity (Critical 32, High 24, unrated 34, Low/Info 7)
+Table~\ref{tab:severity} (Appendix~\ref{app:extra}) breaks the binding
+findings down by pattern and auditor severity. 46 of the 87 core findings are rated Critical or High,
+which is 78\% of the 59 core findings with a rating; with the adjacent
+findings the share is 81\% (56 of 69). Only 7 are rated Low or
+Informational. Findings without a rating are mostly contest and advisory
+entries whose report gives no severity scale.
+% src: CHARACTERIZATION.md pattern x severity (Critical 32, High 24, unrated 34, Low/Info 7); core from LABELS-v1.csv PSS!=Y: C 27, H 19, M 6, L 6, I 1, unrated 28
 A binding flaw usually means an attacker obtains funds or rights that the
 proof did not grant, so the severity is direct.
 
-\begin{table}[t]
-\centering
-\caption{Binding findings by pattern and auditor severity
-(C critical, H high, M medium, L low, I informational, -- unrated).}
-\label{tab:severity}
-\footnotesize
-\begin{tabular}{@{}lrrrrrrr@{}}
-\toprule
-\textbf{Pattern} & \textbf{C} & \textbf{H} & \textbf{M} & \textbf{L} & \textbf{I} & \textbf{--} & \textbf{Total} \\
-\midrule
-P1 Unbound effect & 7 & 5 & 3 & 2 & 0 & 6 & 23 \\
-P2 Context & 6 & 4 & 2 & 2 & 1 & 8 & 23 \\
-P3 Replay / alias & 6 & 3 & 0 & 1 & 0 & 5 & 15 \\
-P4 Verifier integration & 11 & 9 & 1 & 1 & 0 & 11 & 33 \\
-P5 Interface mismatch & 1 & 2 & 0 & 0 & 0 & 4 & 7 \\
-Other & 1 & 1 & 0 & 0 & 0 & 0 & 2 \\
-\midrule
-Total & 32 & 24 & 6 & 6 & 1 & 34 & 103 \\
-\bottomrule
-\end{tabular}
-% src: dataset/labels-v1/CHARACTERIZATION.md
-\end{table}
 
-\finding{Binding flaws are severe: 81\% of rated binding findings are Critical
+
+\finding{Binding flaws are severe: 78\% of rated core findings are Critical
 or High.}
 
 \subsection{Patterns}\label{sec:study-patterns}
@@ -133,36 +127,12 @@ Among the core class, unbound effects (P1, 23) and missing context (P2, 23)
 dominate, followed by replay and aliasing (P3, 15). Interface mismatches (P5,
 7) are rare, partly because a mismatch usually makes honest proofs fail, which
 developers notice in testing.
-Table~\ref{tab:examples} shows representative findings. Their variety is
+Table~\ref{tab:examples} (Appendix~\ref{app:extra}) shows representative findings. Their variety is
 the point. The unbound value can be a refund address, a bond receiver, a
 prior state root, a chain ID, a zkVM program ID, or the position of an
 attribute in the public-input array. Yet each is the same failure: the
 consumer acts on something the statement does not fix.
 
-\begin{table*}[t]
-\centering
-\caption{Representative auditor-reported binding flaws (public reports; all
-fixed or acknowledged). Severity is the auditor's.}
-\label{tab:examples}
-\footnotesize
-\begin{tabular}{@{}llllp{4.3cm}p{4.6cm}@{}}
-\toprule
-\textbf{Pattern} & \textbf{Project} & \textbf{Auditor} & \textbf{Sev.} & \textbf{Effect} & \textbf{Unbound value} \\
-\midrule
-P1 & Nocturne & Zellic & Low & pays the reserved gas refund & refund recipient = \texttt{msg.sender} of the bundle \\
-P1 & Taiko / Surge & Nethermind & High & records the bond receiver of a proven batch & bond receiver = \texttt{msg.sender} of the prover call \\
-P1 & Arianee & Veridise & Critical & spends an issuer credit via a nullifier & the action the credit pays for \\
-P2 & MorphL2 & Sherlock & High & resolves a state challenge & previous state root of the batch \\
-P2 & vlayer & Veridise & Critical & acts on a proven contract-call result & chain ID of the proven execution \\
-P2 & MACI & HashCloak & Critical & stores the new tally commitment & starting tally of the first batch \\
-P3 & Anon Aadhaar & PSE & High & marks a vote nullifier used & nullifier derived from the photo only \\
-P3 & ZkDrops & K.\ Gurkan & -- & transfers an airdrop, marks nullifier & raw 256-bit nullifier ($x$ and $x{+}r$ both verify) \\
-P4 & Taiko / Surge & OpenZeppelin & Critical & accepts a proof for a batch of L2 blocks & guest program ID not pinned \\
-P5 & Anon Aadhaar & PSE & Critical & acts on revealed identity attributes & which attribute sits at which index \\
-\bottomrule
-\end{tabular}
-% src: dataset/labels-v1/LABELS-v1.csv (FULL, binding Y): L015, L041, L043, L014, L050, L048, L020, L049, L019, L007
-\end{table*}
 
 \DEMO{Most P1 findings concern a recipient or fee that the contract takes from
 calldata; most P2 findings concern a root or prior state that the consumer
@@ -175,54 +145,57 @@ little.}
 
 \subsection{Trend and who finds them}\label{sec:study-trend}
 
-Raw counts of binding findings grow over time: 6 come from 2021--2022,
-13 from 2023, 20 from 2024 and 39 from 2025. 2026 is a partial year (9), and 16 findings have
-no report date. Raw counts also reflect how many ZK audits were published each
-year.
-% src: CHARACTERIZATION.md by report year
+Raw counts of core findings grow: 6 from 2021--2022, 11 from 2023, 19 from
+2024, 32 from 2025, 6 from the partial year 2026, and 13 undated (87; with
+adjacent findings 6, 13, 20, 39, 9 and 16, summing to 103). They also track
+how many ZK audits were published.
+% src: CHARACTERIZATION.md by report year; D2-TREND.md core table
 The number of in-scope ZK audit reports grows too, from 60 in 2023 to 94 in
 2025. Normalized by those reports, the share of reports with at least one
-binding finding moves from 0.17 (95\% Wilson CI 0.09--0.28) to 0.27
-(0.19--0.36). The change is not significant (Cochran--Armitage over
-2023--2025, $p=0.12$; core class $p=0.22$), so we do not claim a rising rate.
-The stable picture is that roughly one in four recent ZK application audits
-reports at least one binding flaw.
+core finding is 9 of 60 in 2023 (0.15, 95\% Wilson CI 0.08--0.26), 9 of 58
+in 2024 (0.16) and 21 of 94 in 2025 (0.22, 0.15--0.32). The change is not
+significant (Cochran--Armitage over 2023--2025, $p=0.22$; $p=0.12$ with the
+adjacent findings), so we do not claim a rising rate. Over all 311 reports
+from 2021 to 2026, including undated ones, 55 (18\%) report at least one core
+finding, and 63 (20\%) at least one binding finding of either kind.
 % src: dataset/labels-v1/D2-TREND.md (analysis/d2_trend.py)
-The 103 findings come from 24 different auditors and advisory sources, and no
-source contributes more than 21. Binding is therefore a class that many
+The 87 core findings come from 21 different auditors and advisory sources
+(24 for all 103), and no source contributes more than 21. Binding is therefore a class that many
 experienced auditors encounter, not the checklist item of one firm.
 % src: CHARACTERIZATION.md by auditor (24 sources; max Veridise 21)
 
 \para{Which layers are needed}
-\DEMO{Given the report's description of what the proved statement exposes, 43
-of the 87 core findings (49\%) can be decided from the consumer contract
-alone, 20 (23\%) from the circuit alone, and 7 (8\%) only by comparing the
-two. The remaining 17 (20\%) lie in verifier, recursion or off-chain
-framework code. If a finding counts as cross-layer whenever its fix adds the
-missing value to the statement, the contract-only share falls to 32\% and the
-cross-layer share rises to 25\%. The contract-only half is not ordinary
-contract analysis: deciding it still requires knowing \emph{which values the
-statement fixes}, which is exactly what contract analyzers do not model
+We tagged each core finding with the code a reviewer must read to decide it,
+under one rule: the statement side counts as known when the audit report
+states what the proof establishes. This rule favors single-layer tags,
+because the auditor has already done the cross-layer reading and written it
+down. \DEMO{The tags are LLM-proposed and author-checked on a stratified
+sample of 15. Under this rule, 43 of the 87 core findings (49\%) can be decided from
+the consumer contract alone, 20 (23\%) from the circuit alone, and 7 (8\%)
+only by comparing the two. The remaining 17 (20\%) lie in verifier,
+recursion or off-chain framework code. Under the alternative rule, a finding
+is cross-layer whenever its fix adds the missing value to the statement; the
+contract-only share then falls to 32\% and the cross-layer share rises to
+25\%. The 7 is therefore a lower bound that depends on the report, not a
+property of the code. Even the contract-only findings are not ordinary
+contract analysis: deciding them still requires knowing \emph{which values
+the statement fixes}, which contract analyzers do not model
 (Section~\ref{sec:eval}).}
 % src: dataset/labels-v1/D3-LAYERS.md, D3-layers.csv (AI-proposed tags)
 \TODO{D3}{author spot-check of the 15-item stratified sample in D3-LAYERS.md; re-tag under amendment A3 if more than 2 of 15 disagree}
 
 \para{How they were fixed}
-\DEMO{Fixes for the core findings mostly mirror signature-misuse remedies.
+\DEMO{Fixes for the core findings mostly mirror signature-misuse remedies:
 56\% (49 of 87; 95\% CI 46--66\%) add the missing value to the statement,
-bind a context such as chain, contract, root or configuration, or make the
-replay key unique. Another 34\% pin the verifier or program, check its
-result, or enforce a canonical encoding, the analogues of verifying against
-the right key and of signature malleability. Most fix classes are inferred
-from the reported flaw; on the 21 findings whose fix is stated explicitly,
-the shares are 10 of 21 for the three classic remedies and 19 of 21 for the
-broader set. The ZK-specific residue is 6 findings fixed by constraining a
-value the circuit already exposed, which has no signature counterpart:
-whatever is signed is fixed.}
+bind a context, or make the replay key unique, and another 34\% pin the
+verifier or program, check its result, or enforce a canonical encoding. The
+ZK-specific residue is 6 findings fixed by constraining a value the circuit
+already exposed. Most fix classes are inferred from the report; on the 21
+findings whose fix is stated explicitly, 19 fall in these classes.}
 % src: dataset/labels-v1/D4-FIXES.md, D4-fixes.csv (AI-proposed, report text only)
 \TODO{D4}{author check of the AI-proposed fix classes (D4-FIXES.md)}
 
-\finding{About one in four recent ZK application audits reports a binding
-flaw, found by many different auditors. Deciding one requires knowing what the
+\finding{About one in six ZK application audits (55 of 311, 2021--2026)
+reports a core binding flaw, found by many different auditors. Deciding one requires knowing what the
 proof's statement fixes, whether the flaw sits in the contract, the circuit,
 or between them. That reasoning is what Section~\ref{sec:design} automates.}

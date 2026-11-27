@@ -2,24 +2,19 @@
 
 \subsection{Lessons for developers}\label{sec:disc-lessons}
 
-The signature analogy of Section~\ref{sec:definition} doubles as a checklist.
-\begin{itemize}
-\item \textbf{Sign everything you act on.} Every recipient, amount, fee and
-refund address must be a public input or be hashed into one, and the consumer
-must recompute that hash (P1).
-\item \textbf{Separate domains.} The statement should commit to the chain,
-the consumer contract, and the configuration or policy it is valid for. Roots
-and prior states must be checked against the consumer's own storage (P2).
-\item \textbf{Derive nonces from the statement.} Replay keys must come from
-the statement, not from the proof bytes, and must be reduced into the field
-before they are stored (P3).
-\item \textbf{Pin the key.} The consumer must fix the verification key or
-zkVM program ID, and must check the verifier's result (P4).
-\item \textbf{Test with a malicious caller.} An honest proof submitted by a
-second account with changed arguments must fail. This single test, the
-invariant of Section~\ref{sec:design-explore}, would have caught
-\DEMO{every flaw in B1 that our fuzzing harness could express}.
-\end{itemize}
+The signature analogy of Section~\ref{sec:definition} doubles as a
+checklist. \emph{Sign everything you act on}: every recipient, amount, fee
+and refund address must be a public input or hashed into one, and the
+consumer must recompute that hash (P1). \emph{Separate domains}: the
+statement should commit to the chain, the consumer contract and the policy,
+and roots and prior states must be checked against the consumer's own
+storage (P2). \emph{Derive nonces from the statement}, reduced into the field
+before they are stored (P3). \emph{Pin the key}: fix the verification key or
+program ID and check the verifier's result (P4). \emph{Test with a malicious
+caller}: an honest proof submitted by a second account with changed
+arguments must fail; this single test, the invariant of
+Section~\ref{sec:design-explore}, would have caught \DEMO{every flaw in B1
+that our fuzzing harness could express}.
 \TODO{D4}{back the checklist with the fix-pattern counts from Section 4}
 
 \subsection{Toward binding by construction}\label{sec:disc-construction}
@@ -27,21 +22,14 @@ invariant of Section~\ref{sec:design-explore}, would have caught
 Detection is a stopgap. Binding flaws exist because the public-input vector
 is an untyped array whose meaning is restated by hand in the circuit, the
 verifier wrapper and the consumer. Three changes would remove most of the
-class by construction.
-\begin{itemize}
-\item \textbf{Typed statements.} Circuit languages could export a statement
-schema (names, types, widths, order). Verifier generators could emit a
-consumer interface that accepts the named fields instead of a raw array. This
-removes P5 and makes P1 visible, because every effect argument that is not a
-schema field stands out.
-\item \textbf{Effect commitments.} A standard \emph{effect hash} over
-recipient, amount, chain, contract and nonce, computed in the circuit and
-recomputed in the consumer, would play the role that EIP-712 typed data plays
-for signatures and address P1--P3 together.
-\item \textbf{Pinned verification.} Libraries could make the verification
-key or program ID an immutable constructor argument and refuse to accept it
-per call (P4).
-\end{itemize}
+class by construction. \emph{Typed statements}: circuit languages could
+export a statement schema (names, types, widths, order) from which verifier
+generators emit a typed consumer interface; this removes P5 and makes P1
+visible. \emph{Effect commitments}: a standard effect hash over recipient,
+amount, chain, contract and nonce, computed in the circuit and recomputed in
+the consumer, would play the role EIP-712 plays for signatures and address
+P1--P3 together. \emph{Pinned verification}: libraries could make the key or
+program ID an immutable constructor argument (P4).
 \DEMO{Applied to the 87 core-class findings, typed statements would have
 prevented 41\% and effect commitments 63\%.}
 \TODO{D6}{estimate per finding which construction would have prevented it}
@@ -54,8 +42,8 @@ without audits may have more binding flaws, and audit firms differ in which
 findings they publish. Some sources could not be fully enumerated.
 
 \para{Labels}
-Labels were proposed by an LLM and adjudicated by two raters who discussed
-every item, so they are not independent annotations. We mitigate this with a
+Labels were proposed by an LLM and adjudicated by two collaborating raters
+who discussed every item, so they are not independent annotations. We mitigate this with a
 written guide fixed before labeling, a code-level second pass for every
 evaluated item, \DEMO{and an independent blind relabel of 30 items
 ($\kappa=0.78$)}. Pattern boundaries (especially P2 versus P1 for stored
@@ -74,7 +62,9 @@ by $\pm$1--2 items between runs, which is why we report repeated runs.
 
 \para{Leakage}
 The people who built the benchmark also saw the test results of an earlier
-tool version. To keep the tool independent, every tool version was built by a
+tool version, and the B1 misses informed the final version; we therefore
+count B1 as development data for it and give the full timeline in
+Appendix~\ref{app:timeline}. To keep the tool independent, every tool version was built by a
 separate process that could read only development data, under enforced access
 rules, and the test benchmark lives in a separate repository. The round-2
 labels existed before the freeze and were read by the coordinating author, but
@@ -83,17 +73,12 @@ artifact.
 
 \subsection{Limitations}\label{sec:disc-limits}
 
-\tool{} needs an LLM and costs about one dollar per scan. Its tools are
-syntactic, so deep library internals and dependencies that are not vendored
-are blind spots. Parser differentials and validation gaps inside SDK methods
-are reached only by the second look's probes, and its knowledge base covers
-ten proof systems and domains; others fall back to the generic procedure. Our
-exploration loop targets EVM consumers. Flaws whose effect is committed
-in a zkVM host or off chain stop at E1. Its reach is limited by what can be
-deployed automatically: on development data, real-proof tests were possible
-on 2 of 11 targets, because most projects do not ship proving artifacts, and
-several targets could not be deployed at all. Most warnings therefore leave
-\tool{} as claims, which human adjudication must judge. Finally, binding is relative to
-intent. When the developer never meant a value to be bound, for example a
-deliberately open relayer fee, \tool{} must infer that from code and
-documentation, and it can be wrong.
+\tool{} needs an LLM and costs one to two dollars per scan. Its tools are
+syntactic, so library internals that are not vendored are blind spots, and
+its knowledge base covers ten proof systems and domains; others fall back to
+the generic procedure. The exploration loop targets EVM consumers: flaws
+whose effect lies in a zkVM host or off chain stop at E1, and real-proof
+tests were possible on only 2 of 11 development targets, because most
+projects ship no proving artifacts. Most warnings therefore reach humans as
+claims. Finally, binding is relative to the intended policy $\Pi$, which
+\tool{} must infer from code and documentation, and it can be wrong.

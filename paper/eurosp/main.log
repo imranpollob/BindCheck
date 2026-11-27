@@ -1,8 +1,8 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2026.7.26)  27 NOV 2026 13:33
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2026.7.26)  27 NOV 2026 23:15
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**main
+**main.tex
 (./main.tex
 LaTeX2e <2021-11-15> patch level 1
 L3 programming layer <2022-01-21> (./IEEEtran.cls
@@ -800,7 +800,7 @@ LaTeX Font Info:    Trying to load font information for OT1+phv on input line 1
 File: ot1phv.fd 2020/03/25 scalable font definitions for OT1/phv.
 )
 (./sections/abstract.tex
-LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 5
+LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 7
 .
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ts1ptm.fd
@@ -820,26 +820,26 @@ File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
 File: lstlang1.sty 2020/03/24 1.8d listings language file
 )
 LaTeX Font Info:    Font shape `OT1/pcr/m/it' in size <7.02625> not available
-(Font)              Font shape `OT1/pcr/m/sl' tried instead on input line 43.
+(Font)              Font shape `OT1/pcr/m/sl' tried instead on input line 44.
  [1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}
 
 
 ]
 LaTeX Font Info:    Calculating math sizes for size <10.03749> on input line 12
-2.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 122
+8.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 128
 .
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 122
+LaTeX Font Info:    Trying to load font information for U+msb on input line 128
 .
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-Underfull \hbox (badness 2293) in paragraph at lines 122--125
+Underfull \hbox (badness 2293) in paragraph at lines 128--131
 \OT1/ptm/m/n/10.03749 bind-ing flaws: two ledgers, three con-di-tions,
  []
 
@@ -848,43 +848,43 @@ LaTeX Font Info:    Calculating math sizes for size <9.03374> on input line 33.
 
 LaTeX Font Info:    Calculating math sizes for size <7.02625> on input line 41.
 
-LaTeX Font Info:    Calculating math sizes for size <8.03> on input line 95.
+LaTeX Font Info:    Calculating math sizes for size <8.03> on input line 122.
 
-Underfull \hbox (badness 10000) in paragraph at lines 97--97
+Underfull \hbox (badness 10000) in paragraph at lines 124--124
 []\OT1/ptm/b/n/8.03 Signature
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 99--99
+Underfull \hbox (badness 10000) in paragraph at lines 126--126
 []\OT1/ptm/m/n/8.03 recipient, amount,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 100--100
+Underfull \hbox (badness 10000) in paragraph at lines 127--127
 []\OT1/ptm/m/n/8.03 missing
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 100--100
+Underfull \hbox (badness 10000) in paragraph at lines 127--127
 \OT1/ptm/m/n/8.03 do-main
  []
 
 
-Underfull \hbox (badness 1558) in paragraph at lines 101--101
+Underfull \hbox (badness 1558) in paragraph at lines 128--128
 []\OT1/ptm/m/n/8.03 nullifier key, $\OML/cmm/m/it/8 x$ \OT1/ptm/m/n/8.03 vs.
  []
 
 
-Underfull \hbox (badness 6792) in paragraph at lines 102--102
+Underfull \hbox (badness 6792) in paragraph at lines 129--129
 []\OT1/ptm/m/n/8.03 weak or un-
  []
 
 
-Underfull \hbox (badness 5622) in paragraph at lines 103--103
+Underfull \hbox (badness 5622) in paragraph at lines 130--130
 []\OT1/ptm/m/n/8.03 format con-fu-
  []
 
-[3]) (./sections/study.tex [4]) (./sections/design.tex [5] [6] [7])
+[3]) (./sections/study.tex [4] [5]) (./sections/design.tex [6] [7])
 (./sections/evaluation.tex
 Underfull \hbox (badness 1590) in paragraph at lines 6--8
 []\OT1/ptm/m/n/10.03749 Detection: does \OT1/ptm/m/sc/10.03749 Bind-Check \OT1/
@@ -892,23 +892,39 @@ ptm/m/n/10.03749 find known
  []
 
 
-Underfull \hbox (badness 1448) in paragraph at lines 45--48
+Underfull \hbox (badness 1448) in paragraph at lines 46--49
 \OT1/ptm/m/n/10.03749 neg-a-tives lo-cated by a later code-level
  []
 
 [8]
-Underfull \hbox (badness 10000) in paragraph at lines 66--68
+Underfull \hbox (badness 10000) in paragraph at lines 72--74
 []\OT1/ptm/m/n/10.03749 Static So-lid-ity an-a-lyz-ers: Slither [[][]12[][]] an
 d
  []
 
-[9] [10]) (./sections/discussion.tex [11]) (./sections/related.tex [12]
-Underfull \hbox (badness 1365) in paragraph at lines 20--35
+[9] [10]
+
+LaTeX Font Warning: Font shape `TS1/ptm/m/sc' undefined
+(Font)              using `TS1/ptm/m/n' instead
+(Font)              for symbol `textdollar' on input line 415.
+
+[11]
+Underfull \hbox (badness 2460) in paragraph at lines 480--481
+[][]\OT1/ptm/m/n/10.03749 All check-set re-ports pre-date the cut-off; on
+ []
+
+) (./sections/discussion.tex [12]) (./sections/related.tex
+Underfull \hbox (badness 1365) in paragraph at lines 19--33
 \OT1/ptm/b/n/10.03749 Circuit, com-piler and zkVM anal-y-sis. \OT1/ptm/m/n/10.0
 3749 Most ZK
  []
 
 ) (./sections/conclusion.tex) (./sections/ethics.tex) (./sections/todolist.tex
+Underfull \hbox (badness 10000) in paragraph at lines 15--2
+[][]\OT1/ptm/m/n/10.03749 The ar-ti-fact ([][]$https : / / anonymous . 4open . 
+science / r /
+ []
+
 [13]) (./main.bbl
 Underfull \hbox (badness 10000) in paragraph at lines 58--62
 []\OT1/ptm/m/n/8.03 Blockaid, ``How ZK-Swap's \TS1/ptm/m/n/8.03 $\OT1/ptm/m/n/8
@@ -933,7 +949,9 @@ Underfull \hbox (badness 2932) in paragraph at lines 74--78
 tps : / / rya-[]sge .
  []
 
+[14
 
+]
 Underfull \hbox (badness 4927) in paragraph at lines 95--97
 []\OT1/ptm/m/n/8.03 ConsenSys Dili-gence, ``Mythril: Se-cu-rity anal-y-sis tool
  for
@@ -945,9 +963,36 @@ Underfull \hbox (badness 1577) in paragraph at lines 114--116
 ,'' [][]$https : / /
  []
 
-[14
+[15]) (./sections/appendix.tex [16]
+Underfull \hbox (badness 5519) in paragraph at lines 83--86
+[]\OT1/ptm/m/it/10.03749 Ground truth. \OT1/ptm/m/n/10.03749 Row L193 in the ro
+und-2
+ []
 
-] [15]) (./sections/appendix.tex)
+
+Underfull \hbox (badness 10000) in paragraph at lines 83--86
+\OT1/ptm/m/n/10.03749 lo-ca-tion file: \OT1/pcr/m/n/10.03749 BoundlessMarket.so
+l\OT1/ptm/m/n/10.03749 ,
+ []
+
+
+Underfull \hbox (badness 2035) in paragraph at lines 83--86
+\OT1/ptm/m/n/10.03749 func-tion \OT1/pcr/m/n/10.03749 _fulfillAndPay\OT1/ptm/m/
+n/10.03749 ; un-bound value
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 86--88
+[]\OT1/ptm/m/it/10.03749 Warning. \OT1/ptm/m/n/10.03749 Warn-ing 1 of
+ []
+
+
+Underfull \hbox (badness 3219) in paragraph at lines 86--88
+\OT1/pcr/m/n/10.03749 tool-v2/L193/vuln.json\OT1/ptm/m/n/10.03749 , at the same
+
+ []
+
+)
 
 ** Conference Paper **
 Before submitting the final camera ready copy, remember to:
@@ -959,47 +1004,53 @@ Before submitting the final camera ready copy, remember to:
  uses only Type 1 fonts and that every step in the generation
  process uses the appropriate paper size.
 
-[16
+[17
+
+] [18
 
 ] (./main.aux)
+
+LaTeX Font Warning: Some font shapes were not available, defaults substituted.
+
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 7367A0D5F0A2C0617C397B0CC191863D;5909.
+(rerunfilecheck)             Checksum: 8C27EEA772188E9068C532F737D3CE5C;6838.
  ) 
 Here is how much of TeX's memory you used:
- 24158 strings out of 480247
- 443764 string characters out of 5896151
- 1091533 words of memory out of 5000000
- 41460 multiletter control sequences out of 15000+600000
- 542630 words of font info for 177 fonts, out of 8000000 for 9000
+ 24192 strings out of 480247
+ 444151 string characters out of 5896151
+ 1084786 words of memory out of 5000000
+ 41474 multiletter control sequences out of 15000+600000
+ 545049 words of font info for 180 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 84i,13n,80p,619b,1339s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 84i,13n,80p,772b,1894s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texliv
-e/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texm
-f-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/share/texlive/texmf-dist/
-fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/t
-ype1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/fonts/type1/pu
-blic/amsfonts/cm/cmmi9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/am
-sfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/
-cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.
-pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss10.pfb></
-usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/sh
-are/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb></usr/share/tex
-live/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/share/texlive/te
-xmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dis
-t/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texlive/texmf-dist/fonts
-/type1/public/amsfonts/cm/cmsy9.pfb></usr/share/texlive/texmf-dist/fonts/type1/
-public/amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public
-/amsfonts/symbols/msam10.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/cou
-rier/ucrb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/courier/ucrr8a.p
-fb></usr/share/texlive/texmf-dist/fonts/type1/urw/courier/ucrro8a.pfb></usr/sha
-re/texlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texm
-f-dist/fonts/type1/urw/times/utmbi8a.pfb></usr/share/texlive/texmf-dist/fonts/t
-ype1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/
-utmri8a.pfb>
-Output written on main.pdf (16 pages, 358247 bytes).
+e/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texm
+f-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist
+/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/share/texlive/texmf-dist/fonts/
+type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
+ublic/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/a
+msfonts/cm/cmmi9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
+/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr
+7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></
+usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss10.pfb></usr/sh
+are/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/te
+xlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb></usr/share/texlive/t
+exmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/share/texlive/texmf-di
+st/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/font
+s/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texlive/texmf-dist/fonts/type1
+/public/amsfonts/cm/cmsy9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public
+/amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfo
+nts/symbols/msam10.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/courier/u
+crb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></u
+sr/share/texlive/texmf-dist/fonts/type1/urw/courier/ucrro8a.pfb></usr/share/tex
+live/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist
+/fonts/type1/urw/times/utmbi8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/u
+rw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8
+a.pfb>
+Output written on main.pdf (18 pages, 388132 bytes).
 PDF statistics:
- 636 PDF objects out of 1000 (max. 8388607)
- 564 compressed objects within 6 object streams
- 170 named destinations out of 1000 (max. 500000)
- 325 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 703 PDF objects out of 1000 (max. 8388607)
+ 626 compressed objects within 7 object streams
+ 188 named destinations out of 1000 (max. 500000)
+ 357 words of extra memory for PDF output out of 10000 (max. 10000000)
 

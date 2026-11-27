@@ -25,17 +25,18 @@ Binding flaws are not hypothetical. In June 2026 an attacker drained \$2.28M
 from the deprecated Aztec Connect rollup contract without breaking any
 cryptography. Each of its batches carried a valid proof, but the contract
 settled only as many rows as a calldata field, \texttt{numRealTxs}, declared,
-and the proof did not bind that field~\cite{aztec-connect-hack}. The
-neighbouring verifier-integration layer fails too. ZKSwap's bridge lost \$5M
-in 2025 to an exit verifier that returned \emph{true} before checking
-anything~\cite{zkswap-hack}, and in 2026 two privacy pools put about
-\$1.4--2.3M at stake, most of it later rescued, because their deployed
-verification keys skipped the second phase of the trusted
-setup~\cite{groth16-setup-exploit,rekt-foom}. In a public record of ZK
-incidents from 2023 to 2026, every circuit-soundness bug in an on-chain
-application was caught before exploitation, while each quantified loss we
-could trace sits at the verifier or at the contract that consumes
-it~\cite{zkp-hacks-record}: more than \$8M in under two years.
+and the proof did not bind that field~\cite{aztec-connect-hack} (P1 in our
+taxonomy). ZKSwap's bridge lost \$5M in 2025 to an exit verifier that
+returned \emph{true} before checking anything~\cite{zkswap-hack}, a
+verifier-integration flaw (P4). These two core-class incidents account for
+about \$7.3M of actual losses. A third incident lies outside our scope: in
+2026 two privacy pools put about \$1.4--2.3M at risk, most of it later
+rescued, because their verification keys skipped the second phase of the
+trusted setup~\cite{groth16-setup-exploit,rekt-foom}, a setup failure rather
+than a binding flaw. In a public record of ZK incidents from 2023 to 2026,
+every circuit-soundness bug in an on-chain application was caught before
+exploitation, while each quantified loss we could trace sits at the verifier
+or at the contract that consumes it~\cite{zkp-hacks-record}.
 % src: rekt.news/aztec-connect-rekt ($2.28M; 14 valid processRollup calls; numRealTxs not bound, BlockSec); blockaid ZKSwap ($5M, 2025-07-09, verifyExitProof returns true); zksecurity 2026-02-27 (Foom ~$1.4-1.5M, Veil ~$5K) + rekt the-unfinished-proof ($2.26M gross); floor 2.28+5+1.4 = 8.68
 
 \begin{figure}[t]
@@ -60,11 +61,13 @@ own recipient. \TODO{F1}{replace with a real, already-fixed audited case (dev sp
 \para{Binding flaws are common and severe, and today's tools are blind
 to them}
 We collected 8,578 public audit reports and labeled 264 candidate
-findings about proof use. 103 of them are binding flaws, spread over 44 of the 68 project
-families, and 81\% of those with a severity rating are Critical or High
-(Section~\ref{sec:study}). Yet, on the audited flaws of our test set, the
-Solidity analyzers Slither and Mythril report none at the right location and
-mechanism. The circuit analyzers circomspect and Picus cannot analyze most
+findings about proof use. 87 of them are core binding flaws (103 with
+adjacent proof-system bugs), spread over 43 of the 68 project families, and
+78\% of those with a severity rating are Critical or High; 55 of the 311
+in-scope reports contain at least one (Section~\ref{sec:study}). Yet, on the
+audited flaws of our test set, the Solidity analyzers Slither and Mythril
+report none at the right location and mechanism, on the 8 of 14 targets they
+could analyze. The circuit analyzers circomspect and Picus cannot analyze most
 targets, because most binding flaws are not in a circuit. A property-based
 fuzzer with generic properties finds none of them
 (Section~\ref{sec:eval}). The reason is structural. A binding flaw breaks no
@@ -72,13 +75,12 @@ rule of the contract and no constraint of the circuit. It breaks an
 \emph{intended correspondence} between the two, which neither artifact states.
 
 \para{This is not input validation}
-Input validation checks a value against the program's own rules. Binding
-checks a value against a statement that was proven elsewhere, in a different
-language, by a different component. A recipient that passes every
-contract-level check (non-zero, not blacklisted) is still unbound if the proof
-did not commit to it. That is why taint analysis, symbolic execution and
-generic fuzzing do not flag it, and why a fuzzer finds these flaws once it is
-given the binding specification: 5 of 13, against 0 without it.
+Input validation checks a value against the program's own rules; binding
+checks it against a statement proven elsewhere, by a different component. A
+recipient that passes every contract-level check is still unbound if the
+proof did not commit to it, which is why generic analyses miss it and why a
+fuzzer finds these flaws once given the binding specification: 5 of 13,
+against 0 without it.
 
 The problem has been observed before. Chaliasos et al.\ report 13
 integration-layer bugs among SNARK vulnerabilities, 9 of them unchecked public
@@ -87,7 +89,10 @@ bug trackers document single instances such as nullifiers aliased modulo the
 field order. We make the property precise, measure it at a larger scale
 \DEMO{(49 of our findings fall in their integration layer, 3.8 times their
 count, and one of our two most common patterns has no category of its own there)}, and
-build the detector that this line of work calls for.
+build the detector that this line of work calls for. The two-ledger view
+names what a taxonomy of bug locations does not: the missing equality between
+a statement row and an effect row, each correct on its own
+(Section~\ref{sec:eval-misses}).
 
 \para{This work}
 We first make the property precise. We describe a consumer by two ledgers: a
@@ -99,23 +104,24 @@ misuse: unsigned fields, missing domain separation, nonce reuse, weak or
 unpinned keys, and format confusion.
 
 We then build \tool{}, which makes an LLM construct both ledgers explicitly,
-row by row, under a fixed procedure derived from development data only. The
-LLM queries deterministic analysis tools for facts and, like an auditor
-\DEMO{writing a proof of concept, writes and runs attack tests on a local chain,
-reporting each warning with the paths it tried and the test it ran. Humans
-adjudicate every warning that matches no audit label.}
-On 27 injected binding mutants a first version of \tool{} finds 22, and on 22
-test-set audited flaws it finds 6 at the exact location and mechanism (9 at
-the mechanism level). The existing analyzers find none of the mutants and none
-of the round-1 flaws. Tracing every miss shows that the brain read the flawed
+row by row, under a fixed procedure derived from development data only,
+query deterministic tools for facts, and \DEMO{write and run attack tests on a
+local chain, which it attaches to each warning.}
+On 22 test-set audited flaws a first version of \tool{} finds 6 at the
+exact location and mechanism (9 at the mechanism level), all of them in
+Solidity consumers, and 22 of 27 injected mutants in three small hosts. The
+existing analyzers find none of the flaws they could analyze. Tracing every miss shows that the brain read the flawed
 code each time and then judged it wrongly, often about what a zkVM guest or
 circuit commits. The final version therefore adds a knowledge base per proof
 system and a second look that challenges every lenient verdict.
-\DEMO{On held-out data it finds \TBD{} of 37 new injected flaws and \TBD{} of
-7 audited flaws, against 2 of 7 for the first version.}
-\DEMO{On 25 recently audited applications it found three previously unknown
-binding flaws, all confirmed with real proofs on a local chain and reported to
-the maintainers.}
+\DEMO{We evaluate the two additions together. Frozen before any held-out run,
+the final version finds 10 of 14 held-out audited flaws (71\%, median of
+three runs), against 2 of 7 on the same check set for the first version and
+4 of 14 for the same LLM without the procedure under equal runs. On 37 new
+injected flaws in five larger hosts it finds 31, including 8 of the 11
+circuit- or guest-side ones. On 25 recently audited applications it found
+three previously unknown binding flaws, each confirmed with a real proof on a
+local chain and reported to the maintainers.}
 
 \para{Contributions}
 \begin{itemize}
@@ -123,7 +129,7 @@ the maintainers.}
 two ledgers, three conditions, and five patterns with signature-misuse
 analogues (Section~\ref{sec:definition}).
 \item \textbf{To our knowledge, the first measurement study} of the class: 8,578 audit reports,
-264 labeled findings, and 103 binding flaws, with prevalence, severity,
+264 labeled findings, and 87 core binding flaws, with prevalence, severity,
 patterns, and trends (Section~\ref{sec:study}).
 \item \textbf{\tool{}}, a detector that combines an LLM with a ledger-based
 skill procedure, deterministic tools, per-proof-system knowledge, a

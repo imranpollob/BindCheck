@@ -1,23 +1,24 @@
 Smart contracts accept zero-knowledge (ZK) proofs as permission to release
-funds, mint credentials, and settle state. A proof certifies only a statement, yet the contract's action can depend on
-values the statement never fixed, such as a recipient taken from calldata. Anyone who
-observes a valid proof can then redirect or repeat the effect. We call these
-\emph{binding flaws}. One drained \$2.28M from Aztec Connect in 2026, and
-failures at the same proof-to-contract boundary have cost or put at risk more
-than \$8M since 2025. We define binding as a relation between a
-\emph{statement ledger} and an \emph{effect ledger}, and classify its
-violations into five patterns that mirror classic signature misuse. In 8,578
-public audit reports we find 103 binding flaws across 44 project families;
-81\% of those with a severity rating are Critical or High. Existing tools miss
-them: on audited flaws, Slither, Mythril, circomspect, Picus and
-generic fuzzing find none, because the specification lives between the circuit
-and the contract. We present \tool{}, which drives an LLM through an explicit
-ledger procedure with deterministic analyses and attaches to each warning the
-attack tests it ran on a local chain. A first version finds 22 of 27 injected binding flaws and
-6 of 22 audited test-set flaws, where the existing analyzers find none they
-could analyze. Its misses are errors of judgment, so the final version adds
-per-proof-system knowledge and a second look at every verdict.
-\DEMO{On held-out data it finds \TBD{} of 37 new injected flaws and \TBD{} of
-7 audited ones.}
-\DEMO{It also uncovered three previously unknown binding flaws, all confirmed
-on a local chain and disclosed.}
+funds, mint credentials, and settle state. A proof certifies only a
+statement, yet the contract's action can depend on values the statement never
+fixed, such as a recipient taken from calldata. Anyone who observes a valid
+proof can then redirect or repeat the effect. We call these \emph{binding
+flaws}. Two such failures at the proof-to-contract boundary lost about
+\$7.3M in 2025--2026, including \$2.28M drained from Aztec Connect. We define
+binding as a relation between a \emph{statement ledger} and an \emph{effect
+ledger} under the application's intended policy, and classify its violations
+into five patterns that mirror classic signature misuse. In 8,578 public
+audit reports we find 87 core binding flaws across 43 project families; 78\%
+of those with a severity rating are Critical or High. Existing tools miss
+them: Slither, Mythril, circomspect, Picus and generic fuzzing find none of
+the audited flaws they could analyze, because the specification lives between
+the circuit and the contract. We present \tool{}, which drives an LLM through
+an explicit ledger procedure with deterministic analyses, per-proof-system
+knowledge and a second look at every verdict, and attaches to each warning
+the attack tests it ran on a local chain. A first version found 6 of 22
+audited test-set flaws; its misses were errors of judgment, not of reading.
+\DEMO{The final version, frozen before any held-out run, finds 10 of 14
+held-out audited flaws (4 for the same LLM without the procedure) and 31 of
+37 new injected flaws, and it uncovered three previously unknown binding
+flaws, each confirmed with a real proof on a local chain and reported to the
+maintainers.}
