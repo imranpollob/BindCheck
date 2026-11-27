@@ -49,6 +49,33 @@ H.~Wen, J.~Stephens, Y.~Chen, K.~Ferles, S.~Pailoor, K.~Charbonnet, I.~Dillig,
   \url{https://www.usenix.org/conference/usenixsecurity24/presentation/wen}
 \BIBentrySTDinterwordspacing
 
+\bibitem{aztec-connect-hack}
+{Rekt}, ``{Aztec Connect} -- rekt,''
+  \url{https://rekt.news/aztec-connect-rekt}, 2026, published 2026-06-18; cites
+  the BlockSec and SlowMist analyses. Accessed 2026-11-26.
+
+\bibitem{zkswap-hack}
+{Blockaid}, ``How {ZKSwap}'s \$5{M} exploit could've been prevented with
+  onchain monitoring,''
+  \url{https://www.blockaid.io/blog/how-zkswaps-5m-exploit-couldve-been-prevented-with-onchain-monitoring},
+  2025, accessed 2026-11-26.
+
+\bibitem{groth16-setup-exploit}
+S.~Chaliasos and H.~Pham, ``The first {ZK} exploits happened, and they weren't
+  what we expected,'' zkSecurity blog,
+  \url{https://blog.zksecurity.xyz/posts/groth16-setup-exploit/}, 2026,
+  accessed 2026-11-26.
+
+\bibitem{rekt-foom}
+{Rekt}, ``The unfinished proof,'' \url{https://rekt.news/the-unfinished-proof},
+  2026, accessed 2026-11-26.
+
+\bibitem{zkp-hacks-record}
+{Ryan S.}, ``Zero-knowledge proof hacks --- a documented record of exploits and
+  vulnerabilities (2023--2026),''
+  \url{https://rya-sge.github.io/access-denied/2026/06/19/zkp-hacks-history/},
+  2026, accessed 2026-11-26.
+
 \bibitem{groth16}
 J.~Groth, ``On the size of pairing-based non-interactive arguments,'' in
   \emph{EUROCRYPT}, ser. LNCS, 2016.

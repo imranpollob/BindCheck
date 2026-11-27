@@ -19,11 +19,21 @@ project appears in both sets. The split is seeded and was fixed before anyone
 read the test code. Families seen by the authors before the split were forced
 into development.
 % src: dataset/labels-v1/build_v1.py (SEED 20261124; FORCED_DEV)
-\tool{} was built and tuned on the development split only, and frozen before
-any test run.
+Each version of \tool{} was built and tuned on development data only and
+frozen before its test run. The second version (v2) was evaluated on the test
+families of benchmark B1. We then inspected its misses, so B1 can no longer
+test a later version. Under a dated amendment to our pre-registration, made
+before any later version ran on held-out data, the 13 B1 families moved into
+development: 6 families (15 flaws) for tuning, and 7 families (7 flaws, 3
+hard negatives), chosen by a seeded draw, as a \emph{held check set} that the
+building process never sees and that is scored once. The final version
+(Section~\ref{sec:eval-final}) is evaluated on that check set, on fresh
+benchmarks, and in the hunt.
+% src: BindCheck/paper/eurosp/PREREG-v3.md amendment A1; mvp/tool/dev/split-v4.json (seed 20261126)
 
 \para{Benchmarks}
-We use two benchmarks.
+Benchmarks B1 and B2 measure v2; Section~\ref{sec:eval-final} adds the fresh
+ones.
 \begin{itemize}
 \item \textbf{B1, audit test set.} These are the audited vulnerable
 commits of the test families, with the flaw located in code by the
@@ -78,10 +88,10 @@ judge it independently from its evidence package alone, using conditions
 C1--C3 as the rubric. They see neither the tool's ranking nor each other's
 verdict, and resolve disagreements afterwards by discussion. We report their
 agreement before resolution. The phase-2 protocol was fixed before the
-\tool{} v3 freeze, so phase~2 is blind on B3, round~3 and the hunt. On B1
-and B2 it is not: the v2 warnings there were seen during development of v3,
+final freeze, so phase~2 is blind on the check set, B3, round~3 and the hunt. On B1
+and B2 it is not: the v2 warnings there were seen during later development,
 and we mark those rows accordingly.}
-\TODO{E5}{phase-2 adjudication: pre-register rubric and blinding before the v3 freeze; two raters; Cohen's kappa; TP / policy-bounded / FP per benchmark}
+\TODO{E5}{phase-2 adjudication: pre-register rubric and blinding before the final freeze; two raters; Cohen's kappa; TP / policy-bounded / FP per benchmark}
 
 \para{Scoring}
 The matching rules were committed before each tool ran. One amendment (v1.1)
@@ -125,7 +135,7 @@ Plain LLM & $\circ$ & $\circ$ & \checkmark & $\circ$ \\
 
 \begin{table*}[t]
 \centering
-\caption{Detection on the audit test set B1 (strict hits / positives;
+\caption{Detection by \tool{} v2 and the baselines on the audit test set B1 (strict hits / positives;
 95\% Wilson interval). ``Sup.'' = targets the tool could analyze, out of
 26 in round~1. Specificity counts fixed versions and hard negatives without a
 warning at the flaw's location (both rounds for Slither and \tool{}, round~1 otherwise). The plain-LLM arm
@@ -143,7 +153,7 @@ Picus & 0/26 & unsupported & unsupported & -- & -- \\
 Foundry, out of box$^\dagger$ & 13 & \multicolumn{2}{c}{0/13 (R1+R2)} & -- & -- \\
 Foundry, assisted$^\dagger$ & 13 & \multicolumn{2}{c}{5/13 (0.18--0.64)} & 4/5 & 3/3 \\
 Plain LLM (same model) & 26/26 & 3/14 (0.08--0.48) & -- & 6/6 & 6/6 \\
-\tool{} & 26/26 & 4/14 (0.12--0.55) & 2/8 (0.07--0.59) & 12/12 & 12/14 \\
+\tool{} v2 & 26/26 & 4/14 (0.12--0.55) & 2/8 (0.07--0.59) & 12/12 & 12/14 \\
 \quad mechanism-level & & 5/14 & 4/8 & & \\
 \bottomrule
 \multicolumn{6}{@{}p{0.95\textwidth}}{\scriptsize $^\dagger$Fuzzing covers EVM-side flaws of both rounds; circuit- and guest-side flaws are unsupported. Harnesses were wired by hand in 5--45 min per target. $^\ddagger$Round-2 run stopped by memory limits; resumable.}
@@ -205,10 +215,8 @@ noise: an LLM triage of every warning (not re-verified by hand) judges 77\%
 of 26 on round~2 to be clearly not binding.
 \TODO{RV5}{hand-verify the triage of the 65 test warnings; report as precision with a second rater}
 % src: mvp/eval/RESULTS-precision.md (eval 7b5fa137): R1 39/26, TP+plausible 30/39; R2 26/22, 15/26, not-binding 3
-Because the miss analysis below inspects round-1 and round-2 items, no later
-version of \tool{} is evaluated on them; later versions are evaluated only on
-fresh benchmarks (Section~\ref{sec:eval-b3}).
-\TODO{E1b}{v3 (v2 + exploration loop, O1--O6, depth pass if V-C wins) built on dev only, one run on a fresh held-out round 3}
+Because we later inspected the round-1 and round-2 misses, these items count
+as development data for any later version (Section~\ref{sec:eval-setup}).
 
 \begin{table}[t]
 \centering
@@ -261,47 +269,28 @@ have not confirmed.
 
 \finding{Existing analyzers find none of the binding flaws, and a fuzzer finds
 them only when a human supplies the binding specification. \tool{} infers
-that specification and finds 22 of 27 injected flaws and 6 of 22 test-set
+that specification: v2 finds 22 of 27 injected flaws and 6 of 22 test-set
 audited ones (2 of 8 on the clean round; 9 of 22 at the mechanism level). Real
 flaws remain hard: half of the round-2 misses are zkVM guest-side.}
 
-\subsection{Fresh benchmarks for \tool{} v3}\label{sec:eval-b3}
+\subsection{Why \tool{} v2 misses}\label{sec:eval-misses}
 
-\DEMO{\tool{} v3 keeps the frozen ledger procedure and adds the exploration
-loop (Section~\ref{sec:design-explore}). It was built on development data only
-and evaluated once on two benchmarks frozen before its freeze: B3, 35 binding
-mutants injected into five open-source applications by operators derived from
-the labeled findings, with clean hosts and bound decoys as controls, and
-round~3, \TBD{} audited flaws from test families located by a new code-level
-pass. On B3, v3 finds \TBD{} of 35 with \TBD{} false alarms on controls; on
-round~3, \TBD{} of \TBD{}.}
-\TODO{E12/D7}{B3 (mutants3 lane) and round 3; protocol pre-registered before the v3 freeze (RV20)}
-
-\subsection{Why \tool{} misses}\label{sec:eval-misses}
-
-We inspected every positive that \tool{} missed, on development and test
-data. This analysis uses test items, which is why no later version is
-evaluated on rounds~1 and~2. On round~2, three of the six misses are flaws whose unbound value lives
-in a zkVM guest program or host configuration (Rust), not in the consumer
-contract. One is a cross-deployment context flaw (chain ID and contract address
-not in the statement) for which \tool{} raised no warning. The other two are
-found only at the mechanism level. Three further causes recur on development
-data:
-\begin{itemize}
-\item \emph{Parser differentials.} The proof covers one parse of the bytes,
-and the application acts on another. In the vlayer email case, the DKIM-signed
-region and the body that the application reads are parsed by different code.
-No ledger row is wrong, and the flaw lies inside a parser.
-\item \emph{SDK-level validation.} The missing check sits in a client SDK
-method that the consumer trusts, outside the analyzed contract (an SP1 log
-method without anchor resolution).
-\item \emph{Deep dependencies.} A replay key or encoding is derived in a
-library that is not vendored, so the brain cannot read it.
-\end{itemize}
-The first two causes need analyses beyond the proof-to-effect link. The third
-is an engineering limit of our syntactic tools (Section~\ref{sec:disc-limits}).
-% src: mvp/tool/FREEZE-v2.md known weaknesses 3 (L003 parser differential, L008 SDK method)
-\TODO{E11}{classify all 16 test misses into these causes, with counts}
+We traced every miss on the 28 development flaws (the original 13 plus the 15
+tuning flaws from B1) through the scan transcripts. v2 finds 13 of the 28 at
+the strict level. For each of the 15 misses we recorded the earliest stage at which the flaw
+was lost. \emph{Not read}: none; the flawed code reached the brain in every
+case. \emph{Wrong verdict}: 7, judged bound or unknown (5) or found and then
+withdrawn or folded into another warning (2), with reasons such as ``the label
+swap is naming only'' or ``the field's reader is not vendored''. \emph{Other
+end}: 4, described correctly but at the other end of the binding.
+\emph{Never asked}: 3, a missing chain ID in a signed message, a DKIM parser
+differential, and a library getter without its sibling's anchor check.
+\emph{Other mechanism}: 1. Twelve misses need reasoning about what the proof side commits. Flaws located
+in Rust guest code were found in 1 of 6 cases, and the context pattern P2 in 3
+of 10. Variance matters as well: a second run agreed on 12 of 15 tuning items,
+and five hits were found in some runs only.
+% src: mvp/tool/MISS-MAP.md (branch v4-miss 8aad593)
+The final version therefore fixes judgment, not reading.
 
 \para{Case study}
 In a round-2 proof marketplace, \tool{} reports that the fulfillment
@@ -314,6 +303,21 @@ request is marked fulfilled. This matches the auditors' finding. Slither and
 Mythril report nothing at that location. The assisted fuzzer confirms the
 same flaw, but only once a human has written the harness.
 % src: mvp/eval/runs/tool-v2/L193/vuln.json (warning text); RESULTS-tool-v2.md (L193 strict Y); fuzz/RESULTS-fuzz.md (L193 HIT)
+
+
+\subsection{The final version on held-out data}\label{sec:eval-final}
+
+\DEMO{The final version adds the second look and the stack knowledge to v2 and
+keeps the exploration loop. It was built on the 28 development flaws and
+evaluated once on three held-out sets fixed before its freeze: the 7 flaws of
+the held check set; B3, 37 binding mutants (11 circuit- or guest-side) injected
+into five open-source applications by operators derived from the labeled
+findings, with five decoys and five clean hosts; and round~3, \TBD{} audited
+flaws from test families never used before. On development data it finds
+\TBD{} of 28 (v2: 13). On the check set it finds \TBD{} of 7 (v2: 2); on B3,
+\TBD{} of 37 with \TBD{} false alarms on decoys; on round~3, \TBD{} of
+\TBD{}. Each result is the median of three runs.}
+\TODO{E12/D7}{freeze v4; v4-check once; B3 and round 3 x3 runs under PREREG A1}
 
 \subsection{RQ3: New binding flaws}\label{sec:eval-rq3}
 
@@ -354,10 +358,8 @@ phase-2 adjudication, where the raters agreed on 77 before discussion
 bounded by an access or value policy, and 52 to be false positives. Counting
 policy-bounded warnings as false, overall precision is 44\% (52 of 118; 95\%
 Wilson CI 35--53\%). The evidence package carried the decision: 17 of the 19 real flaws
-came with a succeeding attack test, against 3 of the 52 false positives. In
-those three, the effects differed only in a field outside the effect ledger,
-such as an event argument, and the raters rejected them. Median adjudication
-time was 6 minutes for a warning with a test and 14 minutes without one.}
+came with a succeeding attack test, against 3 of the 52 false positives. Median adjudication
+time was 6 minutes with a test and 14 without.}
 
 \begin{table}[t]
 \centering
@@ -393,7 +395,7 @@ The exploration loop adds a median of \$0.39 and a maximum of \$2.40 per scan
 on development data, most of it for drafting test scaffolds (80\%); the
 template attempts cost nothing.
 % src: mvp/tool/BASE-REPORT.md (gate 4 cost split)
-\DEMO{On the test benchmarks, v3 costs \$\TBD{} per scan in total.}
+\DEMO{The final version costs \$\TBD{} per scan in total on the held-out benchmarks.}
 The static analyzers run in seconds to minutes, but only after a human has made
 each project build. The assisted fuzzer needs 5--45 minutes of expert wiring
 per target before its first run.
@@ -403,7 +405,7 @@ per target before its first run.
 
 \para{Run-to-run variance}
 LLM output varies between runs.
-The numbers above come from one run per target.
+The B1 and B2 numbers above come from one run per target.
 \DEMO{Across three independent runs, \tool{} finds 2--3 of 8 round-2 flaws
 strictly and 21--23 of 27 mutants.}
 \TODO{E2}{three full runs on B1 and B2; report min/median/max}

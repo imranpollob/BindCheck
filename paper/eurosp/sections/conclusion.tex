@@ -6,8 +6,10 @@ classified its violations into five patterns that mirror classic signature
 misuse, and showed that they make up 103 auditor-reported findings, 81\% of
 them rated Critical or High. Existing analyzers do not find them, because
 neither the circuit nor the contract alone carries the specification. \tool{}
-reconstructs that specification as two explicit ledgers. It finds 22 of 27
+reconstructs that specification as two explicit ledgers. Its first version finds 22 of 27
 injected flaws and 6 of 22 test-set audited ones, where existing analyzers
-find none of those they could analyze, \DEMO{and it uncovered three new ones}. Guest-side zkVM binding is
-the main open problem.
+find none of those they could analyze. Its misses were judgment errors, which
+the final version targets with proof-system knowledge and a second look
+\DEMO{(\TBD{} of 37 held-out mutants, \TBD{} of 7 held-out audited flaws) and
+it uncovered three new flaws}.
 Binding should be checked as routinely as a signature.

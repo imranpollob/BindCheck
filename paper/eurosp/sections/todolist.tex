@@ -1,0 +1,81 @@
+% Draft-only backlog, mirrored from TODO.md. Remove before submission.
+\clearpage
+\section*{\textcolor{red}{Draft backlog (not part of the paper)}}
+{\color{red}\small
+Status as of 2026-11-27. The IDs match \texttt{TODO.md} and the red notes in
+the text. Red text in the body holds expected results until these items close.
+
+\para{Tool and results (running now)}
+\begin{itemize}\setlength\itemsep{0pt}
+\item \textbf{DEC-4/4b} v4 build (second look and stack knowledge). It is
+being measured on 28 development flaws, with 2 runs per item. The two-day
+push ends 2026-11-29. A step is kept only if it gains at least 2 hits and adds
+no more than 1 false alarm per 10 targets.
+\item \textbf{v4gm} Guest-side practice mutants (16--20 plus 4 decoys,
+answers held from the build lane). These are the signal before B3.
+\item \textbf{E12/D7} After the v4 freeze:
+  \begin{itemize}\setlength\itemsep{0pt}
+  \item the check set, scored once;
+  \item B3 (37 mutants), 3 runs;
+  \item round~3, 3 runs.
+  \end{itemize}
+  This fills §6.4, the abstract, the intro and the conclusion.
+\item \textbf{E3} The hunt: scan new audited ZK projects, confirm with a
+real-proof test, and disclose privately. This fills RQ3, Table~6 and the
+abstract.
+\item \textbf{E5} Phase-2 rating of all unmatched warnings by two humans,
+with $\kappa$. This fills RQ4 and Table~7.
+\item \textbf{E2} Variance: min/median/max over 3 runs, for the final numbers.
+\item \textbf{E6} Contamination split: detection by report date vs.\ the
+model's cutoff.
+\item \textbf{E8, E10, E13, E9} Missing cells in the static-tool tables:
+  \begin{itemize}\setlength\itemsep{0pt}
+  \item static tools on round~2 (E8);
+  \item false alarms on clean B2 hosts (E10);
+  \item vacuous Mythril runs (E13);
+  \item honest-path check on two B2 hosts (E9).
+  \end{itemize}
+\item \textbf{RV5} A human check of the warning-triage numbers in ``Warning
+volume''.
+\end{itemize}
+
+\para{Your decisions}
+\begin{itemize}\setlength\itemsep{0pt}
+\item Name rater~2. This blocks E5 and D1.
+\item Hunt scope (which projects; audited commits vs.\ live versions) and the
+disclosure window (default 90 days).
+\item The round~3 list: pin-checked and labeled, then appended to the
+pre-registration before the first run.
+\item \textbf{W1} Title (suggested: ``Valid Proof, Wrong Effect: Binding Flaws
+in Zero-Knowledge Applications'').
+\item \textbf{W3/RV3} The P4 split (17 core + 16 adjacent), and whether the
+headline uses 87 core findings.
+\item \textbf{D5} Your 15-item spot-check of the D3 layer tags.
+\item \textbf{RV1} Whether to add the plain-LLM arm on round~2 and B2.
+\item Commit the pre-registration amendment A1.
+\end{itemize}
+
+\para{Data and writing fixes}
+\begin{itemize}\setlength\itemsep{0pt}
+\item \textbf{D1} Blind relabel of 30 items and $\kappa$ for the dataset.
+\item \textbf{F1} Make Fig.~1 a real case. Aztec Connect is the candidate.
+\item \textbf{T1} A short formal property, with C1--C3 as its negation.
+\item \textbf{RV4} A policy-parameterized definition (intended open fields).
+\item \textbf{RV14} The year counts sum to 97, not 103.
+\item \textbf{RV6, RV7, RV15} Reconcile:
+  \begin{itemize}\setlength\itemsep{0pt}
+  \item the fixed-version and scan counts;
+  \item the triage-sample extrapolation;
+  \item the two meanings of ``68''.
+  \end{itemize}
+\item \textbf{RV16, RV17} Disclosure timeline; exact model ID and run dates;
+ship the transcripts.
+\item \textbf{RV22} An alternate abstract for each hunt outcome.
+\item \textbf{W5, W8} Anonymized artifact link; matching-rules appendix.
+\item \textbf{RV12, RV13, RV19} Rendering and label fixes in the figures and
+tables.
+\item \textbf{Nice to have:} D4 (fix patterns), D6 (preventing
+constructions), E7 (open-weight brain), RV8 (taint baseline), RV18
+(component contribution), W6, W7.
+\end{itemize}
+}

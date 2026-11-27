@@ -85,8 +85,9 @@ artifact.
 
 \tool{} needs an LLM and costs about one dollar per scan. Its tools are
 syntactic, so deep library internals and dependencies that are not vendored
-are blind spots. It misses parser differentials (where two components parse
-the same bytes differently) and validation gaps inside SDK methods. Our
+are blind spots. Parser differentials and validation gaps inside SDK methods
+are reached only by the second look's probes, and its knowledge base covers
+ten proof systems and domains; others fall back to the generic procedure. Our
 exploration loop targets EVM consumers. Flaws whose effect is committed
 in a zkVM host or off chain stop at E1. Its reach is limited by what can be
 deployed automatically: on development data, real-proof tests were possible

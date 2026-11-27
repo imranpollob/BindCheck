@@ -114,4 +114,16 @@ Each warning is matched against the benchmark labels under the rules in §2.
 - No build lane sees any of the material in this file.
 
 ## Amendments
-(none yet)
+
+### A1 — 2026-11-26: tool under test becomes v4; rounds 1–2 released to dev
+- **Reason.** Frozen v3 adds no recall over v2 (dev strict 9/13 for both; test v2 6/22). The author decided to build a stronger v4 before any blind run. **No v3 result on B3, round 3 or the hunt has been run or seen.**
+- **Tool under test.** BindCheck v4, built on dev only. Its tag and file hashes are appended here at freeze. Sections 1–7 apply to v4 unchanged, except as below.
+- **Rounds 1 and 2 → dev.** Their 13 families leave the test split. They were already scored on v2 and their misses inspected. v4 numbers on these items are **dev numbers** and are never reported as held-out.
+  - Split of the 13 families (seed 20261126; rule: check holds 6–8 positives, ≥1 Rust-side positive, ≥2 hard negatives; Boundless forced to tune): **v4-tune** 6 families (15 positives, 11 hard negatives); **v4-check** 7 families (7 positives, 3 hard negatives), held by the orchestrator, scored as aggregate counts only. File: `mvp/tool/dev/split-v4.json`.
+- **Round 3.** Restricted to binding items from test families that were not used in rounds 1–2 and are not v4-check. Report-only items from released families are no longer round-3 eligible. The list is still **[author]** and is frozen before the first v4 run on it.
+- **Knowledge.** v4 may carry knowledge files distilled from dev findings (dev + v4-tune families, report-only items included) and official SDK documentation. Nothing from test families, B3 hosts, or audit write-ups fetched from the web.
+- **v4-check is looked at once.** It is scored a single time, on the v4 freeze candidate (3 runs, as §3). Any change after that look makes v4-check a dev set, and it is reported as such.
+- **Dev-v4 numbers are in-sample.** The miss map and the knowledge files were derived from the dev-v4 positives. Dev-v4 recall is reported only as a development number; held-out claims rest on v4-check, B3, round 3 and the hunt.
+- **Findings, not locations.** v4 may report one flaw at several locations (proof side, consumer, helper) under one shared finding ID. Recall credits a finding if any of its locations matches. Volume, precision, false alarms on decoys and hard negatives, and phase-2 rating all count **findings**, not locations.
+- **Equal run counts.** Any v4-vs-v2 comparison uses the same number of runs per item for both, and specificity and volume come from the same runs as recall.
+- **Cost cap.** The $3 per-scan cap is lifted for development. The v4 freeze fixes a new cap, which RQ5 reports.

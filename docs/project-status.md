@@ -721,3 +721,6 @@ For every bounded task that changes project state, update the relevant node and
 append one row above. Link to the report or evidence that supports the status.
 Never remove an old row; corrections should be new rows that identify what
 changed. Pure discussion or status checks do not create project checkpoints.
+
+- 2026-11-26 DEC-4: author chose to build v4 for recall before any blind run. Rounds 1–2 released to dev (13 families; v4-tune 15 pos / v4-check 7 pos held). PREREG amendment A1 written (uncommitted). B3 and round 3 on hold. Lanes: v4miss (miss map), v4kb (knowledge files).
+- 2026-11-26 v4miss done: dev-v4 strict 13/28 of record; misses C7 E4 B3 D1 A0 F0; ceiling E+C 24/28. v4build lane launched (branch v4 = v3-base + v4-miss + v4-kb). PREREG A1 extended: v4-check looked at once; findings not locations; equal run counts.

@@ -104,11 +104,15 @@ LLM queries deterministic analysis tools for facts and, like an auditor
 \DEMO{writing a proof of concept, writes and runs attack tests on a local chain,
 reporting each warning with the paths it tried and the test it ran. Humans
 adjudicate every warning that matches no audit label.}
-On 27 injected binding mutants \tool{} finds 22, and on 22 test-set audited
-flaws it finds 6 at the exact location and mechanism (2 of 8 on the clean
-round; 9 of 22 at the mechanism level). The existing analyzers find none of the mutants and none of the
-round-1 flaws. Real flaws remain hard:
-half of the misses on the clean round sit in zkVM guest programs.
+On 27 injected binding mutants a first version of \tool{} finds 22, and on 22
+test-set audited flaws it finds 6 at the exact location and mechanism (9 at
+the mechanism level). The existing analyzers find none of the mutants and none
+of the round-1 flaws. Tracing every miss shows that the brain read the flawed
+code each time and then judged it wrongly, often about what a zkVM guest or
+circuit commits. The final version therefore adds a knowledge base per proof
+system and a second look that challenges every lenient verdict.
+\DEMO{On held-out data it finds \TBD{} of 37 new injected flaws and \TBD{} of
+7 audited flaws, against 2 of 7 for the first version.}
 \DEMO{On 25 recently audited applications it found three previously unknown
 binding flaws, all confirmed with real proofs on a local chain and reported to
 the maintainers.}
@@ -122,8 +126,9 @@ analogues (Section~\ref{sec:definition}).
 264 labeled findings, and 103 binding flaws, with prevalence, severity,
 patterns, and trends (Section~\ref{sec:study}).
 \item \textbf{\tool{}}, a detector that combines an LLM with a ledger-based
-skill procedure, deterministic tools, and \DEMO{an exploration loop that attaches
-executed attack tests to its warnings} (Section~\ref{sec:design}).
+skill procedure, deterministic tools, per-proof-system knowledge, a
+second-look stage, and an exploration loop that attaches executed attack tests
+to its warnings (Section~\ref{sec:design}).
 \item \textbf{An evaluation} against static, circuit, fuzzing and LLM
 baselines on real audited flaws and on a new binding-mutant benchmark,
 \DEMO{including three new flaws confirmed with real-proof tests} (Section~\ref{sec:eval}).

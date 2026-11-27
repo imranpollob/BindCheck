@@ -5,7 +5,10 @@ two artifacts that no single analyzer reads together, and that auditors find
 them by reasoning about intent. \tool{} mechanizes that reasoning. An LLM
 \emph{brain} reads the target. A fixed \emph{skill procedure} forces the brain
 to build the two ledgers of Section~\ref{sec:def-ledgers} explicitly, row by
-row. A set of \emph{analysis tools} supplies facts the brain should not guess.
+row. A set of \emph{analysis tools} supplies facts the brain should not guess,
+and a \emph{stack knowledge base} tells it what a proof in the detected proof
+system actually commits. A \emph{second-look} stage then challenges every
+verdict that would let a flaw slip through.
 An \emph{exploration loop} then lets the brain work like an auditor writing a
 proof of concept: it plans an attack on each unbound row, writes it as a test,
 runs it in a sandbox, reads the outcome, and tries another path when the test
@@ -26,15 +29,17 @@ minutes. Figure~\ref{fig:arch} shows the architecture.
 \node[st,right=of s0] (s1) {1. Effect ledger\\(entry, effect, value, verdict)};
 \node[st,right=of s1] (s2) {2. Statement ledger\\(public value, meaning, constraint)};
 \node[st,right=of s2] (s3) {3. Pattern checks\\P1--P5 playbooks, follow-through};
-\node[st,right=of s3] (s4) {4. Attacker pass\\and final review};
+\node[st,right=of s3] (s4) {4. Attacker pass,\\5. second look};
 \draw[ar] (t)--(s0); \draw[ar] (s0)--(s1); \draw[ar] (s1)--(s2); \draw[ar] (s2)--(s3); \draw[ar] (s3)--(s4);
 \draw[ar,dashed] (s2.south) to[bend left=25] node[below,font=\tiny]{coverage re-prompt} (s1.south);
 \node[tl,below=0.75cm of s0] (a) {inventory: entries, effects, publics};
 \node[tl,below=0.75cm of s1] (b) {verifiers, pins, decode};
 \node[tl,below=0.75cm of s2] (c) {def / callers / callees};
 \node[tl,below=0.75cm of s3] (d) {replay, P4 checks};
+\node[tl,below=0.75cm of s4,fill=orange!10] (k) {stack knowledge (per proof system)};
 \node[draw,dashed,fit=(a)(b)(c)(d),inner sep=3pt,label={[font=\tiny]below:analysis tools (deterministic)}] (tools) {};
 \foreach \x in {a,b,c,d} \draw[{Latex}-{Latex},blue!50] (\x) -- (\x |- s0.south);
+\draw[-{Latex},orange!70] (k.north west) -- (s2.south east);
 \node[ev,right=0.6cm of s4,yshift=0.9cm] (e1) {Warning\\(ledger row, reasoning)};
 \node[ev,below=0.25cm of e1] (e2) {Exploration loop\\template, test, run, retry};
 \node[ev,below=0.25cm of e2] (e4) {Evidence package\\(paths tried, executed test)};
@@ -42,7 +47,7 @@ minutes. Figure~\ref{fig:arch} shows the architecture.
 \end{tikzpicture}}
 \caption{\tool{} architecture. A skill procedure drives the LLM through
 explicit ledgers (top). Deterministic analysis tools answer factual queries
-(bottom). For each warning, an exploration loop writes attack tests, runs
+(bottom), and a per-stack knowledge base informs the statement ledger. For each warning, an exploration loop writes attack tests, runs
 them in a sandbox (local chain, the project's own prover), and attaches the
 paths tried and any executed test. Humans adjudicate the package; no LLM
 verdict serves as ground truth.}
@@ -69,12 +74,13 @@ Scan(target):
   L_E := Brain(step1, I)                         // effect ledger
   for r in 1..2: U := I.E \ entries(L_E)
       if U = {}: break;  L_E += Brain(reprompt, U)
-  L_S := Brain(step2, I, L_E)                    // statement ledger
+  L_S := Brain(step2, I, L_E, K) // statement ledger + stack knowledge K
   for r in 1..2: U := I.S \ values(L_S)
       if U = {}: break;  L_S += Brain(reprompt, U)
   W := Brain(step3, L_E, L_S)  // playbooks P1-P5, follow-through
   if cost < SOFT and time < T_soft: W += Brain(step3b, W)
   W := Brain(final, W)         // drop C1-C3 failures, 1 per root cause
+  W := SecondLook(W, L_E, L_S) // no-drop, both ends, challenge, probes
   U := unbound rows of W, fixed ledger order
   for k in 0..K:                 // breadth-first rounds
     for u in U not yet settled:
@@ -130,17 +136,45 @@ one warning per root cause. Each warning carries the pattern, the consumer
 file and function, the effect, the unbound value, an explanation, and the
 related locations (verifier, circuit, helpers).
 
+\para{Step 5: Second look}
+The brain reads the flawed code in every development miss and then judges it
+wrongly (Section~\ref{sec:eval-misses}), so a second look runs after the
+review. \emph{No drop}: an unbound row with a concrete attack always becomes a
+warning, even when the consumer is absent or the root cause is shared.
+\emph{Both ends}: a flaw is reported at each root-cause location (circuit or
+guest, consumer, flawed helper) as one finding. \emph{Challenge}: every
+effect-deciding row judged bound or unknown is re-examined, and known
+dismissals are forbidden, such as ``naming only'', ``bound by a proof that may
+not exist'', or ``the reading code is not vendored''. \emph{Inventory and
+probes}: every private input of a zkVM guest (configuration, starting state,
+chain identity) must be committed or derived from committed data, and three
+probes check domain separation, parser differentials on authenticated fields,
+and validation on every library getter.
+\DEMO{The final configuration keeps all four rules.}
+
+\para{Stack knowledge}
+Twelve of the fifteen development misses turn on what the proof side commits,
+and the brain often accepted the consumer's account of it. \tool{} detects the
+proof system from build files and imports and loads a matching knowledge file
+into the statement-ledger step: RISC~Zero, SP1, Noir, circom, gnark, halo2,
+Groth16/PLONK verifier integration, DKIM email proofs, rollup and bridge light
+clients, and TEE attestation with multi-proof routing. Each file states where
+the proof program lives, what is and is not committed (a zkVM journal versus
+private reads), how the consumer checks it, and a checklist. A catalogue lists
+34 flaw mechanisms and 17 look-alikes, written from official documentation and
+development findings only.
+% src: mvp/tool/skills/knowledge/ (branch v4; KB-REPORT.md: 10 stack files, PITFALLS 34 PF + 17 NC)
+
 \para{Where the skills come from}
-The procedure and the five playbooks were written from the development split
-only (Section~\ref{sec:eval-setup}). We split the development families again,
-with a fixed seed, into a \emph{tune} part and a \emph{check} part. In the second
-design round, changes were motivated by misses on the tune part. A change was
-kept only if it did not hurt the check part. The check part is not a clean
-holdout. The first version's skills were written on all development items,
-and two check-part misses of that version were named in the second round's
-brief. On development data, the frozen version finds 9 of 13 flaws at the
+The procedure, the playbooks, the second look and the knowledge files were
+written from the development split only (Section~\ref{sec:eval-setup}). Development families are split again, with a fixed seed, into \emph{tune}
+and \emph{check} parts; changes come from tune misses and must not hurt check,
+which is not a clean holdout. On development data, the frozen version finds 9 of 13 flaws at the
 exact location and mechanism, 5 of 6 on the check part, up from 4 of 6 for
-the first version. The held-out evidence is the test set
+the first version. After the second version was tested, we moved the test
+families of that evaluation into development, keeping seven of them as a held
+check set, and built the final version on 28 development flaws. The held-out
+evidence is the check set, fresh benchmarks and the hunt
 (Section~\ref{sec:eval}).
 % src: mvp/tool/FREEZE-v2.md (ALL 9/13; CHECK 5/6; v1 CHECK 4/6)
 
@@ -239,20 +273,14 @@ supports Solidity consumers with Circom, gnark and Noir circuits.
 Circuit-only and zkVM-guest flaws have no on-chain attack call and stay at E1.
 
 \para{Design alternatives}
-We kept the ledger procedure of the frozen second version unchanged and
-compared discovery stages on development data, under a selection rule fixed
-before any run. A coverage check that hands every extractor row the ledgers
-missed back to the brain found 70 such rows and judged none unbound. An
-execution sweep that runs the template attack on every on-chain effect row,
-including rows judged bound, attacked 60 of 645 and found no success. Neither
-changed recall. The ledgers are nearly complete; the remaining misses sit
-deeper, in parsers and dependencies.
+Under a selection rule fixed before any run, we compared discovery stages on
+development data. A coverage check found 70 extractor rows the ledgers missed
+and judged none unbound; an execution sweep attacked 60 of 645 effect rows,
+including bound ones, without success.
 % src: mvp-va/tool/VA-REPORT.md; mvp-vb/tool/VB-REPORT.md; mvp/tool/VARIANTS-RULE.md
-A depth pass, which vendors the target's pinned dependencies and follows each
-value whose binding rests on library code into that code, added one strict
-hit, within run-to-run variance, at 2.4 times the loop's cost and with more
-warnings. Under the rule, the frozen version keeps the procedure and the
-exploration loop and adds no discovery stage.
+A depth pass into vendored dependencies added one strict hit, within
+run-to-run variance, at 2.4 times the loop's cost. More reading does not help;
+the misses are errors of judgment, which the second look targets.
 % src: mvp-vc/tool/VC-REPORT.md (+1 strict CHECK L023 at E1, it2 only; volume 1.64 vs 1.36; new cost median $0.92 vs $0.39)
 
 \subsection{Guards and isolation}\label{sec:design-guards}
@@ -261,6 +289,7 @@ Each scan runs on a fresh, read-only copy of the target. The brain gets only
 read-only tools and has a 20-minute limit. The controller tracks the cost
 of the session. Past a soft limit it skips the optional passes, and past a
 hard limit it asks for the final answer at once. The brain is a commercial
-model (Claude Sonnet, high reasoning effort). Any model that supports tool use
+model (Claude Sonnet, high reasoning effort); the second look and the knowledge
+base use the same model. Any model that supports tool use
 can be swapped in.
 \TODO{E7}{optional: open-weight brain on B1/B2 (lab machine)}

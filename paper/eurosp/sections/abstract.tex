@@ -1,6 +1,5 @@
-Smart contracts accept zero-knowledge (ZK) proofs as permission to act: they
-release funds, mint credentials, and settle state when a proof verifies. A
-proof certifies only a statement, yet the contract's action can depend on
+Smart contracts accept zero-knowledge (ZK) proofs as permission to release
+funds, mint credentials, and settle state. A proof certifies only a statement, yet the contract's action can depend on
 values the statement never fixed, such as a recipient taken from calldata. Anyone who
 observes a valid proof can then redirect or repeat the effect. We call these
 \emph{binding flaws}. One drained \$2.28M from Aztec Connect in 2026, and
@@ -13,9 +12,12 @@ public audit reports we find 103 binding flaws across 44 project families;
 them: on audited flaws, Slither, Mythril, circomspect, Picus and
 generic fuzzing find none, because the specification lives between the circuit
 and the contract. We present \tool{}, which drives an LLM through an explicit
-ledger procedure, backs it with deterministic analyses, and, like an auditor, attaches to each warning the attack tests it ran
-on a local chain. \tool{} finds 22 of 27 injected binding flaws and 6 of 22
-audited test-set flaws (2 of 8 on a clean retest); the existing analyzers find none of
-the mutants or of the audited flaws they could analyze.
+ledger procedure with deterministic analyses and attaches to each warning the
+attack tests it ran on a local chain. A first version finds 22 of 27 injected binding flaws and
+6 of 22 audited test-set flaws, where the existing analyzers find none they
+could analyze. Its misses are errors of judgment, so the final version adds
+per-proof-system knowledge and a second look at every verdict.
+\DEMO{On held-out data it finds \TBD{} of 37 new injected flaws and \TBD{} of
+7 audited ones.}
 \DEMO{It also uncovered three previously unknown binding flaws, all confirmed
 on a local chain and disclosed.}
