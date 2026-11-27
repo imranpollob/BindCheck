@@ -56,3 +56,8 @@ tools/oz-5.0.1/
 cache-synth/
 out-synth/
 cases/d1/synth/**/target/
+
+# Archived early phases (moved 2026-11-27): same ignores under the archive path
+archive/2026-10-early-phases/contracts/generated/
+archive/2026-10-early-phases/payy/src/AggFinalHonkVerifier.sol
+archive/2026-10-early-phases/payy-consumer/src/

@@ -7,9 +7,11 @@ Read these sources in order before changing the project:
 1. `docs/research-contract.md` — authoritative research question, threat model, scope, semantics, and evidence rules.
 2. `README.md` — current implementation and task status.
 3. `reports/Txx.md` and `reports/D1-xx.md` — immutable evidence records for completed tasks.
-4. `BindCheck_Research_Guide.md` and dated research updates — historical planning context only.
+4. `archive/2026-10-early-phases/BindCheck_Research_Guide.md` and dated research updates — historical planning context only.
 
 If these sources disagree, follow the higher-ranked source and report the disagreement. Do not silently rewrite an older report to match a later conclusion.
+
+Earlier-phase code, studies and notes (prototypes, Payy case study, feasibility, red-team, reviews) were moved to `archive/2026-10-early-phases/` on 2026-11-27. Current work: `paper/`, `dataset/`, `benchmarks/`, `docs/`, `reports/`, and the MVP tool outside this repo.
 
 ## Working rules
 
