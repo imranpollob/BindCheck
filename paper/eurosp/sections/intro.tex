@@ -21,6 +21,23 @@ one argument. Figure~\ref{fig:motivating} shows the shape of such a flaw. We
 call it a \emph{binding flaw}: the proof is valid, the verifier is correct,
 and the effect is still unauthorized.
 
+Binding flaws are not hypothetical. In June 2026 an attacker drained \$2.28M
+from the deprecated Aztec Connect rollup contract without breaking any
+cryptography. Each of its batches carried a valid proof, but the contract
+settled only as many rows as a calldata field, \texttt{numRealTxs}, declared,
+and the proof did not bind that field~\cite{aztec-connect-hack}. The
+neighbouring verifier-integration layer fails too. ZKSwap's bridge lost \$5M
+in 2025 to an exit verifier that returned \emph{true} before checking
+anything~\cite{zkswap-hack}, and in 2026 two privacy pools put about
+\$1.4--2.3M at stake, most of it later rescued, because their deployed
+verification keys skipped the second phase of the trusted
+setup~\cite{groth16-setup-exploit,rekt-foom}. In a public record of ZK
+incidents from 2023 to 2026, every circuit-soundness bug in an on-chain
+application was caught before exploitation, while each quantified loss we
+could trace sits at the verifier or at the contract that consumes
+it~\cite{zkp-hacks-record}: more than \$8M in under two years.
+% src: rekt.news/aztec-connect-rekt ($2.28M; 14 valid processRollup calls; numRealTxs not bound, BlockSec); blockaid ZKSwap ($5M, 2025-07-09, verifyExitProof returns true); zksecurity 2026-02-27 (Foom ~$1.4-1.5M, Veil ~$5K) + rekt the-unfinished-proof ($2.26M gross); floor 2.28+5+1.4 = 8.68
+
 \begin{figure}[t]
 \begin{lstlisting}[language=Java]
 // Circuit: public [root, nullifierHash]; proves membership
