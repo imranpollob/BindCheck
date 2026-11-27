@@ -248,10 +248,12 @@ including rows judged bound, attacked 60 of 645 and found no success. Neither
 changed recall. The ledgers are nearly complete; the remaining misses sit
 deeper, in parsers and dependencies.
 % src: mvp-va/tool/VA-REPORT.md; mvp-vb/tool/VB-REPORT.md; mvp/tool/VARIANTS-RULE.md
-\DEMO{A depth pass, which vendors the target's pinned dependencies and
-follows each value whose binding rests on library code into that code, adds
-\TBD{} strict hits on development data and is part of the frozen version.}
-\TODO{VC}{V-C depth variant result; drop this sentence and keep v3 = base if it adds nothing}
+A depth pass, which vendors the target's pinned dependencies and follows each
+value whose binding rests on library code into that code, added one strict
+hit, within run-to-run variance, at 2.4 times the loop's cost and with more
+warnings. Under the rule, the frozen version keeps the procedure and the
+exploration loop and adds no discovery stage.
+% src: mvp-vc/tool/VC-REPORT.md (+1 strict CHECK L023 at E1, it2 only; volume 1.64 vs 1.36; new cost median $0.92 vs $0.39)
 
 \subsection{Guards and isolation}\label{sec:design-guards}
 
