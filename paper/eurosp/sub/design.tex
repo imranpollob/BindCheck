@@ -1,0 +1,202 @@
+\section{\tool{}}\label{sec:design}
+
+Section~\ref{sec:study} shows that binding flaws are decided by comparing two
+artifacts that no single analyzer reads together. \tool{} mechanizes that
+comparison with an LLM \emph{agent} that must build the two ledgers of
+Section~\ref{sec:def-ledgers} explicitly, a tool-less \emph{post-stage} that
+keeps the agent from losing what it found, and an \emph{execution loop} that
+turns warnings into attack tests. Its central design rule is
+\textbf{additivity}: a stage may add warnings and evidence but never remove or
+alter an earlier stage's, which is checked mechanically at every stage
+boundary. Additivity makes every stage separately measurable and every gain
+attributable (Figure~\ref{fig:pipeline}).
+
+\begin{figure*}[t]
+\centering
+\begin{tikzpicture}[
+  st/.style={draw=blue!60!black, rounded corners=2pt, fill=blue!5, minimum height=12mm, text width=19mm, align=center,
+             font=\sffamily\scriptsize, inner sep=2pt},
+  pst/.style={st, draw=green!50!black, fill=green!7},
+  lst/.style={st, draw=gray, fill=white},
+  arr/.style={-{Latex[length=1.6mm]}, gray!70!black, thick}, node distance=3.2mm]
+\node[lst] (s0) {\textbf{Inventory}\\[1pt]entries $E_i$ with effects; statement producers $S_j$};
+\node[st, right=of s0] (s1) {\textbf{Effect ledger}\\[1pt](entry, effect, value): bound / unbound};
+\node[st, right=of s1] (s2) {\textbf{Statement ledger}\\[1pt]public value: what fixes it?};
+\node[st, right=of s2] (s3) {\textbf{Follow-through, attacker pass}\\[1pt]final warnings};
+\node[pst, right=5mm of s3] (s4) {\textbf{No-drop}\\[1pt]re-adjudicate discarded suspicions};
+\node[pst, right=of s4] (s5) {\textbf{Multi-location}\\[1pt]one finding, every root-cause site};
+\node[lst, right=5mm of s5] (s6) {\textbf{Execution loop}\\[1pt]E1 claim, E2 mock test, E3 real proof};
+\foreach \a/\b in {s0/s1,s1/s2,s2/s3,s3/s4,s4/s5,s5/s6} \draw[arr] (\a) -- (\b);
+\draw[arr, dashed] (s2.south) to[bend left=28] node[below, font=\sffamily\tiny]{coverage re-prompt} (s1.south);
+\begin{scope}[on background layer]
+\node[draw=blue!60!black, dashed, rounded corners=3pt, fit=(s0)(s3), inner sep=4pt,
+  label={[font=\sffamily\scriptsize, blue!60!black]above:Stage A: one hermetic agent session (read-only copy, capped)}] {};
+\node[draw=green!50!black, dashed, rounded corners=3pt, fit=(s4)(s5), inner sep=4pt,
+  label={[font=\sffamily\scriptsize, green!40!black]above:post-stage: tool-less}] {};
+\end{scope}
+\end{tikzpicture}
+\caption{\tool{} pipeline. Stage A drives the agent through coverage-checked
+ledgers. The post-stage sees Stage A's ledgers and the tail of its
+transcript, not the repository. The loop attaches executed attack tests.
+Every stage only adds; new warnings carry a \texttt{finding\_id}, a source
+and a location role (proof side, consumer, helper).}
+\label{fig:pipeline}
+\end{figure*}
+
+\subsection{Stage A: ledger-guided review}\label{sec:design-stagea}
+
+A plain LLM asked to ``find binding bugs'' reads the consumer, notices the
+most salient issue and stops. The failure is coverage: a target has many
+entry points, each with several effect values, and a flaw hides in one row
+of a table the model never writes down. Stage A turns the definition into
+that table. One session of an LLM runs in a hermetic sandbox: a read-only
+private copy of the snapshot, file-reading tools and deterministic helpers,
+with no network and no write access. A controller drives it through fixed
+passes and parses tagged output lines (\texttt{LEDGER}, \texttt{STMT},
+\texttt{WARNING}) after every turn (Appendix~\ref{app:extra}).
+\begin{enumerate}
+\item \textbf{Inventory.} A deterministic helper lists the entry points that
+reach a verifier and commit effects ($E_1,\dots$) and the producers of public
+statements ($S_1,\dots$): verifier calls, public-input arrays, circuit
+\texttt{main} signatures and guest commit sites. The list is the coverage
+target.
+\item \textbf{Effect ledger.} One row per (entry, effect, value) with the
+value's provenance (statement, hash-committed input, storage, calldata,
+sender) and a verdict, \emph{bound} or \emph{unbound}, with a reason. An
+entry without a row is re-prompted, at most twice.
+\item \textbf{Statement ledger.} For each public value: what the circuit or
+guest constrains it to mean, which consumer value it should fix, and whether
+the consumer compares the two. This pass catches P3--P5, where the consumer
+is right but the statement is not.
+\item \textbf{Follow-through and attacker pass.} The agent runs the playbook
+of each unbound row's pattern, follows values into libraries, helpers and
+record writers, takes the view of an attacker holding an observed proof, and
+emits final warnings: pattern, file and function, effect, unbound value,
+explanation and related locations.
+\end{enumerate}
+Cost guards skip optional passes above a soft cap and force the final answer
+at a hard cap. A typical effect-ledger row from a benchmark run reads
+(identifiers generalized):
+\begin{lstlisting}
+E1 Pool.processBundle | executed calls of an op with 0 joinsplits
+   value: actions of a proofless op | source: op in bundle | UNBOUND
+   why: validateOperation does not require a joinsplit, so an op
+   needs no proof if another op in the bundle has one
+\end{lstlisting}
+
+\subsection{How agents lose what they find}\label{sec:design-lose}
+
+Reading Stage A's ledgers against its final answers on development data
+showed two ways in which a flaw the agent had recorded fails to reach the
+output.
+
+\para{Placement}
+A binding flaw has two sides, and the agent reports it on one. Given a guest
+that commits a prover-chosen starting state and a contract that stores the
+result, it reports at the contract; the statement ledger already records the
+guest-side gap, but the final answer folds it into the contract warning. When
+the root cause is in the guest, the report points the developer to the wrong
+fix and, under strict scoring, counts as a miss.
+
+\para{Non-reporting}
+The agent writes an unbound row or drafts a warning and then lets it go: it
+withdraws it with a reason that sounds prudent but is invalid under the
+threat model (the consumer ``is not in this repository'', the value at stake
+seems too small, the behavior is intended design, an exclusion that does not
+apply), or never carries the row into the answer. In an audit, where
+a false negative costs far more than a false positive, this is the wrong
+prior.
+
+\subsection{Post-stage: no-drop and multi-location}\label{sec:design-post}
+
+\para{No-drop}
+The first step collects three kinds of candidates from Stage A: drafts
+emitted during the session but absent from the final answer
+($W\setminus W_f$), effect rows with verdict \emph{unbound}, and statement
+rows marked unconstrained. One tool-less LLM call receives the candidates, the
+final warnings, the closing part of the transcript, the exclusion list and a
+closed list of \textbf{admissible drop reasons}. Writing $\ell(\cdot)$ for a
+primary location (file, function) and $\nu(\cdot)$ for the unbound value, a
+candidate $c$ may be dropped only if
+\[
+\begin{aligned}
+\textsf{drop}(c)\iff{}&\exists w\in W_f:\ \nu(w)=\nu(c)\wedge \ell(w)=\ell(c)\\
+&\vee\ \textsf{chk}(c)\ \vee\ \textsf{excl}(c)\ \vee\ \textsf{noact}(c),
+\end{aligned}
+\]
+where \textsf{chk} requires a file:line check that binds the value on every
+path (or shows that the attack only makes verification fail), \textsf{excl} a
+numbered exclusion that genuinely applies, and \textsf{noact} that the
+attacker changes nothing while keeping a valid proof. Any other reason,
+including every dismissal of Section~\ref{sec:design-lose}, restores $c$ as a
+warning where the value enters the effect path (Appendix~\ref{app:nodrop}).
+The same-location clause turns placement into recall: ``already part of
+another finding'' is inadmissible when the locations differ. The step sees no
+repository, so it cannot invent locations; it can only overrule the agent's
+own decisions.
+
+\para{Multi-location}
+The second step groups warnings into \emph{findings} (same unbound value,
+same missing check) and lists, per finding, up to three root-cause locations
+tagged by role (proof side, consumer, helper). Each location is validated
+against a function definition in the snapshot and emitted as a sibling
+warning sharing the finding's \texttt{finding\_id}. Volume, precision and
+false alarms are therefore counted in findings.
+
+\subsection{Execution loop and evidence}\label{sec:design-loop}
+
+A warning is a claim; auditors write a proof of concept. For each unbound
+row with an on-chain entry point, the loop drafts a Foundry scaffold once per
+(contract, entry), checks that an honest call succeeds, and then submits the
+same accepted proof twice from the same state: once honestly and once with
+the attacker's change. The test succeeds when both calls are accepted and the
+committed effects differ in recipient, amount, state written or count, which
+is condition C3 made executable; a success is re-run with the honest value
+restored and must then show no difference. Attempt~0 comes from the pattern's
+template without the LLM (resubmit from a second account, change a context
+argument, replay, add the field modulus to the replay key, swap the verifier);
+up to three further attempts are written by the agent from the labeled
+outcomes of earlier ones. Evidence has three levels: \emph{E1} (claim),
+\emph{E2} (a test against a mock verifier that accepts exactly the honest
+public inputs succeeded) and \emph{E3} (a real proof from the project's own
+prover, against the unmodified verifier and consumer, succeeded). Six oracle
+guards close loopholes we found by running the loop on patched code and on
+24 adversarial harnesses written to fool it, such as an owner-only call that
+looks like a replay because the scaffold deployed from the honest account
+(Appendix~\ref{app:guards}); with them, none of the 10 rows attacked at a
+fixed or hard-negative location and none of the 24 harnesses reaches E2. The loop never removes a warning, and
+whether a test succeeded is computed from the two executions, never read from
+the agent's summary. Circuit-only and guest-only flaws without an on-chain
+attack call stay at E1.
+
+\subsection{Extensions we built and rejected}\label{sec:design-ext}
+
+Four further steps target the misses that remain. All are generic, sit
+behind their own flags, and were measured under the same rule as the kept
+steps (Section~\ref{sec:eval-anatomy}). \emph{Knowledge} loads a pitfall
+catalogue (34 flaw mechanisms, 17 look-alikes) and stack-specific files for
+the detected proof system (RISC~Zero, SP1, Noir, Circom, gnark, halo2,
+verifier integration, e-mail proofs, light clients, TEE attestation) into
+Stage A. \emph{Challenge} runs a second tool-using session that re-opens every
+non-unbound verdict on an effect value under a list of forbidden dismissals.
+\emph{Inventory} enumerates every private input of a zkVM guest and asks
+whether it can steer a committed output. \emph{Probes} ask for domain
+separation in every proven message, parser differentials on authenticated
+fields, and anchor checks on every library getter.
+
+\subsection{Implementation and isolation}\label{sec:design-impl}
+
+\tool{} is about 6,700 lines of Python. The agent and the post-stage use
+\texttt{claude-sonnet-5-5} at high reasoning effort through a command-line
+client run non-interactively with a tool allowlist and write and network
+access denied; any tool-using model can be substituted. Helpers parse
+Solidity, Circom, Noir and Rust with the Solidity compiler's AST, tree-sitter
+and regular expressions. A Stage A run is capped at 20 minutes. A
+\emph{limit guard} treats any model call that returns in under 10\,s at zero
+cost, with an error or with an empty answer as a failed run that is never
+cached or scored: provider usage limits interrupted our study three times,
+and before the guard existed 52 failed calls had been cached as empty
+results, which would have silently lowered the recall of the affected
+configurations. Every version was built by a separate process that could read
+only development data, and an automated gate rejects project names, file
+names, addresses and benchmark identifiers in prompts and code.

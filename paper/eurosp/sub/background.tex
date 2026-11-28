@@ -1,0 +1,35 @@
+\section{Background and Threat Model}\label{sec:background}
+
+\para{ZK applications}
+A ZK application has three parts. The \emph{circuit}, or zkVM guest program,
+defines a relation $R(\vec{u},\vec{w})$ over public inputs $\vec{u}$ and
+private witnesses $\vec{w}$; it is written in a circuit language (Circom,
+Noir, gnark, halo2) or as a program for a zkVM (RISC~Zero, SP1), in which case
+$\vec{u}$ is derived from the bytes the guest commits, its \emph{journal}. The
+\emph{verifier}, generated from a verification key (e.g.,
+Groth16~\cite{groth16}, PLONK~\cite{plonk}) or reached through a router,
+accepts or rejects $(\vec{u},\pi)$ without knowing what $\vec{u}$ means. The
+\emph{consumer} assembles $\vec{u}$ from calldata and storage, calls the
+verifier and, on acceptance, commits effects. The public-input vector is the
+only interface between the three parts. It has no type system and no shared
+schema, and each side restates its meaning by hand.
+
+\para{Attacker}
+The attacker is any account that can send transactions. It controls all
+calldata and its own address, observes pending and past transactions,
+including other users' valid proofs, and can resubmit an observed proof with
+different arguments and try to be included first. It cannot break the
+cryptographic assumptions of the proof system or hash functions, or forge
+proofs for false statements of a sound verifier. Administrators and deployers
+are trusted. ``Only the relayer submits proofs'' is not a defense unless the
+contract enforces it.
+
+\para{Goal and scope}
+The attacker seeks an effect that the proved statement does not authorize:
+funds or rights sent to itself, a larger amount, a repeated effect, an effect
+in another context, or a change to another user's state. Out of scope are
+soundness bugs inside a proof system, circuit under-constraints that do not
+change what the consumer is told, prover-side and trusted-setup bugs, and
+denial of service against one's own transaction. Existing ZK tools target the
+first two classes~\cite{sok-snark-bugs,picus,circomspect}; we study the layer
+above them.

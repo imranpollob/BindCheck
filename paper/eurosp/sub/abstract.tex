@@ -1,0 +1,26 @@
+Smart contracts accept zero-knowledge (ZK) proofs as permission to release
+funds, mint credentials and settle state. A proof certifies only its public
+statement, yet the contract's action may depend on values the statement never
+fixed, such as a recipient taken from calldata. Anyone who observes a valid
+proof can then redirect or repeat the effect. We call these \emph{binding
+flaws}. Two of them at the proof-to-contract boundary caused about \$7.3M in
+losses in 2025--2026. We define binding as a relation between a
+\emph{statement ledger} and an \emph{effect ledger} under the application's
+intended policy, and classify violations into five patterns that mirror
+classic signature misuse. In 8,578 public audit reports we find 87 core
+binding flaws across 43 project families; 78\% of the rated ones are Critical
+or High, and one in six ZK application audits reports at least one. Static
+analyzers, circuit analyzers and generic fuzzing find none of the audited
+flaws they can analyze. We present \tool{}, an LLM agent that must fill both
+ledgers under coverage checks, and use its ledgers to ask why such an agent
+misses flaws. The misses we could recover were not unseen: the agent reported
+them on the wrong side of the proof boundary, or recorded them and never
+reported them. A tool-less
+post-stage that re-adjudicates discarded suspicions under closed
+admissibility rules raises strict recall on 28 development flaws from 12 to 18 over two runs
+(10.0 to 14.0 per run; paired $p=0.031$) for \$0.15 per scan, with no strict finding on 17 patched
+versions, while four knowledge- and tool-based extensions fail a
+specificity rule fixed in advance. \DEMO{On 51 held-out flaws the frozen tool gains 10 and
+loses 2 against its predecessor ($p=0.04$), and on 25 audited applications
+it found three previously unknown binding flaws, confirmed by executed attack
+tests and reported to the maintainers.}

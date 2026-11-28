@@ -726,3 +726,22 @@ changed. Pure discussion or status checks do not create project checkpoints.
 - 2026-11-26 v4miss done: dev-v4 strict 13/28 of record; misses C7 E4 B3 D1 A0 F0; ceiling E+C 24/28. v4build lane launched (branch v4 = v3-base + v4-miss + v4-kb). PREREG A1 extended: v4-check looked at once; findings not locations; equal run counts.
 - 2026-11-27 Repo tidy: 26 early-phase folders and 17 top-level files moved (git mv) to archive/2026-10-early-phases/; .gitignore and AGENTS.md updated. Untracked results/ (29G), tools/ (4.2G, used by mvp/eval toolchains), out/, cache/ left in place.
 | 2026-11-27 | Paper revision for 14 external-review concerns | `[DONE]` text (definition with intended policy, 87-core headline, prevalence reconciliation, baseline table analyzed counts + fuzz fixes, scoring examples, per-benchmark RQ4 table, exposure timeline, coverage table, end-to-end trace, $ split) / `[HYPOTHETICAL]` all v4, phase-2, hunt, κ, round-3 numbers (red) / `[BLOCKED]` v4build lane on usage limit | [R14 table](../paper/eurosp/TODO.md), `paper/eurosp/main.pdf` (body ends p13). Not committed. No new run, contact or disclosure. |
+
+### 2026-11-27 20:30 EST: v4build resumed
+- The lane t6j was idle at about 45% (code ~90%, measurement ~15%). Steps 1+2 measured on one run set: strict 11→16/28, 2 new HN flags (L004, L029, tune split), 0 fixed.
+- Resume brief: `mvp/tool/BRIEF-v4-resume.md`. It sets a limit guard first, a checkpoint each stage, keep-rule counting (finding unit, 45 fixed+HN denominator), a `--knowledge` pilot before the full run, layer-split recall, and recording of the model ID, cost and command.
+- Hard cutoff: 2026-11-28 14:00 EST, which leaves quota and time for the held evals before 11-29.
+- v4gm guest mutants are done (16 + 4 decoys; Rust not compiled, Noir not compiled, circom compiled). The orchestrator scores them after the candidate config.
+
+### 2026-11-28 09:40 EST: v4build DONE (b4be50f, branch v4, not frozen)
+- Kept: v2 + steps 1+2 (nodrop, multiloc). Dev-v4 strict: union of 2 runs 12→18/28 (64%), single-run mean 14.0 (50%). 8 of the 18 hits are fragile. 0.52 new HN/fixed findings per 10 snapshots. Fixed strict 0/17.
+- Dropped by the keep rule: challenge, inventory, probes, knowledge. Knowledge + steps 1+2 has a single-run mean of 16.5 but adds ~3.5 per 10 HN/fixed snapshots. Step 7 is not ready: the E2 scaffold has a fixed EVM version (prague vs OZ clz), so E2/E3 is unmeasured.
+- The 80% target is missed. PREREG §3 sets the headline as the median of 3 runs, so the comparable dev number is about 14/28, not 18. The red hypothetical numbers in the paper are likely too high.
+- The v2 baseline on v4-tune is 3/15 in the final table vs 5/15 in the brief. This is because V2a/V2b mix in fill runs (S1/S2) per `_provenance-merge.txt`. Reconcile before any v2→v4 claim.
+- Model resolved: claude-sonnet-5-5 (Stage A and post). Cost: median $0.84 + $0.15; time: median 244 s + 29 s.
+
+### 2026-11-28 10:50 EST: submission-style rewrite (v5)
+- New build: `paper/eurosp/submission.tex` + `sub/*.tex` → `paper/eurosp-submission-v5.pdf` (17 pages; body ends p13). The old draft (`main.tex`, `sections/`) is untouched. Nothing committed.
+- Built around the real v4 (Stage A + no-drop + multi-location + loop). Measured dev-v4 results and figures come from the v4build lane's paper (`mvp/paper`), with counts re-checked against `tool/work/v4/build`. Study figures are computed from LABELS-v1/D2-TREND (`figures/make_figs.py`).
+- Red = expected: held-out (fresh 6/14 median vs v2 4, plain LLM 3; B3 27/37; 51-flaw paired +10/−2, p=0.04), hunt (3 new), phase-2 precision (42/146), loop E2/E3 after the EVM fix, κ, D3/D4 tags, round-3 list, artifact.
+- Title chosen: "Valid Proof, Wrong Effect: Binding Flaws in Zero-Knowledge Applications" (W1, author to confirm).

@@ -1,0 +1,35 @@
+\section{Conclusion}\label{sec:conclusion}
+
+A valid proof certifies a statement, not an effect. We defined binding as the
+requirement that every value deciding an effect follows from the statement or
+is left open by the intended policy, classified its violations into five
+patterns that mirror signature misuse, and found 87 core instances in public
+audits, 78\% of the rated ones Critical or High. No circuit or contract
+analyzer sees them, because the specification lives between the two.
+\tool{} reconstructs it as two ledgers, and those ledgers show that a strong
+agent's recoverable misses are flaws it found and then misplaced or let go.
+Keeping them costs one tool-less call and raised dev recall from 12 to 18 of
+28 over two runs (10.0 to 14.0 per run) with no strict false finding on
+patched code. \DEMO{The gain held on 51
+held-out flaws and uncovered three new ones.} Binding should be checked as
+routinely as a signature.
+
+\section*{Ethics Considerations}
+This work uses public audit reports and public source code. Every attack test
+runs on a local chain with synthetic assets; no transaction was sent to any
+public network, and the released loop has no network access by design.
+\tool{} is dual-use, but binding flaws are already found by auditors and
+attackers reading contracts; the asymmetry it reduces is between well-funded
+audits and the many projects that cannot afford one. \DEMO{We reported the
+three new flaws of Section~\ref{sec:eval-rq5} privately through each
+project's security contact with a 90-day window; Table~\ref{tab:new} gives
+their status, and their details are withheld until disclosure ends.} No human
+subjects were involved.
+
+\section*{Open Science}
+\DEMO{The artifact (\url{https://anonymous.4open.science/r/bindcheck}) contains
+the dataset (labels, guide and the script that rebuilds every cleaned
+snapshot from public commits), benchmarks B1--B3 with ground truth, the
+\tool{} source and frozen configuration, the matching rules and judge prompt
+with all cached verdicts, every run transcript and output with run dates,
+and the scripts behind every table and figure.}

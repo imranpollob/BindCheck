@@ -1,0 +1,109 @@
+\section{Introduction}\label{sec:intro}
+
+Zero-knowledge (ZK) proofs now guard real money on public blockchains.
+Privacy pools release deposits to whoever proves membership, rollups settle
+state on a proof of correct execution, identity systems mint credentials to
+the holder of a proved attribute, and zkVM markets pay provers for proved
+computations. In each case a smart contract, the \emph{consumer}, accepts a
+proof and then acts. Much work makes sure that proofs are sound, circuits
+fully constrained and verifiers correctly
+generated~\cite{sok-snark-bugs,picus,circomspect,zkap}. Much less asks a
+simpler question: does the contract's action follow from what was proved?
+
+Often it does not. A proof certifies a \emph{statement}: the public inputs
+and what the circuit fixes about them. The consumer performs an
+\emph{effect}, which depends on a recipient, an amount, a state root, a
+replay key or a verification key. When an effect value is not fixed by the
+statement, whoever submits the proof chooses it, and since proofs are public
+once broadcast, that can be an attacker who copies a victim's proof and
+changes one argument. We call this a \emph{binding flaw}: the proof is valid,
+the verifier is correct, and the effect is still unauthorized.
+It lives at the \emph{seam} between the proof side (circuit or zkVM guest) and
+the consumer. Figure~\ref{fig:motivating} shows one from an audited proof
+marketplace.
+
+Binding flaws cause real losses. In June 2026 an attacker drained \$2.28M
+from the Aztec Connect rollup contract without breaking any cryptography:
+every batch carried a valid proof, but the contract settled as many rows as
+a calldata field declared, and the proof did not bind that
+field~\cite{aztec-connect-hack}. ZKSwap's bridge lost \$5M in 2025 to an
+exit verifier that returned \emph{true} before checking
+anything~\cite{zkswap-hack}. In a public record of ZK incidents from 2023 to
+2026, every circuit-soundness bug in an on-chain application was caught
+before exploitation, while each quantified loss we could trace sits at the
+verifier or at the contract that consumes it~\cite{zkp-hacks-record}.
+
+\begin{figure}[t]
+\begin{lstlisting}[language=Java]
+function fulfill(Fulfillment calldata fill, AssessorReceipt calldata r) public {
+  verifyDelivery(fill, r);  // assessor journal commits fill.requestDigest
+  ...
+}
+function _fulfillAndPay(Fulfillment calldata fill, address prover) internal {
+  RequestId id = fill.id;                       // free calldata field
+  (address client, uint32 idx) = id.clientAndIndex();
+  ... _fulfillAndPayNeverLocked(id, client, idx, fill.requestDigest, ...);
+}  // charges client of fill.id; nothing checks fill.id == id(requestDigest)
+\end{lstlisting}
+\caption{A binding flaw in an audited zkVM proof marketplace (abridged
+from the vulnerable commit; since fixed). The proof binds the request \emph{digest}; the contract charges the
+request named by a calldata \emph{identifier}. An attacker proves its own
+cheap request but names a victim's, which is charged and marked fulfilled.
+Each side is correct on its own; the flaw is the missing equality between
+them.}
+\label{fig:motivating}
+\end{figure}
+
+\para{Common, severe, and invisible to today's tools}
+We collected 8,578 public audit reports and labeled 264 proof-related
+findings. 87 are core binding flaws, spread over 43 of 68 project families;
+78\% of the rated ones are Critical or High, and 55 of the 311 in-scope ZK
+application audits report at least one (Section~\ref{sec:study}). Yet
+Slither and Mythril report none of the audited flaws of our test set at the
+right location and mechanism, circomspect and Picus cannot analyze most
+targets because most binding flaws are not in a circuit, and a fuzzer with
+generic properties finds none (Section~\ref{sec:eval-rq2}). The reason is
+structural. A binding flaw breaks no rule of the contract and no constraint
+of the circuit; it breaks an intended correspondence between the two that
+neither artifact states. This is also why it is not input validation, which
+checks a value against the program's own rules: given the missing
+correspondence as a hand-written invariant, the same fuzzer finds 5 of the
+13 flaws it could run on, against 0 without it.
+
+\para{What an LLM agent gets wrong}
+LLMs read Solidity, Circom, Noir and Rust alike, so an agent can in
+principle follow a value from a guest's journal to a contract's storage
+write. We build \tool{}, an agent that must fill both ledgers row by row
+under coverage checks, and the ledgers let us ask a question that is usually
+unanswerable for LLM tools: when it misses a flaw, had it never seen it, or
+had it seen it and lost it? The answer surprised us. On 28 development flaws the agent
+misses 16; we recovered six, and none of the six had been unseen. Three were reported on the \emph{other side} of the
+proof boundary, at the contract when the root cause lay in the guest or the
+reverse; three sat in the agent's ledgers as \emph{unbound} and were
+withdrawn for reasons the threat model does not support, such as ``the
+consuming contract is not in this repository''. Undoing both with one
+tool-less call is far more effective, and far more specific, than teaching
+the agent more: a pitfall catalogue, a second tool-using look at every
+verdict, input inventories and targeted probes each failed a specificity
+rule fixed in advance, and those that raised recall did so only by adding
+false findings.
+
+\para{Contributions}
+\begin{itemize}
+\item \textbf{A definition and taxonomy} of binding flaws: two ledgers under
+an intended policy, three conditions, and five patterns with
+signature-misuse analogues (Section~\ref{sec:definition}).
+\item \textbf{To our knowledge, the first measurement study} of the class:
+8,578 reports, 264 labeled findings and 87 core binding flaws, with
+prevalence, severity, patterns, trends and fixes (Section~\ref{sec:study}).
+\item \textbf{\tool{}}, a ledger-guided LLM agent with a strictly additive
+post-stage that re-adjudicates discarded suspicions and reports each flaw at
+every root-cause location, and an execution loop that attaches attack tests
+to warnings (Section~\ref{sec:design}).
+\item \textbf{An evaluation} on audited flaws, patched versions, hard
+negatives and injected mutants against static, circuit, fuzzing and LLM
+baselines; an anatomy of agent misses with four negative results under a
+fixed keep rule; \DEMO{and a held-out evaluation and three new flaws
+confirmed by executed tests} (Section~\ref{sec:eval}). We release the
+dataset, benchmarks and tool.
+\end{itemize}

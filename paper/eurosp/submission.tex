@@ -1,0 +1,34 @@
+% EuroS&P 2027 submission. IEEE conference format, A4, 13 body pages.
+% Red text (\DEMO) marks expected values that replace pending measurements; all black values are measured.
+\documentclass[compsoc,conference,a4paper,10pt,times]{IEEEtran}
+\IEEEoverridecommandlockouts
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx,textcomp,xcolor}
+\usepackage{booktabs,listings,tikz,multirow,colortbl}
+\usetikzlibrary{positioning,arrows.meta,fit,shapes.misc,backgrounds}
+\input{macros}
+\usepackage[colorlinks=true,urlcolor=black,linkcolor=black,citecolor=black]{hyperref}
+\graphicspath{{figures/}}
+\begin{document}
+\title{Valid Proof, Wrong Effect: Binding Flaws in Zero-Knowledge Applications}
+\author{\IEEEauthorblockN{Anonymous submission}}
+\maketitle
+\begin{abstract}\input{sub/abstract}\end{abstract}
+\begin{IEEEkeywords}
+zero-knowledge proofs, smart contracts, zkVM, vulnerability detection, LLM agents
+\end{IEEEkeywords}
+\input{sub/intro}
+\input{sub/background}
+\input{sub/definition}
+\input{sub/study}
+\input{sub/design}
+\input{sub/eval}
+\input{sub/discussion}
+\input{sub/related}
+\input{sub/conclusion}
+\bibliographystyle{IEEEtran}
+\bibliography{refs}
+\appendices
+\input{sub/appendix}
+\end{document}

@@ -1,0 +1,89 @@
+\section{Discussion}\label{sec:discussion}
+
+\para{Beyond binding}
+We expect the no-drop idea to transfer to any LLM auditor that keeps
+intermediate notes: a withdrawn or relocated suspicion deserves at least as
+much scrutiny as the suspicion itself, and structured intermediate output is
+what makes ``never seen'' and ``seen and lost'' distinguishable when the
+agent is evaluated.
+
+\para{Lessons for developers}
+The signature analogy doubles as a checklist. \emph{Sign what you act on}:
+every recipient, amount and fee is a public input or hashed into one that the
+consumer recomputes (P1). \emph{Separate domains}: commit to chain, contract
+and policy, and check roots and prior states against the consumer's own
+storage (P2). \emph{Derive nonces from the statement} and reduce them into the
+field before storing (P3). \emph{Pin the key} and check the verifier's result
+(P4). \emph{Test with a malicious caller}: an honest proof submitted by a
+second account with changed arguments must fail. This single test, the
+invariant of Section~\ref{sec:design-loop}, is what turned the fuzzer from 0
+to 5 of 13 flaws.
+
+\para{Toward binding by construction}
+Binding flaws exist because the public-input vector is an untyped array whose
+meaning is restated by hand in the circuit, the verifier wrapper and the
+consumer. Circuit languages could export a \emph{typed statement} schema from
+which verifier generators emit a typed consumer interface, removing P5 and
+making P1 visible. A standard \emph{effect commitment} over recipient,
+amount, chain, contract and nonce, computed in the circuit and recomputed in
+the consumer, would play the role EIP-712~\cite{eip712} plays for signatures
+and address P1--P3 together. Verifier libraries could make the key or program
+ID an immutable constructor argument (P4). \DEMO{Applied to the 87 core
+findings, typed statements would have prevented 41\% and effect commitments
+63\%.} The binding question---does the verified object commit to every value
+the effect uses?---also applies beyond ZK: to signed permits that omit the
+spender, TEE attestations whose report data omits the request, and bridge
+messages that omit the destination domain.
+
+\subsection{Threats to validity}\label{sec:threats}
+
+\para{Selection and labels}
+We study public audits of projects that chose to publish them; unaudited
+projects may differ. Labels were proposed by an LLM and adjudicated by two
+raters who discussed every item, so they are not independent annotations; a
+written guide, a code-level pass for every evaluated item \DEMO{and a blind
+relabel ($\kappa=0.78$)} mitigate this, and we release every label with its
+notes. Auditors' locations are one of several valid ones; mechanism-level
+recall bounds the effect.
+
+\para{Development bias}
+The post-stage rules were written while studying dev misses, and one
+admissibility rule and one catalogue fact were informed by an item in the
+original check split, which is among the gains; dev recall is therefore
+optimistic, and we report it only as development evidence. The keep rule was
+fixed after a preliminary single-run measurement of no-drop and
+multi-location and before any other step was measured; one counting detail
+was corrected afterwards, which turned the knowledge step from pass to fail
+and changed no other decision (Appendix~\ref{app:count}). Held-out claims
+rest on sets the building process never saw.
+
+\para{Location credit and judge}
+Multi-location reporting raises the chance of matching the auditor's
+location. The judge's mechanism check, 0 of 17 fixed twins flagged at
+strict, and per-finding counting bound this effect but do not remove it. The
+judge is an LLM with a frozen prompt and about 5\% verdict instability; all
+configurations share cached verdicts.
+
+\para{Variance and contamination}
+With 28 dev flaws and two runs, intervals are wide and 8 of 18 hits fragile;
+held-out numbers are medians of three runs. Audit reports may be in the
+model's training data. Mutants are new code, snapshots contain no audit text,
+and fixed twins are a partial control: a model recalling a report would also
+flag the patched code, and v4 flags none at strict. \DEMO{On round~3, whose
+reports were all published after the model's training cutoff, v4 finds 3 of 7,
+as on the check set, and the three new flaws were unknown before our scans.}
+
+\para{Leakage}
+The coordinating author saw v2's test results, so B1 is development data for
+v4. Every version was built by a separate process restricted to development
+data, test benchmarks live in a separate repository, and every exposure is
+logged (Appendix~\ref{app:timeline}).
+
+\subsection{Limitations}\label{sec:limits}
+\tool{} needs an LLM and costs about one to two dollars per scan, and all
+runs use one model. Its helpers are syntactic, so library code that is not
+vendored is a blind spot, and the residue of RQ3 sits exactly there. The
+loop targets EVM consumers: flaws whose effect lies in a zkVM host or off
+chain stay at E1, and real-proof tests need proving artifacts that most
+projects do not ship. Binding is relative to the intended policy $\Pi$, which
+\tool{} infers from code and documentation and can get wrong.

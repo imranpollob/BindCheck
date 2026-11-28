@@ -1,0 +1,71 @@
+\section{Related Work}\label{sec:related}
+
+\para{ZK vulnerability studies}
+Chaliasos et al.\ classify 141 vulnerabilities in SNARK systems by layer
+(circuit, front end, back end, integration)~\cite{sok-snark-bugs}. Their
+integration layer holds 13 bugs, 9 of them public inputs the application
+does not check, and they report that no defense targets this layer. Other
+studies and trackers catalog circuit and auditing
+flaws~\cite{zkp-vuln-audit,zk-bug-tracker,zkbugs} and zkVM
+vulnerabilities~\cite{zkvm-study}. Individual binding flaws therefore appear
+in this literature: the tracker documents an airdrop whose nullifier aliases
+modulo $r$ (our P3) and describes how a proof can be replayed with a changed
+public input that the compiler optimized out of the circuit (our
+P1)~\cite{zk-bug-tracker}.
+These works catalog flaws by layer or root cause, one instance at a time; we
+define the class by the cross-layer property it violates and measure it on
+87 core findings.
+
+\para{Circuit, compiler and zkVM analysis}
+Most ZK tools check the relation $R$. circomspect~\cite{circomspect} lints
+Circom, Ecne~\cite{ecne} and Picus~\cite{picus} decide whether a circuit
+uniquely determines its outputs, ZKAP~\cite{zkap} queries a circuit
+dependence graph for anti-patterns, CIVER~\cite{civer} and
+Coda~\cite{coda} verify circuit specifications, and zkFuzz~\cite{zkfuzz}
+fuzzes circuits for under- and over-constraints. Circuzz and
+MTZK~\cite{circuzz,mtzk} test circuit compilers, and Arguzz, Beak and a
+miscompilation study~\cite{arguzz,beak,zkvm-miscompile} target zkVMs. Their detection rate drops from 45.7\% on isolated targets to 19.6\% on
+full codebases, and practitioners name integration as a major
+gap~\cite{zk-tools-sok}.
+A binding flaw can exist under a fully constrained, correctly compiled
+circuit, because it concerns which consumer values the statement was meant
+to fix. \tool{} analyzes the circuit and the consumer together.
+
+\para{Smart-contract analysis}
+Static analyzers~\cite{slither,securify}, symbolic
+executors~\cite{mythril,manticore} and fuzzers~\cite{echidna,ityfuzz,foundry}
+miss most annotated~\cite{smartbugs} and contest-exploitable~\cite{exploitable-bugs}
+vulnerabilities. Invariant inference~\cite{smartinv},
+LLM-generated properties~\cite{propertygpt} and signature-replay
+detection~\cite{lasir} supply some missing specifications, but none has a
+notion of a proved statement, so an unbound recipient looks like an ordinary
+parameter.
+
+\para{LLM-based auditing}
+GPTScan~\cite{gptscan}, LLM4Vuln~\cite{llm4vuln} and iAudit~\cite{iaudit}
+combine LLMs with analysis or fine-tuned agents, and A1, ReX and
+PoCo~\cite{a1-agent,rex,poco} validate exploits by execution. \tool{} shares
+the execution loop, but its procedure is derived from a precise definition
+and forces checkable ledgers over two artifacts. Studies of LLM auditors
+measure what they report; the ledgers let us measure what they \emph{knew}
+and discarded, and show that for a strong agent the recoverable misses come
+from placement and non-reporting rather than ignorance.
+
+\para{Binding in cryptography and protocols}
+Signatures of knowledge~\cite{sig-of-knowledge,snarky-sigs} bind a proof to a
+message, and simulation extractability prevents mauling a proof into one for
+a new statement. Groth16~\cite{groth16} proofs are re-randomizable yet
+statement non-malleable~\cite{groth16-randomization}, which is why
+$\mathsf{keccak}(\pi)$ fails as a replay key (P3). Weak
+Fiat--Shamir~\cite{weak-fs} breaks soundness, and Portal~\cite{portal} fixes
+proof replay at identity contracts. These results protect the statement; a
+binding flaw concerns a value that was never in it. Our patterns mirror
+cryptographic API misuse~\cite{egele-crypto-misuse,cryptoguard,crysl,cognicrypt}
+and signed-token flaws such as a relying party using an email the signature
+does not cover~\cite{sso-flaws}. EIP-712~\cite{eip712} adds domain separation
+to signed messages, front-running~\cite{flashboys} turns an unbound recipient
+into theft, and bridges fail the same way for verified
+messages~\cite{bridge-sok,xscope,smartaxe,interop-sok}. To our knowledge we
+are the first to define statement-to-effect binding for ZK consumers as a
+property, measure its prevalence across audits, and detect it
+automatically.
